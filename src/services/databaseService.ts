@@ -105,6 +105,8 @@ export interface ProductAnalytics {
   user_id?: string;
   session_id?: string;
   event_data?: any;
+  page_url?: string;
+  user_agent?: string;
   created_at: string;
 }
 
@@ -432,7 +434,7 @@ export class VariantService {
       const fileName = `variant_${variantId}_${Date.now()}.${fileExt}`;
       const filePath = `variants/${variantId}/${fileName}`;
 
-      const { data: uploadData, error: uploadError } = await supabase.storage
+      const { error: uploadError } = await supabase.storage
         .from('product-images')
         .upload(filePath, file);
 

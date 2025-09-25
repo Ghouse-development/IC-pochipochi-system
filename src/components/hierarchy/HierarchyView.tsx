@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ChevronRight, ChevronDown, Package, Layers, Box, Palette, Tag } from 'lucide-react';
-import type { CategoryNode, HierarchicalProduct } from '../../utils/csvParser';
+import type { CategoryNode } from '../../utils/csvParser';
 
 interface HierarchyViewProps {
   data: CategoryNode[];

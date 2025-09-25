@@ -24,7 +24,7 @@ export interface CategoryNode {
 
 export function parseCSV(csvText: string): HierarchicalProduct[] {
   const lines = csvText.split('\n');
-  const headers = lines[0].split(',');
+  lines[0].split(','); // headers - not used currently
   const products: HierarchicalProduct[] = [];
 
   let currentCategory1 = '';

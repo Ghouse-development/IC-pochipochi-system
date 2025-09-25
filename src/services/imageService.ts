@@ -59,7 +59,7 @@ export class ImageService {
       const fileName = `${productCode}_${Date.now()}.${fileExt}`;
       const filePath = `products/${productCode}/${fileName}`;
 
-      const { data, error } = await supabase.storage
+      const { error } = await supabase.storage
         .from(this.BUCKET_NAME)
         .upload(filePath, file, {
           cacheControl: '3600',
