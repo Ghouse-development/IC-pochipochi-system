@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShoppingCart, User, Settings, Menu, X } from 'lucide-react';
+import { ShoppingCart, User, Settings, Menu, X, FileText } from 'lucide-react';
 import { useCartStore } from '../../stores/useCartStore';
 import { formatPrice } from '../../lib/utils';
 
@@ -7,12 +7,14 @@ interface HeaderProps {
   onCartClick: () => void;
   isAdmin?: boolean;
   onAdminClick?: () => void;
+  onHierarchyClick?: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ 
-  onCartClick, 
+export const Header: React.FC<HeaderProps> = ({
+  onCartClick,
   isAdmin = false,
-  onAdminClick
+  onAdminClick,
+  onHierarchyClick
 }) => {
   const { items, getTotalPrice } = useCartStore();
   const totalPrice = getTotalPrice();
@@ -69,7 +71,15 @@ export const Header: React.FC<HeaderProps> = ({
         {/* 管理者ボタン */}
         {isAdmin && (
           <div className="px-4 sm:px-6 py-2 bg-gray-50 border-t border-gray-100">
-            <div className="flex justify-end">
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={onHierarchyClick}
+                className="flex items-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 text-xs text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded transition-colors"
+              >
+                <FileText className="w-3 h-3" />
+                <span className="hidden sm:inline">階層表示</span>
+                <span className="sm:hidden">階層</span>
+              </button>
               <button
                 onClick={onAdminClick}
                 className="flex items-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 text-xs text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded transition-colors"
@@ -94,17 +104,30 @@ export const Header: React.FC<HeaderProps> = ({
             <nav className="p-4">
               <ul className="space-y-2">
                 {isAdmin && (
-                  <li className="pt-4 border-t">
-                    <button
-                      onClick={() => {
-                        if (onAdminClick) onAdminClick();
-                        setIsMobileMenuOpen(false);
-                      }}
-                      className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg text-gray-600"
-                    >
-                      アイテムのメンテナンス
-                    </button>
-                  </li>
+                  <>
+                    <li className="pt-4 border-t">
+                      <button
+                        onClick={() => {
+                          if (onHierarchyClick) onHierarchyClick();
+                          setIsMobileMenuOpen(false);
+                        }}
+                        className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg text-gray-600"
+                      >
+                        階層表示
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        onClick={() => {
+                          if (onAdminClick) onAdminClick();
+                          setIsMobileMenuOpen(false);
+                        }}
+                        className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg text-gray-600"
+                      >
+                        アイテムのメンテナンス
+                      </button>
+                    </li>
+                  </>
                 )}
               </ul>
             </nav>

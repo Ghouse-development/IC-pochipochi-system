@@ -3,7 +3,7 @@ import type { Product } from '../../types/product';
 import type { FilterOptions } from '../../types/filter';
 import { ProductCard } from './ProductCard';
 import { FilterSidebar } from './FilterSidebar';
-import { ProductDetailModal } from './ProductDetailModal';
+import { ProductSelectionModal } from './ProductSelectionModal';
 import { categories } from '../../data/mockData';
 import { useProductStore } from '../../stores/useProductStore';
 import { Search, Filter, X } from 'lucide-react';
@@ -85,8 +85,19 @@ export const CatalogView: React.FC<CatalogViewProps> = ({ catalogType = 'interio
   }, [filters, searchQuery, products]);
   
   const handleProductSelect = (product: Product) => {
-    setSelectedProduct(product);
-    setIsModalOpen(true);
+    // If product has color variants, show selection modal
+    if (product.variants && product.variants.length > 0) {
+      setSelectedProduct(product);
+      setIsModalOpen(true);
+    }
+  };
+
+  const handleProductVariantSelect = (product: Product, variant: any) => {
+    // ここで選択された製品とバリアントを処理
+    console.log('Selected:', product.name, 'Color:', variant.color);
+    // 見積もりに追加するなどの処理を実装
+    setIsModalOpen(false);
+    setSelectedProduct(null);
   };
   
   const handleResetFilters = () => {
@@ -199,15 +210,17 @@ export const CatalogView: React.FC<CatalogViewProps> = ({ catalogType = 'interio
         </div>
       )}
       
-      {/* 商品詳細モーダル */}
-      <ProductDetailModal
-        product={selectedProduct}
-        isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-          setSelectedProduct(null);
-        }}
-      />
+      {/* 商品選択モーダル */}
+      {selectedProduct && isModalOpen && (
+        <ProductSelectionModal
+          product={selectedProduct}
+          onClose={() => {
+            setIsModalOpen(false);
+            setSelectedProduct(null);
+          }}
+          onSelect={handleProductVariantSelect}
+        />
+      )}
     </div>
   );
 };

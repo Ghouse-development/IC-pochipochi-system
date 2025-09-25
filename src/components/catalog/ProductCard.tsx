@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import type { Product } from '../../types/product';
 import { Card } from '../common/Card';
 import { Badge } from '../common/Badge';
 import { formatPrice } from '../../lib/utils';
+import { generateProductPlaceholder } from '../../utils/imageUtils';
 
 interface ProductCardProps {
   product: Product;
@@ -10,17 +11,18 @@ interface ProductCardProps {
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect }) => {
+  const [imageError, setImageError] = useState(false);
   const price = product.pricing.find((p) => p.planId === 'LACIE')?.price || 0;
   const defaultVariant = product.variants[0];
-  
-  const imagePlaceholder = `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(`
-    <svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
-      <rect width="400" height="300" fill="#f3f4f6"/>
-      <text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="#9ca3af" font-family="sans-serif" font-size="16">
-        ${product.name}
-      </text>
-    </svg>
-  `)))}`;
+
+  const imagePlaceholder = generateProductPlaceholder(
+    product.name,
+    defaultVariant?.color
+  );
+
+  const displayImage = imageError
+    ? imagePlaceholder
+    : (defaultVariant?.imageUrl || defaultVariant?.thumbnailUrl || imagePlaceholder);
 
   return (
     <Card
@@ -30,12 +32,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect }) =
     >
       <div className="aspect-w-16 aspect-h-12 bg-gray-100">
         <img
-          src={defaultVariant?.imageUrl || imagePlaceholder}
+          src={displayImage}
           alt={product.name}
           className="w-full h-32 sm:h-48 object-cover"
-          onError={(e) => {
-            e.currentTarget.src = imagePlaceholder;
-          }}
+          onError={() => setImageError(true)}
         />
       </div>
       

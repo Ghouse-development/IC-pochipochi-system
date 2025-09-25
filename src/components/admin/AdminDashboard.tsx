@@ -1,18 +1,20 @@
 import React, { useState, useMemo } from 'react';
-import { Plus, Edit, Trash2, BarChart3, Package, Bell, Search, TrendingUp, FileText, Download } from 'lucide-react';
+import { Plus, Edit, Trash2, BarChart3, Package, Bell, Search, TrendingUp, FileText, Download, Upload, Settings } from 'lucide-react';
 import { Button } from '../common/Button';
 import { Card } from '../common/Card';
 import { ProductFormNew } from './ProductFormNew';
+import { ProductManagement } from './ProductManagement';
 import { useVersionStore } from '../../stores/useVersionStore';
 import { useOrderStore } from '../../stores/useOrderStore';
 import { useProductStore } from '../../stores/useProductStore';
 import { useStatisticsStore } from '../../stores/useStatisticsStore';
 import { formatPrice } from '../../lib/utils';
 import { exportProductsToExcel, exportProductsToCSV } from '../../utils/exportProducts';
+import { PdfImport } from './PdfImport';
 import type { Product } from '../../types/product';
 
 export const AdminDashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'products' | 'statistics' | 'adoption' | 'versions'>('products');
+  const [activeTab, setActiveTab] = useState<'products' | 'management' | 'statistics' | 'adoption' | 'versions' | 'pdf'>('products');
   const [productCategory, setProductCategory] = useState<'exterior' | 'interior' | 'water'>('exterior');
   const [searchTerm, setSearchTerm] = useState('');
   const [showProductForm, setShowProductForm] = useState(false);
@@ -232,6 +234,20 @@ export const AdminDashboard: React.FC = () => {
             </div>
           </button>
           <button
+            onClick={() => setActiveTab('management')}
+            className={`pb-2 px-1 border-b-2 transition-colors ${
+              activeTab === 'management'
+                ? 'border-blue-500 text-blue-600'
+                : 'border-transparent text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            <div className="flex items-center gap-1 sm:gap-2">
+              <Settings className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="hidden sm:inline">製品詳細管理</span>
+              <span className="sm:hidden">管理</span>
+            </div>
+          </button>
+          <button
             onClick={() => setActiveTab('statistics')}
             className={`pb-2 px-1 border-b-2 transition-colors ${
               activeTab === 'statistics'
@@ -273,8 +289,22 @@ export const AdminDashboard: React.FC = () => {
               <span className="sm:hidden">履歴</span>
             </div>
           </button>
+          <button
+            onClick={() => setActiveTab('pdf')}
+            className={`pb-2 px-1 border-b-2 transition-colors ${
+              activeTab === 'pdf'
+                ? 'border-blue-500 text-blue-600'
+                : 'border-transparent text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            <div className="flex items-center gap-1 sm:gap-2">
+              <Upload className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="hidden sm:inline">PDF取り込み</span>
+              <span className="sm:hidden">PDF</span>
+            </div>
+          </button>
         </div>
-        
+
         {/* 商品管理 */}
         {activeTab === 'products' && (
           <div>
@@ -634,8 +664,64 @@ export const AdminDashboard: React.FC = () => {
             </Card>
           </div>
         )}
+
+        {/* 製品詳細管理 */}
+        {activeTab === 'management' && (
+          <div className="space-y-6">
+            <ProductManagement
+              products={[...exteriorProducts, ...interiorProducts, ...waterProducts]}
+              onProductsChange={(updatedProducts) => {
+                // カテゴリごとに製品を分類して更新
+                const exterior = updatedProducts.filter(p => p.categoryName === '外装材' || p.categoryName === '屋根');
+                const interior = updatedProducts.filter(p => p.categoryName === '内装材' || p.categoryName === '床材');
+                const water = updatedProducts.filter(p =>
+                  p.categoryName === 'キッチン' ||
+                  p.categoryName === 'バスルーム' ||
+                  p.categoryName === 'トイレ' ||
+                  p.categoryName === '洗面化粧台' ||
+                  p.categoryName === '給湯器'
+                );
+
+                // 一括更新（実際の更新処理はストアの実装に依存）
+                exterior.forEach(p => {
+                  const existing = exteriorProducts.find(ep => ep.id === p.id);
+                  if (existing) {
+                    updateExteriorProduct(p.id, p);
+                  } else {
+                    addExteriorProduct(p);
+                  }
+                });
+
+                interior.forEach(p => {
+                  const existing = interiorProducts.find(ip => ip.id === p.id);
+                  if (existing) {
+                    updateInteriorProduct(p.id, p);
+                  } else {
+                    addInteriorProduct(p);
+                  }
+                });
+
+                water.forEach(p => {
+                  const existing = waterProducts.find(wp => wp.id === p.id);
+                  if (existing) {
+                    updateWaterProduct(p.id, p);
+                  } else {
+                    addWaterProduct(p);
+                  }
+                });
+              }}
+            />
+          </div>
+        )}
+
+        {/* PDF取り込み */}
+        {activeTab === 'pdf' && (
+          <div className="space-y-6">
+            <PdfImport />
+          </div>
+        )}
       </div>
-      
+
       {/* 商品フォームモーダル */}
       {showProductForm && (
         <ProductFormNew

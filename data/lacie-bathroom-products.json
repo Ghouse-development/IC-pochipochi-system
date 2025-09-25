@@ -1,0 +1,1276 @@
+{
+  "brand": "LACIE",
+  "category": "水廻り設備",
+  "products": {
+    "kitchens": {
+      "grandia": {
+        "name": "GRANDIA",
+        "series": "グランディア",
+        "types": {
+          "flat_with_stove": {
+            "name": "ステンレストップ（コンロ付）",
+            "size": "W2590mm × D900mm × H850mm",
+            "options": {
+              "colors": {
+                "group1": [
+                  {"code": "TVF", "name": "スタッコグレー"},
+                  {"code": "TTG", "name": "コンクリートグレー"},
+                  {"code": "TZW", "name": "ホワイトアッシュ"},
+                  {"code": "TSW", "name": "ホワイト"},
+                  {"code": "TSI", "name": "グローラルアイボリー"},
+                  {"code": "TSF", "name": "ライトグレー"}
+                ],
+                "group2": [
+                  {"code": "TZV", "name": "グレージュアッシュ"},
+                  {"code": "TJU", "name": "チェスナットミディアム"},
+                  {"code": "TWQ", "name": "ウォルナットブラック"},
+                  {"code": "TSJ", "name": "ブルーグリーン"},
+                  {"code": "TSN", "name": "ダークブルー"},
+                  {"code": "TSQ", "name": "ブラック"}
+                ],
+                "group3": [
+                  {"code": "TMF", "name": "マットホワイトグレー"},
+                  {"code": "TMT", "name": "マットベージュ"}
+                ]
+              },
+              "handles": ["シルバー", "ブラック"],
+              "worktop": {
+                "type": "ステンレス",
+                "options": ["バイブレーション加工", "ヘアライン"]
+              },
+              "sink": {
+                "type": "エルシンク（ステンレス）",
+                "size": "W700",
+                "features": ["動きやすい作業スペース", "排気口カバー", "まな板"]
+              },
+              "equipment": {
+                "dishwasher": "食器洗い乾燥機 EW-45R01S（深型/フレーム有りタイプ）",
+                "faucet": "レングフードファン",
+                "oven": "ソフトクローズレール仕様"
+              }
+            }
+          },
+          "flat_without_stove": {
+            "name": "人造大理石トップ（コンロなし）",
+            "size": "W2590mm × D900mm × H850mm",
+            "options": {
+              "colors": "同上",
+              "worktop": {
+                "type": "人造大理石",
+                "colors": ["ホワイト", "グレー", "ベージュ", "ホワイト", "ココア", "ブラック"]
+              }
+            }
+          },
+          "island_with_stove": {
+            "name": "アクリル人造大理石（コンロ付）",
+            "size": "W2590mm × D900mm × H850mm",
+            "options": {
+              "colors": "同上",
+              "worktop": {
+                "type": "アクリル人造大理石",
+                "features": ["すり傷つき難い", "きれい"]
+              }
+            }
+          },
+          "island_without_stove": {
+            "name": "アクリル人造大理石（コンロなし）",
+            "size": "W2590mm × D900mm × H850mm"
+          }
+        },
+        "storage": {
+          "under_counter": {
+            "type": "周辺収納",
+            "size": "間口180cm 高さ85cm",
+            "features": ["フロアキャビネット", "3段引出しタイプ"]
+          }
+        }
+      },
+      "offelia": {
+        "name": "OFFELIA",
+        "series": "オフェリア",
+        "types": {
+          "flat_with_stove": {
+            "name": "クォーツストーン天然水晶入混合",
+            "size": "W2590mm × D900mm × H850mm",
+            "options": {
+              "colors": {
+                "matt": [
+                  {"code": "TXU800YCT74", "name": "TXU8"},
+                  {"code": "TXU811BCT74", "name": "TXU811BCT74"},
+                  {"code": "TXU814BCT74", "name": "TXU814BCT74"},
+                  {"code": "TXU900YCT74", "name": "TXU900YCT74"},
+                  {"code": "JK300C", "name": "JK300C"},
+                  {"code": "JCU1023BC", "name": "JCU1023BC"},
+                  {"code": "TJK1003BC", "name": "TJK1003BC"},
+                  {"code": "TJK1024BC", "name": "TJK1024BC"}
+                ],
+                "frame": [
+                  {"code": "TJK1043BC", "name": "TJK1043BC"},
+                  {"code": "TYU2250C", "name": "TYU2250C"},
+                  {"code": "TYU2866C", "name": "TYU2866C"},
+                  {"code": "TJK2650C", "name": "TJK2650C"},
+                  {"code": "JRM1018I0", "name": "JRM1018I0"},
+                  {"code": "JCU833C", "name": "JCU833C"},
+                  {"code": "TJK1900BC", "name": "TJK1900BC"},
+                  {"code": "TNU1020BC", "name": "TNU1020BC"}
+                ],
+                "door": [
+                  {"code": "TYU1800SC", "name": "TYU1800SC"},
+                  {"code": "TYU4810BC", "name": "TYU4810BC"},
+                  {"code": "TJK1834BC", "name": "TJK1834BC"},
+                  {"code": "TJK1006BC", "name": "TJK1006BC"},
+                  {"code": "TYU4025BC", "name": "TYU4025BC"}
+                ],
+                "panel": [
+                  {"code": "KSI-8600CM", "name": "KSI-8600CM"},
+                  {"code": "KSI-8522CM", "name": "KSI-8522CM"},
+                  {"code": "KSI-6814CM", "name": "KSI-6814CM"},
+                  {"code": "CKU3000CM", "name": "CKU3000CM"},
+                  {"code": "ALU1015CM", "name": "ALU1015CM"},
+                  {"code": "NYU263CM", "name": "NYU263CM"},
+                  {"code": "NYU2683CM", "name": "NYU2683CM"},
+                  {"code": "AYU2666CM", "name": "AYU2666CM"}
+                ]
+              },
+              "handles": {
+                "type": "レール引手",
+                "colors": ["シルバー"]
+              },
+              "accessories": {
+                "mirror": "台輪カラー",
+                "colors": ["ダークブラウン", "ホワイト"]
+              },
+              "worktop": {
+                "type": "クォーツストーン天然水晶入混石",
+                "options": [
+                  {"code": "ブラックガーネット", "name": "ブラックガーネット"},
+                  {"code": "ジュエルリバー", "name": "ジュエルリバー"},
+                  {"code": "ホワイトシャイン", "name": "ホワイトシャイン"},
+                  {"code": "オリーブサンド", "name": "オリーブサンド"},
+                  {"code": "ラディアントイエロー", "name": "ラディアントイエロー"},
+                  {"code": "ジュエルホワイト", "name": "ジュエルホワイト"}
+                ],
+                "sink": "ステンレス"
+              },
+              "equipment": {
+                "dishwasher": "食器洗い乾燥機 EW-45R01S（深型/フレーム有りタイプ）"
+              }
+            }
+          },
+          "island_without_stove": {
+            "name": "周辺収納",
+            "size": "間口180cm 高さ85cm",
+            "options": {
+              "type": "メラミンカウンター",
+              "worktop": "メラミン"
+            }
+          }
+        }
+      }
+    },
+    "lixil_kitchens": {
+      "richelle": {
+        "name": "RICHELLE リシェル",
+        "type": "センターキッチン/ペニンシュラI型",
+        "size": {
+          "height": "85cm",
+          "width": "257.4cm"
+        },
+        "features": {
+          "worktop": {
+            "material": "セラミック (グループ3)",
+            "colors": [
+              "ラパートカーボン",
+              "ラパートトープ",
+              "ラパートシルク",
+              "グレーズグレー",
+              "バサルトブラック",
+              "カラカッタホワイト"
+            ]
+          },
+          "sink": {
+            "type": "スキットシンク",
+            "material": "ステンレス",
+            "size": "約76cm × 約45.3cm",
+            "depth": "約19.5cm",
+            "features": [
+              "ナイアガラフロー方式",
+              "デュアルコート付き",
+              "まな板スタンド付ワイヤーポケット"
+            ]
+          },
+          "panel": {
+            "series": "MEシリーズ",
+            "colors": [
+              {"code": "BX", "name": "ラフサンドホワイト"},
+              {"code": "BW", "name": "フレッシュホワイト"},
+              {"code": "BV", "name": "ラフサンドベージュ"}
+            ]
+          },
+          "door_colors": {
+            "group1": [
+              {"code": "WP0", "name": "エアリィホワイト"},
+              {"code": "KP1", "name": "ブラックスタッコ"},
+              {"code": "VP1", "name": "グレージュスタッコ"},
+              {"code": "WP1", "name": "ホワイトスタッコ"}
+            ],
+            "group2": [
+              {"code": "AQ1", "name": "クリエダーク"},
+              {"code": "UQ1", "name": "クリエモカ"},
+              {"code": "HQ1", "name": "クリエアイボリー"},
+              {"code": "AQ0", "name": "プレーンウォルナット"},
+              {"code": "IQ0", "name": "ラスティックアッシュ"},
+              {"code": "NQ0", "name": "ラスティックオーク"}
+            ]
+          },
+          "handles": [
+            {"type": "スリム取手", "colors": ["ブラック", "シャインニッケル", "シルバー"]},
+            {"type": "スリムバー取手", "colors": ["ブラック", "シャインニッケル", "シルバー"]},
+            {"type": "パッと取手LS", "colors": ["ブラック", "シャインニッケル", "シルバー"]},
+            {"type": "スリムハンドル取手", "colors": ["ブラック", "シャインニッケル", "シルバー"]}
+          ],
+          "equipment": {
+            "faucet": {
+              "type": "タッチレス水栓ナビッシュ",
+              "model": "SFNAB451SYXJG5",
+              "features": ["エコハンドル", "シンプルタイプ"]
+            },
+            "dishwasher": {
+              "type": "浅型タイプ（扉材仕様）",
+              "model": "RKW405GPMSVJG",
+              "brand": "リンナイ製"
+            },
+            "cooktop": {
+              "type": "IHヒーター",
+              "model": "HTSK6ASK",
+              "brand": "日立グローバルライフソリューションズ製",
+              "features": ["2口IH+ラジエント・スタンダードタイプ", "無水両面焼グリル"]
+            },
+            "range_hood": {
+              "type": "サイドマントルHVRタイプ",
+              "model": "SMHVR931",
+              "brand": "富士工業製",
+              "colors": ["シルバー", "ホワイト", "ブラック"]
+            }
+          },
+          "storage": {
+            "sink_cabinet": "スライドストッカー メラミン底板（ポケットなし）",
+            "stove_cabinet": "スライドストッカー グリル付用 メラミン底板（ポケットなし）",
+            "dishwasher_cabinet": "スライドストッカー メラミン底板 スマートトレー付・3段引出し浅型用"
+          }
+        }
+      },
+      "noct": {
+        "name": "Noct ノクト",
+        "type": "ペニンシュラI型",
+        "size": {
+          "height": "85cm",
+          "width": "257cm"
+        },
+        "features": {
+          "worktop": {
+            "material": "人造大理石",
+            "colors": [
+              {"code": "BK", "name": "ブラックストーン"},
+              {"code": "BN", "name": "ブラウンストーン"},
+              {"code": "LE", "name": "シルフィーグレー"},
+              {"code": "LV", "name": "シルフィーベージュ"},
+              {"code": "DW", "name": "ソルティホワイト"}
+            ]
+          },
+          "sink": {
+            "type": "ひろびろラクリーンシンク",
+            "material": "ステンレス",
+            "size": "約94cm × 約52.2cm",
+            "depth": "約20cm",
+            "features": [
+              "まな板スタンド付ワイヤーポケット",
+              "排水口リングなし"
+            ]
+          },
+          "panel": {
+            "series": "MEシリーズ",
+            "colors": [
+              {"code": "BX", "name": "ラフサンドホワイト"},
+              {"code": "BW", "name": "フレッシュホワイト"},
+              {"code": "BV", "name": "ラフサンドベージュ"}
+            ]
+          },
+          "door_colors": {
+            "group1": [
+              {"code": "SL0", "name": "シルバーグレー"},
+              {"code": "WL0", "name": "スムースホワイト"},
+              {"code": "AM0", "name": "プレーンウォルナット"},
+              {"code": "NM0", "name": "プレーンオーク"},
+              {"code": "IM0", "name": "ラスティックアッシュ"}
+            ],
+            "group2": [
+              {"code": "WL4", "name": "ミストホワイト"},
+              {"code": "VL4", "name": "ミストベージュ"},
+              {"code": "KL5", "name": "ジェットブラック"},
+              {"code": "BL5", "name": "アイアンブルー"},
+              {"code": "RL5", "name": "タスカニーレッド"},
+              {"code": "KL1", "name": "ソリッドブラック"},
+              {"code": "WL1", "name": "ソリッドホワイト"},
+              {"code": "KL2", "name": "ブラックスタッコ"},
+              {"code": "VL2", "name": "グレージュスタッコ"},
+              {"code": "WL2", "name": "ホワイトスタッコ"}
+            ]
+          },
+          "handles": {
+            "group1": [
+              {"type": "ショート取手", "colors": ["ブラック", "シルバー"]}
+            ],
+            "group2": [
+              {"type": "スリム取手", "colors": ["ブラック", "シャインニッケル", "シルバー"]},
+              {"type": "ロング取手", "colors": ["シルバー"]},
+              {"type": "ミドル取手", "colors": ["ブラック", "シャインニッケル", "シルバー"]}
+            ]
+          },
+          "equipment": {
+            "faucet": {
+              "type": "タッチレス水栓ナビッシュ",
+              "model": "SFNAH452SYJG5",
+              "features": ["ハンズフリータイプ", "エコハンドル"]
+            },
+            "dishwasher": {
+              "type": "深型タイプ（扉材仕様）",
+              "model": "RKWD401AMBJG",
+              "brand": "リンナイ製"
+            },
+            "cooktop": {
+              "type": "IHヒーター",
+              "model": "CHA6LJGW",
+              "brand": "パナソニック製",
+              "features": ["2口IH+ラジエント・スタンダードタイプ", "無水両面焼グリル"]
+            },
+            "range_hood": {
+              "type": "サイドマントルLCRタイプ",
+              "model": "SMLCR931",
+              "brand": "富士工業製",
+              "colors": ["シルバー", "ホワイト", "ブラック"]
+            }
+          },
+          "storage": {
+            "sink_cabinet": "スライドストッカー メラミン底板 ソフトモーションロングレール（ポケットなし）",
+            "stove_cabinet": "スライドストッカー メラミン底板 ソフトモーションロングレール（ポケットなし）",
+            "dishwasher_cabinet": "スライドストッカー メラミン底板 ソフトモーションレール 深型用",
+            "dining_side": "ペニンシュラ型 収納タイプ（間口180cm）"
+          }
+        }
+      },
+      "custom_vanity": {
+        "name": "Custom Vanity カスタムバニティ",
+        "type": "洗面化粧台",
+        "size": "間口1200mm～1800mm",
+        "features": {
+          "bowl": {
+            "type": "大型洗面ボウル",
+            "size": "間口750mm",
+            "capacity": "20L",
+            "depth": "185mm",
+            "features": ["ハイバックガード一体ボウル", "ウェットパレット", "ドライパレット"]
+          },
+          "counter": {
+            "material": "耐水メラミンカウンター",
+            "colors": [
+              {"code": "LV", "name": "クリエアイボリー"},
+              {"code": "LR", "name": "クリエオーク"},
+              {"code": "LH", "name": "クリエチェリー"},
+              {"code": "LM", "name": "クリエモカ"},
+              {"code": "LD", "name": "クリエダーク"},
+              {"code": "FW", "name": "プレシャスホワイト"},
+              {"code": "FG", "name": "コージーライトグレー"},
+              {"code": "AC", "name": "クリエダーク"},
+              {"code": "AM", "name": "シマンホワイト"},
+              {"code": "AS", "name": "モルティグレージュ"},
+              {"code": "AD", "name": "ソイルグレー"}
+            ]
+          },
+          "faucet": {
+            "type": "ホース収納式",
+            "features": ["180度回転", "グースネック形状", "エコハンドル"]
+          },
+          "drain": {
+            "type": "新てまなし排水口",
+            "features": ["金属フランジなし", "掃除簡単"]
+          },
+          "shelf": {
+            "type": "下棚",
+            "colors": "カウンターと同じ11色"
+          },
+          "bracket": {
+            "colors": ["シルバー", "ブラック"]
+          },
+          "mirror_cabinet": {
+            "type": "ミラーキャビネット（3面鏡・コンセント付）",
+            "model": "TSF-D124PR"
+          }
+        }
+      }
+    },
+    "panasonic_kitchens": {
+      "i_land": {
+        "name": "パナソニックキッチン Sクラス フラット対面",
+        "type": "アイランド",
+        "size": "W2700 or W2500",
+        "features": {
+          "door_colors": {
+            "soft_wood": [
+              {"code": "CH20", "name": "ソフトウォーク柄"},
+              {"code": "OP20", "name": "ソフトーク柄 ナチュラルチェスナット柄"},
+              {"code": "OO10", "name": "ホワイトアッシュ柄"},
+              {"code": "CL30", "name": "グレーアッシュ柄"},
+              {"code": "CT90", "name": "チルベロホワイト"},
+              {"code": "CG10", "name": "アルベロブラック"},
+              {"code": "TA87", "name": "ポリックス"}
+            ],
+            "vintage": [
+              {"code": "CH50", "name": "ヴィンテージメタル柄"},
+              {"code": "OM40", "name": "ヴィンテージブラウン柄"},
+              {"code": "SM40", "name": "スクラッチメタル柄"},
+              {"code": "TL40", "name": "アースホワイト"},
+              {"code": "NE10", "name": "ネイビー"},
+              {"code": "BE10", "name": "ベージュ"},
+              {"code": "BY10", "name": "ピューティホワイト"},
+              {"code": "GM40", "name": "グレイッシュグリーン"}
+            ],
+            "handles": [
+              {"code": "HJA5", "name": "ハンドル金っキャパス本来"},
+              {"code": "HJG2", "name": "HJG2"},
+              {"code": "HJG3", "name": "HJG3"},
+              {"code": "HJK3", "name": "HJK3"},
+              {"code": "HJA3", "name": "HJA3"},
+              {"code": "HJE3", "name": "HJE3"}
+            ]
+          },
+          "range_hood": {
+            "type": "スクエアセンターフードタイプ",
+            "size": "W900mm",
+            "model": "LIXLRSEHL-APE32",
+            "features": ["さっとれるファン"]
+          },
+          "cooktop": {
+            "type": "ソフトクレイパソンキトルグ-ズ",
+            "brand": "パナソニック製",
+            "model": "TA94",
+            "features": ["トリプルワイドIH（フル IHタイプ）", "W900mm"]
+          },
+          "sink": {
+            "type": "ラクするーシンク",
+            "features": ["スキマレスなので洗いやすいひとしぼり", "洗剤ラックを提供", "排水口も"]
+          },
+          "faucet": {
+            "type": "コンパクトセンター美装",
+            "features": ["上センサーに手をかざだけ", "ひとめの自由に水とお湯ことに湯をぴった場合は気場が反応制限止ま"]
+          },
+          "counter": {
+            "type": "人造大理石カウンター"
+          },
+          "countertop_height": "カウンター高さ",
+          "storage": {
+            "type": "フロアユニット",
+            "features": [
+              "ソフトクローシング機構",
+              "ダイニング側 オール処理タイプ"
+            ]
+          },
+          "dishwasher": {
+            "type": "食器洗い乾燥機",
+            "model": "深型",
+            "features": ["ストアリム片付パングフリル/", "食器収納容量6人用"]
+          }
+        }
+      },
+      "peninsula": {
+        "name": "パナソニックキッチン Sクラス フラット対面",
+        "type": "ペニンシュラ",
+        "size": "W2700 or W2500",
+        "features": "同上アイランドと同様"
+      },
+      "ii_type": {
+        "name": "パナソニックキッチン シンク側ペニンシュラ",
+        "type": "Sクラス扉：CL20ビューティホワイト（LW）扉っ手：LCAカウンター：グラニールホワイト（YS）",
+        "size": "W2100+W1800 or W1800+W1800",
+        "features": {
+          "unit_rail": "ユニットレール",
+          "hood": {
+            "type": "スマートフード II",
+            "features": ["シルバー色（S）上基板シルバー", "LED照明・フィルター付"]
+          },
+          "sink": {
+            "type": "ラケするーシンク",
+            "features": ["ホワイト", "洗剤ラック"]
+          },
+          "faucet": {
+            "model": "JUAS313EB4E3K",
+            "type": "トリプルワイドIH",
+            "features": ["基・ステンレス対応", "グリルなし、ユニット橋付形シルバー用"]
+          },
+          "equipment": {
+            "dishwasher": {
+              "type": "食器洗い乾燥機",
+              "model": "ECONAVI",
+              "capacity": "深型 幅450mm、上面槐作付タイプ、開き任様"
+            },
+            "cooktop": {
+              "type": "キッチンボード［3mm厚］",
+              "model": "ライドトープ扱",
+              "size": "ホワイト立絵面"
+            }
+          },
+          "storage": {
+            "type": "エコナビ付き冷蔵パッド",
+            "model": "JUAS45MDD9W2",
+            "features": ["深型", "幅450mm", "上面操作付タイプ", "開き仕様"]
+          }
+        }
+      },
+      "island_type": {
+        "name": "パナソニックキッチン シンク側アイランド",
+        "type": "Sクラス扉：CL20ビューティホワイト（LW）扉っ手：LCAカウンター：グラニールホワイト（YS）",
+        "size": "W2100+W1800 or W1800+W1800",
+        "features": "同上II型と同様"
+      }
+    },
+    "bathrooms": {
+      "panasonic": {
+        "oflora": {
+          "name": "オフローラ 1616 AR",
+          "model": "WGAVAB",
+          "size": "1坪 浴室",
+          "features": {
+            "walls": {
+              "accent": "エスライン浴槽（FRP浴槽）ピュアホワイト",
+              "colors": ["ミディアムホワイト（単色）", "きさっと排水口"]
+            },
+            "floor": {
+              "type": "洗い場・照明合水栓",
+              "model": "スゴピカ水柱・スクエア",
+              "features": ["水アカが残りにくい", "新素材"]
+            },
+            "bathtub": {
+              "type": "スゴピカフロア",
+              "features": ["床のスミに目地がないので、汚れが落としやすい"]
+            },
+            "door": {
+              "type": "ドア",
+              "model": "スイングドア（ホワイト）"
+            },
+            "ventilation": {
+              "type": "換気扇（100V）"
+            },
+            "ceiling": {
+              "type": "天井",
+              "model": "正面アクセントパネル"
+            },
+            "lighting": {
+              "type": "照明",
+              "model": "フラットラインLED照明（昼色）（白色・電球色）"
+            },
+            "mirror": {
+              "type": "スリムミラー"
+            },
+            "faucet": {
+              "type": "W水流シャワー（メタル）",
+              "features": ["握りバー兼用スライドバー"]
+            },
+            "accessories": [
+              {"type": "タオル掛け（メタル柄）"},
+              {"type": "収納棚", "model": "2段型"},
+              {"type": "組みフタ", "size": "2分割"}
+            ]
+          }
+        }
+      },
+      "toto": {
+        "sazana": {
+          "name": "Gハウス LACIE 標準仕様 SYSTEM BATHROOM sazana（サザナ）",
+          "model": "HTV1616UNX4",
+          "size": "Sタイプ 1616サイズ",
+          "features": {
+            "floor": {
+              "type": "お掃除ラクラクほっカラリ床",
+              "features": [
+                "断熱・防水仕様",
+                "カラリパターン",
+                "ホワイト基調"
+              ]
+            },
+            "drain": {
+              "type": "お掃除ラクラク排水口（抗菌・防カビ仕様）",
+              "features": [
+                "排水口のめぐり・ゴビを回え、指導なお掃除でリングれい"
+              ]
+            },
+            "shower": {
+              "type": "コンフォートウェーブシャワー",
+              "features": [
+                "大粒の水玉をすっかりシャワレながら節水",
+                "ウェーブ水を手感覚",
+                "節水率約35%"
+              ]
+            },
+            "bathtub": {
+              "type": "ゆるリラ浴槽",
+              "features": [
+                "自然とリラックス姿勢に導く",
+                "身体を支える曲線形状で足元ゆったり",
+                "人体を受けとめ、入浴姿勢が"
+              ]
+            },
+            "walls": {
+              "base_panel": [
+                {"code": "LE301", "name": "マットホワイト"},
+                {"code": "HN301", "name": "鏡面ホワイト"}
+              ],
+              "accent_panel": [
+                {"code": "HN642", "name": "ウッドグレインライト"},
+                {"code": "HN661", "name": "チェリー"},
+                {"code": "HN662", "name": "ウォールナット"},
+                {"code": "HN985", "name": "ヘイジーシルバー"},
+                {"code": "HN987", "name": "ストーンシェルグレー"},
+                {"code": "HN986", "name": "クルムホワイト"},
+                {"code": "HT541", "name": "ランダムウッド"},
+                {"code": "HN954", "name": "モサイクアクア"},
+                {"code": "HT614", "name": "モルティオダーク"}
+              ]
+            },
+            "faucet": {
+              "type": "壁付サーモ水栓（LS）",
+              "model": "スイッチ付エコアクアシャワー＜メタル調＞",
+              "features": ["メタル調ホース"]
+            },
+            "door": {
+              "type": "開き戸［11mm段差］(800W)",
+              "model": "UDY-8002006UR(29)",
+              "features": ["プッシュプルハンドル"]
+            },
+            "accessories": [
+              {"type": "鏡", "model": "タテ長ミラー（3080）", "features": ["キレイ鏡", "特殊コーティング"]},
+              {"type": "照明", "model": "ダウンライト（LED）3灯"},
+              {"type": "タオル掛", "model": "フック付タオル掛＜メタル調＞"},
+              {"type": "握りバー", "model": "スライドフック付握りバー＜メタル調＞", "size": "L1000"}
+            ],
+            "ventilation": {
+              "type": "天井換気扇",
+              "model": "UF-27A"
+            }
+          }
+        },
+        "ax": {
+          "name": "システムバスルーム AX",
+          "model": "BMUS-1616LBZ-B+H",
+          "size": "1616サイズ",
+          "features": {
+            "floor": {
+              "type": "キレイサーモフロア",
+              "features": [
+                "足元が冷ヤッとしない",
+                "汚れにくい表面処理と形状"
+              ]
+            },
+            "drain": {
+              "type": "パッとくるりんポイ排水口",
+              "features": [
+                "パッとゴミがまとまって、カンタンにポイッ",
+                "渦でまとまったゴミをポイッとするだけ"
+              ]
+            },
+            "bathtub": {
+              "types": [
+                {"name": "1600ロング浴槽"},
+                {"name": "エコベンチ浴槽"},
+                {"name": "ストレートライン浴槽"},
+                {"name": "ミナモ浴槽"}
+              ]
+            },
+            "walls": {
+              "panels": "アクセント張り",
+              "colors": ["同上sazanaと同様"]
+            },
+            "equipment": {
+              "shower": {
+                "type": "スイッチ付エコアクアシャワー＜メタル調＞",
+                "features": ["メタル調ホース"]
+              },
+              "faucet": {
+                "type": "壁付サーモ水栓（LS）"
+              },
+              "mirror": {
+                "type": "タテ長ミラー（3080）",
+                "model": "KGM-3080S-C"
+              },
+              "lighting": {
+                "type": "ダウンライト（LED）3灯"
+              }
+            }
+          }
+        }
+      },
+      "lixil": {
+        "ax": {
+          "name": "システムバスルーム AX",
+          "model": "BMUS-1616LBZ-B+H",
+          "size": "1616サイズ",
+          "features": {
+            "drain": {
+              "type": "パッとくるりんポイ排水口II",
+              "features": [
+                "渦でまとまったゴミをポイッとするだけ",
+                "スムーズに水や髪を流す半円形状の立ち上がり",
+                "頭や身体を洗うときなどの排水"
+              ]
+            },
+            "bathtub": {
+              "types": [
+                {"name": "エコベンチ浴槽", "features": ["ミニベンチ浴槽"]},
+                {"name": "ストレートライン浴槽"},
+                {"name": "ミナモ浴槽"},
+                {"name": "1600ロング浴槽"}
+              ]
+            },
+            "walls": {
+              "base": [
+                {"code": "LE301", "name": "キレイサーモフロア"},
+                {"code": "HN642", "name": "ウッドグレインライト"},
+                {"code": "HN661", "name": "チェリー"}
+              ],
+              "accent": [
+                {"code": "HN662", "name": "ウォールナット"},
+                {"code": "HN985", "name": "ヘイジーシルバー"},
+                {"code": "HN987", "name": "ストーンシェルグレー"}
+              ]
+            },
+            "equipment": {
+              "shower_head": {
+                "type": "シャワーヘッド",
+                "features": ["エコアウォッ"]
+              },
+              "faucet": {
+                "type": "洗い場側水栓",
+                "model": "サーモ付き混合水栓（L.S）"
+              },
+              "mirror": {
+                "type": "ミラー",
+                "model": "タテ長ミラー（3080）"
+              },
+              "lighting": {
+                "type": "照明",
+                "model": "ダウンライト（LED）3灯"
+              },
+              "door": {
+                "type": "ドア",
+                "model": "フラッシュバンドウ",
+                "size": "720mm"
+              }
+            }
+          }
+        }
+      },
+      "aica": {
+        "smart_sanitary": {
+          "name": "スマートサニタリー",
+          "model": "アイカ工業",
+          "features": {
+            "concept": "きっと見つかる、理想のスタイル。",
+            "description": "スマートサニタリーの中でも、特に人気のコンセプトプランをインテリアスタイルをテーマにスタイリング。選びやすいパッケージプランがデビューしました。トレンドを押さえつつ、しっかりと使いやすい。スマートで快適な洗面空間が、理想のライフスタイルを叶えます。",
+            "model_number": "D530 L1200",
+            "components": {
+              "basin": {
+                "type": "奥行",
+                "model": "D530",
+                "code": "15"
+              },
+              "door": {
+                "type": "間口",
+                "model": "L1200",
+                "code": "B"
+              },
+              "bowl": {
+                "type": "ボウル下収納幅",
+                "model": "W750",
+                "code": "3"
+              },
+              "drain": {
+                "type": "ボウル下収納",
+                "features": ["引出タイプ", "チューハレー"],
+                "code": "2"
+              },
+              "water_heater": {
+                "type": "排水金具",
+                "model": "フランジレス排水金具（開閉仕様）体排水用5トラップ",
+                "code": "HMB3014"
+              },
+              "faucet": {
+                "type": "水栓金具",
+                "model": "L字金具 ホワイト",
+                "code": "CH=9347＋CH=9348"
+              },
+              "mirror": {
+                "type": "ミラー",
+                "model": "ホワイト側設置/暴り止め機能付ミラー収納",
+                "code": "WJ100"
+              },
+              "accessories": {
+                "type": "追加ミラー",
+                "features": ["なし"]
+              },
+              "power_outlet": {
+                "type": "セカンドミラー",
+                "features": ["なし"]
+              }
+            },
+            "colors": {
+              "panel": [
+                {"code": "エンドパネルC", "name": "エンドパネル左側"},
+                {"code": "エンドパネルC", "name": "エンドパネル右側"}
+              ]
+            },
+            "price": "¥479,200（税抜）"
+          }
+        }
+      }
+    },
+    "washstands": {
+      "lixil": {
+        "xv": {
+          "name": "XV 洗面化粧台",
+          "model": "X3EFH-120BXVCKSANX",
+          "size": "間口1,200mm",
+          "features": {
+            "counter": {
+              "type": "スクエアカウンター",
+              "material": "つなぎ目なしの一体成形",
+              "size": "600mm × 470mm",
+              "capacity": "12L"
+            },
+            "drain": {
+              "type": "新てまなし排水口",
+              "features": [
+                "金属フランジや排水口の奥の突起がなく、お掃除簡単",
+                "ななめ形状でゴミをキャッチ"
+              ]
+            },
+            "cabinet": {
+              "type": "フルスライドタイプ",
+              "features": [
+                "ソフトサイレンス機構",
+                "インナー引出付"
+              ]
+            },
+            "faucet": {
+              "type": "シングルレバーシャワー水栓"
+            },
+            "mirror_cabinet": {
+              "type": "木製3面鏡 上部ライン照明付",
+              "features": [
+                "奥行126mm",
+                "棚板奥行115mm",
+                "タッチレススイッチ",
+                "ソフトサイレンス機構",
+                "くもり止めコート"
+              ]
+            },
+            "colors": {
+              "counter": [
+                {"code": "H", "name": "プレーンネオホワイト"},
+                {"code": "K", "name": "ブラック"},
+                {"code": "S", "name": "ホワイト"}
+              ],
+              "cabinet": [
+                {"code": "RA1", "name": "クリスタルホワイト"},
+                {"code": "RA3", "name": "ルーセントベージュ"},
+                {"code": "RA7", "name": "チェスナット"},
+                {"code": "RA8", "name": "チェリー"},
+                {"code": "RA9", "name": "ウォルナット"},
+                {"code": "RG9", "name": "ミストホワイト"},
+                {"code": "RH4", "name": "ミストベージュ"},
+                {"code": "RJ3", "name": "オニキスブラック"},
+                {"code": "LP2", "name": "クリエペール"},
+                {"code": "LL2", "name": "クリエラスク"},
+                {"code": "LM2", "name": "クリエモカ"},
+                {"code": "LD2", "name": "クリエダーク"},
+                {"code": "YS2", "name": "グロスホワイト"}
+              ]
+            },
+            "height": "カウンター高さ 約800mm"
+          }
+        }
+      },
+      "panasonic": {
+        "dresser": {
+          "name": "洗面ドレッシング シーライン D530タイプ",
+          "model": "YR1RRB",
+          "size": "2型キャビン・洗面W1700プラン 1階 LACIE 洗面W1700",
+          "features": {
+            "construction": {
+              "type": "建見積",
+              "note": "システムトラブルにより リフトウォールチャメナチュラルチェスナット柄の本日方向が違っている場合がありまず。正しい本日方向についてば力夕ログをご確認ください"
+            },
+            "cabinet": {
+              "type": "扉カラー バリエーション",
+              "types": [
+                {"code": "タイプB", "name": "ブラックオニオール扉"},
+                {"code": "タイプC", "name": "ネイビーオニキスメタル"}
+              ],
+              "lines": [
+                {"code": "タイプA", "name": "グレージュアッシュ柄"},
+                {"code": "タイプB", "name": "ホワイトベニヤ柄"},
+                {"code": "その他", "name": "チェリー柄、イデアテー角柄、オーク柄"}
+              ]
+            },
+            "faucet": {
+              "type": "水栓",
+              "model": "マルチシングルレバーシャワー（スゴピカタイプ）（エコカチットあり）",
+              "features": [
+                "抗菌加工",
+                "※シャワーヘッドは引き出せます"
+              ]
+            },
+            "counter": {
+              "type": "カウンター",
+              "features": [
+                "のびのび使えるワイドカウンター",
+                "空間にぴったり合ったプランをつくれます",
+                "幅1700mm"
+              ]
+            },
+            "bowl": {
+              "type": "本体キャビネット",
+              "features": [
+                "壁前板十ニーススペース側タイプ"
+              ]
+            },
+            "mirror": {
+              "type": "ミラー",
+              "model": "ヒータースでくもりにくいミラー「くもりシャット！」",
+              "features": [
+                "電気代毎月全く、全面クリア",
+                "新感覚のミラーです",
+                "湯の表面に、吸水性＋観水性のある層をコーティング",
+                "湯い視分、小効果のなかった表面点（ヒーター）に対し、全面がくもりにくいため、お風呂上がりも鏡はいつもクリア。電気代もかからない仕様で経済的です"
+              ]
+            },
+            "lighting": {
+              "type": "照明",
+              "model": "ツインラインLED木製3面鏡",
+              "features": [
+                "ミトルミラー 1200",
+                "施サイドからの均一な光で、滴の鼓に網像なく測る体全明るく煩にします"
+              ]
+            }
+          }
+        }
+      },
+      "toto": {
+        "octave": {
+          "name": "Gハウス 標準仕様 LAVATORY Octave（オクターブ）",
+          "model": "LDSFB120BJGDN1A／化粧器：LMFB120A3GLC1G",
+          "size": "間口：1200mm",
+          "features": {
+            "bowl": {
+              "type": "ひろびろ設計のボウル",
+              "features": [
+                "圧迫感なく、ひろびろと使える",
+                "本体の出家が薄く、適応限付きを感覚したボウル形状",
+                "正面をとらったり使えます"
+              ]
+            },
+            "drain": {
+              "type": "お掃除ラクラク水栓",
+              "features": [
+                "汚れにくく、掃除しやすい",
+                "継ぎ目のない、陶系統1段用包装ひから、白黒・浮いてカレー・低腐食による手前わたす"
+              ]
+            },
+            "counter": {
+              "type": "ちょい置きカウンター",
+              "features": [
+                "すぐ手が届くところに一時溜まきできる"
+              ]
+            },
+            "lighting": {
+              "type": "タッチレスワイドLED照明",
+              "features": [
+                "手を触れずにオンオフができて清潔",
+                "センターご覧あかすだけけ、照明がオフができます",
+                "関白いっぱいの出明瞭が、広い範開をてこ照らく派えます"
+              ]
+            },
+            "mirror": {
+              "type": "エコミラー",
+              "features": [
+                "くもらなくてもわにくい",
+                "鏡面",
+                "組こくもりもこー口を採圧ムし、電気をわないエコ仕様。きっずの手部納だく（くもりが内をあてるときれいめです）"
+              ]
+            },
+            "storage": {
+              "type": "お掃除ラクラク排水口（肌面・防カビ仕様）",
+              "features": [
+                "きれいやいこて保つこだわの先状々材質",
+                "仕薬×防カビ収置を持つ排構成技術、清掃料合お掃除もラシラ"
+              ]
+            },
+            "accessories": {
+              "type": "化粧台・化粧鏡",
+              "model": "扉開閉式扉",
+              "features": [
+                "片引き出し用＜600xd／月引出し開き（200xd）"
+              ]
+            },
+            "colors": {
+              "counter": [
+                {"code": "#WH", "name": "ホワイト"}
+              ],
+              "cabinet": [
+                {"code": "LL5Y1", "name": "スムースホワイト"}
+              ]
+            }
+          }
+        }
+      }
+    },
+    "toilets": {
+      "lixil": {
+        "basia_harmo_l": {
+          "name": "ベーシアハーモ Lタイプ",
+          "model": "BC-BL10SU/DT-BL113GU",
+          "features": {
+            "washing": {
+              "type": "パワーストリーム洗浄",
+              "features": [
+                "強力な水流が便器鉢内のすみずみまで回り",
+                "少ない水でもしっかり汚れを洗い流します"
+              ]
+            },
+            "shape": {
+              "type": "フチレス形状",
+              "features": [
+                "便器のフチを丸ごとなくし",
+                "サッとひと拭き、お掃除ラクラクです"
+              ]
+            },
+            "material": {
+              "type": "ハイパーキラミック",
+              "features": [
+                "高硬度のジルコンを釉薬の表面まで含んでいるので",
+                "キズがつきにくく、陶器の美しさを長く保てます",
+                "抗菌仕様（ISO抗菌準拠）で細菌の繁殖も抑制"
+              ]
+            },
+            "eco": {
+              "type": "超節水ECO5トイレ",
+              "features": [
+                "大13L便器と比べ約69％節水",
+                "大8L便器と比べ約49％節水"
+              ]
+            },
+            "functions": [
+              {"name": "お掃除リフトアップ", "description": "便座が真上に持ち上がるので、便器とのすき間汚れが拭き取れる"},
+              {"name": "キレイ便座", "description": "つぎ目がなく、便座裏は防汚素材"},
+              {"name": "鉢内スプレー", "description": "便器の表面を濡らし、汚物汚れをつきにくくする"},
+              {"name": "フルオート便器洗浄", "description": "便座から立ち上がると自動的に便器を洗浄"},
+              {"name": "スッキリノズルシャッター", "description": "ノズルを使用しないときは収納し、シャッターでカバー"}
+            ],
+            "colors": [
+              {"code": "BW1", "name": "ピュアホワイト"},
+              {"code": "BN8", "name": "オフホワイト"},
+              {"code": "LR8", "name": "ピンク"},
+              {"code": "BB7", "name": "ブルーグレー"}
+            ]
+          }
+        },
+        "basia_shower_toilet": {
+          "name": "ベーシア シャワートイレ",
+          "model": "BC-B30S/DT-B383G",
+          "features": {
+            "washing": {
+              "type": "パワーストリーム洗浄＋フチレス形状",
+              "features": "同上ベーシアハーモと同様"
+            },
+            "eco": {
+              "type": "超節水ECO5トイレ",
+              "features": [
+                "地球環境に配慮した、強力洗浄の超節水トイレ",
+                "一般家庭で電トイレは使用水量がぜ％も使用し",
+                "ています",
+                "この点瞥んや拿ぐ家庭におうことを考え、使い洗水力はその手まに",
+                "使な量・約69％も使用・大13L便器と比べ"
+              ]
+            },
+            "compact": {
+              "type": "コンパクトなフォルム",
+              "features": [
+                "前出寸法を720mmに抑え",
+                "曲線を生かしたデザイン"
+              ]
+            },
+            "functions": [
+              {"name": "お掃除リフトアップ", "description": "詳ぶ入り込みやす滞器とのすき間をラクにお掃除"},
+              {"name": "お掃除しやすいフォルム", "description": "メンよ手垂はレーム化にしてく汚は捨隅しもすデザイン"},
+              {"name": "鉢内スプレー", "description": "便器の表面を洗らし、汚物汚れをつきにくくかける汚染"},
+              {"name": "フルオート便器洗浄", "description": "便座から立ち上がると自動的に洗浄"},
+              {"name": "Wパワー脱臭", "description": "香害するとば臭で脱臭"},
+              {"name": "キレイ便座", "description": "便座のつぎ目なくて、便座裏は防汚素材だから、汚れもサッと"},
+              {"name": "キレイ便座", "description": "俺なくてサッと"}
+            ]
+          }
+        }
+      },
+      "panasonic": {
+        "arauno_v_limited": {
+          "name": "New アラウーノ V Limited 手洗い付き（SN5タイプ）",
+          "model": "CH320AWSV",
+          "features": {
+            "washing": {
+              "type": "3Dツイスター水流",
+              "features": [
+                "少ない水量でがんこく洗って流します",
+                "ボールを汚れやベんなく流す",
+                "激れの方向を変えペー気に流し去る"
+              ]
+            },
+            "water_saving": {
+              "type": "節水",
+              "features": [
+                "小10L → 3L（節水率70%）",
+                "大13L → 4.6L（節水率65%）"
+              ]
+            },
+            "compact": {
+              "type": "コンパクトサイズでトイレ空間が広々",
+              "features": [
+                "狭いトイレ空間でもゆとりの動作スペースが確保できます",
+                "奥行き約1200mmのスペースに設置した場合",
+                "ゆとりの動作スペースを確保",
+                "約480mm"
+              ]
+            },
+            "materials": {
+              "type": "スゴピカ素材（有機ガラス系）",
+              "features": [
+                "汚れがつきにくいからおそうじラクラク",
+                "細水アカ汚れ洗剤級"
+              ]
+            },
+            "foam": {
+              "type": "泡でドルいやすく汚れにくい「手洗い」です",
+              "features": [
+                "スゴピカ素材（有機ガラス系）",
+                "手洗いボールは、水アカをはじく新素材",
+                "ソフトエリア",
+                "ハンドソープも置きやすい設計"
+              ]
+            },
+            "accessories": [
+              {"type": "小物置きスペース", "description": "秀芳剤などか小物も置けます"},
+              {"type": "操作部", "description": "手洗いと洗浄ボタン（スコップ）・一緒用に集約"},
+              {"type": "スポンジで10性器をせた綿黒", "description": "写真は実際図にと上のカタログ適物図が付喜せたものです、タネ今力口は水ずた付与ではなもりなせ"}
+            ]
+          }
+        },
+        "arauno_z160": {
+          "name": "全自動おそうじトイレ アラウーノ Z160（タイプ2）",
+          "model": "LACIE仕様",
+          "features": {
+            "design": {
+              "description": "「おそうじラクラク」を追求したタンクレストイレ"
+            },
+            "washing": {
+              "type": "トリプル汚れガード",
+              "features": [
+                "泡のクッション",
+                "スキマレス設計",
+                "スパイラル水流",
+                "ステンレスノズル"
+              ]
+            },
+            "functions": [
+              {"name": "泡のクッションで受け止める「ハネガード」（リモコン式）", "description": "フチの立ちあがりで、外に垂れ出しにくい「モレガード」"},
+              {"name": "便座と便器の合わせ技でばより止める「モレガード」", "description": "マイクロバブルとミリバブルの2種類の泡が便器内をめぐり、おそうじします"},
+              {"name": "低水圧※1でもしっかり排水", "description": "高台の建物や上階階にも、ご使用いただけます"}
+            ],
+            "low_water_pressure": {
+              "type": "低水圧対応",
+              "features": [
+                "高台の建物や上階階にもご使用いただけます",
+                "ターントラップ方式排水路にたまった水を一気に排出、少ない水量でしっかり流浄"
+              ]
+            }
+          }
+        }
+      },
+      "toto": {
+        "gg-j1": {
+          "name": "Gハウス 標準仕様 RESTROOM ウォシュレット一体形便器 GG-J1",
+          "model": "CES9414",
+          "features": {
+            "clean": {
+              "type": "汚れツルリン",
+              "features": [
+                "セフィオンテクト",
+                "料理表面の阻立をなくしたナノレベルのなめらかで、汚れがば付きにく優れたTOTO独自の技術です"
+              ]
+            },
+            "design": {
+              "type": "おそうじ超ラク",
+              "features": [
+                "フチなし形状「スゴフチ」",
+                "奥までぐるーっとフチがないから、サッとひとふき、お掃除ラクラク"
+              ]
+            },
+            "functions": [
+              {"name": "プレミスト", "description": "自動で便器面にミスト（水）を噴きつけることで、汚れを付きにくくします"},
+              {"name": "ノズルきれい", "description": "「ウォシュレット」の便器をノズルには、はっ水性のあるクリーン樹脂を採用、汚れをはじくので、ゆっとひとふきでお手入れできます"},
+              {"name": "クリーン便座（つぎ目なし）", "description": "便座のつぎ目にもか掃除も、つぎ目がないので、お掃除ラクラク"},
+              {"name": "クリーンノズル", "description": "使用の内陸にも外側にもつきやすいないので、お掃除ラクラク"}
+            ],
+            "eco": {
+              "type": "節水だからエコ",
+              "features": [
+                "少ない水でしっかり洗浄",
+                "13L洗器からおよそ1/3、4L洗器からおよそ3/4の水洗量へ、環統どより使っていくだけでいつの間に水道にやさらにます"
+              ]
+            },
+            "emergency": {
+              "type": "停電時安心設計",
+              "features": [
+                "手動レバーを引っ張ることで停電時も水を流すことができます",
+                "便器に向かって右横奥の手動レバーを約4秒以上引っ張ってください",
+                "乾電池などの電源は不要です"
+              ]
+            },
+            "colors": [
+              {"code": "#NW1", "name": "ホワイト"}
+            ]
+          }
+        },
+        "zj1": {
+          "name": "ウォシュレット一体形便器 ZJ1",
+          "model": "CES9151",
+          "features": {
+            "clean": {
+              "type": "汚れツルリン おそうじ超ラク",
+              "features": [
+                "フチなし形状「スゴフチ」",
+                "お掃除のしやすさを究めたデザイン",
+                "奥までぐるーっとフチがないから、サッとひとふき、お掃除ラクラクです"
+              ]
+            },
+            "material": {
+              "type": "セフィオンテクト",
+              "features": [
+                "表面がツルツルで汚れがつきにくい",
+                "陶器表面に水がなじむので汚れを浮かせて落とします",
+                "菌すら入り込めない、ナノレベルのなめらかさです"
+              ]
+            },
+            "functions": "同上GG-J1と同様"
+          }
+        }
+      }
+    }
+  }
+}

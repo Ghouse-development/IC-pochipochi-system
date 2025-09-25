@@ -1,7 +1,8 @@
 // エクステリア（外装）製品データ - FACADE Style Book
 import type { Product } from '../types/product';
+import { exteriorProductsAdditional } from './exteriorProductsAdditional';
 
-export const exteriorProducts: Product[] = [
+const baseExteriorProducts: Product[] = [
   // ===== 外壁 - ニチハ モナビストーンV =====
   {
     id: 'ext-wall-001',
@@ -1671,4 +1672,10 @@ export const exteriorProducts: Product[] = [
       { plan: 'HOURS', price: 145000 }
     ]
   }
+];
+
+// 基本製品と追加製品をマージ
+export const exteriorProducts: Product[] = [
+  ...baseExteriorProducts,
+  ...exteriorProductsAdditional
 ];

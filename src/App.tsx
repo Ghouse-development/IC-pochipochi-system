@@ -4,6 +4,7 @@ import { CatalogWithTabs } from './components/catalog/CatalogWithTabs';
 import { CartSidebarEnhanced } from './components/cart/CartSidebarEnhanced';
 import { ConfirmOrderModal } from './components/catalog/ConfirmOrderModal';
 import { AdminDashboard } from './components/admin/AdminDashboard';
+import { HierarchyPage } from './pages/HierarchyPage';
 import { useVersionStore } from './stores/useVersionStore';
 import { useCartStore } from './stores/useCartStore';
 
@@ -11,6 +12,7 @@ function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [showAdmin, setShowAdmin] = useState(false);
+  const [showHierarchy, setShowHierarchy] = useState(false);
   const [isAdmin] = useState(true); // デモ用に管理者モードを有効化
   
   const currentVersion = useVersionStore((state) => state.currentVersion);
@@ -27,12 +29,17 @@ function App() {
     return <AdminDashboard />;
   }
 
+  if (showHierarchy) {
+    return <HierarchyPage onBack={() => setShowHierarchy(false)} />;
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      <Header 
+      <Header
         onCartClick={() => setIsCartOpen(true)}
         isAdmin={isAdmin}
         onAdminClick={() => setShowAdmin(true)}
+        onHierarchyClick={() => setShowHierarchy(true)}
       />
       
       <main className="flex-1 overflow-hidden">

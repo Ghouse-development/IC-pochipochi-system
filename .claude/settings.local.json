@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/nishino/Downloads/**)",
+      "Bash(npm run dev:*)",
+      "Read(//g/共有ドライブ/０３｜商品/01｜HOURS・LACIE・LIFE+･LIFE/**)",
+      "Bash(npm install:*)",
+      "Bash(npm run dev:server:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(npm run typecheck:*)",
+      "Bash(npx tsc:*)",
+      "Read(//g//**)",
+      "Read(//g/共有ドライブ//**)",
+      "Bash(grep:*)",
+      "Bash(python:*)",
+      "Bash(python3:*)",
+      "Bash(where python)",
+      "Bash(\"C:\\Users\\nishino\\AppData\\Local\\Microsoft\\WindowsApps\\python.exe\" extract_products.py)",
+      "Bash(node:*)",
+      "Bash(npm:*)",
+      "Bash(winget upgrade:*)",
+      "Bash(refreshenv)",
+      "Bash(git add:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
