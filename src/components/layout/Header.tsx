@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShoppingCart, User, Settings, Menu, X, FileText } from 'lucide-react';
+import { ShoppingCart, User, Settings, Menu, X, FileText, Upload } from 'lucide-react';
 import { useCartStore } from '../../stores/useCartStore';
 import { formatPrice } from '../../lib/utils';
 
@@ -8,13 +8,15 @@ interface HeaderProps {
   isAdmin?: boolean;
   onAdminClick?: () => void;
   onHierarchyClick?: () => void;
+  onImageTestClick?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   onCartClick,
   isAdmin = false,
   onAdminClick,
-  onHierarchyClick
+  onHierarchyClick,
+  onImageTestClick
 }) => {
   const { items, getTotalPrice } = useCartStore();
   const totalPrice = getTotalPrice();
@@ -34,7 +36,7 @@ export const Header: React.FC<HeaderProps> = ({
               >
                 {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>
-              <h1 className="text-xl sm:text-2xl font-bold text-gray-900">LIFE X</h1>
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-900">STYLEBOOK</h1>
               <span className="hidden sm:block text-sm text-gray-500">カタログ</span>
             </div>
             
@@ -79,6 +81,14 @@ export const Header: React.FC<HeaderProps> = ({
                 <FileText className="w-3 h-3" />
                 <span className="hidden sm:inline">階層表示</span>
                 <span className="sm:hidden">階層</span>
+              </button>
+              <button
+                onClick={onImageTestClick}
+                className="flex items-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 text-xs text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded transition-colors"
+              >
+                <Upload className="w-3 h-3" />
+                <span className="hidden sm:inline">画像テスト</span>
+                <span className="sm:hidden">画像</span>
               </button>
               <button
                 onClick={onAdminClick}

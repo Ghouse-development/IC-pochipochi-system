@@ -20,7 +20,10 @@
       "Bash(npm:*)",
       "Bash(winget upgrade:*)",
       "Bash(refreshenv)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git checkout:*)"
     ],
     "deny": [],
     "ask": []

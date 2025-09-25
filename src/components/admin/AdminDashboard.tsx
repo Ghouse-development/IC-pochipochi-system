@@ -199,7 +199,7 @@ export const AdminDashboard: React.FC = () => {
         {/* ヘッダー */}
         <div className="mb-8">
           <div className="flex justify-between items-start">
-            <h1 className="text-3xl font-bold text-gray-900">LIFE X 管理ダッシュボード</h1>
+            <h1 className="text-3xl font-bold text-gray-900">STYLEBOOK 管理ダッシュボード</h1>
             <button
               onClick={() => window.location.reload()}
               className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"

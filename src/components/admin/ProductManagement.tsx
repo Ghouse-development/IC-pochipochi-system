@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Copy, Save, X, Search, Filter } from 'lucide-react';
+import { Plus, Edit, Trash2, Copy, Save, X, Search, Filter, Upload, Image as ImageIcon } from 'lucide-react';
 import type { Product, ProductVariant, PricingInfo, PlanType, UnitType } from '../../types/product';
+import { ImageUpload } from './ImageUpload';
+import { ImageService } from '../../services/imageService';
+import type { ProductImage } from '../../lib/supabase';
 
 interface ProductManagementProps {
   products: Product[];
@@ -15,10 +18,28 @@ export function ProductManagement({ products, onProductsChange }: ProductManagem
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [showVariantEditor, setShowVariantEditor] = useState(false);
   const [editingVariant, setEditingVariant] = useState<ProductVariant | null>(null);
+  const [showImageUpload, setShowImageUpload] = useState(false);
+  const [selectedProductForImage, setSelectedProductForImage] = useState<Product | null>(null);
+  const [productImages, setProductImages] = useState<{ [key: string]: ProductImage[] }>({});
 
   useEffect(() => {
     setLocalProducts(products);
   }, [products]);
+
+  useEffect(() => {
+    // 各商品の画像を取得
+    const loadProductImages = async () => {
+      const imageMap: { [key: string]: ProductImage[] } = {};
+      for (const product of localProducts) {
+        const images = await ImageService.getProductImages(product.modelNumber);
+        if (images.length > 0) {
+          imageMap[product.modelNumber] = images;
+        }
+      }
+      setProductImages(imageMap);
+    };
+    loadProductImages();
+  }, [localProducts]);
 
   const categories = Array.from(new Set(localProducts.map(p => p.categoryName)));
 
@@ -164,6 +185,24 @@ export function ProductManagement({ products, onProductsChange }: ProductManagem
     setEditingProduct({ ...editingProduct, variants: updatedVariants });
   };
 
+  const handleOpenImageUpload = (product: Product) => {
+    setSelectedProductForImage(product);
+    setShowImageUpload(true);
+  };
+
+  const handleImageUploadComplete = async (images: ProductImage[]) => {
+    if (!selectedProductForImage) return;
+
+    // 画像マップを更新
+    setProductImages(prev => ({
+      ...prev,
+      [selectedProductForImage.modelNumber]: [
+        ...(prev[selectedProductForImage.modelNumber] || []),
+        ...images
+      ]
+    }));
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-sm">
       <div className="border-b p-4">
@@ -215,6 +254,7 @@ export function ProductManagement({ products, onProductsChange }: ProductManagem
               <th className="text-left p-3">型番</th>
               <th className="text-left p-3">カテゴリ</th>
               <th className="text-left p-3">バリエーション</th>
+              <th className="text-left p-3">画像</th>
               <th className="text-left p-3">価格（LACIE）</th>
               <th className="text-left p-3">操作</th>
             </tr>
@@ -236,6 +276,20 @@ export function ProductManagement({ products, onProductsChange }: ProductManagem
                   </span>
                 </td>
                 <td className="p-3">
+                  <div className="flex items-center gap-2">
+                    {productImages[product.modelNumber]?.length > 0 ? (
+                      <>
+                        <ImageIcon className="w-4 h-4 text-green-600" />
+                        <span className="text-sm text-gray-600">
+                          {productImages[product.modelNumber].length}枚
+                        </span>
+                      </>
+                    ) : (
+                      <span className="text-sm text-gray-400">なし</span>
+                    )}
+                  </div>
+                </td>
+                <td className="p-3">
                   ¥{(product.pricing.find(p => p.plan === 'LACIE')?.price || 0).toLocaleString()}
                 </td>
                 <td className="p-3">
@@ -246,6 +300,13 @@ export function ProductManagement({ products, onProductsChange }: ProductManagem
                       title="編集"
                     >
                       <Edit className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => handleOpenImageUpload(product)}
+                      className="p-1 text-purple-600 hover:bg-purple-50 rounded"
+                      title="画像管理"
+                    >
+                      <Upload className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => handleCopy(product)}
@@ -500,6 +561,60 @@ export function ProductManagement({ products, onProductsChange }: ProductManagem
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
               >
                 保存
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 画像アップロードモーダル */}
+      {showImageUpload && selectedProductForImage && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b p-4 flex items-center justify-between">
+              <h3 className="text-lg font-semibold">
+                {selectedProductForImage.name} - 画像管理
+              </h3>
+              <button
+                onClick={() => {
+                  setShowImageUpload(false);
+                  setSelectedProductForImage(null);
+                }}
+                className="p-1 hover:bg-gray-100 rounded"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-6">
+              <div className="mb-4">
+                <p className="text-sm text-gray-600">
+                  型番: {selectedProductForImage.modelNumber}
+                </p>
+                <p className="text-sm text-gray-600">
+                  カテゴリ: {selectedProductForImage.categoryName} / {selectedProductForImage.subcategory}
+                </p>
+              </div>
+
+              <ImageUpload
+                productCode={selectedProductForImage.modelNumber}
+                productName={selectedProductForImage.name}
+                category={selectedProductForImage.categoryName}
+                subcategory={selectedProductForImage.subcategory}
+                onUploadComplete={handleImageUploadComplete}
+                existingImages={productImages[selectedProductForImage.modelNumber] || []}
+              />
+            </div>
+
+            <div className="border-t p-4 flex justify-end">
+              <button
+                onClick={() => {
+                  setShowImageUpload(false);
+                  setSelectedProductForImage(null);
+                }}
+                className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
+              >
+                閉じる
               </button>
             </div>
           </div>
