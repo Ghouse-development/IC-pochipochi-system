@@ -1,4 +1,4 @@
-import { supabase, ProductImage } from '../lib/supabase';
+import { supabase, type ProductImage } from '../lib/supabase';
 
 export class ImageService {
   private static BUCKET_NAME = 'product-images';

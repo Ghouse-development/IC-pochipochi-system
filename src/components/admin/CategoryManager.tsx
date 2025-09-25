@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Folder,
   FolderOpen,
@@ -8,10 +8,9 @@ import {
   ChevronRight,
   ChevronDown,
   Save,
-  X,
-  Move
+  X
 } from 'lucide-react';
-import { CategoryService, Category } from '../../services/databaseService';
+import { CategoryService, type Category } from '../../services/databaseService';
 
 export function CategoryManager() {
   const [categories, setCategories] = useState<Category[]>([]);

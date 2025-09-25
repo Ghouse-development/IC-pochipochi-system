@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ImageUpload } from '../components/admin/ImageUpload';
-import { ImageService } from '../services/imageService';
 import type { ProductImage } from '../lib/supabase';
 
 export function ImageTestPage() {

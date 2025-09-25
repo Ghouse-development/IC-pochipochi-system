@@ -4,18 +4,15 @@ import {
   Save,
   Upload,
   Palette,
-  Package,
   DollarSign,
   Image as ImageIcon,
   Trash2,
-  Plus,
   Check
 } from 'lucide-react';
 import {
   VariantService,
-  ProductVariant,
-  VariantPricing,
-  VariantImage
+  type ProductVariant,
+  type VariantImage
 } from '../../services/databaseService';
 
 interface ProductVariantEditorProps {

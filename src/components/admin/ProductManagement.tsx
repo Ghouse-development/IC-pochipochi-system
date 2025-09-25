@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, Copy, Save, X, Search, Filter, Upload, Image as ImageIcon } from 'lucide-react';
-import type { Product, ProductVariant, PricingInfo, PlanType, UnitType } from '../../types/product';
+import type { Product, ProductVariant, PlanType, UnitType } from '../../types/product';
 import { ImageUpload } from './ImageUpload';
 import { ImageService } from '../../services/imageService';
 import type { ProductImage } from '../../lib/supabase';

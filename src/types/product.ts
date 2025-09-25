@@ -1,10 +1,11 @@
-export type PlanType = 'LACIE' | 'HOURS';
-export type UnitType = '㎡' | '個' | '一式' | 'sqm' | 'piece' | 'set';
+export type PlanType = 'LIFE' | 'LIFE+' | 'HOURS' | 'LACIE' | 'LIFE_X';
+export type UnitType = '㎡' | '個' | '一式' | '台' | '式' | 'sqm' | 'piece' | 'set';
 
 export interface ProductVariant {
   id: string;
   color: string;
   colorCode?: string;
+  modelNumber?: string;
   imageUrl?: string;
   thumbnailUrl?: string;
   images?: string[];
