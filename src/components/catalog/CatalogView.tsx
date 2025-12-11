@@ -92,10 +92,8 @@ export const CatalogView: React.FC<CatalogViewProps> = ({ catalogType = 'interio
     }
   };
 
-  const handleProductVariantSelect = (product: Product, variant: any) => {
-    // ここで選択された製品とバリアントを処理
-    console.log('Selected:', product.name, 'Color:', variant.color);
-    // 見積もりに追加するなどの処理を実装
+  const handleProductVariantSelect = () => {
+    // TODO: 選択された製品とバリアントを見積もりに追加する処理を実装
     setIsModalOpen(false);
     setSelectedProduct(null);
   };

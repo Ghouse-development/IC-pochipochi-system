@@ -8,7 +8,6 @@ export function ImageTestPage() {
 
   const handleUploadComplete = (images: ProductImage[]) => {
     setUploadedImages(prev => [...prev, ...images]);
-    console.log('Uploaded images:', images);
   };
 
   return (

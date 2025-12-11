@@ -40,7 +40,7 @@ export const useStatisticsStore = create<StatisticsStore>()(
         set((state) => {
           // 商品統計を更新
           const existingStatIndex = state.productStats.findIndex(s => s.productId === productId);
-          let updatedStats = [...state.productStats];
+          const updatedStats = [...state.productStats];
           
           if (existingStatIndex >= 0) {
             updatedStats[existingStatIndex] = {

@@ -530,7 +530,7 @@ export const exportPresentationData = async (
     ];
 
     // シート名を安全な文字に変換（31文字制限、特殊文字除去）
-    const safeName = category.replace(/[\\\/\?\*\[\]]/g, '').slice(0, 31);
+    const safeName = category.replace(/[\\/\\?*[\]]/g, '').slice(0, 31);
     XLSX.utils.book_append_sheet(wb, ws, safeName);
   });
 

@@ -80,13 +80,15 @@ export function UserProvider({ children }: { children: ReactNode }) {
 
     try {
       // データベースからユーザーを取得または作成
-      let { data: user, error } = await supabase
+      const { data: existingUser, error: fetchError } = await supabase
         .from('app_users')
         .select('*')
         .eq('email', email)
         .single();
 
-      if (error || !user) {
+      let finalUser = existingUser;
+
+      if (fetchError || !existingUser) {
         // ユーザーが存在しない場合は作成
         const { data: newUser, error: createError } = await supabase
           .from('app_users')
@@ -99,10 +101,10 @@ export function UserProvider({ children }: { children: ReactNode }) {
           .single();
 
         if (createError) throw createError;
-        user = newUser;
+        finalUser = newUser;
       }
 
-      setCurrentUser(user as User);
+      setCurrentUser(finalUser as User);
     } catch (error) {
       console.error('Login error:', error);
       // エラーが発生してもデモ用ユーザーを設定

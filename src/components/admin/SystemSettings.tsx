@@ -8,7 +8,7 @@ interface SettingValue {
 }
 
 export function SystemSettings() {
-  const [_settings, setSettings] = useState<SystemSetting[]>([]);
+  const [, setSettings] = useState<SystemSetting[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
