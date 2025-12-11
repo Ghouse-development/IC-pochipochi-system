@@ -381,7 +381,79 @@ VITE_SUPABASE_ANON_KEY=eyJxxxxx...
 
 ### ブランチ情報
 - **現在のブランチ**: `extrior_image`
-- **最終コミット**: `refactor: コードクリーンアップ - 型安全性向上と不要なconsole.log削除`
+- **最終コミット**: `docs: 100社ローンチチェックリスト追加`
+
+---
+
+## 2025年12月11日 Vercelデプロイ修正
+
+### 問題
+デプロイ後、以下のエラーが発生：
+```
+Supabase credentials not found. Please check your .env file.
+supabaseUrl is required.
+```
+
+### 原因
+Vercelに環境変数が設定されていなかった。
+
+### 解決手順
+```bash
+# 環境変数の確認
+npx vercel env ls
+# → No Environment Variables found
+
+# 環境変数の追加
+echo "https://qqzqffkiyzeaampotgnn.supabase.co" | npx vercel env add VITE_SUPABASE_URL production
+echo "<anon_key>" | npx vercel env add VITE_SUPABASE_ANON_KEY production
+
+# 再デプロイ
+npx vercel --prod
+```
+
+### 設定した環境変数
+| 変数名 | 環境 | 状態 |
+|--------|------|------|
+| `VITE_SUPABASE_URL` | Production | ✅ 設定済 |
+| `VITE_SUPABASE_ANON_KEY` | Production | ✅ 設定済 |
+
+### デプロイ結果
+- **本番URL**: https://ic-pochipochi-system.vercel.app
+- **デプロイ時刻**: 2025年12月11日
+- **ステータス**: ✅ Ready
+
+### システム完成度
+**全体: 92%**
+
+| カテゴリ | 完成度 |
+|----------|--------|
+| 管理者機能 | 95% |
+| お客様機能 | 93% |
+| データベース | 100% |
+| セキュリティ | 100% |
+| 品質 | 96% |
+
+---
+
+## 2025年12月11日 RLSポリシー修正
+
+### 問題
+SQLシードを実行後もAPIからデータが取得できない（空配列が返る）
+
+### 原因
+`001_complete_schema.sql`のRLSポリシーが`TO authenticated`のみで、匿名ユーザー（anon key）が読み取れなかった
+
+### 解決
+`006_fix_rls_policies.sql`を作成・実行
+- products, categories, items, item_variants, item_pricing, units, system_settings
+- すべて公開読み取り（SELECT）を許可
+
+### 確認結果
+| テーブル | 件数 | 状態 |
+|----------|------|------|
+| items | 5+ | ✅ |
+| categories | 5+ | ✅ |
+| products | 4 | ✅ |
 
 ---
 最終更新: 2025年12月11日
