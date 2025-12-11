@@ -1,9 +1,14 @@
 import React, { useState, useMemo } from 'react';
-import { Plus, Edit, Trash2, BarChart3, Package, Bell, Search, TrendingUp, FileText, Download, Upload, Settings } from 'lucide-react';
+import { Plus, Edit, Trash2, BarChart3, Package, Bell, Search, TrendingUp, FileText, Download, Upload, Settings, Users, FolderTree, Briefcase, Wrench } from 'lucide-react';
 import { Button } from '../common/Button';
 import { Card } from '../common/Card';
 import { ProductFormNew } from './ProductFormNew';
 import { ProductManagement } from './ProductManagement';
+import { SystemSettings } from './SystemSettings';
+import { ProjectManager } from './ProjectManager';
+import { ItemManager } from './ItemManager';
+import { CategoryManager } from './CategoryManager';
+import { UserManager } from './UserManager';
 import { useVersionStore } from '../../stores/useVersionStore';
 import { useOrderStore } from '../../stores/useOrderStore';
 import { useProductStore } from '../../stores/useProductStore';
@@ -13,8 +18,12 @@ import { exportProductsToExcel, exportProductsToCSV } from '../../utils/exportPr
 import { PdfImport } from './PdfImport';
 import type { Product } from '../../types/product';
 
-export const AdminDashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'products' | 'management' | 'statistics' | 'adoption' | 'versions' | 'pdf'>('products');
+interface AdminDashboardProps {
+  onBack?: () => void;
+}
+
+export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
+  const [activeTab, setActiveTab] = useState<'products' | 'management' | 'statistics' | 'adoption' | 'versions' | 'pdf' | 'settings' | 'projects' | 'items' | 'categories' | 'users'>('products');
   const [productCategory, setProductCategory] = useState<'exterior' | 'interior' | 'water'>('exterior');
   const [searchTerm, setSearchTerm] = useState('');
   const [showProductForm, setShowProductForm] = useState(false);
@@ -201,10 +210,10 @@ export const AdminDashboard: React.FC = () => {
           <div className="flex justify-between items-start">
             <h1 className="text-3xl font-bold text-gray-900">STYLEBOOK 管理ダッシュボード</h1>
             <button
-              onClick={() => window.location.reload()}
+              onClick={onBack || (() => window.location.reload())}
               className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
             >
-              カタログに戻る
+              ← カタログに戻る
             </button>
           </div>
           <div className="flex items-center gap-4 mt-2">
@@ -301,6 +310,80 @@ export const AdminDashboard: React.FC = () => {
               <Upload className="w-4 h-4 sm:w-5 sm:h-5" />
               <span className="hidden sm:inline">PDF取り込み</span>
               <span className="sm:hidden">PDF</span>
+            </div>
+          </button>
+
+          {/* 新しい管理機能タブ */}
+          <div className="border-l border-gray-300 h-6 mx-2" />
+
+          <button
+            onClick={() => setActiveTab('projects')}
+            className={`pb-2 px-1 border-b-2 transition-colors ${
+              activeTab === 'projects'
+                ? 'border-teal-500 text-teal-600'
+                : 'border-transparent text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            <div className="flex items-center gap-1 sm:gap-2">
+              <Briefcase className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="hidden sm:inline">プロジェクト</span>
+              <span className="sm:hidden">案件</span>
+            </div>
+          </button>
+          <button
+            onClick={() => setActiveTab('items')}
+            className={`pb-2 px-1 border-b-2 transition-colors ${
+              activeTab === 'items'
+                ? 'border-teal-500 text-teal-600'
+                : 'border-transparent text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            <div className="flex items-center gap-1 sm:gap-2">
+              <Package className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="hidden sm:inline">アイテム管理</span>
+              <span className="sm:hidden">商品</span>
+            </div>
+          </button>
+          <button
+            onClick={() => setActiveTab('categories')}
+            className={`pb-2 px-1 border-b-2 transition-colors ${
+              activeTab === 'categories'
+                ? 'border-teal-500 text-teal-600'
+                : 'border-transparent text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            <div className="flex items-center gap-1 sm:gap-2">
+              <FolderTree className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="hidden sm:inline">カテゴリ</span>
+              <span className="sm:hidden">分類</span>
+            </div>
+          </button>
+          <button
+            onClick={() => setActiveTab('users')}
+            className={`pb-2 px-1 border-b-2 transition-colors ${
+              activeTab === 'users'
+                ? 'border-teal-500 text-teal-600'
+                : 'border-transparent text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            <div className="flex items-center gap-1 sm:gap-2">
+              <Users className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="hidden sm:inline">ユーザー</span>
+              <span className="sm:hidden">人</span>
+            </div>
+          </button>
+          <button
+            onClick={() => setActiveTab('settings')}
+            className={`pb-2 px-1 border-b-2 transition-colors ${
+              activeTab === 'settings'
+                ? 'border-teal-500 text-teal-600'
+                : 'border-transparent text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            <div className="flex items-center gap-1 sm:gap-2">
+              <Wrench className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="hidden sm:inline">システム設定</span>
+              <span className="sm:hidden">設定</span>
             </div>
           </button>
         </div>
@@ -718,6 +801,41 @@ export const AdminDashboard: React.FC = () => {
         {activeTab === 'pdf' && (
           <div className="space-y-6">
             <PdfImport />
+          </div>
+        )}
+
+        {/* プロジェクト管理 */}
+        {activeTab === 'projects' && (
+          <div className="space-y-6">
+            <ProjectManager />
+          </div>
+        )}
+
+        {/* アイテム管理 */}
+        {activeTab === 'items' && (
+          <div className="space-y-6">
+            <ItemManager />
+          </div>
+        )}
+
+        {/* カテゴリ管理 */}
+        {activeTab === 'categories' && (
+          <div className="space-y-6">
+            <CategoryManager />
+          </div>
+        )}
+
+        {/* ユーザー管理 */}
+        {activeTab === 'users' && (
+          <div className="space-y-6">
+            <UserManager />
+          </div>
+        )}
+
+        {/* システム設定 */}
+        {activeTab === 'settings' && (
+          <div className="space-y-6">
+            <SystemSettings />
           </div>
         )}
       </div>

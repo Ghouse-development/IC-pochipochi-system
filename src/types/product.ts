@@ -1,5 +1,34 @@
 export type PlanType = 'LIFE' | 'LIFE+' | 'HOURS' | 'LACIE' | 'LIFE_X';
-export type UnitType = '㎡' | '個' | '一式' | '台' | '式' | '箇所' | 'sqm' | 'piece' | 'set';
+
+// UnitType: DBコード + 日本語表示両方サポート（後方互換性維持）
+export type UnitTypeCode = 'sqm' | 'piece' | 'location' | 'set' | 'package' | 'sheet' | 'meter' | 'unit' | 'pair';
+export type UnitTypeJapanese = '㎡' | '個' | '箇所' | '一式' | '梱' | '枚' | 'm' | '台' | '組' | '式';
+export type UnitType = UnitTypeCode | UnitTypeJapanese;
+
+// 単位コードから日本語表示への変換マップ
+export const UNIT_SYMBOLS: Record<string, string> = {
+  // Code to Japanese
+  sqm: '㎡',
+  piece: '個',
+  location: '箇所',
+  set: '一式',
+  package: '梱',
+  sheet: '枚',
+  meter: 'm',
+  unit: '台',
+  pair: '組',
+  // Japanese passthrough
+  '㎡': '㎡',
+  '個': '個',
+  '箇所': '箇所',
+  '一式': '一式',
+  '梱': '梱',
+  '枚': '枚',
+  'm': 'm',
+  '台': '台',
+  '組': '組',
+  '式': '一式',
+};
 
 export interface ProductVariant {
   id: string;

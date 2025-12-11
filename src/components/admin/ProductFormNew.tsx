@@ -21,7 +21,7 @@ export const ProductFormNew: React.FC<ProductFormNewProps> = ({
     categoryName: product?.categoryName || '',
     manufacturer: product?.manufacturer || '',
     modelNumber: product?.modelNumber || '',
-    unit: product?.unit || '個',
+    unit: product?.unit || 'piece',
     isOption: product?.isOption ?? true,
     description: product?.description || '',
     variants: product?.variants || [{ 

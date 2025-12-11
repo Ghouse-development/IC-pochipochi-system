@@ -1,10 +1,73 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://pnurwehyjmiyevwtekip.supabase.co';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBudXJ3ZWh5am1peWV2d3Rla2lwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg3NTEwODQsImV4cCI6MjA3NDMyNzA4NH0.K7JybxT95cElbF-FXLBDHvHQ4S-FrphP1E9cScSKJoo';
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.warn('Supabase credentials not found. Please check your .env file.');
+}
 
+export const supabase = createClient(
+  supabaseUrl || '',
+  supabaseAnonKey || '',
+  {
+    auth: {
+      autoRefreshToken: true,
+      persistSession: true,
+      detectSessionInUrl: true,
+    },
+  }
+);
+
+// Storage bucket names
+export const STORAGE_BUCKETS = {
+  ITEM_IMAGES: 'item-images',
+  PROJECT_DOCUMENTS: 'project-documents',
+  SYSTEM_ASSETS: 'system-assets',
+} as const;
+
+// Helper function to get public URL for storage items
+export const getStorageUrl = (bucket: string, path: string): string => {
+  const { data } = supabase.storage.from(bucket).getPublicUrl(path);
+  return data.publicUrl;
+};
+
+// Helper function to upload file to storage
+export const uploadFile = async (
+  bucket: string,
+  path: string,
+  file: File
+): Promise<{ url: string; path: string } | null> => {
+  const { data, error } = await supabase.storage
+    .from(bucket)
+    .upload(path, file, {
+      cacheControl: '3600',
+      upsert: true,
+    });
+
+  if (error) {
+    console.error('Upload error:', error);
+    return null;
+  }
+
+  const publicUrl = getStorageUrl(bucket, data.path);
+  return { url: publicUrl, path: data.path };
+};
+
+// Helper function to delete file from storage
+export const deleteFile = async (
+  bucket: string,
+  path: string
+): Promise<boolean> => {
+  const { error } = await supabase.storage.from(bucket).remove([path]);
+  if (error) {
+    console.error('Delete error:', error);
+    return false;
+  }
+  return true;
+};
+
+// Legacy interface for backward compatibility
 export interface ProductImage {
   id?: string;
   product_code: string;

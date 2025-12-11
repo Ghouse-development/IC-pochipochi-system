@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { Product } from '../../types/product';
+import { UNIT_SYMBOLS } from '../../types/product';
 import { Card } from '../common/Card';
 import { Badge } from '../common/Badge';
 import { formatPrice } from '../../lib/utils';
@@ -65,9 +66,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect }) =
           <span className="text-sm sm:text-lg font-bold text-gray-900">
             {price === 0 ? '標準仕様' : formatPrice(price)}
           </span>
-          {price > 0 && (
+          {price > 0 && product.unit && (
             <span className="text-xs text-gray-500">
-              {product.unit === '㎡' ? '/ ㎡' : product.unit === '個' ? '/ 個' : ''}
+              / {UNIT_SYMBOLS[product.unit] || product.unit}
             </span>
           )}
         </div>

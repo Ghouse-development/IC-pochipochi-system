@@ -1,5 +1,10 @@
 import { supabase } from '../lib/supabase';
 
+// JSON型定義（監査ログ用）
+export type JsonValue = string | number | boolean | null | JsonObject | JsonArray;
+export interface JsonObject { [key: string]: JsonValue }
+export type JsonArray = JsonValue[];
+
 export interface AuditLog {
   id: string;
   user_id?: string;
@@ -8,9 +13,9 @@ export interface AuditLog {
   table_name: string;
   record_id: string;
   action: 'INSERT' | 'UPDATE' | 'DELETE';
-  old_data?: any;
-  new_data?: any;
-  changes?: any;
+  old_data?: JsonObject;
+  new_data?: JsonObject;
+  changes?: JsonObject;
   ip_address?: string;
   user_agent?: string;
   session_id?: string;
@@ -26,7 +31,7 @@ export interface AuditLogSummary {
   action: string;
   record_id: string;
   record_name: string;
-  changes: any;
+  changes: JsonObject | null;
   changed_fields_count: number;
 }
 
@@ -49,9 +54,9 @@ export class AuditService {
     tableName: string,
     recordId: string,
     action: 'INSERT' | 'UPDATE' | 'DELETE',
-    oldData?: any,
-    newData?: any,
-    changes?: any
+    oldData?: JsonObject,
+    newData?: JsonObject,
+    changes?: JsonObject
   ): Promise<void> {
     try {
       const user = JSON.parse(localStorage.getItem('stylebook_user') || '{}');
@@ -177,7 +182,7 @@ export class AuditService {
   /**
    * 変更内容をわかりやすい形式に変換
    */
-  static formatChanges(changes: any): string[] {
+  static formatChanges(changes: JsonObject | null | undefined): string[] {
     if (!changes || typeof changes !== 'object') return [];
 
     const formatted: string[] = [];
@@ -218,7 +223,7 @@ export class AuditService {
   /**
    * 値をフォーマット
    */
-  private static formatValue(value: any): string {
+  private static formatValue(value: JsonValue): string {
     if (value === null || value === undefined) return '(空)';
     if (typeof value === 'boolean') return value ? 'はい' : 'いいえ';
     if (typeof value === 'number') return value.toLocaleString();

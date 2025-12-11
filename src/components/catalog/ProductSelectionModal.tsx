@@ -174,7 +174,7 @@ export const ProductSelectionModal: React.FC<ProductSelectionModalProps> = ({
                 </div>
                 {price > 0 && product.unit && (
                   <div className="text-sm text-gray-600 text-right mt-1">
-                    {product.unit === '㎡' ? '/ ㎡' : product.unit === '個' ? '/ 個' : '/ 一式'}
+                    / {product.unit}
                   </div>
                 )}
               </div>
