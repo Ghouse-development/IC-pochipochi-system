@@ -76,13 +76,9 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
       }
       return;
     }
-    
-    addItem({
-      product,
-      selectedVariant: variant,
-      quantity,
-    });
-    
+
+    addItem(product, quantity, variant);
+
     setIsAdded(true);
     setTimeout(() => {
       setIsAdded(false);

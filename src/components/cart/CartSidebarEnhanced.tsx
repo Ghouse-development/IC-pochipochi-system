@@ -12,11 +12,11 @@ interface CartSidebarEnhancedProps {
 }
 
 export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen, onClose }) => {
-  const { items, removeItem, updateQuantity, getTotalPrice, clearCart } = useCartStore();
+  const { items, removeItem, updateQuantity, getTotalPrice, clearCart, selectedPlanId } = useCartStore();
   const [isFinalized, setIsFinalized] = useState(false);
   const [customerName, setCustomerName] = useState('');
   const [projectName, setProjectName] = useState('');
-  
+
   const totalPrice = getTotalPrice();
 
   const handleTemporarySave = () => {
@@ -155,8 +155,8 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
           ) : (
             <div className="space-y-4">
               {items.map((item) => {
-                const price = item.product.pricing.find(
-                  (p) => p.planId === 'LACIE'
+                const price = item.product.pricing?.find(
+                  (p) => p.planId === selectedPlanId || p.plan === selectedPlanId
                 )?.price || 0;
                 
                 return (
