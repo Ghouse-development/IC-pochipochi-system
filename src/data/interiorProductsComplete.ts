@@ -2359,7 +2359,7 @@ export const interiorProductsComplete: Product[] = [
     name: '健やかたたみおもて/清流',
     manufacturer: '大建工業',
     modelNumber: 'SUKOYAKA-SEIRYU',
-    unit: '半畳',
+    unit: '枚',
     isOption: true,
     description: '和室はもちろん、小上がりスペースにもおすすめ。強化和紙製、耐水性・耐久性に優れる',
     variants: [
@@ -2418,7 +2418,7 @@ export const interiorProductsComplete: Product[] = [
     name: '小上がり下引出収納（H350）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'KOAGARI-STORAGE-H350',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '小上がり下を有効活用する引出収納。収納高さH200程度。※小上がり高さH350用',
     variants: [
@@ -2445,7 +2445,7 @@ export const interiorProductsComplete: Product[] = [
     name: '小上がり下引出収納（H400）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'KOAGARI-STORAGE-H400',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '小上がり下を有効活用する引出収納。収納高さH250程度。※小上がり高さH400用',
     variants: [
@@ -2551,7 +2551,7 @@ export const interiorProductsComplete: Product[] = [
     name: '床下収納庫 SPF-60S2',
     manufacturer: '城東テクノ',
     modelNumber: 'SPF-60S2',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '600×600床下収納庫。深さ約270㎜',
     variants: [
@@ -2804,7 +2804,7 @@ export const interiorProductsComplete: Product[] = [
     name: '階段 踊り場形状',
     manufacturer: 'Gハウス施工',
     modelNumber: 'STAIRS-LANDING',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '階段の踊り場形状変更',
     variants: [
@@ -2851,7 +2851,7 @@ export const interiorProductsComplete: Product[] = [
     name: '壁付I型手摺追加 H600',
     manufacturer: 'LIXIL',
     modelNumber: 'HANDRAIL-WALL',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '壁付けI型手摺の追加（H600）',
     variants: [
@@ -2925,7 +2925,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'アイアンまわり階段',
     manufacturer: 'スレート',
     modelNumber: 'IRON-STAIRS-TURN',
-    unit: '曲がり',
+    unit: '箇所',
     isOption: true,
     description: 'アイアン階段を曲がり階段にする追加オプション。一曲がりごとに追加',
     variants: [
@@ -3019,7 +3019,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'カーペット階段',
     manufacturer: 'Gハウス施工',
     modelNumber: 'CARPET-STAIRS',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '1~2階分ごとにオプション。※ひな壇階段・アイアン階段では使用不可。1～2階と2～3階で採用の場合はオプション×2',
     variants: [
@@ -3180,7 +3180,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'アーチ垂壁',
     manufacturer: 'Gハウス施工',
     modelNumber: 'ARCH-TAREKABE',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'アーチ型の垂壁。幅910mm',
     variants: [
@@ -3236,7 +3236,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'Panasonic VERITIS ペイントカラー',
     manufacturer: 'Panasonic',
     modelNumber: 'VERITIS-PAINT',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'ペイントカラーへの変更差額（扉1枚W900まで）',
     variants: [
@@ -3262,7 +3262,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'Panasonic VERITIS ソリッドカラー',
     manufacturer: 'Panasonic',
     modelNumber: 'VERITIS-SOLID',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'ソリッドカラーへの変更差額（扉1枚W900まで）',
     variants: [
@@ -3310,7 +3310,7 @@ export const interiorProductsComplete: Product[] = [
     name: '開き戸追加',
     manufacturer: 'Panasonic',
     modelNumber: 'DOOR-ADD-SWING',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'リビングドア・書斎・洗面室・収納等の建具追加',
     variants: [
@@ -3333,7 +3333,7 @@ export const interiorProductsComplete: Product[] = [
     name: '標準開戸から片引戸へ変更',
     manufacturer: 'Panasonic',
     modelNumber: 'DOOR-CHANGE-SLIDE',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '標準開戸から片引戸への変更差額。上吊りタイプ、下方レール無',
     variants: [
@@ -3356,7 +3356,7 @@ export const interiorProductsComplete: Product[] = [
     name: '表示錠付きに変更',
     manufacturer: 'Panasonic',
     modelNumber: 'DOOR-ADD-LOCK',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '表示錠付きに変更差額。※トイレ、脱衣室の扉には標準で表示錠が付属',
     variants: [
@@ -3379,7 +3379,7 @@ export const interiorProductsComplete: Product[] = [
     name: '引戸追加',
     manufacturer: 'Panasonic',
     modelNumber: 'DOOR-ADD-SLIDING',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '引戸の追加。片引戸は3枚目からオプション',
     variants: [
@@ -3402,7 +3402,7 @@ export const interiorProductsComplete: Product[] = [
     name: '収納用建具 折れ戸 PHデザイン',
     manufacturer: 'Panasonic',
     modelNumber: 'STORAGE-FOLD',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '折れ戸/壁芯々W910まで（H2400）。PHデザイン取手レス',
     variants: [
@@ -3425,7 +3425,7 @@ export const interiorProductsComplete: Product[] = [
     name: '収納用建具 2枚引き違い戸 PAデザイン',
     manufacturer: 'Panasonic',
     modelNumber: 'STORAGE-SLIDE2',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '2枚引き違い戸/壁芯々W1820まで（H2400）',
     variants: [
@@ -3448,7 +3448,7 @@ export const interiorProductsComplete: Product[] = [
     name: '収納建具 鏡追加',
     manufacturer: 'Panasonic',
     modelNumber: 'STORAGE-MIRROR',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '折れ戸のみ対応可',
     variants: [
@@ -3471,7 +3471,7 @@ export const interiorProductsComplete: Product[] = [
     name: '建具デザイン変更（ガラス/アクリル入り）',
     manufacturer: 'Panasonic',
     modelNumber: 'DOOR-DESIGN-GLASS',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'WB/WC/LD/MC/LBデザイン、ペットドア。※ガラスの変更は対応不可',
     variants: [
@@ -3499,7 +3499,7 @@ export const interiorProductsComplete: Product[] = [
     name: '建具デザイン変更 HCデザイン',
     manufacturer: 'Panasonic',
     modelNumber: 'DOOR-DESIGN-HC',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '引戸のみ対応。透明orフロスト長熱処理ガラス。引戸変更費用含む',
     variants: [
@@ -3523,7 +3523,7 @@ export const interiorProductsComplete: Product[] = [
     name: '建具デザイン変更 HBデザイン',
     manufacturer: 'Panasonic',
     modelNumber: 'DOOR-DESIGN-HB',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '引戸のみ対応。透明orフロスト長熱処理ガラス。引戸変更費用含む',
     variants: [
@@ -3922,7 +3922,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'インテリア格子 W045（W276～465mm）',
     manufacturer: 'LIXIL',
     modelNumber: 'KOUSHI-W045',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '高さH895～2,495mmから選択可能。※腰壁を設置する場合は別途費用',
     variants: [
@@ -3948,7 +3948,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'インテリア格子 W085（W466～843mm）',
     manufacturer: 'LIXIL',
     modelNumber: 'KOUSHI-W085',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '高さH895～2,495mmから選択可能。※腰壁を設置する場合は別途費用',
     variants: [
@@ -3974,7 +3974,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'インテリア格子 W12（W843～1,221mm）',
     manufacturer: 'LIXIL',
     modelNumber: 'KOUSHI-W12',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '高さH895～2,495mmから選択可能。※腰壁を設置する場合は別途費用',
     variants: [
@@ -4000,7 +4000,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'インテリア格子 W16（W1,221～2,495mm）',
     manufacturer: 'LIXIL',
     modelNumber: 'KOUSHI-W16',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '高さH895～2,495mmから選択可能。※腰壁を設置する場合は別途費用',
     variants: [
@@ -4666,7 +4666,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'インテリアカウンター1（ちょい置きスペース）',
     manufacturer: 'Panasonic',
     modelNumber: 'INT-COUNTER-1',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '耐水集成タイプ・厚み24mm。トイレなど、ちょい置きスペースに。受け桟のみ（両側壁の場合のみ）',
     variants: [
@@ -4697,7 +4697,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'インテリアカウンター2 奥行100～200mm W～1000mm',
     manufacturer: 'Panasonic',
     modelNumber: 'INT-COUNTER-2A-W1000',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '耐水集成タイプ・厚み24mm。アーチアングル3個使用。奥行150～300mmに対応。角はR加工なし',
     variants: [
@@ -4720,7 +4720,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'インテリアカウンター2 奥行100～200mm W1001～1800mm',
     manufacturer: 'Panasonic',
     modelNumber: 'INT-COUNTER-2A-W1800',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '耐水集成タイプ・厚み24mm。アーチアングル4個使用。奥行150～300mmに対応。角はR加工なし',
     variants: [
@@ -4743,7 +4743,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'インテリアカウンター2 奥行100～200mm W1801～2800mm',
     manufacturer: 'Panasonic',
     modelNumber: 'INT-COUNTER-2A-W2800',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '耐水集成タイプ・厚み24mm。アーチアングル6個使用。奥行150～300mmに対応。角はR加工なし',
     variants: [
@@ -4766,7 +4766,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'インテリアカウンター2 奥行100～200mm W2801～4000mm',
     manufacturer: 'Panasonic',
     modelNumber: 'INT-COUNTER-2A-W4000',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '耐水集成タイプ・厚み24mm。アーチアングル9個使用。奥行150～300mmに対応。角はR加工なし',
     variants: [
@@ -4789,7 +4789,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'インテリアカウンター2 奥行201～450mm W～1000mm',
     manufacturer: 'Panasonic',
     modelNumber: 'INT-COUNTER-2B-W1000',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '耐水集成タイプ・厚み24mm。ブラケット3個使用。角はR加工なし',
     variants: [
@@ -4812,7 +4812,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'インテリアカウンター2 奥行201～450mm W1001～1800mm',
     manufacturer: 'Panasonic',
     modelNumber: 'INT-COUNTER-2B-W1800',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '耐水集成タイプ・厚み24mm。ブラケット4個使用。角はR加工なし',
     variants: [
@@ -4835,7 +4835,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'インテリアカウンター2 奥行201～450mm W1801～2800mm',
     manufacturer: 'Panasonic',
     modelNumber: 'INT-COUNTER-2B-W2800',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '耐水集成タイプ・厚み24mm。ブラケット6個使用。角はR加工なし',
     variants: [
@@ -4858,7 +4858,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'インテリアカウンター2 奥行201～450mm W2801～4000mm',
     manufacturer: 'Panasonic',
     modelNumber: 'INT-COUNTER-2B-W4000',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '耐水集成タイプ・厚み24mm。ブラケット9個使用。角はR加工なし',
     variants: [
@@ -4881,7 +4881,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'インテリアカウンター2 奥行451～600mm W～1000mm',
     manufacturer: 'Panasonic',
     modelNumber: 'INT-COUNTER-2C-W1000',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '耐水集成タイプ・厚み24mm。ブラケット3個使用。角はR加工なし',
     variants: [
@@ -4904,7 +4904,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'インテリアカウンター2 奥行451～600mm W1001～1800mm',
     manufacturer: 'Panasonic',
     modelNumber: 'INT-COUNTER-2C-W1800',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '耐水集成タイプ・厚み24mm。ブラケット4個使用。角はR加工なし',
     variants: [
@@ -4927,7 +4927,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'インテリアカウンター2 奥行451～600mm W1801～2800mm',
     manufacturer: 'Panasonic',
     modelNumber: 'INT-COUNTER-2C-W2800',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '耐水集成タイプ・厚み24mm。ブラケット6個使用。角はR加工なし',
     variants: [
@@ -4950,7 +4950,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'インテリアカウンター2 奥行451～600mm W2801～4000mm',
     manufacturer: 'Panasonic',
     modelNumber: 'INT-COUNTER-2C-W4000',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '耐水集成タイプ・厚み24mm。ブラケット9個使用。角はR加工なし',
     variants: [
@@ -5028,7 +5028,7 @@ export const interiorProductsComplete: Product[] = [
     name: '配線用キャップ穴加工',
     manufacturer: 'Panasonic',
     modelNumber: 'CABLE-HOLE',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'カウンターへの配線用穴加工。φ60mmキャップ付き',
     variants: [
@@ -5053,7 +5053,7 @@ export const interiorProductsComplete: Product[] = [
     name: '枕棚+PH W～910mm（各居室2カ所目から）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'SHELF-A-W910',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '枕棚+パイプハンガー。FL+1800。枕棚ホワイト、パイプシルバー。W～910mm（壁芯々）。※WIC、納戸は含みません。各寝室1カ所は標準',
     variants: [
@@ -5076,7 +5076,7 @@ export const interiorProductsComplete: Product[] = [
     name: '枕棚+PH W910～1820mm（各居室2カ所目から）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'SHELF-A-W1820',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '枕棚+パイプハンガー。FL+1800。枕棚ホワイト、パイプシルバー。W910～1820mm（壁芯々）。※WIC、納戸は含みません。各寝室1カ所は標準',
     variants: [
@@ -5099,7 +5099,7 @@ export const interiorProductsComplete: Product[] = [
     name: '枕棚+PH W1820～2730mm（各居室2カ所目から）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'SHELF-A-W2730',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '枕棚+パイプハンガー。FL+1800。枕棚ホワイト、パイプシルバー。W1820～2730mm（壁芯々）。※WIC、納戸は含みません。各寝室1カ所は標準',
     variants: [
@@ -5122,7 +5122,7 @@ export const interiorProductsComplete: Product[] = [
     name: '枕棚のみ W～910mm（D450）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'SHELF-B1-W910',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '枕棚のみ D450mm。FL+1800。ホワイトのみ。W～910mm（壁芯々）',
     variants: [
@@ -5145,7 +5145,7 @@ export const interiorProductsComplete: Product[] = [
     name: '枕棚のみ W910～1820mm（D450）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'SHELF-B1-W1820',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '枕棚のみ D450mm。FL+1800。ホワイトのみ。W910～1820mm（壁芯々）',
     variants: [
@@ -5168,7 +5168,7 @@ export const interiorProductsComplete: Product[] = [
     name: '枕棚のみ W1820～2730mm（D450）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'SHELF-B1-W2730',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '枕棚のみ D450mm。FL+1800。ホワイトのみ。W1820～2730mm（壁芯々）',
     variants: [
@@ -5191,7 +5191,7 @@ export const interiorProductsComplete: Product[] = [
     name: '枕棚+中段 W～910mm（D840）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'SHELF-B2-W910',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '枕棚+中段 D840mm。FL+800。ホワイトのみ。W～910mm（壁芯々）',
     variants: [
@@ -5214,7 +5214,7 @@ export const interiorProductsComplete: Product[] = [
     name: '枕棚+中段 W910～1820mm（D840）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'SHELF-B2-W1820',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '枕棚+中段 D840mm。FL+800。ホワイトのみ。W910～1820mm（壁芯々）',
     variants: [
@@ -5237,7 +5237,7 @@ export const interiorProductsComplete: Product[] = [
     name: '枕棚+中段 W1820～2730mm（D840）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'SHELF-B2-W2730',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '枕棚+中段 D840mm。FL+800。ホワイトのみ。W1820～2730mm（壁芯々）',
     variants: [
@@ -5260,7 +5260,7 @@ export const interiorProductsComplete: Product[] = [
     name: '中段のみ W～910mm（D840）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'SHELF-B3-W910',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '中段のみ D840mm。ホワイトのみ。W～910mm（壁芯々）',
     variants: [
@@ -5283,7 +5283,7 @@ export const interiorProductsComplete: Product[] = [
     name: '中段のみ W910～1820mm（D840）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'SHELF-B3-W1820',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '中段のみ D840mm。ホワイトのみ。W910～1820mm（壁芯々）',
     variants: [
@@ -5306,7 +5306,7 @@ export const interiorProductsComplete: Product[] = [
     name: '中段のみ W1820～2730mm（D840）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'SHELF-B3-W2730',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '中段のみ D840mm。ホワイトのみ。W1820～2730mm（壁芯々）',
     variants: [
@@ -5329,7 +5329,7 @@ export const interiorProductsComplete: Product[] = [
     name: '可動棚C D300×2枚（両壁収まり）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'C300-2',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '棚柱最長1800mm。W～900mm（有効）。棚板ホワイトorダークグレー、棚柱ブラケット・パイプ：シルバー',
     variants: [
@@ -5353,7 +5353,7 @@ export const interiorProductsComplete: Product[] = [
     name: '可動棚C D300×4枚（両壁収まり）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'C300-4',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '棚柱最長1800mm。W～900mm（有効）。棚板ホワイトorダークグレー、棚柱ブラケット・パイプ：シルバー',
     variants: [
@@ -5377,7 +5377,7 @@ export const interiorProductsComplete: Product[] = [
     name: '可動棚C D300×6枚（両壁収まり）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'C300-6',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '棚柱最長1800mm。W～900mm（有効）。棚板ホワイトorダークグレー、棚柱ブラケット・パイプ：シルバー',
     variants: [
@@ -5401,7 +5401,7 @@ export const interiorProductsComplete: Product[] = [
     name: '可動棚C D450×2枚（両壁収まり）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'C450-2',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '棚柱最長1800mm。W～900mm（有効）。棚板ホワイトorダークグレー、棚柱ブラケット・パイプ：シルバー',
     variants: [
@@ -5425,7 +5425,7 @@ export const interiorProductsComplete: Product[] = [
     name: '可動棚C D450×4枚（両壁収まり）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'C450-4',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '棚柱最長1800mm。W～900mm（有効）。棚板ホワイトorダークグレー、棚柱ブラケット・パイプ：シルバー',
     variants: [
@@ -5449,7 +5449,7 @@ export const interiorProductsComplete: Product[] = [
     name: '可動棚C D450×6枚（両壁収まり）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'C450-6',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '棚柱最長1800mm。W～900mm（有効）。棚板ホワイトorダークグレー、棚柱ブラケット・パイプ：シルバー',
     variants: [
@@ -5473,7 +5473,7 @@ export const interiorProductsComplete: Product[] = [
     name: '可動棚D D300×2枚 W～900mm（壁無し納まり）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'D300-2-W900',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '棚柱最長1800mm。W～900mm（有効）。棚板ホワイトorダークグレー、棚柱ブラケット・パイプ：シルバー',
     variants: [
@@ -5497,7 +5497,7 @@ export const interiorProductsComplete: Product[] = [
     name: '可動棚D D300×2枚 W900～1800mm（壁無し納まり）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'D300-2-W1800',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '棚柱最長1800mm。W900～1800mm（有効）。棚板ホワイトorダークグレー、棚柱ブラケット・パイプ：シルバー',
     variants: [
@@ -5521,7 +5521,7 @@ export const interiorProductsComplete: Product[] = [
     name: '可動棚D D300×4枚 W～900mm（壁無し納まり）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'D300-4-W900',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '棚柱最長1800mm。W～900mm（有効）。棚板ホワイトorダークグレー、棚柱ブラケット・パイプ：シルバー',
     variants: [
@@ -5545,7 +5545,7 @@ export const interiorProductsComplete: Product[] = [
     name: '可動棚D D300×4枚 W900～1800mm（壁無し納まり）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'D300-4-W1800',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '棚柱最長1800mm。W900～1800mm（有効）。棚板ホワイトorダークグレー、棚柱ブラケット・パイプ：シルバー',
     variants: [
@@ -5569,7 +5569,7 @@ export const interiorProductsComplete: Product[] = [
     name: '可動棚D D300×6枚 W～900mm（壁無し納まり）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'D300-6-W900',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '棚柱最長1800mm。W～900mm（有効）。棚板ホワイトorダークグレー、棚柱ブラケット・パイプ：シルバー',
     variants: [
@@ -5593,7 +5593,7 @@ export const interiorProductsComplete: Product[] = [
     name: '可動棚D D300×6枚 W900～1800mm（壁無し納まり）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'D300-6-W1800',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '棚柱最長1800mm。W900～1800mm（有効）。棚板ホワイトorダークグレー、棚柱ブラケット・パイプ：シルバー',
     variants: [
@@ -5617,7 +5617,7 @@ export const interiorProductsComplete: Product[] = [
     name: '可動棚D D450×2枚 W～900mm（壁無し納まり）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'D450-2-W900',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '棚柱最長1800mm。W～900mm（有効）。棚板ホワイトorダークグレー、棚柱ブラケット・パイプ：シルバー',
     variants: [
@@ -5641,7 +5641,7 @@ export const interiorProductsComplete: Product[] = [
     name: '可動棚D D450×2枚 W900～1800mm（壁無し納まり）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'D450-2-W1800',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '棚柱最長1800mm。W900～1800mm（有効）。棚板ホワイトorダークグレー、棚柱ブラケット・パイプ：シルバー',
     variants: [
@@ -5665,7 +5665,7 @@ export const interiorProductsComplete: Product[] = [
     name: '可動棚D D450×4枚 W～900mm（壁無し納まり）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'D450-4-W900',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '棚柱最長1800mm。W～900mm（有効）。棚板ホワイトorダークグレー、棚柱ブラケット・パイプ：シルバー',
     variants: [
@@ -5689,7 +5689,7 @@ export const interiorProductsComplete: Product[] = [
     name: '可動棚D D450×4枚 W900～1800mm（壁無し納まり）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'D450-4-W1800',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '棚柱最長1800mm。W900～1800mm（有効）。棚板ホワイトorダークグレー、棚柱ブラケット・パイプ：シルバー',
     variants: [
@@ -5713,7 +5713,7 @@ export const interiorProductsComplete: Product[] = [
     name: '可動棚D D450×6枚 W～900mm（壁無し納まり）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'D450-6-W900',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '棚柱最長1800mm。W～900mm（有効）。棚板ホワイトorダークグレー、棚柱ブラケット・パイプ：シルバー',
     variants: [
@@ -5737,7 +5737,7 @@ export const interiorProductsComplete: Product[] = [
     name: '可動棚D D450×6枚 W900～1800mm（壁無し納まり）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'D450-6-W1800',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '棚柱最長1800mm。W900～1800mm（有効）。棚板ホワイトorダークグレー、棚柱ブラケット・パイプ：シルバー',
     variants: [
@@ -5761,7 +5761,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'ハンガーパイプ2本 棚柱付（可動）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'HANGER-2P',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'W～1000mmまで。棚柱ブラケット・パイプ：シルバー',
     variants: [
@@ -5784,7 +5784,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'ハンガーパイプ1セット追加（可動）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'HANGER-ADD',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'W～1000mmまで。棚柱ブラケット・パイプ：シルバー',
     variants: [
@@ -5807,7 +5807,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'ランドリー可動棚（W600）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'LAUNDRY-SHELF',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'D300棚板×1枚、D300パイプ付棚板×1枚。棚柱FL+2100。棚柱ブラケット：ホワイト、パイプ：シルバー。棚板ホワイトのみ',
     variants: [
@@ -5830,7 +5830,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'S1 樹脂製 可動棚',
     manufacturer: 'Gハウス施工',
     modelNumber: 'SHELF-S1',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '棚板D300×8枚。棚板ホワイトorダークグレー、棚柱ブラケット・パイプ：シルバー。W756mm',
     variants: [
@@ -5854,7 +5854,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'S2 樹脂製 可動棚',
     manufacturer: 'Gハウス施工',
     modelNumber: 'SHELF-S2',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '棚板D300×8枚。棚板ホワイトorダークグレー、棚柱ブラケット・パイプ：シルバー。W1132mm',
     variants: [
@@ -5878,7 +5878,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'S3 樹脂製 可動棚',
     manufacturer: 'Gハウス施工',
     modelNumber: 'SHELF-S3',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '棚板D300×8枚。棚板ホワイトorダークグレー、棚柱ブラケット・パイプ：シルバー。W1682mm',
     variants: [
@@ -5901,7 +5901,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'P1 ハンガーパイプ セット①',
     manufacturer: 'Gハウス施工',
     modelNumber: 'HANGER-P1',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'ハンガーパイプセット。W～2900mm、H～1200mm。棚柱ブラケット・パイプ：シルバー',
     variants: [
@@ -5924,7 +5924,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'P2 ハンガーパイプ セット②',
     manufacturer: 'Gハウス施工',
     modelNumber: 'HANGER-P2',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'ハンガーパイプセット。W～1450mm×2段、H～2000mm。棚柱ブラケット・パイプ：シルバー',
     variants: [
@@ -5947,7 +5947,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'P3 ハンガーパイプ セット③',
     manufacturer: 'Gハウス施工',
     modelNumber: 'HANGER-P3',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'ハンガーパイプセット。W～2900mm+1450mm×2段、H～2000mm。棚柱ブラケット・パイプ：シルバー',
     variants: [
@@ -5970,7 +5970,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'P4 ハンガーパイプ セット④',
     manufacturer: 'Gハウス施工',
     modelNumber: 'HANGER-P4',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'ハンガーパイプセット。W～2900mm+900mm×2段×2、H～2000mm。棚柱ブラケット・パイプ：シルバー',
     variants: [
@@ -5993,7 +5993,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'PKO ハンガーパイプ（固定）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'HANGER-PKO',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'W～1000mmまで。固定タイプ。パイプ：シルバー',
     variants: [
@@ -6016,7 +6016,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'コンポリア W800',
     manufacturer: 'Panasonic',
     modelNumber: 'COMPORIA-W800',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'フロートタイプH2070。W800mm。ユニット内部ライトグレー色。斜め棚板で取り出しやすい。カウンターのみ/セパレート/トールプラン選択可。※コの字プラン選択不可',
     variants: [
@@ -6039,7 +6039,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'コンポリア W1200',
     manufacturer: 'Panasonic',
     modelNumber: 'COMPORIA-W1200',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'フロートタイプH2070。W1200mm。ユニット内部ライトグレー色。斜め棚板で取り出しやすい。カウンターのみ/セパレート/コの字/トールプラン選択可',
     variants: [
@@ -6062,7 +6062,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'コンポリア W1600',
     manufacturer: 'Panasonic',
     modelNumber: 'COMPORIA-W1600',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'フロートタイプH2070。W1600mm。ユニット内部ライトグレー色。斜め棚板で取り出しやすい。カウンターのみ/セパレート/コの字/トールプラン選択可',
     variants: [
@@ -6174,7 +6174,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'コンポリア ミラー追加',
     manufacturer: 'Panasonic',
     modelNumber: 'COMPORIA-MIRROR',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '玄関靴箱にミラーを追加',
     variants: [
@@ -6247,7 +6247,7 @@ export const interiorProductsComplete: Product[] = [
     name: '造作トイレ 背面収納スペース（ZS）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'ZS',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'スペースのみ（棚板は含まれない）。開口部有効寸法260mm以上確保必要。下地施工は別途費用',
     variants: [
@@ -6270,7 +6270,7 @@ export const interiorProductsComplete: Product[] = [
     name: '造作トイレ 収納（TZ）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'TZ',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'W150×H床～天井迄×D130（有効）。棚板×3枚（固定棚）。ふかし壁費用含む',
     variants: [
@@ -6320,7 +6320,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'サニタトイレ収納ボックス Sタイプ（TS）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'TS',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'W300×H740×D117.4（有効）。クリアホワイトのみ。棚は可動式',
     variants: [
@@ -6344,7 +6344,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'トイレ上部収納（TR/TK）',
     manufacturer: 'Gハウス施工',
     modelNumber: 'TR-TK',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '～W905迄×H470×D300（有効）。クリアホワイトのみ',
     variants: [
@@ -6368,7 +6368,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'スロップシンク ボウル／水栓／排水Pトラップ',
     manufacturer: 'TOTO',
     modelNumber: 'SK507-SET',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'TOTO洗濯用流し（大型）SK507#NW1 + 壁付シングル混合水栓TKS05314J + 壁排水金具TK40P。給排水工事費用別途',
     variants: [
@@ -6391,7 +6391,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'スロップシンク 給排水工事費用',
     manufacturer: 'Gハウス施工',
     modelNumber: 'SLOP-PLUMB',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'スロップシンク設置に必要な給排水工事',
     variants: [
@@ -6447,7 +6447,7 @@ export const interiorProductsComplete: Product[] = [
     name: '洗濯パン（GB745+排水トラップGB881セット）',
     manufacturer: 'Panasonic',
     modelNumber: 'GB745-SET',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '洗濯パンGB745+排水トラップGB881セット。カラー：クールホワイト。外寸740×640×55mm、内寸690×590mm。PP製、耐荷重200kg',
     variants: [
@@ -6595,7 +6595,7 @@ export const interiorProductsComplete: Product[] = [
     name: '耐水集成 インテリアカウンター',
     manufacturer: 'Panasonic',
     modelNumber: 'ENT-COUNTER',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'D500/W1,000迄。壁付けの場合笠木材（南海プライウッド）¥6,000/枚別途',
     variants: [
@@ -6669,7 +6669,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'ステンレスボウル一体型コーナーカウンターセット',
     manufacturer: 'KAKUDAI',
     modelNumber: '497-028-SET',
-    unit: 'セット',
+    unit: '一式',
     isOption: true,
     description: 'ボウル+排水トラップ+水栓（単水栓）セット。ステンレスボウル497-028、立水栓721-209、Sトラップ433-315-25他',
     variants: [
@@ -6692,7 +6692,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'ホスクリーン（川口技研）',
     manufacturer: '川口技研',
     modelNumber: 'SPC',
-    unit: 'セット',
+    unit: '一式',
     isOption: true,
     description: 'シンプルな着脱可能商品。天井金具部分カラー全3色。※2カ所目からオプション',
     variants: [
@@ -6717,7 +6717,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'Kacu（森田アルミ工業）',
     manufacturer: '森田アルミ工業',
     modelNumber: 'KACU',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '高さ：H400・H500・H600。L型W1432、U型W1455、F型W2862、E型W2885。※2カ所目からオプション',
     variants: [
@@ -6741,7 +6741,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'Pid4M（森田アルミ工業）',
     manufacturer: '森田アルミ工業',
     modelNumber: 'PID4M',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'ワイヤータイプ物干し。※2カ所目からオプション',
     variants: [
@@ -6764,7 +6764,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'ホスクリーン昇降タイプD（川口技研）',
     manufacturer: '川口技研',
     modelNumber: 'UTM',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '竿に付帯のヒモで楽々操作可能。※洗濯物を干しながらの昇降はできません。※2カ所目からオプション',
     variants: [
@@ -6788,7 +6788,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'ホスクリーン昇降タイプE（川口技研）',
     manufacturer: '川口技研',
     modelNumber: 'URM',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '付属の操作棒ですっきり操作可能。※洗濯物を干しながらの昇降が可能。※2カ所目からオプション',
     variants: [
@@ -6812,7 +6812,7 @@ export const interiorProductsComplete: Product[] = [
     name: '乾太くん スタンダードタイプ 6kg',
     manufacturer: 'Rinnai',
     modelNumber: 'RDT-STD',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'H684×W650×D641mm。6kg。上部に配管ダクトが露出。カラー指定不可',
     variants: [
@@ -6835,7 +6835,7 @@ export const interiorProductsComplete: Product[] = [
     name: '乾太くん デラックスタイプ 6kg',
     manufacturer: 'Rinnai',
     modelNumber: 'RDT-63',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '671×W653×D554mm。6kg。上部に配管ダクトが露出。カラー指定不可',
     variants: [
@@ -6859,7 +6859,7 @@ export const interiorProductsComplete: Product[] = [
     name: '乾太くん デラックスタイプ 9kg',
     manufacturer: 'Rinnai',
     modelNumber: 'RDT-93',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '671×W653×D674mm。9kg。上部に配管ダクトが露出。カラー指定不可',
     variants: [
@@ -6906,7 +6906,7 @@ export const interiorProductsComplete: Product[] = [
     name: '乾太くん専用架台',
     manufacturer: 'Rinnai',
     modelNumber: 'KANTA-STAND',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '乾太くん設置用専用架台',
     variants: [
@@ -6929,7 +6929,7 @@ export const interiorProductsComplete: Product[] = [
     name: '乾太くん専用収納ユニット',
     manufacturer: 'Rinnai',
     modelNumber: 'KANTA-STORAGE',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '乾太くん設置用収納ユニット',
     variants: [
@@ -6956,7 +6956,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'ほたるスイッチ追加',
     manufacturer: 'Panasonic',
     modelNumber: 'COSMO-WIDE21-SW',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'コスモワイド21 スクエアタイプ/ホワイト ほたるスイッチ追加',
     variants: [
@@ -6979,7 +6979,7 @@ export const interiorProductsComplete: Product[] = [
     name: '3路・4路スイッチ追加',
     manufacturer: 'Panasonic',
     modelNumber: 'COSMO-WIDE21-3W4W',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '2カ所で同じ照明を入切できるスイッチ',
     variants: [
@@ -7002,7 +7002,7 @@ export const interiorProductsComplete: Product[] = [
     name: '2口コンセント追加',
     manufacturer: 'Panasonic',
     modelNumber: 'COSMO-WIDE21-2P',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'コスモワイド21 2口コンセント追加',
     variants: [
@@ -7025,7 +7025,7 @@ export const interiorProductsComplete: Product[] = [
     name: '4口コンセント',
     manufacturer: 'Panasonic',
     modelNumber: 'COSMO-WIDE21-4P',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'コスモワイド21 4口コンセント',
     variants: [
@@ -7048,7 +7048,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'TVコンセント追加',
     manufacturer: 'Panasonic',
     modelNumber: 'COSMO-WIDE21-TV',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'TVコンセント追加',
     variants: [
@@ -7071,7 +7071,7 @@ export const interiorProductsComplete: Product[] = [
     name: '電話コンセント追加',
     manufacturer: 'Panasonic',
     modelNumber: 'COSMO-WIDE21-TEL',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '電話コンセント追加',
     variants: [
@@ -7094,7 +7094,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'LANコンセント追加（空配管）',
     manufacturer: 'Panasonic',
     modelNumber: 'COSMO-WIDE21-LAN',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'LANコンセント追加（空配管）',
     variants: [
@@ -7117,7 +7117,7 @@ export const interiorProductsComplete: Product[] = [
     name: '2口アース付専用コンセント追加',
     manufacturer: 'Panasonic',
     modelNumber: 'COSMO-WIDE21-2PE-D',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '電子レンジ・食洗機用 2口アース付専用コンセント追加',
     variants: [
@@ -7140,7 +7140,7 @@ export const interiorProductsComplete: Product[] = [
     name: '2口アース付コンセント追加',
     manufacturer: 'Panasonic',
     modelNumber: 'COSMO-WIDE21-2PE',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'トイレ・洗濯機・冷蔵庫用 2口アース付コンセント追加',
     variants: [
@@ -7163,7 +7163,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'エアコン用コンセント（100V）追加',
     manufacturer: 'Panasonic',
     modelNumber: 'COSMO-WIDE21-AC100',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'エアコン用コンセント（100V）追加',
     variants: [
@@ -7186,7 +7186,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'エアコン用コンセント（200V）追加',
     manufacturer: 'Panasonic',
     modelNumber: 'COSMO-WIDE21-AC200',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'エアコン用コンセント（200V）追加 ※外壁面に設置不可、内壁がない場合天井付け',
     variants: [
@@ -7209,7 +7209,7 @@ export const interiorProductsComplete: Product[] = [
     name: '床用コンセント F型アップコン',
     manufacturer: 'Panasonic',
     modelNumber: 'F-UPCON',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '床用コンセント F型アップコン',
     variants: [
@@ -7235,7 +7235,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'Sプレートコンセント',
     manufacturer: 'Panasonic',
     modelNumber: 'S-PLATE',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'Sプレートコンセント（カ所別色変更不可）※外壁側は気密処理困難の為使用不可',
     variants: [
@@ -7309,7 +7309,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'LAN用空配管',
     manufacturer: 'Panasonic',
     modelNumber: 'CONDUIT-LAN',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'LAN用空配管',
     variants: [
@@ -7332,7 +7332,7 @@ export const interiorProductsComplete: Product[] = [
     name: '壁掛けテレビ用空配管',
     manufacturer: 'Panasonic',
     modelNumber: 'CONDUIT-WALLTV',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '壁掛けテレビ用空配管',
     variants: [
@@ -7359,7 +7359,7 @@ export const interiorProductsComplete: Product[] = [
     name: '外でもドアホン VL-SVD505KFに変更',
     manufacturer: 'Panasonic',
     modelNumber: 'VL-SVD505KF',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'スマホで外から来客応対、録画機能、ドアホンから玄関ドアの施解錠可、スマホで玄関ドアの施解錠可',
     variants: [
@@ -7382,7 +7382,7 @@ export const interiorProductsComplete: Product[] = [
     name: '外でもドアホン VL-SVD710KFに変更',
     manufacturer: 'Panasonic',
     modelNumber: 'VL-SVD710KF',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'スマホで外から来客応対、録画機能、あんしん応対、ドアホンから玄関ドアの施解錠可、スマホで玄関ドアの施解錠可',
     variants: [
@@ -7405,7 +7405,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'テレビドアホン VL-SE50KPAに変更',
     manufacturer: 'Panasonic',
     modelNumber: 'VL-SE50KPA',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '録画機能（SDカード別途必要）、増設モニター追加可能',
     variants: [
@@ -7428,7 +7428,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'どこでもドアホン VL-SVE310KLA 1セット追加',
     manufacturer: 'Panasonic',
     modelNumber: 'VL-SVE310KLA',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'どこでもドアホン（玄関子機＋モニター親機）1セット追加',
     variants: [
@@ -7451,7 +7451,7 @@ export const interiorProductsComplete: Product[] = [
     name: '外でもドアホン VL-SVD505KF 1セット追加',
     manufacturer: 'Panasonic',
     modelNumber: 'VL-SVD505KF-ADD',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '外でもドアホン（玄関子機＋モニター親機）1セット追加',
     variants: [
@@ -7474,7 +7474,7 @@ export const interiorProductsComplete: Product[] = [
     name: '外でもドアホン VL-SVD710KF 1セット追加',
     manufacturer: 'Panasonic',
     modelNumber: 'VL-SVD710KF-ADD',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '外でもドアホン（玄関子機＋モニター親機）1セット追加',
     variants: [
@@ -7497,7 +7497,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'テレビドアホン VL-SE50KPA 1セット追加',
     manufacturer: 'Panasonic',
     modelNumber: 'VL-SE50KPA-ADD',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'テレビドアホン（玄関子機＋モニター親機）1セット追加',
     variants: [
@@ -7520,7 +7520,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'ワイヤレスモニター子機VL-WD623追加',
     manufacturer: 'Panasonic',
     modelNumber: 'VL-WD623',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'ワイヤレスモニター子機（VL-SWE310KLA用）追加',
     variants: [
@@ -7543,7 +7543,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'ワイヤレスモニター子機VL-WD618追加',
     manufacturer: 'Panasonic',
     modelNumber: 'VL-WD618',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'ワイヤレスモニター子機（VL-SWD505KF用）追加',
     variants: [
@@ -7566,7 +7566,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'ワイヤレスモニター子機VL-WD616追加',
     manufacturer: 'Panasonic',
     modelNumber: 'VL-WD616',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'ワイヤレスモニター子機（VL-SWD710KF用）追加',
     variants: [
@@ -7589,7 +7589,7 @@ export const interiorProductsComplete: Product[] = [
     name: '増設モニターVL-V632K追加',
     manufacturer: 'Panasonic',
     modelNumber: 'VL-V632K',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '増設モニター（VL-SE50KPA用）追加',
     variants: [
@@ -7612,7 +7612,7 @@ export const interiorProductsComplete: Product[] = [
     name: '増設モニターVL-VH673K追加',
     manufacturer: 'Panasonic',
     modelNumber: 'VL-VH673K',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '増設モニター（VL-SVD710KF用）追加',
     variants: [
@@ -7639,7 +7639,7 @@ export const interiorProductsComplete: Product[] = [
     name: '三菱電機 霧ヶ峰 Zシリーズ 6畳用100V',
     manufacturer: '三菱電機',
     modelNumber: 'MSZ-ZXV2225',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'さらっと除湿冷房（室温の下がらない再熱除湿方式）',
     variants: [
@@ -7664,7 +7664,7 @@ export const interiorProductsComplete: Product[] = [
     name: '三菱電機 霧ヶ峰 Zシリーズ 10畳用200V',
     manufacturer: '三菱電機',
     modelNumber: 'MSZ-ZXV2825S',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'さらっと除湿冷房（室温の下がらない再熱除湿方式）',
     variants: [
@@ -7689,7 +7689,7 @@ export const interiorProductsComplete: Product[] = [
     name: '三菱電機 霧ヶ峰 Zシリーズ 14畳用200V',
     manufacturer: '三菱電機',
     modelNumber: 'MSZ-ZXV4025S',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'さらっと除湿冷房（室温の下がらない再熱除湿方式）',
     variants: [
@@ -7714,7 +7714,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'ダイキン GXシリーズ 6畳用100V',
     manufacturer: 'ダイキン',
     modelNumber: 'S224ATGS-W',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'さらら除湿（ハイブリッド方式）再熱除湿と弱冷房除湿の中間',
     variants: [
@@ -7739,7 +7739,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'ダイキン GXシリーズ 10畳用100V',
     manufacturer: 'ダイキン',
     modelNumber: 'S284ATGS-W',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'さらら除湿（ハイブリッド方式）再熱除湿と弱冷房除湿の中間',
     variants: [
@@ -7764,7 +7764,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'ダイキン GXシリーズ 14畳用200V',
     manufacturer: 'ダイキン',
     modelNumber: 'S404ATGP-W',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: 'さらら除湿（ハイブリッド方式）再熱除湿と弱冷房除湿の中間',
     variants: [
@@ -7789,7 +7789,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'ダイキン Eシリーズ 6畳用100V',
     manufacturer: 'ダイキン',
     modelNumber: 'S225ATES-W',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '9段階セレクトドライ（弱冷房除湿）',
     variants: [
@@ -7814,7 +7814,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'ダイキン Eシリーズ 10畳用100V',
     manufacturer: 'ダイキン',
     modelNumber: 'S285ATES-W',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '9段階セレクトドライ（弱冷房除湿）',
     variants: [
@@ -7839,7 +7839,7 @@ export const interiorProductsComplete: Product[] = [
     name: 'ダイキン Eシリーズ 14畳用200V',
     manufacturer: 'ダイキン',
     modelNumber: 'S405ATEP-W',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '9段階セレクトドライ（弱冷房除湿）',
     variants: [
@@ -7918,7 +7918,7 @@ export const interiorProductsComplete: Product[] = [
     name: '洗濯機混合水栓へ変更',
     manufacturer: '-',
     modelNumber: 'LAUNDRY-MIXER',
-    unit: 'カ所',
+    unit: '箇所',
     isOption: true,
     description: '洗濯機用混合水栓へ変更',
     variants: [
