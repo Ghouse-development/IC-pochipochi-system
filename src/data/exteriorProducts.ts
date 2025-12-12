@@ -4,6 +4,7 @@ import { exteriorProductsAdditional } from './exteriorProductsAdditional';
 import { exteriorProductsPage3to5 } from './exteriorProductsPage3to5';
 import { exteriorProductsPage16to20 } from './exteriorProductsPage16to20';
 import { exteriorProductsPage21to25 } from './exteriorProductsPage21to25';
+import { exteriorProductsPage26to29 } from './exteriorProductsPage26to29';
 
 const baseExteriorProducts: Product[] = [
   // ===== 外壁 - ニチハ モナビストーンV =====
@@ -1691,5 +1692,6 @@ export const exteriorProducts: Product[] = [
   ...exteriorProductsAdditional,
   ...exteriorProductsPage3to5,
   ...exteriorProductsPage16to20,
-  ...exteriorProductsPage21to25
+  ...exteriorProductsPage21to25,
+  ...exteriorProductsPage26to29
 ];
