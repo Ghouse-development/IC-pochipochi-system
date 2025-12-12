@@ -1,23 +1,66 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { Search, Loader2, ShoppingCart, Check, Sparkles, Star, ChevronRight, X } from 'lucide-react';
+import { Search, ShoppingCart, Check, Sparkles, Star, ChevronRight, X, Filter, Package, Home, Sofa, Wrench, Heart, Eye } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useCartStore } from '../../stores/useCartStore';
 import { formatPrice } from '../../lib/utils';
 import type { ItemWithDetails, Category, Product } from '../../types/database';
 
-// アニメーション用のCSS
-const pulseAnimation = `
+// 100点UIアニメーション
+const animations = `
   @keyframes pochipochi {
-    0%, 100% { transform: scale(1); }
+    0% { transform: scale(1); }
+    25% { transform: scale(0.95); }
+    50% { transform: scale(1.08); }
+    75% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+  }
+  @keyframes bounce-in {
+    0% { transform: scale(0.3); opacity: 0; }
     50% { transform: scale(1.05); }
+    70% { transform: scale(0.9); }
+    100% { transform: scale(1); opacity: 1; }
   }
-  @keyframes confetti {
-    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-    100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+  @keyframes confetti-fall {
+    0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg) scale(0); opacity: 0; }
   }
-  @keyframes slideIn {
-    from { transform: translateX(20px); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  @keyframes pulse-ring {
+    0% { transform: scale(0.8); opacity: 1; }
+    100% { transform: scale(2); opacity: 0; }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  @keyframes sparkle {
+    0%, 100% { opacity: 0; transform: scale(0); }
+    50% { opacity: 1; transform: scale(1); }
+  }
+  @keyframes slide-up {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  @keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .animate-pochipochi { animation: pochipochi 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+  .animate-bounce-in { animation: bounce-in 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+  .animate-shimmer {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+  .animate-float { animation: float 3s ease-in-out infinite; }
+  .animate-slide-up { animation: slide-up 0.3s ease-out; }
+  .gradient-animate {
+    background-size: 200% 200%;
+    animation: gradient-shift 3s ease infinite;
   }
 `;
 
@@ -60,10 +103,71 @@ const convertToCartItem = (item: ItemWithDetails, selectedPlanId: string) => {
 
 // ステップ定義
 const STEPS = [
-  { id: 'exterior', label: '外装', icon: '🏠', color: 'green' },
-  { id: 'interior', label: '内装', icon: '🛋️', color: 'blue' },
-  { id: 'equipment', label: '設備', icon: '🚿', color: 'cyan' },
+  { id: 'exterior', label: '外装', icon: Home, emoji: '🏠', gradient: 'from-emerald-500 to-teal-500' },
+  { id: 'interior', label: '内装', icon: Sofa, emoji: '🛋️', gradient: 'from-blue-500 to-indigo-500' },
+  { id: 'equipment', label: '設備', icon: Wrench, emoji: '🚿', gradient: 'from-cyan-500 to-blue-500' },
 ];
+
+// スケルトンカード
+const SkeletonCard = () => (
+  <div className="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
+    <div className="aspect-square animate-shimmer" />
+    <div className="p-4 space-y-3">
+      <div className="h-3 bg-gray-200 rounded animate-shimmer w-1/3" />
+      <div className="h-4 bg-gray-200 rounded animate-shimmer" />
+      <div className="h-4 bg-gray-200 rounded animate-shimmer w-2/3" />
+      <div className="h-10 bg-gray-200 rounded-xl animate-shimmer mt-4" />
+    </div>
+  </div>
+);
+
+// 空状態
+const EmptyState = ({ searchTerm, onClear }: { searchTerm: string; onClear: () => void }) => (
+  <div className="flex flex-col items-center justify-center py-20 animate-slide-up">
+    <div className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mb-6 animate-float">
+      <Package className="w-12 h-12 text-gray-400" />
+    </div>
+    <h3 className="text-xl font-bold text-gray-700 mb-2">商品が見つかりません</h3>
+    <p className="text-gray-500 mb-6 text-center max-w-sm">
+      {searchTerm
+        ? `「${searchTerm}」に一致する商品がありません`
+        : 'このカテゴリには商品がありません'}
+    </p>
+    {searchTerm && (
+      <button
+        onClick={onClear}
+        className="px-6 py-2.5 bg-teal-500 text-white rounded-full font-medium hover:bg-teal-600 transition-all hover:scale-105 active:scale-95"
+      >
+        検索をクリア
+      </button>
+    )}
+  </div>
+);
+
+// 紙吹雪コンポーネント
+const Confetti = ({ show }: { show: boolean }) => {
+  if (!show) return null;
+  const confettiItems = ['🎉', '✨', '⭐', '🌟', '💫', '🎊', '💎', '🔮'];
+
+  return (
+    <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
+      {[...Array(40)].map((_, i) => (
+        <div
+          key={i}
+          className="absolute text-2xl"
+          style={{
+            left: `${Math.random() * 100}%`,
+            top: '-50px',
+            animation: `confetti-fall ${2 + Math.random() * 2}s linear forwards`,
+            animationDelay: `${Math.random() * 0.5}s`,
+          }}
+        >
+          {confettiItems[i % confettiItems.length]}
+        </div>
+      ))}
+    </div>
+  );
+};
 
 export const CatalogWithTabs: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'exterior' | 'interior' | 'equipment'>('exterior');
@@ -73,6 +177,8 @@ export const CatalogWithTabs: React.FC = () => {
   const [selectedPlanId, setSelectedPlanId] = useState<string>('LACIE');
   const [addedItemId, setAddedItemId] = useState<string | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [showMobileFilter, setShowMobileFilter] = useState(false);
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   // データ
   const [items, setItems] = useState<ItemWithDetails[]>([]);
@@ -151,7 +257,7 @@ export const CatalogWithTabs: React.FC = () => {
         const { data, error: fetchError } = await query.order('display_order');
         if (fetchError) throw fetchError;
         setItems((data as ItemWithDetails[]) || []);
-      } catch (err) {
+      } catch {
         setError('データの読み込みに失敗しました');
       } finally {
         setIsLoading(false);
@@ -178,20 +284,20 @@ export const CatalogWithTabs: React.FC = () => {
     });
   }, [items, searchTerm, filterType, selectedPlanId]);
 
-  // カートに追加（アニメーション付き）
+  // カートに追加
   const handleAddToCart = useCallback((item: ItemWithDetails) => {
     const cartProduct = convertToCartItem(item, selectedPlanId);
     addItem(cartProduct as any, 1);
     useCartStore.getState().setSelectedPlanId(selectedPlanId);
 
-    // アニメーション
     setAddedItemId(item.id);
-    setTimeout(() => setAddedItemId(null), 600);
+    setTimeout(() => setAddedItemId(null), 500);
 
-    // 5個選択ごとに紙吹雪
-    if ((cartItems.length + 1) % 5 === 0) {
+    // マイルストーン演出
+    const newCount = cartItems.length + 1;
+    if (newCount === 5 || newCount === 10 || newCount === 15 || newCount === 20) {
       setShowConfetti(true);
-      setTimeout(() => setShowConfetti(false), 2000);
+      setTimeout(() => setShowConfetti(false), 3000);
     }
   }, [addItem, cartItems.length, selectedPlanId]);
 
@@ -212,115 +318,125 @@ export const CatalogWithTabs: React.FC = () => {
     return variant?.images?.[0]?.image_url || variant?.images?.[0]?.thumbnail_url || null;
   };
 
-  // カテゴリ別選択数
   const getCategoryCount = (categoryName: string) => {
-    return cartItems.filter(i =>
-      i.product.categoryName === categoryName
-    ).length;
+    return cartItems.filter(i => i.product.categoryName === categoryName).length;
   };
+
+  // 各ステップの選択数
+  const getStepCount = (stepId: string) => {
+    return cartItems.filter(i => {
+      const cat = i.product.categoryName;
+      if (stepId === 'exterior') return ['外壁', 'ポーチ', '屋根', '樋', '軒天', '破風', '雨戸'].some(c => cat?.includes(c));
+      if (stepId === 'interior') return ['床材', '壁クロス', '天井クロス', '巾木', '建具', '収納'].some(c => cat?.includes(c));
+      return ['キッチン', 'バス', '洗面台', 'トイレ', '給湯器', 'エアコン', '照明'].some(c => cat?.includes(c));
+    }).length;
+  };
+
+  // 進捗率
+  const progressPercent = Math.min(100, (cartItems.length / 20) * 100);
 
   return (
     <>
-      <style>{pulseAnimation}</style>
+      <style>{animations}</style>
+      <Confetti show={showConfetti} />
 
-      {/* 紙吹雪エフェクト */}
-      {showConfetti && (
-        <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
-          {[...Array(30)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute text-2xl"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: '50%',
-                animation: `confetti 1.5s ease-out forwards`,
-                animationDelay: `${Math.random() * 0.5}s`,
-              }}
-            >
-              {['🎉', '✨', '⭐', '🌟'][i % 4]}
-            </div>
-          ))}
-        </div>
-      )}
+      <div className="flex flex-col h-full bg-gradient-to-br from-gray-50 via-white to-gray-100">
+        {/* ヘッダー */}
+        <div className="bg-gradient-to-r from-teal-600 via-teal-500 to-emerald-500 gradient-animate text-white shadow-lg">
+          {/* ステップナビゲーション */}
+          <div className="px-4 py-4">
+            <div className="flex items-center justify-between max-w-6xl mx-auto">
+              <div className="flex items-center gap-2 sm:gap-4">
+                {STEPS.map((step, index) => {
+                  const isActive = step.id === activeTab;
+                  const stepCount = getStepCount(step.id);
+                  const Icon = step.icon;
 
-      <div className="flex flex-col h-full bg-gray-50">
-        {/* プログレスヘッダー */}
-        <div className="bg-gradient-to-r from-teal-600 to-teal-500 text-white px-4 py-3">
-          <div className="flex items-center justify-between max-w-6xl mx-auto">
-            <div className="flex items-center gap-4">
-              {STEPS.map((step, index) => {
-                const isActive = step.id === activeTab;
-                const stepItems = cartItems.filter(i => {
-                  const cat = i.product.categoryName;
-                  if (step.id === 'exterior') return ['外壁', 'ポーチ', '屋根', '樋', '軒天'].some(c => cat?.includes(c));
-                  if (step.id === 'interior') return ['床材', '壁クロス', '天井クロス', '巾木', '建具'].some(c => cat?.includes(c));
-                  return ['キッチン', 'バス', '洗面台', 'トイレ', '給湯器'].some(c => cat?.includes(c));
-                });
-
-                return (
-                  <React.Fragment key={step.id}>
-                    <button
-                      onClick={() => setActiveTab(step.id as any)}
-                      className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
-                        isActive
-                          ? 'bg-white text-teal-600 shadow-lg'
-                          : 'bg-white/20 hover:bg-white/30'
-                      }`}
-                    >
-                      <span className="text-xl">{step.icon}</span>
-                      <span className="hidden sm:inline font-medium">{step.label}</span>
-                      {stepItems.length > 0 && (
-                        <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
-                          isActive ? 'bg-teal-100 text-teal-700' : 'bg-white/30'
-                        }`}>
-                          {stepItems.length}
-                        </span>
+                  return (
+                    <React.Fragment key={step.id}>
+                      <button
+                        onClick={() => setActiveTab(step.id as any)}
+                        className={`relative flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-2xl transition-all duration-300 ${
+                          isActive
+                            ? 'bg-white text-teal-600 shadow-xl scale-105'
+                            : 'bg-white/20 hover:bg-white/30 backdrop-blur-sm'
+                        }`}
+                      >
+                        <Icon className={`w-4 h-4 sm:w-5 sm:h-5 ${isActive ? 'text-teal-500' : ''}`} />
+                        <span className="hidden sm:inline font-semibold">{step.label}</span>
+                        <span className="sm:hidden text-lg">{step.emoji}</span>
+                        {stepCount > 0 && (
+                          <span className={`absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center rounded-full text-xs font-bold animate-bounce-in ${
+                            isActive ? 'bg-teal-500 text-white' : 'bg-white text-teal-600'
+                          }`}>
+                            {stepCount}
+                          </span>
+                        )}
+                      </button>
+                      {index < STEPS.length - 1 && (
+                        <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-white/40" />
                       )}
-                    </button>
-                    {index < STEPS.length - 1 && (
-                      <ChevronRight className="w-5 h-5 text-white/50" />
-                    )}
-                  </React.Fragment>
-                );
-              })}
-            </div>
-
-            {/* 合計表示 */}
-            <div className="flex items-center gap-3">
-              <div className="text-right">
-                <p className="text-xs text-white/80">オプション合計</p>
-                <p className="text-xl font-bold">{formatPrice(totalPrice)}</p>
+                    </React.Fragment>
+                  );
+                })}
               </div>
-              <div className="bg-white/20 rounded-full px-3 py-1">
-                <span className="font-bold">{cartItems.length}</span>
-                <span className="text-sm ml-1">件選択</span>
+
+              {/* 合計表示 */}
+              <div className="flex items-center gap-2 sm:gap-4">
+                <div className="text-right hidden sm:block">
+                  <p className="text-xs text-white/70">オプション合計</p>
+                  <p className="text-lg sm:text-xl font-bold">{formatPrice(totalPrice)}</p>
+                </div>
+                <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-3 sm:px-4 py-1.5 sm:py-2 flex items-center gap-2">
+                  <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="font-bold text-lg">{cartItems.length}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* プログレスバー */}
+          <div className="px-4 pb-3">
+            <div className="max-w-6xl mx-auto">
+              <div className="flex items-center gap-3">
+                <div className="flex-1 h-2 bg-white/20 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-yellow-400 via-orange-400 to-pink-500 rounded-full transition-all duration-500"
+                    style={{ width: `${progressPercent}%` }}
+                  />
+                </div>
+                <span className="text-xs font-medium text-white/80 whitespace-nowrap">
+                  {cartItems.length >= 20 ? '🎉 目標達成!' : `あと${20 - cartItems.length}件`}
+                </span>
               </div>
             </div>
           </div>
         </div>
 
         <div className="flex flex-1 overflow-hidden">
-          {/* 左サイドバー */}
-          <div className="hidden lg:block w-64 bg-white border-r overflow-y-auto">
-            <div className="p-4 space-y-6">
+          {/* サイドバー (PC) */}
+          <div className="hidden lg:flex flex-col w-72 bg-white/80 backdrop-blur-sm border-r border-gray-200 overflow-y-auto">
+            <div className="p-5 space-y-6">
               {/* プラン選択 */}
               <div>
-                <h3 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
-                  <Star className="w-4 h-4 text-yellow-500" />
-                  プラン
+                <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
+                  <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-lg flex items-center justify-center">
+                    <Star className="w-4 h-4 text-white" />
+                  </div>
+                  プラン選択
                 </h3>
                 <div className="space-y-2">
                   {plans.map(plan => (
                     <button
                       key={plan.id}
                       onClick={() => setSelectedPlanId(plan.code)}
-                      className={`w-full text-left px-3 py-2 rounded-lg transition-all ${
+                      className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 ${
                         selectedPlanId === plan.code
-                          ? 'bg-teal-100 text-teal-800 ring-2 ring-teal-500'
-                          : 'hover:bg-gray-100'
+                          ? 'bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-lg shadow-teal-200'
+                          : 'bg-gray-50 hover:bg-gray-100 text-gray-700'
                       }`}
                     >
-                      <span className="font-medium">{plan.name}</span>
+                      <span className="font-semibold">{plan.name}</span>
                     </button>
                   ))}
                 </div>
@@ -328,12 +444,19 @@ export const CatalogWithTabs: React.FC = () => {
 
               {/* カテゴリ */}
               <div>
-                <h3 className="font-bold text-gray-900 mb-3">カテゴリ</h3>
+                <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
+                  <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-lg flex items-center justify-center">
+                    <Filter className="w-4 h-4 text-white" />
+                  </div>
+                  カテゴリ
+                </h3>
                 <div className="space-y-1">
                   <button
                     onClick={() => setSelectedCategoryId(null)}
-                    className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${
-                      !selectedCategoryId ? 'bg-teal-100 text-teal-800 font-medium' : 'hover:bg-gray-100'
+                    className={`w-full text-left px-4 py-2.5 rounded-xl text-sm transition-all ${
+                      !selectedCategoryId
+                        ? 'bg-teal-100 text-teal-700 font-semibold'
+                        : 'hover:bg-gray-100 text-gray-600'
                     }`}
                   >
                     すべて表示
@@ -344,15 +467,15 @@ export const CatalogWithTabs: React.FC = () => {
                       <button
                         key={cat.id}
                         onClick={() => setSelectedCategoryId(cat.id)}
-                        className={`w-full text-left px-3 py-2 rounded-lg text-sm flex items-center justify-between transition-all ${
+                        className={`w-full text-left px-4 py-2.5 rounded-xl text-sm flex items-center justify-between transition-all ${
                           selectedCategoryId === cat.id
-                            ? 'bg-teal-100 text-teal-800 font-medium'
-                            : 'hover:bg-gray-100'
+                            ? 'bg-teal-100 text-teal-700 font-semibold'
+                            : 'hover:bg-gray-100 text-gray-600'
                         }`}
                       >
                         <span>{cat.name}</span>
                         {count > 0 && (
-                          <span className="bg-teal-500 text-white px-2 py-0.5 rounded-full text-xs">
+                          <span className="bg-gradient-to-r from-teal-500 to-emerald-500 text-white px-2.5 py-0.5 rounded-full text-xs font-bold">
                             {count}
                           </span>
                         )}
@@ -364,20 +487,20 @@ export const CatalogWithTabs: React.FC = () => {
 
               {/* フィルター */}
               <div>
-                <h3 className="font-bold text-gray-900 mb-3">タイプ</h3>
-                <div className="flex gap-1">
+                <h3 className="font-bold text-gray-800 mb-3">タイプ</h3>
+                <div className="grid grid-cols-3 gap-1 bg-gray-100 p-1 rounded-xl">
                   {[
                     { value: 'all', label: 'すべて' },
                     { value: 'standard', label: '標準' },
-                    { value: 'option', label: 'OP' },
+                    { value: 'option', label: 'オプション' },
                   ].map(opt => (
                     <button
                       key={opt.value}
                       onClick={() => setFilterType(opt.value as any)}
-                      className={`flex-1 px-2 py-1.5 rounded text-xs font-medium transition-all ${
+                      className={`px-2 py-2 rounded-lg text-xs font-medium transition-all ${
                         filterType === opt.value
-                          ? 'bg-teal-600 text-white'
-                          : 'bg-gray-100 hover:bg-gray-200'
+                          ? 'bg-white text-teal-600 shadow-sm'
+                          : 'text-gray-500 hover:text-gray-700'
                       }`}
                     >
                       {opt.label}
@@ -389,104 +512,193 @@ export const CatalogWithTabs: React.FC = () => {
           </div>
 
           {/* メインエリア */}
-          <div className="flex-1 overflow-y-auto">
+          <div className="flex-1 flex flex-col overflow-hidden">
             {/* 検索バー */}
-            <div className="sticky top-0 bg-white border-b z-10 p-4">
-              <div className="relative max-w-md">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="商品名・メーカーで検索..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                />
+            <div className="sticky top-0 bg-white/90 backdrop-blur-md border-b border-gray-100 z-10 p-4">
+              <div className="flex items-center gap-3 max-w-4xl mx-auto">
+                <div className="relative flex-1">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="商品名・メーカーで検索..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-12 pr-4 py-3 bg-gray-50 border-0 rounded-2xl focus:ring-2 focus:ring-teal-500 focus:bg-white transition-all"
+                  />
+                  {searchTerm && (
+                    <button
+                      onClick={() => setSearchTerm('')}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-200 rounded-full"
+                    >
+                      <X className="w-4 h-4 text-gray-400" />
+                    </button>
+                  )}
+                </div>
+
+                {/* モバイルフィルターボタン */}
+                <button
+                  onClick={() => setShowMobileFilter(!showMobileFilter)}
+                  className="lg:hidden p-3 bg-gray-50 rounded-2xl hover:bg-gray-100"
+                >
+                  <Filter className="w-5 h-5 text-gray-600" />
+                </button>
               </div>
+
+              {/* モバイルフィルター */}
+              {showMobileFilter && (
+                <div className="lg:hidden mt-3 p-4 bg-gray-50 rounded-2xl animate-slide-up">
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    {plans.map(plan => (
+                      <button
+                        key={plan.id}
+                        onClick={() => setSelectedPlanId(plan.code)}
+                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                          selectedPlanId === plan.code
+                            ? 'bg-teal-500 text-white'
+                            : 'bg-white text-gray-600'
+                        }`}
+                      >
+                        {plan.name}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="flex gap-2 overflow-x-auto pb-2">
+                    <button
+                      onClick={() => setSelectedCategoryId(null)}
+                      className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap ${
+                        !selectedCategoryId ? 'bg-teal-100 text-teal-700' : 'bg-white text-gray-600'
+                      }`}
+                    >
+                      すべて
+                    </button>
+                    {categories.map(cat => (
+                      <button
+                        key={cat.id}
+                        onClick={() => setSelectedCategoryId(cat.id)}
+                        className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap ${
+                          selectedCategoryId === cat.id ? 'bg-teal-100 text-teal-700' : 'bg-white text-gray-600'
+                        }`}
+                      >
+                        {cat.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* 商品グリッド */}
-            <div className="p-4">
+            <div className="flex-1 overflow-y-auto p-4">
               {isLoading ? (
-                <div className="flex items-center justify-center py-20">
-                  <Loader2 className="w-10 h-10 animate-spin text-teal-600" />
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                  {[...Array(10)].map((_, i) => <SkeletonCard key={i} />)}
                 </div>
               ) : error ? (
-                <div className="text-center py-20 text-red-500">{error}</div>
-              ) : filteredItems.length === 0 ? (
-                <div className="text-center py-20">
-                  <p className="text-gray-500 text-lg">該当する商品がありません</p>
-                  <p className="text-gray-400 text-sm mt-2">別のカテゴリを選択してください</p>
+                <div className="flex flex-col items-center justify-center py-20">
+                  <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
+                    <X className="w-8 h-8 text-red-500" />
+                  </div>
+                  <p className="text-red-500 font-medium">{error}</p>
+                  <button
+                    onClick={() => window.location.reload()}
+                    className="mt-4 px-6 py-2 bg-red-500 text-white rounded-full hover:bg-red-600"
+                  >
+                    再読み込み
+                  </button>
                 </div>
+              ) : filteredItems.length === 0 ? (
+                <EmptyState searchTerm={searchTerm} onClear={() => setSearchTerm('')} />
               ) : (
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                  {filteredItems.map((item) => {
+                  {filteredItems.map((item, index) => {
                     const price = getPrice(item);
                     const standard = isStandard(item);
                     const imageUrl = getImageUrl(item);
                     const inCart = cartItemIds.has(item.id);
                     const isJustAdded = addedItemId === item.id;
+                    const isHovered = hoveredItem === item.id;
                     const variant = item.variants?.[0];
 
                     return (
                       <div
                         key={item.id}
-                        className={`bg-white rounded-2xl shadow-sm overflow-hidden border-2 transition-all duration-300 ${
-                          inCart ? 'border-teal-500 shadow-teal-100' : 'border-transparent hover:shadow-md'
-                        } ${isJustAdded ? 'animate-[pochipochi_0.3s_ease-in-out]' : ''}`}
-                        style={{ animation: isJustAdded ? 'pochipochi 0.3s ease-in-out' : undefined }}
+                        className={`group bg-white rounded-2xl shadow-sm overflow-hidden border-2 transition-all duration-300 animate-slide-up ${
+                          inCart
+                            ? 'border-teal-400 shadow-lg shadow-teal-100 ring-4 ring-teal-50'
+                            : 'border-transparent hover:border-gray-200 hover:shadow-xl'
+                        } ${isJustAdded ? 'animate-pochipochi' : ''}`}
+                        style={{ animationDelay: `${index * 50}ms` }}
+                        onMouseEnter={() => setHoveredItem(item.id)}
+                        onMouseLeave={() => setHoveredItem(null)}
                       >
                         {/* 画像エリア */}
                         <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
                           {imageUrl ? (
-                            <img src={imageUrl} alt={item.name} className="w-full h-full object-cover" />
+                            <img
+                              src={imageUrl}
+                              alt={item.name}
+                              className={`w-full h-full object-cover transition-transform duration-500 ${isHovered ? 'scale-110' : ''}`}
+                            />
                           ) : (
-                            <div className="w-full h-full flex flex-col items-center justify-center">
+                            <div className="w-full h-full flex flex-col items-center justify-center p-4">
                               <div
-                                className="w-16 h-16 rounded-full mb-2"
+                                className={`w-20 h-20 rounded-2xl mb-3 transition-transform duration-300 ${isHovered ? 'scale-110 rotate-3' : ''}`}
                                 style={{
                                   background: variant?.color_code
                                     ? `linear-gradient(135deg, ${variant.color_code}, ${variant.color_code}88)`
                                     : 'linear-gradient(135deg, #e5e7eb, #d1d5db)'
                                 }}
                               />
-                              <span className="text-xs text-gray-400">{variant?.color_name || item.manufacturer}</span>
+                              <span className="text-xs text-gray-400 text-center">{variant?.color_name || item.manufacturer}</span>
                             </div>
                           )}
 
                           {/* バッジ */}
-                          <div className="absolute top-2 left-2 flex flex-col gap-1">
-                            <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
-                              standard ? 'bg-teal-500 text-white' : 'bg-orange-500 text-white'
+                          <div className="absolute top-2 left-2 flex flex-col gap-1.5">
+                            <span className={`px-2.5 py-1 rounded-full text-xs font-bold shadow-sm ${
+                              standard
+                                ? 'bg-gradient-to-r from-teal-500 to-emerald-500 text-white'
+                                : 'bg-gradient-to-r from-orange-500 to-amber-500 text-white'
                             }`}>
-                              {standard ? '標準' : 'OP'}
+                              {standard ? '標準' : 'オプション'}
                             </span>
                             {item.is_hit && (
-                              <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-red-500 text-white flex items-center gap-1">
+                              <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-red-500 to-pink-500 text-white shadow-sm flex items-center gap-1">
                                 <Sparkles className="w-3 h-3" /> HIT
                               </span>
                             )}
                           </div>
 
+                          {/* ホバーアクション */}
+                          <div className={`absolute inset-0 bg-black/40 flex items-center justify-center gap-2 transition-opacity duration-300 ${isHovered && !inCart ? 'opacity-100' : 'opacity-0'}`}>
+                            <button className="p-3 bg-white/90 rounded-full hover:bg-white transition-transform hover:scale-110">
+                              <Eye className="w-5 h-5 text-gray-700" />
+                            </button>
+                            <button className="p-3 bg-white/90 rounded-full hover:bg-white transition-transform hover:scale-110">
+                              <Heart className="w-5 h-5 text-gray-700" />
+                            </button>
+                          </div>
+
                           {/* 選択済みオーバーレイ */}
                           {inCart && (
-                            <div className="absolute inset-0 bg-teal-500/20 flex items-center justify-center">
-                              <div className="bg-white rounded-full p-2 shadow-lg">
-                                <Check className="w-6 h-6 text-teal-600" />
+                            <div className="absolute inset-0 bg-gradient-to-br from-teal-500/30 to-emerald-500/30 flex items-center justify-center">
+                              <div className="bg-white rounded-full p-3 shadow-xl animate-bounce-in">
+                                <Check className="w-8 h-8 text-teal-600" strokeWidth={3} />
                               </div>
                             </div>
                           )}
                         </div>
 
                         {/* 情報エリア */}
-                        <div className="p-3">
-                          <p className="text-xs text-gray-500 truncate">{item.manufacturer}</p>
-                          <h3 className="font-medium text-sm text-gray-900 line-clamp-2 h-10 mb-1">
+                        <div className="p-4">
+                          <p className="text-xs text-gray-400 font-medium mb-1 truncate">{item.manufacturer}</p>
+                          <h3 className="font-semibold text-sm text-gray-800 line-clamp-2 h-10 mb-2 leading-tight">
                             {item.name}
                           </h3>
 
                           {/* 価格 */}
-                          <div className="flex items-baseline gap-1 mb-3">
-                            <span className={`text-lg font-bold ${price === 0 ? 'text-teal-600' : 'text-gray-900'}`}>
+                          <div className="flex items-baseline gap-1 mb-4">
+                            <span className={`text-xl font-bold ${price === 0 ? 'text-teal-600' : 'text-gray-900'}`}>
                               {price === 0 ? '標準仕様' : formatPrice(price)}
                             </span>
                             {price > 0 && item.unit && (
@@ -498,7 +710,7 @@ export const CatalogWithTabs: React.FC = () => {
                           {inCart ? (
                             <button
                               onClick={() => handleRemoveFromCart(item.id)}
-                              className="w-full py-2.5 rounded-xl text-sm font-medium bg-gray-100 text-gray-600 hover:bg-red-50 hover:text-red-600 flex items-center justify-center gap-2 transition-colors"
+                              className="w-full py-3 rounded-xl text-sm font-semibold bg-gray-100 text-gray-600 hover:bg-red-50 hover:text-red-600 flex items-center justify-center gap-2 transition-all active:scale-95"
                             >
                               <X className="w-4 h-4" />
                               選択を解除
@@ -506,7 +718,7 @@ export const CatalogWithTabs: React.FC = () => {
                           ) : (
                             <button
                               onClick={() => handleAddToCart(item)}
-                              className="w-full py-2.5 rounded-xl text-sm font-bold bg-gradient-to-r from-teal-500 to-teal-600 text-white hover:from-teal-600 hover:to-teal-700 flex items-center justify-center gap-2 shadow-sm hover:shadow transition-all active:scale-95"
+                              className="w-full py-3 rounded-xl text-sm font-bold bg-gradient-to-r from-teal-500 to-emerald-500 text-white hover:from-teal-600 hover:to-emerald-600 flex items-center justify-center gap-2 shadow-lg shadow-teal-200 hover:shadow-xl hover:shadow-teal-300 transition-all active:scale-95"
                             >
                               <ShoppingCart className="w-4 h-4" />
                               選択する
@@ -521,6 +733,18 @@ export const CatalogWithTabs: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* モバイル用フローティングカートボタン */}
+        {cartItems.length > 0 && (
+          <div className="lg:hidden fixed bottom-6 right-6 z-40">
+            <button className="relative bg-gradient-to-r from-teal-500 to-emerald-500 text-white p-4 rounded-2xl shadow-2xl shadow-teal-300 animate-float">
+              <ShoppingCart className="w-6 h-6" />
+              <span className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center animate-bounce-in">
+                {cartItems.length}
+              </span>
+            </button>
+          </div>
+        )}
       </div>
     </>
   );
