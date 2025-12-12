@@ -725,5 +725,129 @@ export const exteriorProductsComplete: Product[] = [
       { plan: 'LIFE', planId: 'LIFE', price: 12500 },
       { plan: 'LIFE+', planId: 'LIFE+', price: 8000 }
     ]
-  }
+  },
+  // シントア プレミアム
+  {
+    id: 'ext-wall-shintoa-premium',
+    categoryId: 'exterior-wall',
+    categoryName: '外壁',
+    subcategory: '窯業系サイディング',
+    name: 'シントア プレミアム',
+    manufacturer: 'ニチハ',
+    modelNumber: 'SHINTOA-PREMIUM',
+    unit: '㎡',
+    isOption: true,
+    description: 'Fu-geプレミアム シーリングレス外壁',
+    variants: [
+      { id: 'v1', color: 'シントアMGホワイト30', colorCode: '#FAFAFA', modelNumber: 'ELS461F' },
+      { id: 'v2', color: 'シントアMGオフホワイト30', colorCode: '#F5F5DC', modelNumber: 'ELS462F' },
+      { id: 'v3', color: 'シントアMGネイビー30', colorCode: '#2F2F4F', modelNumber: 'ELS463F' },
+      { id: 'v4', color: 'シントアMGライトグレー30', colorCode: '#D3D3D3', modelNumber: 'ELS465F' },
+      { id: 'v5', color: 'シントアMGミロリブルー30', colorCode: '#4169E1', modelNumber: 'ELS466F' }
+    ],
+    pricing: [
+      { plan: 'LACIE', planId: 'LACIE', price: 4500 },
+      { plan: 'HOURS', planId: 'HOURS', price: 4500 },
+      { plan: 'LIFE', planId: 'LIFE', price: 4500 },
+      { plan: 'LIFE+', planId: 'LIFE+', price: 4500 }
+    ]
+  },
+
+  // スプーモ プレミアム
+  {
+    id: 'ext-wall-spumo-premium',
+    categoryId: 'exterior-wall',
+    categoryName: '外壁',
+    subcategory: '窯業系サイディング',
+    name: 'スプーモ プレミアム',
+    manufacturer: 'ニチハ',
+    modelNumber: 'SPUMO-PREMIUM',
+    unit: '㎡',
+    isOption: true,
+    description: 'Fu-geプレミアム シーリングレス外壁',
+    variants: [
+      { id: 'v1', color: 'プリミエMGホワイト30', colorCode: '#FAFAFA', modelNumber: 'ELS446E' },
+      { id: 'v2', color: 'ラフラMGブラック30', colorCode: '#1C1C1C', modelNumber: 'ELS448E' },
+      { id: 'v3', color: 'ラフラMGグレー30', colorCode: '#A9A9A9', modelNumber: 'ELS449E' }
+    ],
+    pricing: [
+      { plan: 'LACIE', planId: 'LACIE', price: 4500 },
+      { plan: 'HOURS', planId: 'HOURS', price: 4500 },
+      { plan: 'LIFE', planId: 'LIFE', price: 4500 },
+      { plan: 'LIFE+', planId: 'LIFE+', price: 4500 }
+    ]
+  },
+
+  // ヴィンテージウッド プレミアム
+  {
+    id: 'ext-wall-vintagewood-premium',
+    categoryId: 'exterior-wall',
+    categoryName: '外壁',
+    subcategory: '窯業系サイディング',
+    name: 'ヴィンテージウッド プレミアム',
+    manufacturer: 'ニチハ',
+    modelNumber: 'VINTAGEWOOD-PREMIUM',
+    unit: '㎡',
+    isOption: true,
+    description: 'NOHASプレミアム 横張のみの採用となります',
+    variants: [
+      { id: 'v1', color: 'スキムドMGダルブラウン30', colorCode: '#8B7355', modelNumber: 'ELG762FK' },
+      { id: 'v2', color: 'スキムドMGレッド30', colorCode: '#8B4513', modelNumber: 'ELG765FK' },
+      { id: 'v3', color: 'スキムドMGアッシュ30', colorCode: '#A67B5B', modelNumber: 'ELG766FK' }
+    ],
+    pricing: [
+      { plan: 'LACIE', planId: 'LACIE', price: 4500 },
+      { plan: 'HOURS', planId: 'HOURS', price: 4500 },
+      { plan: 'LIFE', planId: 'LIFE', price: 4500 },
+      { plan: 'LIFE+', planId: 'LIFE+', price: 4500 }
+    ]
+  },
+
+  // コンクリート打ちっ放し16 プレミアム
+  {
+    id: 'ext-wall-concrete16-premium',
+    categoryId: 'exterior-wall',
+    categoryName: '外壁',
+    subcategory: '窯業系サイディング',
+    name: 'コンクリート打ちっ放し16 プレミアム',
+    manufacturer: 'ニチハ',
+    modelNumber: 'CONCRETE16-PREMIUM',
+    unit: '㎡',
+    isOption: true,
+    description: 'NOHASプレミアム 横張のみの採用となります',
+    variants: [
+      { id: 'v1', color: 'MGグレー30', colorCode: '#A9A9A9', modelNumber: 'ELG432NK' }
+    ],
+    pricing: [
+      { plan: 'LACIE', planId: 'LACIE', price: 4500 },
+      { plan: 'HOURS', planId: 'HOURS', price: 4500 },
+      { plan: 'LIFE', planId: 'LIFE', price: 4500 },
+      { plan: 'LIFE+', planId: 'LIFE+', price: 4500 }
+    ]
+  },
+
+  // シャルムロック プレミアム
+  {
+    id: 'ext-wall-sharmrock-premium',
+    categoryId: 'exterior-wall',
+    categoryName: '外壁',
+    subcategory: '窯業系サイディング',
+    name: 'シャルムロック プレミアム',
+    manufacturer: 'ニチハ',
+    modelNumber: 'SHARMROCK-PREMIUM',
+    unit: '㎡',
+    isOption: true,
+    description: 'NOHASプレミアム レンガ調サイディング',
+    variants: [
+      { id: 'v1', color: 'マハビMGルビー30', colorCode: '#722F37', modelNumber: 'ELG283FK' },
+      { id: 'v2', color: 'マハビMGブラウン30', colorCode: '#5C4033', modelNumber: 'ELG284FK' },
+      { id: 'v3', color: 'マハビMGスモーク30', colorCode: '#4A4A4A', modelNumber: 'ELG285FK' }
+    ],
+    pricing: [
+      { plan: 'LACIE', planId: 'LACIE', price: 4500 },
+      { plan: 'HOURS', planId: 'HOURS', price: 4500 },
+      { plan: 'LIFE', planId: 'LIFE', price: 4500 },
+      { plan: 'LIFE+', planId: 'LIFE+', price: 4500 }
+    ]
+  },
 ];
