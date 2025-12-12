@@ -1,9 +1,9 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { Product } from '../types/product';
-import { exteriorProductsComplete } from '../data/exteriorProductsComplete';
-import { interiorProductsComplete } from '../data/interiorProductsComplete';
-import { waterEquipmentProductsComplete } from '../data/waterEquipmentProductsComplete';
+import { exteriorProducts } from '../data/exteriorProducts';
+import { interiorProducts } from '../data/interiorProducts';
+import { waterEquipmentProducts } from '../data/waterEquipmentProducts';
 
 interface ProductStore {
   exteriorProducts: Product[];
@@ -32,9 +32,9 @@ interface ProductStore {
 export const useProductStore = create<ProductStore>()(
   persist(
     (set, get) => ({
-      exteriorProducts: exteriorProductsComplete,
-      interiorProducts: interiorProductsComplete,
-      waterProducts: waterEquipmentProductsComplete,
+      exteriorProducts: exteriorProducts,
+      interiorProducts: interiorProducts,
+      waterProducts: waterEquipmentProducts,
       
       // エクステリア商品管理
       addExteriorProduct: (product) => set((state) => ({

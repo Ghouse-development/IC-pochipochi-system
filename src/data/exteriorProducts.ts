@@ -1,6 +1,9 @@
 // エクステリア（外装）製品データ - FACADE Style Book
 import type { Product } from '../types/product';
 import { exteriorProductsAdditional } from './exteriorProductsAdditional';
+import { exteriorProductsPage3to5 } from './exteriorProductsPage3to5';
+import { exteriorProductsPage16to20 } from './exteriorProductsPage16to20';
+import { exteriorProductsPage21to25 } from './exteriorProductsPage21to25';
 
 const baseExteriorProducts: Product[] = [
   // ===== 外壁 - ニチハ モナビストーンV =====
@@ -703,10 +706,10 @@ const baseExteriorProducts: Product[] = [
     subcategory: 'SOLIDO',
     name: 'SOLIDO typeM_LAP',
     manufacturer: 'KMEW',
-    modelNumber: 'SMG72Q',
+    modelNumber: 'SMG72G',
     unit: 'sqm',
     isOption: true,
-    description: 'SOLIDO 高級外壁材 5㎡以下は110,000円/式',
+    description: 'SOLIDO 高級外壁材 HOURS/LACIE:5㎡以下は80,000円/式 LIFE+/LIFE:5㎡以下は110,000円/式',
     variants: [
       {
         id: 'v1',
@@ -716,8 +719,10 @@ const baseExteriorProducts: Product[] = [
       }
     ],
     pricing: [
-      { plan: 'LACIE', price: 21500 },
-      { plan: 'HOURS', price: 21500 }
+      { plan: 'LACIE', price: 17000 },
+      { plan: 'HOURS', price: 17000 },
+      { plan: 'LIFE+', price: 21500 },
+      { plan: 'LIFE', price: 21500 }
     ]
   },
   {
@@ -730,7 +735,7 @@ const baseExteriorProducts: Product[] = [
     modelNumber: 'SMG85G',
     unit: 'sqm',
     isOption: true,
-    description: 'SOLIDO 高級外壁材 5㎡以下は110,000円/式',
+    description: 'SOLIDO 高級外壁材 HOURS/LACIE:5㎡以下は80,000円/式 LIFE+/LIFE:5㎡以下は110,000円/式',
     variants: [
       {
         id: 'v1',
@@ -740,8 +745,10 @@ const baseExteriorProducts: Product[] = [
       }
     ],
     pricing: [
-      { plan: 'LACIE', price: 21500 },
-      { plan: 'HOURS', price: 21500 }
+      { plan: 'LACIE', price: 17000 },
+      { plan: 'HOURS', price: 17000 },
+      { plan: 'LIFE+', price: 21500 },
+      { plan: 'LIFE', price: 21500 }
     ]
   },
   {
@@ -754,7 +761,7 @@ const baseExteriorProducts: Product[] = [
     modelNumber: 'SMG21G',
     unit: 'sqm',
     isOption: true,
-    description: 'SOLIDO 高級外壁材 5㎡以下は110,000円/式',
+    description: 'SOLIDO 高級外壁材 HOURS/LACIE:5㎡以下は80,000円/式 LIFE+/LIFE:5㎡以下は110,000円/式',
     variants: [
       {
         id: 'v1',
@@ -764,8 +771,10 @@ const baseExteriorProducts: Product[] = [
       }
     ],
     pricing: [
-      { plan: 'LACIE', price: 21500 },
-      { plan: 'HOURS', price: 21500 }
+      { plan: 'LACIE', price: 17000 },
+      { plan: 'HOURS', price: 17000 },
+      { plan: 'LIFE+', price: 21500 },
+      { plan: 'LIFE', price: 21500 }
     ]
   },
   {
@@ -775,10 +784,10 @@ const baseExteriorProducts: Product[] = [
     subcategory: 'SOLIDO',
     name: 'SOLIDO typeM_LAP',
     manufacturer: 'KMEW',
-    modelNumber: 'SMG86G',
+    modelNumber: 'SMG65G',
     unit: 'sqm',
     isOption: true,
-    description: 'SOLIDO 高級外壁材 5㎡以下は110,000円/式',
+    description: 'SOLIDO 高級外壁材 HOURS/LACIE:5㎡以下は80,000円/式 LIFE+/LIFE:5㎡以下は110,000円/式',
     variants: [
       {
         id: 'v1',
@@ -788,8 +797,10 @@ const baseExteriorProducts: Product[] = [
       }
     ],
     pricing: [
-      { plan: 'LACIE', price: 21500 },
-      { plan: 'HOURS', price: 21500 }
+      { plan: 'LACIE', price: 17000 },
+      { plan: 'HOURS', price: 17000 },
+      { plan: 'LIFE+', price: 21500 },
+      { plan: 'LIFE', price: 21500 }
     ]
   },
 
@@ -1677,5 +1688,8 @@ const baseExteriorProducts: Product[] = [
 // 基本製品と追加製品をマージ
 export const exteriorProducts: Product[] = [
   ...baseExteriorProducts,
-  ...exteriorProductsAdditional
+  ...exteriorProductsAdditional,
+  ...exteriorProductsPage3to5,
+  ...exteriorProductsPage16to20,
+  ...exteriorProductsPage21to25
 ];

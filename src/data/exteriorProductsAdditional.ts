@@ -1589,10 +1589,10 @@ export const exteriorProductsAdditional: Product[] = [
       }
     ],
     pricing: [
-      { plan: 'LACIE', price: 26000 },
-      { plan: 'HOURS', price: 26000 },
-      { plan: 'LIFE+', price: 26000 },
-      { plan: 'LIFE', price: 26000 }
+      { plan: 'LACIE', price: 22000 },
+      { plan: 'HOURS', price: 22000 },
+      { plan: 'LIFE+', price: 22000 },
+      { plan: 'LIFE', price: 22000 }
     ]
   },
   {
@@ -1615,10 +1615,10 @@ export const exteriorProductsAdditional: Product[] = [
       }
     ],
     pricing: [
-      { plan: 'LACIE', price: 26000 },
-      { plan: 'HOURS', price: 26000 },
-      { plan: 'LIFE+', price: 26000 },
-      { plan: 'LIFE', price: 26000 }
+      { plan: 'LACIE', price: 22000 },
+      { plan: 'HOURS', price: 22000 },
+      { plan: 'LIFE+', price: 22000 },
+      { plan: 'LIFE', price: 22000 }
     ]
   },
   {
@@ -1641,10 +1641,10 @@ export const exteriorProductsAdditional: Product[] = [
       }
     ],
     pricing: [
-      { plan: 'LACIE', price: 26000 },
-      { plan: 'HOURS', price: 26000 },
-      { plan: 'LIFE+', price: 26000 },
-      { plan: 'LIFE', price: 26000 }
+      { plan: 'LACIE', price: 22000 },
+      { plan: 'HOURS', price: 22000 },
+      { plan: 'LIFE+', price: 22000 },
+      { plan: 'LIFE', price: 22000 }
     ]
   },
   {
@@ -1667,10 +1667,10 @@ export const exteriorProductsAdditional: Product[] = [
       }
     ],
     pricing: [
-      { plan: 'LACIE', price: 26000 },
-      { plan: 'HOURS', price: 26000 },
-      { plan: 'LIFE+', price: 26000 },
-      { plan: 'LIFE', price: 26000 }
+      { plan: 'LACIE', price: 22000 },
+      { plan: 'HOURS', price: 22000 },
+      { plan: 'LIFE+', price: 22000 },
+      { plan: 'LIFE', price: 22000 }
     ]
   },
   {
@@ -1693,10 +1693,10 @@ export const exteriorProductsAdditional: Product[] = [
       }
     ],
     pricing: [
-      { plan: 'LACIE', price: 26000 },
-      { plan: 'HOURS', price: 26000 },
-      { plan: 'LIFE+', price: 26000 },
-      { plan: 'LIFE', price: 26000 }
+      { plan: 'LACIE', price: 22000 },
+      { plan: 'HOURS', price: 22000 },
+      { plan: 'LIFE+', price: 22000 },
+      { plan: 'LIFE', price: 22000 }
     ]
   }
 ];
