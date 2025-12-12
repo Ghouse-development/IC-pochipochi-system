@@ -62,6 +62,30 @@ CREATE POLICY "Public can view system_settings" ON system_settings
   FOR SELECT USING (true);
 
 -- ========================================
+-- 8. item_variant_images テーブル - 公開読み取り
+-- ========================================
+DROP POLICY IF EXISTS "Authenticated users can view item_variant_images" ON item_variant_images;
+DROP POLICY IF EXISTS "Public can view item_variant_images" ON item_variant_images;
+CREATE POLICY "Public can view item_variant_images" ON item_variant_images
+  FOR SELECT USING (true);
+
+-- ========================================
+-- 9. rooms テーブル - 公開読み取り
+-- ========================================
+DROP POLICY IF EXISTS "Authenticated users can view rooms" ON rooms;
+DROP POLICY IF EXISTS "Public can view rooms" ON rooms;
+CREATE POLICY "Public can view rooms" ON rooms
+  FOR SELECT USING (is_active = true);
+
+-- ========================================
+-- 10. preset_templates テーブル - 公開読み取り
+-- ========================================
+DROP POLICY IF EXISTS "Authenticated users can view preset_templates" ON preset_templates;
+DROP POLICY IF EXISTS "Public can view preset_templates" ON preset_templates;
+CREATE POLICY "Public can view preset_templates" ON preset_templates
+  FOR SELECT USING (is_active = true);
+
+-- ========================================
 -- 確認クエリ
 -- ========================================
 -- SELECT COUNT(*) FROM products;
