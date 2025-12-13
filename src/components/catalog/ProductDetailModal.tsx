@@ -8,6 +8,7 @@ import { Badge } from '../common/Badge';
 import { useToast } from '../common/Toast';
 import { formatPrice } from '../../lib/utils';
 import { useCartStore } from '../../stores/useCartStore';
+import { useStatisticsStore } from '../../stores/useStatisticsStore';
 import { cn } from '../../lib/utils';
 import { getCategoryRule } from '../../config/categoryRules';
 import { getHexColor } from '../../utils/colorMapping';
@@ -27,16 +28,21 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   const [quantity, setQuantity] = useState(1);
   const [isAdded, setIsAdded] = useState(false);
   const { addItem, items } = useCartStore();
+  const recordView = useStatisticsStore((state) => state.recordView);
+  const recordAdoption = useStatisticsStore((state) => state.recordAdoption);
   const toast = useToast();
 
-  // 開いた時にリセット
+  // 開いた時にリセット & 閲覧記録
   useEffect(() => {
     if (isOpen && product) {
       setSelectedVariant(product.variants[0] || null);
       setQuantity(1);
       setIsAdded(false);
+
+      // 商品閲覧を記録
+      recordView(product.id, product.name, product.categoryName);
     }
-  }, [isOpen, product]);
+  }, [isOpen, product, recordView]);
 
   if (!product) return null;
 
@@ -90,6 +96,8 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
     }
 
     addItem(product, quantity, variant);
+    // 採用を記録
+    recordAdoption(product.id, product.name, product.categoryName, price * quantity);
     toast.success('追加完了', `「${product.name}」をカートに追加しました`);
 
     setIsAdded(true);

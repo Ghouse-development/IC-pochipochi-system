@@ -63,6 +63,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
   // 採用統計データを直接取得（セレクターを使用）
   const productStats = useStatisticsStore((state) => state.productStats || []);
   const yearlyAdoptions = useStatisticsStore((state) => state.yearlyAdoptions || []);
+  const getAdoptionRates = useStatisticsStore((state) => state.getAdoptionRates);
+  const getUnselectedProducts = useStatisticsStore((state) => state.getUnselectedProducts);
+  const getLowAdoptionProducts = useStatisticsStore((state) => state.getLowAdoptionProducts);
+  const getCategoryAdoptionRates = useStatisticsStore((state) => state.getCategoryAdoptionRates);
+
+  // 採用率分析データ
+  const adoptionRates = useMemo(() => getAdoptionRates(), [productStats, getAdoptionRates]);
+  const unselectedProducts = useMemo(() => getUnselectedProducts(), [productStats, getUnselectedProducts]);
+  const lowAdoptionProducts = useMemo(() => getLowAdoptionProducts(30), [productStats, getLowAdoptionProducts]);
+  const categoryAdoptionRates = useMemo(() => getCategoryAdoptionRates(), [productStats, getCategoryAdoptionRates]);
   
   const topProducts = useMemo(() => 
     [...productStats]
@@ -681,28 +691,209 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
         {/* 採用統計 */}
         {activeTab === 'adoption' && (
           <div>
-            <h2 className="text-xl font-semibold text-gray-900 mb-6">商品採用統計</h2>
-            
-            {/* TOP採用商品 */}
+            <h2 className="text-xl font-semibold text-gray-900 mb-6">商品採用統計・分析</h2>
+
+            {/* サマリーカード */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+              <Card className="p-4 bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+                <h4 className="text-sm font-medium text-blue-800">総閲覧商品数</h4>
+                <p className="text-2xl font-bold text-blue-900 mt-1">{adoptionRates.length}件</p>
+              </Card>
+              <Card className="p-4 bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+                <h4 className="text-sm font-medium text-green-800">採用商品数</h4>
+                <p className="text-2xl font-bold text-green-900 mt-1">{adoptionRates.filter(a => a.adoptionCount > 0).length}件</p>
+              </Card>
+              <Card className="p-4 bg-gradient-to-br from-amber-50 to-amber-100 border-amber-200">
+                <h4 className="text-sm font-medium text-amber-800">未採用商品数</h4>
+                <p className="text-2xl font-bold text-amber-900 mt-1">{unselectedProducts.length}件</p>
+              </Card>
+              <Card className="p-4 bg-gradient-to-br from-red-50 to-red-100 border-red-200">
+                <h4 className="text-sm font-medium text-red-800">低採用率商品</h4>
+                <p className="text-2xl font-bold text-red-900 mt-1">{lowAdoptionProducts.length}件</p>
+                <p className="text-xs text-red-600 mt-0.5">（採用率30%未満）</p>
+              </Card>
+            </div>
+
+            {/* カテゴリ別採用率 */}
             <div className="mb-8">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">人気商品TOP10</h3>
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">カテゴリ別採用率</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {categoryAdoptionRates.map((cat) => (
+                  <Card key={cat.category} className="p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-medium text-gray-900">{cat.category}</h4>
+                      <span className={`text-lg font-bold ${
+                        cat.adoptionRate >= 50 ? 'text-green-600' :
+                        cat.adoptionRate >= 20 ? 'text-amber-600' : 'text-red-600'
+                      }`}>
+                        {cat.adoptionRate}%
+                      </span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+                      <div
+                        className={`h-2 rounded-full ${
+                          cat.adoptionRate >= 50 ? 'bg-green-500' :
+                          cat.adoptionRate >= 20 ? 'bg-amber-500' : 'bg-red-500'
+                        }`}
+                        style={{ width: `${Math.min(cat.adoptionRate, 100)}%` }}
+                      />
+                    </div>
+                    <p className="text-xs text-gray-500">
+                      閲覧: {cat.viewCount}回 → 採用: {cat.adoptionCount}回
+                    </p>
+                  </Card>
+                ))}
+                {categoryAdoptionRates.length === 0 && (
+                  <Card className="p-6 col-span-full">
+                    <p className="text-center text-gray-500">まだ閲覧データがありません</p>
+                  </Card>
+                )}
+              </div>
+            </div>
+
+            {/* 未採用商品リスト */}
+            <div className="mb-8">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                <span className="w-3 h-3 bg-amber-500 rounded-full"></span>
+                閲覧されたが未採用の商品
+                <span className="text-sm font-normal text-gray-500">（検討されたが選ばれなかった商品）</span>
+              </h3>
               <Card className="overflow-hidden">
                 <table className="w-full">
-                  <thead className="bg-gray-50 border-b border-gray-200">
+                  <thead className="bg-amber-50 border-b border-amber-200">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        順位
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-amber-700 uppercase tracking-wider">
                         商品名
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-amber-700 uppercase tracking-wider">
                         カテゴリ
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-amber-700 uppercase tracking-wider">
+                        閲覧回数
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-amber-700 uppercase tracking-wider">
+                        採用率
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {unselectedProducts.length === 0 ? (
+                      <tr>
+                        <td colSpan={4} className="px-6 py-8 text-center text-gray-500">
+                          未採用の商品はありません
+                        </td>
+                      </tr>
+                    ) : (
+                      unselectedProducts.slice(0, 20).map((product) => (
+                        <tr key={product.productId} className="hover:bg-amber-50">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            {product.productName}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {product.categoryName}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            {product.viewCount}回
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
+                              0%
+                            </span>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </Card>
+            </div>
+
+            {/* 低採用率商品リスト */}
+            <div className="mb-8">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                <span className="w-3 h-3 bg-red-500 rounded-full"></span>
+                採用率の低い商品
+                <span className="text-sm font-normal text-gray-500">（3回以上閲覧されたが採用率30%未満）</span>
+              </h3>
+              <Card className="overflow-hidden">
+                <table className="w-full">
+                  <thead className="bg-red-50 border-b border-red-200">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-red-700 uppercase tracking-wider">
+                        商品名
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-red-700 uppercase tracking-wider">
+                        カテゴリ
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-red-700 uppercase tracking-wider">
+                        閲覧回数
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-red-700 uppercase tracking-wider">
                         採用回数
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-red-700 uppercase tracking-wider">
+                        採用率
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {lowAdoptionProducts.length === 0 ? (
+                      <tr>
+                        <td colSpan={5} className="px-6 py-8 text-center text-gray-500">
+                          該当する商品はありません
+                        </td>
+                      </tr>
+                    ) : (
+                      lowAdoptionProducts.slice(0, 15).map((product) => (
+                        <tr key={product.productId} className="hover:bg-red-50">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            {product.productName}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {product.categoryName}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            {product.viewCount}回
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            {product.adoptionCount}回
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
+                              {product.adoptionRate}%
+                            </span>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </Card>
+            </div>
+
+            {/* TOP採用商品 */}
+            <div className="mb-8">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                <span className="w-3 h-3 bg-green-500 rounded-full"></span>
+                人気商品TOP10
+              </h3>
+              <Card className="overflow-hidden">
+                <table className="w-full">
+                  <thead className="bg-green-50 border-b border-green-200">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
+                        順位
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
+                        商品名
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
+                        カテゴリ
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
+                        採用回数
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
                         売上合計
                       </th>
                     </tr>
@@ -716,9 +907,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
                       </tr>
                     ) : (
                       topProducts.map((product, index) => (
-                        <tr key={product.productId}>
+                        <tr key={product.productId} className="hover:bg-green-50">
                           <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                            {index + 1}位
+                            <span className={`${
+                              index === 0 ? 'text-yellow-500' :
+                              index === 1 ? 'text-gray-400' :
+                              index === 2 ? 'text-amber-600' : ''
+                            }`}>
+                              {index + 1}位
+                            </span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                             {product.productName}
@@ -739,25 +936,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
                 </table>
               </Card>
             </div>
-            
-            {/* カテゴリ別統計 */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              {categoryStats.map((stat) => (
-                <Card key={stat.category} className="p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-gray-900">{stat.category}</h3>
-                    <Package className="w-5 h-5 text-blue-500" />
-                  </div>
-                  <p className="text-2xl font-bold text-gray-900">
-                    {stat.count}回
-                  </p>
-                  <p className="text-sm text-gray-600 mt-1">
-                    売上: {formatPrice(stat.revenue)}
-                  </p>
-                </Card>
-              ))}
-            </div>
-            
+
             {/* 月別採用推移 */}
             <Card className="p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">月別採用推移</h3>
