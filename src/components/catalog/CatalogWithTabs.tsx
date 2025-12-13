@@ -149,12 +149,12 @@ const STEPS = [
 
 // スケルトンカード
 const SkeletonCard = () => (
-  <div className="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
-    <div className="aspect-square animate-shimmer" />
+  <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm overflow-hidden border border-gray-100 dark:border-gray-700">
+    <div className="aspect-square animate-shimmer dark:opacity-20" />
     <div className="p-3 space-y-2">
-      <div className="h-3 bg-gray-200 rounded animate-shimmer w-1/3" />
-      <div className="h-4 bg-gray-200 rounded animate-shimmer" />
-      <div className="h-8 bg-gray-200 rounded-xl animate-shimmer mt-3" />
+      <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded animate-shimmer w-1/3" />
+      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-shimmer" />
+      <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded-xl animate-shimmer mt-3" />
     </div>
   </div>
 );
@@ -233,12 +233,12 @@ const ItemCard: React.FC<ItemCardProps> = ({
 
   return (
     <div
-      className={`group bg-white rounded-xl shadow-sm overflow-hidden border-2 transition-all duration-200 cursor-pointer ${
+      className={`group bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden border-2 transition-all duration-200 cursor-pointer ${
         inCart
-          ? 'border-teal-400 shadow-md shadow-teal-100 ring-2 ring-teal-50'
+          ? 'border-teal-400 shadow-md shadow-teal-100 dark:shadow-teal-900/30 ring-2 ring-teal-50 dark:ring-teal-900/50'
           : inCompare
-          ? 'border-purple-400 shadow-md shadow-purple-100'
-          : 'border-transparent hover:border-gray-200 hover:shadow-lg'
+          ? 'border-purple-400 shadow-md shadow-purple-100 dark:shadow-purple-900/30'
+          : 'border-transparent hover:border-gray-200 dark:hover:border-gray-600 hover:shadow-lg'
       } ${isJustAdded ? 'animate-pochipochi' : ''}`}
       style={{ animationDelay: `${index * 30}ms` }}
       onMouseEnter={() => setHoveredItem(item.id)}
@@ -339,19 +339,19 @@ const ItemCard: React.FC<ItemCardProps> = ({
       {/* 情報エリア - コンパクト化 */}
       <div className="p-2.5">
         {showManufacturer && (
-          <p className="text-[10px] text-gray-400 font-medium mb-0.5 truncate">{item.manufacturer}</p>
+          <p className="text-[10px] text-gray-400 dark:text-gray-500 font-medium mb-0.5 truncate">{item.manufacturer}</p>
         )}
-        <h3 className="font-medium text-xs text-gray-800 line-clamp-2 min-h-[2rem] mb-1.5 leading-tight">
+        <h3 className="font-medium text-xs text-gray-800 dark:text-gray-200 line-clamp-2 min-h-[2rem] mb-1.5 leading-tight">
           <HighlightText text={item.name} searchTerm={searchTerm} />
         </h3>
 
         {/* 価格 */}
         <div className="flex items-baseline gap-1 mb-2">
-          <span className={`text-base font-bold ${price === 0 ? 'text-teal-600' : 'text-gray-900'}`}>
+          <span className={`text-base font-bold ${price === 0 ? 'text-teal-600 dark:text-teal-400' : 'text-gray-900 dark:text-gray-100'}`}>
             {price === 0 ? '標準' : formatPrice(price)}
           </span>
           {price > 0 && item.unit && (
-            <span className="text-[10px] text-gray-400">/{item.unit.symbol}</span>
+            <span className="text-[10px] text-gray-400 dark:text-gray-500">/{item.unit.symbol}</span>
           )}
         </div>
 
@@ -362,7 +362,7 @@ const ItemCard: React.FC<ItemCardProps> = ({
               e.stopPropagation();
               handleRemoveFromCart(item.id);
             }}
-            className="w-full py-2 rounded-lg text-xs font-medium bg-gray-100 text-gray-600 hover:bg-red-50 hover:text-red-600 flex items-center justify-center gap-1.5 transition-all active:scale-95"
+            className="w-full py-2 rounded-lg text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 dark:hover:text-red-400 flex items-center justify-center gap-1.5 transition-all active:scale-95"
           >
             <X className="w-3.5 h-3.5" />
             解除
@@ -398,11 +398,11 @@ const ItemCard: React.FC<ItemCardProps> = ({
 // 空状態
 const EmptyState = ({ searchTerm, onClear }: { searchTerm: string; onClear: () => void }) => (
   <div className="flex flex-col items-center justify-center py-20 animate-slide-up">
-    <div className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mb-6 animate-float">
-      <Package className="w-12 h-12 text-gray-400" />
+    <div className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 rounded-full flex items-center justify-center mb-6 animate-float">
+      <Package className="w-12 h-12 text-gray-400 dark:text-gray-500" />
     </div>
-    <h3 className="text-xl font-bold text-gray-700 mb-2">商品が見つかりません</h3>
-    <p className="text-gray-500 mb-6 text-center max-w-sm">
+    <h3 className="text-xl font-bold text-gray-700 dark:text-gray-200 mb-2">商品が見つかりません</h3>
+    <p className="text-gray-500 dark:text-gray-400 mb-6 text-center max-w-sm">
       {searchTerm
         ? `「${searchTerm}」に一致する商品がありません`
         : 'このカテゴリには商品がありません'}
@@ -911,7 +911,7 @@ export const CatalogWithTabs: React.FC = () => {
       <style>{animations}</style>
       <Confetti show={showConfetti} />
 
-      <div className="flex flex-col h-full bg-gradient-to-br from-gray-50 via-white to-gray-100">
+      <div className="flex flex-col h-full bg-gray-50 dark:bg-gray-900">
         {/* ヘッダー - 統一デザイン */}
         <div className="bg-teal-600 text-white shadow-lg">
           {/* ステップナビゲーション */}
@@ -994,7 +994,7 @@ export const CatalogWithTabs: React.FC = () => {
         </div>
 
         {/* カテゴリナビゲーション - 決定/未決ステータス表示 */}
-        <div className="bg-white border-b border-gray-200 shadow-sm">
+        <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
           <div className="flex items-center gap-2 px-4 py-3 overflow-x-auto scrollbar-thin">
             {categories.map((cat, idx) => {
               const count = getCategoryCount(cat.name);
@@ -1037,7 +1037,7 @@ export const CatalogWithTabs: React.FC = () => {
 
         <div className="flex flex-1 overflow-hidden">
           {/* サイドバー (PC) - 未決/決定表示 */}
-          <div className="hidden lg:flex flex-col w-72 bg-white/80 backdrop-blur-sm border-r border-gray-200 overflow-y-auto">
+          <div className="hidden lg:flex flex-col w-72 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 overflow-y-auto">
             <div className="p-4 space-y-4">
               {/* プラン選択（コンパクト） */}
               <div className="flex items-center gap-2">
@@ -1247,27 +1247,27 @@ export const CatalogWithTabs: React.FC = () => {
           {/* メインエリア */}
           <div className="flex-1 flex flex-col overflow-hidden">
             {/* 検索バー＋フィルター */}
-            <div className="sticky top-0 bg-white/95 backdrop-blur-md border-b border-gray-100 z-10 p-3">
+            <div className="sticky top-0 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md border-b border-gray-100 dark:border-gray-700 z-10 p-3">
               <div className="flex items-center gap-2 max-w-4xl mx-auto">
                 {/* 検索 */}
                 <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                   <input
                     type="text"
                     placeholder="検索... (/ でフォーカス)"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-3 py-2.5 bg-gray-50 border-0 rounded-xl text-sm focus:ring-2 focus:ring-teal-500 focus:bg-white transition-all"
+                    className="w-full pl-10 pr-3 py-2.5 bg-gray-50 dark:bg-gray-700 dark:text-gray-100 border-0 rounded-xl text-sm focus:ring-2 focus:ring-teal-500 focus:bg-white dark:focus:bg-gray-600 transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
                   />
                   {searchTerm ? (
                     <button
                       onClick={() => setSearchTerm('')}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-200 rounded-full"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full"
                     >
-                      <X className="w-3 h-3 text-gray-400" />
+                      <X className="w-3 h-3 text-gray-400 dark:text-gray-500" />
                     </button>
                   ) : (
-                    <span className="hidden sm:block absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-gray-400 bg-gray-200 px-1.5 py-0.5 rounded">
+                    <span className="hidden sm:block absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-gray-400 dark:text-gray-500 bg-gray-200 dark:bg-gray-600 px-1.5 py-0.5 rounded">
                       /
                     </span>
                   )}
@@ -1288,7 +1288,7 @@ export const CatalogWithTabs: React.FC = () => {
                     className={`p-2.5 rounded-lg transition-colors ${
                       quickSelectMode
                         ? 'bg-amber-500 text-white'
-                        : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'
                     }`}
                     title="クイック選択モード (Q)"
                     aria-label="クイック選択モード"
@@ -1300,13 +1300,13 @@ export const CatalogWithTabs: React.FC = () => {
             </div>
 
             {/* モバイル用フィルターバー */}
-            <div className="lg:hidden bg-white border-b border-gray-100 px-3 py-2">
+            <div className="lg:hidden bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 px-3 py-2">
               <div className="flex items-center gap-2">
                 {/* プラン選択 */}
                 <select
                   value={selectedPlanId}
                   onChange={(e) => setSelectedPlanId(e.target.value)}
-                  className="flex-1 px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 focus:ring-2 focus:ring-teal-500"
+                  className="flex-1 px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-teal-500"
                 >
                   {plans.map(plan => (
                     <option key={plan.id} value={plan.code}>{plan.name}</option>
@@ -1314,7 +1314,7 @@ export const CatalogWithTabs: React.FC = () => {
                 </select>
 
                 {/* タイプフィルター */}
-                <div className="flex bg-gray-100 p-1 rounded-xl">
+                <div className="flex bg-gray-100 dark:bg-gray-700 p-1 rounded-xl">
                   {[
                     { value: 'all', label: 'すべて', color: 'gray' },
                     { value: 'standard', label: '標準', color: 'teal' },
@@ -1329,8 +1329,8 @@ export const CatalogWithTabs: React.FC = () => {
                             ? 'bg-teal-500 text-white shadow-sm'
                             : opt.value === 'option'
                             ? 'bg-orange-500 text-white shadow-sm'
-                            : 'bg-white text-gray-700 shadow-sm'
-                          : 'text-gray-500 hover:text-gray-700'
+                            : 'bg-white dark:bg-gray-600 text-gray-700 dark:text-gray-200 shadow-sm'
+                          : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
                       }`}
                     >
                       {opt.label}
@@ -1344,7 +1344,7 @@ export const CatalogWithTabs: React.FC = () => {
                   className={`p-2.5 rounded-xl transition-all ${
                     quickSelectMode
                       ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-white shadow-lg'
-                      : 'bg-gray-100 text-gray-500'
+                      : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
                   }`}
                   title="クイック選択モード"
                 >
@@ -1491,29 +1491,29 @@ export const CatalogWithTabs: React.FC = () => {
         </div>
 
         {/* モバイル用 - 下部ナビゲーションバー */}
-        <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 shadow-lg safe-area-pb">
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 shadow-lg safe-area-pb">
           <div className="flex items-center justify-between p-3 gap-3">
             {/* 進捗表示 */}
             <button
               onClick={() => setShowMobileProgress(true)}
-              className="flex items-center gap-2 px-3 py-2 bg-gray-100 rounded-xl"
+              className="flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-700 rounded-xl"
             >
               <div className="relative w-10 h-10">
                 <svg className="w-10 h-10 -rotate-90">
-                  <circle cx="20" cy="20" r="16" fill="none" stroke="#e5e7eb" strokeWidth="4" />
+                  <circle cx="20" cy="20" r="16" fill="none" className="stroke-gray-200 dark:stroke-gray-600" strokeWidth="4" />
                   <circle
                     cx="20" cy="20" r="16" fill="none" stroke="#14b8a6" strokeWidth="4"
                     strokeDasharray={`${currentCategoryProgress} 100`}
                     strokeLinecap="round"
                   />
                 </svg>
-                <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-gray-700">
+                <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-gray-700 dark:text-gray-200">
                   {decidedCategories.length}/{categories.length}
                 </span>
               </div>
               <div className="text-left">
-                <p className="text-xs text-gray-500">進捗</p>
-                <p className="text-sm font-bold text-gray-700">
+                <p className="text-xs text-gray-500 dark:text-gray-400">進捗</p>
+                <p className="text-sm font-bold text-gray-700 dark:text-gray-200">
                   {undecidedCategories.length > 0 ? `残り${undecidedCategories.length}` : '完了!'}
                 </p>
               </div>
@@ -1537,7 +1537,7 @@ export const CatalogWithTabs: React.FC = () => {
                 <ChevronRight className="w-5 h-5" />
               </button>
             ) : (
-              <div className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-orange-100 text-orange-700 rounded-xl font-medium">
+              <div className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 rounded-xl font-medium">
                 <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse" />
                 {categories.find(c => c.id === selectedCategoryId)?.name || 'カテゴリ'}を選択中
               </div>
@@ -1562,25 +1562,25 @@ export const CatalogWithTabs: React.FC = () => {
               className="lg:hidden fixed inset-0 bg-black/50 z-50"
               onClick={() => setShowMobileProgress(false)}
             />
-            <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-3xl shadow-2xl max-h-[70vh] overflow-y-auto animate-slide-up">
-              <div className="sticky top-0 bg-white p-4 border-b border-gray-100">
+            <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-gray-800 rounded-t-3xl shadow-2xl max-h-[70vh] overflow-y-auto animate-slide-up">
+              <div className="sticky top-0 bg-white dark:bg-gray-800 p-4 border-b border-gray-100 dark:border-gray-700">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-bold text-lg text-gray-900">選択状況</h3>
+                  <h3 className="font-bold text-lg text-gray-900 dark:text-gray-100">選択状況</h3>
                   <button
                     onClick={() => setShowMobileProgress(false)}
-                    className="p-2 hover:bg-gray-100 rounded-full"
+                    className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full"
                   >
-                    <X className="w-5 h-5" />
+                    <X className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                   </button>
                 </div>
                 {/* 進捗バー */}
-                <div className="mt-3 bg-gray-100 rounded-full h-2 overflow-hidden">
+                <div className="mt-3 bg-gray-100 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
                   <div
                     className="h-full bg-gradient-to-r from-teal-500 to-emerald-500 transition-all duration-500"
                     style={{ width: `${currentCategoryProgress}%` }}
                   />
                 </div>
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                   {decidedCategories.length}/{categories.length} カテゴリ完了
                 </p>
               </div>
@@ -1589,7 +1589,7 @@ export const CatalogWithTabs: React.FC = () => {
                 {/* 未決項目 */}
                 {undecidedCategories.length > 0 && (
                   <div>
-                    <h4 className="font-bold text-sm text-orange-600 mb-2 flex items-center gap-2">
+                    <h4 className="font-bold text-sm text-orange-600 dark:text-orange-400 mb-2 flex items-center gap-2">
                       <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse" />
                       未選択 ({undecidedCategories.length})
                     </h4>
@@ -1601,9 +1601,9 @@ export const CatalogWithTabs: React.FC = () => {
                             setSelectedCategoryId(cat.id);
                             setShowMobileProgress(false);
                           }}
-                          className="w-full flex items-center justify-between p-3 bg-orange-50 rounded-xl border border-orange-200"
+                          className="w-full flex items-center justify-between p-3 bg-orange-50 dark:bg-orange-900/20 rounded-xl border border-orange-200 dark:border-orange-800"
                         >
-                          <span className="font-medium text-gray-700">{cat.name}</span>
+                          <span className="font-medium text-gray-700 dark:text-gray-200">{cat.name}</span>
                           <ChevronRight className="w-5 h-5 text-orange-400" />
                         </button>
                       ))}
@@ -1614,7 +1614,7 @@ export const CatalogWithTabs: React.FC = () => {
                 {/* 決定項目 */}
                 {decidedCategories.length > 0 && (
                   <div>
-                    <h4 className="font-bold text-sm text-teal-600 mb-2 flex items-center gap-2">
+                    <h4 className="font-bold text-sm text-teal-600 dark:text-teal-400 mb-2 flex items-center gap-2">
                       <Check className="w-4 h-4" />
                       選択済み ({decidedCategories.length})
                     </h4>
@@ -1628,15 +1628,15 @@ export const CatalogWithTabs: React.FC = () => {
                               setSelectedCategoryId(cat.id);
                               setShowMobileProgress(false);
                             }}
-                            className="w-full p-3 bg-teal-50 rounded-xl border border-teal-200 text-left"
+                            className="w-full p-3 bg-teal-50 dark:bg-teal-900/20 rounded-xl border border-teal-200 dark:border-teal-800 text-left"
                           >
                             <div className="flex items-center justify-between">
-                              <span className="font-medium text-teal-700">{cat.name}</span>
+                              <span className="font-medium text-teal-700 dark:text-teal-300">{cat.name}</span>
                               <span className="text-xs bg-teal-500 text-white px-2 py-0.5 rounded-full">
                                 {selectedItems.length}件
                               </span>
                             </div>
-                            <div className="mt-1 text-sm text-gray-600">
+                            <div className="mt-1 text-sm text-gray-600 dark:text-gray-400">
                               {selectedItems.map(i => i.product.name).join(', ')}
                             </div>
                           </button>
