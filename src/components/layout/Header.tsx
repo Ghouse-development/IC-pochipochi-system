@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { ShoppingCart, User, Settings, Menu, X, FileText, Upload, Share2, Scale } from 'lucide-react';
+import { ShoppingCart, User, Settings, Menu, X, FileText, Upload, Share2, Scale, Moon, Sun } from 'lucide-react';
 import { useCartStore } from '../../stores/useCartStore';
+import { useThemeStore } from '../../stores/useThemeStore';
 import { formatPrice } from '../../lib/utils';
 
 interface HeaderProps {
@@ -25,13 +26,14 @@ export const Header: React.FC<HeaderProps> = ({
   onImageTestClick
 }) => {
   const { items, getTotalPrice } = useCartStore();
+  const { isDark, toggle: toggleTheme } = useThemeStore();
   const totalPrice = getTotalPrice();
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
     <>
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
+      <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-40">
         <div className="px-4 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center justify-between">
             {/* ロゴとメニューボタン */}
@@ -100,9 +102,22 @@ export const Header: React.FC<HeaderProps> = ({
                 </div>
               </button>
               
+              {/* ダークモードトグル */}
+              <button
+                onClick={toggleTheme}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                aria-label={isDark ? 'ライトモードに切替' : 'ダークモードに切替'}
+              >
+                {isDark ? (
+                  <Sun className="w-5 h-5 text-yellow-500" />
+                ) : (
+                  <Moon className="w-5 h-5 text-gray-500" />
+                )}
+              </button>
+
               {/* ユーザーメニュー */}
-              <button className="hidden sm:block p-2 hover:bg-gray-50 rounded-lg transition-colors">
-                <User className="w-5 h-5 text-gray-700" />
+              <button className="hidden sm:block p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                <User className="w-5 h-5 text-gray-700 dark:text-gray-300" />
               </button>
             </div>
           </div>

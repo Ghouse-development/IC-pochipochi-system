@@ -251,6 +251,8 @@ const ItemCard: React.FC<ItemCardProps> = ({
           <img
             src={imageUrl}
             alt={item.name}
+            loading="lazy"
+            decoding="async"
             className={`w-full h-full object-cover transition-transform duration-300 ${isHovered ? 'scale-105' : ''}`}
           />
         ) : (
