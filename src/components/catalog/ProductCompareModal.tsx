@@ -48,9 +48,10 @@ export const ProductCompareModal: React.FC<ProductCompareModalProps> = ({
         return product.isOption ? 'オプション' : '標準仕様';
       case 'variants':
         return `${product.variants.length}色`;
-      case 'price':
+      case 'price': {
         const price = product.pricing.find(p => p.plan === 'LACIE' || p.planId === 'LACIE')?.price || 0;
         return price === 0 ? '標準仕様' : `${formatPrice(price)}/${UNIT_SYMBOLS[product.unit] || product.unit}`;
+      }
       case 'description':
         return product.description || '-';
       default:

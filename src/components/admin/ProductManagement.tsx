@@ -125,7 +125,7 @@ export function ProductManagement({ products, onProductsChange }: ProductManagem
     setEditingVariant(null);
   };
 
-  const handleFieldChange = (field: keyof Product, value: any) => {
+  const handleFieldChange = (field: keyof Product, value: Product[keyof Product]) => {
     if (!editingProduct) return;
     setEditingProduct({ ...editingProduct, [field]: value });
   };

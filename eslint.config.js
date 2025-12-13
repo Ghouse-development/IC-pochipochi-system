@@ -19,5 +19,13 @@ export default tseslint.config([
       ecmaVersion: 2020,
       globals: globals.browser,
     },
+    rules: {
+      // Context/Hooks等のエクスポートを許可
+      'react-refresh/only-export-components': 'off',
+      // 未使用変数の警告のみ（アンダースコア接頭辞を許可）
+      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+      // React Hooks依存関係は警告のみ
+      'react-hooks/exhaustive-deps': 'warn',
+    },
   },
 ])

@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { Trash2, ChevronDown, ChevronUp, Home, X, Copy, Wand2, Check, Search, Layers, Zap } from 'lucide-react';
-import type { Product } from '../../types/product';
+import type { Product, ProductVariant } from '../../types/product';
 import { formatPrice } from '../../lib/utils';
 import { UNIT_SYMBOLS } from '../../types/product';
 import { getHexColor } from '../../utils/colorMapping';
@@ -247,10 +247,11 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
   const addSelectionsToCart = () => {
     let addedCount = 0;
     rooms.forEach(room => {
-      Object.entries(room.parts).forEach(([partId, selection]) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      Object.entries(room.parts).forEach(([_partId, selection]) => {
         if (selection.product) {
           const variant = selection.product.variants.find(v => v.id === selection.variantId);
-          addItem(selection.product as any, 1, variant as any);
+          addItem(selection.product as unknown as Product, 1, variant as unknown as ProductVariant);
           addedCount++;
         }
       });

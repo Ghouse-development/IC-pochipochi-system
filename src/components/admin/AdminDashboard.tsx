@@ -74,28 +74,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
   const lowAdoptionProducts = useMemo(() => getLowAdoptionProducts(30), [productStats, getLowAdoptionProducts]);
   const categoryAdoptionRates = useMemo(() => getCategoryAdoptionRates(), [productStats, getCategoryAdoptionRates]);
   
-  const topProducts = useMemo(() => 
+  const topProducts = useMemo(() =>
     [...productStats]
       .sort((a, b) => b.adoptionCount - a.adoptionCount)
       .slice(0, 10)
   , [productStats]);
-  
-  const categoryStats = useMemo(() => {
-    const categoryMap = new Map<string, { count: number; revenue: number }>();
-    productStats.forEach(stat => {
-      const existing = categoryMap.get(stat.categoryName) || { count: 0, revenue: 0 };
-      categoryMap.set(stat.categoryName, {
-        count: existing.count + stat.adoptionCount,
-        revenue: existing.revenue + stat.totalRevenue
-      });
-    });
-    return Array.from(categoryMap.entries()).map(([category, data]) => ({
-      category,
-      count: data.count,
-      revenue: data.revenue
-    }));
-  }, [productStats]);
-  
+
   const monthlyStats = yearlyAdoptions;
   
   const {

@@ -45,7 +45,7 @@ export interface ProductVariant {
   color_hex?: string;
   material?: string;
   finish?: string;
-  size_info?: any;
+  size_info?: Record<string, unknown>;
   is_standard: boolean;
   stock_status: string;
   display_order: number;
@@ -104,7 +104,7 @@ export interface ProductAnalytics {
   event_type: 'view' | 'click' | 'add_to_cart' | 'purchase';
   user_id?: string;
   session_id?: string;
-  event_data?: any;
+  event_data?: Record<string, unknown>;
   page_url?: string;
   user_agent?: string;
   created_at: string;
@@ -483,7 +483,7 @@ export class AnalyticsService {
     eventType: ProductAnalytics['event_type'],
     productId: string,
     variantId?: string,
-    eventData?: any
+    eventData?: Record<string, unknown>
   ): Promise<void> {
     try {
       // Get or create session ID
@@ -516,7 +516,7 @@ export class AnalyticsService {
   /**
    * Get popular products
    */
-  static async getPopularProducts(limit: number = 10): Promise<any[]> {
+  static async getPopularProducts(limit: number = 10): Promise<Record<string, unknown>[]> {
     try {
       const { data, error } = await supabase
         .from('popular_products')
@@ -534,7 +534,7 @@ export class AnalyticsService {
   /**
    * Get analytics summary
    */
-  static async getAnalyticsSummary(productId: string, days: number = 30): Promise<any> {
+  static async getAnalyticsSummary(productId: string, days: number = 30): Promise<Record<string, number> | null> {
     try {
       const startDate = new Date();
       startDate.setDate(startDate.getDate() - days);

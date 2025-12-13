@@ -74,10 +74,8 @@ const animations = `
 `;
 
 // DBアイテムをカート用のProduct型に変換
-const convertToCartItem = (item: ItemWithDetails, _selectedPlanId: string): CatalogProduct => {
+const convertToCartItem = (item: ItemWithDetails): CatalogProduct => {
   const pricing = item.pricing?.find(p => p.product?.code === 'LACIE');
-  const variant = item.variants?.[0];
-  const image = variant?.images?.[0];
 
   return {
     id: item.id,
@@ -723,7 +721,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
   // カートに追加
   const handleAddToCart = useCallback((item: ItemWithDetails) => {
-    const cartProduct = convertToCartItem(item, selectedPlanId);
+    const cartProduct = convertToCartItem(item);
     addItem(cartProduct, 1);
     useCartStore.getState().setSelectedPlanId(selectedPlanId);
 
@@ -762,7 +760,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     }
 
     standardItems.forEach(item => {
-      const cartProduct = convertToCartItem(item, selectedPlanId);
+      const cartProduct = convertToCartItem(item);
       addItem(cartProduct, 1);
     });
 

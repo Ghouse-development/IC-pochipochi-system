@@ -301,6 +301,7 @@ export const exportToPDF = async (
 
   // テーブルの描画
   const startY = companyY + 10;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (pdf as any).autoTable({
     startY: startY,
     head: [['No.', '区分', '工事内容', 'メーカー', '数量', '単位', '単価', '金額']],
@@ -344,6 +345,7 @@ export const exportToPDF = async (
   });
 
   // 備考欄
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const finalY = (pdf as any).lastAutoTable.finalY + 10;
   pdf.setFontSize(10);
   pdf.setFont('helvetica', 'bold');

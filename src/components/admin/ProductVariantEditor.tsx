@@ -72,7 +72,7 @@ export function ProductVariantEditor({
     }
   }, [variant]);
 
-  const handleInputChange = (field: string, value: any) => {
+  const handleInputChange = (field: string, value: string | boolean) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
@@ -158,7 +158,7 @@ export function ProductVariantEditor({
           if (price > 0) {
             await VariantService.upsertPricing({
               variant_id: savedVariant.id,
-              plan_type: planType as any,
+              plan_type: planType as 'LIFE' | 'LIFE_PLUS' | 'HOURS' | 'LACIE' | 'LIFE_X',
               price: price,
               is_active: true
             });
