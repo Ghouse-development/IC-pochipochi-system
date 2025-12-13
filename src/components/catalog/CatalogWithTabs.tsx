@@ -630,26 +630,48 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   // モバイル進捗パネル
   const [showMobileProgress, setShowMobileProgress] = useState(false);
 
-  // カテゴリ取得 + 最初の未決カテゴリを自動選択
+  // カテゴリ取得 - 静的データから生成
   useEffect(() => {
-    const fetchCategories = async () => {
-      const { data } = await supabase
-        .from('categories')
-        .select('*')
-        .eq('category_type', activeTab)
-        .eq('is_active', true)
-        .order('display_order');
-      if (data) {
-        setCategories(data);
-        // 最初の未決カテゴリを自動選択
-        const firstUndecided = data.find(cat =>
-          !cartItems.some(item => item.product.categoryName === cat.name)
-        );
-        setSelectedCategoryId(firstUndecided?.id || data[0]?.id || null);
+    // 静的データからカテゴリを抽出
+    let products: CatalogProduct[] = [];
+    if (activeTab === 'exterior') {
+      products = exteriorProducts;
+    } else if (activeTab === 'interior') {
+      products = interiorProducts;
+    } else if (activeTab === 'equipment') {
+      products = waterProducts;
+    }
+
+    // カテゴリ名でユニークなカテゴリを生成
+    const categoryMap = new Map<string, Category>();
+    products.forEach((p, idx) => {
+      if (p.categoryName && !categoryMap.has(p.categoryName)) {
+        categoryMap.set(p.categoryName, {
+          id: `cat-${activeTab}-${idx}`,
+          parent_id: null,
+          name: p.categoryName,
+          slug: p.categoryName.toLowerCase().replace(/\s+/g, '-'),
+          description: null,
+          category_type: activeTab as 'exterior' | 'interior' | 'equipment',
+          is_active: true,
+          is_required: false,
+          display_order: idx,
+          icon: null,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        });
       }
-    };
-    fetchCategories();
-  }, [activeTab]);
+    });
+
+    const generatedCategories = Array.from(categoryMap.values());
+    setCategories(generatedCategories);
+
+    // 最初の未決カテゴリを自動選択
+    const firstUndecided = generatedCategories.find(cat =>
+      !cartItems.some(item => item.product.categoryName === cat.name)
+    );
+    setSelectedCategoryId(firstUndecided?.id || generatedCategories[0]?.id || null);
+  }, [activeTab, exteriorProducts, interiorProducts, waterProducts]);
 
   // 静的データからItemWithDetails形式のデータを取得
   const getStaticItems = useCallback((tab: string): ItemWithDetails[] => {
@@ -664,79 +686,30 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     return products.map(p => convertStaticToItemWithDetails(p, tab));
   }, [exteriorProducts, interiorProducts, waterProducts]);
 
-  // アイテム取得
+  // アイテム取得 - 静的データを直接使用（色・サブカテゴリ情報が完全）
   useEffect(() => {
-    const fetchItems = async () => {
-      setIsLoading(true);
-      setError(null);
+    setIsLoading(true);
+    setError(null);
 
-      try {
-        let query = supabase
-          .from('items')
-          .select(`
-            *,
-            category:categories(*),
-            unit:units(*),
-            variants:item_variants(*, images:item_variant_images(*)),
-            pricing:item_pricing(*, product:products(*))
-          `)
-          .eq('is_active', true);
+    // 静的データを使用（Supabaseにデータがないため）
+    const staticItems = getStaticItems(activeTab);
 
-        if (selectedCategoryId) {
-          query = query.eq('category_id', selectedCategoryId);
-        } else {
-          const { data: categoryIds } = await supabase
-            .from('categories')
-            .select('id')
-            .eq('category_type', activeTab)
-            .eq('is_active', true);
-
-          if (categoryIds?.length) {
-            query = query.in('category_id', categoryIds.map(c => c.id));
-          }
-        }
-
-        const { data, error: fetchError } = await query.order('display_order');
-        if (fetchError) throw fetchError;
-
-        // 静的データを取得（色・バリアント情報が完全）
-        const staticItems = getStaticItems(activeTab);
-
-        // Supabaseデータと静的データをマージ
-        // 静的データの色・バリアント情報を優先
-        if (data && data.length > 0) {
-          const mergedItems = (data as ItemWithDetails[]).map(dbItem => {
-            // 静的データから同じIDまたは名前の商品を検索
-            const staticItem = staticItems.find(s =>
-              s.id === dbItem.id || s.name === dbItem.name
-            );
-            if (staticItem && staticItem.variants && staticItem.variants.length > 0) {
-              // 静的データのvariantsを使用
-              return {
-                ...dbItem,
-                variants: staticItem.variants,
-                category_name: staticItem.category_name || dbItem.category_name,
-              };
-            }
-            return dbItem;
-          });
-          setItems(mergedItems);
-        } else {
-          // DBにデータがない場合は静的データを使用
-          setItems(staticItems);
-        }
-      } catch {
-        // エラー時は静的データを使用
-        const staticItems = getStaticItems(activeTab);
-        setItems(staticItems);
-        setError(null);
-      } finally {
-        setIsLoading(false);
+    // カテゴリでフィルタリング（選択されている場合）
+    let filteredStaticItems = staticItems;
+    if (selectedCategoryId) {
+      // カテゴリ名でフィルタリング
+      const selectedCategory = categories.find(c => c.id === selectedCategoryId);
+      if (selectedCategory) {
+        filteredStaticItems = staticItems.filter(item =>
+          item.category?.name === selectedCategory.name ||
+          item.category_name === selectedCategory.name
+        );
       }
-    };
+    }
 
-    fetchItems();
-  }, [activeTab, selectedCategoryId, getStaticItems]);
+    setItems(filteredStaticItems);
+    setIsLoading(false);
+  }, [activeTab, selectedCategoryId, getStaticItems, categories]);
 
   // 利用可能なサブカテゴリと色を抽出
   const availableSubcategories = useMemo(() => {
