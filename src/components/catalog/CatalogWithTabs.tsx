@@ -1,10 +1,14 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { Search, ShoppingCart, Check, Sparkles, Star, ChevronRight, X, Filter, Package, Home, Sofa, Wrench, Heart, Eye } from 'lucide-react';
+import { Search, ShoppingCart, Check, Sparkles, Star, ChevronRight, X, Filter, Package, Home, Sofa, Wrench, Eye, Scale } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useCartStore } from '../../stores/useCartStore';
 import { formatPrice } from '../../lib/utils';
 import type { ItemWithDetails, Category, Product } from '../../types/database';
 import { RecommendationPanel } from './RecommendationPanel';
+import { ProductDetailModal } from './ProductDetailModal';
+import { ProductCompareModal } from './ProductCompareModal';
+import { RoomInteriorSelector } from '../interior/RoomInteriorSelector';
+import * as Dialog from '@radix-ui/react-dialog';
 import type { Product as CatalogProduct } from '../../types/product';
 
 // 100点UIアニメーション
@@ -212,6 +216,17 @@ export const CatalogWithTabs: React.FC = () => {
   const [showMobileFilter, setShowMobileFilter] = useState(false);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
+  // 商品詳細モーダル用
+  const [selectedProductForDetail, setSelectedProductForDetail] = useState<CatalogProduct | null>(null);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+
+  // 比較機能用
+  const [compareProducts, setCompareProducts] = useState<CatalogProduct[]>([]);
+  const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
+
+  // 部屋別内装プランナー
+  const [isRoomPlannerOpen, setIsRoomPlannerOpen] = useState(false);
+
   // データ
   const [items, setItems] = useState<ItemWithDetails[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -363,6 +378,32 @@ export const CatalogWithTabs: React.FC = () => {
   const handleRemoveFromCart = useCallback((itemId: string) => {
     removeItem(itemId);
   }, [removeItem]);
+
+  // 商品詳細モーダルを開く
+  const handleOpenDetail = useCallback((item: ItemWithDetails) => {
+    const product = convertToCatalogProduct(item);
+    setSelectedProductForDetail(product);
+    setIsDetailModalOpen(true);
+  }, []);
+
+  // 比較に追加/削除
+  const handleToggleCompare = useCallback((item: ItemWithDetails) => {
+    const product = convertToCatalogProduct(item);
+    setCompareProducts(prev => {
+      const exists = prev.some(p => p.id === product.id);
+      if (exists) {
+        return prev.filter(p => p.id !== product.id);
+      } else if (prev.length < 3) {
+        return [...prev, product];
+      }
+      return prev;
+    });
+  }, []);
+
+  // 比較リストにあるかチェック
+  const isInCompare = useCallback((itemId: string) => {
+    return compareProducts.some(p => p.id === itemId);
+  }, [compareProducts]);
 
   const getPrice = (item: ItemWithDetails) => {
     return item.pricing?.find(p => p.product?.code === selectedPlanId)?.price || 0;
@@ -567,6 +608,22 @@ export const CatalogWithTabs: React.FC = () => {
                   ))}
                 </div>
               </div>
+
+              {/* 部屋別プランナー（内装タブの時のみ） */}
+              {activeTab === 'interior' && (
+                <div className="pt-4 border-t border-gray-200">
+                  <button
+                    onClick={() => setIsRoomPlannerOpen(true)}
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-xl font-medium hover:from-blue-600 hover:to-indigo-600 transition-all shadow-lg shadow-blue-200"
+                  >
+                    <Home className="w-5 h-5" />
+                    部屋別プランナー
+                  </button>
+                  <p className="text-xs text-gray-500 mt-2 text-center">
+                    部屋ごとに床材・壁クロスを設定
+                  </p>
+                </div>
+              )}
             </div>
           </div>
 
@@ -678,17 +735,22 @@ export const CatalogWithTabs: React.FC = () => {
                     const isHovered = hoveredItem === item.id;
                     const variant = item.variants?.[0];
 
+                    const inCompare = isInCompare(item.id);
+
                     return (
                       <div
                         key={item.id}
-                        className={`group bg-white rounded-2xl shadow-sm overflow-hidden border-2 transition-all duration-300 animate-slide-up ${
+                        className={`group bg-white rounded-2xl shadow-sm overflow-hidden border-2 transition-all duration-300 animate-slide-up cursor-pointer ${
                           inCart
                             ? 'border-teal-400 shadow-lg shadow-teal-100 ring-4 ring-teal-50'
+                            : inCompare
+                            ? 'border-purple-400 shadow-lg shadow-purple-100'
                             : 'border-transparent hover:border-gray-200 hover:shadow-xl'
                         } ${isJustAdded ? 'animate-pochipochi' : ''}`}
                         style={{ animationDelay: `${index * 50}ms` }}
                         onMouseEnter={() => setHoveredItem(item.id)}
                         onMouseLeave={() => setHoveredItem(null)}
+                        onClick={() => handleOpenDetail(item)}
                       >
                         {/* 画像エリア */}
                         <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
@@ -728,13 +790,45 @@ export const CatalogWithTabs: React.FC = () => {
                             )}
                           </div>
 
+                          {/* 比較ボタン（常に表示） */}
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleToggleCompare(item);
+                            }}
+                            className={`absolute top-2 right-2 p-2 rounded-full shadow-sm transition-all ${
+                              inCompare
+                                ? 'bg-purple-500 text-white'
+                                : 'bg-white/90 text-gray-600 hover:bg-purple-100 hover:text-purple-600'
+                            }`}
+                            title={inCompare ? '比較から削除' : '比較に追加'}
+                          >
+                            <Scale className="w-4 h-4" />
+                          </button>
+
                           {/* ホバーアクション */}
                           <div className={`absolute inset-0 bg-black/40 flex items-center justify-center gap-2 transition-opacity duration-300 ${isHovered && !inCart ? 'opacity-100' : 'opacity-0'}`}>
-                            <button className="p-3 bg-white/90 rounded-full hover:bg-white transition-transform hover:scale-110">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleOpenDetail(item);
+                              }}
+                              className="p-3 bg-white/90 rounded-full hover:bg-white transition-transform hover:scale-110"
+                              title="詳細を見る"
+                            >
                               <Eye className="w-5 h-5 text-gray-700" />
                             </button>
-                            <button className="p-3 bg-white/90 rounded-full hover:bg-white transition-transform hover:scale-110">
-                              <Heart className="w-5 h-5 text-gray-700" />
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleToggleCompare(item);
+                              }}
+                              className={`p-3 rounded-full transition-transform hover:scale-110 ${
+                                inCompare ? 'bg-purple-500 text-white' : 'bg-white/90 hover:bg-purple-100'
+                              }`}
+                              title={inCompare ? '比較から削除' : '比較に追加'}
+                            >
+                              <Scale className={`w-5 h-5 ${inCompare ? 'text-white' : 'text-gray-700'}`} />
                             </button>
                           </div>
 
@@ -768,7 +862,10 @@ export const CatalogWithTabs: React.FC = () => {
                           {/* ボタン */}
                           {inCart ? (
                             <button
-                              onClick={() => handleRemoveFromCart(item.id)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleRemoveFromCart(item.id);
+                              }}
                               className="w-full py-3 rounded-xl text-sm font-semibold bg-gray-100 text-gray-600 hover:bg-red-50 hover:text-red-600 flex items-center justify-center gap-2 transition-all active:scale-95"
                             >
                               <X className="w-4 h-4" />
@@ -776,11 +873,14 @@ export const CatalogWithTabs: React.FC = () => {
                             </button>
                           ) : (
                             <button
-                              onClick={() => handleAddToCart(item)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleOpenDetail(item);
+                              }}
                               className="w-full py-3 rounded-xl text-sm font-bold bg-gradient-to-r from-teal-500 to-emerald-500 text-white hover:from-teal-600 hover:to-emerald-600 flex items-center justify-center gap-2 shadow-lg shadow-teal-200 hover:shadow-xl hover:shadow-teal-300 transition-all active:scale-95"
                             >
-                              <ShoppingCart className="w-4 h-4" />
-                              選択する
+                              <Eye className="w-4 h-4" />
+                              詳細を見る
                             </button>
                           )}
                         </div>
@@ -810,18 +910,109 @@ export const CatalogWithTabs: React.FC = () => {
           </div>
         </div>
 
-        {/* モバイル用フローティングカートボタン */}
-        {cartItems.length > 0 && (
-          <div className="lg:hidden fixed bottom-6 right-6 z-40">
+        {/* モバイル用フローティングボタン */}
+        <div className="lg:hidden fixed bottom-6 right-6 z-40 flex flex-col gap-3">
+          {/* 比較ボタン */}
+          {compareProducts.length > 0 && (
+            <button
+              onClick={() => setIsCompareModalOpen(true)}
+              className="relative bg-gradient-to-r from-purple-500 to-purple-600 text-white p-4 rounded-2xl shadow-2xl shadow-purple-300"
+            >
+              <Scale className="w-6 h-6" />
+              <span className="absolute -top-2 -right-2 w-6 h-6 bg-white text-purple-600 text-xs font-bold rounded-full flex items-center justify-center">
+                {compareProducts.length}
+              </span>
+            </button>
+          )}
+          {/* カートボタン */}
+          {cartItems.length > 0 && (
             <button className="relative bg-gradient-to-r from-teal-500 to-emerald-500 text-white p-4 rounded-2xl shadow-2xl shadow-teal-300 animate-float">
               <ShoppingCart className="w-6 h-6" />
               <span className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center animate-bounce-in">
                 {cartItems.length}
               </span>
             </button>
+          )}
+        </div>
+
+        {/* 比較バー（PC用） */}
+        {compareProducts.length > 0 && (
+          <div className="hidden lg:flex fixed bottom-0 left-0 right-0 bg-purple-600 text-white py-3 px-6 items-center justify-between z-40">
+            <div className="flex items-center gap-4">
+              <Scale className="w-5 h-5" />
+              <span className="font-medium">比較中: {compareProducts.length}件</span>
+              <div className="flex gap-2">
+                {compareProducts.map(p => (
+                  <span key={p.id} className="bg-white/20 px-2 py-1 rounded text-sm">
+                    {p.name.substring(0, 15)}...
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setCompareProducts([])}
+                className="px-4 py-2 bg-white/20 rounded-lg hover:bg-white/30 transition-colors"
+              >
+                クリア
+              </button>
+              <button
+                onClick={() => setIsCompareModalOpen(true)}
+                className="px-4 py-2 bg-white text-purple-600 rounded-lg font-medium hover:bg-purple-50 transition-colors"
+              >
+                比較する
+              </button>
+            </div>
           </div>
         )}
       </div>
+
+      {/* 商品詳細モーダル */}
+      <ProductDetailModal
+        product={selectedProductForDetail}
+        isOpen={isDetailModalOpen}
+        onClose={() => {
+          setIsDetailModalOpen(false);
+          setSelectedProductForDetail(null);
+        }}
+      />
+
+      {/* 比較モーダル */}
+      <ProductCompareModal
+        products={compareProducts}
+        isOpen={isCompareModalOpen}
+        onClose={() => setIsCompareModalOpen(false)}
+        onRemoveProduct={(productId) => setCompareProducts(prev => prev.filter(p => p.id !== productId))}
+      />
+
+      {/* 部屋別プランナーモーダル */}
+      <Dialog.Root open={isRoomPlannerOpen} onOpenChange={setIsRoomPlannerOpen}>
+        <Dialog.Portal>
+          <Dialog.Overlay className="fixed inset-0 bg-black/50 z-50" />
+          <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-xl w-[95vw] max-w-6xl max-h-[90vh] overflow-hidden z-50">
+            <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Home className="w-6 h-6" />
+                <h2 className="text-lg font-bold">部屋別内装プランナー</h2>
+              </div>
+              <Dialog.Close className="p-2 hover:bg-white/20 rounded-full">
+                <X className="w-5 h-5" />
+              </Dialog.Close>
+            </div>
+            <div className="overflow-y-auto max-h-[calc(90vh-60px)]">
+              <RoomInteriorSelector
+                interiorProducts={catalogProducts.filter(p =>
+                  ['床材', '壁クロス', '天井クロス', '巾木'].some(cat => p.categoryName.includes(cat))
+                )}
+                onSelectionsChange={(selections) => {
+                  console.log('Room selections:', selections);
+                  // TODO: カートに反映する処理
+                }}
+              />
+            </div>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
     </>
   );
 };
