@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { Search, ShoppingCart, Check, Sparkles, Star, ChevronRight, X, Package, Home, Sofa, Wrench, Eye, Scale } from 'lucide-react';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { Search, ShoppingCart, Check, Sparkles, Star, ChevronRight, X, Package, Home, Sofa, Wrench, Eye, Scale, Zap, Heart, Clock } from 'lucide-react';
+import { useToast } from '../common/Toast';
 import { supabase } from '../../lib/supabase';
 import { useCartStore } from '../../stores/useCartStore';
+import { useFavoritesStore } from '../../stores/useFavoritesStore';
 import { formatPrice } from '../../lib/utils';
 import type { ItemWithDetails, Category, Product } from '../../types/database';
 import { RecommendationPanel } from './RecommendationPanel';
@@ -172,6 +175,8 @@ interface ItemCardProps {
   handleRemoveFromCart: (itemId: string) => void;
   handleToggleCompare: (item: ItemWithDetails) => void;
   isInCompare: (itemId: string) => boolean;
+  handleToggleFavorite: (itemId: string) => void;
+  isFavorite: (itemId: string) => boolean;
   showManufacturer?: boolean;
 }
 
@@ -190,6 +195,8 @@ const ItemCard: React.FC<ItemCardProps> = ({
   handleRemoveFromCart,
   handleToggleCompare,
   isInCompare,
+  handleToggleFavorite,
+  isFavorite,
   showManufacturer = true,
 }) => {
   const price = getPrice(item);
@@ -200,6 +207,7 @@ const ItemCard: React.FC<ItemCardProps> = ({
   const isHovered = hoveredItem === item.id;
   const variant = item.variants?.[0];
   const inCompare = isInCompare(item.id);
+  const inFavorite = isFavorite(item.id);
   const hasMultipleVariants = (item.variants?.length || 0) > 1;
 
   return (
@@ -249,13 +257,27 @@ const ItemCard: React.FC<ItemCardProps> = ({
           </span>
         </div>
 
-        {/* HITバッジ & 比較ボタン */}
+        {/* HITバッジ & お気に入り & 比較ボタン */}
         <div className="absolute top-1.5 right-1.5 flex flex-col gap-1">
           {item.is_hit && (
             <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-red-500 text-white shadow-sm flex items-center gap-0.5">
               <Sparkles className="w-2.5 h-2.5" />
             </span>
           )}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleToggleFavorite(item.id);
+            }}
+            className={`p-1.5 rounded-full shadow-sm transition-all ${
+              inFavorite
+                ? 'bg-pink-500 text-white'
+                : 'bg-white/90 text-gray-400 hover:text-pink-500'
+            }`}
+            title={inFavorite ? 'お気に入りから削除' : 'お気に入りに追加'}
+          >
+            <Heart className={`w-3.5 h-3.5 ${inFavorite ? 'fill-current' : ''}`} />
+          </button>
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -399,10 +421,45 @@ const Confetti = ({ show }: { show: boolean }) => {
 };
 
 export const CatalogWithTabs: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'exterior' | 'interior' | 'equipment'>('exterior');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
-  const [filterType, setFilterType] = useState<'all' | 'standard' | 'option'>('all');
+  // URLパラメータ
+  const { step = 'exterior', categoryId: urlCategoryId, productId: urlProductId } = useParams<{
+    step?: string;
+    categoryId?: string;
+    productId?: string;
+  }>();
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // URLからactiveTabを設定
+  const activeTab = (['exterior', 'interior', 'equipment'].includes(step) ? step : 'exterior') as 'exterior' | 'interior' | 'equipment';
+  const selectedCategoryId = urlCategoryId || null;
+
+  // URLクエリパラメータから検索・フィルターを取得
+  const searchTerm = searchParams.get('q') || '';
+  const filterType = (searchParams.get('filter') as 'all' | 'standard' | 'option') || 'all';
+
+  // 検索・フィルター更新関数（URL同期）
+  const setSearchTerm = useCallback((term: string) => {
+    setSearchParams(prev => {
+      if (term) {
+        prev.set('q', term);
+      } else {
+        prev.delete('q');
+      }
+      return prev;
+    });
+  }, [setSearchParams]);
+
+  const setFilterType = useCallback((type: 'all' | 'standard' | 'option') => {
+    setSearchParams(prev => {
+      if (type !== 'all') {
+        prev.set('filter', type);
+      } else {
+        prev.delete('filter');
+      }
+      return prev;
+    });
+  }, [setSearchParams]);
   const [selectedPlanId, setSelectedPlanId] = useState<string>('LACIE');
   const [addedItemId, setAddedItemId] = useState<string | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -430,6 +487,36 @@ export const CatalogWithTabs: React.FC = () => {
   const { items: cartItems, addItem, removeItem, getTotalPrice } = useCartStore();
   const cartItemIds = useMemo(() => new Set(cartItems.map(i => i.product.id)), [cartItems]);
   const totalPrice = getTotalPrice();
+  const toast = useToast();
+
+  // お気に入り・履歴
+  const { favorites, toggleFavorite, isFavorite, addRecentlyViewed, recentlyViewed } = useFavoritesStore();
+  const handleToggleFavorite = useCallback((itemId: string) => {
+    toggleFavorite(itemId);
+    const wasFavorite = favorites.includes(itemId);
+    if (wasFavorite) {
+      toast.info('お気に入り解除');
+    } else {
+      toast.success('お気に入り追加');
+    }
+  }, [toggleFavorite, favorites, toast]);
+
+  // クイック選択モード
+  const [quickSelectMode, setQuickSelectMode] = useState(false);
+
+  // タブ切替（URL遷移）
+  const setActiveTab = useCallback((newTab: 'exterior' | 'interior' | 'equipment') => {
+    navigate(`/catalog/${newTab}`);
+  }, [navigate]);
+
+  // カテゴリ選択（URL遷移）
+  const setSelectedCategoryId = useCallback((catId: string | null) => {
+    if (catId) {
+      navigate(`/catalog/${activeTab}/${catId}`);
+    } else {
+      navigate(`/catalog/${activeTab}`);
+    }
+  }, [navigate, activeTab]);
 
   // プラン取得
   useEffect(() => {
@@ -566,24 +653,42 @@ export const CatalogWithTabs: React.FC = () => {
     setAddedItemId(item.id);
     setTimeout(() => setAddedItemId(null), 500);
 
+    // Toast通知
+    toast.success('追加しました', item.name);
+
     // マイルストーン演出
     const newCount = cartItems.length + 1;
     if (newCount === 5 || newCount === 10 || newCount === 15 || newCount === 20) {
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), 3000);
     }
-  }, [addItem, cartItems.length, selectedPlanId]);
+
+    // クイック選択モードで自動的に次のカテゴリへ
+    if (quickSelectMode) {
+      setTimeout(() => goToNextCategory(), 300);
+    }
+  }, [addItem, cartItems.length, selectedPlanId, toast, quickSelectMode, goToNextCategory]);
 
   const handleRemoveFromCart = useCallback((itemId: string) => {
+    const item = cartItems.find(i => i.product.id === itemId);
     removeItem(itemId);
-  }, [removeItem]);
+    if (item) {
+      toast.info('解除しました', item.product.name);
+    }
+  }, [removeItem, cartItems, toast]);
 
-  // 商品詳細モーダルを開く
+  // 商品詳細モーダルを開く（URL付き）
   const handleOpenDetail = useCallback((item: ItemWithDetails) => {
     const product = convertToCatalogProduct(item);
     setSelectedProductForDetail(product);
     setIsDetailModalOpen(true);
-  }, []);
+    // 最近見た商品に追加
+    addRecentlyViewed(item.id);
+    // URLを更新（ブラウザ履歴に追加）
+    if (selectedCategoryId) {
+      navigate(`/catalog/${activeTab}/${selectedCategoryId}/${item.id}`);
+    }
+  }, [navigate, activeTab, selectedCategoryId, addRecentlyViewed]);
 
   // 比較に追加/削除
   const handleToggleCompare = useCallback((item: ItemWithDetails) => {
@@ -672,6 +777,85 @@ export const CatalogWithTabs: React.FC = () => {
     const currentCat = categories.find(c => c.id === selectedCategoryId);
     return currentCat ? cartItems.some(item => item.product.categoryName === currentCat.name) : false;
   }, [categories, selectedCategoryId, cartItems]);
+
+  // URLの商品IDで詳細モーダルを自動的に開く
+  useEffect(() => {
+    if (urlProductId && items.length > 0) {
+      const item = items.find(i => i.id === urlProductId);
+      if (item) {
+        const product = convertToCatalogProduct(item);
+        setSelectedProductForDetail(product);
+        setIsDetailModalOpen(true);
+      }
+    }
+  }, [urlProductId, items]);
+
+  // モーダルを閉じる（URLから商品IDを削除）
+  const handleCloseDetailModal = useCallback(() => {
+    setIsDetailModalOpen(false);
+    setSelectedProductForDetail(null);
+    // URLから商品IDを削除
+    if (selectedCategoryId) {
+      navigate(`/catalog/${activeTab}/${selectedCategoryId}`);
+    } else {
+      navigate(`/catalog/${activeTab}`);
+    }
+  }, [navigate, activeTab, selectedCategoryId]);
+
+  // キーボードショートカット
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // モーダルが開いている場合はEscでのみ閉じる
+      if (isDetailModalOpen || isCompareModalOpen || isRoomPlannerOpen) {
+        if (e.key === 'Escape') {
+          if (isDetailModalOpen) handleCloseDetailModal();
+          if (isCompareModalOpen) setIsCompareModalOpen(false);
+          if (isRoomPlannerOpen) setIsRoomPlannerOpen(false);
+        }
+        return;
+      }
+
+      // 検索ボックスにフォーカスがある場合
+      if (document.activeElement?.tagName === 'INPUT') {
+        if (e.key === 'Escape') {
+          (document.activeElement as HTMLInputElement).blur();
+          setSearchTerm('');
+        }
+        return;
+      }
+
+      // グローバルショートカット
+      switch (e.key) {
+        case '/':
+        case 'f':
+          if (e.ctrlKey || e.metaKey || e.key === '/') {
+            e.preventDefault();
+            const searchInput = document.querySelector('input[placeholder="検索..."]') as HTMLInputElement;
+            searchInput?.focus();
+          }
+          break;
+        case 'n':
+          // 次のカテゴリへ
+          if (undecidedCategories.length > 0) {
+            goToNextCategory();
+          }
+          break;
+        case 'q':
+          // クイック選択モード切替
+          setQuickSelectMode(prev => !prev);
+          break;
+        case 'Escape':
+          // 検索をクリア
+          if (searchTerm) {
+            setSearchTerm('');
+          }
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isDetailModalOpen, isCompareModalOpen, isRoomPlannerOpen, handleCloseDetailModal, searchTerm, setSearchTerm, undecidedCategories, goToNextCategory]);
 
   return (
     <>
@@ -935,6 +1119,62 @@ export const CatalogWithTabs: React.FC = () => {
                 );
               })()}
 
+              {/* お気に入り */}
+              {favorites.length > 0 && (
+                <div className="pt-3 border-t border-gray-200">
+                  <h3 className="font-bold text-gray-800 mb-2 text-sm flex items-center gap-2">
+                    <Heart className="w-4 h-4 text-pink-500 fill-pink-500" />
+                    お気に入り
+                    <span className="text-pink-500">({favorites.length})</span>
+                  </h3>
+                  <div className="space-y-1">
+                    {favorites.slice(0, 3).map(favId => {
+                      const item = items.find(i => i.id === favId);
+                      if (!item) return null;
+                      return (
+                        <button
+                          key={favId}
+                          onClick={() => handleOpenDetail(item)}
+                          className="w-full flex items-center justify-between p-2 bg-pink-50 hover:bg-pink-100 rounded-lg text-sm transition-all border border-pink-200"
+                        >
+                          <span className="font-medium text-gray-700 truncate">{item.name}</span>
+                          <ChevronRight className="w-4 h-4 text-pink-400 flex-shrink-0" />
+                        </button>
+                      );
+                    })}
+                    {favorites.length > 3 && (
+                      <p className="text-xs text-pink-400 text-center">他{favorites.length - 3}件</p>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* 最近見た商品 */}
+              {recentlyViewed.length > 0 && (
+                <div className="pt-3 border-t border-gray-200">
+                  <h3 className="font-bold text-gray-800 mb-2 text-sm flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-gray-500" />
+                    最近見た商品
+                  </h3>
+                  <div className="space-y-1">
+                    {recentlyViewed.slice(0, 3).map(viewedId => {
+                      const item = items.find(i => i.id === viewedId);
+                      if (!item) return null;
+                      return (
+                        <button
+                          key={viewedId}
+                          onClick={() => handleOpenDetail(item)}
+                          className="w-full flex items-center justify-between p-2 bg-gray-50 hover:bg-gray-100 rounded-lg text-sm transition-all"
+                        >
+                          <span className="text-gray-600 truncate">{item.name}</span>
+                          <ChevronRight className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
               {/* 部屋別プランナー（内装タブの時のみ） */}
               {activeTab === 'interior' && (
                 <div className="pt-3 border-t border-gray-200">
@@ -962,8 +1202,10 @@ export const CatalogWithTabs: React.FC = () => {
                   <button
                     onClick={goToNextCategory}
                     className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-teal-500 to-emerald-500 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all"
+                    title="キーボードショートカット: N"
                   >
                     次のカテゴリへ
+                    <span className="text-[10px] bg-white/20 px-1.5 rounded">N</span>
                     <ChevronRight className="w-5 h-5" />
                   </button>
                 ) : null}
@@ -981,55 +1223,93 @@ export const CatalogWithTabs: React.FC = () => {
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <input
                     type="text"
-                    placeholder="検索..."
+                    placeholder="検索... (/ でフォーカス)"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="w-full pl-10 pr-3 py-2.5 bg-gray-50 border-0 rounded-xl text-sm focus:ring-2 focus:ring-teal-500 focus:bg-white transition-all"
                   />
-                  {searchTerm && (
+                  {searchTerm ? (
                     <button
                       onClick={() => setSearchTerm('')}
                       className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-200 rounded-full"
                     >
                       <X className="w-3 h-3 text-gray-400" />
                     </button>
+                  ) : (
+                    <span className="hidden sm:block absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-gray-400 bg-gray-200 px-1.5 py-0.5 rounded">
+                      /
+                    </span>
                   )}
                 </div>
 
-                {/* モバイル用プラン・タイプセレクター */}
-                <div className="flex lg:hidden items-center gap-1.5">
-                  {/* プラン選択（コンパクト） */}
-                  <select
-                    value={selectedPlanId}
-                    onChange={(e) => setSelectedPlanId(e.target.value)}
-                    className="px-2 py-2.5 bg-gray-50 border-0 rounded-xl text-xs font-medium text-gray-700 focus:ring-2 focus:ring-teal-500"
-                  >
-                    {plans.map(plan => (
-                      <option key={plan.id} value={plan.code}>{plan.name}</option>
-                    ))}
-                  </select>
+                {/* クイック選択モードトグル */}
+                <button
+                  onClick={() => setQuickSelectMode(!quickSelectMode)}
+                  className={`hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium transition-all ${
+                    quickSelectMode
+                      ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-white shadow-lg'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                  title="クイック選択 (Q): 商品選択後に自動で次のカテゴリへ移動"
+                >
+                  <Zap className="w-4 h-4" />
+                  <span className="hidden md:inline">{quickSelectMode ? 'クイック ON' : 'クイック'}</span>
+                  <span className="hidden lg:block text-[10px] ml-1 bg-black/10 px-1 rounded">Q</span>
+                </button>
+              </div>
+            </div>
 
-                  {/* タイプフィルター（コンパクト） */}
-                  <div className="flex bg-gray-100 p-0.5 rounded-lg">
-                    {[
-                      { value: 'all', label: '全' },
-                      { value: 'standard', label: '標準' },
-                      { value: 'option', label: 'OP' },
-                    ].map(opt => (
-                      <button
-                        key={opt.value}
-                        onClick={() => setFilterType(opt.value as any)}
-                        className={`px-2 py-1.5 rounded text-xs font-medium transition-all ${
-                          filterType === opt.value
-                            ? 'bg-white text-teal-600 shadow-sm'
-                            : 'text-gray-500'
-                        }`}
-                      >
-                        {opt.label}
-                      </button>
-                    ))}
-                  </div>
+            {/* モバイル用フィルターバー */}
+            <div className="lg:hidden bg-white border-b border-gray-100 px-3 py-2">
+              <div className="flex items-center gap-2">
+                {/* プラン選択 */}
+                <select
+                  value={selectedPlanId}
+                  onChange={(e) => setSelectedPlanId(e.target.value)}
+                  className="flex-1 px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 focus:ring-2 focus:ring-teal-500"
+                >
+                  {plans.map(plan => (
+                    <option key={plan.id} value={plan.code}>{plan.name}</option>
+                  ))}
+                </select>
+
+                {/* タイプフィルター */}
+                <div className="flex bg-gray-100 p-1 rounded-xl">
+                  {[
+                    { value: 'all', label: 'すべて', color: 'gray' },
+                    { value: 'standard', label: '標準', color: 'teal' },
+                    { value: 'option', label: 'OP', color: 'orange' },
+                  ].map(opt => (
+                    <button
+                      key={opt.value}
+                      onClick={() => setFilterType(opt.value as any)}
+                      className={`px-3 py-2 rounded-lg text-xs font-bold transition-all ${
+                        filterType === opt.value
+                          ? opt.value === 'standard'
+                            ? 'bg-teal-500 text-white shadow-sm'
+                            : opt.value === 'option'
+                            ? 'bg-orange-500 text-white shadow-sm'
+                            : 'bg-white text-gray-700 shadow-sm'
+                          : 'text-gray-500 hover:text-gray-700'
+                      }`}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
                 </div>
+
+                {/* クイック選択モード */}
+                <button
+                  onClick={() => setQuickSelectMode(!quickSelectMode)}
+                  className={`p-2.5 rounded-xl transition-all ${
+                    quickSelectMode
+                      ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-white shadow-lg'
+                      : 'bg-gray-100 text-gray-500'
+                  }`}
+                  title="クイック選択モード"
+                >
+                  <Zap className="w-4 h-4" />
+                </button>
               </div>
             </div>
 
@@ -1096,6 +1376,8 @@ export const CatalogWithTabs: React.FC = () => {
                                     handleRemoveFromCart={handleRemoveFromCart}
                                     handleToggleCompare={handleToggleCompare}
                                     isInCompare={isInCompare}
+                                    handleToggleFavorite={handleToggleFavorite}
+                                    isFavorite={isFavorite}
                                     showManufacturer={false}
                                   />
                                 ))}
@@ -1136,6 +1418,8 @@ export const CatalogWithTabs: React.FC = () => {
                           handleRemoveFromCart={handleRemoveFromCart}
                           handleToggleCompare={handleToggleCompare}
                           isInCompare={isInCompare}
+                          handleToggleFavorite={handleToggleFavorite}
+                          isFavorite={isFavorite}
                           showManufacturer={true}
                         />
                       ))}
@@ -1360,10 +1644,7 @@ export const CatalogWithTabs: React.FC = () => {
       <ProductDetailModal
         product={selectedProductForDetail}
         isOpen={isDetailModalOpen}
-        onClose={() => {
-          setIsDetailModalOpen(false);
-          setSelectedProductForDetail(null);
-        }}
+        onClose={handleCloseDetailModal}
       />
 
       {/* 比較モーダル */}

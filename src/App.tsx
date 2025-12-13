@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, DemoAuthProvider, useAuth } from './contexts/AuthContext';
 import { LoginPage } from './pages/LoginPage';
 import { Header } from './components/layout/Header';
@@ -30,9 +31,6 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
   const { user, isLoading, isAdmin } = useAuth();
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
-  const [showAdmin, setShowAdmin] = useState(false);
-  const [showHierarchy, setShowHierarchy] = useState(false);
-  const [showImageTest, setShowImageTest] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
   const [compareProducts, setCompareProducts] = useState<Product[]>([]);
@@ -72,31 +70,6 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
     return <LoginPage onDemoLogin={onDemoSwitch} />;
   }
 
-  // Admin dashboard
-  if (showAdmin) {
-    return <AdminDashboard onBack={() => setShowAdmin(false)} />;
-  }
-
-  // Hierarchy page
-  if (showHierarchy) {
-    return <HierarchyPage onBack={() => setShowHierarchy(false)} />;
-  }
-
-  // Image test page
-  if (showImageTest) {
-    return (
-      <div>
-        <button
-          onClick={() => setShowImageTest(false)}
-          className="fixed top-4 left-4 z-50 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
-        >
-          ← 戻る
-        </button>
-        <ImageTestPage />
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Header
@@ -105,17 +78,26 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
         onCompareClick={() => setIsCompareModalOpen(true)}
         compareCount={compareProducts.length}
         isAdmin={isAdmin}
-        onAdminClick={() => setShowAdmin(true)}
-        onHierarchyClick={() => setShowHierarchy(true)}
-        onImageTestClick={() => setShowImageTest(true)}
       />
 
       <main className="flex-1 overflow-hidden">
-        <CatalogWithTabs />
+        <Routes>
+          {/* カタログルート */}
+          <Route path="/" element={<Navigate to="/catalog/exterior" replace />} />
+          <Route path="/catalog" element={<Navigate to="/catalog/exterior" replace />} />
+          <Route path="/catalog/:step" element={<CatalogWithTabs />} />
+          <Route path="/catalog/:step/:categoryId" element={<CatalogWithTabs />} />
+          <Route path="/catalog/:step/:categoryId/:productId" element={<CatalogWithTabs />} />
+
+          {/* 管理画面 */}
+          <Route path="/admin" element={<AdminDashboard onBack={() => window.history.back()} />} />
+          <Route path="/hierarchy" element={<HierarchyPage onBack={() => window.history.back()} />} />
+          <Route path="/image-test" element={<ImageTestPage />} />
+        </Routes>
       </main>
 
       {/* Version display */}
-      <div className="fixed bottom-4 left-4 bg-white px-3 py-1 rounded-lg shadow-md text-xs text-gray-600">
+      <div className="fixed bottom-4 left-4 bg-white px-3 py-1 rounded-lg shadow-md text-xs text-gray-600 z-30">
         Ver. {currentVersion}
         {isDemo && <span className="ml-2 text-orange-500">(Demo)</span>}
       </div>
@@ -159,12 +141,13 @@ function App() {
   const wrappedContent = (isDemoMode: boolean, onDemoSwitch?: () => void) => (
     <ErrorBoundary
       onError={(error, errorInfo) => {
-        // 本番環境ではSentryなどに送信
         console.error('App error caught:', error.message);
         console.error('Component stack:', errorInfo.componentStack);
       }}
     >
-      <MainContent isDemoMode={isDemoMode} onDemoSwitch={onDemoSwitch} />
+      <BrowserRouter>
+        <MainContent isDemoMode={isDemoMode} onDemoSwitch={onDemoSwitch} />
+      </BrowserRouter>
     </ErrorBoundary>
   );
 
