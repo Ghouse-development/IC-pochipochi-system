@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { AuthProvider, DemoAuthProvider, useAuth } from './contexts/AuthContext';
 import { LoginPage } from './pages/LoginPage';
 import { Header } from './components/layout/Header';
@@ -29,6 +29,7 @@ interface MainContentProps {
 
 function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
   const { user, isLoading, isAdmin } = useAuth();
+  const navigate = useNavigate();
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
@@ -78,6 +79,9 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
         onCompareClick={() => setIsCompareModalOpen(true)}
         compareCount={compareProducts.length}
         isAdmin={isAdmin}
+        onAdminClick={() => navigate('/admin')}
+        onHierarchyClick={() => navigate('/hierarchy')}
+        onImageTestClick={() => navigate('/image-test')}
       />
 
       <main className="flex-1 overflow-hidden">

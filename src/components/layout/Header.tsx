@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { ShoppingCart, User, Settings, Menu, X, FileText, Upload, Share2, Scale, Moon, Sun } from 'lucide-react';
+import { ShoppingCart, User, Settings, Menu, X, FileText, Upload, Share2, Scale, Moon, Sun, LogOut, BarChart3 } from 'lucide-react';
 import { useCartStore } from '../../stores/useCartStore';
 import { useThemeStore } from '../../stores/useThemeStore';
 import { formatPrice } from '../../lib/utils';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface HeaderProps {
   onCartClick: () => void;
@@ -27,9 +28,11 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   const { items, getTotalPrice } = useCartStore();
   const { isDark, toggle: toggleTheme } = useThemeStore();
+  const { user, signOut } = useAuth();
   const totalPrice = getTotalPrice();
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   return (
     <>
@@ -116,9 +119,71 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
 
               {/* ユーザーメニュー */}
-              <button className="hidden sm:block p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
-                <User className="w-5 h-5 text-gray-700 dark:text-gray-300" />
-              </button>
+              <div className="relative">
+                <button
+                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                  className="hidden sm:flex items-center gap-2 p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                >
+                  <User className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                  {user && (
+                    <span className="text-sm text-gray-600 dark:text-gray-400 max-w-[100px] truncate">
+                      {user.email?.split('@')[0]}
+                    </span>
+                  )}
+                </button>
+                {isUserMenuOpen && (
+                  <>
+                    <div
+                      className="fixed inset-0 z-40"
+                      onClick={() => setIsUserMenuOpen(false)}
+                    />
+                    <div className="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 z-50 py-2">
+                      <div className="px-4 py-2 border-b border-gray-100 dark:border-gray-700">
+                        <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                          {user?.email}
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          {isAdmin ? '管理者' : 'ユーザー'}
+                        </p>
+                      </div>
+                      {isAdmin && (
+                        <>
+                          <button
+                            onClick={() => {
+                              setIsUserMenuOpen(false);
+                              onAdminClick?.();
+                            }}
+                            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                          >
+                            <Settings className="w-4 h-4" />
+                            管理画面
+                          </button>
+                          <button
+                            onClick={() => {
+                              setIsUserMenuOpen(false);
+                              onHierarchyClick?.();
+                            }}
+                            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                          >
+                            <BarChart3 className="w-4 h-4" />
+                            進捗ダッシュボード
+                          </button>
+                        </>
+                      )}
+                      <button
+                        onClick={() => {
+                          setIsUserMenuOpen(false);
+                          signOut?.();
+                        }}
+                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        ログアウト
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </div>
