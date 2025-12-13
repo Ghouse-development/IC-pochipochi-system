@@ -159,6 +159,25 @@ const SkeletonCard = () => (
   </div>
 );
 
+// 検索ハイライトコンポーネント
+const HighlightText: React.FC<{ text: string; searchTerm: string }> = ({ text, searchTerm }) => {
+  if (!searchTerm.trim()) return <>{text}</>;
+
+  const parts = text.split(new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'));
+
+  return (
+    <>
+      {parts.map((part, i) =>
+        part.toLowerCase() === searchTerm.toLowerCase() ? (
+          <mark key={i} className="bg-yellow-200 text-gray-900 px-0.5 rounded">{part}</mark>
+        ) : (
+          <span key={i}>{part}</span>
+        )
+      )}
+    </>
+  );
+};
+
 // 商品カードコンポーネント
 interface ItemCardProps {
   item: ItemWithDetails;
@@ -177,6 +196,7 @@ interface ItemCardProps {
   isInCompare: (itemId: string) => boolean;
   handleToggleFavorite: (itemId: string) => void;
   isFavorite: (itemId: string) => boolean;
+  searchTerm: string;
   showManufacturer?: boolean;
 }
 
@@ -197,6 +217,7 @@ const ItemCard: React.FC<ItemCardProps> = ({
   isInCompare,
   handleToggleFavorite,
   isFavorite,
+  searchTerm,
   showManufacturer = true,
 }) => {
   const price = getPrice(item);
@@ -319,7 +340,7 @@ const ItemCard: React.FC<ItemCardProps> = ({
           <p className="text-[10px] text-gray-400 font-medium mb-0.5 truncate">{item.manufacturer}</p>
         )}
         <h3 className="font-medium text-xs text-gray-800 line-clamp-2 min-h-[2rem] mb-1.5 leading-tight">
-          {item.name}
+          <HighlightText text={item.name} searchTerm={searchTerm} />
         </h3>
 
         {/* 価格 */}
@@ -1378,6 +1399,7 @@ export const CatalogWithTabs: React.FC = () => {
                                     isInCompare={isInCompare}
                                     handleToggleFavorite={handleToggleFavorite}
                                     isFavorite={isFavorite}
+                                    searchTerm={searchTerm}
                                     showManufacturer={false}
                                   />
                                 ))}
@@ -1420,6 +1442,7 @@ export const CatalogWithTabs: React.FC = () => {
                           isInCompare={isInCompare}
                           handleToggleFavorite={handleToggleFavorite}
                           isFavorite={isFavorite}
+                          searchTerm={searchTerm}
                           showManufacturer={true}
                         />
                       ))}
