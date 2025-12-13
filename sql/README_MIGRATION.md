@@ -1,33 +1,22 @@
-# Supabase データ移行ガイド
+# Supabase セットアップガイド
 
 ## 概要
 
-静的TypeScriptファイルからSupabaseデータベースへの完全移行
+IC-pochipochi-system のデータベースセットアップ用統合SQLファイル
 
-### 移行データ統計
+## ファイル構成
 
-| タブ | アイテム数 | カテゴリ数 | SQLファイル |
-|-----|-----------|-----------|-------------|
-| **内装** | 317件 | 39件 | 009_seed_interior_complete.sql |
-| **外装** | 151件 | 14件 | 010_seed_exterior_complete.sql |
-| **設備** | 46件 | 7件 | 008_seed_equipment_items.sql |
-| **合計** | **514件** | **60件** | - |
+| ファイル | 説明 |
+|---------|------|
+| **COMPLETE_SETUP.sql** | 全テーブル・関数・初期データの統合SQL |
 
-## 実行手順
+## セットアップ手順
 
 ### 1. Supabase SQL Editorで実行
 
-Supabaseダッシュボード → SQL Editor → 以下の順序で実行:
-
-```
-0. sql/000_fix_constraints.sql (必須！制約追加)
-1. sql/009_seed_interior_complete.sql (内装317件)
-2. sql/010_seed_exterior_complete.sql (外装151件)
-3. sql/008_seed_equipment_items.sql (設備46件) ※既存の場合はスキップ
-```
-
-**重要**: `000_fix_constraints.sql` を最初に実行してください。
-これにより ON CONFLICT に必要なユニーク制約が追加されます。
+1. Supabaseダッシュボード → SQL Editor を開く
+2. `COMPLETE_SETUP.sql` の内容を貼り付け
+3. 「Run」をクリック
 
 ### 2. CLIで実行する場合
 
@@ -36,45 +25,77 @@ Supabaseダッシュボード → SQL Editor → 以下の順序で実行:
 supabase db push
 
 # または直接PostgreSQLに接続
-psql $DATABASE_URL -f sql/009_seed_interior_complete.sql
-psql $DATABASE_URL -f sql/010_seed_exterior_complete.sql
+psql $DATABASE_URL -f sql/COMPLETE_SETUP.sql
 ```
 
-## カテゴリ一覧
+## COMPLETE_SETUP.sql の内容
 
-### 内装 (39カテゴリ)
-- Gハウスオリジナル、床材、収納棚、アクセントタイル
-- スイッチ/コンセント、階段、インテリアカウンター、ニッチ
-- 室内ドア、インターホン、玄関靴箱、玄関手洗い
-- エアコン、アクセントパネル、室内窓、壁
-- 乾太くん、トイレ収納、物干し金物、天井
-- 補強・下地、換気システム、格子、アクセサリー
-- 間接照明、収納、小上がり、スロップシンク
-- カーテンBOX、壁材、建具、天井材
-- 点検口、ダウンライト施工費、畳、お風呂
-- 洗濯パン、洗濯機混合水栓、ナノバブル発生装置
+### 1. ENUM型定義
+- category_type (外装/内装/設備)
+- plan_type (LACIE/HOURS/LIFE/LIFE_PLUS)
+- pricing_type (標準/オプション)
+- item_status (active/discontinued/coming_soon)
+- unit_type (各種単位)
+- room_type (部屋タイプ)
 
-### 外装 (14カテゴリ)
-- 外壁、窓、外部設備、エコキュート
-- ポーチ、玄関ドア、軒天、電動ガレージシャッター
-- 樋、ガレージシャッター、換気システム
-- 屋根、庇、太陽光・蓄電池
+### 2. コアテーブル
+| テーブル | 説明 |
+|---------|------|
+| users | ユーザー情報 |
+| products | プラン（LACIE/HOURS/LIFE/LIFE+） |
+| categories | カテゴリ（外装/内装/設備） |
+| items | 商品マスター |
+| item_variants | 色・バリエーション |
+| item_pricing | 価格情報（プラン別） |
+| projects | 物件プロジェクト |
+| selections | 選択履歴 |
+| system_settings | システム設定 |
 
-### 設備 (7カテゴリ)
-- キッチン、バス、洗面台、トイレ
-- 給湯器、エアコン、照明
+### 3. インデックス
+- カテゴリ検索用
+- 商品コード検索用
+- 価格検索用
 
-## 注意事項
+### 4. 初期データ
+- 4プラン（LACIE/HOURS/LIFE/LIFE_PLUS）
+- 単位マスター
+- 部屋タイプマスター
+- システム設定
 
-1. **既存データの削除**: 各SQLファイルは既存の該当カテゴリのデータを削除してから挿入します
-2. **トランザクション**: BEGIN/COMMITで囲まれているため、エラー時は自動ロールバック
-3. **重複防止**: ON CONFLICTで重複を防止
+### 5. RLSポリシー
+- 商品データ: 匿名読み取り許可
+- ユーザーデータ: 認証ユーザーのみ
+- プロジェクトデータ: 所有者のみ
+
+### 6. ユーティリティ
+- `data_statistics` ビュー: データ統計表示
+- `popular_items_ranking` ビュー: 人気商品ランキング
+- `check_data_integrity()` 関数: データ整合性チェック
+- `bulk_update_prices()` 関数: 一括価格更新
+
+## 商品データのインポート
+
+商品データはTypeScriptスクリプトでインポート:
+
+```bash
+npx tsx scripts/importToSupabase.ts
+```
+
+### インポート結果（2025-12-13時点）
+- カテゴリ: 38件
+- 商品: 196件
+- バリアント: 486件
+- 価格レコード: 1,268件
 
 ## 確認クエリ
 
-移行後にデータを確認:
-
 ```sql
+-- データ統計を確認
+SELECT * FROM data_statistics;
+
+-- データ整合性チェック
+SELECT * FROM check_data_integrity();
+
 -- カテゴリ別アイテム数
 SELECT
   c.category_type,
@@ -84,13 +105,19 @@ FROM categories c
 LEFT JOIN items i ON i.category_id = c.id
 GROUP BY c.category_type, c.name
 ORDER BY c.category_type, c.display_order;
-
--- 合計
-SELECT
-  c.category_type,
-  COUNT(DISTINCT c.id) as category_count,
-  COUNT(i.id) as item_count
-FROM categories c
-LEFT JOIN items i ON i.category_id = c.id
-GROUP BY c.category_type;
 ```
+
+## トラブルシューティング
+
+### エラー: relation already exists
+既存のテーブルがある場合は、先に削除するか、CREATE TABLE IF NOT EXISTSを使用
+
+### エラー: permission denied
+RLSが有効な場合、service_roleキーを使用するか、ポリシーを確認
+
+## 連絡先
+
+- GitHub: https://github.com/Ghouse-development/IC-pochipochi-system
+
+---
+最終更新: 2025-12-13
