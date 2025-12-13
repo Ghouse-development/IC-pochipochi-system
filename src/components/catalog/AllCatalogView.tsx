@@ -61,7 +61,7 @@ export const AllCatalogView: React.FC = () => {
         if (filterType === 'option' && !product.isOption) return false;
 
         // 価格フィルター
-        const price = product.pricing.find(p => p.planId === 'LACIE')?.price || 0;
+        const price = product.pricing.find(p => p.plan === 'LACIE' || p.planId === 'LACIE')?.price || 0;
         if (price < priceRange[0] || price > priceRange[1]) return false;
 
         // カテゴリフィルター

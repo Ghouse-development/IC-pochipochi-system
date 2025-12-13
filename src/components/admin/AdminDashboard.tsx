@@ -548,7 +548,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
                             {product.manufacturer}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {formatPrice(product.pricing.find(p => p.planId === 'LACIE')?.price || 0)}
+                            {formatPrice(product.pricing.find(p => p.plan === 'LACIE' || p.planId === 'LACIE')?.price || 0)}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${

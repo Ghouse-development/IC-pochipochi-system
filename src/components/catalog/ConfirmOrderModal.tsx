@@ -35,7 +35,7 @@ export const ConfirmOrderModal: React.FC<ConfirmOrderModalProps> = ({
     
     // 統計を記録
     items.forEach(item => {
-      const price = item.product.pricing.find(p => p.planId === 'LACIE')?.price || 0;
+      const price = item.product.pricing.find(p => p.plan === 'LACIE' || p.planId === 'LACIE')?.price || 0;
       recordAdoption(
         item.product.id,
         item.product.name,

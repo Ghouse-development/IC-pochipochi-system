@@ -19,7 +19,7 @@ export const exportProductsToExcel = (products: Product[], catalogType: string) 
     product.name,
     product.manufacturer,
     product.modelNumber || '',
-    product.pricing.find(p => p.planId === 'LACIE')?.price || 0,
+    product.pricing.find(p => p.plan === 'LACIE' || p.planId === 'LACIE')?.price || 0,
     product.unit,
     product.isOption ? 'オプション' : '標準',
     product.variants?.map(v => v.color).filter(c => c).join(', ') || '',
@@ -28,10 +28,10 @@ export const exportProductsToExcel = (products: Product[], catalogType: string) 
 
   // データを結合
   const wsData = [...headerData, ...productData];
-  
+
   // ワークシートの作成
   const ws = XLSX.utils.aoa_to_sheet(wsData);
-  
+
   // 列幅の設定
   ws['!cols'] = [
     { wch: 20 }, // カテゴリ
@@ -44,12 +44,12 @@ export const exportProductsToExcel = (products: Product[], catalogType: string) 
     { wch: 30 }, // 色展開
     { wch: 40 }  // 備考
   ];
-  
+
   // ワークシートをワークブックに追加
   XLSX.utils.book_append_sheet(wb, ws, '商品一覧');
-  
+
   // ファイルのダウンロード
-  const catalogName = catalogType === 'exterior' ? 'エクステリア' : 
+  const catalogName = catalogType === 'exterior' ? 'エクステリア' :
                       catalogType === 'interior' ? 'インテリア' : '水廻り';
   XLSX.writeFile(wb, `商品一覧_${catalogName}_${new Date().getTime()}.xlsx`);
 };
@@ -57,14 +57,14 @@ export const exportProductsToExcel = (products: Product[], catalogType: string) 
 export const exportProductsToCSV = (products: Product[], catalogType: string) => {
   // CSVヘッダー
   const headers = ['カテゴリ', '商品名', 'メーカー', '品番', '価格', '単位', 'タイプ', '色展開', '備考'];
-  
+
   // データ行の作成
   const rows = products.map(product => [
     product.categoryName,
     product.name,
     product.manufacturer,
     product.modelNumber || '',
-    product.pricing.find(p => p.planId === 'LACIE')?.price || 0,
+    product.pricing.find(p => p.plan === 'LACIE' || p.planId === 'LACIE')?.price || 0,
     product.unit,
     product.isOption ? 'オプション' : '標準',
     product.variants?.map(v => v.color).filter(c => c).join(', ') || '',

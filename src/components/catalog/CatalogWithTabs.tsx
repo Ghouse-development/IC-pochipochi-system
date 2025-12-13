@@ -1627,100 +1627,31 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
               ) : filteredItems.length === 0 ? (
                 <EmptyState searchTerm={searchTerm} onClear={() => setSearchTerm('')} />
               ) : (
-                <>
-                  {/* サブカテゴリ別グループ化表示（カテゴリ選択時のみ） */}
-                  {selectedCategoryId && (() => {
-                    // category_name（サブカテゴリ名）でグループ化
-                    const groupedBySubcategory = filteredItems.reduce((acc, item) => {
-                      // category_nameにサブカテゴリ名が入っている（例: 窯業系サイディング）
-                      const subcategory = item.category_name || item.model_number || item.manufacturer || 'その他';
-                      if (!acc[subcategory]) acc[subcategory] = [];
-                      acc[subcategory].push(item);
-                      return acc;
-                    }, {} as Record<string, typeof filteredItems>);
-                    const subcategories = Object.keys(groupedBySubcategory);
-
-                    // サブカテゴリが2つ以上ある場合のみグループ化表示
-                    if (subcategories.length > 1) {
-                      return (
-                        <div className="space-y-6">
-                          {subcategories.map(subcategory => (
-                            <div key={subcategory} className="animate-slide-up">
-                              <div className="flex items-center gap-2 mb-3 sticky top-0 bg-gray-50/95 dark:bg-gray-900/95 backdrop-blur-sm py-2 -mx-1 px-1 z-5">
-                                <div className="w-1 h-5 bg-gradient-to-b from-teal-500 to-emerald-500 rounded-full" />
-                                <h3 className="font-bold text-gray-800 dark:text-gray-200">{subcategory}</h3>
-                                <span className="text-xs text-gray-400 dark:text-gray-500">({groupedBySubcategory[subcategory].length}件)</span>
-                              </div>
-                              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-                                {groupedBySubcategory[subcategory].map((item, index) => (
-                                  <ItemCard
-                                    key={item.id}
-                                    item={item}
-                                    index={index}
-                                    getPrice={getPrice}
-                                    isStandard={isStandard}
-                                    getImageUrl={getImageUrl}
-                                    cartItemIds={cartItemIds}
-                                    addedItemId={addedItemId}
-                                    hoveredItem={hoveredItem}
-                                    setHoveredItem={setHoveredItem}
-                                    handleOpenDetail={handleOpenDetail}
-                                    handleAddToCart={handleAddToCart}
-                                    handleRemoveFromCart={handleRemoveFromCart}
-                                    handleToggleCompare={handleToggleCompare}
-                                    isInCompare={isInCompare}
-                                    handleToggleFavorite={handleToggleFavorite}
-                                    isFavorite={isFavorite}
-                                    searchTerm={searchTerm}
-                                    showManufacturer={true}
-                                  />
-                                ))}
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      );
-                    }
-                    return null;
-                  })()}
-
-                  {/* 通常グリッド表示（グループ化しない場合） */}
-                  {(!selectedCategoryId || (() => {
-                    const groupedBySubcategory = filteredItems.reduce((acc, item) => {
-                      const subcategory = item.category_name || item.model_number || item.manufacturer || 'その他';
-                      if (!acc[subcategory]) acc[subcategory] = [];
-                      acc[subcategory].push(item);
-                      return acc;
-                    }, {} as Record<string, typeof filteredItems>);
-                    return Object.keys(groupedBySubcategory).length <= 1;
-                  })()) && (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-                      {filteredItems.map((item, index) => (
-                        <ItemCard
-                          key={item.id}
-                          item={item}
-                          index={index}
-                          getPrice={getPrice}
-                          isStandard={isStandard}
-                          getImageUrl={getImageUrl}
-                          cartItemIds={cartItemIds}
-                          addedItemId={addedItemId}
-                          hoveredItem={hoveredItem}
-                          setHoveredItem={setHoveredItem}
-                          handleOpenDetail={handleOpenDetail}
-                          handleAddToCart={handleAddToCart}
-                          handleRemoveFromCart={handleRemoveFromCart}
-                          handleToggleCompare={handleToggleCompare}
-                          isInCompare={isInCompare}
-                          handleToggleFavorite={handleToggleFavorite}
-                          isFavorite={isFavorite}
-                          searchTerm={searchTerm}
-                          showManufacturer={true}
-                        />
-                      ))}
-                    </div>
-                  )}
-                </>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+                  {filteredItems.map((item, index) => (
+                    <ItemCard
+                      key={item.id}
+                      item={item}
+                      index={index}
+                      getPrice={getPrice}
+                      isStandard={isStandard}
+                      getImageUrl={getImageUrl}
+                      cartItemIds={cartItemIds}
+                      addedItemId={addedItemId}
+                      hoveredItem={hoveredItem}
+                      setHoveredItem={setHoveredItem}
+                      handleOpenDetail={handleOpenDetail}
+                      handleAddToCart={handleAddToCart}
+                      handleRemoveFromCart={handleRemoveFromCart}
+                      handleToggleCompare={handleToggleCompare}
+                      isInCompare={isInCompare}
+                      handleToggleFavorite={handleToggleFavorite}
+                      isFavorite={isFavorite}
+                      searchTerm={searchTerm}
+                      showManufacturer={true}
+                    />
+                  ))}
+                </div>
               )}
 
               {/* レコメンドパネル */}

@@ -47,7 +47,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   if (!product) return null;
 
   const variant = selectedVariant || product.variants[0];
-  const price = product.pricing.find((p) => p.planId === 'LACIE')?.price || 0;
+  const price = product.pricing.find((p) => p.plan === 'LACIE' || p.planId === 'LACIE')?.price || 0;
   const totalPrice = price * quantity;
 
   // カテゴリルールを取得

@@ -81,7 +81,7 @@ export const VendorOrderManager: React.FC = () => {
       color: item.selectedVariant?.color || item.product.variants[0]?.color || '',
       quantity: item.quantity,
       unit: item.product.unit,
-      price: item.product.pricing.find(p => p.planId === 'LACIE')?.price || 0,
+      price: item.product.pricing.find(p => p.plan === 'LACIE' || p.planId === 'LACIE')?.price || 0,
     }));
 
     const totalAmount = orderItems.reduce((sum, item) => sum + item.price * item.quantity, 0);

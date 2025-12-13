@@ -49,7 +49,7 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => 
             <div className="space-y-4">
               {items.map((item) => {
                 const price = item.product.pricing.find(
-                  (p) => p.planId === 'LACIE'
+                  (p) => p.plan === 'LACIE' || p.planId === 'LACIE'
                 )?.price || 0;
                 
                 return (

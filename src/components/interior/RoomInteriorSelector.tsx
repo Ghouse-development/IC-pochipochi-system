@@ -8,30 +8,71 @@ import { useCartStore } from '../../stores/useCartStore';
 import { useToast } from '../common/Toast';
 import { ConfirmDialog } from '../common/ConfirmDialog';
 
-// 部屋タイプの定義
+// 部屋タイプの定義（適用可能パーツを明確化）
 const ROOM_TYPES = [
-  { id: 'living', name: 'リビング', icon: '🛋️', floor: 1, group: 'main' },
-  { id: 'dining', name: 'ダイニング', icon: '🍽️', floor: 1, group: 'main' },
-  { id: 'kitchen', name: 'キッチン', icon: '🍳', floor: 1, group: 'main' },
-  { id: 'entrance', name: '玄関', icon: '🚪', floor: 1, group: 'common' },
-  { id: 'toilet1', name: 'トイレ（1階）', icon: '🚽', floor: 1, group: 'water' },
-  { id: 'washroom', name: '洗面室', icon: '🪥', floor: 1, group: 'water' },
-  { id: 'bathroom', name: '浴室', icon: '🛁', floor: 1, group: 'water' },
-  { id: 'master', name: '主寝室', icon: '🛏️', floor: 2, group: 'bedroom' },
-  { id: 'child1', name: '子供部屋1', icon: '👶', floor: 2, group: 'bedroom' },
-  { id: 'child2', name: '子供部屋2', icon: '👶', floor: 2, group: 'bedroom' },
-  { id: 'toilet2', name: 'トイレ（2階）', icon: '🚽', floor: 2, group: 'water' },
-  { id: 'corridor', name: '廊下・階段', icon: '🚶', floor: 0, group: 'common' },
-  { id: 'closet', name: 'クローゼット', icon: '👔', floor: 0, group: 'storage' },
+  { id: 'living', name: 'リビング', icon: '🛋️', floor: 1, group: 'main',
+    applicableParts: ['flooring', 'wall', 'accent', 'door', 'electrical', 'lighting', 'aircon', 'curtain', 'blind', 'furniture'] },
+  { id: 'dining', name: 'ダイニング', icon: '🍽️', floor: 1, group: 'main',
+    applicableParts: ['flooring', 'wall', 'accent', 'electrical', 'lighting', 'furniture'] },
+  { id: 'kitchen', name: 'キッチン', icon: '🍳', floor: 1, group: 'main',
+    applicableParts: ['flooring', 'wall', 'accent', 'electrical', 'lighting', 'ventilation', 'blind'] },
+  { id: 'entrance', name: '玄関', icon: '🚪', floor: 1, group: 'common',
+    applicableParts: ['flooring', 'wall', 'accent', 'door', 'electrical', 'lighting', 'niche'] },
+  { id: 'toilet1', name: 'トイレ（1階）', icon: '🚽', floor: 1, group: 'water',
+    applicableParts: ['flooring', 'wall', 'accent', 'door', 'electrical', 'lighting', 'ventilation', 'handrail'] },
+  { id: 'washroom', name: '洗面室', icon: '🪥', floor: 1, group: 'water',
+    applicableParts: ['flooring', 'wall', 'accent', 'door', 'electrical', 'lighting', 'ventilation', 'hanger'] },
+  { id: 'bathroom', name: '浴室', icon: '🛁', floor: 1, group: 'water',
+    applicableParts: ['ventilation', 'handrail'] },
+  { id: 'master', name: '主寝室', icon: '🛏️', floor: 2, group: 'bedroom',
+    applicableParts: ['flooring', 'wall', 'accent', 'door', 'storage', 'electrical', 'lighting', 'aircon', 'curtain', 'blind'] },
+  { id: 'child1', name: '子供部屋1', icon: '👶', floor: 2, group: 'bedroom',
+    applicableParts: ['flooring', 'wall', 'accent', 'door', 'storage', 'electrical', 'lighting', 'aircon', 'curtain', 'blind'] },
+  { id: 'child2', name: '子供部屋2', icon: '👶', floor: 2, group: 'bedroom',
+    applicableParts: ['flooring', 'wall', 'accent', 'door', 'storage', 'electrical', 'lighting', 'aircon', 'curtain', 'blind'] },
+  { id: 'toilet2', name: 'トイレ（2階）', icon: '🚽', floor: 2, group: 'water',
+    applicableParts: ['flooring', 'wall', 'accent', 'door', 'electrical', 'lighting', 'ventilation', 'handrail'] },
+  { id: 'corridor', name: '廊下・階段', icon: '🚶', floor: 0, group: 'common',
+    applicableParts: ['flooring', 'wall', 'stairs', 'electrical', 'lighting', 'handrail'] },
+  { id: 'closet', name: 'クローゼット', icon: '👔', floor: 0, group: 'storage',
+    applicableParts: ['flooring', 'wall', 'door', 'storage', 'electrical', 'lighting', 'hanger'] },
 ];
 
-// 内装パーツカテゴリ
+// 内装パーツカテゴリ（実際のデータに完全対応）
 const INTERIOR_PARTS = [
-  { id: 'flooring', name: '床材', icon: '🟫', required: true, bulkApply: true },
-  { id: 'wall', name: '壁クロス', icon: '⬜', required: true, bulkApply: true },
-  { id: 'ceiling', name: '天井クロス', icon: '⬜', required: false, bulkApply: true },
-  { id: 'baseboard', name: '巾木', icon: '▬', required: false, bulkApply: true },
-  { id: 'accent', name: 'アクセントクロス', icon: '🎨', required: false, bulkApply: false },
+  // === 基本内装 ===
+  { id: 'flooring', name: '床材', icon: '🟫', required: true, bulkApply: true, group: 'basic', order: 1 },
+  { id: 'wall', name: '壁クロス', icon: '⬜', required: true, bulkApply: true, group: 'basic', order: 2 },
+  { id: 'accent', name: 'アクセントクロス/タイル', icon: '🎨', required: false, bulkApply: false, group: 'basic', order: 3 },
+  // === 建具・収納 ===
+  { id: 'door', name: '室内ドア', icon: '🚪', required: true, bulkApply: false, group: 'structure', order: 4 },
+  { id: 'stairs', name: '階段', icon: '🪜', required: false, bulkApply: false, group: 'structure', order: 5 },
+  { id: 'storage', name: '収納', icon: '🗄️', required: false, bulkApply: false, group: 'structure', order: 6 },
+  { id: 'niche', name: 'ニッチ/造作', icon: '📦', required: false, bulkApply: false, group: 'structure', order: 7 },
+  // === 電気・照明 ===
+  { id: 'electrical', name: 'スイッチ/コンセント', icon: '🔌', required: true, bulkApply: true, group: 'electric', order: 8 },
+  { id: 'lighting', name: '照明', icon: '💡', required: true, bulkApply: false, group: 'electric', order: 9 },
+  // === 空調・換気 ===
+  { id: 'aircon', name: 'エアコン', icon: '❄️', required: false, bulkApply: false, group: 'hvac', order: 10 },
+  { id: 'ventilation', name: '換気', icon: '💨', required: false, bulkApply: false, group: 'hvac', order: 11 },
+  // === 窓装飾 ===
+  { id: 'curtain', name: 'カーテン', icon: '🪟', required: false, bulkApply: false, group: 'window', order: 12 },
+  { id: 'blind', name: 'ブラインド', icon: '🪟', required: false, bulkApply: false, group: 'window', order: 13 },
+  // === 家具・その他 ===
+  { id: 'furniture', name: '家具/造作家具', icon: '🛋️', required: false, bulkApply: false, group: 'furniture', order: 14 },
+  { id: 'handrail', name: '手摺', icon: '🛡️', required: false, bulkApply: false, group: 'other', order: 15 },
+  { id: 'hanger', name: '室内物干し', icon: '👕', required: false, bulkApply: false, group: 'other', order: 16 },
+];
+
+// パーツグループ定義
+const PART_GROUPS = [
+  { id: 'basic', name: '基本内装', icon: '🏠' },
+  { id: 'structure', name: '建具・収納', icon: '🚪' },
+  { id: 'electric', name: '電気・照明', icon: '💡' },
+  { id: 'hvac', name: '空調・換気', icon: '❄️' },
+  { id: 'window', name: '窓装飾', icon: '🪟' },
+  { id: 'furniture', name: '家具', icon: '🛋️' },
+  { id: 'other', name: 'その他', icon: '📦' },
 ];
 
 // 一括適用グループ
@@ -69,11 +110,11 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
   const toast = useToast();
   const { addItem } = useCartStore();
 
-  // 部屋リストの管理
+  // 部屋リストの管理（全室デフォルト表示）
   const [rooms, setRooms] = useState<RoomSelection[]>(
     initialSelections.length > 0
       ? initialSelections
-      : ROOM_TYPES.slice(0, 8).map(rt => ({
+      : ROOM_TYPES.map(rt => ({
           roomId: rt.id,
           roomName: rt.name,
           floor: rt.floor,
@@ -103,21 +144,111 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
     return grouped;
   }, [rooms]);
 
-  // パーツタイプで製品をフィルタリング
+  // パーツタイプで製品をフィルタリング（実際のデータに完全対応）
   const getProductsForPart = useCallback((partId: string) => {
-    const categoryMap: { [key: string]: string[] } = {
-      flooring: ['床材', 'フローリング'],
-      wall: ['壁クロス', 'クロス', '壁紙'],
-      ceiling: ['天井クロス', '天井'],
-      baseboard: ['巾木'],
-      accent: ['アクセントクロス', 'アクセント'],
+    // categoryName と subcategory の両方でマッチング
+    const categoryMap: { [key: string]: { categoryNames: string[], subcategories: string[], categoryIds: string[] } } = {
+      flooring: {
+        categoryNames: ['床材'],
+        subcategories: ['フローリング', 'ライブナチュラル'],
+        categoryIds: ['flooring']
+      },
+      wall: {
+        categoryNames: ['壁材'],
+        subcategories: ['ベースクロス', '壁クロス'],
+        categoryIds: ['wallpaper']
+      },
+      accent: {
+        categoryNames: ['壁材'],
+        subcategories: ['アクセントクロス', 'アクセントタイル'],
+        categoryIds: ['tile']
+      },
+      door: {
+        categoryNames: ['建具'],
+        subcategories: ['室内ドア', 'ドア', 'スタンダードレーベル'],
+        categoryIds: ['interior-door']
+      },
+      stairs: {
+        categoryNames: ['階段'],
+        subcategories: ['階段踏板', '階段手摺', '蹴込板'],
+        categoryIds: ['stairs']
+      },
+      storage: {
+        categoryNames: ['収納'],
+        subcategories: ['クローゼット', 'システム収納', '可動棚'],
+        categoryIds: ['storage']
+      },
+      niche: {
+        categoryNames: ['造作'],
+        subcategories: ['リモコンニッチ', '飾り棚ニッチ', 'ニッチ'],
+        categoryIds: ['niche']
+      },
+      electrical: {
+        categoryNames: ['電気設備'],
+        subcategories: ['スイッチ', 'コンセント', 'USB'],
+        categoryIds: ['electrical']
+      },
+      lighting: {
+        categoryNames: ['照明'],
+        subcategories: ['ダウンライト', 'ペンダントライト', 'シーリング'],
+        categoryIds: ['lighting']
+      },
+      aircon: {
+        categoryNames: ['空調'],
+        subcategories: ['エアコン'],
+        categoryIds: ['aircon']
+      },
+      ventilation: {
+        categoryNames: ['換気'],
+        subcategories: ['換気システム', '換気扇', '暖房乾燥機'],
+        categoryIds: ['ventilation']
+      },
+      curtain: {
+        categoryNames: ['カーテン'],
+        subcategories: ['ドレープカーテン', 'レースカーテン'],
+        categoryIds: ['curtain']
+      },
+      blind: {
+        categoryNames: ['ブラインド'],
+        subcategories: ['アルミブラインド', 'ウッドブラインド'],
+        categoryIds: ['blind']
+      },
+      furniture: {
+        categoryNames: ['家具', '造作家具'],
+        subcategories: ['ダイニングテーブル', 'TVボード', 'カウンター'],
+        categoryIds: ['furniture', 'dining-table']
+      },
+      handrail: {
+        categoryNames: ['手摺'],
+        subcategories: ['室内手摺'],
+        categoryIds: ['handrail']
+      },
+      hanger: {
+        categoryNames: ['物干し'],
+        subcategories: ['室内物干し', 'ホスクリーン'],
+        categoryIds: ['hanger']
+      },
     };
-    const categories = categoryMap[partId] || [];
-    let products = interiorProducts.filter(p =>
-      categories.some(cat =>
-        p.categoryName.includes(cat) || p.subcategory?.includes(cat)
-      )
-    );
+
+    const mapping = categoryMap[partId];
+    if (!mapping) return [];
+
+    let products = interiorProducts.filter(p => {
+      // カテゴリ名でマッチ
+      const categoryMatch = mapping.categoryNames.some(cat =>
+        p.categoryName === cat || p.categoryName.includes(cat)
+      );
+      // サブカテゴリでマッチ
+      const subcategoryMatch = p.subcategory && mapping.subcategories.some(sub =>
+        p.subcategory?.includes(sub)
+      );
+      // カテゴリIDでマッチ
+      const categoryIdMatch = mapping.categoryIds.some(id =>
+        p.categoryId === id || p.categoryId.includes(id)
+      );
+
+      return categoryMatch || subcategoryMatch || categoryIdMatch;
+    });
 
     // 検索フィルター
     if (searchQuery) {
@@ -125,9 +256,17 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
       products = products.filter(p =>
         p.name.toLowerCase().includes(q) ||
         p.manufacturer.toLowerCase().includes(q) ||
+        p.subcategory?.toLowerCase().includes(q) ||
         p.variants.some(v => v.color.toLowerCase().includes(q))
       );
     }
+
+    // 標準品を先に、オプション品を後に
+    products.sort((a, b) => {
+      const priceA = a.pricing.find(pr => pr.plan === 'LACIE' || pr.planId === 'LACIE')?.price ?? 999999;
+      const priceB = b.pricing.find(pr => pr.plan === 'LACIE' || pr.planId === 'LACIE')?.price ?? 999999;
+      return priceA - priceB;
+    });
 
     return products;
   }, [interiorProducts, searchQuery]);
@@ -269,7 +408,8 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
         if (!newParts[part.id]?.product) {
           const products = getProductsForPart(part.id);
           const standardProduct = products.find(p => {
-            const price = p.pricing.find(pr => pr.planId === 'LACIE')?.price || 0;
+            // plan または planId の両方に対応
+            const price = p.pricing.find(pr => pr.plan === 'LACIE' || pr.planId === 'LACIE')?.price ?? 0;
             return price === 0;
           });
           if (standardProduct && standardProduct.variants.length > 0) {
@@ -289,13 +429,13 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
     toast.success('標準仕様を適用', '未設定の必須項目に標準仕様を設定しました');
   };
 
-  // 合計金額の計算
+  // 合計金額の計算（plan / planId 両方対応）
   const totalPrice = useMemo(() => {
     let total = 0;
     rooms.forEach(room => {
       Object.values(room.parts).forEach(part => {
         if (part.product) {
-          const price = part.product.pricing.find(p => p.planId === 'LACIE')?.price || 0;
+          const price = part.product.pricing.find(p => p.plan === 'LACIE' || p.planId === 'LACIE')?.price ?? 0;
           total += price;
         }
       });
@@ -500,15 +640,29 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
                         </div>
                       </button>
 
-                      {/* パーツ選択エリア */}
+                      {/* パーツ選択エリア（部屋タイプに応じたパーツのみ表示） */}
                       {isExpanded && (
                         <div className="p-3 bg-gray-50 dark:bg-gray-700/30 border-t border-gray-200 dark:border-gray-600">
-                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-                            {INTERIOR_PARTS.map(part => {
-                              const selection = room.parts[part.id];
-                              const selectedVariant = selection?.product?.variants.find(
-                                v => v.id === selection?.variantId
-                              );
+                          {/* グループ別パーツ表示 */}
+                          {PART_GROUPS.map(group => {
+                            const groupParts = INTERIOR_PARTS.filter(p =>
+                              p.group === group.id &&
+                              (roomType?.applicableParts?.includes(p.id) ?? true)
+                            );
+                            if (groupParts.length === 0) return null;
+
+                            return (
+                              <div key={group.id} className="mb-4 last:mb-0">
+                                <h4 className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 flex items-center gap-1">
+                                  <span>{group.icon}</span>
+                                  {group.name}
+                                </h4>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                                  {groupParts.map(part => {
+                                    const selection = room.parts[part.id];
+                                    const selectedVariant = selection?.product?.variants.find(
+                                      v => v.id === selection?.variantId
+                                    );
 
                               return (
                                 <div
@@ -574,10 +728,13 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
                                       + 選択する
                                     </button>
                                   )}
+                                    </div>
+                                  );
+                                })}
                                 </div>
-                              );
-                            })}
-                          </div>
+                              </div>
+                            );
+                          })}
 
                           {/* 他の部屋にコピー */}
                           {Object.keys(room.parts).length > 0 && (
@@ -756,16 +913,23 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
                       })}
                     </div>
 
-                    {/* 価格 */}
+                    {/* 価格（plan / planId 両方対応） */}
                     <div className="mt-3 pt-2 border-t border-gray-100 dark:border-gray-600">
-                      <span className="text-sm font-bold text-gray-900 dark:text-gray-100">
+                      <span className={`text-sm font-bold ${
+                        (() => {
+                          const price = product.pricing.find(
+                            p => p.plan === 'LACIE' || p.planId === 'LACIE'
+                          )?.price ?? 0;
+                          return price === 0 ? 'text-green-600 dark:text-green-400' : 'text-gray-900 dark:text-gray-100';
+                        })()
+                      }`}>
                         {(() => {
                           const price = product.pricing.find(
-                            p => p.planId === 'LACIE'
-                          )?.price || 0;
+                            p => p.plan === 'LACIE' || p.planId === 'LACIE'
+                          )?.price ?? 0;
                           return price === 0
-                            ? '標準仕様'
-                            : `${formatPrice(price)}/${UNIT_SYMBOLS[product.unit] || product.unit}`;
+                            ? '✓ 標準仕様（追加費用なし）'
+                            : `+${formatPrice(price)}/${UNIT_SYMBOLS[product.unit] || product.unit}`;
                         })()}
                       </span>
                     </div>
