@@ -8,7 +8,9 @@
     "dev:server": "tsx src/server/index.ts",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "import:supabase": "tsx scripts/importToSupabase.ts",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@pdfme/common": "^5.5.7",
