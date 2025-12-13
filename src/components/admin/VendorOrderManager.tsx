@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Package, Truck, FileText, Download, Send, CheckCircle, Clock, AlertCircle, Building2, Phone, Mail, Filter, Plus, Edit2, Trash2, X } from 'lucide-react';
 import { Button } from '../common/Button';
 import { Card } from '../common/Card';
+import { useToast } from '../common/Toast';
 import { useCartStore } from '../../stores/useCartStore';
 import { useVendorOrderStore, type Vendor, type VendorOrder } from '../../stores/useVendorOrderStore';
 import { useStatisticsStore } from '../../stores/useStatisticsStore';
@@ -29,6 +30,7 @@ export const VendorOrderManager: React.FC = () => {
   });
 
   const { items } = useCartStore();
+  const toast = useToast();
   const {
     orders,
     vendors,
@@ -59,7 +61,7 @@ export const VendorOrderManager: React.FC = () => {
   // 発注書作成
   const createVendorOrder = () => {
     if (!selectedVendorId || !projectName || !customerName) {
-      alert('業者、プロジェクト名、お客様名を入力してください');
+      toast.warning('入力エラー', '業者、プロジェクト名、お客様名を入力してください');
       return;
     }
 
@@ -67,7 +69,7 @@ export const VendorOrderManager: React.FC = () => {
     if (!vendor) return;
 
     if (items.length === 0) {
-      alert('カートに商品がありません');
+      toast.warning('カートが空です', 'カートに商品がありません');
       return;
     }
 
@@ -100,13 +102,13 @@ export const VendorOrderManager: React.FC = () => {
     setCustomerName('');
     setNotes('');
     setSelectedVendorId('');
-    alert('発注書を作成しました');
+    toast.success('作成完了', '発注書を作成しました');
   };
 
   // 業者追加/更新
   const handleSaveVendor = () => {
     if (!vendorForm.name || !vendorForm.category) {
-      alert('業者名とカテゴリは必須です');
+      toast.warning('入力エラー', '業者名とカテゴリは必須です');
       return;
     }
 

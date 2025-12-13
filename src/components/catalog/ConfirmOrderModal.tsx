@@ -5,6 +5,7 @@ import { Button } from '../common/Button';
 import { useCartStore } from '../../stores/useCartStore';
 import { useNotificationStore } from '../../stores/useNotificationStore';
 import { useStatisticsStore } from '../../stores/useStatisticsStore';
+import { useToast } from '../common/Toast';
 import { formatPrice } from '../../lib/utils';
 
 interface ConfirmOrderModalProps {
@@ -19,15 +20,16 @@ export const ConfirmOrderModal: React.FC<ConfirmOrderModalProps> = ({
   const [customerName, setCustomerName] = useState('');
   const [customerEmail, setCustomerEmail] = useState('');
   const [isConfirmed, setIsConfirmed] = useState(false);
-  
+
   const { items, getTotalPrice, clearCart } = useCartStore();
   const addNotification = useNotificationStore((state) => state.addNotification);
   const recordAdoption = useStatisticsStore((state) => state.recordAdoption);
+  const toast = useToast();
   const totalPrice = getTotalPrice();
-  
+
   const handleConfirm = () => {
     if (!customerName || !customerEmail) {
-      alert('お客様情報を入力してください');
+      toast.warning('入力エラー', 'お客様情報を入力してください');
       return;
     }
     

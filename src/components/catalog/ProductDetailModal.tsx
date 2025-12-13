@@ -5,6 +5,7 @@ import type { Product, ProductVariant } from '../../types/product';
 import { UNIT_SYMBOLS } from '../../types/product';
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
+import { useToast } from '../common/Toast';
 import { formatPrice } from '../../lib/utils';
 import { useCartStore } from '../../stores/useCartStore';
 import { cn } from '../../lib/utils';
@@ -26,6 +27,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   const [quantity, setQuantity] = useState(1);
   const [isAdded, setIsAdded] = useState(false);
   const { addItem, items } = useCartStore();
+  const toast = useToast();
 
   // 開いた時にリセット
   useEffect(() => {
@@ -80,14 +82,15 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   const handleAddToCart = () => {
     if (!canAddToCart()) {
       if (isSingleSelection) {
-        alert(`${product.categoryName}は1つのみ選択可能です。既に選択されている商品を削除してから追加してください。`);
+        toast.warning('選択制限', `${product.categoryName}は1つのみ選択可能です。既に選択されている商品を削除してから追加してください。`);
       } else if (categoryRule.maxSelection) {
-        alert(`${product.categoryName}は最大${categoryRule.maxSelection}つまで選択可能です。`);
+        toast.warning('選択制限', `${product.categoryName}は最大${categoryRule.maxSelection}つまで選択可能です。`);
       }
       return;
     }
 
     addItem(product, quantity, variant);
+    toast.success('追加完了', `「${product.name}」をカートに追加しました`);
 
     setIsAdded(true);
     setTimeout(() => {

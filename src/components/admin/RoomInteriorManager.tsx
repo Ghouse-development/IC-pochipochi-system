@@ -12,6 +12,7 @@ import {
   Maximize2,
   RefreshCw,
 } from 'lucide-react';
+import { useToast } from '../common/Toast';
 import { supabase } from '../../lib/supabase';
 import type { Room, RoomSelection, Item, ItemVariant } from '../../types/database';
 
@@ -60,6 +61,7 @@ export function RoomInteriorManager({ projectId, onUpdate }: RoomInteriorManager
   const [newRoomFloor, setNewRoomFloor] = useState(1);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const toast = useToast();
 
   useEffect(() => {
     loadRoomsAndSelections();
@@ -351,7 +353,7 @@ export function RoomInteriorManager({ projectId, onUpdate }: RoomInteriorManager
                         onClick={(e) => {
                           e.stopPropagation();
                           // TODO: 部屋名編集モーダル実装予定
-                          alert('部屋名の編集機能は準備中です');
+                          toast.info('準備中', '部屋名の編集機能は準備中です');
                         }}
                         className="p-1 hover:bg-gray-100 rounded"
                       >
@@ -412,7 +414,7 @@ export function RoomInteriorManager({ projectId, onUpdate }: RoomInteriorManager
                                   className="text-sm text-teal-600 hover:text-teal-700"
                                   onClick={() => {
                                     // TODO: アイテム選択モーダルを開く
-                                    alert('アイテム選択機能は準備中です');
+                                    toast.info('準備中', 'アイテム選択機能は準備中です');
                                   }}
                                 >
                                   + 選択する

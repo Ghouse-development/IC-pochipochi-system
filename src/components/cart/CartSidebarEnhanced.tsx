@@ -4,6 +4,7 @@ import { useCartStore } from '../../stores/useCartStore';
 import { formatPrice } from '../../lib/utils';
 import { UNIT_SYMBOLS } from '../../types/product';
 import { Badge } from '../common/Badge';
+import { useToast } from '../common/Toast';
 import { exportToExcel, exportToPDF, exportSpecificationSheet, exportPresentationData, exportAllFormats } from '../../utils/exportEstimate';
 import { supabase } from '../../lib/supabase';
 
@@ -14,6 +15,7 @@ interface CartSidebarEnhancedProps {
 
 export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen, onClose }) => {
   const { items, removeItem, updateQuantity, getTotalPrice, clearCart, selectedPlanId } = useCartStore();
+  const toast = useToast();
   const [isFinalized, setIsFinalized] = useState(false);
   const [customerName, setCustomerName] = useState('');
   const [projectName, setProjectName] = useState('');
@@ -46,12 +48,12 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
       status: 'draft'
     };
     localStorage.setItem('lifex_draft_estimate', JSON.stringify(saveData));
-    alert('見積が一時保存されました');
+    toast.success('一時保存完了', '見積が一時保存されました');
   };
 
   const handleFinalize = () => {
     if (!customerName || !projectName) {
-      alert('お客様名と工事名を入力してください');
+      toast.warning('入力エラー', 'お客様名と工事名を入力してください');
       return;
     }
 
@@ -73,61 +75,65 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
         status: 'finalized',
         totalPrice
       };
-      
+
       // 確定データを保存
       const existingData = JSON.parse(localStorage.getItem('lifex_finalized_estimates') || '[]');
       existingData.push(finalData);
       localStorage.setItem('lifex_finalized_estimates', JSON.stringify(existingData));
-      
+
       setIsFinalized(true);
-      alert('見積が確定されました');
+      toast.success('確定完了', '見積が確定されました');
     }
   };
 
   const handleExportExcel = () => {
     if (!customerName || !projectName) {
-      alert('お客様名と工事名を入力してください');
+      toast.warning('入力エラー', 'お客様名と工事名を入力してください');
       return;
     }
     exportToExcel(items, customerName, projectName);
+    toast.success('Excel出力完了', '見積書をダウンロードしました');
   };
 
   const handleExportPDF = () => {
     if (!customerName || !projectName) {
-      alert('お客様名と工事名を入力してください');
+      toast.warning('入力エラー', 'お客様名と工事名を入力してください');
       return;
     }
     exportToPDF(items, customerName, projectName);
+    toast.success('PDF出力完了', '見積書をダウンロードしました');
   };
 
   const handleExportSpec = () => {
     if (!customerName || !projectName) {
-      alert('お客様名と工事名を入力してください');
+      toast.warning('入力エラー', 'お客様名と工事名を入力してください');
       return;
     }
     exportSpecificationSheet(items, customerName, projectName);
+    toast.success('仕様書出力完了', '仕様書をダウンロードしました');
   };
 
   const handleExportPresentation = async () => {
     if (!customerName || !projectName) {
-      alert('お客様名と工事名を入力してください');
+      toast.warning('入力エラー', 'お客様名と工事名を入力してください');
       return;
     }
     await exportPresentationData(items, customerName, projectName);
+    toast.success('提案資料出力完了', '提案資料をダウンロードしました');
   };
 
   const handleExportAll = async () => {
     if (!customerName || !projectName) {
-      alert('お客様名と工事名を入力してください');
+      toast.warning('入力エラー', 'お客様名と工事名を入力してください');
       return;
     }
     setIsExporting(true);
     try {
       await exportAllFormats(items, customerName, projectName);
-      alert('全形式のダウンロードが完了しました');
+      toast.success('一括出力完了', '全形式のダウンロードが完了しました');
     } catch (error) {
       console.error('Export error:', error);
-      alert('エクスポート中にエラーが発生しました');
+      toast.error('エラー', 'エクスポート中にエラーが発生しました');
     } finally {
       setIsExporting(false);
       setShowExportMenu(false);

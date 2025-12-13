@@ -12,6 +12,7 @@ import { ShareModal } from './components/common/ShareModal';
 import { ProductCompareModal } from './components/catalog/ProductCompareModal';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { OnboardingGuide, HelpButton, useOnboarding } from './components/common/OnboardingGuide';
+import { ToastProvider } from './components/common/Toast';
 import { useVersionStore } from './stores/useVersionStore';
 import { useCartStore } from './stores/useCartStore';
 import type { Product } from './types/product';
@@ -170,17 +171,21 @@ function App() {
   // Use Demo provider if in demo mode
   if (useDemoMode) {
     return (
-      <DemoAuthProvider>
-        {wrappedContent(true)}
-      </DemoAuthProvider>
+      <ToastProvider>
+        <DemoAuthProvider>
+          {wrappedContent(true)}
+        </DemoAuthProvider>
+      </ToastProvider>
     );
   }
 
   // Use real auth provider
   return (
-    <AuthProvider>
-      {wrappedContent(false, () => setUseDemoMode(true))}
-    </AuthProvider>
+    <ToastProvider>
+      <AuthProvider>
+        {wrappedContent(false, () => setUseDemoMode(true))}
+      </AuthProvider>
+    </ToastProvider>
   );
 }
 
