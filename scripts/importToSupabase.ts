@@ -252,7 +252,9 @@ async function importItems(
         // 価格情報を作成（各プランごと）
         if (product.pricing) {
           for (const pricing of product.pricing) {
-            const planCode = pricing.plan || 'LACIE';
+            // プラン名の正規化（LIFE+ -> LIFE_PLUS）
+            let planCode = pricing.plan || 'LACIE';
+            if (planCode === 'LIFE+') planCode = 'LIFE_PLUS';
             const productId = productMap[planCode];
 
             if (!productId) {
@@ -304,7 +306,9 @@ async function importItems(
         // 価格情報
         if (product.pricing) {
           for (const pricing of product.pricing) {
-            const planCode = pricing.plan || 'LACIE';
+            // プラン名の正規化（LIFE+ -> LIFE_PLUS）
+            let planCode = pricing.plan || 'LACIE';
+            if (planCode === 'LIFE+') planCode = 'LIFE_PLUS';
             const productId = productMap[planCode];
 
             if (productId) {
