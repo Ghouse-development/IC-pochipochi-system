@@ -89,9 +89,9 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
           {/* カタログルート */}
           <Route path="/" element={<Navigate to="/catalog/exterior" replace />} />
           <Route path="/catalog" element={<Navigate to="/catalog/exterior" replace />} />
-          <Route path="/catalog/:step" element={<CatalogWithTabs />} />
-          <Route path="/catalog/:step/:categoryId" element={<CatalogWithTabs />} />
-          <Route path="/catalog/:step/:categoryId/:productId" element={<CatalogWithTabs />} />
+          <Route path="/catalog/:step" element={<CatalogWithTabs onCartClick={() => setIsCartOpen(true)} />} />
+          <Route path="/catalog/:step/:categoryId" element={<CatalogWithTabs onCartClick={() => setIsCartOpen(true)} />} />
+          <Route path="/catalog/:step/:categoryId/:productId" element={<CatalogWithTabs onCartClick={() => setIsCartOpen(true)} />} />
 
           {/* 管理画面 */}
           <Route path="/admin" element={<AdminDashboard onBack={() => window.history.back()} />} />

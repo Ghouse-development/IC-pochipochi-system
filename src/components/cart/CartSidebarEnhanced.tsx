@@ -5,6 +5,7 @@ import { formatPrice } from '../../lib/utils';
 import { UNIT_SYMBOLS } from '../../types/product';
 import { Badge } from '../common/Badge';
 import { useToast } from '../common/Toast';
+import { ConfirmDialog } from '../common/ConfirmDialog';
 import { exportToExcel, exportToPDF, exportSpecificationSheet, exportPresentationData, exportAllFormats } from '../../utils/exportEstimate';
 import { supabase } from '../../lib/supabase';
 
@@ -22,6 +23,8 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
   const [planName, setPlanName] = useState('');
   const [showExportMenu, setShowExportMenu] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [showFinalizeConfirm, setShowFinalizeConfirm] = useState(false);
 
   const totalPrice = getTotalPrice();
 
@@ -56,34 +59,37 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
       toast.warning('入力エラー', 'お客様名と工事名を入力してください');
       return;
     }
+    setShowFinalizeConfirm(true);
+  };
 
-    const confirmMessage = `
-確定後は変更できません。
-以下の内容で確定してよろしいですか？
+  const executeFinalize = () => {
+    const finalData = {
+      items,
+      customerName,
+      projectName,
+      date: new Date().toISOString(),
+      status: 'finalized',
+      totalPrice
+    };
 
-お客様名: ${customerName}
-工事名: ${projectName}
-合計金額: ${formatPrice(totalPrice)}
-    `;
+    // 確定データを保存
+    const existingData = JSON.parse(localStorage.getItem('lifex_finalized_estimates') || '[]');
+    existingData.push(finalData);
+    localStorage.setItem('lifex_finalized_estimates', JSON.stringify(existingData));
 
-    if (confirm(confirmMessage)) {
-      const finalData = {
-        items,
-        customerName,
-        projectName,
-        date: new Date().toISOString(),
-        status: 'finalized',
-        totalPrice
-      };
+    setIsFinalized(true);
+    setShowFinalizeConfirm(false);
+    toast.success('確定完了', '見積が確定されました');
+  };
 
-      // 確定データを保存
-      const existingData = JSON.parse(localStorage.getItem('lifex_finalized_estimates') || '[]');
-      existingData.push(finalData);
-      localStorage.setItem('lifex_finalized_estimates', JSON.stringify(existingData));
+  const handleClearCart = () => {
+    setShowClearConfirm(true);
+  };
 
-      setIsFinalized(true);
-      toast.success('確定完了', '見積が確定されました');
-    }
+  const executeClearCart = () => {
+    clearCart();
+    setShowClearConfirm(false);
+    toast.success('クリア完了', '選択をクリアしました');
   };
 
   const handleExportExcel = () => {
@@ -340,8 +346,9 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
                     </button>
                   </div>
                   <button
-                    onClick={clearCart}
-                    className="w-full px-4 py-2 text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors text-sm"
+                    onClick={handleClearCart}
+                    className="w-full px-4 py-2 text-gray-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors text-sm"
+                    aria-label="選択した商品をすべてクリア"
                   >
                     選択をクリア
                   </button>
@@ -425,6 +432,27 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
           </div>
         )}
       </div>
+
+      {/* 確認ダイアログ */}
+      <ConfirmDialog
+        isOpen={showClearConfirm}
+        onClose={() => setShowClearConfirm(false)}
+        onConfirm={executeClearCart}
+        title="選択をクリア"
+        message={`選択中の${items.length}件の商品をすべてクリアしますか？\n\nこの操作は取り消せません。`}
+        variant="danger"
+        confirmText="クリアする"
+      />
+
+      <ConfirmDialog
+        isOpen={showFinalizeConfirm}
+        onClose={() => setShowFinalizeConfirm(false)}
+        onConfirm={executeFinalize}
+        title="見積を確定"
+        message={`確定後は変更できません。\n以下の内容で確定してよろしいですか？\n\nお客様名: ${customerName}\n工事名: ${projectName}\n合計金額: ${formatPrice(totalPrice)}`}
+        variant="warning"
+        confirmText="確定する"
+      />
     </>
   );
 };

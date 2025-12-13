@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Download, Upload, AlertTriangle, CheckCircle, Database, RefreshCw, Trash2, HardDrive } from 'lucide-react';
 import { Button } from '../common/Button';
 import { Card } from '../common/Card';
+import { ConfirmDialog } from '../common/ConfirmDialog';
 
 interface BackupData {
   version: string;
@@ -22,6 +23,25 @@ export const DataBackup: React.FC = () => {
     localStorage.getItem('lifex-last-backup')
   );
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  // Confirm dialog state
+  const [confirmDialog, setConfirmDialog] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    variant: 'danger' | 'warning' | 'info';
+    onConfirm: () => void;
+    confirmText?: string;
+  }>({
+    isOpen: false,
+    title: '',
+    message: '',
+    variant: 'warning',
+    onConfirm: () => {},
+  });
+
+  // Pending import data
+  const [pendingImport, setPendingImport] = useState<BackupData | null>(null);
 
   // 全データをエクスポート
   const handleExport = () => {
@@ -84,46 +104,20 @@ export const DataBackup: React.FC = () => {
           throw new Error('無効なバックアップファイルです');
         }
 
-        // 確認ダイアログ
-        const confirm = window.confirm(
-          `以下のバックアップを復元しますか？\n\n` +
-          `作成日時: ${new Date(backupData.createdAt).toLocaleString('ja-JP')}\n` +
-          `バージョン: ${backupData.version}\n\n` +
-          `注意: 現在のデータは上書きされます。`
-        );
-
-        if (!confirm) {
-          setIsImporting(false);
-          return;
-        }
-
-        // データを復元
-        if (backupData.data.cart) {
-          localStorage.setItem('lifex-cart-storage', JSON.stringify(backupData.data.cart));
-        }
-        if (backupData.data.statistics) {
-          localStorage.setItem('lifex-statistics-storage', JSON.stringify(backupData.data.statistics));
-        }
-        if (backupData.data.vendorOrders) {
-          localStorage.setItem('lifex-vendor-orders', JSON.stringify(backupData.data.vendorOrders));
-        }
-        if (backupData.data.versions) {
-          localStorage.setItem('lifex-version-storage', JSON.stringify(backupData.data.versions));
-        }
-        if (backupData.data.estimates) {
-          localStorage.setItem('lifex_finalized_estimates', JSON.stringify(backupData.data.estimates));
-        }
-
-        setMessage({ type: 'success', text: '復元が完了しました。ページを再読み込みしてください。' });
-
-        // 3秒後にリロード
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
+        // 確認ダイアログを表示
+        setPendingImport(backupData);
+        setConfirmDialog({
+          isOpen: true,
+          title: 'バックアップを復元',
+          message: `以下のバックアップを復元しますか？\n\n作成日時: ${new Date(backupData.createdAt).toLocaleString('ja-JP')}\nバージョン: ${backupData.version}\n\n注意: 現在のデータは上書きされます。`,
+          variant: 'warning',
+          confirmText: '復元する',
+          onConfirm: () => executeImport(backupData),
+        });
+        setIsImporting(false);
       } catch (error) {
         console.error('Import error:', error);
         setMessage({ type: 'error', text: 'インポートに失敗しました。ファイルを確認してください。' });
-      } finally {
         setIsImporting(false);
       }
     };
@@ -137,6 +131,33 @@ export const DataBackup: React.FC = () => {
     event.target.value = ''; // リセット
   };
 
+  const executeImport = (backupData: BackupData) => {
+    // データを復元
+    if (backupData.data.cart) {
+      localStorage.setItem('lifex-cart-storage', JSON.stringify(backupData.data.cart));
+    }
+    if (backupData.data.statistics) {
+      localStorage.setItem('lifex-statistics-storage', JSON.stringify(backupData.data.statistics));
+    }
+    if (backupData.data.vendorOrders) {
+      localStorage.setItem('lifex-vendor-orders', JSON.stringify(backupData.data.vendorOrders));
+    }
+    if (backupData.data.versions) {
+      localStorage.setItem('lifex-version-storage', JSON.stringify(backupData.data.versions));
+    }
+    if (backupData.data.estimates) {
+      localStorage.setItem('lifex_finalized_estimates', JSON.stringify(backupData.data.estimates));
+    }
+
+    setMessage({ type: 'success', text: '復元が完了しました。ページを再読み込みしてください。' });
+    setPendingImport(null);
+
+    // 3秒後にリロード
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
+  };
+
   // ストレージ使用量を計算
   const getStorageUsage = () => {
     let total = 0;
@@ -148,22 +169,31 @@ export const DataBackup: React.FC = () => {
     return (total / 1024).toFixed(2);
   };
 
-  // 全データをクリア
+  // 全データをクリア - Step 1
   const handleClearAll = () => {
-    const confirm = window.confirm(
-      '警告: すべてのデータを削除しますか？\n\n' +
-      'この操作は取り消せません。\n' +
-      '先にバックアップを取ることをお勧めします。'
-    );
+    setConfirmDialog({
+      isOpen: true,
+      title: '全データを削除',
+      message: 'すべてのデータを削除しますか？\n\nこの操作は取り消せません。\n先にバックアップを取ることをお勧めします。',
+      variant: 'danger',
+      confirmText: '削除する',
+      onConfirm: handleClearAllStep2,
+    });
+  };
 
-    if (!confirm) return;
+  // 全データをクリア - Step 2 (最終確認)
+  const handleClearAllStep2 = () => {
+    setConfirmDialog({
+      isOpen: true,
+      title: '最終確認',
+      message: '本当に削除しますか？\n\nこれが最後の確認です。この操作は元に戻せません。',
+      variant: 'danger',
+      confirmText: '完全に削除',
+      onConfirm: executeClearAll,
+    });
+  };
 
-    const confirmAgain = window.confirm(
-      '本当に削除しますか？\n\nこれが最後の確認です。'
-    );
-
-    if (!confirmAgain) return;
-
+  const executeClearAll = () => {
     // LIFEX関連のデータのみ削除
     const keysToRemove: string[] = [];
     for (let i = 0; i < localStorage.length; i++) {
@@ -208,8 +238,8 @@ export const DataBackup: React.FC = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-bold text-gray-900">データバックアップ</h2>
-        <p className="text-sm text-gray-600 mt-1">
+        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">データバックアップ</h2>
+        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
           システムデータのバックアップと復元を行います
         </p>
       </div>
@@ -217,7 +247,9 @@ export const DataBackup: React.FC = () => {
       {/* メッセージ */}
       {message && (
         <div className={`p-4 rounded-lg flex items-center gap-3 ${
-          message.type === 'success' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'
+          message.type === 'success'
+            ? 'bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300'
+            : 'bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300'
         }`}>
           {message.type === 'success' ? (
             <CheckCircle className="w-5 h-5" />
@@ -231,34 +263,34 @@ export const DataBackup: React.FC = () => {
       {/* ストレージ情報 */}
       <Card className="p-4">
         <div className="flex items-center gap-3 mb-4">
-          <HardDrive className="w-5 h-5 text-gray-600" />
-          <h3 className="font-semibold text-gray-900">ストレージ情報</h3>
+          <HardDrive className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+          <h3 className="font-semibold text-gray-900 dark:text-gray-100">ストレージ情報</h3>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-4">
-          <div className="bg-gray-50 rounded-lg p-3 text-center">
-            <p className="text-2xl font-bold text-gray-900">{dataCounts.cartItems}</p>
-            <p className="text-xs text-gray-500">カート商品</p>
+          <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 text-center">
+            <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{dataCounts.cartItems}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">カート商品</p>
           </div>
-          <div className="bg-gray-50 rounded-lg p-3 text-center">
-            <p className="text-2xl font-bold text-gray-900">{dataCounts.productStats}</p>
-            <p className="text-xs text-gray-500">採用統計</p>
+          <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 text-center">
+            <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{dataCounts.productStats}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">採用統計</p>
           </div>
-          <div className="bg-gray-50 rounded-lg p-3 text-center">
-            <p className="text-2xl font-bold text-gray-900">{dataCounts.vendorOrders}</p>
-            <p className="text-xs text-gray-500">発注書</p>
+          <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 text-center">
+            <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{dataCounts.vendorOrders}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">発注書</p>
           </div>
-          <div className="bg-gray-50 rounded-lg p-3 text-center">
-            <p className="text-2xl font-bold text-gray-900">{dataCounts.vendors}</p>
-            <p className="text-xs text-gray-500">業者</p>
+          <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 text-center">
+            <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{dataCounts.vendors}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">業者</p>
           </div>
-          <div className="bg-gray-50 rounded-lg p-3 text-center">
-            <p className="text-2xl font-bold text-gray-900">{dataCounts.estimates}</p>
-            <p className="text-xs text-gray-500">確定見積</p>
+          <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 text-center">
+            <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{dataCounts.estimates}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">確定見積</p>
           </div>
         </div>
 
-        <div className="flex items-center justify-between text-sm text-gray-600">
+        <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
           <span>使用容量: {getStorageUsage()} KB</span>
           {lastBackup && (
             <span>最終バックアップ: {new Date(lastBackup).toLocaleString('ja-JP')}</span>
@@ -270,10 +302,10 @@ export const DataBackup: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card className="p-6">
           <div className="flex items-center gap-3 mb-4">
-            <Download className="w-6 h-6 text-teal-600" />
+            <Download className="w-6 h-6 text-teal-600 dark:text-teal-400" />
             <div>
-              <h3 className="font-semibold text-gray-900">データをエクスポート</h3>
-              <p className="text-sm text-gray-600">全データをJSONファイルとして保存</p>
+              <h3 className="font-semibold text-gray-900 dark:text-gray-100">データをエクスポート</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">全データをJSONファイルとして保存</p>
             </div>
           </div>
           <Button
@@ -298,10 +330,10 @@ export const DataBackup: React.FC = () => {
 
         <Card className="p-6">
           <div className="flex items-center gap-3 mb-4">
-            <Upload className="w-6 h-6 text-blue-600" />
+            <Upload className="w-6 h-6 text-blue-600 dark:text-blue-400" />
             <div>
-              <h3 className="font-semibold text-gray-900">データをインポート</h3>
-              <p className="text-sm text-gray-600">バックアップファイルから復元</p>
+              <h3 className="font-semibold text-gray-900 dark:text-gray-100">データをインポート</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">バックアップファイルから復元</p>
             </div>
           </div>
           <label className="block">
@@ -311,10 +343,13 @@ export const DataBackup: React.FC = () => {
               onChange={handleImport}
               disabled={isImporting}
               className="hidden"
+              aria-label="バックアップファイルを選択"
             />
             <span
-              className={`inline-flex items-center justify-center w-full px-4 py-2 border border-gray-300 rounded-md text-sm font-medium cursor-pointer ${
-                isImporting ? 'bg-gray-100 text-gray-400' : 'bg-white text-gray-700 hover:bg-gray-50'
+              className={`inline-flex items-center justify-center w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium cursor-pointer ${
+                isImporting
+                  ? 'bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500'
+                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
               }`}
             >
               {isImporting ? (
@@ -334,18 +369,18 @@ export const DataBackup: React.FC = () => {
       </div>
 
       {/* 危険な操作 */}
-      <Card className="p-6 border-red-200 bg-red-50">
+      <Card className="p-6 border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20">
         <div className="flex items-center gap-3 mb-4">
-          <AlertTriangle className="w-6 h-6 text-red-600" />
+          <AlertTriangle className="w-6 h-6 text-red-600 dark:text-red-400" />
           <div>
-            <h3 className="font-semibold text-red-900">危険な操作</h3>
-            <p className="text-sm text-red-700">この操作は取り消せません</p>
+            <h3 className="font-semibold text-red-900 dark:text-red-200">危険な操作</h3>
+            <p className="text-sm text-red-700 dark:text-red-300">この操作は取り消せません</p>
           </div>
         </div>
         <Button
           variant="outline"
           onClick={handleClearAll}
-          className="border-red-300 text-red-600 hover:bg-red-100"
+          className="border-red-300 dark:border-red-700 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30"
         >
           <Trash2 className="w-4 h-4 mr-2" />
           全データを削除
@@ -353,12 +388,12 @@ export const DataBackup: React.FC = () => {
       </Card>
 
       {/* 注意事項 */}
-      <Card className="p-4 bg-amber-50 border-amber-200">
+      <Card className="p-4 bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800">
         <div className="flex items-start gap-3">
-          <Database className="w-5 h-5 text-amber-600 mt-0.5" />
-          <div className="text-sm text-amber-800">
+          <Database className="w-5 h-5 text-amber-600 dark:text-amber-400 mt-0.5" />
+          <div className="text-sm text-amber-800 dark:text-amber-200">
             <p className="font-medium mb-1">バックアップについて</p>
-            <ul className="list-disc list-inside space-y-1 text-amber-700">
+            <ul className="list-disc list-inside space-y-1 text-amber-700 dark:text-amber-300">
               <li>定期的なバックアップをお勧めします（週1回以上）</li>
               <li>重要な変更前には必ずバックアップを取ってください</li>
               <li>バックアップファイルは安全な場所に保管してください</li>
@@ -367,6 +402,17 @@ export const DataBackup: React.FC = () => {
           </div>
         </div>
       </Card>
+
+      {/* 確認ダイアログ */}
+      <ConfirmDialog
+        isOpen={confirmDialog.isOpen}
+        onClose={() => setConfirmDialog({ ...confirmDialog, isOpen: false })}
+        onConfirm={confirmDialog.onConfirm}
+        title={confirmDialog.title}
+        message={confirmDialog.message}
+        variant={confirmDialog.variant}
+        confirmText={confirmDialog.confirmText}
+      />
     </div>
   );
 };
