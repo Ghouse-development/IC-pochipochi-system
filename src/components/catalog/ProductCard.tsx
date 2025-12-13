@@ -5,6 +5,7 @@ import { Card } from '../common/Card';
 import { Badge } from '../common/Badge';
 import { formatPrice } from '../../lib/utils';
 import { generateProductPlaceholder } from '../../utils/imageUtils';
+import { getHexColor } from '../../utils/colorMapping';
 
 interface ProductCardProps {
   product: Product;
@@ -75,16 +76,19 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect }) =
         
         {product.variants.length > 1 && (
           <div className="flex gap-1 mt-3">
-            {product.variants.slice(0, 5).map((variant) => (
-              <div
-                key={variant.id}
-                className="w-6 h-6 rounded-full border-2 border-gray-300"
-                style={{ 
-                  backgroundColor: variant.colorCode || '#e5e7eb',
-                }}
-                title={variant.color}
-              />
-            ))}
+            {product.variants.slice(0, 5).map((variant) => {
+              const hexColor = getHexColor(variant.colorCode) !== '#CCCCCC'
+                ? getHexColor(variant.colorCode)
+                : getHexColor(variant.color);
+              return (
+                <div
+                  key={variant.id}
+                  className="w-6 h-6 rounded-full border-2 border-gray-300 shadow-sm"
+                  style={{ backgroundColor: hexColor }}
+                  title={variant.color}
+                />
+              );
+            })}
             {product.variants.length > 5 && (
               <div className="w-6 h-6 rounded-full border-2 border-gray-300 bg-gray-100 flex items-center justify-center">
                 <span className="text-xs text-gray-600">+{product.variants.length - 5}</span>

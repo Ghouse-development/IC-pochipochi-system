@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import type { Category } from '../../types/product';
 import type { FilterOptions } from '../../types/filter';
 import { useProductStore } from '../../stores/useProductStore';
+import { sortCategories, getCategoryOrderConfig } from '../../config/categoryOrder';
 
 interface FilterSidebarProps {
   categories: Category[];
@@ -20,7 +21,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
 }) => {
   const { exteriorProducts, interiorProducts, waterProducts } = useProductStore();
   
-  // カタログタイプに応じたカテゴリを動的に生成
+  // カタログタイプに応じたカテゴリを動的に生成（ソート済み）
   const dynamicCategories = useMemo(() => {
     let products = [];
     switch (catalogType) {
@@ -34,7 +35,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
         products = waterProducts;
         break;
     }
-    
+
     // カテゴリを集計
     const categoryMap = new Map<string, Set<string>>();
     products.forEach(product => {
@@ -45,11 +46,16 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
         categoryMap.get(product.categoryName)?.add(product.subcategory);
       }
     });
-    
-    return Array.from(categoryMap.entries()).map(([name, subcategories]) => ({
+
+    // 未ソートのカテゴリリスト
+    const unsortedCategories = Array.from(categoryMap.entries()).map(([name, subcategories]) => ({
       name,
       subcategories: Array.from(subcategories)
     }));
+
+    // カテゴリ順序設定を適用してソート
+    const orderConfig = getCategoryOrderConfig(catalogType);
+    return sortCategories(unsortedCategories, orderConfig);
   }, [catalogType, exteriorProducts, interiorProducts, waterProducts]);
   
   const handleCategoryToggle = (categoryId: string) => {
@@ -101,10 +107,13 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
                       onChange={() => handleCategoryToggle(category.name)}
                       className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                     />
-                    <span className="ml-2 text-sm text-gray-700 font-medium">{category.name}</span>
+                    <span className="ml-2 text-sm text-gray-700 font-medium flex items-center gap-1">
+                      {category.icon && <span>{category.icon}</span>}
+                      {category.name}
+                    </span>
                   </label>
                   {category.subcategories.length > 0 && filters.categories.includes(category.name) && (
-                    <div className="ml-6 mt-1 space-y-1">
+                    <div className="ml-6 mt-1 space-y-1 border-l-2 border-gray-200 pl-2">
                       {category.subcategories.map((subcategory) => (
                         <label
                           key={subcategory}

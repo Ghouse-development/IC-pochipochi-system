@@ -8,6 +8,7 @@ import { formatPrice } from '../../lib/utils';
 import { useCartStore } from '../../stores/useCartStore';
 import { cn } from '../../lib/utils';
 import { getCategoryRule } from '../../config/categoryRules';
+import { getHexColor } from '../../utils/colorMapping';
 
 interface ProductDetailModalProps {
   product: Product | null;
@@ -195,28 +196,31 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                 {/* カラー選択 */}
                 {product.variants.length > 1 && (
                   <div className="mb-6">
-                    <h3 className="text-sm font-medium text-gray-700 mb-3">カラー選択</h3>
-                    <div className="flex flex-wrap gap-2">
-                      {product.variants.map((v) => (
-                        <button
-                          key={v.id}
-                          onClick={() => setSelectedVariant(v)}
-                          className={cn(
-                            'flex items-center gap-2 px-3 py-2 rounded-lg border-2 transition-all',
-                            variant.id === v.id
-                              ? 'border-blue-500 bg-blue-50'
-                              : 'border-gray-300 hover:border-gray-400'
-                          )}
-                        >
-                          {v.colorCode && (
+                    <h3 className="text-sm font-medium text-gray-700 mb-3">カラー選択 ({product.variants.length}色)</h3>
+                    <div className="flex flex-wrap gap-2 max-h-48 overflow-y-auto">
+                      {product.variants.map((v) => {
+                        const hexColor = getHexColor(v.colorCode) !== '#CCCCCC'
+                          ? getHexColor(v.colorCode)
+                          : getHexColor(v.color);
+                        return (
+                          <button
+                            key={v.id}
+                            onClick={() => setSelectedVariant(v)}
+                            className={cn(
+                              'flex items-center gap-2 px-3 py-2 rounded-lg border-2 transition-all',
+                              variant.id === v.id
+                                ? 'border-blue-500 bg-blue-50'
+                                : 'border-gray-300 hover:border-gray-400'
+                            )}
+                          >
                             <div
-                              className="w-5 h-5 rounded-full border border-gray-300"
-                              style={{ backgroundColor: v.colorCode }}
+                              className="w-5 h-5 rounded-full border border-gray-300 shadow-sm flex-shrink-0"
+                              style={{ backgroundColor: hexColor }}
                             />
-                          )}
-                          <span className="text-sm">{v.color}</span>
-                        </button>
-                      ))}
+                            <span className="text-sm whitespace-nowrap">{v.color}</span>
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
                 )}
