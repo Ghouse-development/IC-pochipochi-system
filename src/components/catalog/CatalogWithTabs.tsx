@@ -699,20 +699,37 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
         const { data, error: fetchError } = await query.order('display_order');
         if (fetchError) throw fetchError;
 
-        // Supabaseからデータが取得できた場合はそれを使用
-        // データが空または少ない場合は静的データにフォールバック
+        // 静的データを取得（色・バリアント情報が完全）
+        const staticItems = getStaticItems(activeTab);
+
+        // Supabaseデータと静的データをマージ
+        // 静的データの色・バリアント情報を優先
         if (data && data.length > 0) {
-          setItems(data as ItemWithDetails[]);
+          const mergedItems = (data as ItemWithDetails[]).map(dbItem => {
+            // 静的データから同じIDまたは名前の商品を検索
+            const staticItem = staticItems.find(s =>
+              s.id === dbItem.id || s.name === dbItem.name
+            );
+            if (staticItem && staticItem.variants && staticItem.variants.length > 0) {
+              // 静的データのvariantsを使用
+              return {
+                ...dbItem,
+                variants: staticItem.variants,
+                category_name: staticItem.category_name || dbItem.category_name,
+              };
+            }
+            return dbItem;
+          });
+          setItems(mergedItems);
         } else {
-          // 静的データを使用
-          const staticItems = getStaticItems(activeTab);
+          // DBにデータがない場合は静的データを使用
           setItems(staticItems);
         }
       } catch {
-        // エラー時も静的データにフォールバック
+        // エラー時は静的データを使用
         const staticItems = getStaticItems(activeTab);
         setItems(staticItems);
-        setError(null); // エラーをクリア（静的データが使用可能）
+        setError(null);
       } finally {
         setIsLoading(false);
       }
