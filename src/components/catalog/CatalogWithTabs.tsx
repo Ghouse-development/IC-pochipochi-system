@@ -910,8 +910,8 @@ export const CatalogWithTabs: React.FC = () => {
       <Confetti show={showConfetti} />
 
       <div className="flex flex-col h-full bg-gradient-to-br from-gray-50 via-white to-gray-100">
-        {/* ヘッダー */}
-        <div className="bg-gradient-to-r from-teal-600 via-teal-500 to-emerald-500 gradient-animate text-white shadow-lg">
+        {/* ヘッダー - 統一デザイン */}
+        <div className="bg-teal-600 text-white shadow-lg">
           {/* ステップナビゲーション */}
           <div className="px-4 py-4">
             <div className="flex items-center justify-between max-w-6xl mx-auto">
@@ -964,7 +964,7 @@ export const CatalogWithTabs: React.FC = () => {
             </div>
           </div>
 
-          {/* プログレスバー - カテゴリベース */}
+          {/* プログレスバー - シンプル化 */}
           <div className="px-4 pb-3">
             <div className="max-w-6xl mx-auto">
               {(() => {
@@ -975,16 +975,14 @@ export const CatalogWithTabs: React.FC = () => {
                 const catProgressPercent = totalCount > 0 ? (decidedCount / totalCount) * 100 : 0;
                 return (
                   <div className="flex items-center gap-3">
-                    <div className="flex-1 h-2 bg-white/20 rounded-full overflow-hidden">
+                    <div className="flex-1 h-1.5 bg-white/20 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-gradient-to-r from-yellow-400 via-orange-400 to-pink-500 rounded-full transition-all duration-500"
+                        className="h-full bg-white rounded-full transition-all duration-500"
                         style={{ width: `${catProgressPercent}%` }}
                       />
                     </div>
-                    <span className="text-xs font-medium text-white/80 whitespace-nowrap">
-                      {decidedCount === totalCount && totalCount > 0
-                        ? '🎉 完了!'
-                        : `${decidedCount}/${totalCount}カテゴリ`}
+                    <span className="text-xs font-medium text-white/90 whitespace-nowrap">
+                      {decidedCount}/{totalCount}
                     </span>
                   </div>
                 );
@@ -1067,48 +1065,44 @@ export const CatalogWithTabs: React.FC = () => {
 
                 return (
                   <>
-                    {/* 進捗バー */}
-                    <div className="bg-gradient-to-r from-teal-50 to-emerald-50 rounded-xl p-3">
+                    {/* 進捗バー - シンプル */}
+                    <div className="bg-gray-50 rounded-xl p-3">
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm font-bold text-gray-700">
-                          {STEPS.find(s => s.id === activeTab)?.label}の進捗
+                        <span className="text-sm font-medium text-gray-600">
+                          {STEPS.find(s => s.id === activeTab)?.label}
                         </span>
-                        <span className="text-lg font-bold text-teal-600">
+                        <span className="text-sm font-bold text-teal-600">
                           {decidedCategories.length}/{categories.length}
                         </span>
                       </div>
-                      <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-gradient-to-r from-teal-500 to-emerald-500 rounded-full transition-all duration-500"
+                          className="h-full bg-teal-500 rounded-full transition-all duration-500"
                           style={{ width: `${progressPercent}%` }}
                         />
                       </div>
-                      <p className="text-xs text-gray-500 mt-1 text-center">
-                        {progressPercent === 100 ? '🎉 完了!' : `残り${undecidedCategories.length}カテゴリ`}
-                      </p>
                     </div>
 
                     {/* 未決項目 */}
                     {undecidedCategories.length > 0 && (
                       <div>
-                        <h3 className="font-bold text-gray-800 mb-2 text-sm flex items-center gap-2">
-                          <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse" />
-                          未決項目
-                          <span className="text-orange-500">({undecidedCategories.length})</span>
+                        <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
+                          未選択 ({undecidedCategories.length})
                         </h3>
                         <div className="space-y-1">
                           {undecidedCategories.map(cat => (
                             <button
                               key={cat.id}
                               onClick={() => setSelectedCategoryId(cat.id)}
-                              className={`w-full flex items-center justify-between p-2 rounded-lg text-sm transition-all ${
+                              aria-label={`${cat.name}カテゴリを選択`}
+                              className={`w-full flex items-center justify-between p-2.5 rounded-lg text-sm transition-all ${
                                 selectedCategoryId === cat.id
-                                  ? 'bg-orange-100 border-2 border-orange-300 text-orange-700'
-                                  : 'bg-orange-50 hover:bg-orange-100 text-gray-700 border border-orange-200'
+                                  ? 'bg-teal-50 border border-teal-300 text-teal-700'
+                                  : 'bg-white hover:bg-gray-50 text-gray-700 border border-gray-200'
                               }`}
                             >
                               <span className="font-medium">{cat.name}</span>
-                              <ChevronRight className="w-4 h-4 text-orange-400" />
+                              <ChevronRight className="w-4 h-4 text-gray-400" />
                             </button>
                           ))}
                         </div>
@@ -1118,12 +1112,11 @@ export const CatalogWithTabs: React.FC = () => {
                     {/* 決定項目 */}
                     {decidedCategories.length > 0 && (
                       <div>
-                        <h3 className="font-bold text-gray-800 mb-2 text-sm flex items-center gap-2">
-                          <Check className="w-4 h-4 text-teal-500" />
-                          決定項目
-                          <span className="text-teal-500">({decidedCategories.length})</span>
+                        <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2 flex items-center gap-1">
+                          <Check className="w-3.5 h-3.5 text-emerald-500" />
+                          選択済み ({decidedCategories.length})
                         </h3>
-                        <div className="space-y-1.5">
+                        <div className="space-y-1">
                           {decidedCategories.map(cat => {
                             const selectedItems = cartItems.filter(
                               item => item.product.categoryName === cat.name
@@ -1132,30 +1125,22 @@ export const CatalogWithTabs: React.FC = () => {
                               <button
                                 key={cat.id}
                                 onClick={() => setSelectedCategoryId(cat.id)}
-                                className={`w-full p-2 rounded-lg text-sm transition-all text-left ${
+                                aria-label={`${cat.name}カテゴリを編集`}
+                                className={`w-full p-2.5 rounded-lg text-sm transition-all text-left ${
                                   selectedCategoryId === cat.id
-                                    ? 'bg-teal-100 border-2 border-teal-300'
-                                    : 'bg-teal-50 hover:bg-teal-100 border border-teal-200'
+                                    ? 'bg-emerald-50 border border-emerald-300'
+                                    : 'bg-emerald-50/50 hover:bg-emerald-50 border border-emerald-200'
                                 }`}
                               >
                                 <div className="flex items-center justify-between">
-                                  <span className="font-medium text-teal-700">{cat.name}</span>
-                                  <span className="text-xs bg-teal-500 text-white px-1.5 py-0.5 rounded-full">
+                                  <span className="font-medium text-gray-700">{cat.name}</span>
+                                  <span className="text-xs text-emerald-600 font-medium">
                                     {selectedItems.length}件
                                   </span>
                                 </div>
-                                <div className="mt-1 space-y-0.5">
-                                  {selectedItems.slice(0, 2).map(item => (
-                                    <p key={item.product.id} className="text-xs text-gray-600 truncate">
-                                      ・{item.product.name}
-                                    </p>
-                                  ))}
-                                  {selectedItems.length > 2 && (
-                                    <p className="text-xs text-gray-400">
-                                      他{selectedItems.length - 2}件
-                                    </p>
-                                  )}
-                                </div>
+                                <p className="text-xs text-gray-500 truncate mt-0.5">
+                                  {selectedItems.map(i => i.product.name).join(', ')}
+                                </p>
                               </button>
                             );
                           })}
@@ -1166,13 +1151,12 @@ export const CatalogWithTabs: React.FC = () => {
                 );
               })()}
 
-              {/* お気に入り */}
+              {/* お気に入り - シンプル */}
               {favorites.length > 0 && (
-                <div className="pt-3 border-t border-gray-200">
-                  <h3 className="font-bold text-gray-800 mb-2 text-sm flex items-center gap-2">
-                    <Heart className="w-4 h-4 text-pink-500 fill-pink-500" />
-                    お気に入り
-                    <span className="text-pink-500">({favorites.length})</span>
+                <div className="pt-3 border-t border-gray-100">
+                  <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2 flex items-center gap-1">
+                    <Heart className="w-3.5 h-3.5 text-pink-500" />
+                    お気に入り ({favorites.length})
                   </h3>
                   <div className="space-y-1">
                     {favorites.slice(0, 3).map(favId => {
@@ -1182,39 +1166,37 @@ export const CatalogWithTabs: React.FC = () => {
                         <button
                           key={favId}
                           onClick={() => handleOpenDetail(item)}
-                          className="w-full flex items-center justify-between p-2 bg-pink-50 hover:bg-pink-100 rounded-lg text-sm transition-all border border-pink-200"
+                          aria-label={`${item.name}を表示`}
+                          className="w-full flex items-center justify-between p-2 bg-white hover:bg-gray-50 rounded-lg text-sm transition-all border border-gray-200"
                         >
-                          <span className="font-medium text-gray-700 truncate">{item.name}</span>
-                          <ChevronRight className="w-4 h-4 text-pink-400 flex-shrink-0" />
+                          <span className="text-gray-700 truncate">{item.name}</span>
+                          <ChevronRight className="w-4 h-4 text-gray-400 flex-shrink-0" />
                         </button>
                       );
                     })}
-                    {favorites.length > 3 && (
-                      <p className="text-xs text-pink-400 text-center">他{favorites.length - 3}件</p>
-                    )}
                   </div>
                 </div>
               )}
 
-              {/* 最近見た商品 */}
+              {/* 最近見た商品 - シンプル */}
               {recentlyViewed.length > 0 && (
-                <div className="pt-3 border-t border-gray-200">
-                  <h3 className="font-bold text-gray-800 mb-2 text-sm flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-gray-500" />
-                    最近見た商品
+                <div className="pt-3 border-t border-gray-100">
+                  <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2 flex items-center gap-1">
+                    <Clock className="w-3.5 h-3.5 text-gray-400" />
+                    履歴
                   </h3>
-                  <div className="space-y-1">
-                    {recentlyViewed.slice(0, 3).map(viewedId => {
+                  <div className="flex flex-wrap gap-1">
+                    {recentlyViewed.slice(0, 5).map(viewedId => {
                       const item = items.find(i => i.id === viewedId);
                       if (!item) return null;
                       return (
                         <button
                           key={viewedId}
                           onClick={() => handleOpenDetail(item)}
-                          className="w-full flex items-center justify-between p-2 bg-gray-50 hover:bg-gray-100 rounded-lg text-sm transition-all"
+                          aria-label={`${item.name}を表示`}
+                          className="px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded text-xs text-gray-600 transition-colors truncate max-w-[120px]"
                         >
-                          <span className="text-gray-600 truncate">{item.name}</span>
-                          <ChevronRight className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                          {item.name}
                         </button>
                       );
                     })}
@@ -1236,23 +1218,23 @@ export const CatalogWithTabs: React.FC = () => {
               )}
 
               {/* アクションボタン */}
-              <div className="pt-3 border-t border-gray-200 space-y-2">
+              <div className="pt-3 border-t border-gray-100">
                 {isCurrentStepComplete ? (
                   <button
                     onClick={goToNextStep}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all"
+                    aria-label="次のステップへ進む"
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-medium transition-colors"
                   >
-                    🎉 次のステップへ進む
+                    次のステップへ
                     <ChevronRight className="w-5 h-5" />
                   </button>
                 ) : isCurrentCategoryDecided && undecidedCategories.length > 0 ? (
                   <button
                     onClick={goToNextCategory}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-teal-500 to-emerald-500 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all"
-                    title="キーボードショートカット: N"
+                    aria-label="次のカテゴリへ進む"
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-teal-500 hover:bg-teal-600 text-white rounded-xl font-medium transition-colors"
                   >
                     次のカテゴリへ
-                    <span className="text-[10px] bg-white/20 px-1.5 rounded">N</span>
                     <ChevronRight className="w-5 h-5" />
                   </button>
                 ) : null}
@@ -1289,30 +1271,29 @@ export const CatalogWithTabs: React.FC = () => {
                   )}
                 </div>
 
-                {/* 標準品一括選択 */}
-                <button
-                  onClick={handleSelectAllStandard}
-                  className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium bg-gradient-to-r from-teal-500 to-emerald-500 text-white shadow-md hover:shadow-lg transition-all"
-                  title="このカテゴリの標準品をすべて選択"
-                >
-                  <Check className="w-4 h-4" />
-                  <span className="hidden md:inline">標準一括</span>
-                </button>
-
-                {/* クイック選択モードトグル */}
-                <button
-                  onClick={() => setQuickSelectMode(!quickSelectMode)}
-                  className={`hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium transition-all ${
-                    quickSelectMode
-                      ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-white shadow-lg'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  }`}
-                  title="クイック選択 (Q): 商品選択後に自動で次のカテゴリへ移動"
-                >
-                  <Zap className="w-4 h-4" />
-                  <span className="hidden md:inline">{quickSelectMode ? 'クイック ON' : 'クイック'}</span>
-                  <span className="hidden lg:block text-[10px] ml-1 bg-black/10 px-1 rounded">Q</span>
-                </button>
+                {/* アクションボタン群 - シンプル化 */}
+                <div className="hidden sm:flex items-center gap-1">
+                  <button
+                    onClick={handleSelectAllStandard}
+                    className="p-2.5 rounded-lg bg-teal-500 text-white hover:bg-teal-600 transition-colors"
+                    title="標準品を一括選択"
+                    aria-label="標準品を一括選択"
+                  >
+                    <Check className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => setQuickSelectMode(!quickSelectMode)}
+                    className={`p-2.5 rounded-lg transition-colors ${
+                      quickSelectMode
+                        ? 'bg-amber-500 text-white'
+                        : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                    }`}
+                    title="クイック選択モード (Q)"
+                    aria-label="クイック選択モード"
+                  >
+                    <Zap className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             </div>
 
