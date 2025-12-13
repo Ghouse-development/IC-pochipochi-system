@@ -345,12 +345,12 @@ const ItemCard: React.FC<ItemCardProps> = ({
           <HighlightText text={item.name} searchTerm={searchTerm} />
         </h3>
 
-        {/* 価格 */}
+        {/* 価格と単位 */}
         <div className="flex items-baseline gap-1 mb-2">
           <span className={`text-base font-bold ${price === 0 ? 'text-teal-600 dark:text-teal-400' : 'text-gray-900 dark:text-gray-100'}`}>
             {price === 0 ? '標準' : formatPrice(price)}
           </span>
-          {price > 0 && item.unit && (
+          {item.unit && (
             <span className="text-[10px] text-gray-400 dark:text-gray-500">/{item.unit.symbol}</span>
           )}
         </div>
@@ -1371,30 +1371,31 @@ export const CatalogWithTabs: React.FC = () => {
                 <EmptyState searchTerm={searchTerm} onClear={() => setSearchTerm('')} />
               ) : (
                 <>
-                  {/* メーカー別グループ化表示（カテゴリ選択時のみ） */}
+                  {/* サブカテゴリ別グループ化表示（カテゴリ選択時のみ） */}
                   {selectedCategoryId && (() => {
-                    // メーカー別にグループ化
-                    const groupedByManufacturer = filteredItems.reduce((acc, item) => {
-                      const mfr = item.manufacturer || 'その他';
-                      if (!acc[mfr]) acc[mfr] = [];
-                      acc[mfr].push(item);
+                    // model_number（シリーズ/サブカテゴリ）でグループ化
+                    const groupedBySubcategory = filteredItems.reduce((acc, item) => {
+                      // model_numberをサブカテゴリとして使用（なければメーカー名）
+                      const subcategory = item.model_number || item.manufacturer || 'その他';
+                      if (!acc[subcategory]) acc[subcategory] = [];
+                      acc[subcategory].push(item);
                       return acc;
                     }, {} as Record<string, typeof filteredItems>);
-                    const manufacturers = Object.keys(groupedByManufacturer);
+                    const subcategories = Object.keys(groupedBySubcategory);
 
-                    // メーカーが2つ以上ある場合のみグループ化表示
-                    if (manufacturers.length > 1) {
+                    // サブカテゴリが2つ以上ある場合のみグループ化表示
+                    if (subcategories.length > 1) {
                       return (
                         <div className="space-y-6">
-                          {manufacturers.map(mfr => (
-                            <div key={mfr} className="animate-slide-up">
-                              <div className="flex items-center gap-2 mb-3">
+                          {subcategories.map(subcategory => (
+                            <div key={subcategory} className="animate-slide-up">
+                              <div className="flex items-center gap-2 mb-3 sticky top-0 bg-gray-50/95 dark:bg-gray-900/95 backdrop-blur-sm py-2 -mx-1 px-1 z-5">
                                 <div className="w-1 h-5 bg-gradient-to-b from-teal-500 to-emerald-500 rounded-full" />
-                                <h3 className="font-bold text-gray-800">{mfr}</h3>
-                                <span className="text-xs text-gray-400">({groupedByManufacturer[mfr].length}件)</span>
+                                <h3 className="font-bold text-gray-800 dark:text-gray-200">{subcategory}</h3>
+                                <span className="text-xs text-gray-400 dark:text-gray-500">({groupedBySubcategory[subcategory].length}件)</span>
                               </div>
                               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-                                {groupedByManufacturer[mfr].map((item, index) => (
+                                {groupedBySubcategory[subcategory].map((item, index) => (
                                   <ItemCard
                                     key={item.id}
                                     item={item}
@@ -1414,7 +1415,7 @@ export const CatalogWithTabs: React.FC = () => {
                                     handleToggleFavorite={handleToggleFavorite}
                                     isFavorite={isFavorite}
                                     searchTerm={searchTerm}
-                                    showManufacturer={false}
+                                    showManufacturer={true}
                                   />
                                 ))}
                               </div>
@@ -1426,15 +1427,15 @@ export const CatalogWithTabs: React.FC = () => {
                     return null;
                   })()}
 
-                  {/* 通常グリッド表示 */}
+                  {/* 通常グリッド表示（グループ化しない場合） */}
                   {(!selectedCategoryId || (() => {
-                    const groupedByManufacturer = filteredItems.reduce((acc, item) => {
-                      const mfr = item.manufacturer || 'その他';
-                      if (!acc[mfr]) acc[mfr] = [];
-                      acc[mfr].push(item);
+                    const groupedBySubcategory = filteredItems.reduce((acc, item) => {
+                      const subcategory = item.model_number || item.manufacturer || 'その他';
+                      if (!acc[subcategory]) acc[subcategory] = [];
+                      acc[subcategory].push(item);
                       return acc;
                     }, {} as Record<string, typeof filteredItems>);
-                    return Object.keys(groupedByManufacturer).length <= 1;
+                    return Object.keys(groupedBySubcategory).length <= 1;
                   })()) && (
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
                       {filteredItems.map((item, index) => (
