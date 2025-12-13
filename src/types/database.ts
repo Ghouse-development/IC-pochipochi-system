@@ -3,7 +3,8 @@
 // ========================================
 
 // ENUM Types
-export type UserRole = 'admin' | 'coordinator' | 'user';
+export type UserRole = 'super_admin' | 'admin' | 'coordinator' | 'user';
+export type OrganizationType = 'headquarters' | 'franchise' | 'partner';
 export type CategoryType = 'exterior' | 'interior' | 'equipment' | 'other';
 export type UnitType = 'sqm' | 'piece' | 'location' | 'set' | 'package' | 'sheet' | 'meter' | 'unit' | 'pair';
 export type ProjectStatus = 'draft' | 'active' | 'confirmed' | 'completed' | 'cancelled';
@@ -12,6 +13,64 @@ export type NotificationType = 'project_created' | 'selection_confirmed' | 'item
 
 // ========================================
 // Table Types
+// ========================================
+
+// ========================================
+// Organization Types (Multi-tenant)
+// ========================================
+
+export interface Organization {
+  id: string;
+  name: string;
+  name_kana: string | null;
+  code: string;
+  type: OrganizationType;
+  parent_id: string | null;
+  email: string | null;
+  phone: string | null;
+  address: string | null;
+  postal_code: string | null;
+  prefecture: string | null;
+  city: string | null;
+  logo_url: string | null;
+  primary_color: string;
+  is_active: boolean;
+  can_customize_pricing: boolean;
+  can_add_products: boolean;
+  settings: Record<string, unknown>;
+  created_at: string;
+  updated_at: string;
+  // Joined data
+  parent?: Organization;
+  children?: Organization[];
+}
+
+export interface OrganizationMember {
+  id: string;
+  organization_id: string;
+  user_id: string;
+  role: string;
+  is_primary: boolean;
+  joined_at: string;
+  // Joined data
+  organization?: Organization;
+  user?: User;
+}
+
+export interface OrganizationItemSetting {
+  id: string;
+  organization_id: string;
+  item_id: string;
+  is_visible: boolean;
+  custom_price: number | null;
+  custom_note: string | null;
+  display_order: number | null;
+  created_at: string;
+  updated_at: string;
+}
+
+// ========================================
+// User Types
 // ========================================
 
 export interface User {
@@ -23,10 +82,14 @@ export interface User {
   role: UserRole;
   phone: string | null;
   company_name: string | null;
+  organization_id: string | null;
+  is_super_admin: boolean;
   is_active: boolean;
   last_login_at: string | null;
   created_at: string;
   updated_at: string;
+  // Joined data
+  organization?: Organization;
 }
 
 export interface SystemSetting {

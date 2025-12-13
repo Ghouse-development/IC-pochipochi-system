@@ -16,11 +16,13 @@ interface AuthContextType {
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<{ error: Error | null }>;
   // Role checks
+  isSuperAdmin: boolean;
   isAdmin: boolean;
   isCoordinator: boolean;
   isCustomer: boolean;
   canManageItems: boolean;
   canManageProjects: boolean;
+  canViewAllOrganizations: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -165,11 +167,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   // Role checks
-  const isAdmin = user?.role === 'admin';
+  const isSuperAdmin = user?.is_super_admin === true || user?.role === 'super_admin';
+  const isAdmin = user?.role === 'admin' || isSuperAdmin;
   const isCoordinator = user?.role === 'coordinator';
   const isCustomer = user?.role === 'user';
   const canManageItems = isAdmin;
   const canManageProjects = isAdmin || isCoordinator;
+  const canViewAllOrganizations = isSuperAdmin;
 
   return (
     <AuthContext.Provider
@@ -182,11 +186,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         signUp,
         signOut,
         resetPassword,
+        isSuperAdmin,
         isAdmin,
         isCoordinator,
         isCustomer,
         canManageItems,
         canManageProjects,
+        canViewAllOrganizations,
       }}
     >
       {children}
@@ -210,9 +216,11 @@ export function DemoAuthProvider({ children }: { children: ReactNode }) {
     email: 'admin@ghouse.com',
     full_name: '管理者（デモ）',
     full_name_kana: 'カンリシャ',
-    role: 'admin',
+    role: 'super_admin',
     phone: null,
-    company_name: 'Gハウス',
+    company_name: 'Gハウス本部',
+    organization_id: null,
+    is_super_admin: true,
     is_active: true,
     last_login_at: new Date().toISOString(),
     created_at: new Date().toISOString(),
@@ -228,11 +236,13 @@ export function DemoAuthProvider({ children }: { children: ReactNode }) {
     signUp: async () => ({ error: null }),
     signOut: async () => {},
     resetPassword: async () => ({ error: null }),
+    isSuperAdmin: true,
     isAdmin: true,
     isCoordinator: false,
     isCustomer: false,
     canManageItems: true,
     canManageProjects: true,
+    canViewAllOrganizations: true,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

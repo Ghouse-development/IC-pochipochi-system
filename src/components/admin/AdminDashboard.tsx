@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Plus, Edit, Trash2, BarChart3, Package, Bell, Search, TrendingUp, FileText, Download, Upload, Settings, Users, FolderTree, Briefcase, Wrench, Truck, Database } from 'lucide-react';
+import { Plus, Edit, Trash2, BarChart3, Package, Bell, Search, TrendingUp, FileText, Download, Upload, Settings, Users, FolderTree, Briefcase, Wrench, Truck, Database, Building2 } from 'lucide-react';
 import { Button } from '../common/Button';
 import { Card } from '../common/Card';
 import { ProductFormNew } from './ProductFormNew';
@@ -11,6 +11,7 @@ import { CategoryManager } from './CategoryManager';
 import { UserManager } from './UserManager';
 import { VendorOrderManager } from './VendorOrderManager';
 import { DataBackup } from './DataBackup';
+import { OrganizationManager } from './OrganizationManager';
 import { useVersionStore } from '../../stores/useVersionStore';
 import { useOrderStore } from '../../stores/useOrderStore';
 import { useProductStore } from '../../stores/useProductStore';
@@ -25,7 +26,7 @@ interface AdminDashboardProps {
 }
 
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
-  const [activeTab, setActiveTab] = useState<'products' | 'management' | 'statistics' | 'adoption' | 'versions' | 'pdf' | 'settings' | 'projects' | 'items' | 'categories' | 'users' | 'vendors' | 'backup'>('products');
+  const [activeTab, setActiveTab] = useState<'products' | 'management' | 'statistics' | 'adoption' | 'versions' | 'pdf' | 'settings' | 'projects' | 'items' | 'categories' | 'users' | 'vendors' | 'backup' | 'organizations'>('products');
   const [productCategory, setProductCategory] = useState<'exterior' | 'interior' | 'water'>('exterior');
   const [searchTerm, setSearchTerm] = useState('');
   const [showProductForm, setShowProductForm] = useState(false);
@@ -408,6 +409,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
               <Wrench className="w-4 h-4 sm:w-5 sm:h-5" />
               <span className="hidden sm:inline">システム設定</span>
               <span className="sm:hidden">設定</span>
+            </div>
+          </button>
+          <button
+            onClick={() => setActiveTab('organizations')}
+            className={`pb-2 px-1 border-b-2 transition-colors ${
+              activeTab === 'organizations'
+                ? 'border-amber-500 text-amber-600'
+                : 'border-transparent text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            <div className="flex items-center gap-1 sm:gap-2">
+              <Building2 className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="hidden sm:inline">組織管理</span>
+              <span className="sm:hidden">組織</span>
             </div>
           </button>
         </div>
@@ -1043,6 +1058,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
         {activeTab === 'settings' && (
           <div className="space-y-6">
             <SystemSettings />
+          </div>
+        )}
+
+        {/* 組織管理 */}
+        {activeTab === 'organizations' && (
+          <div className="space-y-6">
+            <OrganizationManager />
           </div>
         )}
       </div>

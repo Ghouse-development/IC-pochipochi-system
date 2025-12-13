@@ -7,10 +7,26 @@
 
 ## バージョン履歴
 
+### v2.12.0 (2025-12-13)
+- **マルチテナント対応（フランチャイズ対応）**
+  - 組織テーブル（organizations）追加
+  - 組織メンバーテーブル（organization_members）追加
+  - 組織別商品設定テーブル（organization_item_settings）追加
+  - super_admin権限追加（Gハウス本部が全組織データ閲覧可能）
+  - 組織管理UIコンポーネント追加
+- **SQL統合**
+  - 20+のSQLファイルをCOMPLETE_SETUP.sqlに集約
+  - マルチテナント拡張SQL（MULTI_TENANT_EXTENSION.sql）追加
+- **型定義拡張**
+  - Organization, OrganizationMember, OrganizationItemSetting型追加
+  - UserRole型にsuper_admin追加
+- **AuthContext強化**
+  - isSuperAdmin, canViewAllOrganizations権限追加
+
 ### v2.11.0 (2025-12-13)
 - ユーザーマニュアル追加 (docs/USER_MANUAL.md)
 - 管理者マニュアル追加 (docs/ADMIN_MANUAL.md)
-- バックアップ・メンテナンス用SQL関数追加 (sql/012_backup_functions.sql)
+- バックアップ・メンテナンス用SQL関数追加
 - DataBackupコンポーネント強化（Supabaseデータ統計・CSV/JSONエクスポート）
 
 ### v2.10.0 (2025-12-13)
