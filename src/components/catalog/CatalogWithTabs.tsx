@@ -444,7 +444,10 @@ export const CatalogWithTabs: React.FC = () => {
     fetchPlans();
   }, []);
 
-  // カテゴリ取得
+  // モバイル進捗パネル
+  const [showMobileProgress, setShowMobileProgress] = useState(false);
+
+  // カテゴリ取得 + 最初の未決カテゴリを自動選択
   useEffect(() => {
     const fetchCategories = async () => {
       const { data } = await supabase
@@ -455,7 +458,11 @@ export const CatalogWithTabs: React.FC = () => {
         .order('display_order');
       if (data) {
         setCategories(data);
-        setSelectedCategoryId(null);
+        // 最初の未決カテゴリを自動選択
+        const firstUndecided = data.find(cat =>
+          !cartItems.some(item => item.product.categoryName === cat.name)
+        );
+        setSelectedCategoryId(firstUndecided?.id || data[0]?.id || null);
       }
     };
     fetchCategories();
@@ -624,6 +631,48 @@ export const CatalogWithTabs: React.FC = () => {
     }).length;
   };
 
+  // 未決・決定カテゴリ
+  const decidedCategories = useMemo(() =>
+    categories.filter(cat => cartItems.some(item => item.product.categoryName === cat.name)),
+    [categories, cartItems]
+  );
+  const undecidedCategories = useMemo(() =>
+    categories.filter(cat => !cartItems.some(item => item.product.categoryName === cat.name)),
+    [categories, cartItems]
+  );
+  const currentCategoryProgress = categories.length > 0
+    ? Math.round((decidedCategories.length / categories.length) * 100)
+    : 0;
+  const isCurrentStepComplete = undecidedCategories.length === 0 && categories.length > 0;
+
+  // 次のカテゴリへ進む
+  const goToNextCategory = useCallback(() => {
+    const currentIndex = categories.findIndex(c => c.id === selectedCategoryId);
+    const nextUndecided = categories.slice(currentIndex + 1).find(cat =>
+      !cartItems.some(item => item.product.categoryName === cat.name)
+    ) || undecidedCategories[0];
+
+    if (nextUndecided) {
+      setSelectedCategoryId(nextUndecided.id);
+    }
+  }, [categories, selectedCategoryId, cartItems, undecidedCategories]);
+
+  // 次のステップへ進む
+  const goToNextStep = useCallback(() => {
+    const currentIndex = STEPS.findIndex(s => s.id === activeTab);
+    if (currentIndex < STEPS.length - 1) {
+      setActiveTab(STEPS[currentIndex + 1].id as any);
+      setShowConfetti(true);
+      setTimeout(() => setShowConfetti(false), 3000);
+    }
+  }, [activeTab]);
+
+  // 現在のカテゴリが決定済みかチェック
+  const isCurrentCategoryDecided = useMemo(() => {
+    const currentCat = categories.find(c => c.id === selectedCategoryId);
+    return currentCat ? cartItems.some(item => item.product.categoryName === currentCat.name) : false;
+  }, [categories, selectedCategoryId, cartItems]);
+
   return (
     <>
       <style>{animations}</style>
@@ -713,37 +762,40 @@ export const CatalogWithTabs: React.FC = () => {
           </div>
         </div>
 
-        {/* カテゴリナビゲーション（常に表示） */}
+        {/* カテゴリナビゲーション - 決定/未決ステータス表示 */}
         <div className="bg-white border-b border-gray-200 shadow-sm">
           <div className="flex items-center gap-2 px-4 py-3 overflow-x-auto scrollbar-thin">
-            {categories.map(cat => {
+            {categories.map((cat, idx) => {
               const count = getCategoryCount(cat.name);
-              const itemCount = items.filter(i => i.category_id === cat.id).length;
+              const isDecided = count > 0;
+              const isSelected = selectedCategoryId === cat.id;
               return (
                 <button
                   key={cat.id}
                   onClick={() => setSelectedCategoryId(cat.id)}
                   className={`flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                    selectedCategoryId === cat.id
-                      ? 'bg-gradient-to-r from-teal-500 to-emerald-500 text-white shadow-lg'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    isSelected
+                      ? isDecided
+                        ? 'bg-gradient-to-r from-teal-500 to-emerald-500 text-white shadow-lg'
+                        : 'bg-gradient-to-r from-orange-400 to-amber-500 text-white shadow-lg'
+                      : isDecided
+                        ? 'bg-teal-100 text-teal-700 border-2 border-teal-300'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
                 >
+                  {isDecided ? (
+                    <Check className="w-4 h-4" />
+                  ) : (
+                    <span className="w-4 h-4 flex items-center justify-center text-xs font-bold rounded-full bg-current/20">
+                      {idx + 1}
+                    </span>
+                  )}
                   <span>{cat.name}</span>
-                  <span className={`text-xs px-1.5 py-0.5 rounded-full ${
-                    selectedCategoryId === cat.id
-                      ? 'bg-white/30'
-                      : 'bg-gray-200'
-                  }`}>
-                    {itemCount}
-                  </span>
-                  {count > 0 && (
-                    <span className={`w-5 h-5 flex items-center justify-center rounded-full text-xs font-bold ${
-                      selectedCategoryId === cat.id
-                        ? 'bg-white text-teal-600'
-                        : 'bg-teal-500 text-white'
+                  {isDecided && (
+                    <span className={`text-xs px-1.5 py-0.5 rounded-full ${
+                      isSelected ? 'bg-white/30' : 'bg-teal-200'
                     }`}>
-                      {count}
+                      {count}件
                     </span>
                   )}
                 </button>
@@ -895,6 +947,27 @@ export const CatalogWithTabs: React.FC = () => {
                   </button>
                 </div>
               )}
+
+              {/* アクションボタン */}
+              <div className="pt-3 border-t border-gray-200 space-y-2">
+                {isCurrentStepComplete ? (
+                  <button
+                    onClick={goToNextStep}
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all"
+                  >
+                    🎉 次のステップへ進む
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
+                ) : isCurrentCategoryDecided && undecidedCategories.length > 0 ? (
+                  <button
+                    onClick={goToNextCategory}
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-teal-500 to-emerald-500 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all"
+                  >
+                    次のカテゴリへ
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
+                ) : null}
+              </div>
             </div>
           </div>
 
@@ -961,7 +1034,7 @@ export const CatalogWithTabs: React.FC = () => {
             </div>
 
             {/* 商品グリッド */}
-            <div className="flex-1 overflow-y-auto p-3 sm:p-4">
+            <div className="flex-1 overflow-y-auto p-3 sm:p-4 pb-24 lg:pb-4">
               {isLoading ? (
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
                   {[...Array(10)].map((_, i) => <SkeletonCard key={i} />)}
@@ -1091,30 +1164,165 @@ export const CatalogWithTabs: React.FC = () => {
           </div>
         </div>
 
-        {/* モバイル用フローティングボタン */}
-        <div className="lg:hidden fixed bottom-6 right-6 z-40 flex flex-col gap-3">
-          {/* 比較ボタン */}
-          {compareProducts.length > 0 && (
+        {/* モバイル用 - 下部ナビゲーションバー */}
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 shadow-lg safe-area-pb">
+          <div className="flex items-center justify-between p-3 gap-3">
+            {/* 進捗表示 */}
             <button
-              onClick={() => setIsCompareModalOpen(true)}
-              className="relative bg-gradient-to-r from-purple-500 to-purple-600 text-white p-4 rounded-2xl shadow-2xl shadow-purple-300"
+              onClick={() => setShowMobileProgress(true)}
+              className="flex items-center gap-2 px-3 py-2 bg-gray-100 rounded-xl"
             >
-              <Scale className="w-6 h-6" />
-              <span className="absolute -top-2 -right-2 w-6 h-6 bg-white text-purple-600 text-xs font-bold rounded-full flex items-center justify-center">
-                {compareProducts.length}
-              </span>
+              <div className="relative w-10 h-10">
+                <svg className="w-10 h-10 -rotate-90">
+                  <circle cx="20" cy="20" r="16" fill="none" stroke="#e5e7eb" strokeWidth="4" />
+                  <circle
+                    cx="20" cy="20" r="16" fill="none" stroke="#14b8a6" strokeWidth="4"
+                    strokeDasharray={`${currentCategoryProgress} 100`}
+                    strokeLinecap="round"
+                  />
+                </svg>
+                <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-gray-700">
+                  {decidedCategories.length}/{categories.length}
+                </span>
+              </div>
+              <div className="text-left">
+                <p className="text-xs text-gray-500">進捗</p>
+                <p className="text-sm font-bold text-gray-700">
+                  {undecidedCategories.length > 0 ? `残り${undecidedCategories.length}` : '完了!'}
+                </p>
+              </div>
             </button>
-          )}
-          {/* カートボタン */}
-          {cartItems.length > 0 && (
-            <button className="relative bg-gradient-to-r from-teal-500 to-emerald-500 text-white p-4 rounded-2xl shadow-2xl shadow-teal-300 animate-float">
-              <ShoppingCart className="w-6 h-6" />
-              <span className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center animate-bounce-in">
-                {cartItems.length}
-              </span>
+
+            {/* メインアクション */}
+            {isCurrentStepComplete ? (
+              <button
+                onClick={goToNextStep}
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl font-bold shadow-lg"
+              >
+                次のステップへ
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            ) : isCurrentCategoryDecided ? (
+              <button
+                onClick={goToNextCategory}
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-teal-500 to-emerald-500 text-white rounded-xl font-bold shadow-lg"
+              >
+                次のカテゴリへ
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            ) : (
+              <div className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-orange-100 text-orange-700 rounded-xl font-medium">
+                <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse" />
+                {categories.find(c => c.id === selectedCategoryId)?.name || 'カテゴリ'}を選択中
+              </div>
+            )}
+
+            {/* カート */}
+            <button className="relative p-3 bg-teal-500 text-white rounded-xl">
+              <ShoppingCart className="w-5 h-5" />
+              {cartItems.length > 0 && (
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
+                  {cartItems.length}
+                </span>
+              )}
             </button>
-          )}
+          </div>
         </div>
+
+        {/* モバイル進捗パネル（ボトムシート） */}
+        {showMobileProgress && (
+          <>
+            <div
+              className="lg:hidden fixed inset-0 bg-black/50 z-50"
+              onClick={() => setShowMobileProgress(false)}
+            />
+            <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-3xl shadow-2xl max-h-[70vh] overflow-y-auto animate-slide-up">
+              <div className="sticky top-0 bg-white p-4 border-b border-gray-100">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold text-lg text-gray-900">選択状況</h3>
+                  <button
+                    onClick={() => setShowMobileProgress(false)}
+                    className="p-2 hover:bg-gray-100 rounded-full"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+                {/* 進捗バー */}
+                <div className="mt-3 bg-gray-100 rounded-full h-2 overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-teal-500 to-emerald-500 transition-all duration-500"
+                    style={{ width: `${currentCategoryProgress}%` }}
+                  />
+                </div>
+                <p className="text-sm text-gray-500 mt-1">
+                  {decidedCategories.length}/{categories.length} カテゴリ完了
+                </p>
+              </div>
+
+              <div className="p-4 space-y-4">
+                {/* 未決項目 */}
+                {undecidedCategories.length > 0 && (
+                  <div>
+                    <h4 className="font-bold text-sm text-orange-600 mb-2 flex items-center gap-2">
+                      <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse" />
+                      未選択 ({undecidedCategories.length})
+                    </h4>
+                    <div className="space-y-2">
+                      {undecidedCategories.map(cat => (
+                        <button
+                          key={cat.id}
+                          onClick={() => {
+                            setSelectedCategoryId(cat.id);
+                            setShowMobileProgress(false);
+                          }}
+                          className="w-full flex items-center justify-between p-3 bg-orange-50 rounded-xl border border-orange-200"
+                        >
+                          <span className="font-medium text-gray-700">{cat.name}</span>
+                          <ChevronRight className="w-5 h-5 text-orange-400" />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* 決定項目 */}
+                {decidedCategories.length > 0 && (
+                  <div>
+                    <h4 className="font-bold text-sm text-teal-600 mb-2 flex items-center gap-2">
+                      <Check className="w-4 h-4" />
+                      選択済み ({decidedCategories.length})
+                    </h4>
+                    <div className="space-y-2">
+                      {decidedCategories.map(cat => {
+                        const selectedItems = cartItems.filter(item => item.product.categoryName === cat.name);
+                        return (
+                          <button
+                            key={cat.id}
+                            onClick={() => {
+                              setSelectedCategoryId(cat.id);
+                              setShowMobileProgress(false);
+                            }}
+                            className="w-full p-3 bg-teal-50 rounded-xl border border-teal-200 text-left"
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className="font-medium text-teal-700">{cat.name}</span>
+                              <span className="text-xs bg-teal-500 text-white px-2 py-0.5 rounded-full">
+                                {selectedItems.length}件
+                              </span>
+                            </div>
+                            <div className="mt-1 text-sm text-gray-600">
+                              {selectedItems.map(i => i.product.name).join(', ')}
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </>
+        )}
 
         {/* 比較バー（PC用） */}
         {compareProducts.length > 0 && (
