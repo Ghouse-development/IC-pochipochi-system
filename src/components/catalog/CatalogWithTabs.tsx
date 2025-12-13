@@ -790,47 +790,21 @@ export const CatalogWithTabs: React.FC = () => {
                             )}
                           </div>
 
-                          {/* 比較ボタン（常に表示） */}
+                          {/* 比較ボタン（タッチしやすいサイズ） */}
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
                               handleToggleCompare(item);
                             }}
-                            className={`absolute top-2 right-2 p-2 rounded-full shadow-sm transition-all ${
+                            className={`absolute top-2 right-2 p-2.5 rounded-full shadow-md transition-all ${
                               inCompare
-                                ? 'bg-purple-500 text-white'
-                                : 'bg-white/90 text-gray-600 hover:bg-purple-100 hover:text-purple-600'
+                                ? 'bg-purple-500 text-white scale-110'
+                                : 'bg-white text-gray-500 hover:bg-purple-50 hover:text-purple-600'
                             }`}
                             title={inCompare ? '比較から削除' : '比較に追加'}
                           >
-                            <Scale className="w-4 h-4" />
+                            <Scale className="w-5 h-5" />
                           </button>
-
-                          {/* ホバーアクション */}
-                          <div className={`absolute inset-0 bg-black/40 flex items-center justify-center gap-2 transition-opacity duration-300 ${isHovered && !inCart ? 'opacity-100' : 'opacity-0'}`}>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleOpenDetail(item);
-                              }}
-                              className="p-3 bg-white/90 rounded-full hover:bg-white transition-transform hover:scale-110"
-                              title="詳細を見る"
-                            >
-                              <Eye className="w-5 h-5 text-gray-700" />
-                            </button>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleToggleCompare(item);
-                              }}
-                              className={`p-3 rounded-full transition-transform hover:scale-110 ${
-                                inCompare ? 'bg-purple-500 text-white' : 'bg-white/90 hover:bg-purple-100'
-                              }`}
-                              title={inCompare ? '比較から削除' : '比較に追加'}
-                            >
-                              <Scale className={`w-5 h-5 ${inCompare ? 'text-white' : 'text-gray-700'}`} />
-                            </button>
-                          </div>
 
                           {/* 選択済みオーバーレイ */}
                           {inCart && (
@@ -871,16 +845,29 @@ export const CatalogWithTabs: React.FC = () => {
                               <X className="w-4 h-4" />
                               選択を解除
                             </button>
-                          ) : (
+                          ) : (item.variants?.length || 0) > 1 ? (
+                            /* 複数色 → 詳細モーダルで色選択 */
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleOpenDetail(item);
                               }}
-                              className="w-full py-3 rounded-xl text-sm font-bold bg-gradient-to-r from-teal-500 to-emerald-500 text-white hover:from-teal-600 hover:to-emerald-600 flex items-center justify-center gap-2 shadow-lg shadow-teal-200 hover:shadow-xl hover:shadow-teal-300 transition-all active:scale-95"
+                              className="w-full py-3 rounded-xl text-sm font-bold bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 flex items-center justify-center gap-2 shadow-lg shadow-blue-200 transition-all active:scale-95"
                             >
                               <Eye className="w-4 h-4" />
-                              詳細を見る
+                              {item.variants?.length}色から選ぶ
+                            </button>
+                          ) : (
+                            /* 単色 → 直接カートに追加 */
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleAddToCart(item);
+                              }}
+                              className="w-full py-3 rounded-xl text-sm font-bold bg-gradient-to-r from-teal-500 to-emerald-500 text-white hover:from-teal-600 hover:to-emerald-600 flex items-center justify-center gap-2 shadow-lg shadow-teal-200 transition-all active:scale-95"
+                            >
+                              <ShoppingCart className="w-4 h-4" />
+                              選択する
                             </button>
                           )}
                         </div>
