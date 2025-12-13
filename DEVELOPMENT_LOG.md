@@ -5,6 +5,48 @@
 
 ## 2024年12月 - 100社ローンチ対応
 
+### v2.9.0 - 採用率分析・時短機能強化 (2024-12-13)
+
+#### 採用率・未選択アイテム集計機能
+- **useStatisticsStore拡張**
+  - `recordView`: 商品詳細閲覧時に自動記録
+  - `getAdoptionRates`: 閲覧→採用の変換率計算
+  - `getUnselectedProducts`: 閲覧されたが未採用の商品リスト
+  - `getLowAdoptionProducts`: 採用率が低い商品（閾値設定可能）
+  - `getCategoryAdoptionRates`: カテゴリ別採用率
+
+#### 管理画面「採用統計」タブ強化
+- サマリーカード（4指標）
+  - 総閲覧商品数
+  - 採用商品数
+  - 未採用商品数
+  - 低採用率商品数（30%未満）
+- カテゴリ別採用率プログレスバー
+- 未採用商品リスト（閲覧回数順）
+- 低採用率商品リスト
+- 人気商品TOP10（売上合計表示）
+
+#### 部屋別内装プランナー大幅改善
+- **全室一括設定機能**
+  - クロス・床を全室に一括適用
+  - 部屋グループ別適用（LDK/寝室/水回り/共有スペース）
+- **標準仕様で自動設定**ボタン追加
+- 商品検索機能（ピッカー内）
+- 同タイプ部屋へのコピー機能
+- カート連携（選択した商品をカートに追加）
+- ダークモード完全対応
+- ConfirmDialog統合
+
+#### 変更ファイル
+```
+src/stores/useStatisticsStore.ts              # 閲覧追跡・採用率分析追加
+src/components/catalog/ProductDetailModal.tsx  # 閲覧記録統合
+src/components/admin/AdminDashboard.tsx       # 採用統計UI強化
+src/components/interior/RoomInteriorSelector.tsx # 大幅改善
+```
+
+---
+
 ### v2.8.0 - 100点UX達成・プロフェッショナル品質 (2024-12-13)
 
 #### 確認ダイアログシステム刷新
