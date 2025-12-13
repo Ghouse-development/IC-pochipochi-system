@@ -2,10 +2,6 @@ import React, { useState } from 'react';
 import { Download, Upload, AlertTriangle, CheckCircle, Database, RefreshCw, Trash2, HardDrive } from 'lucide-react';
 import { Button } from '../common/Button';
 import { Card } from '../common/Card';
-import { useCartStore } from '../../stores/useCartStore';
-import { useStatisticsStore } from '../../stores/useStatisticsStore';
-import { useVendorOrderStore } from '../../stores/useVendorOrderStore';
-import { useVersionStore } from '../../stores/useVersionStore';
 
 interface BackupData {
   version: string;
@@ -316,11 +312,10 @@ export const DataBackup: React.FC = () => {
               disabled={isImporting}
               className="hidden"
             />
-            <Button
-              variant="outline"
-              as="span"
-              disabled={isImporting}
-              className="w-full cursor-pointer"
+            <span
+              className={`inline-flex items-center justify-center w-full px-4 py-2 border border-gray-300 rounded-md text-sm font-medium cursor-pointer ${
+                isImporting ? 'bg-gray-100 text-gray-400' : 'bg-white text-gray-700 hover:bg-gray-50'
+              }`}
             >
               {isImporting ? (
                 <>
@@ -333,7 +328,7 @@ export const DataBackup: React.FC = () => {
                   ファイルを選択して復元
                 </>
               )}
-            </Button>
+            </span>
           </label>
         </Card>
       </div>

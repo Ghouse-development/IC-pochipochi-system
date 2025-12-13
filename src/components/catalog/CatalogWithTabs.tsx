@@ -685,12 +685,7 @@ export const CatalogWithTabs: React.FC = () => {
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), 3000);
     }
-
-    // クイック選択モードで自動的に次のカテゴリへ
-    if (quickSelectMode) {
-      setTimeout(() => goToNextCategory(), 300);
-    }
-  }, [addItem, cartItems.length, selectedPlanId, toast, quickSelectMode, goToNextCategory]);
+  }, [addItem, cartItems.length, selectedPlanId, toast]);
 
   const handleRemoveFromCart = useCallback((itemId: string) => {
     const item = cartItems.find(i => i.product.id === itemId);
