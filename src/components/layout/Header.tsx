@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { ShoppingCart, User, Settings, Menu, X, FileText, Upload } from 'lucide-react';
+import { ShoppingCart, User, Settings, Menu, X, FileText, Upload, Share2, Scale } from 'lucide-react';
 import { useCartStore } from '../../stores/useCartStore';
 import { formatPrice } from '../../lib/utils';
 
 interface HeaderProps {
   onCartClick: () => void;
+  onShareClick?: () => void;
+  onCompareClick?: () => void;
+  compareCount?: number;
   isAdmin?: boolean;
   onAdminClick?: () => void;
   onHierarchyClick?: () => void;
@@ -13,6 +16,9 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({
   onCartClick,
+  onShareClick,
+  onCompareClick,
+  compareCount = 0,
   isAdmin = false,
   onAdminClick,
   onHierarchyClick,
@@ -43,6 +49,38 @@ export const Header: React.FC<HeaderProps> = ({
             
             {/* 右側のアクション */}
             <div className="flex items-center gap-2">
+              {/* 比較ボタン */}
+              {onCompareClick && (
+                <button
+                  onClick={onCompareClick}
+                  className={`relative p-2 rounded-lg transition-colors ${
+                    compareCount > 0
+                      ? 'bg-purple-100 text-purple-600 hover:bg-purple-200'
+                      : 'hover:bg-gray-50 text-gray-500'
+                  }`}
+                  title="商品比較"
+                >
+                  <Scale className="w-5 h-5" />
+                  {compareCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-purple-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                      {compareCount}
+                    </span>
+                  )}
+                </button>
+              )}
+
+              {/* シェアボタン */}
+              {onShareClick && itemCount > 0 && (
+                <button
+                  onClick={onShareClick}
+                  className="hidden sm:flex items-center gap-1 px-3 py-2 text-teal-600 hover:bg-teal-50 rounded-lg transition-colors"
+                  title="シェア"
+                >
+                  <Share2 className="w-4 h-4" />
+                  <span className="text-sm font-medium">シェア</span>
+                </button>
+              )}
+
               {/* カートボタン */}
               <button
                 onClick={onCartClick}

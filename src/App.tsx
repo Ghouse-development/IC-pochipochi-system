@@ -8,8 +8,11 @@ import { ConfirmOrderModal } from './components/catalog/ConfirmOrderModal';
 import { AdminDashboard } from './components/admin/AdminDashboard';
 import { HierarchyPage } from './pages/HierarchyPage';
 import { ImageTestPage } from './pages/ImageTestPage';
+import { ShareModal } from './components/common/ShareModal';
+import { ProductCompareModal } from './components/catalog/ProductCompareModal';
 import { useVersionStore } from './stores/useVersionStore';
 import { useCartStore } from './stores/useCartStore';
+import type { Product } from './types/product';
 
 // Environment check for demo mode
 const isDemoMode = import.meta.env.VITE_DEMO_MODE === 'true' || !import.meta.env.VITE_SUPABASE_URL;
@@ -22,6 +25,9 @@ function AppContent() {
   const [showHierarchy, setShowHierarchy] = useState(false);
   const [showImageTest, setShowImageTest] = useState(false);
   const [useDemoMode, setUseDemoMode] = useState(isDemoMode);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
+  const [compareProducts, setCompareProducts] = useState<Product[]>([]);
 
   const currentVersion = useVersionStore((state) => state.currentVersion);
   const items = useCartStore((state) => state.items);
@@ -79,6 +85,9 @@ function AppContent() {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Header
         onCartClick={() => setIsCartOpen(true)}
+        onShareClick={() => setIsShareModalOpen(true)}
+        onCompareClick={() => setIsCompareModalOpen(true)}
+        compareCount={compareProducts.length}
         isAdmin={isAdmin}
         onAdminClick={() => setShowAdmin(true)}
         onHierarchyClick={() => setShowHierarchy(true)}
@@ -100,6 +109,18 @@ function AppContent() {
       <ConfirmOrderModal
         isOpen={isConfirmModalOpen}
         onClose={() => setIsConfirmModalOpen(false)}
+      />
+
+      <ShareModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+      />
+
+      <ProductCompareModal
+        isOpen={isCompareModalOpen}
+        onClose={() => setIsCompareModalOpen(false)}
+        products={compareProducts}
+        onRemoveProduct={(productId) => setCompareProducts(prev => prev.filter(p => p.id !== productId))}
       />
     </div>
   );
@@ -133,6 +154,9 @@ function AppContentWithDemoSwitch({ onDemoSwitch }: { onDemoSwitch: () => void }
   const [showAdmin, setShowAdmin] = useState(false);
   const [showHierarchy, setShowHierarchy] = useState(false);
   const [showImageTest, setShowImageTest] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
+  const [compareProducts, setCompareProducts] = useState<Product[]>([]);
 
   const currentVersion = useVersionStore((state) => state.currentVersion);
   const items = useCartStore((state) => state.items);
@@ -185,6 +209,9 @@ function AppContentWithDemoSwitch({ onDemoSwitch }: { onDemoSwitch: () => void }
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Header
         onCartClick={() => setIsCartOpen(true)}
+        onShareClick={() => setIsShareModalOpen(true)}
+        onCompareClick={() => setIsCompareModalOpen(true)}
+        compareCount={compareProducts.length}
         isAdmin={isAdmin}
         onAdminClick={() => setShowAdmin(true)}
         onHierarchyClick={() => setShowHierarchy(true)}
@@ -204,6 +231,18 @@ function AppContentWithDemoSwitch({ onDemoSwitch }: { onDemoSwitch: () => void }
       <ConfirmOrderModal
         isOpen={isConfirmModalOpen}
         onClose={() => setIsConfirmModalOpen(false)}
+      />
+
+      <ShareModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+      />
+
+      <ProductCompareModal
+        isOpen={isCompareModalOpen}
+        onClose={() => setIsCompareModalOpen(false)}
+        products={compareProducts}
+        onRemoveProduct={(productId) => setCompareProducts(prev => prev.filter(p => p.id !== productId))}
       />
     </div>
   );

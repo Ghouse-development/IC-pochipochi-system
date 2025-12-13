@@ -4,6 +4,8 @@ import { supabase } from '../../lib/supabase';
 import { useCartStore } from '../../stores/useCartStore';
 import { formatPrice } from '../../lib/utils';
 import type { ItemWithDetails, Category, Product } from '../../types/database';
+import { RecommendationPanel } from './RecommendationPanel';
+import type { Product as CatalogProduct } from '../../types/product';
 
 // 100点UIアニメーション
 const animations = `
@@ -98,6 +100,36 @@ const convertToCartItem = (item: ItemWithDetails, selectedPlanId: string) => {
       thumbnailUrl: image?.thumbnail_url || undefined,
     } : undefined,
     imageUrl: image?.image_url,
+  };
+};
+
+// DBアイテムをRecommendation用のCatalogProductに変換
+const convertToCatalogProduct = (item: ItemWithDetails): CatalogProduct => {
+  const pricing = item.pricing?.find(p => p.product?.code === 'LACIE');
+
+  return {
+    id: item.id,
+    categoryId: item.category_id || '',
+    categoryName: item.category?.name || item.category_name || '',
+    subcategory: '',
+    name: item.name,
+    manufacturer: item.manufacturer || '',
+    modelNumber: item.model_number || '',
+    unit: (item.unit?.symbol || '式') as CatalogProduct['unit'],
+    isOption: pricing ? !pricing.is_standard : false,
+    description: '',
+    pricing: item.pricing?.map(p => ({
+      plan: (p.product?.code || 'LACIE') as 'LACIE' | 'HOURS' | 'LIFE',
+      planId: (p.product?.code || undefined) as 'LACIE' | 'HOURS' | 'LIFE' | undefined,
+      price: p.price,
+    })) || [],
+    variants: item.variants?.map(v => ({
+      id: v.id,
+      color: v.color_name,
+      colorCode: v.color_code || undefined,
+      imageUrl: v.images?.[0]?.image_url,
+      thumbnailUrl: v.images?.[0]?.thumbnail_url || undefined,
+    })) || [],
   };
 };
 
@@ -283,6 +315,33 @@ export const CatalogWithTabs: React.FC = () => {
       return true;
     });
   }, [items, searchTerm, filterType, selectedPlanId]);
+
+  // レコメンド用にCatalogProduct形式に変換
+  const catalogProducts = useMemo(() => {
+    return items.map(convertToCatalogProduct);
+  }, [items]);
+
+  // カートに入っている商品をCatalogProduct形式で取得
+  const selectedProducts = useMemo(() => {
+    return cartItems.map(item => ({
+      id: item.product.id,
+      categoryId: '',
+      categoryName: item.product.categoryName,
+      subcategory: '',
+      name: item.product.name,
+      manufacturer: item.product.manufacturer,
+      modelNumber: item.product.modelNumber,
+      unit: (item.product.unit || '式') as CatalogProduct['unit'],
+      isOption: item.product.isOption,
+      description: '',
+      pricing: item.product.pricing.map(p => ({
+        plan: (p.planId || 'LACIE') as 'LACIE' | 'HOURS' | 'LIFE',
+        planId: p.planId as 'LACIE' | 'HOURS' | 'LIFE' | undefined,
+        price: p.price,
+      })),
+      variants: item.product.variants,
+    })) as CatalogProduct[];
+  }, [cartItems]);
 
   // カートに追加
   const handleAddToCart = useCallback((item: ItemWithDetails) => {
@@ -728,6 +787,23 @@ export const CatalogWithTabs: React.FC = () => {
                       </div>
                     );
                   })}
+                </div>
+              )}
+
+              {/* レコメンドパネル */}
+              {catalogProducts.length > 0 && (
+                <div className="mt-8 pb-8">
+                  <RecommendationPanel
+                    selectedProducts={selectedProducts}
+                    allProducts={catalogProducts}
+                    onSelectProduct={(product) => {
+                      // 該当するDBアイテムを探してカートに追加
+                      const dbItem = items.find(item => item.id === product.id);
+                      if (dbItem) {
+                        handleAddToCart(dbItem);
+                      }
+                    }}
+                  />
                 </div>
               )}
             </div>
