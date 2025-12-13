@@ -5,6 +5,51 @@
 
 ## 2024年12月 - 100社ローンチ対応
 
+### v2.10.0 - サブカテゴリ・色フィルター・型安全性強化 (2024-12-13)
+
+#### サブカテゴリ・色フィルター機能
+- **サブカテゴリフィルター**
+  - カテゴリ選択時に種類（サイディング/塗り壁等）でフィルタリング
+  - ドロップダウンで選択
+  - URLパラメータ永続化（`?sub=`）
+- **色フィルター**
+  - バリアントの色で商品を絞り込み
+  - 利用可能な色を自動抽出
+  - URLパラメータ永続化（`?color=`）
+- フィルタークリアボタン
+- 結果件数リアルタイム表示
+
+#### 型安全性向上
+- `as any` を適切な型キャストに全面置換
+- StepId型・FilterTypeValue型定義追加
+- convertToCartItem関数にCatalogProduct型明示
+- useCartStore: PlanType型使用
+- useNotificationStore: NotificationData型定義
+- version.ts: unknown型採用
+
+#### ロガーユーティリティ新規作成
+- `src/utils/logger.ts` 追加
+- 開発/本番環境でログ出力制御
+- debug/info/warn/error レベル対応
+- emailService.tsをloggerに移行
+
+#### その他改善
+- RoomInteriorSelector → カート連携完成
+- 不要なconsole.log削除
+- TODOコメント解消
+
+#### 変更ファイル
+```
+src/components/catalog/CatalogWithTabs.tsx  # フィルター追加・型改善
+src/services/emailService.ts                # logger移行
+src/stores/useCartStore.ts                  # PlanType型
+src/stores/useNotificationStore.ts          # NotificationData型
+src/types/version.ts                        # unknown型
+src/utils/logger.ts                         # 新規作成
+```
+
+---
+
 ### v2.9.0 - 採用率分析・時短機能強化 (2024-12-13)
 
 #### 採用率・未選択アイテム集計機能
