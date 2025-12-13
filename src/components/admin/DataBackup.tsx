@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { Download, Upload, AlertTriangle, CheckCircle, Database, RefreshCw, Trash2, HardDrive } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Download, Upload, AlertTriangle, CheckCircle, Database, RefreshCw, Trash2, HardDrive, Cloud, FileSpreadsheet } from 'lucide-react';
 import { Button } from '../common/Button';
 import { Card } from '../common/Card';
 import { ConfirmDialog } from '../common/ConfirmDialog';
+import { supabase } from '../../lib/supabase';
 
 interface BackupData {
   version: string;
@@ -16,13 +17,151 @@ interface BackupData {
   };
 }
 
+// Supabaseデータ統計
+interface SupabaseStats {
+  items: number;
+  variants: number;
+  pricing: number;
+  categories: number;
+  projects: number;
+  selections: number;
+}
+
 export const DataBackup: React.FC = () => {
   const [isExporting, setIsExporting] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
+  const [isExportingSupabase, setIsExportingSupabase] = useState(false);
   const [lastBackup, setLastBackup] = useState<string | null>(
     localStorage.getItem('lifex-last-backup')
   );
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [supabaseStats, setSupabaseStats] = useState<SupabaseStats | null>(null);
+  const [loadingStats, setLoadingStats] = useState(true);
+
+  // Supabase統計を取得
+  useEffect(() => {
+    const fetchStats = async () => {
+      setLoadingStats(true);
+      try {
+        const [items, variants, pricing, categories, projects, selections] = await Promise.all([
+          supabase.from('items').select('id', { count: 'exact', head: true }),
+          supabase.from('item_variants').select('id', { count: 'exact', head: true }),
+          supabase.from('item_pricing').select('id', { count: 'exact', head: true }),
+          supabase.from('categories').select('id', { count: 'exact', head: true }),
+          supabase.from('projects').select('id', { count: 'exact', head: true }),
+          supabase.from('selections').select('id', { count: 'exact', head: true }),
+        ]);
+
+        setSupabaseStats({
+          items: items.count || 0,
+          variants: variants.count || 0,
+          pricing: pricing.count || 0,
+          categories: categories.count || 0,
+          projects: projects.count || 0,
+          selections: selections.count || 0,
+        });
+      } catch (error) {
+        console.error('Failed to fetch Supabase stats:', error);
+      } finally {
+        setLoadingStats(false);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
+  // SupabaseデータをCSVエクスポート
+  const handleExportSupabase = async (tableName: string) => {
+    setIsExportingSupabase(true);
+    setMessage(null);
+
+    try {
+      const { data, error } = await supabase.from(tableName).select('*');
+      if (error) throw error;
+
+      if (!data || data.length === 0) {
+        setMessage({ type: 'error', text: `${tableName}にデータがありません` });
+        return;
+      }
+
+      // CSVに変換
+      const headers = Object.keys(data[0]);
+      const csvContent = [
+        headers.join(','),
+        ...data.map(row =>
+          headers.map(h => {
+            const val = row[h];
+            if (val === null || val === undefined) return '';
+            if (typeof val === 'object') return `"${JSON.stringify(val).replace(/"/g, '""')}"`;
+            if (typeof val === 'string' && (val.includes(',') || val.includes('"') || val.includes('\n'))) {
+              return `"${val.replace(/"/g, '""')}"`;
+            }
+            return val;
+          }).join(',')
+        )
+      ].join('\n');
+
+      const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${tableName}-${new Date().toISOString().split('T')[0]}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      setMessage({ type: 'success', text: `${tableName}をエクスポートしました` });
+    } catch (error) {
+      console.error('Export error:', error);
+      setMessage({ type: 'error', text: 'エクスポートに失敗しました' });
+    } finally {
+      setIsExportingSupabase(false);
+    }
+  };
+
+  // Supabase全データをJSONエクスポート
+  const handleExportAllSupabase = async () => {
+    setIsExportingSupabase(true);
+    setMessage(null);
+
+    try {
+      const [items, variants, pricing, categories] = await Promise.all([
+        supabase.from('items').select('*'),
+        supabase.from('item_variants').select('*'),
+        supabase.from('item_pricing').select('*'),
+        supabase.from('categories').select('*'),
+      ]);
+
+      const exportData = {
+        exportedAt: new Date().toISOString(),
+        version: '2.10.0',
+        data: {
+          items: items.data || [],
+          item_variants: variants.data || [],
+          item_pricing: pricing.data || [],
+          categories: categories.data || [],
+        }
+      };
+
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `supabase-backup-${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      setMessage({ type: 'success', text: 'Supabase全データをエクスポートしました' });
+    } catch (error) {
+      console.error('Export error:', error);
+      setMessage({ type: 'error', text: 'エクスポートに失敗しました' });
+    } finally {
+      setIsExportingSupabase(false);
+    }
+  };
 
   // Confirm dialog state
   const [confirmDialog, setConfirmDialog] = useState<{
@@ -294,7 +433,91 @@ export const DataBackup: React.FC = () => {
         </div>
       </Card>
 
-      {/* バックアップ操作 */}
+      {/* Supabaseデータ情報 */}
+      <Card className="p-4">
+        <div className="flex items-center gap-3 mb-4">
+          <Cloud className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+          <h3 className="font-semibold text-gray-900 dark:text-gray-100">Supabaseデータ（商品マスター）</h3>
+        </div>
+
+        {loadingStats ? (
+          <div className="flex items-center justify-center py-4">
+            <RefreshCw className="w-5 h-5 animate-spin text-gray-400" />
+          </div>
+        ) : supabaseStats ? (
+          <>
+            <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-4">
+              <div className="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-3 text-center">
+                <p className="text-2xl font-bold text-blue-900 dark:text-blue-100">{supabaseStats.items}</p>
+                <p className="text-xs text-blue-600 dark:text-blue-400">商品</p>
+              </div>
+              <div className="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-3 text-center">
+                <p className="text-2xl font-bold text-blue-900 dark:text-blue-100">{supabaseStats.variants}</p>
+                <p className="text-xs text-blue-600 dark:text-blue-400">バリアント</p>
+              </div>
+              <div className="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-3 text-center">
+                <p className="text-2xl font-bold text-blue-900 dark:text-blue-100">{supabaseStats.pricing}</p>
+                <p className="text-xs text-blue-600 dark:text-blue-400">価格</p>
+              </div>
+              <div className="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-3 text-center">
+                <p className="text-2xl font-bold text-blue-900 dark:text-blue-100">{supabaseStats.categories}</p>
+                <p className="text-xs text-blue-600 dark:text-blue-400">カテゴリ</p>
+              </div>
+              <div className="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-3 text-center">
+                <p className="text-2xl font-bold text-blue-900 dark:text-blue-100">{supabaseStats.projects}</p>
+                <p className="text-xs text-blue-600 dark:text-blue-400">プロジェクト</p>
+              </div>
+              <div className="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-3 text-center">
+                <p className="text-2xl font-bold text-blue-900 dark:text-blue-100">{supabaseStats.selections}</p>
+                <p className="text-xs text-blue-600 dark:text-blue-400">選択履歴</p>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleExportAllSupabase}
+                disabled={isExportingSupabase}
+              >
+                <Download className="w-4 h-4 mr-1" />
+                全データJSON
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleExportSupabase('items')}
+                disabled={isExportingSupabase}
+              >
+                <FileSpreadsheet className="w-4 h-4 mr-1" />
+                商品CSV
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleExportSupabase('item_variants')}
+                disabled={isExportingSupabase}
+              >
+                <FileSpreadsheet className="w-4 h-4 mr-1" />
+                バリアントCSV
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleExportSupabase('item_pricing')}
+                disabled={isExportingSupabase}
+              >
+                <FileSpreadsheet className="w-4 h-4 mr-1" />
+                価格CSV
+              </Button>
+            </div>
+          </>
+        ) : (
+          <p className="text-sm text-gray-500">データの取得に失敗しました</p>
+        )}
+      </Card>
+
+      {/* ローカルバックアップ操作 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card className="p-6">
           <div className="flex items-center gap-3 mb-4">

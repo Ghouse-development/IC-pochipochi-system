@@ -7,11 +7,18 @@
 
 ## バージョン履歴
 
+### v2.11.0 (2025-12-13)
+- ユーザーマニュアル追加 (docs/USER_MANUAL.md)
+- 管理者マニュアル追加 (docs/ADMIN_MANUAL.md)
+- バックアップ・メンテナンス用SQL関数追加 (sql/012_backup_functions.sql)
+- DataBackupコンポーネント強化（Supabaseデータ統計・CSV/JSONエクスポート）
+
 ### v2.10.0 (2025-12-13)
 - Supabaseデータインポートスクリプト追加
 - ノーコード運用対応（Supabase管理画面から商品データ編集可能）
 - CatalogWithTabsのSupabase優先・静的データフォールバック方式実装
 - RLSポリシー修正（匿名アクセス許可）
+- 196商品・486バリアント・1,268価格レコードをSupabaseにインポート
 
 ### v2.9.0 (2025-12-12)
 - ESLintエラー修正（25件→0件）
