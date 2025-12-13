@@ -698,6 +698,32 @@ export const CatalogWithTabs: React.FC = () => {
     }
   }, [removeItem, cartItems, toast]);
 
+  // 標準品一括選択
+  const handleSelectAllStandard = useCallback(() => {
+    const standardItems = filteredItems.filter(item => {
+      const pricing = item.pricing?.find(p => p.product?.code === selectedPlanId);
+      return pricing?.is_standard && !cartItemIds.has(item.id);
+    });
+
+    if (standardItems.length === 0) {
+      toast.info('選択可能な標準品がありません');
+      return;
+    }
+
+    standardItems.forEach(item => {
+      const cartProduct = convertToCartItem(item, selectedPlanId);
+      addItem(cartProduct as any, 1);
+    });
+
+    toast.success(`${standardItems.length}件の標準品を選択しました`);
+
+    // 紙吹雪
+    if (standardItems.length >= 3) {
+      setShowConfetti(true);
+      setTimeout(() => setShowConfetti(false), 3000);
+    }
+  }, [filteredItems, selectedPlanId, cartItemIds, addItem, toast]);
+
   // 商品詳細モーダルを開く（URL付き）
   const handleOpenDetail = useCallback((item: ItemWithDetails) => {
     const product = convertToCatalogProduct(item);
@@ -1262,6 +1288,16 @@ export const CatalogWithTabs: React.FC = () => {
                     </span>
                   )}
                 </div>
+
+                {/* 標準品一括選択 */}
+                <button
+                  onClick={handleSelectAllStandard}
+                  className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium bg-gradient-to-r from-teal-500 to-emerald-500 text-white shadow-md hover:shadow-lg transition-all"
+                  title="このカテゴリの標準品をすべて選択"
+                >
+                  <Check className="w-4 h-4" />
+                  <span className="hidden md:inline">標準一括</span>
+                </button>
 
                 {/* クイック選択モードトグル */}
                 <button
