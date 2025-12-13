@@ -57,7 +57,7 @@ export const Header: React.FC<HeaderProps> = ({
                   )}
                 </div>
                 <div className="hidden sm:block text-left">
-                  <p className="text-xs text-gray-500">合計</p>
+                  <p className="text-xs text-gray-500">合計<span className="ml-1 text-gray-400">税別</span></p>
                   <p className="text-sm font-bold text-gray-900">{formatPrice(totalPrice)}</p>
                 </div>
               </button>

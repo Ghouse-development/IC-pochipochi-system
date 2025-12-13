@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Trash2, Plus, Minus, Save, CheckCircle, Download, FileText, Star, ShoppingBag } from 'lucide-react';
 import { useCartStore } from '../../stores/useCartStore';
 import { formatPrice } from '../../lib/utils';
+import { UNIT_SYMBOLS } from '../../types/product';
 import { Badge } from '../common/Badge';
 import { exportToExcel, exportToPDF } from '../../utils/exportEstimate';
 import { supabase } from '../../lib/supabase';
@@ -238,16 +239,16 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
                           </span>
                         )}
                         <span className="text-xs text-gray-500">
-                          {item.product.unit}
+                          {UNIT_SYMBOLS[item.product.unit] || item.product.unit}
                         </span>
                       </div>
-                      
+
                       <div className="text-right">
                         <p className="text-sm font-semibold">
                           {formatPrice(price * item.quantity)}
                         </p>
                         <p className="text-xs text-gray-500">
-                          {formatPrice(price)} / {item.product.unit}
+                          {formatPrice(price)}/{UNIT_SYMBOLS[item.product.unit] || item.product.unit}
                         </p>
                       </div>
                     </div>
@@ -268,7 +269,10 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
         {items.length > 0 && (
           <div className="border-t border-gray-200 p-4">
             <div className="flex items-center justify-between mb-4 bg-gradient-to-r from-teal-50 to-teal-100 -mx-4 px-4 py-3 border-y border-teal-200">
-              <span className="text-lg font-semibold text-gray-700">オプション合計</span>
+              <div>
+                <span className="text-lg font-semibold text-gray-700">オプション合計</span>
+                <span className="text-xs text-gray-500 ml-2">税別</span>
+              </div>
               <span className="text-2xl font-bold text-teal-600">
                 {formatPrice(totalPrice)}
               </span>

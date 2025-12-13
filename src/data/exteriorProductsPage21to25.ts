@@ -1,153 +1,26 @@
 // エクステリア（外装）製品データ - ページ21-25追加分
+// 色バリアント統合版
 import type { Product } from '../types/product';
 
 export const exteriorProductsPage21to25: Product[] = [
-  // ===== 21ページ - ポーチ ランドストン 4色 =====
+  // ===== 21ページ - ポーチ ランドストン 600角 =====
   {
-    id: 'ext-porch-landstone-001',
+    id: 'ext-porch-landstone-600',
     categoryId: 'porch-tile',
     categoryName: 'ポーチ',
     subcategory: 'ランドストン',
     name: 'ランドストン 600角',
     manufacturer: 'Nagoya mozaic',
-    modelNumber: 'CRD-X3910G',
+    modelNumber: 'CRD-X39xxG',
     unit: 'sqm',
     isOption: true,
     description: '600×600 岩面タイル ※外装標準品からの変更差額',
-    variants: [{ id: 'v1', color: 'CRD-X3910G', colorCode: '', images: [] }],
-    pricing: [
-      { plan: 'LACIE', price: 5000 },
-      { plan: 'HOURS', price: 5000 },
-      { plan: 'LIFE+', price: 32000 },
-      { plan: 'LIFE', price: 32000 }
-    ]
-  },
-  {
-    id: 'ext-porch-landstone-002',
-    categoryId: 'porch-tile',
-    categoryName: 'ポーチ',
-    subcategory: 'ランドストン',
-    name: 'ランドストン 600角',
-    manufacturer: 'Nagoya mozaic',
-    modelNumber: 'CRD-X3920G',
-    unit: 'sqm',
-    isOption: true,
-    description: '600×600 岩面タイル ※外装標準品からの変更差額',
-    variants: [{ id: 'v1', color: 'CRD-X3920G', colorCode: '', images: [] }],
-    pricing: [
-      { plan: 'LACIE', price: 5000 },
-      { plan: 'HOURS', price: 5000 },
-      { plan: 'LIFE+', price: 32000 },
-      { plan: 'LIFE', price: 32000 }
-    ]
-  },
-  {
-    id: 'ext-porch-landstone-003',
-    categoryId: 'porch-tile',
-    categoryName: 'ポーチ',
-    subcategory: 'ランドストン',
-    name: 'ランドストン 600角',
-    manufacturer: 'Nagoya mozaic',
-    modelNumber: 'CRD-X3930G',
-    unit: 'sqm',
-    isOption: true,
-    description: '600×600 岩面タイル ※外装標準品からの変更差額',
-    variants: [{ id: 'v1', color: 'CRD-X3930G', colorCode: '', images: [] }],
-    pricing: [
-      { plan: 'LACIE', price: 5000 },
-      { plan: 'HOURS', price: 5000 },
-      { plan: 'LIFE+', price: 32000 },
-      { plan: 'LIFE', price: 32000 }
-    ]
-  },
-  {
-    id: 'ext-porch-landstone-004',
-    categoryId: 'porch-tile',
-    categoryName: 'ポーチ',
-    subcategory: 'ランドストン',
-    name: 'ランドストン 600角',
-    manufacturer: 'Nagoya mozaic',
-    modelNumber: 'CRD-X3940G',
-    unit: 'sqm',
-    isOption: true,
-    description: '600×600 岩面タイル ※外装標準品からの変更差額',
-    variants: [{ id: 'v1', color: 'CRD-X3940G', colorCode: '', images: [] }],
-    pricing: [
-      { plan: 'LACIE', price: 5000 },
-      { plan: 'HOURS', price: 5000 },
-      { plan: 'LIFE+', price: 32000 },
-      { plan: 'LIFE', price: 32000 }
-    ]
-  },
-  {
-    id: 'ext-porch-landstone-005',
-    categoryId: 'porch-tile',
-    categoryName: 'ポーチ',
-    subcategory: 'ランドストン',
-    name: 'ランドストン 600×300',
-    manufacturer: 'Nagoya mozaic',
-    modelNumber: 'CRD-U3910G',
-    unit: 'sqm',
-    isOption: true,
-    description: '600×300 岩面タイル ※外装標準品からの変更差額',
-    variants: [{ id: 'v1', color: 'CRD-U3910G', colorCode: '', images: [] }],
-    pricing: [
-      { plan: 'LACIE', price: 5000 },
-      { plan: 'HOURS', price: 5000 },
-      { plan: 'LIFE+', price: 32000 },
-      { plan: 'LIFE', price: 32000 }
-    ]
-  },
-  {
-    id: 'ext-porch-landstone-006',
-    categoryId: 'porch-tile',
-    categoryName: 'ポーチ',
-    subcategory: 'ランドストン',
-    name: 'ランドストン 600×300',
-    manufacturer: 'Nagoya mozaic',
-    modelNumber: 'CRD-U3920G',
-    unit: 'sqm',
-    isOption: true,
-    description: '600×300 岩面タイル ※外装標準品からの変更差額',
-    variants: [{ id: 'v1', color: 'CRD-U3920G', colorCode: '', images: [] }],
-    pricing: [
-      { plan: 'LACIE', price: 5000 },
-      { plan: 'HOURS', price: 5000 },
-      { plan: 'LIFE+', price: 32000 },
-      { plan: 'LIFE', price: 32000 }
-    ]
-  },
-  {
-    id: 'ext-porch-landstone-007',
-    categoryId: 'porch-tile',
-    categoryName: 'ポーチ',
-    subcategory: 'ランドストン',
-    name: 'ランドストン 600×300',
-    manufacturer: 'Nagoya mozaic',
-    modelNumber: 'CRD-U3930G',
-    unit: 'sqm',
-    isOption: true,
-    description: '600×300 岩面タイル ※外装標準品からの変更差額',
-    variants: [{ id: 'v1', color: 'CRD-U3930G', colorCode: '', images: [] }],
-    pricing: [
-      { plan: 'LACIE', price: 5000 },
-      { plan: 'HOURS', price: 5000 },
-      { plan: 'LIFE+', price: 32000 },
-      { plan: 'LIFE', price: 32000 }
-    ]
-  },
-  {
-    id: 'ext-porch-landstone-008',
-    categoryId: 'porch-tile',
-    categoryName: 'ポーチ',
-    subcategory: 'ランドストン',
-    name: 'ランドストン 600×300',
-    manufacturer: 'Nagoya mozaic',
-    modelNumber: 'CRD-U3940G',
-    unit: 'sqm',
-    isOption: true,
-    description: '600×300 岩面タイル ※外装標準品からの変更差額',
-    variants: [{ id: 'v1', color: 'CRD-U3940G', colorCode: '', images: [] }],
+    variants: [
+      { id: 'v1', color: 'CRD-X3910G', colorCode: '', images: [] },
+      { id: 'v2', color: 'CRD-X3920G', colorCode: '', images: [] },
+      { id: 'v3', color: 'CRD-X3930G', colorCode: '', images: [] },
+      { id: 'v4', color: 'CRD-X3940G', colorCode: '', images: [] }
+    ],
     pricing: [
       { plan: 'LACIE', price: 5000 },
       { plan: 'HOURS', price: 5000 },
@@ -156,190 +29,24 @@ export const exteriorProductsPage21to25: Product[] = [
     ]
   },
 
-  // ===== 21ページ - ポーチ ピエトラソーニ 5色 =====
+  // ===== 21ページ - ポーチ ランドストン 600×300 =====
   {
-    id: 'ext-porch-pietra-001',
+    id: 'ext-porch-landstone-630',
     categoryId: 'porch-tile',
     categoryName: 'ポーチ',
-    subcategory: 'ピエトラソーニ',
-    name: 'ピエトラソーニ 600角',
+    subcategory: 'ランドストン',
+    name: 'ランドストン 600×300',
     manufacturer: 'Nagoya mozaic',
-    modelNumber: 'PAN-X8110G',
+    modelNumber: 'CRD-U39xxG',
     unit: 'sqm',
     isOption: true,
-    description: '600×600 粗目タイル ※外装標準品からの変更差額',
-    variants: [{ id: 'v1', color: 'PAN-X8110G', colorCode: '', images: [] }],
-    pricing: [
-      { plan: 'LACIE', price: 5000 },
-      { plan: 'HOURS', price: 5000 },
-      { plan: 'LIFE+', price: 32000 },
-      { plan: 'LIFE', price: 32000 }
-    ]
-  },
-  {
-    id: 'ext-porch-pietra-002',
-    categoryId: 'porch-tile',
-    categoryName: 'ポーチ',
-    subcategory: 'ピエトラソーニ',
-    name: 'ピエトラソーニ 600角',
-    manufacturer: 'Nagoya mozaic',
-    modelNumber: 'PAN-X8120G',
-    unit: 'sqm',
-    isOption: true,
-    description: '600×600 粗目タイル ※外装標準品からの変更差額',
-    variants: [{ id: 'v1', color: 'PAN-X8120G', colorCode: '', images: [] }],
-    pricing: [
-      { plan: 'LACIE', price: 5000 },
-      { plan: 'HOURS', price: 5000 },
-      { plan: 'LIFE+', price: 32000 },
-      { plan: 'LIFE', price: 32000 }
-    ]
-  },
-  {
-    id: 'ext-porch-pietra-003',
-    categoryId: 'porch-tile',
-    categoryName: 'ポーチ',
-    subcategory: 'ピエトラソーニ',
-    name: 'ピエトラソーニ 600角',
-    manufacturer: 'Nagoya mozaic',
-    modelNumber: 'PAN-X8130G',
-    unit: 'sqm',
-    isOption: true,
-    description: '600×600 粗目タイル ※外装標準品からの変更差額',
-    variants: [{ id: 'v1', color: 'PAN-X8130G', colorCode: '', images: [] }],
-    pricing: [
-      { plan: 'LACIE', price: 5000 },
-      { plan: 'HOURS', price: 5000 },
-      { plan: 'LIFE+', price: 32000 },
-      { plan: 'LIFE', price: 32000 }
-    ]
-  },
-  {
-    id: 'ext-porch-pietra-004',
-    categoryId: 'porch-tile',
-    categoryName: 'ポーチ',
-    subcategory: 'ピエトラソーニ',
-    name: 'ピエトラソーニ 600角',
-    manufacturer: 'Nagoya mozaic',
-    modelNumber: 'PAN-X8140G',
-    unit: 'sqm',
-    isOption: true,
-    description: '600×600 粗目タイル ※外装標準品からの変更差額',
-    variants: [{ id: 'v1', color: 'PAN-X8140G', colorCode: '', images: [] }],
-    pricing: [
-      { plan: 'LACIE', price: 5000 },
-      { plan: 'HOURS', price: 5000 },
-      { plan: 'LIFE+', price: 32000 },
-      { plan: 'LIFE', price: 32000 }
-    ]
-  },
-  {
-    id: 'ext-porch-pietra-005',
-    categoryId: 'porch-tile',
-    categoryName: 'ポーチ',
-    subcategory: 'ピエトラソーニ',
-    name: 'ピエトラソーニ 600角',
-    manufacturer: 'Nagoya mozaic',
-    modelNumber: 'PAN-X8150G',
-    unit: 'sqm',
-    isOption: true,
-    description: '600×600 粗目タイル ※外装標準品からの変更差額',
-    variants: [{ id: 'v1', color: 'PAN-X8150G', colorCode: '', images: [] }],
-    pricing: [
-      { plan: 'LACIE', price: 5000 },
-      { plan: 'HOURS', price: 5000 },
-      { plan: 'LIFE+', price: 32000 },
-      { plan: 'LIFE', price: 32000 }
-    ]
-  },
-  {
-    id: 'ext-porch-pietra-006',
-    categoryId: 'porch-tile',
-    categoryName: 'ポーチ',
-    subcategory: 'ピエトラソーニ',
-    name: 'ピエトラソーニ 600×300',
-    manufacturer: 'Nagoya mozaic',
-    modelNumber: 'PAN-U8110G',
-    unit: 'sqm',
-    isOption: true,
-    description: '600×300 粗目タイル ※外装標準品からの変更差額',
-    variants: [{ id: 'v1', color: 'PAN-U8110G', colorCode: '', images: [] }],
-    pricing: [
-      { plan: 'LACIE', price: 5000 },
-      { plan: 'HOURS', price: 5000 },
-      { plan: 'LIFE+', price: 32000 },
-      { plan: 'LIFE', price: 32000 }
-    ]
-  },
-  {
-    id: 'ext-porch-pietra-007',
-    categoryId: 'porch-tile',
-    categoryName: 'ポーチ',
-    subcategory: 'ピエトラソーニ',
-    name: 'ピエトラソーニ 600×300',
-    manufacturer: 'Nagoya mozaic',
-    modelNumber: 'PAN-U8120G',
-    unit: 'sqm',
-    isOption: true,
-    description: '600×300 粗目タイル ※外装標準品からの変更差額',
-    variants: [{ id: 'v1', color: 'PAN-U8120G', colorCode: '', images: [] }],
-    pricing: [
-      { plan: 'LACIE', price: 5000 },
-      { plan: 'HOURS', price: 5000 },
-      { plan: 'LIFE+', price: 32000 },
-      { plan: 'LIFE', price: 32000 }
-    ]
-  },
-  {
-    id: 'ext-porch-pietra-008',
-    categoryId: 'porch-tile',
-    categoryName: 'ポーチ',
-    subcategory: 'ピエトラソーニ',
-    name: 'ピエトラソーニ 600×300',
-    manufacturer: 'Nagoya mozaic',
-    modelNumber: 'PAN-U8130G',
-    unit: 'sqm',
-    isOption: true,
-    description: '600×300 粗目タイル ※外装標準品からの変更差額',
-    variants: [{ id: 'v1', color: 'PAN-U8130G', colorCode: '', images: [] }],
-    pricing: [
-      { plan: 'LACIE', price: 5000 },
-      { plan: 'HOURS', price: 5000 },
-      { plan: 'LIFE+', price: 32000 },
-      { plan: 'LIFE', price: 32000 }
-    ]
-  },
-  {
-    id: 'ext-porch-pietra-009',
-    categoryId: 'porch-tile',
-    categoryName: 'ポーチ',
-    subcategory: 'ピエトラソーニ',
-    name: 'ピエトラソーニ 600×300',
-    manufacturer: 'Nagoya mozaic',
-    modelNumber: 'PAN-U8140G',
-    unit: 'sqm',
-    isOption: true,
-    description: '600×300 粗目タイル ※外装標準品からの変更差額',
-    variants: [{ id: 'v1', color: 'PAN-U8140G', colorCode: '', images: [] }],
-    pricing: [
-      { plan: 'LACIE', price: 5000 },
-      { plan: 'HOURS', price: 5000 },
-      { plan: 'LIFE+', price: 32000 },
-      { plan: 'LIFE', price: 32000 }
-    ]
-  },
-  {
-    id: 'ext-porch-pietra-010',
-    categoryId: 'porch-tile',
-    categoryName: 'ポーチ',
-    subcategory: 'ピエトラソーニ',
-    name: 'ピエトラソーニ 600×300',
-    manufacturer: 'Nagoya mozaic',
-    modelNumber: 'PAN-U8150G',
-    unit: 'sqm',
-    isOption: true,
-    description: '600×300 粗目タイル ※外装標準品からの変更差額',
-    variants: [{ id: 'v1', color: 'PAN-U8150G', colorCode: '', images: [] }],
+    description: '600×300 岩面タイル ※外装標準品からの変更差額',
+    variants: [
+      { id: 'v1', color: 'CRD-U3910G', colorCode: '', images: [] },
+      { id: 'v2', color: 'CRD-U3920G', colorCode: '', images: [] },
+      { id: 'v3', color: 'CRD-U3930G', colorCode: '', images: [] },
+      { id: 'v4', color: 'CRD-U3940G', colorCode: '', images: [] }
+    ],
     pricing: [
       { plan: 'LACIE', price: 5000 },
       { plan: 'HOURS', price: 5000 },
@@ -348,57 +55,77 @@ export const exteriorProductsPage21to25: Product[] = [
     ]
   },
 
-  // ===== 22ページ - 横樋 追加3色 =====
+  // ===== 21ページ - ポーチ ピエトラソーニ 600角 =====
   {
-    id: 'ext-gutter-007',
+    id: 'ext-porch-pietra-600',
+    categoryId: 'porch-tile',
+    categoryName: 'ポーチ',
+    subcategory: 'ピエトラソーニ',
+    name: 'ピエトラソーニ 600角',
+    manufacturer: 'Nagoya mozaic',
+    modelNumber: 'PAN-X81xxG',
+    unit: 'sqm',
+    isOption: true,
+    description: '600×600 粗目タイル ※外装標準品からの変更差額',
+    variants: [
+      { id: 'v1', color: 'PAN-X8110G', colorCode: '', images: [] },
+      { id: 'v2', color: 'PAN-X8120G', colorCode: '', images: [] },
+      { id: 'v3', color: 'PAN-X8130G', colorCode: '', images: [] },
+      { id: 'v4', color: 'PAN-X8140G', colorCode: '', images: [] },
+      { id: 'v5', color: 'PAN-X8150G', colorCode: '', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 5000 },
+      { plan: 'HOURS', price: 5000 },
+      { plan: 'LIFE+', price: 32000 },
+      { plan: 'LIFE', price: 32000 }
+    ]
+  },
+
+  // ===== 21ページ - ポーチ ピエトラソーニ 600×300 =====
+  {
+    id: 'ext-porch-pietra-630',
+    categoryId: 'porch-tile',
+    categoryName: 'ポーチ',
+    subcategory: 'ピエトラソーニ',
+    name: 'ピエトラソーニ 600×300',
+    manufacturer: 'Nagoya mozaic',
+    modelNumber: 'PAN-U81xxG',
+    unit: 'sqm',
+    isOption: true,
+    description: '600×300 粗目タイル ※外装標準品からの変更差額',
+    variants: [
+      { id: 'v1', color: 'PAN-U8110G', colorCode: '', images: [] },
+      { id: 'v2', color: 'PAN-U8120G', colorCode: '', images: [] },
+      { id: 'v3', color: 'PAN-U8130G', colorCode: '', images: [] },
+      { id: 'v4', color: 'PAN-U8140G', colorCode: '', images: [] },
+      { id: 'v5', color: 'PAN-U8150G', colorCode: '', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 5000 },
+      { plan: 'HOURS', price: 5000 },
+      { plan: 'LIFE+', price: 32000 },
+      { plan: 'LIFE', price: 32000 }
+    ]
+  },
+
+  // ===== 22ページ - 横樋 =====
+  {
+    id: 'ext-gutter-horizontal',
     categoryId: 'gutter',
     categoryName: '樋',
     subcategory: '横樋',
     name: 'ファインスケアNF-I型',
     manufacturer: 'Panasonic',
-    modelNumber: 'MQF5180',
+    modelNumber: 'MQFx180',
     unit: 'set',
     isOption: false,
     description: '横樋',
-    variants: [{ id: 'v1', color: 'しんちゃ', colorCode: '', images: [] }],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 },
-      { plan: 'LIFE+', price: 0 },
-      { plan: 'LIFE', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-gutter-008',
-    categoryId: 'gutter',
-    categoryName: '樋',
-    subcategory: '横樋',
-    name: 'ファインスケアNF-I型',
-    manufacturer: 'Panasonic',
-    modelNumber: 'MQFX180J',
-    unit: 'set',
-    isOption: false,
-    description: '横樋',
-    variants: [{ id: 'v1', color: 'モダンベージュ', colorCode: '', images: [] }],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 },
-      { plan: 'LIFE+', price: 0 },
-      { plan: 'LIFE', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-gutter-009',
-    categoryId: 'gutter',
-    categoryName: '樋',
-    subcategory: '横樋',
-    name: 'ファインスケアNF-I型',
-    manufacturer: 'Panasonic',
-    modelNumber: 'MQFZ180J',
-    unit: 'set',
-    isOption: false,
-    description: '横樋',
-    variants: [{ id: 'v1', color: 'オークブラウン', colorCode: '', images: [] }],
+    variants: [
+      { id: 'v1', color: 'しんちゃ', colorCode: 'しんちゃ', images: [] },
+      { id: 'v2', color: 'モダンベージュ', colorCode: 'ベージュ', images: [] },
+      { id: 'v3', color: 'オークブラウン', colorCode: 'オークブラウン', images: [] }
+    ],
     pricing: [
       { plan: 'LACIE', price: 0 },
       { plan: 'HOURS', price: 0 },
@@ -407,57 +134,23 @@ export const exteriorProductsPage21to25: Product[] = [
     ]
   },
 
-  // ===== 22ページ - 縦樋 追加3色 =====
+  // ===== 22ページ - 縦樋 =====
   {
-    id: 'ext-gutter-010',
+    id: 'ext-gutter-vertical',
     categoryId: 'gutter',
     categoryName: '樋',
     subcategory: '縦樋',
     name: 'S30',
     manufacturer: 'Panasonic',
-    modelNumber: 'KBP5261K',
+    modelNumber: 'KBPx261K',
     unit: 'set',
     isOption: false,
     description: '縦樋',
-    variants: [{ id: 'v1', color: 'しんちゃ', colorCode: '', images: [] }],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 },
-      { plan: 'LIFE+', price: 0 },
-      { plan: 'LIFE', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-gutter-011',
-    categoryId: 'gutter',
-    categoryName: '樋',
-    subcategory: '縦樋',
-    name: 'S30',
-    manufacturer: 'Panasonic',
-    modelNumber: 'KBPX261K',
-    unit: 'set',
-    isOption: false,
-    description: '縦樋',
-    variants: [{ id: 'v1', color: 'モダンベージュ', colorCode: '', images: [] }],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 },
-      { plan: 'LIFE+', price: 0 },
-      { plan: 'LIFE', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-gutter-012',
-    categoryId: 'gutter',
-    categoryName: '樋',
-    subcategory: '縦樋',
-    name: 'S30',
-    manufacturer: 'Panasonic',
-    modelNumber: 'KBPZ261K',
-    unit: 'set',
-    isOption: false,
-    description: '縦樋',
-    variants: [{ id: 'v1', color: 'オークブラウン', colorCode: '', images: [] }],
+    variants: [
+      { id: 'v1', color: 'しんちゃ', colorCode: 'しんちゃ', images: [] },
+      { id: 'v2', color: 'モダンベージュ', colorCode: 'ベージュ', images: [] },
+      { id: 'v3', color: 'オークブラウン', colorCode: 'オークブラウン', images: [] }
+    ],
     pricing: [
       { plan: 'LACIE', price: 0 },
       { plan: 'HOURS', price: 0 },
@@ -466,76 +159,24 @@ export const exteriorProductsPage21to25: Product[] = [
     ]
   },
 
-  // ===== 22ページ - 軒天 エンボス 追加色 =====
+  // ===== 22ページ - 軒天 エンボス =====
   {
-    id: 'ext-soffit-004',
+    id: 'ext-soffit-emboss',
     categoryId: 'soffit',
     categoryName: '軒天',
     subcategory: 'エンボス',
     name: 'エンボス',
     manufacturer: '神島化学',
-    modelNumber: 'EMBOSS-IV',
+    modelNumber: 'EMBOSS-xx',
     unit: 'sqm',
     isOption: false,
     description: '軒天材',
-    variants: [{ id: 'v1', color: 'ミルトアイボリー', colorCode: '', images: [] }],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 },
-      { plan: 'LIFE+', price: 0 },
-      { plan: 'LIFE', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-soffit-005',
-    categoryId: 'soffit',
-    categoryName: '軒天',
-    subcategory: 'エンボス',
-    name: 'エンボス',
-    manufacturer: '神島化学',
-    modelNumber: 'EMBOSS-FS',
-    unit: 'sqm',
-    isOption: false,
-    description: '軒天材',
-    variants: [{ id: 'v1', color: 'ファインステン', colorCode: '', images: [] }],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 },
-      { plan: 'LIFE+', price: 0 },
-      { plan: 'LIFE', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-soffit-006',
-    categoryId: 'soffit',
-    categoryName: '軒天',
-    subcategory: 'エンボス',
-    name: 'エンボス',
-    manufacturer: '神島化学',
-    modelNumber: 'EMBOSS-BR',
-    unit: 'sqm',
-    isOption: false,
-    description: '軒天材',
-    variants: [{ id: 'v1', color: 'ボルドーブラウン', colorCode: '', images: [] }],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 },
-      { plan: 'LIFE+', price: 0 },
-      { plan: 'LIFE', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-soffit-007',
-    categoryId: 'soffit',
-    categoryName: '軒天',
-    subcategory: 'エンボス',
-    name: 'エンボス',
-    manufacturer: '神島化学',
-    modelNumber: 'EMBOSS-CB',
-    unit: 'sqm',
-    isOption: false,
-    description: '軒天材',
-    variants: [{ id: 'v1', color: 'チャコールブラック', colorCode: '', images: [] }],
+    variants: [
+      { id: 'v1', color: 'ミルトアイボリー', colorCode: 'アイボリー', images: [] },
+      { id: 'v2', color: 'ファインステン', colorCode: 'グレー', images: [] },
+      { id: 'v3', color: 'ボルドーブラウン', colorCode: 'ブラウン', images: [] },
+      { id: 'v4', color: 'チャコールブラック', colorCode: 'ブラック', images: [] }
+    ],
     pricing: [
       { plan: 'LACIE', price: 0 },
       { plan: 'HOURS', price: 0 },
@@ -544,57 +185,23 @@ export const exteriorProductsPage21to25: Product[] = [
     ]
   },
 
-  // ===== 22ページ - 軒天 ラフォーレソレイユ 3色 =====
+  // ===== 22ページ - 軒天 ラフォーレソレイユ =====
   {
-    id: 'ext-soffit-soleil-001',
+    id: 'ext-soffit-soleil',
     categoryId: 'soffit',
     categoryName: '軒天',
     subcategory: 'ラフォーレソレイユ',
     name: 'ラフォーレソレイユ',
     manufacturer: '神島化学',
-    modelNumber: 'LAFORET-SOLEIL-GS',
+    modelNumber: 'LAFORET-SOLEIL-xx',
     unit: 'sqm',
     isOption: true,
     description: '軒天材 ※準耐火仕様の場合、上階に居室が乗っている箇所は採用不可',
-    variants: [{ id: 'v1', color: 'グレイッシュシダー', colorCode: '', images: [] }],
-    pricing: [
-      { plan: 'LACIE', price: 12000 },
-      { plan: 'HOURS', price: 12000 },
-      { plan: 'LIFE+', price: 12000 },
-      { plan: 'LIFE', price: 12000 }
-    ]
-  },
-  {
-    id: 'ext-soffit-soleil-002',
-    categoryId: 'soffit',
-    categoryName: '軒天',
-    subcategory: 'ラフォーレソレイユ',
-    name: 'ラフォーレソレイユ',
-    manufacturer: '神島化学',
-    modelNumber: 'LAFORET-SOLEIL-ND',
-    unit: 'sqm',
-    isOption: true,
-    description: '軒天材 ※準耐火仕様の場合、上階に居室が乗っている箇所は採用不可',
-    variants: [{ id: 'v1', color: 'ナチュラルダーク', colorCode: '', images: [] }],
-    pricing: [
-      { plan: 'LACIE', price: 12000 },
-      { plan: 'HOURS', price: 12000 },
-      { plan: 'LIFE+', price: 12000 },
-      { plan: 'LIFE', price: 12000 }
-    ]
-  },
-  {
-    id: 'ext-soffit-soleil-003',
-    categoryId: 'soffit',
-    categoryName: '軒天',
-    subcategory: 'ラフォーレソレイユ',
-    name: 'ラフォーレソレイユ',
-    manufacturer: '神島化学',
-    modelNumber: 'LAFORET-SOLEIL-WN',
-    unit: 'sqm',
-    isOption: true,
-    description: '軒天材 ※準耐火仕様の場合、上階に居室が乗っている箇所は採用不可',
-    variants: [{ id: 'v1', color: 'ウォルナット', colorCode: '', images: [] }],
+    variants: [
+      { id: 'v1', color: 'グレイッシュシダー', colorCode: 'グレー', images: [] },
+      { id: 'v2', color: 'ナチュラルダーク', colorCode: 'ダークブラウン', images: [] },
+      { id: 'v3', color: 'ウォルナット', colorCode: 'ウォールナット', images: [] }
+    ],
     pricing: [
       { plan: 'LACIE', price: 12000 },
       { plan: 'HOURS', price: 12000 },
@@ -603,76 +210,24 @@ export const exteriorProductsPage21to25: Product[] = [
     ]
   },
 
-  // ===== 22ページ - 軒天 ラフォーレティンバー 4色 =====
+  // ===== 22ページ - 軒天 ラフォーレティンバー =====
   {
-    id: 'ext-soffit-timber-001',
+    id: 'ext-soffit-timber',
     categoryId: 'soffit',
     categoryName: '軒天',
     subcategory: 'ラフォーレティンバー',
     name: 'ラフォーレティンバー',
     manufacturer: '神島化学',
-    modelNumber: 'LAFORET-TIMBER-SY',
+    modelNumber: 'LAFORET-TIMBER-xx',
     unit: 'sqm',
     isOption: true,
     description: '軒天材 ※準耐火仕様の場合、上階に居室が乗っている箇所は採用不可',
-    variants: [{ id: 'v1', color: 'スモークィエロー', colorCode: '', images: [] }],
-    pricing: [
-      { plan: 'LACIE', price: 12000 },
-      { plan: 'HOURS', price: 12000 },
-      { plan: 'LIFE+', price: 12000 },
-      { plan: 'LIFE', price: 12000 }
-    ]
-  },
-  {
-    id: 'ext-soffit-timber-002',
-    categoryId: 'soffit',
-    categoryName: '軒天',
-    subcategory: 'ラフォーレティンバー',
-    name: 'ラフォーレティンバー',
-    manufacturer: '神島化学',
-    modelNumber: 'LAFORET-TIMBER-CB',
-    unit: 'sqm',
-    isOption: true,
-    description: '軒天材 ※準耐火仕様の場合、上階に居室が乗っている箇所は採用不可',
-    variants: [{ id: 'v1', color: 'キャラメルブラウン', colorCode: '', images: [] }],
-    pricing: [
-      { plan: 'LACIE', price: 12000 },
-      { plan: 'HOURS', price: 12000 },
-      { plan: 'LIFE+', price: 12000 },
-      { plan: 'LIFE', price: 12000 }
-    ]
-  },
-  {
-    id: 'ext-soffit-timber-003',
-    categoryId: 'soffit',
-    categoryName: '軒天',
-    subcategory: 'ラフォーレティンバー',
-    name: 'ラフォーレティンバー',
-    manufacturer: '神島化学',
-    modelNumber: 'LAFORET-TIMBER-RB',
-    unit: 'sqm',
-    isOption: true,
-    description: '軒天材 ※準耐火仕様の場合、上階に居室が乗っている箇所は採用不可',
-    variants: [{ id: 'v1', color: 'レッドブラウン', colorCode: '', images: [] }],
-    pricing: [
-      { plan: 'LACIE', price: 12000 },
-      { plan: 'HOURS', price: 12000 },
-      { plan: 'LIFE+', price: 12000 },
-      { plan: 'LIFE', price: 12000 }
-    ]
-  },
-  {
-    id: 'ext-soffit-timber-004',
-    categoryId: 'soffit',
-    categoryName: '軒天',
-    subcategory: 'ラフォーレティンバー',
-    name: 'ラフォーレティンバー',
-    manufacturer: '神島化学',
-    modelNumber: 'LAFORET-TIMBER-CH',
-    unit: 'sqm',
-    isOption: true,
-    description: '軒天材 ※準耐火仕様の場合、上階に居室が乗っている箇所は採用不可',
-    variants: [{ id: 'v1', color: 'チャコール', colorCode: '', images: [] }],
+    variants: [
+      { id: 'v1', color: 'スモークィエロー', colorCode: 'ナチュラル', images: [] },
+      { id: 'v2', color: 'キャラメルブラウン', colorCode: 'キャラメルチーク', images: [] },
+      { id: 'v3', color: 'レッドブラウン', colorCode: 'チェリー', images: [] },
+      { id: 'v4', color: 'チャコール', colorCode: 'チャコール', images: [] }
+    ],
     pricing: [
       { plan: 'LACIE', price: 12000 },
       { plan: 'HOURS', price: 12000 },
@@ -683,7 +238,7 @@ export const exteriorProductsPage21to25: Product[] = [
 
   // ===== 24ページ - ガレージシャッター オプション =====
   {
-    id: 'ext-garage-opt-001',
+    id: 'ext-garage-opt-bouka',
     categoryId: 'garage-shutter-option',
     categoryName: '電動ガレージシャッター',
     subcategory: 'シャッターオプション',
@@ -702,7 +257,7 @@ export const exteriorProductsPage21to25: Product[] = [
     ]
   },
   {
-    id: 'ext-garage-opt-002',
+    id: 'ext-garage-opt-black',
     categoryId: 'garage-shutter-option',
     categoryName: '電動ガレージシャッター',
     subcategory: 'シャッターオプション',
@@ -712,7 +267,7 @@ export const exteriorProductsPage21to25: Product[] = [
     unit: 'piece',
     isOption: true,
     description: 'スラットカラーリング（1台分）※ブラックは別途塗装のため傷が目立ちやすい',
-    variants: [{ id: 'v1', color: 'ブラック', colorCode: '', images: [] }],
+    variants: [{ id: 'v1', color: 'ブラック', colorCode: 'ブラック', images: [] }],
     pricing: [
       { plan: 'LACIE', price: 60000 },
       { plan: 'HOURS', price: 60000 },
@@ -721,7 +276,7 @@ export const exteriorProductsPage21to25: Product[] = [
     ]
   },
   {
-    id: 'ext-garage-opt-003',
+    id: 'ext-garage-ifudodo-bouka',
     categoryId: 'garage-shutter-option',
     categoryName: '電動ガレージシャッター',
     subcategory: 'シャッターオプション',
@@ -740,7 +295,7 @@ export const exteriorProductsPage21to25: Product[] = [
     ]
   },
   {
-    id: 'ext-garage-opt-004',
+    id: 'ext-garage-ifudodo-wood',
     categoryId: 'garage-shutter-option',
     categoryName: '電動ガレージシャッター',
     subcategory: 'シャッターオプション',
@@ -750,7 +305,7 @@ export const exteriorProductsPage21to25: Product[] = [
     unit: 'piece',
     isOption: true,
     description: '木目調パネル（1台分）※塗装で木目を表現、内部面はシルバー ※防火未対応',
-    variants: [{ id: 'v1', color: '木目調', colorCode: '', images: [] }],
+    variants: [{ id: 'v1', color: '木目調', colorCode: 'ナチュラル', images: [] }],
     pricing: [
       { plan: 'LACIE', price: 660000 },
       { plan: 'HOURS', price: 660000 },
@@ -759,13 +314,13 @@ export const exteriorProductsPage21to25: Product[] = [
     ]
   },
 
-  // ===== 25ページ - 窓オプション =====
+  // ===== 25ページ - 窓オプション APW330 =====
   {
-    id: 'ext-window-option-003',
+    id: 'ext-window-glass-bouka-w1650',
     categoryId: 'window-option',
     categoryName: '窓',
     subcategory: '窓オプション',
-    name: '防火地域用耐熱強化複層ガラス（網なし）',
+    name: '防火地域用耐熱強化複層ガラス（網なし）~W1650',
     manufacturer: 'YKKAP',
     modelNumber: 'APW330-GLASS-BOUKA-W1650',
     unit: 'piece',
@@ -780,11 +335,11 @@ export const exteriorProductsPage21to25: Product[] = [
     ]
   },
   {
-    id: 'ext-window-option-004',
+    id: 'ext-window-glass-bouka-w2560',
     categoryId: 'window-option',
     categoryName: '窓',
     subcategory: '窓オプション',
-    name: '防火地域用耐熱強化複層ガラス（網なし）',
+    name: '防火地域用耐熱強化複層ガラス（網なし）~W2560',
     manufacturer: 'YKKAP',
     modelNumber: 'APW330-GLASS-BOUKA-W2560',
     unit: 'piece',
@@ -799,7 +354,7 @@ export const exteriorProductsPage21to25: Product[] = [
     ]
   },
   {
-    id: 'ext-window-option-005',
+    id: 'ext-window-glass-safety',
     categoryId: 'window-option',
     categoryName: '窓',
     subcategory: '窓オプション',
@@ -818,7 +373,7 @@ export const exteriorProductsPage21to25: Product[] = [
     ]
   },
   {
-    id: 'ext-window-option-006',
+    id: 'ext-window-add-22',
     categoryId: 'window-option',
     categoryName: '窓',
     subcategory: '窓オプション',
@@ -837,7 +392,7 @@ export const exteriorProductsPage21to25: Product[] = [
     ]
   },
   {
-    id: 'ext-window-option-007',
+    id: 'ext-window-add-bouka',
     categoryId: 'window-option',
     categoryName: '窓',
     subcategory: '窓オプション',
@@ -856,7 +411,7 @@ export const exteriorProductsPage21to25: Product[] = [
     ]
   },
   {
-    id: 'ext-window-option-008',
+    id: 'ext-window-hakidashi-22-w1650',
     categoryId: 'window-option',
     categoryName: '窓',
     subcategory: '窓オプション',
@@ -875,7 +430,7 @@ export const exteriorProductsPage21to25: Product[] = [
     ]
   },
   {
-    id: 'ext-window-option-009',
+    id: 'ext-window-hakidashi-22-w2560',
     categoryId: 'window-option',
     categoryName: '窓',
     subcategory: '窓オプション',
@@ -894,7 +449,7 @@ export const exteriorProductsPage21to25: Product[] = [
     ]
   },
   {
-    id: 'ext-window-option-010',
+    id: 'ext-window-hakidashi-bouka-w1650',
     categoryId: 'window-option',
     categoryName: '窓',
     subcategory: '窓オプション',
@@ -913,7 +468,7 @@ export const exteriorProductsPage21to25: Product[] = [
     ]
   },
   {
-    id: 'ext-window-option-011',
+    id: 'ext-window-hakidashi-bouka-w2560',
     categoryId: 'window-option',
     categoryName: '窓',
     subcategory: '窓オプション',

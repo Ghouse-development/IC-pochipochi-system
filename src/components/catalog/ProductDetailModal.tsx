@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { X, ChevronLeft, ChevronRight, Plus, Minus, ShoppingCart, Check, AlertCircle } from 'lucide-react';
 import type { Product, ProductVariant } from '../../types/product';
+import { UNIT_SYMBOLS } from '../../types/product';
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
 import { formatPrice } from '../../lib/utils';
@@ -239,11 +240,11 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                 <div className="border-t pt-4 mb-4">
                   <div className="flex items-baseline justify-between mb-2">
                     <span className="text-2xl font-bold text-gray-900">
-                      {formatPrice(price)}
+                      {price === 0 ? '標準仕様' : `${formatPrice(price)}/${UNIT_SYMBOLS[product.unit] || product.unit}`}
                     </span>
-                    <span className="text-sm text-gray-500">/ {product.unit}</span>
+                    <span className="text-xs text-gray-400">税別</span>
                   </div>
-                  
+
                   <div className="flex items-center gap-2">
                     {product.isOption ? (
                       <Badge variant="option">オプション</Badge>
@@ -276,17 +277,20 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                         <Plus className="w-4 h-4" />
                       </button>
                     </div>
-                    <span className="text-sm text-gray-500">{product.unit}</span>
+                    <span className="text-sm text-gray-500">{UNIT_SYMBOLS[product.unit] || product.unit}</span>
                   </div>
                 </div>
-                
+
                 {/* 合計金額 */}
                 <div className="mb-6 p-4 bg-gray-50 rounded-lg">
                   <div className="flex items-center justify-between">
                     <span className="text-gray-700">合計金額</span>
-                    <span className="text-xl font-bold text-gray-900">
-                      {formatPrice(totalPrice)}
-                    </span>
+                    <div className="text-right">
+                      <span className="text-xl font-bold text-gray-900">
+                        {formatPrice(totalPrice)}
+                      </span>
+                      <span className="text-xs text-gray-400 ml-1">税別</span>
+                    </div>
                   </div>
                 </div>
                 

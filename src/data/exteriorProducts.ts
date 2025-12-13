@@ -1,4 +1,5 @@
 // エクステリア（外装）製品データ - FACADE Style Book
+// 色バリアント統合版 - 1製品 = 複数の色バリアント
 import type { Product } from '../types/product';
 import { exteriorProductsAdditional } from './exteriorProductsAdditional';
 import { exteriorProductsPage3to5 } from './exteriorProductsPage3to5';
@@ -9,143 +10,23 @@ import { exteriorProductsPage26to29 } from './exteriorProductsPage26to29';
 const baseExteriorProducts: Product[] = [
   // ===== 外壁 - ニチハ モナビストーンV =====
   {
-    id: 'ext-wall-001',
+    id: 'ext-wall-monabistone-v',
     categoryId: 'exterior-wall',
     categoryName: '外壁',
     subcategory: 'モナビストーンV',
-    name: 'フローMGグレー',
+    name: 'モナビストーンV',
     manufacturer: 'ニチハ',
-    modelNumber: 'EFA5256FK',
+    modelNumber: 'EFA52xxFK/GK/TK',
     unit: 'sqm',
     isOption: false,
     description: '横張のみの採用となります',
     variants: [
-      {
-        id: 'v1',
-        color: 'N7',
-        colorCode: 'N7',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-wall-002',
-    categoryId: 'exterior-wall',
-    categoryName: '外壁',
-    subcategory: 'モナビストーンV',
-    name: 'フローMGブラック',
-    manufacturer: 'ニチハ',
-    modelNumber: 'EFA5257FK',
-    unit: 'sqm',
-    isOption: false,
-    description: '横張のみの採用となります',
-    variants: [
-      {
-        id: 'v1',
-        color: 'N2',
-        colorCode: 'N2',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-wall-003',
-    categoryId: 'exterior-wall',
-    categoryName: '外壁',
-    subcategory: 'モナビストーンV',
-    name: 'フローMGクリアホワイト',
-    manufacturer: 'ニチハ',
-    modelNumber: 'EFA5251GK',
-    unit: 'sqm',
-    isOption: false,
-    description: '横張のみの採用となります',
-    variants: [
-      {
-        id: 'v1',
-        color: 'N9',
-        colorCode: 'N9',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-wall-004',
-    categoryId: 'exterior-wall',
-    categoryName: '外壁',
-    subcategory: 'モナビストーンV',
-    name: 'フローMGホワイト',
-    manufacturer: 'ニチハ',
-    modelNumber: 'EFA5252GK',
-    unit: 'sqm',
-    isOption: false,
-    description: '横張のみの採用となります',
-    variants: [
-      {
-        id: 'v1',
-        color: '2.5Y 9/1',
-        colorCode: '2.5Y 9/1',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-wall-005',
-    categoryId: 'exterior-wall',
-    categoryName: '外壁',
-    subcategory: 'モナビストーンV',
-    name: 'フローMGクリーム',
-    manufacturer: 'ニチハ',
-    modelNumber: 'EFA5253GK',
-    unit: 'sqm',
-    isOption: false,
-    description: '横張のみの採用となります',
-    variants: [
-      {
-        id: 'v1',
-        color: '10YR 8/2',
-        colorCode: '10YR 8/2',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-wall-006',
-    categoryId: 'exterior-wall',
-    categoryName: '外壁',
-    subcategory: 'モナビストーンV',
-    name: 'フローMGネイビー',
-    manufacturer: 'ニチハ',
-    modelNumber: 'EFA5254TK',
-    unit: 'sqm',
-    isOption: false,
-    description: '横張のみの採用となります',
-    variants: [
-      {
-        id: 'v1',
-        color: 'N3',
-        colorCode: 'N3',
-        images: []
-      }
+      { id: 'v1', color: 'フローMGグレー', colorCode: 'フローMGグレー', images: [] },
+      { id: 'v2', color: 'フローMGブラック', colorCode: 'フローMGブラック', images: [] },
+      { id: 'v3', color: 'フローMGクリアホワイト', colorCode: 'フローMGクリアホワイト', images: [] },
+      { id: 'v4', color: 'フローMGホワイト', colorCode: 'フローMGホワイト', images: [] },
+      { id: 'v5', color: 'フローMGクリーム', colorCode: 'フローMGクリーム', images: [] },
+      { id: 'v6', color: 'フローMGネイビー', colorCode: 'フローMGネイビー', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 0 },
@@ -155,119 +36,22 @@ const baseExteriorProducts: Product[] = [
 
   // ===== 外壁 - ニチハ リーガストーン調V =====
   {
-    id: 'ext-wall-007',
+    id: 'ext-wall-reega-stone',
     categoryId: 'exterior-wall',
     categoryName: '外壁',
     subcategory: 'リーガストーン調V',
-    name: 'ランダMGプラチナ',
+    name: 'リーガストーン調V',
     manufacturer: 'ニチハ',
-    modelNumber: 'EFX3455CK',
+    modelNumber: 'EFX34xxCK/NK',
     unit: 'sqm',
     isOption: false,
     description: '横張のみの採用となります',
     variants: [
-      {
-        id: 'v1',
-        color: '5Y 7/1',
-        colorCode: '5Y 7/1',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-wall-008',
-    categoryId: 'exterior-wall',
-    categoryName: '外壁',
-    subcategory: 'リーガストーン調V',
-    name: 'ランダMGブラック',
-    manufacturer: 'ニチハ',
-    modelNumber: 'EFX3457CK',
-    unit: 'sqm',
-    isOption: false,
-    description: '横張のみの採用となります',
-    variants: [
-      {
-        id: 'v1',
-        color: '2.5Y 3/1',
-        colorCode: '2.5Y 3/1',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-wall-009',
-    categoryId: 'exterior-wall',
-    categoryName: '外壁',
-    subcategory: 'リーガストーン調V',
-    name: 'ランダMGトリュフ',
-    manufacturer: 'ニチハ',
-    modelNumber: 'EFX3451NK',
-    unit: 'sqm',
-    isOption: false,
-    description: '横張のみの採用となります',
-    variants: [
-      {
-        id: 'v1',
-        color: '2.5Y 6/4',
-        colorCode: '2.5Y 6/4',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-wall-010',
-    categoryId: 'exterior-wall',
-    categoryName: '外壁',
-    subcategory: 'リーガストーン調V',
-    name: 'ランダMGラテ',
-    manufacturer: 'ニチハ',
-    modelNumber: 'EFX3451CK',
-    unit: 'sqm',
-    isOption: false,
-    description: '横張のみの採用となります',
-    variants: [
-      {
-        id: 'v1',
-        color: '10YR 8/2',
-        colorCode: '10YR 8/2',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-wall-011',
-    categoryId: 'exterior-wall',
-    categoryName: '外壁',
-    subcategory: 'リーガストーン調V',
-    name: 'ランダMGパウダー',
-    manufacturer: 'ニチハ',
-    modelNumber: 'EFX3453CK',
-    unit: 'sqm',
-    isOption: false,
-    description: '横張のみの採用となります',
-    variants: [
-      {
-        id: 'v1',
-        color: '10Y 8/1',
-        colorCode: '10Y 8/1',
-        images: []
-      }
+      { id: 'v1', color: 'ランダMGプラチナ', colorCode: 'ランダMGプラチナ', images: [] },
+      { id: 'v2', color: 'ランダMGブラック', colorCode: 'ランダMGブラック', images: [] },
+      { id: 'v3', color: 'ランダMGトリュフ', colorCode: 'ランダMGトリュフ', images: [] },
+      { id: 'v4', color: 'ランダMGラテ', colorCode: 'ランダMGラテ', images: [] },
+      { id: 'v5', color: 'ランダMGパウダー', colorCode: 'ランダMGパウダー', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 0 },
@@ -277,23 +61,18 @@ const baseExteriorProducts: Product[] = [
 
   // ===== 外壁 - ニチハ ボルブストーン調V =====
   {
-    id: 'ext-wall-012',
+    id: 'ext-wall-bolb-stone',
     categoryId: 'exterior-wall',
     categoryName: '外壁',
     subcategory: 'ボルブストーン調V',
-    name: 'エアルMGスノー',
+    name: 'ボルブストーン調V',
     manufacturer: 'ニチハ',
     modelNumber: 'EFX3151FK',
     unit: 'sqm',
     isOption: false,
     description: '横張のみの採用となります',
     variants: [
-      {
-        id: 'v1',
-        color: '5Y 7/1',
-        colorCode: '5Y 7/1',
-        images: []
-      }
+      { id: 'v1', color: 'エアルMGスノー', colorCode: 'エアルMGスノー', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 0 },
@@ -301,97 +80,23 @@ const baseExteriorProducts: Product[] = [
     ]
   },
 
-  // ===== 外壁 - KMEW プレミアム Fuge =====
+  // ===== 外壁 - KMEW ルボン プレミアム Fuge =====
   {
-    id: 'ext-wall-premium-001',
+    id: 'ext-wall-lubon-premium',
     categoryId: 'exterior-wall-premium',
     categoryName: '外壁',
     subcategory: 'ルボン プレミアム',
-    name: 'レセピMGチタンホワイト30',
+    name: 'ルボン プレミアム',
     manufacturer: 'KMEW',
-    modelNumber: 'ELS411P',
+    modelNumber: 'ELS4xxP',
     unit: 'sqm',
     isOption: true,
     description: 'プレミアム外壁 シーリング目地に比べて継ぎ目が目立たない',
     variants: [
-      {
-        id: 'v1',
-        color: '5Y 9/1',
-        colorCode: '5Y 9/1',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 4500 },
-      { plan: 'HOURS', price: 4500 }
-    ]
-  },
-  {
-    id: 'ext-wall-premium-002',
-    categoryId: 'exterior-wall-premium',
-    categoryName: '外壁',
-    subcategory: 'ルボン プレミアム',
-    name: 'レセピMGチタンチャコール30',
-    manufacturer: 'KMEW',
-    modelNumber: 'ELS434P',
-    unit: 'sqm',
-    isOption: true,
-    description: 'プレミアム外壁 シーリング目地に比べて継ぎ目が目立たない',
-    variants: [
-      {
-        id: 'v1',
-        color: '2.5Y 4/2',
-        colorCode: '2.5Y 4/2',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 4500 },
-      { plan: 'HOURS', price: 4500 }
-    ]
-  },
-  {
-    id: 'ext-wall-premium-003',
-    categoryId: 'exterior-wall-premium',
-    categoryName: '外壁',
-    subcategory: 'ルボン プレミアム',
-    name: 'レセピMGネロ30',
-    manufacturer: 'KMEW',
-    modelNumber: 'ELS437P',
-    unit: 'sqm',
-    isOption: true,
-    description: 'プレミアム外壁 シーリング目地に比べて継ぎ目が目立たない',
-    variants: [
-      {
-        id: 'v1',
-        color: '5Y 3/1',
-        colorCode: '5Y 3/1',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 4500 },
-      { plan: 'HOURS', price: 4500 }
-    ]
-  },
-  {
-    id: 'ext-wall-premium-004',
-    categoryId: 'exterior-wall-premium',
-    categoryName: '外壁',
-    subcategory: 'ルボン プレミアム',
-    name: 'レセピMGネイビー30',
-    manufacturer: 'KMEW',
-    modelNumber: 'ELS438P',
-    unit: 'sqm',
-    isOption: true,
-    description: 'プレミアム外壁 シーリング目地に比べて継ぎ目が目立たない',
-    variants: [
-      {
-        id: 'v1',
-        color: '5PB 2/1',
-        colorCode: '5PB 2/1',
-        images: []
-      }
+      { id: 'v1', color: 'レセピMGチタンホワイト30', colorCode: 'ホワイト', images: [] },
+      { id: 'v2', color: 'レセピMGチタンチャコール30', colorCode: 'チャコール', images: [] },
+      { id: 'v3', color: 'レセピMGネロ30', colorCode: 'ブラック', images: [] },
+      { id: 'v4', color: 'レセピMGネイビー30', colorCode: 'ネイビー', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 4500 },
@@ -399,49 +104,21 @@ const baseExteriorProducts: Product[] = [
     ]
   },
 
-  // ===== 外壁 - モエンエクセラード16 Fuge =====
+  // ===== 外壁 - ニチハ モエンエクセラード16 Fuge =====
   {
-    id: 'ext-wall-moene-001',
+    id: 'ext-wall-moene-fuge',
     categoryId: 'exterior-wall-moene',
     categoryName: '外壁',
     subcategory: 'モエンエクセラード16 Fuge',
-    name: 'モベルウッド',
+    name: 'モエンエクセラード16 Fuge',
     manufacturer: 'ニチハ',
-    modelNumber: 'EQS691D',
+    modelNumber: 'EQS6xxD',
     unit: 'sqm',
     isOption: true,
-    description: 'モエンエクセラード16 Fuge リニューアル品',
+    description: 'モエンエクセラード16 Fuge',
     variants: [
-      {
-        id: 'v1',
-        color: 'モベルクレージュⅡ',
-        colorCode: '5Y 7/1',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 4500 },
-      { plan: 'HOURS', price: 4500 }
-    ]
-  },
-  {
-    id: 'ext-wall-moene-002',
-    categoryId: 'exterior-wall-moene',
-    categoryName: '外壁',
-    subcategory: 'モエンエクセラード16 Fuge',
-    name: 'シュマール',
-    manufacturer: 'ニチハ',
-    modelNumber: 'EQS661D',
-    unit: 'sqm',
-    isOption: true,
-    description: 'モエンエクセラード16 Fuge NEW',
-    variants: [
-      {
-        id: 'v1',
-        color: 'シュマールベージュⅡ',
-        colorCode: '2.5YR 8/2',
-        images: []
-      }
+      { id: 'v1', color: 'モベルクレージュⅡ', colorCode: 'ベージュ', images: [] },
+      { id: 'v2', color: 'シュマールベージュⅡ', colorCode: 'サンドベージュ', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 4500 },
@@ -449,97 +126,23 @@ const baseExteriorProducts: Product[] = [
     ]
   },
 
-  // ===== 外壁 - COOL イルミオ =====
+  // ===== 外壁 - AICA COOL イルミオ =====
   {
-    id: 'ext-wall-cool-001',
+    id: 'ext-wall-cool-illuminio',
     categoryId: 'exterior-wall-cool',
     categoryName: '外壁',
     subcategory: 'COOL イルミオ',
-    name: 'メレホワイト',
+    name: 'COOL イルミオ',
     manufacturer: 'アイカ',
-    modelNumber: 'EFM508P',
+    modelNumber: 'EFM5xxP',
     unit: 'sqm',
     isOption: true,
     description: 'COOL 遮熱性能付き外壁',
     variants: [
-      {
-        id: 'v1',
-        color: 'N9',
-        colorCode: 'N9',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 4500 },
-      { plan: 'HOURS', price: 4500 }
-    ]
-  },
-  {
-    id: 'ext-wall-cool-002',
-    categoryId: 'exterior-wall-cool',
-    categoryName: '外壁',
-    subcategory: 'COOL イルミオ',
-    name: 'メレグレー',
-    manufacturer: 'アイカ',
-    modelNumber: 'EFM509P',
-    unit: 'sqm',
-    isOption: true,
-    description: 'COOL 遮熱性能付き外壁',
-    variants: [
-      {
-        id: 'v1',
-        color: '2.5YR 4/1',
-        colorCode: '2.5YR 4/1',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 4500 },
-      { plan: 'HOURS', price: 4500 }
-    ]
-  },
-  {
-    id: 'ext-wall-cool-003',
-    categoryId: 'exterior-wall-cool',
-    categoryName: '外壁',
-    subcategory: 'COOL イルミオ',
-    name: 'メレブラウン',
-    manufacturer: 'アイカ',
-    modelNumber: 'EFM510P',
-    unit: 'sqm',
-    isOption: true,
-    description: 'COOL 遮熱性能付き外壁',
-    variants: [
-      {
-        id: 'v1',
-        color: '5YR 3/2',
-        colorCode: '5YR 3/2',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 4500 },
-      { plan: 'HOURS', price: 4500 }
-    ]
-  },
-  {
-    id: 'ext-wall-cool-004',
-    categoryId: 'exterior-wall-cool',
-    categoryName: '外壁',
-    subcategory: 'COOL イルミオ',
-    name: 'メレブラック',
-    manufacturer: 'アイカ',
-    modelNumber: 'EFM511P',
-    unit: 'sqm',
-    isOption: true,
-    description: 'COOL 遮熱性能付き外壁',
-    variants: [
-      {
-        id: 'v1',
-        color: 'N4',
-        colorCode: 'N4',
-        images: []
-      }
+      { id: 'v1', color: 'メレホワイト', colorCode: 'ホワイト', images: [] },
+      { id: 'v2', color: 'メレグレー', colorCode: 'グレー', images: [] },
+      { id: 'v3', color: 'メレブラウン', colorCode: 'ブラウン', images: [] },
+      { id: 'v4', color: 'メレブラック', colorCode: 'ブラック', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 4500 },
@@ -549,47 +152,19 @@ const baseExteriorProducts: Product[] = [
 
   // ===== 外壁 - KMEW 新フラット16 =====
   {
-    id: 'ext-wall-flat-001',
+    id: 'ext-wall-flat16',
     categoryId: 'exterior-wall-flat',
     categoryName: '外壁',
     subcategory: '新フラット16',
-    name: 'フィエルテ',
+    name: '新フラット16 フィエルテ',
     manufacturer: 'KMEW',
-    modelNumber: 'NH4971A',
+    modelNumber: 'NH49xxA',
     unit: 'sqm',
     isOption: true,
     description: 'フラットデザイン外壁（16mm厚）',
     variants: [
-      {
-        id: 'v1',
-        color: 'チタンコンクリー',
-        colorCode: '3.6RP 7.2/0.3',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 4500 },
-      { plan: 'HOURS', price: 4500 }
-    ]
-  },
-  {
-    id: 'ext-wall-flat-002',
-    categoryId: 'exterior-wall-flat',
-    categoryName: '外壁',
-    subcategory: '新フラット16',
-    name: 'フィエルテ',
-    manufacturer: 'KMEW',
-    modelNumber: 'NH4975A',
-    unit: 'sqm',
-    isOption: true,
-    description: 'フラットデザイン外壁（16mm厚）',
-    variants: [
-      {
-        id: 'v1',
-        color: 'チタンアイロン',
-        colorCode: '3.6YR 4.1/0.3',
-        images: []
-      }
+      { id: 'v1', color: 'チタンコンクリー', colorCode: 'グレー', images: [] },
+      { id: 'v2', color: 'チタンアイロン', colorCode: 'ダークグレー', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 4500 },
@@ -599,7 +174,7 @@ const baseExteriorProducts: Product[] = [
 
   // ===== 外壁 - KMEW カンターピレ =====
   {
-    id: 'ext-wall-canter-001',
+    id: 'ext-wall-canterpile',
     categoryId: 'exterior-wall-canter',
     categoryName: '外壁',
     subcategory: 'カンターピレ',
@@ -610,12 +185,7 @@ const baseExteriorProducts: Product[] = [
     isOption: true,
     description: 'タイルデザイン外壁（16mm厚）',
     variants: [
-      {
-        id: 'v1',
-        color: 'シルクチタンホワイト',
-        colorCode: '2Y 8.2/0.9',
-        images: []
-      }
+      { id: 'v1', color: 'シルクチタンホワイト', colorCode: 'ホワイト', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 4500 },
@@ -625,47 +195,19 @@ const baseExteriorProducts: Product[] = [
 
   // ===== 外壁 - KONOSHIMA アルテミュール =====
   {
-    id: 'ext-wall-arte-001',
+    id: 'ext-wall-artemur',
     categoryId: 'exterior-wall-arte',
     categoryName: '外壁',
     subcategory: 'アルテミュール',
-    name: 'レッドシダーナチュラルGC',
+    name: 'アルテミュール',
     manufacturer: 'KONOSHIMA',
-    modelNumber: 'ARTE-RCN-GC',
+    modelNumber: 'ARTE-RCx-GC',
     unit: 'sqm',
     isOption: true,
     description: 'アルテミュール 木目調外壁',
     variants: [
-      {
-        id: 'v1',
-        color: 'レッドシダーナチュラル',
-        colorCode: '8.8YR 6.3/3.4',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 4500 },
-      { plan: 'HOURS', price: 4500 }
-    ]
-  },
-  {
-    id: 'ext-wall-arte-002',
-    categoryId: 'exterior-wall-arte',
-    categoryName: '外壁',
-    subcategory: 'アルテミュール',
-    name: 'レッドシダーエイジングGC',
-    manufacturer: 'KONOSHIMA',
-    modelNumber: 'ARTE-RCE-GC',
-    unit: 'sqm',
-    isOption: true,
-    description: 'アルテミュール 木目調外壁',
-    variants: [
-      {
-        id: 'v1',
-        color: 'レッドシダーエイジング',
-        colorCode: '7.9YR 4.7/5.3',
-        images: []
-      }
+      { id: 'v1', color: 'レッドシダーナチュラル', colorCode: 'レッドシダーナチュラル', images: [] },
+      { id: 'v2', color: 'レッドシダーエイジング', colorCode: 'レッドシダーエイジング', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 4500 },
@@ -673,25 +215,20 @@ const baseExteriorProducts: Product[] = [
     ]
   },
 
-  // ===== 外壁 - AICA ジョリパット =====
+  // ===== 外壁 - AICA ジョリパットネオ∞ =====
   {
-    id: 'ext-wall-jolypate-001',
+    id: 'ext-wall-jolypate',
     categoryId: 'exterior-wall-jolypate',
     categoryName: '外壁',
     subcategory: 'ジョリパットネオ∞',
-    name: 'エンシェントブリック',
+    name: 'ジョリパットネオ∞ エンシェントブリック',
     manufacturer: 'AICA',
-    modelNumber: 'JQ-620-T1010',
+    modelNumber: 'JQ-620-Txxxx',
     unit: 'sqm',
     isOption: true,
     description: 'ジョリパットネオ∞ 塗装仕上げ',
     variants: [
-      {
-        id: 'v1',
-        color: 'T1010',
-        colorCode: '3.81Y 8.48/0.71',
-        images: []
-      }
+      { id: 'v1', color: 'T1010', colorCode: 'クリーム', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 12500 },
@@ -701,101 +238,21 @@ const baseExteriorProducts: Product[] = [
 
   // ===== 外壁 - KMEW SOLIDO =====
   {
-    id: 'ext-wall-solido-001',
+    id: 'ext-wall-solido',
     categoryId: 'exterior-wall-solido',
     categoryName: '外壁',
     subcategory: 'SOLIDO',
     name: 'SOLIDO typeM_LAP',
     manufacturer: 'KMEW',
-    modelNumber: 'SMG72G',
+    modelNumber: 'SMGxxG',
     unit: 'sqm',
     isOption: true,
     description: 'SOLIDO 高級外壁材 HOURS/LACIE:5㎡以下は80,000円/式 LIFE+/LIFE:5㎡以下は110,000円/式',
     variants: [
-      {
-        id: 'v1',
-        color: '鉄黒（てつぐろ）',
-        colorCode: 'N3.5',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 17000 },
-      { plan: 'HOURS', price: 17000 },
-      { plan: 'LIFE+', price: 21500 },
-      { plan: 'LIFE', price: 21500 }
-    ]
-  },
-  {
-    id: 'ext-wall-solido-002',
-    categoryId: 'exterior-wall-solido',
-    categoryName: '外壁',
-    subcategory: 'SOLIDO',
-    name: 'SOLIDO typeM_LAP',
-    manufacturer: 'KMEW',
-    modelNumber: 'SMG85G',
-    unit: 'sqm',
-    isOption: true,
-    description: 'SOLIDO 高級外壁材 HOURS/LACIE:5㎡以下は80,000円/式 LIFE+/LIFE:5㎡以下は110,000円/式',
-    variants: [
-      {
-        id: 'v1',
-        color: 'セメント',
-        colorCode: 'N5.0',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 17000 },
-      { plan: 'HOURS', price: 17000 },
-      { plan: 'LIFE+', price: 21500 },
-      { plan: 'LIFE', price: 21500 }
-    ]
-  },
-  {
-    id: 'ext-wall-solido-003',
-    categoryId: 'exterior-wall-solido',
-    categoryName: '外壁',
-    subcategory: 'SOLIDO',
-    name: 'SOLIDO typeM_LAP',
-    manufacturer: 'KMEW',
-    modelNumber: 'SMG21G',
-    unit: 'sqm',
-    isOption: true,
-    description: 'SOLIDO 高級外壁材 HOURS/LACIE:5㎡以下は80,000円/式 LIFE+/LIFE:5㎡以下は110,000円/式',
-    variants: [
-      {
-        id: 'v1',
-        color: '錆茶（さびちゃ）',
-        colorCode: '10R 3.5/1.0',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 17000 },
-      { plan: 'HOURS', price: 17000 },
-      { plan: 'LIFE+', price: 21500 },
-      { plan: 'LIFE', price: 21500 }
-    ]
-  },
-  {
-    id: 'ext-wall-solido-004',
-    categoryId: 'exterior-wall-solido',
-    categoryName: '外壁',
-    subcategory: 'SOLIDO',
-    name: 'SOLIDO typeM_LAP',
-    manufacturer: 'KMEW',
-    modelNumber: 'SMG65G',
-    unit: 'sqm',
-    isOption: true,
-    description: 'SOLIDO 高級外壁材 HOURS/LACIE:5㎡以下は80,000円/式 LIFE+/LIFE:5㎡以下は110,000円/式',
-    variants: [
-      {
-        id: 'v1',
-        color: '灰（はい）',
-        colorCode: 'N4.0',
-        images: []
-      }
+      { id: 'v1', color: '鉄黒（てつぐろ）', colorCode: 'ブラック', images: [] },
+      { id: 'v2', color: 'セメント', colorCode: 'グレー', images: [] },
+      { id: 'v3', color: '錆茶（さびちゃ）', colorCode: 'ブラウン', images: [] },
+      { id: 'v4', color: '灰（はい）', colorCode: 'ダークグレー', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 17000 },
@@ -807,119 +264,22 @@ const baseExteriorProducts: Product[] = [
 
   // ===== ポーチタイル - LIXIL メンフィス =====
   {
-    id: 'ext-porch-001',
+    id: 'ext-porch-memphis',
     categoryId: 'porch-tile',
     categoryName: 'ポーチ',
     subcategory: 'メンフィス',
     name: 'メンフィス',
     manufacturer: 'LIXIL',
-    modelNumber: 'IPF-600/MMP-11',
+    modelNumber: 'IPF-600/MMP-xx',
     unit: 'sqm',
     isOption: false,
     description: '600×600 標準内外部ポーチサイズ：1.8m×1.8m',
     variants: [
-      {
-        id: 'v1',
-        color: 'MMP-11',
-        colorCode: '',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-porch-002',
-    categoryId: 'porch-tile',
-    categoryName: 'ポーチ',
-    subcategory: 'メンフィス',
-    name: 'メンフィス',
-    manufacturer: 'LIXIL',
-    modelNumber: 'IPF-600/MMP-12',
-    unit: 'sqm',
-    isOption: false,
-    description: '600×600 標準内外部ポーチサイズ：1.8m×1.8m',
-    variants: [
-      {
-        id: 'v1',
-        color: 'MMP-12',
-        colorCode: '',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-porch-003',
-    categoryId: 'porch-tile',
-    categoryName: 'ポーチ',
-    subcategory: 'メンフィス',
-    name: 'メンフィス',
-    manufacturer: 'LIXIL',
-    modelNumber: 'IPF-600/MMP-13',
-    unit: 'sqm',
-    isOption: false,
-    description: '600×600 標準内外部ポーチサイズ：1.8m×1.8m',
-    variants: [
-      {
-        id: 'v1',
-        color: 'MMP-13',
-        colorCode: '',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-porch-004',
-    categoryId: 'porch-tile',
-    categoryName: 'ポーチ',
-    subcategory: 'メンフィス',
-    name: 'メンフィス',
-    manufacturer: 'LIXIL',
-    modelNumber: 'IPF-600/MMP-14',
-    unit: 'sqm',
-    isOption: false,
-    description: '600×600 標準内外部ポーチサイズ：1.8m×1.8m',
-    variants: [
-      {
-        id: 'v1',
-        color: 'MMP-14',
-        colorCode: '',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-porch-005',
-    categoryId: 'porch-tile',
-    categoryName: 'ポーチ',
-    subcategory: 'メンフィス',
-    name: 'メンフィス',
-    manufacturer: 'LIXIL',
-    modelNumber: 'IPF-600/MMP-15',
-    unit: 'sqm',
-    isOption: false,
-    description: '600×600 標準内外部ポーチサイズ：1.8m×1.8m',
-    variants: [
-      {
-        id: 'v1',
-        color: 'MMP-15',
-        colorCode: '',
-        images: []
-      }
+      { id: 'v1', color: 'MMP-11', colorCode: 'MMP-11', images: [] },
+      { id: 'v2', color: 'MMP-12', colorCode: 'MMP-12', images: [] },
+      { id: 'v3', color: 'MMP-13', colorCode: 'MMP-13', images: [] },
+      { id: 'v4', color: 'MMP-14', colorCode: 'MMP-14', images: [] },
+      { id: 'v5', color: 'MMP-15', colorCode: 'MMP-15', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 0 },
@@ -929,7 +289,7 @@ const baseExteriorProducts: Product[] = [
 
   // ===== 屋根材 =====
   {
-    id: 'ext-roof-001',
+    id: 'ext-roof-nisc',
     categoryId: 'roof',
     categoryName: '屋根',
     subcategory: '屋根材',
@@ -940,12 +300,7 @@ const baseExteriorProducts: Product[] = [
     isOption: false,
     description: '材料標準保証規格10年 国土交通大臣認定不燃材料 海岸500m以遠原板の穴あき25年保証',
     variants: [
-      {
-        id: 'v1',
-        color: 'Sブラック',
-        colorCode: '',
-        images: []
-      }
+      { id: 'v1', color: 'Sブラック', colorCode: 'ブラック', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 0 },
@@ -953,145 +308,22 @@ const baseExteriorProducts: Product[] = [
     ]
   },
 
-  // ===== 樋 =====
+  // ===== 樋 - 横樋 =====
   {
-    id: 'ext-gutter-001',
+    id: 'ext-gutter-horizontal',
     categoryId: 'gutter',
     categoryName: '樋',
     subcategory: '横樋',
     name: 'ファインスケアNF-I型',
     manufacturer: 'Panasonic',
-    modelNumber: 'MQF0180J',
+    modelNumber: 'MQFxxxx',
     unit: 'set',
     isOption: false,
     description: '横樋',
     variants: [
-      {
-        id: 'v1',
-        color: 'ミルクホワイト',
-        colorCode: '',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-gutter-002',
-    categoryId: 'gutter',
-    categoryName: '樋',
-    subcategory: '横樋',
-    name: 'ファインスケアNF-I型',
-    manufacturer: 'Panasonic',
-    modelNumber: 'MQF1180J',
-    unit: 'set',
-    isOption: false,
-    description: '横樋',
-    variants: [
-      {
-        id: 'v1',
-        color: 'パールグレー（しろ）',
-        colorCode: '',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-gutter-003',
-    categoryId: 'gutter',
-    categoryName: '樋',
-    subcategory: '横樋',
-    name: 'ファインスケアNF-I型',
-    manufacturer: 'Panasonic',
-    modelNumber: 'MQF6180J',
-    unit: 'set',
-    isOption: false,
-    description: '横樋',
-    variants: [
-      {
-        id: 'v1',
-        color: 'ブラック',
-        colorCode: '',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-gutter-004',
-    categoryId: 'gutter',
-    categoryName: '樋',
-    subcategory: '縦樋',
-    name: 'S30',
-    manufacturer: 'Panasonic',
-    modelNumber: 'KBP0261K',
-    unit: 'set',
-    isOption: false,
-    description: '縦樋',
-    variants: [
-      {
-        id: 'v1',
-        color: 'ミルクホワイト',
-        colorCode: '',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-gutter-005',
-    categoryId: 'gutter',
-    categoryName: '樋',
-    subcategory: '縦樋',
-    name: 'S30',
-    manufacturer: 'Panasonic',
-    modelNumber: 'KBP1261K',
-    unit: 'set',
-    isOption: false,
-    description: '縦樋',
-    variants: [
-      {
-        id: 'v1',
-        color: 'パールグレー（しろ）',
-        colorCode: '',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-gutter-006',
-    categoryId: 'gutter',
-    categoryName: '樋',
-    subcategory: '縦樋',
-    name: 'S30',
-    manufacturer: 'Panasonic',
-    modelNumber: 'KBP6261K',
-    unit: 'set',
-    isOption: false,
-    description: '縦樋',
-    variants: [
-      {
-        id: 'v1',
-        color: 'ブラック',
-        colorCode: '',
-        images: []
-      }
+      { id: 'v1', color: 'ミルクホワイト', colorCode: 'ミルクホワイト', images: [] },
+      { id: 'v2', color: 'パールグレー（しろ）', colorCode: 'パールグレー', images: [] },
+      { id: 'v3', color: 'ブラック', colorCode: 'ブラック', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 0 },
@@ -1099,9 +331,32 @@ const baseExteriorProducts: Product[] = [
     ]
   },
 
-  // ===== 軒天 =====
+  // ===== 樋 - 縦樋 =====
   {
-    id: 'ext-soffit-001',
+    id: 'ext-gutter-vertical',
+    categoryId: 'gutter',
+    categoryName: '樋',
+    subcategory: '縦樋',
+    name: 'S30',
+    manufacturer: 'Panasonic',
+    modelNumber: 'KBPxxxx',
+    unit: 'set',
+    isOption: false,
+    description: '縦樋',
+    variants: [
+      { id: 'v1', color: 'ミルクホワイト', colorCode: 'ミルクホワイト', images: [] },
+      { id: 'v2', color: 'パールグレー（しろ）', colorCode: 'パールグレー', images: [] },
+      { id: 'v3', color: 'ブラック', colorCode: 'ブラック', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 }
+    ]
+  },
+
+  // ===== 軒天 - エンボス =====
+  {
+    id: 'ext-soffit-emboss',
     categoryId: 'soffit',
     categoryName: '軒天',
     subcategory: 'エンボス',
@@ -1112,44 +367,18 @@ const baseExteriorProducts: Product[] = [
     isOption: false,
     description: '軒天材',
     variants: [
-      {
-        id: 'v1',
-        color: 'ホワイト',
-        colorCode: '',
-        images: []
-      }
+      { id: 'v1', color: 'エンボスホワイト', colorCode: 'エンボスホワイト', images: [] },
+      { id: 'v2', color: 'エンボスブラック', colorCode: 'エンボスブラック', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 0 },
       { plan: 'HOURS', price: 0 }
     ]
   },
+
+  // ===== 軒天 - アルテザート =====
   {
-    id: 'ext-soffit-002',
-    categoryId: 'soffit',
-    categoryName: '軒天',
-    subcategory: 'エンボス',
-    name: 'エンボス',
-    manufacturer: '神島化学',
-    modelNumber: 'EMBOSS-BK',
-    unit: 'sqm',
-    isOption: false,
-    description: '軒天材',
-    variants: [
-      {
-        id: 'v1',
-        color: 'ブラック',
-        colorCode: '',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-soffit-003',
+    id: 'ext-soffit-artezart',
     categoryId: 'soffit',
     categoryName: '軒天',
     subcategory: 'アルテザート',
@@ -1160,12 +389,7 @@ const baseExteriorProducts: Product[] = [
     isOption: true,
     description: '準耐火仕様の場合、上階に居室が乗っている箇所は採用不可。5㎡までは80,000円/式',
     variants: [
-      {
-        id: 'v1',
-        color: 'レッドシダーナチュラル',
-        colorCode: '',
-        images: []
-      }
+      { id: 'v1', color: 'レッドシダーナチュラル', colorCode: 'レッドシダーナチュラル', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 18000 },
@@ -1175,7 +399,7 @@ const baseExteriorProducts: Product[] = [
 
   // ===== 窓 - APW330 =====
   {
-    id: 'ext-window-001',
+    id: 'ext-window-apw330',
     categoryId: 'window',
     categoryName: '窓',
     subcategory: 'APW330',
@@ -1186,132 +410,52 @@ const baseExteriorProducts: Product[] = [
     isOption: false,
     description: '樹脂サッシ アルゴンガス ペアガラス 熱貫流率1.31W/(㎡・K)',
     variants: [
-      {
-        id: 'v1',
-        color: 'ホワイト',
-        colorCode: '',
-        images: []
-      }
+      { id: 'v1', color: 'ホワイト', colorCode: 'ホワイト', images: [] },
+      { id: 'v2', color: 'プラチナステン', colorCode: 'プラチナステン', images: [] },
+      { id: 'v3', color: 'ブラウン', colorCode: 'ブラウン', images: [] },
+      { id: 'v4', color: 'ブラック', colorCode: 'ブラック', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 0 },
       { plan: 'HOURS', price: 0 }
     ]
   },
+
+  // ===== 窓オプション - 電動シャッター W1650まで =====
   {
-    id: 'ext-window-002',
-    categoryId: 'window',
-    categoryName: '窓',
-    subcategory: 'APW330',
-    name: 'APW330',
-    manufacturer: 'YKKAP',
-    modelNumber: 'APW330-PS',
-    unit: 'piece',
-    isOption: false,
-    description: '樹脂サッシ アルゴンガス ペアガラス',
-    variants: [
-      {
-        id: 'v1',
-        color: 'プラチナステン',
-        colorCode: '',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-window-003',
-    categoryId: 'window',
-    categoryName: '窓',
-    subcategory: 'APW330',
-    name: 'APW330',
-    manufacturer: 'YKKAP',
-    modelNumber: 'APW330-BR',
-    unit: 'piece',
-    isOption: false,
-    description: '樹脂サッシ アルゴンガス ペアガラス',
-    variants: [
-      {
-        id: 'v1',
-        color: 'ブラウン',
-        colorCode: '',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-window-004',
-    categoryId: 'window',
-    categoryName: '窓',
-    subcategory: 'APW330',
-    name: 'APW330',
-    manufacturer: 'YKKAP',
-    modelNumber: 'APW330-BK',
-    unit: 'piece',
-    isOption: false,
-    description: '樹脂サッシ アルゴンガス ペアガラス',
-    variants: [
-      {
-        id: 'v1',
-        color: 'ブラック',
-        colorCode: '',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-window-option-001',
+    id: 'ext-window-shutter-w1650',
     categoryId: 'window-option',
     categoryName: '窓',
     subcategory: '窓オプション',
-    name: '電動シャッター',
+    name: '電動シャッター W1650まで',
     manufacturer: 'YKKAP',
     modelNumber: 'SHUTTER-E-W1650',
     unit: 'piece',
     isOption: true,
     description: '電動シャッターへ変更 W1650まで',
     variants: [
-      {
-        id: 'v1',
-        color: '標準色',
-        colorCode: '',
-        images: []
-      }
+      { id: 'v1', color: '標準色', colorCode: '標準', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 36000 },
       { plan: 'HOURS', price: 36000 }
     ]
   },
+
+  // ===== 窓オプション - 電動シャッター W2560まで =====
   {
-    id: 'ext-window-option-002',
+    id: 'ext-window-shutter-w2560',
     categoryId: 'window-option',
     categoryName: '窓',
     subcategory: '窓オプション',
-    name: '電動シャッター',
+    name: '電動シャッター W2560まで',
     manufacturer: 'YKKAP',
     modelNumber: 'SHUTTER-E-W2560',
     unit: 'piece',
     isOption: true,
     description: '電動シャッターへ変更 W2560まで',
     variants: [
-      {
-        id: 'v1',
-        color: '標準色',
-        colorCode: '',
-        images: []
-      }
+      { id: 'v1', color: '標準色', colorCode: '標準', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 120000 },
@@ -1321,7 +465,7 @@ const baseExteriorProducts: Product[] = [
 
   // ===== 玄関ドア - ヴェナートD30 =====
   {
-    id: 'ext-door-001',
+    id: 'ext-door-venato-d30',
     categoryId: 'entrance-door',
     categoryName: '玄関ドア',
     subcategory: 'ヴェナートD30',
@@ -1332,12 +476,7 @@ const baseExteriorProducts: Product[] = [
     isOption: false,
     description: '100V電気錠 ポケットキー付き 防火・非防火対応',
     variants: [
-      {
-        id: 'v1',
-        color: 'アイスブルーノーチェ',
-        colorCode: '',
-        images: []
-      }
+      { id: 'v1', color: 'アイスブルーノーチェ', colorCode: 'アイスブルーノーチェ', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 0 },
@@ -1345,33 +484,30 @@ const baseExteriorProducts: Product[] = [
     ]
   },
 
-  // ===== 外部設備 =====
+  // ===== 外部設備 - 外部コンセント（標準） =====
   {
-    id: 'ext-facility-001',
+    id: 'ext-facility-outlet-std',
     categoryId: 'exterior-facility',
     categoryName: '外部設備',
     subcategory: '外部コンセント',
-    name: '外部コンセント',
+    name: '外部コンセント（1カ所標準）',
     manufacturer: 'Panasonic',
     modelNumber: 'EXT-OUTLET',
     unit: 'piece',
     isOption: false,
     description: '外部コンセント（1カ所標準）',
     variants: [
-      {
-        id: 'v1',
-        color: '標準',
-        colorCode: '',
-        images: []
-      }
+      { id: 'v1', color: '標準', colorCode: '標準', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 0 },
       { plan: 'HOURS', price: 0 }
     ]
   },
+
+  // ===== 外部設備 - 外部コンセント追加 =====
   {
-    id: 'ext-facility-002',
+    id: 'ext-facility-outlet-add',
     categoryId: 'exterior-facility',
     categoryName: '外部設備',
     subcategory: '外部コンセント',
@@ -1382,20 +518,17 @@ const baseExteriorProducts: Product[] = [
     isOption: true,
     description: '外部コンセント追加',
     variants: [
-      {
-        id: 'v1',
-        color: '標準',
-        colorCode: '',
-        images: []
-      }
+      { id: 'v1', color: '標準', colorCode: '標準', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 12000 },
       { plan: 'HOURS', price: 12000 }
     ]
   },
+
+  // ===== 外部設備 - EV用コンセント =====
   {
-    id: 'ext-facility-003',
+    id: 'ext-facility-ev-outlet',
     categoryId: 'exterior-facility',
     categoryName: '外部設備',
     subcategory: '外部コンセント',
@@ -1406,20 +539,17 @@ const baseExteriorProducts: Product[] = [
     isOption: true,
     description: 'EV用コンセント（1ヶ所）',
     variants: [
-      {
-        id: 'v1',
-        color: '標準',
-        colorCode: '',
-        images: []
-      }
+      { id: 'v1', color: '標準', colorCode: '標準', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 20000 },
       { plan: 'HOURS', price: 20000 }
     ]
   },
+
+  // ===== 外部設備 - 散水栓 =====
   {
-    id: 'ext-facility-004',
+    id: 'ext-facility-sansui',
     categoryId: 'exterior-facility',
     categoryName: '外部設備',
     subcategory: '外部水栓',
@@ -1430,20 +560,17 @@ const baseExteriorProducts: Product[] = [
     isOption: false,
     description: '散水栓（排水なし） 標準で1カ所取付可能',
     variants: [
-      {
-        id: 'v1',
-        color: 'メタリックシルバー',
-        colorCode: '',
-        images: []
-      }
+      { id: 'v1', color: 'メタリックシルバー', colorCode: 'メタリックシルバー', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 0 },
       { plan: 'HOURS', price: 0 }
     ]
   },
+
+  // ===== 外部設備 - 立水栓 =====
   {
-    id: 'ext-facility-005',
+    id: 'ext-facility-tachimizu',
     categoryId: 'exterior-facility',
     categoryName: '外部設備',
     subcategory: '外部水栓',
@@ -1454,20 +581,17 @@ const baseExteriorProducts: Product[] = [
     isOption: false,
     description: '立水栓（排水なし） 標準で1カ所取付可能',
     variants: [
-      {
-        id: 'v1',
-        color: 'ブラック',
-        colorCode: '',
-        images: []
-      }
+      { id: 'v1', color: 'ブラック', colorCode: 'ブラック', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 0 },
       { plan: 'HOURS', price: 0 }
     ]
   },
+
+  // ===== 外部設備 - アルミ立水栓追加 =====
   {
-    id: 'ext-facility-006',
+    id: 'ext-facility-tachimizu-add',
     categoryId: 'exterior-facility',
     categoryName: '外部設備',
     subcategory: '外部水栓',
@@ -1478,20 +602,17 @@ const baseExteriorProducts: Product[] = [
     isOption: true,
     description: 'アルミ立水栓追加',
     variants: [
-      {
-        id: 'v1',
-        color: 'シルバー',
-        colorCode: '',
-        images: []
-      }
+      { id: 'v1', color: 'シルバー', colorCode: 'シルバー', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 28000 },
       { plan: 'HOURS', price: 28000 }
     ]
   },
+
+  // ===== 外部設備 - 玄関用マルチフック =====
   {
-    id: 'ext-facility-007',
+    id: 'ext-facility-multihook',
     categoryId: 'exterior-facility',
     categoryName: '外部設備',
     subcategory: '外部設備',
@@ -1502,20 +623,17 @@ const baseExteriorProducts: Product[] = [
     isOption: true,
     description: '玄関用マルチフック（下地込み）',
     variants: [
-      {
-        id: 'v1',
-        color: 'シルバー',
-        colorCode: '',
-        images: []
-      }
+      { id: 'v1', color: 'シルバー', colorCode: 'シルバー', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 20000 },
       { plan: 'HOURS', price: 20000 }
     ]
   },
+
+  // ===== 外部設備 - タープフック =====
   {
-    id: 'ext-facility-008',
+    id: 'ext-facility-tarphook',
     categoryId: 'exterior-facility',
     categoryName: '外部設備',
     subcategory: '外部設備',
@@ -1526,44 +644,38 @@ const baseExteriorProducts: Product[] = [
     isOption: true,
     description: 'アイプレートIP-12（2個セット・下地込み）',
     variants: [
-      {
-        id: 'v1',
-        color: 'シルバー',
-        colorCode: '',
-        images: []
-      }
+      { id: 'v1', color: 'シルバー', colorCode: 'シルバー', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 30000 },
       { plan: 'HOURS', price: 30000 }
     ]
   },
+
+  // ===== 外部設備 - エアコンスリーブキャップ（標準） =====
   {
-    id: 'ext-facility-009',
+    id: 'ext-facility-ac-sleeve-std',
     categoryId: 'exterior-facility',
     categoryName: '外部設備',
     subcategory: '外部設備',
-    name: 'エアコンスリーブキャップ',
+    name: 'エアコンスリーブキャップ（5カ所標準）',
     manufacturer: '標準',
     modelNumber: 'AC-SLEEVE',
     unit: 'piece',
     isOption: false,
     description: 'エアコンスリーブキャップ（5カ所標準）',
     variants: [
-      {
-        id: 'v1',
-        color: 'ホワイト',
-        colorCode: '',
-        images: []
-      }
+      { id: 'v1', color: 'ホワイト', colorCode: 'ホワイト', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 0 },
       { plan: 'HOURS', price: 0 }
     ]
   },
+
+  // ===== 外部設備 - エアコンスリーブキャップ追加 =====
   {
-    id: 'ext-facility-010',
+    id: 'ext-facility-ac-sleeve-add',
     categoryId: 'exterior-facility',
     categoryName: '外部設備',
     subcategory: '外部設備',
@@ -1574,12 +686,7 @@ const baseExteriorProducts: Product[] = [
     isOption: true,
     description: 'エアコンスリーブキャップ追加',
     variants: [
-      {
-        id: 'v1',
-        color: 'ホワイト',
-        colorCode: '',
-        images: []
-      }
+      { id: 'v1', color: 'ホワイト', colorCode: 'ホワイト', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 12000 },
@@ -1589,31 +696,28 @@ const baseExteriorProducts: Product[] = [
 
   // ===== エコキュート =====
   {
-    id: 'ext-ecocute-001',
+    id: 'ext-ecocute-standard',
     categoryId: 'ecocute',
     categoryName: 'エコキュート',
     subcategory: 'エコキュート',
-    name: 'エコキュート370L',
+    name: 'エコキュート370L（標準）',
     manufacturer: 'Panasonic',
     modelNumber: 'HE-S37LQS',
     unit: 'piece',
     isOption: false,
     description: 'Sシリーズ 370L 標準（外部設置）',
     variants: [
-      {
-        id: 'v1',
-        color: '標準',
-        colorCode: '',
-        images: []
-      }
+      { id: 'v1', color: '標準', colorCode: '標準', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 0 },
       { plan: 'HOURS', price: 0 }
     ]
   },
+
+  // ===== エコキュート 460L =====
   {
-    id: 'ext-ecocute-002',
+    id: 'ext-ecocute-460l',
     categoryId: 'ecocute',
     categoryName: 'エコキュート',
     subcategory: 'エコキュート',
@@ -1624,20 +728,17 @@ const baseExteriorProducts: Product[] = [
     isOption: true,
     description: 'Sシリーズ 460Lに変更',
     variants: [
-      {
-        id: 'v1',
-        color: '標準',
-        colorCode: '',
-        images: []
-      }
+      { id: 'v1', color: '標準', colorCode: '標準', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 100000 },
       { plan: 'HOURS', price: 100000 }
     ]
   },
+
+  // ===== エコキュート ウルトラ高圧 370L =====
   {
-    id: 'ext-ecocute-003',
+    id: 'ext-ecocute-ultra-370l',
     categoryId: 'ecocute',
     categoryName: 'エコキュート',
     subcategory: 'エコキュート',
@@ -1648,20 +749,17 @@ const baseExteriorProducts: Product[] = [
     isOption: true,
     description: 'Sシリーズ ウルトラ高圧370Lに変更',
     variants: [
-      {
-        id: 'v1',
-        color: '標準',
-        colorCode: '',
-        images: []
-      }
+      { id: 'v1', color: '標準', colorCode: '標準', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 100000 },
       { plan: 'HOURS', price: 100000 }
     ]
   },
+
+  // ===== エコキュート ウルトラ高圧 460L =====
   {
-    id: 'ext-ecocute-004',
+    id: 'ext-ecocute-ultra-460l',
     categoryId: 'ecocute',
     categoryName: 'エコキュート',
     subcategory: 'エコキュート',
@@ -1672,18 +770,13 @@ const baseExteriorProducts: Product[] = [
     isOption: true,
     description: 'Sシリーズ ウルトラ高圧460Lに変更',
     variants: [
-      {
-        id: 'v1',
-        color: '標準',
-        colorCode: '',
-        images: []
-      }
+      { id: 'v1', color: '標準', colorCode: '標準', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 145000 },
       { plan: 'HOURS', price: 145000 }
     ]
-  }
+  },
 ];
 
 // 基本製品と追加製品をマージ

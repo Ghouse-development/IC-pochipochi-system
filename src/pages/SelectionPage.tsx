@@ -620,7 +620,7 @@ export function SelectionPage({ projectId, onBack }: SelectionPageProps) {
             {/* Footer */}
             <div className="p-4 border-t border-gray-200">
               <div className="flex justify-between items-center mb-4">
-                <span className="text-gray-600">合計オプション価格</span>
+                <span className="text-gray-600">合計オプション価格<span className="text-xs text-gray-400 ml-1">税別</span></span>
                 <span className="text-xl font-bold text-gray-900">
                   {formatPrice(totalPrice)}
                 </span>

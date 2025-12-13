@@ -1,78 +1,25 @@
 // エクステリア（外装）製品データ - FACADE Style Book 26-29ページ
+// 色バリアント統合版
 import type { Product } from '../types/product';
 
 export const exteriorProductsPage26to29: Product[] = [
   // ===== 26ページ - APW430 トリプルガラス窓 =====
   {
-    id: 'ext-window-apw430-001',
+    id: 'ext-window-apw430',
     categoryId: 'window',
     categoryName: '窓',
     subcategory: 'APW430',
-    name: 'APW430 ホワイト',
+    name: 'APW430',
     manufacturer: 'YKKAP',
-    modelNumber: 'APW430-WH',
+    modelNumber: 'APW430',
     unit: 'piece',
     isOption: false,
     description: '樹脂サッシ アルゴンガス トリプルガラス 熱貫流率0.90W/(㎡・K) LACIE/HOURS標準',
     variants: [
-      { id: 'v1', color: 'ホワイト', colorCode: 'YW', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-window-apw430-002',
-    categoryId: 'window',
-    categoryName: '窓',
-    subcategory: 'APW430',
-    name: 'APW430 プラチナステン',
-    manufacturer: 'YKKAP',
-    modelNumber: 'APW430-PS',
-    unit: 'piece',
-    isOption: false,
-    description: '樹脂サッシ アルゴンガス トリプルガラス 熱貫流率0.90W/(㎡・K) LACIE/HOURS標準',
-    variants: [
-      { id: 'v1', color: 'プラチナステン', colorCode: 'JO', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-window-apw430-003',
-    categoryId: 'window',
-    categoryName: '窓',
-    subcategory: 'APW430',
-    name: 'APW430 ブラウン',
-    manufacturer: 'YKKAP',
-    modelNumber: 'APW430-BR',
-    unit: 'piece',
-    isOption: false,
-    description: '樹脂サッシ アルゴンガス トリプルガラス 熱貫流率0.90W/(㎡・K) LACIE/HOURS標準',
-    variants: [
-      { id: 'v1', color: 'ブラウン', colorCode: 'J5', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-window-apw430-004',
-    categoryId: 'window',
-    categoryName: '窓',
-    subcategory: 'APW430',
-    name: 'APW430 ブラック',
-    manufacturer: 'YKKAP',
-    modelNumber: 'APW430-BK',
-    unit: 'piece',
-    isOption: false,
-    description: '樹脂サッシ アルゴンガス トリプルガラス 熱貫流率0.90W/(㎡・K) LACIE/HOURS標準',
-    variants: [
-      { id: 'v1', color: 'ブラック', colorCode: '3A', images: [] }
+      { id: 'v1', color: 'ホワイト', colorCode: 'YW', images: [] },
+      { id: 'v2', color: 'プラチナステン', colorCode: 'JO', images: [] },
+      { id: 'v3', color: 'ブラウン', colorCode: 'J5', images: [] },
+      { id: 'v4', color: 'ブラック', colorCode: '3A', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 0 },
@@ -81,7 +28,7 @@ export const exteriorProductsPage26to29: Product[] = [
   },
   // APW430 LIFE+/LIFEオプション
   {
-    id: 'ext-window-apw430-life-001',
+    id: 'ext-window-apw430-upgrade',
     categoryId: 'window-option',
     categoryName: '窓',
     subcategory: 'APW430オプション',
@@ -101,7 +48,7 @@ export const exteriorProductsPage26to29: Product[] = [
   },
   // APW430 窓追加オプション
   {
-    id: 'ext-window-apw430-add-001',
+    id: 'ext-window-apw430-add-22',
     categoryId: 'window-option',
     categoryName: '窓',
     subcategory: '窓追加',
@@ -122,7 +69,7 @@ export const exteriorProductsPage26to29: Product[] = [
     ]
   },
   {
-    id: 'ext-window-apw430-add-002',
+    id: 'ext-window-apw430-add-fire',
     categoryId: 'window-option',
     categoryName: '窓',
     subcategory: '窓追加',
@@ -143,7 +90,7 @@ export const exteriorProductsPage26to29: Product[] = [
     ]
   },
   {
-    id: 'ext-window-apw430-add-003',
+    id: 'ext-window-apw430-sliding-22-w1650',
     categoryId: 'window-option',
     categoryName: '窓',
     subcategory: '窓追加',
@@ -164,7 +111,7 @@ export const exteriorProductsPage26to29: Product[] = [
     ]
   },
   {
-    id: 'ext-window-apw430-add-004',
+    id: 'ext-window-apw430-sliding-22-w2560',
     categoryId: 'window-option',
     categoryName: '窓',
     subcategory: '窓追加',
@@ -185,7 +132,7 @@ export const exteriorProductsPage26to29: Product[] = [
     ]
   },
   {
-    id: 'ext-window-apw430-add-005',
+    id: 'ext-window-apw430-sliding-fire-w1650',
     categoryId: 'window-option',
     categoryName: '窓',
     subcategory: '窓追加',
@@ -206,7 +153,7 @@ export const exteriorProductsPage26to29: Product[] = [
     ]
   },
   {
-    id: 'ext-window-apw430-add-006',
+    id: 'ext-window-apw430-sliding-fire-w2560',
     categoryId: 'window-option',
     categoryName: '窓',
     subcategory: '窓追加',
@@ -227,7 +174,7 @@ export const exteriorProductsPage26to29: Product[] = [
     ]
   },
   {
-    id: 'ext-window-apw430-glass-001',
+    id: 'ext-window-apw430-glass-safety',
     categoryId: 'window-option',
     categoryName: '窓',
     subcategory: '窓オプション',
@@ -251,7 +198,7 @@ export const exteriorProductsPage26to29: Product[] = [
   // ===== 27ページ - 玄関ドア ヴェナートD30 =====
   // ドアデザイン N08
   {
-    id: 'ext-door-n08-001',
+    id: 'ext-door-n08',
     categoryId: 'entrance-door',
     categoryName: '玄関ドア',
     subcategory: 'ヴェナートD30 N08',
@@ -262,10 +209,10 @@ export const exteriorProductsPage26to29: Product[] = [
     isOption: false,
     description: '木目の美感を引き立てる ナチュラルモダンデザイン 100V電気錠 ポケットキー付き',
     variants: [
-      { id: 'v1', color: 'アイスブルーノーチェ', colorCode: '', images: [] },
-      { id: 'v2', color: 'ハニーチェリー', colorCode: '', images: [] },
-      { id: 'v3', color: 'ショコラウォールナット', colorCode: '', images: [] },
-      { id: 'v4', color: 'キャラメルチーク', colorCode: '', images: [] }
+      { id: 'v1', color: 'アイスブルーノーチェ', colorCode: 'アイスブルーノーチェ', images: [] },
+      { id: 'v2', color: 'ハニーチェリー', colorCode: 'ハニーチェリー', images: [] },
+      { id: 'v3', color: 'ショコラウォールナット', colorCode: 'ショコラウォールナット', images: [] },
+      { id: 'v4', color: 'キャラメルチーク', colorCode: 'キャラメルチーク', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 0 },
@@ -276,7 +223,7 @@ export const exteriorProductsPage26to29: Product[] = [
   },
   // ドアデザイン N18
   {
-    id: 'ext-door-n18-001',
+    id: 'ext-door-n18',
     categoryId: 'entrance-door',
     categoryName: '玄関ドア',
     subcategory: 'ヴェナートD30 N18',
@@ -287,10 +234,10 @@ export const exteriorProductsPage26to29: Product[] = [
     isOption: false,
     description: '程よくラフなバランスが絶妙の アースナチュラルデザイン 100V電気錠 ポケットキー付き',
     variants: [
-      { id: 'v1', color: 'アイスブルーノーチェ', colorCode: '', images: [] },
-      { id: 'v2', color: 'ハニーチェリー', colorCode: '', images: [] },
-      { id: 'v3', color: 'ショコラウォールナット', colorCode: '', images: [] },
-      { id: 'v4', color: 'キャラメルチーク', colorCode: '', images: [] }
+      { id: 'v1', color: 'アイスブルーノーチェ', colorCode: 'アイスブルーノーチェ', images: [] },
+      { id: 'v2', color: 'ハニーチェリー', colorCode: 'ハニーチェリー', images: [] },
+      { id: 'v3', color: 'ショコラウォールナット', colorCode: 'ショコラウォールナット', images: [] },
+      { id: 'v4', color: 'キャラメルチーク', colorCode: 'キャラメルチーク', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 0 },
@@ -301,7 +248,7 @@ export const exteriorProductsPage26to29: Product[] = [
   },
   // ドアデザイン N15
   {
-    id: 'ext-door-n15-001',
+    id: 'ext-door-n15',
     categoryId: 'entrance-door',
     categoryName: '玄関ドア',
     subcategory: 'ヴェナートD30 N15',
@@ -312,10 +259,10 @@ export const exteriorProductsPage26to29: Product[] = [
     isOption: false,
     description: '木目の表情を引き立てる シンプルモダンデザイン 100V電気錠 ポケットキー付き',
     variants: [
-      { id: 'v1', color: 'アイスブルーノーチェ', colorCode: '', images: [] },
-      { id: 'v2', color: 'ハニーチェリー', colorCode: '', images: [] },
-      { id: 'v3', color: 'ショコラウォールナット', colorCode: '', images: [] },
-      { id: 'v4', color: 'キャラメルチーク', colorCode: '', images: [] }
+      { id: 'v1', color: 'アイスブルーノーチェ', colorCode: 'アイスブルーノーチェ', images: [] },
+      { id: 'v2', color: 'ハニーチェリー', colorCode: 'ハニーチェリー', images: [] },
+      { id: 'v3', color: 'ショコラウォールナット', colorCode: 'ショコラウォールナット', images: [] },
+      { id: 'v4', color: 'キャラメルチーク', colorCode: 'キャラメルチーク', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 0 },
@@ -326,7 +273,7 @@ export const exteriorProductsPage26to29: Product[] = [
   },
   // ドアデザイン C10
   {
-    id: 'ext-door-c10-001',
+    id: 'ext-door-c10',
     categoryId: 'entrance-door',
     categoryName: '玄関ドア',
     subcategory: 'ヴェナートD30 C10',
@@ -337,18 +284,18 @@ export const exteriorProductsPage26to29: Product[] = [
     isOption: false,
     description: 'カラーの遊び心と多彩なコントラスト調和を追求する 彩りとなしのプレーンデザイン 100V電気錠 ポケットキー付き',
     variants: [
-      { id: 'v1', color: 'ピュアホワイト', colorCode: '', images: [] },
-      { id: 'v2', color: 'プラチナステン', colorCode: '', images: [] },
-      { id: 'v3', color: 'カームブラック', colorCode: '', images: [] },
-      { id: 'v4', color: 'オレンジ', colorCode: '', images: [] },
-      { id: 'v5', color: 'マスタード', colorCode: '', images: [] },
-      { id: 'v6', color: 'サンドベージュ', colorCode: '', images: [] },
-      { id: 'v7', color: 'ブルーグリーン', colorCode: '', images: [] },
-      { id: 'v8', color: 'ボルドー', colorCode: '', images: [] },
-      { id: 'v9', color: 'ネイビーブルー', colorCode: '', images: [] },
-      { id: 'v10', color: 'ライトブルー', colorCode: '', images: [] },
-      { id: 'v11', color: 'グレイッシュグリーン', colorCode: '', images: [] },
-      { id: 'v12', color: 'オフホワイト', colorCode: '', images: [] }
+      { id: 'v1', color: 'ピュアホワイト', colorCode: 'ピュアホワイト', images: [] },
+      { id: 'v2', color: 'プラチナステン', colorCode: 'プラチナステン', images: [] },
+      { id: 'v3', color: 'カームブラック', colorCode: 'カームブラック', images: [] },
+      { id: 'v4', color: 'オレンジ', colorCode: 'オレンジ', images: [] },
+      { id: 'v5', color: 'マスタード', colorCode: 'マスタード', images: [] },
+      { id: 'v6', color: 'サンドベージュ', colorCode: 'サンドベージュ', images: [] },
+      { id: 'v7', color: 'ブルーグリーン', colorCode: 'ブルーグリーン', images: [] },
+      { id: 'v8', color: 'ボルドー', colorCode: 'ボルドー', images: [] },
+      { id: 'v9', color: 'ネイビーブルー', colorCode: 'ネイビーブルー', images: [] },
+      { id: 'v10', color: 'ライトブルー', colorCode: 'ライトブルー', images: [] },
+      { id: 'v11', color: 'グレイッシュグリーン', colorCode: 'グレイッシュグリーン', images: [] },
+      { id: 'v12', color: 'オフホワイト', colorCode: 'オフホワイト', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 0 },
@@ -359,7 +306,7 @@ export const exteriorProductsPage26to29: Product[] = [
   },
   // 玄関ドアオプション
   {
-    id: 'ext-door-option-001',
+    id: 'ext-door-face-auth',
     categoryId: 'entrance-door-option',
     categoryName: '玄関ドア',
     subcategory: '玄関ドアオプション',
@@ -380,7 +327,7 @@ export const exteriorProductsPage26to29: Product[] = [
     ]
   },
   {
-    id: 'ext-door-option-002',
+    id: 'ext-door-pocket-key',
     categoryId: 'entrance-door-option',
     categoryName: '玄関ドア',
     subcategory: '玄関ドアオプション',
@@ -401,7 +348,7 @@ export const exteriorProductsPage26to29: Product[] = [
   // ===== 28ページ - 外部設備 =====
   // 外部LAN用空配管
   {
-    id: 'ext-facility-lan-001',
+    id: 'ext-facility-lan',
     categoryId: 'exterior-facility',
     categoryName: '外部設備',
     subcategory: '外部配管',
@@ -412,10 +359,10 @@ export const exteriorProductsPage26to29: Product[] = [
     isOption: true,
     description: '外部LAN用空配管',
     variants: [
-      { id: 'v1', color: 'ホワイト/シルバー', colorCode: '', images: [] },
-      { id: 'v2', color: 'シャンパンブロンズ', colorCode: '', images: [] },
-      { id: 'v3', color: 'ホワイト', colorCode: '', images: [] },
-      { id: 'v4', color: 'ブラック', colorCode: '', images: [] }
+      { id: 'v1', color: 'ホワイト/シルバー', colorCode: 'シルバー', images: [] },
+      { id: 'v2', color: 'シャンパンブロンズ', colorCode: 'シャンパンブロンズ', images: [] },
+      { id: 'v3', color: 'ホワイト', colorCode: 'ホワイト', images: [] },
+      { id: 'v4', color: 'ブラック', colorCode: 'ブラック', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 30000 },
@@ -426,7 +373,7 @@ export const exteriorProductsPage26to29: Product[] = [
   },
   // センサーライト付屋外ワイヤレスカメラ
   {
-    id: 'ext-facility-camera-001',
+    id: 'ext-facility-camera-813k',
     categoryId: 'exterior-facility',
     categoryName: '外部設備',
     subcategory: '防犯カメラ',
@@ -447,19 +394,19 @@ export const exteriorProductsPage26to29: Product[] = [
     ]
   },
   {
-    id: 'ext-facility-camera-002',
+    id: 'ext-facility-camera-500x',
     categoryId: 'exterior-facility',
     categoryName: '外部設備',
     subcategory: '防犯カメラ',
     name: 'センサーライト付屋外ワイヤレスカメラ（外でもドアホン用）',
     manufacturer: 'Panasonic',
-    modelNumber: 'VL-CX500X-H',
+    modelNumber: 'VL-CX500X',
     unit: 'piece',
     isOption: true,
     description: 'SVD505（外でもドアホン）採用時のみ選択可能 最大2台まで接続可',
     variants: [
-      { id: 'v1', color: 'グレー', colorCode: '', images: [] },
-      { id: 'v2', color: 'ブラック', colorCode: '', images: [] }
+      { id: 'v1', color: 'グレー', colorCode: 'グレー', images: [] },
+      { id: 'v2', color: 'ブラック', colorCode: 'ブラック', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 140000 },
@@ -470,7 +417,7 @@ export const exteriorProductsPage26to29: Product[] = [
   },
   // 露出用四角ボックス（将来防犯カメラ用）
   {
-    id: 'ext-facility-box-001',
+    id: 'ext-facility-box',
     categoryId: 'exterior-facility',
     categoryName: '外部設備',
     subcategory: '外部設備',
@@ -481,10 +428,10 @@ export const exteriorProductsPage26to29: Product[] = [
     isOption: true,
     description: 'LAN空配管+電源仕込み含む 将来防犯カメラ用',
     variants: [
-      { id: 'v1', color: 'ベージュ', colorCode: 'PV4B-ANFJ', images: [] },
-      { id: 'v2', color: 'ミルキーホワイト', colorCode: 'PV4B-ANFM', images: [] },
-      { id: 'v3', color: 'グレー', colorCode: 'PV4B-ANF', images: [] },
-      { id: 'v4', color: 'ブラック', colorCode: 'PV4B-ANFK', images: [] }
+      { id: 'v1', color: 'ベージュ', colorCode: 'ベージュ', images: [] },
+      { id: 'v2', color: 'ミルキーホワイト', colorCode: 'ホワイト', images: [] },
+      { id: 'v3', color: 'グレー', colorCode: 'グレー', images: [] },
+      { id: 'v4', color: 'ブラック', colorCode: 'ブラック', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 28000 },
@@ -493,62 +440,22 @@ export const exteriorProductsPage26to29: Product[] = [
       { plan: 'LIFE', price: 28000 }
     ]
   },
-  // 外部水栓 追加色
+  // 外部水栓 アルミ立水栓
   {
-    id: 'ext-facility-faucet-001',
+    id: 'ext-facility-faucet-alumi',
     categoryId: 'exterior-facility',
     categoryName: '外部設備',
     subcategory: '外部水栓',
-    name: 'アルミ立水栓 ホワイト',
+    name: 'アルミ立水栓',
     manufacturer: 'オンリーワン',
-    modelNumber: 'GM3-ALWHF',
+    modelNumber: 'GM3-ALxxF',
     unit: 'piece',
     isOption: true,
     description: 'アルミ立水栓 標準形状変更差額',
     variants: [
-      { id: 'v1', color: 'ホワイト', colorCode: '', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 28000 },
-      { plan: 'HOURS', price: 28000 },
-      { plan: 'LIFE+', price: 28000 },
-      { plan: 'LIFE', price: 28000 }
-    ]
-  },
-  {
-    id: 'ext-facility-faucet-002',
-    categoryId: 'exterior-facility',
-    categoryName: '外部設備',
-    subcategory: '外部水栓',
-    name: 'アルミ立水栓 ブロンズ',
-    manufacturer: 'オンリーワン',
-    modelNumber: 'GM3-ALDBF',
-    unit: 'piece',
-    isOption: true,
-    description: 'アルミ立水栓 標準形状変更差額',
-    variants: [
-      { id: 'v1', color: 'ブロンズ', colorCode: '', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 28000 },
-      { plan: 'HOURS', price: 28000 },
-      { plan: 'LIFE+', price: 28000 },
-      { plan: 'LIFE', price: 28000 }
-    ]
-  },
-  {
-    id: 'ext-facility-faucet-003',
-    categoryId: 'exterior-facility',
-    categoryName: '外部設備',
-    subcategory: '外部水栓',
-    name: 'アルミ立水栓 メタリックグレー',
-    manufacturer: 'オンリーワン',
-    modelNumber: 'GM3-ALUCF',
-    unit: 'piece',
-    isOption: true,
-    description: 'アルミ立水栓 標準形状変更差額',
-    variants: [
-      { id: 'v1', color: 'メタリックグレー', colorCode: '', images: [] }
+      { id: 'v1', color: 'ホワイト', colorCode: 'ホワイト', images: [] },
+      { id: 'v2', color: 'ブロンズ', colorCode: 'ブロンズ', images: [] },
+      { id: 'v3', color: 'メタリックグレー', colorCode: 'メタリックグレー', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 28000 },
@@ -559,7 +466,7 @@ export const exteriorProductsPage26to29: Product[] = [
   },
   // ステンレス混合立水栓
   {
-    id: 'ext-facility-faucet-004',
+    id: 'ext-facility-faucet-stainless',
     categoryId: 'exterior-facility',
     categoryName: '外部設備',
     subcategory: '外部水栓',
@@ -570,7 +477,7 @@ export const exteriorProductsPage26to29: Product[] = [
     isOption: true,
     description: 'ステンレス混合立水栓 標準形状変更差額 別途給湯工事費用必要',
     variants: [
-      { id: 'v1', color: 'ステンレス', colorCode: '', images: [] }
+      { id: 'v1', color: 'ステンレス', colorCode: 'シルバー', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 53000 },
@@ -581,7 +488,7 @@ export const exteriorProductsPage26to29: Product[] = [
   },
   // 散水栓/立水栓（排水仕込み追加）
   {
-    id: 'ext-facility-faucet-005',
+    id: 'ext-facility-faucet-drain',
     categoryId: 'exterior-facility',
     categoryName: '外部設備',
     subcategory: '外部水栓',
@@ -603,7 +510,7 @@ export const exteriorProductsPage26to29: Product[] = [
   },
   // 散水栓/立水栓追加
   {
-    id: 'ext-facility-faucet-006',
+    id: 'ext-facility-faucet-add',
     categoryId: 'exterior-facility',
     categoryName: '外部設備',
     subcategory: '外部水栓',
@@ -625,7 +532,7 @@ export const exteriorProductsPage26to29: Product[] = [
   },
   // アンテナ
   {
-    id: 'ext-facility-antenna-001',
+    id: 'ext-facility-antenna-tv',
     categoryId: 'exterior-facility',
     categoryName: '外部設備',
     subcategory: 'アンテナ',
@@ -636,10 +543,10 @@ export const exteriorProductsPage26to29: Product[] = [
     isOption: true,
     description: '地上波TVアンテナ ブースター含む',
     variants: [
-      { id: 'v1', color: 'オフホワイト', colorCode: '', images: [] },
-      { id: 'v2', color: 'ライトブラウン', colorCode: '', images: [] },
-      { id: 'v3', color: 'ブラックブラウン', colorCode: '', images: [] },
-      { id: 'v4', color: 'ブラック', colorCode: '', images: [] }
+      { id: 'v1', color: 'オフホワイト', colorCode: 'オフホワイト', images: [] },
+      { id: 'v2', color: 'ライトブラウン', colorCode: 'ライトブラウン', images: [] },
+      { id: 'v3', color: 'ブラックブラウン', colorCode: 'ダークブラウン', images: [] },
+      { id: 'v4', color: 'ブラック', colorCode: 'ブラック', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 95000 },
@@ -649,7 +556,7 @@ export const exteriorProductsPage26to29: Product[] = [
     ]
   },
   {
-    id: 'ext-facility-antenna-002',
+    id: 'ext-facility-antenna-bs',
     categoryId: 'exterior-facility',
     categoryName: '外部設備',
     subcategory: 'アンテナ',
@@ -660,7 +567,7 @@ export const exteriorProductsPage26to29: Product[] = [
     isOption: true,
     description: 'BSアンテナ追加 TVアンテナ設置時の追加料金',
     variants: [
-      { id: 'v1', color: 'ホワイト', colorCode: '', images: [] }
+      { id: 'v1', color: 'ホワイト', colorCode: 'ホワイト', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 80000 },
@@ -673,123 +580,23 @@ export const exteriorProductsPage26to29: Product[] = [
   // ===== 29ページ - 換気システム・エコキュート =====
   // 換気ガラリ
   {
-    id: 'ext-ventilation-001',
+    id: 'ext-ventilation-galari',
     categoryId: 'ventilation',
     categoryName: '換気システム',
     subcategory: '換気ガラリ',
-    name: '換気ガラリ シルバーメタリック',
+    name: '換気ガラリ',
     manufacturer: '標準',
-    modelNumber: 'TRD-100SM-T',
+    modelNumber: 'TRD-100xx-T',
     unit: 'piece',
     isOption: false,
     description: '換気システム用 換気ガラリ',
     variants: [
-      { id: 'v1', color: 'シルバーメタリック', colorCode: '', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 },
-      { plan: 'LIFE+', price: 0 },
-      { plan: 'LIFE', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-ventilation-002',
-    categoryId: 'ventilation',
-    categoryName: '換気システム',
-    subcategory: '換気ガラリ',
-    name: '換気ガラリ クリア',
-    manufacturer: '標準',
-    modelNumber: 'TRD-100HL-T',
-    unit: 'piece',
-    isOption: false,
-    description: '換気システム用 換気ガラリ',
-    variants: [
-      { id: 'v1', color: 'クリア', colorCode: '', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 },
-      { plan: 'LIFE+', price: 0 },
-      { plan: 'LIFE', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-ventilation-003',
-    categoryId: 'ventilation',
-    categoryName: '換気システム',
-    subcategory: '換気ガラリ',
-    name: '換気ガラリ アイボリー',
-    manufacturer: '標準',
-    modelNumber: 'TRD-100IV-T',
-    unit: 'piece',
-    isOption: false,
-    description: '換気システム用 換気ガラリ',
-    variants: [
-      { id: 'v1', color: 'アイボリー', colorCode: '', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 },
-      { plan: 'LIFE+', price: 0 },
-      { plan: 'LIFE', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-ventilation-004',
-    categoryId: 'ventilation',
-    categoryName: '換気システム',
-    subcategory: '換気ガラリ',
-    name: '換気ガラリ ブラック',
-    manufacturer: '標準',
-    modelNumber: 'TRD-100BK-T',
-    unit: 'piece',
-    isOption: false,
-    description: '換気システム用 換気ガラリ',
-    variants: [
-      { id: 'v1', color: 'ブラック', colorCode: '', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 },
-      { plan: 'LIFE+', price: 0 },
-      { plan: 'LIFE', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-ventilation-005',
-    categoryId: 'ventilation',
-    categoryName: '換気システム',
-    subcategory: '換気ガラリ',
-    name: '換気ガラリ ブラウン',
-    manufacturer: '標準',
-    modelNumber: 'TRD-100BR-T',
-    unit: 'piece',
-    isOption: false,
-    description: '換気システム用 換気ガラリ',
-    variants: [
-      { id: 'v1', color: 'ブラウン', colorCode: '', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 },
-      { plan: 'LIFE+', price: 0 },
-      { plan: 'LIFE', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-ventilation-006',
-    categoryId: 'ventilation',
-    categoryName: '換気システム',
-    subcategory: '換気ガラリ',
-    name: '換気ガラリ ホワイト',
-    manufacturer: '標準',
-    modelNumber: 'TRD-100WH-T',
-    unit: 'piece',
-    isOption: false,
-    description: '換気システム用 換気ガラリ',
-    variants: [
-      { id: 'v1', color: 'ホワイト', colorCode: '', images: [] }
+      { id: 'v1', color: 'シルバーメタリック', colorCode: 'シルバーメタリック', images: [] },
+      { id: 'v2', color: 'クリア', colorCode: 'クリア', images: [] },
+      { id: 'v3', color: 'アイボリー', colorCode: 'アイボリー', images: [] },
+      { id: 'v4', color: 'ブラック', colorCode: 'ブラック', images: [] },
+      { id: 'v5', color: 'ブラウン', colorCode: 'ブラウン', images: [] },
+      { id: 'v6', color: 'ホワイト', colorCode: 'ホワイト', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 0 },
@@ -800,7 +607,7 @@ export const exteriorProductsPage26to29: Product[] = [
   },
   // DSDD給気口カラー変更
   {
-    id: 'ext-ventilation-dsdd-001',
+    id: 'ext-ventilation-dsdd-color',
     categoryId: 'ventilation',
     categoryName: '換気システム',
     subcategory: 'DSDD給気口',
@@ -811,7 +618,7 @@ export const exteriorProductsPage26to29: Product[] = [
     isOption: true,
     description: 'DSDD換気システム採用時のみ カラー変更',
     variants: [
-      { id: 'v1', color: '焼付塗装黒', colorCode: '', images: [] }
+      { id: 'v1', color: '焼付塗装黒', colorCode: 'ブラック', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 25000 },
@@ -822,7 +629,7 @@ export const exteriorProductsPage26to29: Product[] = [
   },
   // 太陽光・蓄電池
   {
-    id: 'ext-solar-001',
+    id: 'ext-solar-relay-pole',
     categoryId: 'solar',
     categoryName: '太陽光・蓄電池',
     subcategory: '中継ポール',
@@ -842,9 +649,9 @@ export const exteriorProductsPage26to29: Product[] = [
       { plan: 'LIFE', price: 250000 }
     ]
   },
-  // エコキュート追加オプション
+  // エコキュート Panasonic Hシリーズ
   {
-    id: 'ext-ecocute-005',
+    id: 'ext-ecocute-h-370-slim',
     categoryId: 'ecocute',
     categoryName: 'エコキュート',
     subcategory: 'エコキュート',
@@ -865,7 +672,7 @@ export const exteriorProductsPage26to29: Product[] = [
     ]
   },
   {
-    id: 'ext-ecocute-006',
+    id: 'ext-ecocute-h-460-slim',
     categoryId: 'ecocute',
     categoryName: 'エコキュート',
     subcategory: 'エコキュート',
@@ -885,8 +692,9 @@ export const exteriorProductsPage26to29: Product[] = [
       { plan: 'LIFE', price: 145000 }
     ]
   },
+  // エコキュート Panasonic Wシリーズ パワフル高圧
   {
-    id: 'ext-ecocute-007',
+    id: 'ext-ecocute-w-370-slim',
     categoryId: 'ecocute',
     categoryName: 'エコキュート',
     subcategory: 'エコキュート',
@@ -907,7 +715,7 @@ export const exteriorProductsPage26to29: Product[] = [
     ]
   },
   {
-    id: 'ext-ecocute-008',
+    id: 'ext-ecocute-w-460-slim',
     categoryId: 'ecocute',
     categoryName: 'エコキュート',
     subcategory: 'エコキュート',
@@ -927,8 +735,9 @@ export const exteriorProductsPage26to29: Product[] = [
       { plan: 'LIFE', price: 270000 }
     ]
   },
+  // エコキュート設置オプション
   {
-    id: 'ext-ecocute-009',
+    id: 'ext-ecocute-indoor',
     categoryId: 'ecocute',
     categoryName: 'エコキュート',
     subcategory: 'エコキュート',
@@ -949,7 +758,7 @@ export const exteriorProductsPage26to29: Product[] = [
     ]
   },
   {
-    id: 'ext-ecocute-010',
+    id: 'ext-ecocute-garage',
     categoryId: 'ecocute',
     categoryName: 'エコキュート',
     subcategory: 'エコキュート',
@@ -970,7 +779,7 @@ export const exteriorProductsPage26to29: Product[] = [
     ]
   },
   {
-    id: 'ext-ecocute-011',
+    id: 'ext-ecocute-salt',
     categoryId: 'ecocute',
     categoryName: 'エコキュート',
     subcategory: 'エコキュート',
@@ -991,7 +800,7 @@ export const exteriorProductsPage26to29: Product[] = [
     ]
   },
   {
-    id: 'ext-ecocute-012',
+    id: 'ext-ecocute-370-add',
     categoryId: 'ecocute',
     categoryName: 'エコキュート',
     subcategory: 'エコキュート',
@@ -1013,7 +822,7 @@ export const exteriorProductsPage26to29: Product[] = [
   },
   // おひさまエコキュート DAIKIN
   {
-    id: 'ext-ecocute-daikin-001',
+    id: 'ext-ecocute-daikin-370',
     categoryId: 'ecocute',
     categoryName: 'エコキュート',
     subcategory: 'おひさまエコキュート',
@@ -1034,7 +843,7 @@ export const exteriorProductsPage26to29: Product[] = [
     ]
   },
   {
-    id: 'ext-ecocute-daikin-002',
+    id: 'ext-ecocute-daikin-460',
     categoryId: 'ecocute',
     categoryName: 'エコキュート',
     subcategory: 'おひさまエコキュート',
@@ -1056,7 +865,7 @@ export const exteriorProductsPage26to29: Product[] = [
   },
   // ナイアガラ出湯 日立
   {
-    id: 'ext-ecocute-hitachi-001',
+    id: 'ext-ecocute-hitachi-370-12f',
     categoryId: 'ecocute',
     categoryName: 'エコキュート',
     subcategory: 'ナイアガラ出湯',
@@ -1077,7 +886,7 @@ export const exteriorProductsPage26to29: Product[] = [
     ]
   },
   {
-    id: 'ext-ecocute-hitachi-002',
+    id: 'ext-ecocute-hitachi-370-3f',
     categoryId: 'ecocute',
     categoryName: 'エコキュート',
     subcategory: 'ナイアガラ出湯',
