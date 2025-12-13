@@ -128,11 +128,13 @@ const convertStaticToItemWithDetails = (product: CatalogProduct, categoryType: s
       symbol: product.unit,
       name: product.unit,
     },
-    variants: product.variants?.map(v => ({
-      id: v.id,
+    variants: product.variants?.map((v, idx) => ({
+      id: v.id || `variant-${idx}`,
       color_name: v.color,
-      color_code: v.colorCode,
-      images: v.imageUrl ? [{ id: 'img-1', image_url: v.imageUrl, thumbnail_url: v.thumbnailUrl }] : [],
+      color_code: v.colorCode || v.color,
+      images: v.imageUrl
+        ? [{ id: 'img-1', image_url: v.imageUrl, thumbnail_url: v.thumbnailUrl }]
+        : (v.images?.length ? v.images.map((img, i) => ({ id: `img-${i}`, image_url: img, thumbnail_url: img })) : []),
     })) || [],
     pricing: product.pricing?.map(p => ({
       id: `pricing-${p.plan || p.planId}`,
