@@ -1373,10 +1373,10 @@ export const CatalogWithTabs: React.FC = () => {
                 <>
                   {/* サブカテゴリ別グループ化表示（カテゴリ選択時のみ） */}
                   {selectedCategoryId && (() => {
-                    // note → model_number → manufacturer の優先順でサブカテゴリとして使用
+                    // category_name（サブカテゴリ名）でグループ化
                     const groupedBySubcategory = filteredItems.reduce((acc, item) => {
-                      // noteフィールドをサブカテゴリとして優先使用
-                      const subcategory = item.note || item.model_number || item.manufacturer || 'その他';
+                      // category_nameにサブカテゴリ名が入っている（例: 窯業系サイディング）
+                      const subcategory = item.category_name || item.model_number || item.manufacturer || 'その他';
                       if (!acc[subcategory]) acc[subcategory] = [];
                       acc[subcategory].push(item);
                       return acc;
@@ -1430,7 +1430,7 @@ export const CatalogWithTabs: React.FC = () => {
                   {/* 通常グリッド表示（グループ化しない場合） */}
                   {(!selectedCategoryId || (() => {
                     const groupedBySubcategory = filteredItems.reduce((acc, item) => {
-                      const subcategory = item.note || item.model_number || item.manufacturer || 'その他';
+                      const subcategory = item.category_name || item.model_number || item.manufacturer || 'その他';
                       if (!acc[subcategory]) acc[subcategory] = [];
                       acc[subcategory].push(item);
                       return acc;
