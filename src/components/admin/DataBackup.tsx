@@ -40,8 +40,6 @@ export const DataBackup: React.FC = () => {
     onConfirm: () => {},
   });
 
-  // Pending import data
-  const [pendingImport, setPendingImport] = useState<BackupData | null>(null);
 
   // 全データをエクスポート
   const handleExport = () => {
@@ -105,7 +103,6 @@ export const DataBackup: React.FC = () => {
         }
 
         // 確認ダイアログを表示
-        setPendingImport(backupData);
         setConfirmDialog({
           isOpen: true,
           title: 'バックアップを復元',
@@ -150,7 +147,6 @@ export const DataBackup: React.FC = () => {
     }
 
     setMessage({ type: 'success', text: '復元が完了しました。ページを再読み込みしてください。' });
-    setPendingImport(null);
 
     // 3秒後にリロード
     setTimeout(() => {
