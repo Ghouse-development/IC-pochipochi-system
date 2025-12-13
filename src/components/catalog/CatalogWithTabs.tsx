@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { Search, ShoppingCart, Check, Sparkles, Star, ChevronRight, X, Filter, Package, Home, Sofa, Wrench, Eye, Scale } from 'lucide-react';
+import { Search, ShoppingCart, Check, Sparkles, Star, ChevronRight, X, Package, Home, Sofa, Wrench, Eye, Scale } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useCartStore } from '../../stores/useCartStore';
 import { formatPrice } from '../../lib/utils';
@@ -121,7 +121,7 @@ const convertToCatalogProduct = (item: ItemWithDetails): CatalogProduct => {
     modelNumber: item.model_number || '',
     unit: (item.unit?.symbol || '式') as CatalogProduct['unit'],
     isOption: pricing ? !pricing.is_standard : false,
-    description: '',
+    description: item.note || '', // noteフィールドをdescriptionにマッピング
     pricing: item.pricing?.map(p => ({
       plan: (p.product?.code || 'LACIE') as 'LACIE' | 'HOURS' | 'LIFE',
       planId: (p.product?.code || undefined) as 'LACIE' | 'HOURS' | 'LIFE' | undefined,
@@ -148,14 +148,207 @@ const STEPS = [
 const SkeletonCard = () => (
   <div className="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
     <div className="aspect-square animate-shimmer" />
-    <div className="p-4 space-y-3">
+    <div className="p-3 space-y-2">
       <div className="h-3 bg-gray-200 rounded animate-shimmer w-1/3" />
       <div className="h-4 bg-gray-200 rounded animate-shimmer" />
-      <div className="h-4 bg-gray-200 rounded animate-shimmer w-2/3" />
-      <div className="h-10 bg-gray-200 rounded-xl animate-shimmer mt-4" />
+      <div className="h-8 bg-gray-200 rounded-xl animate-shimmer mt-3" />
     </div>
   </div>
 );
+
+// 商品カードコンポーネント
+interface ItemCardProps {
+  item: ItemWithDetails;
+  index: number;
+  getPrice: (item: ItemWithDetails) => number;
+  isStandard: (item: ItemWithDetails) => boolean;
+  getImageUrl: (item: ItemWithDetails) => string | null;
+  cartItemIds: Set<string>;
+  addedItemId: string | null;
+  hoveredItem: string | null;
+  setHoveredItem: (id: string | null) => void;
+  handleOpenDetail: (item: ItemWithDetails) => void;
+  handleAddToCart: (item: ItemWithDetails) => void;
+  handleRemoveFromCart: (itemId: string) => void;
+  handleToggleCompare: (item: ItemWithDetails) => void;
+  isInCompare: (itemId: string) => boolean;
+  showManufacturer?: boolean;
+}
+
+const ItemCard: React.FC<ItemCardProps> = ({
+  item,
+  index,
+  getPrice,
+  isStandard,
+  getImageUrl,
+  cartItemIds,
+  addedItemId,
+  hoveredItem,
+  setHoveredItem,
+  handleOpenDetail,
+  handleAddToCart,
+  handleRemoveFromCart,
+  handleToggleCompare,
+  isInCompare,
+  showManufacturer = true,
+}) => {
+  const price = getPrice(item);
+  const standard = isStandard(item);
+  const imageUrl = getImageUrl(item);
+  const inCart = cartItemIds.has(item.id);
+  const isJustAdded = addedItemId === item.id;
+  const isHovered = hoveredItem === item.id;
+  const variant = item.variants?.[0];
+  const inCompare = isInCompare(item.id);
+  const hasMultipleVariants = (item.variants?.length || 0) > 1;
+
+  return (
+    <div
+      className={`group bg-white rounded-xl shadow-sm overflow-hidden border-2 transition-all duration-200 cursor-pointer ${
+        inCart
+          ? 'border-teal-400 shadow-md shadow-teal-100 ring-2 ring-teal-50'
+          : inCompare
+          ? 'border-purple-400 shadow-md shadow-purple-100'
+          : 'border-transparent hover:border-gray-200 hover:shadow-lg'
+      } ${isJustAdded ? 'animate-pochipochi' : ''}`}
+      style={{ animationDelay: `${index * 30}ms` }}
+      onMouseEnter={() => setHoveredItem(item.id)}
+      onMouseLeave={() => setHoveredItem(null)}
+      onClick={() => handleOpenDetail(item)}
+    >
+      {/* 画像エリア - よりコンパクトに */}
+      <div className="aspect-[4/3] bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
+        {imageUrl ? (
+          <img
+            src={imageUrl}
+            alt={item.name}
+            className={`w-full h-full object-cover transition-transform duration-300 ${isHovered ? 'scale-105' : ''}`}
+          />
+        ) : (
+          <div className="w-full h-full flex flex-col items-center justify-center p-3">
+            <div
+              className={`w-16 h-16 rounded-xl mb-2 transition-transform duration-200 ${isHovered ? 'scale-105' : ''}`}
+              style={{
+                background: variant?.color_code
+                  ? `linear-gradient(135deg, ${variant.color_code}, ${variant.color_code}88)`
+                  : 'linear-gradient(135deg, #e5e7eb, #d1d5db)'
+              }}
+            />
+            <span className="text-xs text-gray-400 text-center line-clamp-1">{variant?.color_name || ''}</span>
+          </div>
+        )}
+
+        {/* バッジ - コンパクト化 */}
+        <div className="absolute top-1.5 left-1.5">
+          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold shadow-sm ${
+            standard
+              ? 'bg-teal-500 text-white'
+              : 'bg-orange-500 text-white'
+          }`}>
+            {standard ? '標準' : 'OP'}
+          </span>
+        </div>
+
+        {/* HITバッジ & 比較ボタン */}
+        <div className="absolute top-1.5 right-1.5 flex flex-col gap-1">
+          {item.is_hit && (
+            <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-red-500 text-white shadow-sm flex items-center gap-0.5">
+              <Sparkles className="w-2.5 h-2.5" />
+            </span>
+          )}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleToggleCompare(item);
+            }}
+            className={`p-1.5 rounded-full shadow-sm transition-all ${
+              inCompare
+                ? 'bg-purple-500 text-white'
+                : 'bg-white/90 text-gray-400 hover:text-purple-500'
+            }`}
+            title={inCompare ? '比較から削除' : '比較に追加'}
+          >
+            <Scale className="w-3.5 h-3.5" />
+          </button>
+        </div>
+
+        {/* 選択済みオーバーレイ */}
+        {inCart && (
+          <div className="absolute inset-0 bg-teal-500/20 flex items-center justify-center">
+            <div className="bg-white rounded-full p-2 shadow-lg">
+              <Check className="w-6 h-6 text-teal-600" strokeWidth={3} />
+            </div>
+          </div>
+        )}
+
+        {/* 比較中マーク */}
+        {inCompare && !inCart && (
+          <div className="absolute bottom-1.5 right-1.5">
+            <div className="bg-purple-500 rounded-full p-1">
+              <Scale className="w-3 h-3 text-white" />
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* 情報エリア - コンパクト化 */}
+      <div className="p-2.5">
+        {showManufacturer && (
+          <p className="text-[10px] text-gray-400 font-medium mb-0.5 truncate">{item.manufacturer}</p>
+        )}
+        <h3 className="font-medium text-xs text-gray-800 line-clamp-2 min-h-[2rem] mb-1.5 leading-tight">
+          {item.name}
+        </h3>
+
+        {/* 価格 */}
+        <div className="flex items-baseline gap-1 mb-2">
+          <span className={`text-base font-bold ${price === 0 ? 'text-teal-600' : 'text-gray-900'}`}>
+            {price === 0 ? '標準' : formatPrice(price)}
+          </span>
+          {price > 0 && item.unit && (
+            <span className="text-[10px] text-gray-400">/{item.unit.symbol}</span>
+          )}
+        </div>
+
+        {/* アクションボタン - タップしやすく */}
+        {inCart ? (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleRemoveFromCart(item.id);
+            }}
+            className="w-full py-2 rounded-lg text-xs font-medium bg-gray-100 text-gray-600 hover:bg-red-50 hover:text-red-600 flex items-center justify-center gap-1.5 transition-all active:scale-95"
+          >
+            <X className="w-3.5 h-3.5" />
+            解除
+          </button>
+        ) : hasMultipleVariants ? (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleOpenDetail(item);
+            }}
+            className="w-full py-2 rounded-lg text-xs font-bold bg-gradient-to-r from-blue-500 to-indigo-500 text-white flex items-center justify-center gap-1.5 shadow-sm transition-all active:scale-95"
+          >
+            <Eye className="w-3.5 h-3.5" />
+            {item.variants?.length}色
+          </button>
+        ) : (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleAddToCart(item);
+            }}
+            className="w-full py-2 rounded-lg text-xs font-bold bg-gradient-to-r from-teal-500 to-emerald-500 text-white flex items-center justify-center gap-1.5 shadow-sm transition-all active:scale-95"
+          >
+            <ShoppingCart className="w-3.5 h-3.5" />
+            選択
+          </button>
+        )}
+      </div>
+    </div>
+  );
+};
 
 // 空状態
 const EmptyState = ({ searchTerm, onClear }: { searchTerm: string; onClear: () => void }) => (
@@ -213,7 +406,6 @@ export const CatalogWithTabs: React.FC = () => {
   const [selectedPlanId, setSelectedPlanId] = useState<string>('LACIE');
   const [addedItemId, setAddedItemId] = useState<string | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
-  const [showMobileFilter, setShowMobileFilter] = useState(false);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   // 商品詳細モーダル用
@@ -513,91 +705,95 @@ export const CatalogWithTabs: React.FC = () => {
           </div>
         </div>
 
+        {/* カテゴリナビゲーション（常に表示） */}
+        <div className="bg-white border-b border-gray-200 shadow-sm">
+          <div className="flex items-center gap-2 px-4 py-3 overflow-x-auto scrollbar-thin">
+            <button
+              onClick={() => setSelectedCategoryId(null)}
+              className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                !selectedCategoryId
+                  ? 'bg-gradient-to-r from-teal-500 to-emerald-500 text-white shadow-lg'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              すべて
+            </button>
+            {categories.map(cat => {
+              const count = getCategoryCount(cat.name);
+              const itemCount = items.filter(i => i.category_id === cat.id).length;
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => setSelectedCategoryId(cat.id)}
+                  className={`flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                    selectedCategoryId === cat.id
+                      ? 'bg-gradient-to-r from-teal-500 to-emerald-500 text-white shadow-lg'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  <span>{cat.name}</span>
+                  <span className={`text-xs px-1.5 py-0.5 rounded-full ${
+                    selectedCategoryId === cat.id
+                      ? 'bg-white/30'
+                      : 'bg-gray-200'
+                  }`}>
+                    {itemCount}
+                  </span>
+                  {count > 0 && (
+                    <span className={`w-5 h-5 flex items-center justify-center rounded-full text-xs font-bold ${
+                      selectedCategoryId === cat.id
+                        ? 'bg-white text-teal-600'
+                        : 'bg-teal-500 text-white'
+                    }`}>
+                      {count}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         <div className="flex flex-1 overflow-hidden">
-          {/* サイドバー (PC) */}
-          <div className="hidden lg:flex flex-col w-72 bg-white/80 backdrop-blur-sm border-r border-gray-200 overflow-y-auto">
-            <div className="p-5 space-y-6">
+          {/* サイドバー (PC) - コンパクト化 */}
+          <div className="hidden lg:flex flex-col w-64 bg-white/80 backdrop-blur-sm border-r border-gray-200 overflow-y-auto">
+            <div className="p-4 space-y-4">
               {/* プラン選択 */}
               <div>
-                <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
-                  <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-lg flex items-center justify-center">
-                    <Star className="w-4 h-4 text-white" />
-                  </div>
-                  プラン選択
+                <h3 className="font-bold text-gray-800 mb-2 text-sm flex items-center gap-2">
+                  <Star className="w-4 h-4 text-yellow-500" />
+                  プラン
                 </h3>
-                <div className="space-y-2">
+                <div className="grid grid-cols-1 gap-1.5">
                   {plans.map(plan => (
                     <button
                       key={plan.id}
                       onClick={() => setSelectedPlanId(plan.code)}
-                      className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 ${
+                      className={`text-left px-3 py-2 rounded-lg transition-all duration-200 text-sm ${
                         selectedPlanId === plan.code
-                          ? 'bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-lg shadow-teal-200'
+                          ? 'bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-md'
                           : 'bg-gray-50 hover:bg-gray-100 text-gray-700'
                       }`}
                     >
-                      <span className="font-semibold">{plan.name}</span>
+                      <span className="font-medium">{plan.name}</span>
                     </button>
                   ))}
                 </div>
               </div>
 
-              {/* カテゴリ */}
+              {/* タイプフィルター */}
               <div>
-                <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
-                  <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-lg flex items-center justify-center">
-                    <Filter className="w-4 h-4 text-white" />
-                  </div>
-                  カテゴリ
-                </h3>
-                <div className="space-y-1">
-                  <button
-                    onClick={() => setSelectedCategoryId(null)}
-                    className={`w-full text-left px-4 py-2.5 rounded-xl text-sm transition-all ${
-                      !selectedCategoryId
-                        ? 'bg-teal-100 text-teal-700 font-semibold'
-                        : 'hover:bg-gray-100 text-gray-600'
-                    }`}
-                  >
-                    すべて表示
-                  </button>
-                  {categories.map(cat => {
-                    const count = getCategoryCount(cat.name);
-                    return (
-                      <button
-                        key={cat.id}
-                        onClick={() => setSelectedCategoryId(cat.id)}
-                        className={`w-full text-left px-4 py-2.5 rounded-xl text-sm flex items-center justify-between transition-all ${
-                          selectedCategoryId === cat.id
-                            ? 'bg-teal-100 text-teal-700 font-semibold'
-                            : 'hover:bg-gray-100 text-gray-600'
-                        }`}
-                      >
-                        <span>{cat.name}</span>
-                        {count > 0 && (
-                          <span className="bg-gradient-to-r from-teal-500 to-emerald-500 text-white px-2.5 py-0.5 rounded-full text-xs font-bold">
-                            {count}
-                          </span>
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* フィルター */}
-              <div>
-                <h3 className="font-bold text-gray-800 mb-3">タイプ</h3>
-                <div className="grid grid-cols-3 gap-1 bg-gray-100 p-1 rounded-xl">
+                <h3 className="font-bold text-gray-800 mb-2 text-sm">タイプ</h3>
+                <div className="grid grid-cols-3 gap-1 bg-gray-100 p-1 rounded-lg">
                   {[
                     { value: 'all', label: 'すべて' },
                     { value: 'standard', label: '標準' },
-                    { value: 'option', label: 'オプション' },
+                    { value: 'option', label: 'OP' },
                   ].map(opt => (
                     <button
                       key={opt.value}
                       onClick={() => setFilterType(opt.value as any)}
-                      className={`px-2 py-2 rounded-lg text-xs font-medium transition-all ${
+                      className={`px-2 py-1.5 rounded text-xs font-medium transition-all ${
                         filterType === opt.value
                           ? 'bg-white text-teal-600 shadow-sm'
                           : 'text-gray-500 hover:text-gray-700'
@@ -611,17 +807,37 @@ export const CatalogWithTabs: React.FC = () => {
 
               {/* 部屋別プランナー（内装タブの時のみ） */}
               {activeTab === 'interior' && (
-                <div className="pt-4 border-t border-gray-200">
+                <div className="pt-3 border-t border-gray-200">
                   <button
                     onClick={() => setIsRoomPlannerOpen(true)}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-xl font-medium hover:from-blue-600 hover:to-indigo-600 transition-all shadow-lg shadow-blue-200"
+                    className="w-full flex items-center justify-center gap-2 px-3 py-2.5 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg font-medium text-sm hover:from-blue-600 hover:to-indigo-600 transition-all shadow-md"
                   >
-                    <Home className="w-5 h-5" />
+                    <Home className="w-4 h-4" />
                     部屋別プランナー
                   </button>
-                  <p className="text-xs text-gray-500 mt-2 text-center">
-                    部屋ごとに床材・壁クロスを設定
-                  </p>
+                </div>
+              )}
+
+              {/* 選択中の商品サマリー */}
+              {cartItems.length > 0 && (
+                <div className="pt-3 border-t border-gray-200">
+                  <h3 className="font-bold text-gray-800 mb-2 text-sm flex items-center gap-2">
+                    <ShoppingCart className="w-4 h-4 text-teal-500" />
+                    選択中 ({cartItems.length}件)
+                  </h3>
+                  <div className="space-y-1 max-h-40 overflow-y-auto">
+                    {cartItems.slice(0, 5).map(item => (
+                      <div key={item.product.id} className="flex items-center gap-2 p-1.5 bg-teal-50 rounded-lg text-xs">
+                        <Check className="w-3 h-3 text-teal-500 flex-shrink-0" />
+                        <span className="truncate text-gray-700">{item.product.name}</span>
+                      </div>
+                    ))}
+                    {cartItems.length > 5 && (
+                      <p className="text-xs text-gray-500 text-center">
+                        他 {cartItems.length - 5}件...
+                      </p>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
@@ -629,84 +845,70 @@ export const CatalogWithTabs: React.FC = () => {
 
           {/* メインエリア */}
           <div className="flex-1 flex flex-col overflow-hidden">
-            {/* 検索バー */}
-            <div className="sticky top-0 bg-white/90 backdrop-blur-md border-b border-gray-100 z-10 p-4">
-              <div className="flex items-center gap-3 max-w-4xl mx-auto">
+            {/* 検索バー＋フィルター */}
+            <div className="sticky top-0 bg-white/95 backdrop-blur-md border-b border-gray-100 z-10 p-3">
+              <div className="flex items-center gap-2 max-w-4xl mx-auto">
+                {/* 検索 */}
                 <div className="relative flex-1">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <input
                     type="text"
-                    placeholder="商品名・メーカーで検索..."
+                    placeholder="検索..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 bg-gray-50 border-0 rounded-2xl focus:ring-2 focus:ring-teal-500 focus:bg-white transition-all"
+                    className="w-full pl-10 pr-3 py-2.5 bg-gray-50 border-0 rounded-xl text-sm focus:ring-2 focus:ring-teal-500 focus:bg-white transition-all"
                   />
                   {searchTerm && (
                     <button
                       onClick={() => setSearchTerm('')}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-200 rounded-full"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-200 rounded-full"
                     >
-                      <X className="w-4 h-4 text-gray-400" />
+                      <X className="w-3 h-3 text-gray-400" />
                     </button>
                   )}
                 </div>
 
-                {/* モバイルフィルターボタン */}
-                <button
-                  onClick={() => setShowMobileFilter(!showMobileFilter)}
-                  className="lg:hidden p-3 bg-gray-50 rounded-2xl hover:bg-gray-100"
-                >
-                  <Filter className="w-5 h-5 text-gray-600" />
-                </button>
-              </div>
-
-              {/* モバイルフィルター */}
-              {showMobileFilter && (
-                <div className="lg:hidden mt-3 p-4 bg-gray-50 rounded-2xl animate-slide-up">
-                  <div className="flex flex-wrap gap-2 mb-3">
+                {/* モバイル用プラン・タイプセレクター */}
+                <div className="flex lg:hidden items-center gap-1.5">
+                  {/* プラン選択（コンパクト） */}
+                  <select
+                    value={selectedPlanId}
+                    onChange={(e) => setSelectedPlanId(e.target.value)}
+                    className="px-2 py-2.5 bg-gray-50 border-0 rounded-xl text-xs font-medium text-gray-700 focus:ring-2 focus:ring-teal-500"
+                  >
                     {plans.map(plan => (
-                      <button
-                        key={plan.id}
-                        onClick={() => setSelectedPlanId(plan.code)}
-                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                          selectedPlanId === plan.code
-                            ? 'bg-teal-500 text-white'
-                            : 'bg-white text-gray-600'
-                        }`}
-                      >
-                        {plan.name}
-                      </button>
+                      <option key={plan.id} value={plan.code}>{plan.name}</option>
                     ))}
-                  </div>
-                  <div className="flex gap-2 overflow-x-auto pb-2">
-                    <button
-                      onClick={() => setSelectedCategoryId(null)}
-                      className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap ${
-                        !selectedCategoryId ? 'bg-teal-100 text-teal-700' : 'bg-white text-gray-600'
-                      }`}
-                    >
-                      すべて
-                    </button>
-                    {categories.map(cat => (
+                  </select>
+
+                  {/* タイプフィルター（コンパクト） */}
+                  <div className="flex bg-gray-100 p-0.5 rounded-lg">
+                    {[
+                      { value: 'all', label: '全' },
+                      { value: 'standard', label: '標準' },
+                      { value: 'option', label: 'OP' },
+                    ].map(opt => (
                       <button
-                        key={cat.id}
-                        onClick={() => setSelectedCategoryId(cat.id)}
-                        className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap ${
-                          selectedCategoryId === cat.id ? 'bg-teal-100 text-teal-700' : 'bg-white text-gray-600'
+                        key={opt.value}
+                        onClick={() => setFilterType(opt.value as any)}
+                        className={`px-2 py-1.5 rounded text-xs font-medium transition-all ${
+                          filterType === opt.value
+                            ? 'bg-white text-teal-600 shadow-sm'
+                            : 'text-gray-500'
                         }`}
                       >
-                        {cat.name}
+                        {opt.label}
                       </button>
                     ))}
                   </div>
                 </div>
-              )}
+              </div>
             </div>
 
             {/* 商品グリッド */}
-            <div className="flex-1 overflow-y-auto p-4">
+            <div className="flex-1 overflow-y-auto p-3 sm:p-4">
               {isLoading ? (
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
                   {[...Array(10)].map((_, i) => <SkeletonCard key={i} />)}
                 </div>
               ) : error ? (
@@ -725,156 +927,93 @@ export const CatalogWithTabs: React.FC = () => {
               ) : filteredItems.length === 0 ? (
                 <EmptyState searchTerm={searchTerm} onClear={() => setSearchTerm('')} />
               ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                  {filteredItems.map((item, index) => {
-                    const price = getPrice(item);
-                    const standard = isStandard(item);
-                    const imageUrl = getImageUrl(item);
-                    const inCart = cartItemIds.has(item.id);
-                    const isJustAdded = addedItemId === item.id;
-                    const isHovered = hoveredItem === item.id;
-                    const variant = item.variants?.[0];
+                <>
+                  {/* メーカー別グループ化表示（カテゴリ選択時のみ） */}
+                  {selectedCategoryId && (() => {
+                    // メーカー別にグループ化
+                    const groupedByManufacturer = filteredItems.reduce((acc, item) => {
+                      const mfr = item.manufacturer || 'その他';
+                      if (!acc[mfr]) acc[mfr] = [];
+                      acc[mfr].push(item);
+                      return acc;
+                    }, {} as Record<string, typeof filteredItems>);
+                    const manufacturers = Object.keys(groupedByManufacturer);
 
-                    const inCompare = isInCompare(item.id);
-
-                    return (
-                      <div
-                        key={item.id}
-                        className={`group bg-white rounded-2xl shadow-sm overflow-hidden border-2 transition-all duration-300 animate-slide-up cursor-pointer ${
-                          inCart
-                            ? 'border-teal-400 shadow-lg shadow-teal-100 ring-4 ring-teal-50'
-                            : inCompare
-                            ? 'border-purple-400 shadow-lg shadow-purple-100'
-                            : 'border-transparent hover:border-gray-200 hover:shadow-xl'
-                        } ${isJustAdded ? 'animate-pochipochi' : ''}`}
-                        style={{ animationDelay: `${index * 50}ms` }}
-                        onMouseEnter={() => setHoveredItem(item.id)}
-                        onMouseLeave={() => setHoveredItem(null)}
-                        onClick={() => handleOpenDetail(item)}
-                      >
-                        {/* 画像エリア */}
-                        <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
-                          {imageUrl ? (
-                            <img
-                              src={imageUrl}
-                              alt={item.name}
-                              className={`w-full h-full object-cover transition-transform duration-500 ${isHovered ? 'scale-110' : ''}`}
-                            />
-                          ) : (
-                            <div className="w-full h-full flex flex-col items-center justify-center p-4">
-                              <div
-                                className={`w-20 h-20 rounded-2xl mb-3 transition-transform duration-300 ${isHovered ? 'scale-110 rotate-3' : ''}`}
-                                style={{
-                                  background: variant?.color_code
-                                    ? `linear-gradient(135deg, ${variant.color_code}, ${variant.color_code}88)`
-                                    : 'linear-gradient(135deg, #e5e7eb, #d1d5db)'
-                                }}
-                              />
-                              <span className="text-xs text-gray-400 text-center">{variant?.color_name || item.manufacturer}</span>
-                            </div>
-                          )}
-
-                          {/* バッジ */}
-                          <div className="absolute top-2 left-2 flex flex-col gap-1.5">
-                            <span className={`px-2.5 py-1 rounded-full text-xs font-bold shadow-sm ${
-                              standard
-                                ? 'bg-gradient-to-r from-teal-500 to-emerald-500 text-white'
-                                : 'bg-gradient-to-r from-orange-500 to-amber-500 text-white'
-                            }`}>
-                              {standard ? '標準' : 'オプション'}
-                            </span>
-                            {item.is_hit && (
-                              <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-red-500 to-pink-500 text-white shadow-sm flex items-center gap-1">
-                                <Sparkles className="w-3 h-3" /> HIT
-                              </span>
-                            )}
-                          </div>
-
-                          {/* 比較ボタン（タッチしやすいサイズ） */}
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleToggleCompare(item);
-                            }}
-                            className={`absolute top-2 right-2 p-2.5 rounded-full shadow-md transition-all ${
-                              inCompare
-                                ? 'bg-purple-500 text-white scale-110'
-                                : 'bg-white text-gray-500 hover:bg-purple-50 hover:text-purple-600'
-                            }`}
-                            title={inCompare ? '比較から削除' : '比較に追加'}
-                          >
-                            <Scale className="w-5 h-5" />
-                          </button>
-
-                          {/* 選択済みオーバーレイ */}
-                          {inCart && (
-                            <div className="absolute inset-0 bg-gradient-to-br from-teal-500/30 to-emerald-500/30 flex items-center justify-center">
-                              <div className="bg-white rounded-full p-3 shadow-xl animate-bounce-in">
-                                <Check className="w-8 h-8 text-teal-600" strokeWidth={3} />
+                    // メーカーが2つ以上ある場合のみグループ化表示
+                    if (manufacturers.length > 1) {
+                      return (
+                        <div className="space-y-6">
+                          {manufacturers.map(mfr => (
+                            <div key={mfr} className="animate-slide-up">
+                              <div className="flex items-center gap-2 mb-3">
+                                <div className="w-1 h-5 bg-gradient-to-b from-teal-500 to-emerald-500 rounded-full" />
+                                <h3 className="font-bold text-gray-800">{mfr}</h3>
+                                <span className="text-xs text-gray-400">({groupedByManufacturer[mfr].length}件)</span>
+                              </div>
+                              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+                                {groupedByManufacturer[mfr].map((item, index) => (
+                                  <ItemCard
+                                    key={item.id}
+                                    item={item}
+                                    index={index}
+                                    getPrice={getPrice}
+                                    isStandard={isStandard}
+                                    getImageUrl={getImageUrl}
+                                    cartItemIds={cartItemIds}
+                                    addedItemId={addedItemId}
+                                    hoveredItem={hoveredItem}
+                                    setHoveredItem={setHoveredItem}
+                                    handleOpenDetail={handleOpenDetail}
+                                    handleAddToCart={handleAddToCart}
+                                    handleRemoveFromCart={handleRemoveFromCart}
+                                    handleToggleCompare={handleToggleCompare}
+                                    isInCompare={isInCompare}
+                                    showManufacturer={false}
+                                  />
+                                ))}
                               </div>
                             </div>
-                          )}
+                          ))}
                         </div>
+                      );
+                    }
+                    return null;
+                  })()}
 
-                        {/* 情報エリア */}
-                        <div className="p-4">
-                          <p className="text-xs text-gray-400 font-medium mb-1 truncate">{item.manufacturer}</p>
-                          <h3 className="font-semibold text-sm text-gray-800 line-clamp-2 h-10 mb-2 leading-tight">
-                            {item.name}
-                          </h3>
-
-                          {/* 価格 */}
-                          <div className="flex items-baseline gap-1 mb-4">
-                            <span className={`text-xl font-bold ${price === 0 ? 'text-teal-600' : 'text-gray-900'}`}>
-                              {price === 0 ? '標準仕様' : formatPrice(price)}
-                            </span>
-                            {price > 0 && item.unit && (
-                              <span className="text-xs text-gray-400">/{item.unit.symbol}</span>
-                            )}
-                          </div>
-
-                          {/* ボタン */}
-                          {inCart ? (
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleRemoveFromCart(item.id);
-                              }}
-                              className="w-full py-3 rounded-xl text-sm font-semibold bg-gray-100 text-gray-600 hover:bg-red-50 hover:text-red-600 flex items-center justify-center gap-2 transition-all active:scale-95"
-                            >
-                              <X className="w-4 h-4" />
-                              選択を解除
-                            </button>
-                          ) : (item.variants?.length || 0) > 1 ? (
-                            /* 複数色 → 詳細モーダルで色選択 */
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleOpenDetail(item);
-                              }}
-                              className="w-full py-3 rounded-xl text-sm font-bold bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 flex items-center justify-center gap-2 shadow-lg shadow-blue-200 transition-all active:scale-95"
-                            >
-                              <Eye className="w-4 h-4" />
-                              {item.variants?.length}色から選ぶ
-                            </button>
-                          ) : (
-                            /* 単色 → 直接カートに追加 */
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleAddToCart(item);
-                              }}
-                              className="w-full py-3 rounded-xl text-sm font-bold bg-gradient-to-r from-teal-500 to-emerald-500 text-white hover:from-teal-600 hover:to-emerald-600 flex items-center justify-center gap-2 shadow-lg shadow-teal-200 transition-all active:scale-95"
-                            >
-                              <ShoppingCart className="w-4 h-4" />
-                              選択する
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+                  {/* 通常グリッド表示 */}
+                  {(!selectedCategoryId || (() => {
+                    const groupedByManufacturer = filteredItems.reduce((acc, item) => {
+                      const mfr = item.manufacturer || 'その他';
+                      if (!acc[mfr]) acc[mfr] = [];
+                      acc[mfr].push(item);
+                      return acc;
+                    }, {} as Record<string, typeof filteredItems>);
+                    return Object.keys(groupedByManufacturer).length <= 1;
+                  })()) && (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+                      {filteredItems.map((item, index) => (
+                        <ItemCard
+                          key={item.id}
+                          item={item}
+                          index={index}
+                          getPrice={getPrice}
+                          isStandard={isStandard}
+                          getImageUrl={getImageUrl}
+                          cartItemIds={cartItemIds}
+                          addedItemId={addedItemId}
+                          hoveredItem={hoveredItem}
+                          setHoveredItem={setHoveredItem}
+                          handleOpenDetail={handleOpenDetail}
+                          handleAddToCart={handleAddToCart}
+                          handleRemoveFromCart={handleRemoveFromCart}
+                          handleToggleCompare={handleToggleCompare}
+                          isInCompare={isInCompare}
+                          showManufacturer={true}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </>
               )}
 
               {/* レコメンドパネル */}

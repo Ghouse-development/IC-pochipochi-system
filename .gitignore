@@ -29,3 +29,7 @@ dist-ssr
 .env.production
 
 .vercel
+
+# Reference documents (PDFs) - large files not needed in repo
+sankousiryou/
+*.pdf

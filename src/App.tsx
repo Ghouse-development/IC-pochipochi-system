@@ -10,6 +10,8 @@ import { HierarchyPage } from './pages/HierarchyPage';
 import { ImageTestPage } from './pages/ImageTestPage';
 import { ShareModal } from './components/common/ShareModal';
 import { ProductCompareModal } from './components/catalog/ProductCompareModal';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
+import { OnboardingGuide, HelpButton, useOnboarding } from './components/common/OnboardingGuide';
 import { useVersionStore } from './stores/useVersionStore';
 import { useCartStore } from './stores/useCartStore';
 import type { Product } from './types/product';
@@ -17,20 +19,33 @@ import type { Product } from './types/product';
 // Environment check for demo mode
 const isDemoMode = import.meta.env.VITE_DEMO_MODE === 'true' || !import.meta.env.VITE_SUPABASE_URL;
 
-function AppContent() {
+// メインアプリケーションコンテンツ
+interface MainContentProps {
+  onDemoSwitch?: () => void;
+  isDemoMode?: boolean;
+}
+
+function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
   const { user, isLoading, isAdmin } = useAuth();
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [showAdmin, setShowAdmin] = useState(false);
   const [showHierarchy, setShowHierarchy] = useState(false);
   const [showImageTest, setShowImageTest] = useState(false);
-  const [useDemoMode, setUseDemoMode] = useState(isDemoMode);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
   const [compareProducts, setCompareProducts] = useState<Product[]>([]);
 
   const currentVersion = useVersionStore((state) => state.currentVersion);
   const items = useCartStore((state) => state.items);
+
+  // オンボーディングガイド
+  const {
+    showOnboarding,
+    openOnboarding,
+    closeOnboarding,
+    completeOnboarding,
+  } = useOnboarding();
 
   const handleCartClose = () => {
     setIsCartOpen(false);
@@ -40,7 +55,7 @@ function AppContent() {
   };
 
   // Show loading while checking auth
-  if (isLoading && !useDemoMode) {
+  if (isLoading && !isDemo) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <div className="text-center">
@@ -52,8 +67,8 @@ function AppContent() {
   }
 
   // Show login if not authenticated
-  if (!user && !useDemoMode) {
-    return <LoginPage onDemoLogin={() => setUseDemoMode(true)} />;
+  if (!user && !isDemo) {
+    return <LoginPage onDemoLogin={onDemoSwitch} />;
   }
 
   // Admin dashboard
@@ -101,7 +116,7 @@ function AppContent() {
       {/* Version display */}
       <div className="fixed bottom-4 left-4 bg-white px-3 py-1 rounded-lg shadow-md text-xs text-gray-600">
         Ver. {currentVersion}
-        {useDemoMode && <span className="ml-2 text-orange-500">(Demo)</span>}
+        {isDemo && <span className="ml-2 text-orange-500">(Demo)</span>}
       </div>
 
       <CartSidebarEnhanced isOpen={isCartOpen} onClose={handleCartClose} />
@@ -121,6 +136,16 @@ function AppContent() {
         onClose={() => setIsCompareModalOpen(false)}
         products={compareProducts}
         onRemoveProduct={(productId) => setCompareProducts(prev => prev.filter(p => p.id !== productId))}
+      />
+
+      {/* ヘルプボタン */}
+      <HelpButton onClick={openOnboarding} />
+
+      {/* オンボーディングガイド */}
+      <OnboardingGuide
+        isOpen={showOnboarding}
+        onClose={closeOnboarding}
+        onComplete={completeOnboarding}
       />
     </div>
   );
@@ -129,11 +154,24 @@ function AppContent() {
 function App() {
   const [useDemoMode, setUseDemoMode] = useState(isDemoMode);
 
+  // ErrorBoundaryでラップしたコンテンツ
+  const wrappedContent = (isDemoMode: boolean, onDemoSwitch?: () => void) => (
+    <ErrorBoundary
+      onError={(error, errorInfo) => {
+        // 本番環境ではSentryなどに送信
+        console.error('App error caught:', error.message);
+        console.error('Component stack:', errorInfo.componentStack);
+      }}
+    >
+      <MainContent isDemoMode={isDemoMode} onDemoSwitch={onDemoSwitch} />
+    </ErrorBoundary>
+  );
+
   // Use Demo provider if in demo mode
   if (useDemoMode) {
     return (
       <DemoAuthProvider>
-        <AppContent />
+        {wrappedContent(true)}
       </DemoAuthProvider>
     );
   }
@@ -141,110 +179,8 @@ function App() {
   // Use real auth provider
   return (
     <AuthProvider>
-      <AppContentWithDemoSwitch onDemoSwitch={() => setUseDemoMode(true)} />
+      {wrappedContent(false, () => setUseDemoMode(true))}
     </AuthProvider>
-  );
-}
-
-// Wrapper to pass demo switch function
-function AppContentWithDemoSwitch({ onDemoSwitch }: { onDemoSwitch: () => void }) {
-  const { user, isLoading, isAdmin } = useAuth();
-  const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
-  const [showAdmin, setShowAdmin] = useState(false);
-  const [showHierarchy, setShowHierarchy] = useState(false);
-  const [showImageTest, setShowImageTest] = useState(false);
-  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
-  const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
-  const [compareProducts, setCompareProducts] = useState<Product[]>([]);
-
-  const currentVersion = useVersionStore((state) => state.currentVersion);
-  const items = useCartStore((state) => state.items);
-
-  const handleCartClose = () => {
-    setIsCartOpen(false);
-    if (items.length > 0) {
-      setIsConfirmModalOpen(true);
-    }
-  };
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">読み込み中...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!user) {
-    return <LoginPage onDemoLogin={onDemoSwitch} />;
-  }
-
-  if (showAdmin) {
-    return <AdminDashboard onBack={() => setShowAdmin(false)} />;
-  }
-
-  if (showHierarchy) {
-    return <HierarchyPage onBack={() => setShowHierarchy(false)} />;
-  }
-
-  if (showImageTest) {
-    return (
-      <div>
-        <button
-          onClick={() => setShowImageTest(false)}
-          className="fixed top-4 left-4 z-50 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
-        >
-          ← 戻る
-        </button>
-        <ImageTestPage />
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      <Header
-        onCartClick={() => setIsCartOpen(true)}
-        onShareClick={() => setIsShareModalOpen(true)}
-        onCompareClick={() => setIsCompareModalOpen(true)}
-        compareCount={compareProducts.length}
-        isAdmin={isAdmin}
-        onAdminClick={() => setShowAdmin(true)}
-        onHierarchyClick={() => setShowHierarchy(true)}
-        onImageTestClick={() => setShowImageTest(true)}
-      />
-
-      <main className="flex-1 overflow-hidden">
-        <CatalogWithTabs />
-      </main>
-
-      <div className="fixed bottom-4 left-4 bg-white px-3 py-1 rounded-lg shadow-md text-xs text-gray-600">
-        Ver. {currentVersion}
-      </div>
-
-      <CartSidebarEnhanced isOpen={isCartOpen} onClose={handleCartClose} />
-
-      <ConfirmOrderModal
-        isOpen={isConfirmModalOpen}
-        onClose={() => setIsConfirmModalOpen(false)}
-      />
-
-      <ShareModal
-        isOpen={isShareModalOpen}
-        onClose={() => setIsShareModalOpen(false)}
-      />
-
-      <ProductCompareModal
-        isOpen={isCompareModalOpen}
-        onClose={() => setIsCompareModalOpen(false)}
-        products={compareProducts}
-        onRemoveProduct={(productId) => setCompareProducts(prev => prev.filter(p => p.id !== productId))}
-      />
-    </div>
   );
 }
 

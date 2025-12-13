@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Plus, Edit, Trash2, BarChart3, Package, Bell, Search, TrendingUp, FileText, Download, Upload, Settings, Users, FolderTree, Briefcase, Wrench } from 'lucide-react';
+import { Plus, Edit, Trash2, BarChart3, Package, Bell, Search, TrendingUp, FileText, Download, Upload, Settings, Users, FolderTree, Briefcase, Wrench, Truck, Database } from 'lucide-react';
 import { Button } from '../common/Button';
 import { Card } from '../common/Card';
 import { ProductFormNew } from './ProductFormNew';
@@ -9,6 +9,8 @@ import { ProjectManager } from './ProjectManager';
 import { ItemManager } from './ItemManager';
 import { CategoryManager } from './CategoryManager';
 import { UserManager } from './UserManager';
+import { VendorOrderManager } from './VendorOrderManager';
+import { DataBackup } from './DataBackup';
 import { useVersionStore } from '../../stores/useVersionStore';
 import { useOrderStore } from '../../stores/useOrderStore';
 import { useProductStore } from '../../stores/useProductStore';
@@ -23,7 +25,7 @@ interface AdminDashboardProps {
 }
 
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
-  const [activeTab, setActiveTab] = useState<'products' | 'management' | 'statistics' | 'adoption' | 'versions' | 'pdf' | 'settings' | 'projects' | 'items' | 'categories' | 'users'>('products');
+  const [activeTab, setActiveTab] = useState<'products' | 'management' | 'statistics' | 'adoption' | 'versions' | 'pdf' | 'settings' | 'projects' | 'items' | 'categories' | 'users' | 'vendors' | 'backup'>('products');
   const [productCategory, setProductCategory] = useState<'exterior' | 'interior' | 'water'>('exterior');
   const [searchTerm, setSearchTerm] = useState('');
   const [showProductForm, setShowProductForm] = useState(false);
@@ -370,6 +372,34 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
               <Users className="w-4 h-4 sm:w-5 sm:h-5" />
               <span className="hidden sm:inline">ユーザー</span>
               <span className="sm:hidden">人</span>
+            </div>
+          </button>
+          <button
+            onClick={() => setActiveTab('vendors')}
+            className={`pb-2 px-1 border-b-2 transition-colors ${
+              activeTab === 'vendors'
+                ? 'border-teal-500 text-teal-600'
+                : 'border-transparent text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            <div className="flex items-center gap-1 sm:gap-2">
+              <Truck className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="hidden sm:inline">業者発注</span>
+              <span className="sm:hidden">発注</span>
+            </div>
+          </button>
+          <button
+            onClick={() => setActiveTab('backup')}
+            className={`pb-2 px-1 border-b-2 transition-colors ${
+              activeTab === 'backup'
+                ? 'border-teal-500 text-teal-600'
+                : 'border-transparent text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            <div className="flex items-center gap-1 sm:gap-2">
+              <Database className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="hidden sm:inline">バックアップ</span>
+              <span className="sm:hidden">保存</span>
             </div>
           </button>
           <button
@@ -829,6 +859,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
         {activeTab === 'users' && (
           <div className="space-y-6">
             <UserManager />
+          </div>
+        )}
+
+        {/* 業者発注管理 */}
+        {activeTab === 'vendors' && (
+          <div className="space-y-6">
+            <VendorOrderManager />
+          </div>
+        )}
+
+        {/* バックアップ */}
+        {activeTab === 'backup' && (
+          <div className="space-y-6">
+            <DataBackup />
           </div>
         )}
 

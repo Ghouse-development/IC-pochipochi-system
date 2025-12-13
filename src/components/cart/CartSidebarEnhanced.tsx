@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { X, Trash2, Plus, Minus, Save, CheckCircle, Download, FileText, Star, ShoppingBag } from 'lucide-react';
+import { X, Trash2, Plus, Minus, Save, CheckCircle, Download, FileText, Star, ShoppingBag, FileSpreadsheet, Presentation, Package } from 'lucide-react';
 import { useCartStore } from '../../stores/useCartStore';
 import { formatPrice } from '../../lib/utils';
 import { UNIT_SYMBOLS } from '../../types/product';
 import { Badge } from '../common/Badge';
-import { exportToExcel, exportToPDF } from '../../utils/exportEstimate';
+import { exportToExcel, exportToPDF, exportSpecificationSheet, exportPresentationData, exportAllFormats } from '../../utils/exportEstimate';
 import { supabase } from '../../lib/supabase';
 
 interface CartSidebarEnhancedProps {
@@ -18,6 +18,8 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
   const [customerName, setCustomerName] = useState('');
   const [projectName, setProjectName] = useState('');
   const [planName, setPlanName] = useState('');
+  const [showExportMenu, setShowExportMenu] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
 
   const totalPrice = getTotalPrice();
 
@@ -96,6 +98,40 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
       return;
     }
     exportToPDF(items, customerName, projectName);
+  };
+
+  const handleExportSpec = () => {
+    if (!customerName || !projectName) {
+      alert('お客様名と工事名を入力してください');
+      return;
+    }
+    exportSpecificationSheet(items, customerName, projectName);
+  };
+
+  const handleExportPresentation = async () => {
+    if (!customerName || !projectName) {
+      alert('お客様名と工事名を入力してください');
+      return;
+    }
+    await exportPresentationData(items, customerName, projectName);
+  };
+
+  const handleExportAll = async () => {
+    if (!customerName || !projectName) {
+      alert('お客様名と工事名を入力してください');
+      return;
+    }
+    setIsExporting(true);
+    try {
+      await exportAllFormats(items, customerName, projectName);
+      alert('全形式のダウンロードが完了しました');
+    } catch (error) {
+      console.error('Export error:', error);
+      alert('エクスポート中にエラーが発生しました');
+    } finally {
+      setIsExporting(false);
+      setShowExportMenu(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -306,20 +342,77 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
                 </>
               ) : (
                 <div className="space-y-2">
+                  {/* エクスポートメニュートグル */}
                   <button
-                    onClick={handleExportExcel}
-                    className="w-full px-4 py-2.5 border border-teal-500 text-teal-600 rounded-xl font-medium hover:bg-teal-50 transition-colors flex items-center justify-center gap-2"
-                  >
-                    <FileText className="w-4 h-4" />
-                    Excel出力
-                  </button>
-                  <button
-                    onClick={handleExportPDF}
+                    onClick={() => setShowExportMenu(!showExportMenu)}
                     className="w-full px-4 py-2.5 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-xl font-medium hover:from-teal-600 hover:to-teal-700 transition-colors flex items-center justify-center gap-2 shadow-sm"
                   >
                     <Download className="w-4 h-4" />
-                    PDF出力
+                    書類をダウンロード
                   </button>
+
+                  {/* エクスポートメニュー */}
+                  {showExportMenu && (
+                    <div className="bg-gray-50 rounded-xl p-3 space-y-2 border border-gray-200">
+                      <p className="text-xs text-gray-500 font-medium mb-2">出力形式を選択</p>
+
+                      <button
+                        onClick={handleExportPDF}
+                        className="w-full px-3 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm hover:bg-gray-100 transition-colors flex items-center gap-2"
+                      >
+                        <FileText className="w-4 h-4 text-red-500" />
+                        見積書（PDF）
+                        <span className="text-xs text-gray-400 ml-auto">提出用</span>
+                      </button>
+
+                      <button
+                        onClick={handleExportExcel}
+                        className="w-full px-3 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm hover:bg-gray-100 transition-colors flex items-center gap-2"
+                      >
+                        <FileSpreadsheet className="w-4 h-4 text-green-500" />
+                        見積書（Excel）
+                        <span className="text-xs text-gray-400 ml-auto">編集可能</span>
+                      </button>
+
+                      <button
+                        onClick={handleExportSpec}
+                        className="w-full px-3 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm hover:bg-gray-100 transition-colors flex items-center gap-2"
+                      >
+                        <Package className="w-4 h-4 text-blue-500" />
+                        仕様書（Excel）
+                        <span className="text-xs text-gray-400 ml-auto">詳細情報</span>
+                      </button>
+
+                      <button
+                        onClick={handleExportPresentation}
+                        className="w-full px-3 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm hover:bg-gray-100 transition-colors flex items-center gap-2"
+                      >
+                        <Presentation className="w-4 h-4 text-purple-500" />
+                        提案資料（Excel）
+                        <span className="text-xs text-gray-400 ml-auto">カテゴリ別</span>
+                      </button>
+
+                      <div className="border-t border-gray-200 pt-2 mt-2">
+                        <button
+                          onClick={handleExportAll}
+                          disabled={isExporting}
+                          className="w-full px-3 py-2 bg-teal-500 text-white rounded-lg text-sm hover:bg-teal-600 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                        >
+                          {isExporting ? (
+                            <>
+                              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                              出力中...
+                            </>
+                          ) : (
+                            <>
+                              <Download className="w-4 h-4" />
+                              全形式を一括ダウンロード
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

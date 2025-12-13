@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
-import { X, ChevronLeft, ChevronRight, Plus, Minus, ShoppingCart, Check, AlertCircle } from 'lucide-react';
+import { X, Plus, Minus, ShoppingCart, Check, AlertCircle, Info, FileText } from 'lucide-react';
 import type { Product, ProductVariant } from '../../types/product';
 import { UNIT_SYMBOLS } from '../../types/product';
 import { Button } from '../common/Button';
@@ -23,32 +23,40 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   onClose,
 }) => {
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [isAdded, setIsAdded] = useState(false);
   const { addItem, items } = useCartStore();
-  
+
+  // 開いた時にリセット
+  useEffect(() => {
+    if (isOpen && product) {
+      setSelectedVariant(product.variants[0] || null);
+      setQuantity(1);
+      setIsAdded(false);
+    }
+  }, [isOpen, product]);
+
   if (!product) return null;
-  
+
   const variant = selectedVariant || product.variants[0];
   const price = product.pricing.find((p) => p.planId === 'LACIE')?.price || 0;
   const totalPrice = price * quantity;
-  
+
   // カテゴリルールを取得
   const categoryRule = getCategoryRule(product.categoryName);
   const isSingleSelection = categoryRule.selectionType === 'single';
-  
+
   // 同じカテゴリの商品がカートにあるかチェック
   const hasSameCategoryItem = items.some(
-    item => item.product.categoryName === product.categoryName && 
+    item => item.product.categoryName === product.categoryName &&
            item.product.id !== product.id
   );
-  
+
   // 同じカテゴリの商品数をカウント
   const sameCategoryCount = items.filter(
     item => item.product.categoryName === product.categoryName
   ).length;
-  
+
   // 選択可能かチェック
   const canAddToCart = () => {
     if (isSingleSelection && hasSameCategoryItem) {
@@ -59,7 +67,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
     }
     return true;
   };
-  
+
   const imagePlaceholder = `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(`
     <svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
       <rect width="600" height="400" fill="#f3f4f6"/>
@@ -68,7 +76,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
       </text>
     </svg>
   `)))}`;
-  
+
   const handleAddToCart = () => {
     if (!canAddToCart()) {
       if (isSingleSelection) {
@@ -85,269 +93,261 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
     setTimeout(() => {
       setIsAdded(false);
       onClose();
-    }, 1500);
+    }, 1000);
   };
-  
+
   const handleQuantityChange = (delta: number) => {
     const newQuantity = quantity + delta;
     if (newQuantity >= 1 && newQuantity <= 99) {
       setQuantity(newQuantity);
     }
   };
-  
-  const handlePrevImage = () => {
-    setCurrentImageIndex((prev) => 
-      prev === 0 ? product.variants.length - 1 : prev - 1
-    );
-    setSelectedVariant(product.variants[currentImageIndex === 0 ? product.variants.length - 1 : currentImageIndex - 1]);
-  };
-  
-  const handleNextImage = () => {
-    setCurrentImageIndex((prev) => 
-      prev === product.variants.length - 1 ? 0 : prev + 1
-    );
-    setSelectedVariant(product.variants[currentImageIndex === product.variants.length - 1 ? 0 : currentImageIndex + 1]);
-  };
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={onClose}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black/50 z-50" />
-        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden z-50">
-          <div className="flex h-full">
-            {/* 画像エリア */}
-            <div className="flex-1 bg-gray-50 relative">
-              {product.variants.length > 1 && (
-                <>
-                  <button
-                    onClick={handlePrevImage}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-md z-10"
-                  >
-                    <ChevronLeft className="w-5 h-5" />
-                  </button>
-                  <button
-                    onClick={handleNextImage}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-md z-10"
-                  >
-                    <ChevronRight className="w-5 h-5" />
-                  </button>
-                </>
-              )}
-              
-              <img
-                src={variant.imageUrl || imagePlaceholder}
-                alt={product.name}
-                className="w-full h-full object-contain"
-                onError={(e) => {
-                  e.currentTarget.src = imagePlaceholder;
-                }}
-              />
-              
-              {/* サムネイル */}
-              {product.variants.length > 1 && (
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                  {product.variants.map((v, index) => (
-                    <button
-                      key={v.id}
-                      onClick={() => {
-                        setSelectedVariant(v);
-                        setCurrentImageIndex(index);
-                      }}
-                      className={cn(
-                        'w-16 h-16 rounded border-2 overflow-hidden',
-                        variant.id === v.id ? 'border-blue-500' : 'border-gray-300'
-                      )}
-                    >
-                      <img
-                        src={v.thumbnailUrl || v.imageUrl || imagePlaceholder}
-                        alt={v.color}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          e.currentTarget.src = imagePlaceholder;
-                        }}
-                      />
-                    </button>
-                  ))}
-                </div>
-              )}
+        <Dialog.Overlay className="fixed inset-0 bg-black/60 z-50 backdrop-blur-sm" />
+        <Dialog.Content className="fixed inset-4 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 bg-white rounded-2xl shadow-2xl md:max-w-2xl md:w-full md:max-h-[85vh] z-50 flex flex-col overflow-hidden">
+          {/* ヘッダー（固定） */}
+          <div className="flex items-center justify-between p-4 border-b border-gray-100 bg-white">
+            <div className="flex-1 min-w-0">
+              <p className="text-xs text-teal-600 font-medium">{product.categoryName}</p>
+              <h2 className="text-lg font-bold text-gray-900 truncate">{product.name}</h2>
             </div>
-            
+            <Dialog.Close className="p-2 hover:bg-gray-100 rounded-full ml-2 flex-shrink-0">
+              <X className="w-5 h-5" />
+            </Dialog.Close>
+          </div>
+
+          {/* スクロール可能なコンテンツ */}
+          <div className="flex-1 overflow-y-auto overscroll-contain">
+            {/* 画像エリア */}
+            <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-6">
+              <div className="aspect-video max-w-md mx-auto relative rounded-xl overflow-hidden bg-white shadow-lg">
+                <img
+                  src={variant?.imageUrl || imagePlaceholder}
+                  alt={product.name}
+                  className="w-full h-full object-contain"
+                  onError={(e) => {
+                    e.currentTarget.src = imagePlaceholder;
+                  }}
+                />
+              </div>
+            </div>
+
             {/* 詳細エリア */}
-            <div className="w-96 p-6 flex flex-col">
-              <Dialog.Close className="absolute top-4 right-4 p-1 hover:bg-gray-100 rounded">
-                <X className="w-5 h-5" />
-              </Dialog.Close>
-              
-              <div className="flex-1">
-                <h2 className="text-xl font-bold text-gray-900 mb-2">
-                  {product.name}
-                </h2>
-                
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-sm text-gray-500">メーカー名:</span>
-                  <span className="text-sm font-medium">{product.manufacturer}</span>
-                  {product.modelNumber && (
-                    <>
-                      <span className="text-sm text-gray-500">品番:</span>
-                      <span className="text-sm font-medium">{product.modelNumber}</span>
-                    </>
+            <div className="p-4 space-y-5">
+              {/* メーカー・品番 */}
+              <div className="flex flex-wrap items-center gap-3 text-sm">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-gray-500">メーカー:</span>
+                  <span className="font-medium text-gray-900">{product.manufacturer}</span>
+                </div>
+                {product.modelNumber && (
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-gray-500">品番:</span>
+                    <span className="font-medium text-gray-900">{product.modelNumber}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* 価格 */}
+              <div className="bg-gradient-to-r from-teal-50 to-emerald-50 rounded-xl p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs text-gray-500 mb-1">単価（税別）</p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {price === 0 ? '標準仕様' : `${formatPrice(price)}`}
+                      {price > 0 && <span className="text-sm font-normal text-gray-500">/{UNIT_SYMBOLS[product.unit] || product.unit}</span>}
+                    </p>
+                  </div>
+                  {product.isOption ? (
+                    <Badge variant="option">オプション</Badge>
+                  ) : (
+                    <Badge variant="standard">標準仕様</Badge>
                   )}
                 </div>
-                
-                {/* カラー選択 */}
-                {product.variants.length > 1 && (
-                  <div className="mb-6">
-                    <h3 className="text-sm font-medium text-gray-700 mb-3">カラー選択 ({product.variants.length}色)</h3>
-                    <div className="flex flex-wrap gap-2 max-h-48 overflow-y-auto">
-                      {product.variants.map((v) => {
-                        const hexColor = getHexColor(v.colorCode) !== '#CCCCCC'
-                          ? getHexColor(v.colorCode)
-                          : getHexColor(v.color);
-                        return (
-                          <button
-                            key={v.id}
-                            onClick={() => setSelectedVariant(v)}
-                            className={cn(
-                              'flex items-center gap-2 px-3 py-2 rounded-lg border-2 transition-all',
-                              variant.id === v.id
-                                ? 'border-blue-500 bg-blue-50'
-                                : 'border-gray-300 hover:border-gray-400'
-                            )}
-                          >
-                            <div
-                              className="w-5 h-5 rounded-full border border-gray-300 shadow-sm flex-shrink-0"
-                              style={{ backgroundColor: hexColor }}
-                            />
-                            <span className="text-sm whitespace-nowrap">{v.color}</span>
-                          </button>
-                        );
-                      })}
-                    </div>
+              </div>
+
+              {/* カラー選択 */}
+              {product.variants.length > 1 && (
+                <div>
+                  <h3 className="text-sm font-bold text-gray-800 mb-3">
+                    カラー選択 <span className="text-gray-400 font-normal">（{product.variants.length}色）</span>
+                  </h3>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-48 overflow-y-auto p-1">
+                    {product.variants.map((v) => {
+                      const hexColor = getHexColor(v.colorCode) !== '#CCCCCC'
+                        ? getHexColor(v.colorCode)
+                        : getHexColor(v.color);
+                      const isSelected = variant?.id === v.id;
+                      return (
+                        <button
+                          key={v.id}
+                          onClick={() => setSelectedVariant(v)}
+                          className={cn(
+                            'flex items-center gap-2 p-3 rounded-xl border-2 transition-all text-left',
+                            isSelected
+                              ? 'border-teal-500 bg-teal-50 shadow-md'
+                              : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                          )}
+                        >
+                          <div
+                            className="w-8 h-8 rounded-lg border border-gray-300 shadow-inner flex-shrink-0"
+                            style={{ backgroundColor: hexColor }}
+                          />
+                          <span className={cn(
+                            'text-sm truncate',
+                            isSelected ? 'font-medium text-teal-700' : 'text-gray-700'
+                          )}>
+                            {v.color}
+                          </span>
+                          {isSelected && (
+                            <Check className="w-4 h-4 text-teal-500 ml-auto flex-shrink-0" />
+                          )}
+                        </button>
+                      );
+                    })}
                   </div>
-                )}
-                
-                {/* カテゴリルール表示 */}
-                {categoryRule.description && (
-                  <div className="mb-4 p-3 bg-blue-50 rounded-lg">
-                    <div className="flex items-center gap-2">
-                      <AlertCircle className="w-4 h-4 text-blue-600" />
-                      <span className="text-sm text-blue-700">{categoryRule.description}</span>
-                    </div>
-                  </div>
-                )}
-                
-                {/* 価格情報 */}
-                <div className="border-t pt-4 mb-4">
-                  <div className="flex items-baseline justify-between mb-2">
-                    <span className="text-2xl font-bold text-gray-900">
-                      {price === 0 ? '標準仕様' : `${formatPrice(price)}/${UNIT_SYMBOLS[product.unit] || product.unit}`}
+                </div>
+              )}
+
+              {/* 数量選択 */}
+              <div>
+                <h3 className="text-sm font-bold text-gray-800 mb-3">数量</h3>
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center bg-gray-100 rounded-xl">
+                    <button
+                      onClick={() => handleQuantityChange(-1)}
+                      className="p-3 hover:bg-gray-200 rounded-l-xl disabled:opacity-50 transition-colors"
+                      disabled={quantity <= 1}
+                    >
+                      <Minus className="w-5 h-5 text-gray-600" />
+                    </button>
+                    <span className="px-6 py-3 min-w-[80px] text-center font-bold text-lg">
+                      {quantity}
                     </span>
-                    <span className="text-xs text-gray-400">税別</span>
+                    <button
+                      onClick={() => handleQuantityChange(1)}
+                      className="p-3 hover:bg-gray-200 rounded-r-xl disabled:opacity-50 transition-colors"
+                      disabled={quantity >= 99}
+                    >
+                      <Plus className="w-5 h-5 text-gray-600" />
+                    </button>
                   </div>
-
-                  <div className="flex items-center gap-2">
-                    {product.isOption ? (
-                      <Badge variant="option">オプション</Badge>
-                    ) : (
-                      <Badge variant="standard">標準仕様</Badge>
-                    )}
-                  </div>
+                  <span className="text-gray-500">{UNIT_SYMBOLS[product.unit] || product.unit}</span>
                 </div>
-                
-                {/* 数量選択 */}
-                <div className="mb-4">
-                  <h3 className="text-sm font-medium text-gray-700 mb-2">数量</h3>
-                  <div className="flex items-center gap-3">
-                    <div className="flex items-center border border-gray-300 rounded-lg">
-                      <button
-                        onClick={() => handleQuantityChange(-1)}
-                        className="p-2 hover:bg-gray-100 disabled:opacity-50"
-                        disabled={quantity <= 1}
-                      >
-                        <Minus className="w-4 h-4" />
-                      </button>
-                      <span className="px-4 py-2 min-w-[60px] text-center">
-                        {quantity}
-                      </span>
-                      <button
-                        onClick={() => handleQuantityChange(1)}
-                        className="p-2 hover:bg-gray-100 disabled:opacity-50"
-                        disabled={quantity >= 99}
-                      >
-                        <Plus className="w-4 h-4" />
-                      </button>
-                    </div>
-                    <span className="text-sm text-gray-500">{UNIT_SYMBOLS[product.unit] || product.unit}</span>
-                  </div>
-                </div>
+              </div>
 
-                {/* 合計金額 */}
-                <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+              {/* 合計金額 */}
+              {price > 0 && (
+                <div className="bg-gray-900 text-white rounded-xl p-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-700">合計金額</span>
+                    <span className="text-gray-300">合計金額</span>
                     <div className="text-right">
-                      <span className="text-xl font-bold text-gray-900">
-                        {formatPrice(totalPrice)}
-                      </span>
+                      <span className="text-2xl font-bold">{formatPrice(totalPrice)}</span>
                       <span className="text-xs text-gray-400 ml-1">税別</span>
                     </div>
                   </div>
                 </div>
-                
-                {/* 説明 */}
-                {product.description && (
-                  <div className="mb-6">
-                    <h3 className="text-sm font-medium text-gray-700 mb-2">商品説明</h3>
-                    <p className="text-sm text-gray-600">{product.description}</p>
+              )}
+
+              {/* 商品特徴・メモ欄 */}
+              {product.description && (
+                <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Info className="w-4 h-4 text-amber-600" />
+                    <h3 className="text-sm font-bold text-amber-800">商品特徴・メモ</h3>
                   </div>
-                )}
-                
-                {/* 選択制限の警告 */}
-                {!canAddToCart() && (
-                  <div className="mb-4 p-3 bg-red-50 rounded-lg">
-                    <div className="flex items-start gap-2">
-                      <AlertCircle className="w-4 h-4 text-red-600 mt-0.5" />
-                      <div className="text-sm text-red-700">
-                        {isSingleSelection && (
-                          <p>このカテゴリは1つのみ選択可能です。既に別の商品が選択されています。</p>
-                        )}
-                        {categoryRule.maxSelection && sameCategoryCount >= categoryRule.maxSelection && (
-                          <p>このカテゴリは最大{categoryRule.maxSelection}つまで選択可能です。</p>
-                        )}
-                      </div>
+                  <p className="text-sm text-amber-900 leading-relaxed whitespace-pre-wrap">{product.description}</p>
+                </div>
+              )}
+
+              {/* 仕様情報 */}
+              <div className="bg-gray-50 rounded-xl p-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <FileText className="w-4 h-4 text-gray-600" />
+                  <h3 className="text-sm font-bold text-gray-800">仕様情報</h3>
+                </div>
+                <div className="grid grid-cols-2 gap-3 text-sm">
+                  <div>
+                    <span className="text-gray-500">カテゴリ</span>
+                    <p className="font-medium text-gray-800">{product.categoryName}</p>
+                  </div>
+                  {product.subcategory && (
+                    <div>
+                      <span className="text-gray-500">サブカテゴリ</span>
+                      <p className="font-medium text-gray-800">{product.subcategory}</p>
+                    </div>
+                  )}
+                  <div>
+                    <span className="text-gray-500">単位</span>
+                    <p className="font-medium text-gray-800">{UNIT_SYMBOLS[product.unit] || product.unit}</p>
+                  </div>
+                  <div>
+                    <span className="text-gray-500">カラー数</span>
+                    <p className="font-medium text-gray-800">{product.variants.length}色</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* カテゴリルール表示 */}
+              {categoryRule.description && (
+                <div className="p-3 bg-blue-50 rounded-xl border border-blue-100">
+                  <div className="flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                    <span className="text-sm text-blue-700">{categoryRule.description}</span>
+                  </div>
+                </div>
+              )}
+
+              {/* 選択制限の警告 */}
+              {!canAddToCart() && (
+                <div className="p-3 bg-red-50 rounded-xl border border-red-100">
+                  <div className="flex items-start gap-2">
+                    <AlertCircle className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" />
+                    <div className="text-sm text-red-700">
+                      {isSingleSelection && (
+                        <p>このカテゴリは1つのみ選択可能です。既に別の商品が選択されています。</p>
+                      )}
+                      {categoryRule.maxSelection && sameCategoryCount >= categoryRule.maxSelection && (
+                        <p>このカテゴリは最大{categoryRule.maxSelection}つまで選択可能です。</p>
+                      )}
                     </div>
                   </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* フッター（固定） */}
+          <div className="p-4 border-t border-gray-100 bg-white">
+            <div className="flex gap-3">
+              <Button
+                variant="outline"
+                onClick={onClose}
+                className="flex-1 py-3"
+              >
+                閉じる
+              </Button>
+              <Button
+                variant="primary"
+                onClick={handleAddToCart}
+                className="flex-[2] py-3"
+                disabled={isAdded || !canAddToCart()}
+              >
+                {isAdded ? (
+                  <>
+                    <Check className="w-5 h-5 mr-2" />
+                    追加しました
+                  </>
+                ) : (
+                  <>
+                    <ShoppingCart className="w-5 h-5 mr-2" />
+                    {variant ? `「${variant.color}」を追加` : 'カートに追加'}
+                  </>
                 )}
-              </div>
-              
-              {/* アクションボタン */}
-              <div className="flex gap-3">
-                <Button
-                  variant="outline"
-                  onClick={onClose}
-                  className="flex-1"
-                >
-                  閉じる
-                </Button>
-                <Button
-                  variant="primary"
-                  onClick={handleAddToCart}
-                  className="flex-1"
-                  disabled={isAdded || !canAddToCart()}
-                >
-                  {isAdded ? (
-                    <>
-                      <Check className="w-4 h-4 mr-1" />
-                      追加しました
-                    </>
-                  ) : (
-                    <>
-                      <ShoppingCart className="w-4 h-4 mr-1" />
-                      カートに追加
-                    </>
-                  )}
-                </Button>
-              </div>
+              </Button>
             </div>
           </div>
         </Dialog.Content>
