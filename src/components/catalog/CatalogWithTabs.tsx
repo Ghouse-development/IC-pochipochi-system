@@ -4,6 +4,7 @@ import { Search, ShoppingCart, Check, Sparkles, Star, ChevronRight, X, Package, 
 import { useToast } from '../common/Toast';
 import { supabase } from '../../lib/supabase';
 import { useCartStore } from '../../stores/useCartStore';
+import { useProductStore } from '../../stores/useProductStore';
 import { useFavoritesStore } from '../../stores/useFavoritesStore';
 import { formatPrice } from '../../lib/utils';
 import type { ItemWithDetails, Category, Product } from '../../types/database';
@@ -101,6 +102,49 @@ const convertToCartItem = (item: ItemWithDetails): CatalogProduct => {
       thumbnailUrl: v.images?.[0]?.thumbnail_url || undefined,
     })) || [],
   };
+};
+
+// 静的データ（Product）をItemWithDetails形式に変換（フォールバック用）
+const convertStaticToItemWithDetails = (product: CatalogProduct, categoryType: string): ItemWithDetails => {
+  return {
+    id: product.id,
+    name: product.name,
+    manufacturer: product.manufacturer,
+    model_number: product.modelNumber,
+    category_id: product.categoryId,
+    category_name: product.subcategory, // サブカテゴリ名
+    note: product.description,
+    is_active: true,
+    display_order: 0,
+    category: {
+      id: product.categoryId,
+      name: product.categoryName,
+      category_type: categoryType,
+      is_active: true,
+      display_order: 0,
+    },
+    unit: {
+      id: 'unit-1',
+      symbol: product.unit,
+      name: product.unit,
+    },
+    variants: product.variants?.map(v => ({
+      id: v.id,
+      color_name: v.color,
+      color_code: v.colorCode,
+      images: v.imageUrl ? [{ id: 'img-1', image_url: v.imageUrl, thumbnail_url: v.thumbnailUrl }] : [],
+    })) || [],
+    pricing: product.pricing?.map(p => ({
+      id: `pricing-${p.plan || p.planId}`,
+      price: p.price,
+      is_standard: p.price === 0,
+      product: {
+        id: `plan-${p.plan || p.planId}`,
+        code: (p.plan || p.planId) as string,
+        name: (p.plan || p.planId) as string,
+      },
+    })) || [],
+  } as ItemWithDetails;
 };
 
 // DBアイテムをRecommendation用のCatalogProductに変換
@@ -536,6 +580,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   const totalPrice = getTotalPrice();
   const toast = useToast();
 
+  // 静的データ（フォールバック用）
+  const { exteriorProducts, interiorProducts, waterProducts } = useProductStore();
+
   // お気に入り・履歴
   const { favorites, toggleFavorite, isFavorite, addRecentlyViewed, recentlyViewed } = useFavoritesStore();
   const handleToggleFavorite = useCallback((itemId: string) => {
@@ -602,6 +649,19 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     fetchCategories();
   }, [activeTab]);
 
+  // 静的データからItemWithDetails形式のデータを取得
+  const getStaticItems = useCallback((tab: string): ItemWithDetails[] => {
+    let products: CatalogProduct[] = [];
+    if (tab === 'exterior') {
+      products = exteriorProducts;
+    } else if (tab === 'interior') {
+      products = interiorProducts;
+    } else if (tab === 'equipment') {
+      products = waterProducts;
+    }
+    return products.map(p => convertStaticToItemWithDetails(p, tab));
+  }, [exteriorProducts, interiorProducts, waterProducts]);
+
   // アイテム取得
   useEffect(() => {
     const fetchItems = async () => {
@@ -636,16 +696,28 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
         const { data, error: fetchError } = await query.order('display_order');
         if (fetchError) throw fetchError;
-        setItems((data as ItemWithDetails[]) || []);
+
+        // Supabaseからデータが取得できた場合はそれを使用
+        // データが空または少ない場合は静的データにフォールバック
+        if (data && data.length > 0) {
+          setItems(data as ItemWithDetails[]);
+        } else {
+          // 静的データを使用
+          const staticItems = getStaticItems(activeTab);
+          setItems(staticItems);
+        }
       } catch {
-        setError('データの読み込みに失敗しました');
+        // エラー時も静的データにフォールバック
+        const staticItems = getStaticItems(activeTab);
+        setItems(staticItems);
+        setError(null); // エラーをクリア（静的データが使用可能）
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchItems();
-  }, [activeTab, selectedCategoryId]);
+  }, [activeTab, selectedCategoryId, getStaticItems]);
 
   // 利用可能なサブカテゴリと色を抽出
   const availableSubcategories = useMemo(() => {
