@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { CartItem, Product, ProductVariant } from '../types/product';
+import type { CartItem, Product, ProductVariant, PlanType } from '../types/product';
 
 interface CartStore {
   items: CartItem[];
@@ -48,7 +48,7 @@ export const useCartStore = create<CartStore>((set, get) => ({
         product,
         selectedVariant,
         quantity,
-        plan: state.selectedPlanId as any,
+        plan: state.selectedPlanId as PlanType,
       };
 
       return { items: [...state.items, newItem] };

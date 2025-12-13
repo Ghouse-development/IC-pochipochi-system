@@ -13,8 +13,8 @@ export interface VersionChange {
   type: 'add' | 'update' | 'delete';
   entityType: 'product' | 'category' | 'price';
   entityId: string;
-  previousValue?: any;
-  newValue?: any;
+  previousValue?: unknown;
+  newValue?: unknown;
   changedBy: string;
   changedAt: Date;
 }

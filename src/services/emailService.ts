@@ -2,6 +2,7 @@
 // Supabase Edge FunctionsまたはResend/SendGridを使用してメール送信
 
 import { supabase } from '../lib/supabase';
+import { logger } from '../utils/logger';
 
 export interface EmailTemplate {
   subject: string;
@@ -257,7 +258,7 @@ export class EmailService {
         .single();
 
       if (error || !settings) {
-        console.log('Email notification settings not found');
+        logger.info('Email notification settings not found');
         return false;
       }
 
@@ -267,7 +268,7 @@ export class EmailService {
 
       return this.isEnabled;
     } catch (error) {
-      console.error('Error initializing email service:', error);
+      logger.error('Error initializing email service:', error);
       return false;
     }
   }
@@ -277,7 +278,7 @@ export class EmailService {
    */
   static async sendEmail(options: SendEmailOptions): Promise<boolean> {
     if (!this.isEnabled) {
-      console.log('Email service is disabled');
+      logger.debug('Email service is disabled');
       return false;
     }
 
@@ -296,7 +297,7 @@ export class EmailService {
       });
 
       if (error) {
-        console.error('Error sending email:', error);
+        logger.error('Error sending email:', error);
         return false;
       }
 
@@ -305,7 +306,7 @@ export class EmailService {
 
       return true;
     } catch (error) {
-      console.error('Error in sendEmail:', error);
+      logger.error('Error in sendEmail:', error);
       return false;
     }
   }
@@ -321,7 +322,7 @@ export class EmailService {
   ): Promise<boolean> {
     const templateFn = EMAIL_TEMPLATES[type];
     if (!templateFn) {
-      console.error(`Email template not found: ${type}`);
+      logger.error(`Email template not found: ${type}`);
       return false;
     }
 
@@ -419,7 +420,7 @@ export class EmailService {
         },
       });
     } catch (error) {
-      console.error('Error logging email:', error);
+      logger.error('Error logging email:', error);
     }
   }
 

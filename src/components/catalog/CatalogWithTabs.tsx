@@ -73,24 +73,27 @@ const animations = `
   }
 `;
 
-// DBアイテムをカート用に変換
-const convertToCartItem = (item: ItemWithDetails, selectedPlanId: string) => {
-  const pricing = item.pricing?.find(p => p.product?.code === selectedPlanId);
+// DBアイテムをカート用のProduct型に変換
+const convertToCartItem = (item: ItemWithDetails, _selectedPlanId: string): CatalogProduct => {
+  const pricing = item.pricing?.find(p => p.product?.code === 'LACIE');
   const variant = item.variants?.[0];
   const image = variant?.images?.[0];
 
   return {
     id: item.id,
+    categoryId: item.category_id || '',
+    categoryName: item.category?.name || '',
+    subcategory: item.category_name || '',
     name: item.name,
     manufacturer: item.manufacturer || '',
     modelNumber: item.model_number || '',
-    categoryName: item.category?.name || item.category_name || '',
-    unit: item.unit?.symbol || '式',
+    unit: (item.unit?.symbol || '式') as CatalogProduct['unit'],
     isOption: pricing ? !pricing.is_standard : false,
+    description: item.note || '',
     pricing: item.pricing?.map(p => ({
-      planId: p.product?.code || '',
+      plan: (p.product?.code || 'LACIE') as 'LACIE' | 'HOURS' | 'LIFE',
+      planId: (p.product?.code || 'LACIE') as 'LACIE' | 'HOURS' | 'LIFE',
       price: p.price,
-      isStandard: p.is_standard,
     })) || [],
     variants: item.variants?.map(v => ({
       id: v.id,
@@ -99,14 +102,6 @@ const convertToCartItem = (item: ItemWithDetails, selectedPlanId: string) => {
       imageUrl: v.images?.[0]?.image_url,
       thumbnailUrl: v.images?.[0]?.thumbnail_url || undefined,
     })) || [],
-    selectedVariant: variant ? {
-      id: variant.id,
-      color: variant.color_name,
-      colorCode: variant.color_code || undefined,
-      imageUrl: image?.image_url,
-      thumbnailUrl: image?.thumbnail_url || undefined,
-    } : undefined,
-    imageUrl: image?.image_url,
   };
 };
 
@@ -117,8 +112,8 @@ const convertToCatalogProduct = (item: ItemWithDetails): CatalogProduct => {
   return {
     id: item.id,
     categoryId: item.category_id || '',
-    categoryName: item.category?.name || item.category_name || '',
-    subcategory: '',
+    categoryName: item.category?.name || '',
+    subcategory: item.category_name || '', // サブカテゴリ（例: 窯業系サイディング、モナビストーンV）
     name: item.name,
     manufacturer: item.manufacturer || '',
     modelNumber: item.model_number || '',
@@ -141,7 +136,10 @@ const convertToCatalogProduct = (item: ItemWithDetails): CatalogProduct => {
 };
 
 // ステップ定義
-const STEPS = [
+type StepId = 'exterior' | 'interior' | 'equipment';
+type FilterTypeValue = 'all' | 'standard' | 'option';
+
+const STEPS: { id: StepId; label: string; icon: typeof Home; emoji: string; gradient: string }[] = [
   { id: 'exterior', label: '外装', icon: Home, emoji: '🏠', gradient: 'from-emerald-500 to-teal-500' },
   { id: 'interior', label: '内装', icon: Sofa, emoji: '🛋️', gradient: 'from-blue-500 to-indigo-500' },
   { id: 'equipment', label: '設備', icon: Wrench, emoji: '🚿', gradient: 'from-cyan-500 to-blue-500' },
@@ -464,6 +462,8 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   // URLクエリパラメータから検索・フィルターを取得
   const searchTerm = searchParams.get('q') || '';
   const filterType = (searchParams.get('filter') as 'all' | 'standard' | 'option') || 'all';
+  const selectedSubcategory = searchParams.get('sub') || '';
+  const selectedColor = searchParams.get('color') || '';
 
   // 検索・フィルター更新関数（URL同期）
   const setSearchTerm = useCallback((term: string) => {
@@ -483,6 +483,28 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
         prev.set('filter', type);
       } else {
         prev.delete('filter');
+      }
+      return prev;
+    });
+  }, [setSearchParams]);
+
+  const setSelectedSubcategory = useCallback((sub: string) => {
+    setSearchParams(prev => {
+      if (sub) {
+        prev.set('sub', sub);
+      } else {
+        prev.delete('sub');
+      }
+      return prev;
+    });
+  }, [setSearchParams]);
+
+  const setSelectedColor = useCallback((color: string) => {
+    setSearchParams(prev => {
+      if (color) {
+        prev.set('color', color);
+      } else {
+        prev.delete('color');
       }
       return prev;
     });
@@ -627,9 +649,29 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     fetchItems();
   }, [activeTab, selectedCategoryId]);
 
+  // 利用可能なサブカテゴリと色を抽出
+  const availableSubcategories = useMemo(() => {
+    const subs = new Set<string>();
+    items.forEach(item => {
+      if (item.category_name) subs.add(item.category_name);
+    });
+    return Array.from(subs).sort((a, b) => a.localeCompare(b, 'ja'));
+  }, [items]);
+
+  const availableColors = useMemo(() => {
+    const colors = new Set<string>();
+    items.forEach(item => {
+      item.variants?.forEach(v => {
+        if (v.color_name) colors.add(v.color_name);
+      });
+    });
+    return Array.from(colors).sort((a, b) => a.localeCompare(b, 'ja'));
+  }, [items]);
+
   // フィルタリング
   const filteredItems = useMemo(() => {
     return items.filter(item => {
+      // 検索フィルター
       if (searchTerm) {
         const term = searchTerm.toLowerCase();
         if (!item.name.toLowerCase().includes(term) &&
@@ -637,12 +679,20 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
           return false;
         }
       }
+      // 標準/オプションフィルター
       const pricing = item.pricing?.find(p => p.product?.code === selectedPlanId);
       if (filterType === 'standard' && pricing && !pricing.is_standard) return false;
       if (filterType === 'option' && pricing?.is_standard) return false;
+      // サブカテゴリフィルター
+      if (selectedSubcategory && item.category_name !== selectedSubcategory) return false;
+      // 色フィルター
+      if (selectedColor) {
+        const hasColor = item.variants?.some(v => v.color_name === selectedColor);
+        if (!hasColor) return false;
+      }
       return true;
     });
-  }, [items, searchTerm, filterType, selectedPlanId]);
+  }, [items, searchTerm, filterType, selectedPlanId, selectedSubcategory, selectedColor]);
 
   // レコメンド用にCatalogProduct形式に変換
   const catalogProducts = useMemo(() => {
@@ -674,7 +724,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   // カートに追加
   const handleAddToCart = useCallback((item: ItemWithDetails) => {
     const cartProduct = convertToCartItem(item, selectedPlanId);
-    addItem(cartProduct as any, 1);
+    addItem(cartProduct, 1);
     useCartStore.getState().setSelectedPlanId(selectedPlanId);
 
     setAddedItemId(item.id);
@@ -713,7 +763,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
     standardItems.forEach(item => {
       const cartProduct = convertToCartItem(item, selectedPlanId);
-      addItem(cartProduct as any, 1);
+      addItem(cartProduct, 1);
     });
 
     toast.success(`${standardItems.length}件の標準品を選択しました`);
@@ -814,7 +864,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   const goToNextStep = useCallback(() => {
     const currentIndex = STEPS.findIndex(s => s.id === activeTab);
     if (currentIndex < STEPS.length - 1) {
-      setActiveTab(STEPS[currentIndex + 1].id as any);
+      setActiveTab(STEPS[currentIndex + 1].id);
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), 3000);
     }
@@ -925,7 +975,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   return (
                     <React.Fragment key={step.id}>
                       <button
-                        onClick={() => setActiveTab(step.id as any)}
+                        onClick={() => setActiveTab(step.id)}
                         className={`relative flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-2xl transition-all duration-300 ${
                           isActive
                             ? 'bg-white text-teal-600 shadow-xl scale-105'
@@ -1321,7 +1371,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   ].map(opt => (
                     <button
                       key={opt.value}
-                      onClick={() => setFilterType(opt.value as any)}
+                      onClick={() => setFilterType(opt.value as FilterTypeValue)}
                       className={`px-3 py-2 rounded-lg text-xs font-bold transition-all ${
                         filterType === opt.value
                           ? opt.value === 'standard'
@@ -1351,6 +1401,62 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 </button>
               </div>
             </div>
+
+            {/* サブカテゴリ・色フィルター（カテゴリ選択時のみ表示） */}
+            {selectedCategoryId && (availableSubcategories.length > 1 || availableColors.length > 1) && (
+              <div className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 px-3 py-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  {/* サブカテゴリフィルター */}
+                  {availableSubcategories.length > 1 && (
+                    <div className="flex items-center gap-1">
+                      <span className="text-xs text-gray-500 dark:text-gray-400">種類:</span>
+                      <select
+                        value={selectedSubcategory}
+                        onChange={(e) => setSelectedSubcategory(e.target.value)}
+                        className="px-2 py-1.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-xs font-medium text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-teal-500"
+                      >
+                        <option value="">すべて ({availableSubcategories.length}種)</option>
+                        {availableSubcategories.map(sub => (
+                          <option key={sub} value={sub}>{sub}</option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+                  {/* 色フィルター */}
+                  {availableColors.length > 1 && (
+                    <div className="flex items-center gap-1">
+                      <span className="text-xs text-gray-500 dark:text-gray-400">色:</span>
+                      <select
+                        value={selectedColor}
+                        onChange={(e) => setSelectedColor(e.target.value)}
+                        className="px-2 py-1.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-xs font-medium text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-teal-500"
+                      >
+                        <option value="">すべての色 ({availableColors.length}色)</option>
+                        {availableColors.map(color => (
+                          <option key={color} value={color}>{color}</option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+                  {/* フィルタークリア */}
+                  {(selectedSubcategory || selectedColor) && (
+                    <button
+                      onClick={() => {
+                        setSelectedSubcategory('');
+                        setSelectedColor('');
+                      }}
+                      className="px-2 py-1 text-xs text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                    >
+                      クリア
+                    </button>
+                  )}
+                  {/* 結果件数 */}
+                  <span className="ml-auto text-xs text-gray-400 dark:text-gray-500">
+                    {filteredItems.length}件
+                  </span>
+                </div>
+              </div>
+            )}
 
             {/* 商品グリッド */}
             <div className="flex-1 overflow-y-auto p-3 sm:p-4 pb-24 lg:pb-4">
@@ -1721,8 +1827,10 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   ['床材', '壁クロス', '天井クロス', '巾木'].some(cat => p.categoryName.includes(cat))
                 )}
                 onSelectionsChange={(selections) => {
-                  console.log('Room selections:', selections);
-                  // TODO: カートに反映する処理
+                  // RoomInteriorSelector内部でカート追加処理あり
+                  if (selections.length > 0) {
+                    toast.info('内装設定', `${selections.length}件の部屋設定が変更されました`);
+                  }
                 }}
               />
             </div>

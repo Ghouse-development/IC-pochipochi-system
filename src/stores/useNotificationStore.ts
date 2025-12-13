@@ -1,5 +1,12 @@
 import { create } from 'zustand';
 
+export interface NotificationData {
+  orderId?: string;
+  productId?: string;
+  versionId?: string;
+  [key: string]: unknown;
+}
+
 export interface Notification {
   id: string;
   type: 'order_confirmed' | 'order_modified' | 'product_updated' | 'version_changed';
@@ -7,7 +14,7 @@ export interface Notification {
   message: string;
   timestamp: Date;
   read: boolean;
-  data?: any;
+  data?: NotificationData;
 }
 
 interface NotificationStore {
