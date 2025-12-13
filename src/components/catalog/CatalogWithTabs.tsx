@@ -624,9 +624,6 @@ export const CatalogWithTabs: React.FC = () => {
     }).length;
   };
 
-  // 進捗率
-  const progressPercent = Math.min(100, (cartItems.length / 20) * 100);
-
   return (
     <>
       <style>{animations}</style>
@@ -687,20 +684,31 @@ export const CatalogWithTabs: React.FC = () => {
             </div>
           </div>
 
-          {/* プログレスバー */}
+          {/* プログレスバー - カテゴリベース */}
           <div className="px-4 pb-3">
             <div className="max-w-6xl mx-auto">
-              <div className="flex items-center gap-3">
-                <div className="flex-1 h-2 bg-white/20 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-gradient-to-r from-yellow-400 via-orange-400 to-pink-500 rounded-full transition-all duration-500"
-                    style={{ width: `${progressPercent}%` }}
-                  />
-                </div>
-                <span className="text-xs font-medium text-white/80 whitespace-nowrap">
-                  {cartItems.length >= 20 ? '🎉 目標達成!' : `あと${20 - cartItems.length}件`}
-                </span>
-              </div>
+              {(() => {
+                const decidedCount = categories.filter(cat =>
+                  cartItems.some(item => item.product.categoryName === cat.name)
+                ).length;
+                const totalCount = categories.length;
+                const catProgressPercent = totalCount > 0 ? (decidedCount / totalCount) * 100 : 0;
+                return (
+                  <div className="flex items-center gap-3">
+                    <div className="flex-1 h-2 bg-white/20 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-yellow-400 via-orange-400 to-pink-500 rounded-full transition-all duration-500"
+                        style={{ width: `${catProgressPercent}%` }}
+                      />
+                    </div>
+                    <span className="text-xs font-medium text-white/80 whitespace-nowrap">
+                      {decidedCount === totalCount && totalCount > 0
+                        ? '🎉 完了!'
+                        : `${decidedCount}/${totalCount}カテゴリ`}
+                    </span>
+                  </div>
+                );
+              })()}
             </div>
           </div>
         </div>
@@ -708,16 +716,6 @@ export const CatalogWithTabs: React.FC = () => {
         {/* カテゴリナビゲーション（常に表示） */}
         <div className="bg-white border-b border-gray-200 shadow-sm">
           <div className="flex items-center gap-2 px-4 py-3 overflow-x-auto scrollbar-thin">
-            <button
-              onClick={() => setSelectedCategoryId(null)}
-              className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                !selectedCategoryId
-                  ? 'bg-gradient-to-r from-teal-500 to-emerald-500 text-white shadow-lg'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
-            >
-              すべて
-            </button>
             {categories.map(cat => {
               const count = getCategoryCount(cat.name);
               const itemCount = items.filter(i => i.category_id === cat.id).length;
@@ -755,55 +753,135 @@ export const CatalogWithTabs: React.FC = () => {
         </div>
 
         <div className="flex flex-1 overflow-hidden">
-          {/* サイドバー (PC) - コンパクト化 */}
-          <div className="hidden lg:flex flex-col w-64 bg-white/80 backdrop-blur-sm border-r border-gray-200 overflow-y-auto">
+          {/* サイドバー (PC) - 未決/決定表示 */}
+          <div className="hidden lg:flex flex-col w-72 bg-white/80 backdrop-blur-sm border-r border-gray-200 overflow-y-auto">
             <div className="p-4 space-y-4">
-              {/* プラン選択 */}
-              <div>
-                <h3 className="font-bold text-gray-800 mb-2 text-sm flex items-center gap-2">
-                  <Star className="w-4 h-4 text-yellow-500" />
-                  プラン
-                </h3>
-                <div className="grid grid-cols-1 gap-1.5">
+              {/* プラン選択（コンパクト） */}
+              <div className="flex items-center gap-2">
+                <Star className="w-4 h-4 text-yellow-500" />
+                <select
+                  value={selectedPlanId}
+                  onChange={(e) => setSelectedPlanId(e.target.value)}
+                  className="flex-1 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-medium focus:ring-2 focus:ring-teal-500"
+                >
                   {plans.map(plan => (
-                    <button
-                      key={plan.id}
-                      onClick={() => setSelectedPlanId(plan.code)}
-                      className={`text-left px-3 py-2 rounded-lg transition-all duration-200 text-sm ${
-                        selectedPlanId === plan.code
-                          ? 'bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-md'
-                          : 'bg-gray-50 hover:bg-gray-100 text-gray-700'
-                      }`}
-                    >
-                      <span className="font-medium">{plan.name}</span>
-                    </button>
+                    <option key={plan.id} value={plan.code}>{plan.name}</option>
                   ))}
-                </div>
+                </select>
               </div>
 
-              {/* タイプフィルター */}
-              <div>
-                <h3 className="font-bold text-gray-800 mb-2 text-sm">タイプ</h3>
-                <div className="grid grid-cols-3 gap-1 bg-gray-100 p-1 rounded-lg">
-                  {[
-                    { value: 'all', label: 'すべて' },
-                    { value: 'standard', label: '標準' },
-                    { value: 'option', label: 'OP' },
-                  ].map(opt => (
-                    <button
-                      key={opt.value}
-                      onClick={() => setFilterType(opt.value as any)}
-                      className={`px-2 py-1.5 rounded text-xs font-medium transition-all ${
-                        filterType === opt.value
-                          ? 'bg-white text-teal-600 shadow-sm'
-                          : 'text-gray-500 hover:text-gray-700'
-                      }`}
-                    >
-                      {opt.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
+              {/* 進捗サマリー */}
+              {(() => {
+                const decidedCategories = categories.filter(cat =>
+                  cartItems.some(item => item.product.categoryName === cat.name)
+                );
+                const undecidedCategories = categories.filter(cat =>
+                  !cartItems.some(item => item.product.categoryName === cat.name)
+                );
+                const progressPercent = categories.length > 0
+                  ? Math.round((decidedCategories.length / categories.length) * 100)
+                  : 0;
+
+                return (
+                  <>
+                    {/* 進捗バー */}
+                    <div className="bg-gradient-to-r from-teal-50 to-emerald-50 rounded-xl p-3">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-sm font-bold text-gray-700">
+                          {STEPS.find(s => s.id === activeTab)?.label}の進捗
+                        </span>
+                        <span className="text-lg font-bold text-teal-600">
+                          {decidedCategories.length}/{categories.length}
+                        </span>
+                      </div>
+                      <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-teal-500 to-emerald-500 rounded-full transition-all duration-500"
+                          style={{ width: `${progressPercent}%` }}
+                        />
+                      </div>
+                      <p className="text-xs text-gray-500 mt-1 text-center">
+                        {progressPercent === 100 ? '🎉 完了!' : `残り${undecidedCategories.length}カテゴリ`}
+                      </p>
+                    </div>
+
+                    {/* 未決項目 */}
+                    {undecidedCategories.length > 0 && (
+                      <div>
+                        <h3 className="font-bold text-gray-800 mb-2 text-sm flex items-center gap-2">
+                          <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse" />
+                          未決項目
+                          <span className="text-orange-500">({undecidedCategories.length})</span>
+                        </h3>
+                        <div className="space-y-1">
+                          {undecidedCategories.map(cat => (
+                            <button
+                              key={cat.id}
+                              onClick={() => setSelectedCategoryId(cat.id)}
+                              className={`w-full flex items-center justify-between p-2 rounded-lg text-sm transition-all ${
+                                selectedCategoryId === cat.id
+                                  ? 'bg-orange-100 border-2 border-orange-300 text-orange-700'
+                                  : 'bg-orange-50 hover:bg-orange-100 text-gray-700 border border-orange-200'
+                              }`}
+                            >
+                              <span className="font-medium">{cat.name}</span>
+                              <ChevronRight className="w-4 h-4 text-orange-400" />
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* 決定項目 */}
+                    {decidedCategories.length > 0 && (
+                      <div>
+                        <h3 className="font-bold text-gray-800 mb-2 text-sm flex items-center gap-2">
+                          <Check className="w-4 h-4 text-teal-500" />
+                          決定項目
+                          <span className="text-teal-500">({decidedCategories.length})</span>
+                        </h3>
+                        <div className="space-y-1.5">
+                          {decidedCategories.map(cat => {
+                            const selectedItems = cartItems.filter(
+                              item => item.product.categoryName === cat.name
+                            );
+                            return (
+                              <button
+                                key={cat.id}
+                                onClick={() => setSelectedCategoryId(cat.id)}
+                                className={`w-full p-2 rounded-lg text-sm transition-all text-left ${
+                                  selectedCategoryId === cat.id
+                                    ? 'bg-teal-100 border-2 border-teal-300'
+                                    : 'bg-teal-50 hover:bg-teal-100 border border-teal-200'
+                                }`}
+                              >
+                                <div className="flex items-center justify-between">
+                                  <span className="font-medium text-teal-700">{cat.name}</span>
+                                  <span className="text-xs bg-teal-500 text-white px-1.5 py-0.5 rounded-full">
+                                    {selectedItems.length}件
+                                  </span>
+                                </div>
+                                <div className="mt-1 space-y-0.5">
+                                  {selectedItems.slice(0, 2).map(item => (
+                                    <p key={item.product.id} className="text-xs text-gray-600 truncate">
+                                      ・{item.product.name}
+                                    </p>
+                                  ))}
+                                  {selectedItems.length > 2 && (
+                                    <p className="text-xs text-gray-400">
+                                      他{selectedItems.length - 2}件
+                                    </p>
+                                  )}
+                                </div>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+                  </>
+                );
+              })()}
 
               {/* 部屋別プランナー（内装タブの時のみ） */}
               {activeTab === 'interior' && (
@@ -815,29 +893,6 @@ export const CatalogWithTabs: React.FC = () => {
                     <Home className="w-4 h-4" />
                     部屋別プランナー
                   </button>
-                </div>
-              )}
-
-              {/* 選択中の商品サマリー */}
-              {cartItems.length > 0 && (
-                <div className="pt-3 border-t border-gray-200">
-                  <h3 className="font-bold text-gray-800 mb-2 text-sm flex items-center gap-2">
-                    <ShoppingCart className="w-4 h-4 text-teal-500" />
-                    選択中 ({cartItems.length}件)
-                  </h3>
-                  <div className="space-y-1 max-h-40 overflow-y-auto">
-                    {cartItems.slice(0, 5).map(item => (
-                      <div key={item.product.id} className="flex items-center gap-2 p-1.5 bg-teal-50 rounded-lg text-xs">
-                        <Check className="w-3 h-3 text-teal-500 flex-shrink-0" />
-                        <span className="truncate text-gray-700">{item.product.name}</span>
-                      </div>
-                    ))}
-                    {cartItems.length > 5 && (
-                      <p className="text-xs text-gray-500 text-center">
-                        他 {cartItems.length - 5}件...
-                      </p>
-                    )}
-                  </div>
                 </div>
               )}
             </div>
