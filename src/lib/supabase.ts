@@ -1,10 +1,13 @@
 import { createClient } from '@supabase/supabase-js';
+import { createLogger } from './logger';
+
+const logger = createLogger('Supabase');
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseAnonKey) {
-  console.warn('Supabase credentials not found. Please check your .env file.');
+  logger.warn('Supabase credentials not found. Please check your .env file.');
 }
 
 export const supabase = createClient(
@@ -46,7 +49,7 @@ export const uploadFile = async (
     });
 
   if (error) {
-    console.error('Upload error:', error);
+    logger.error('Upload error:', error);
     return null;
   }
 
@@ -61,7 +64,7 @@ export const deleteFile = async (
 ): Promise<boolean> => {
   const { error } = await supabase.storage.from(bucket).remove([path]);
   if (error) {
-    console.error('Delete error:', error);
+    logger.error('Delete error:', error);
     return false;
   }
   return true;

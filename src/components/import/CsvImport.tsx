@@ -12,6 +12,10 @@ import {
 import { parseCSV, buildHierarchy, type HierarchicalProduct } from '../../utils/csvParser';
 import type { CategoryNode } from '../../utils/csvParser';
 import { supabase } from '../../lib/supabase';
+import { useToast } from '../common/Toast';
+import { createLogger } from '../../lib/logger';
+
+const logger = createLogger('CsvImport');
 
 interface CsvImportProps {
   onImportComplete: (hierarchy: CategoryNode[]) => void;
@@ -27,6 +31,7 @@ interface ImportProgress {
 }
 
 export function CsvImport({ onImportComplete, mode = 'preview' }: CsvImportProps) {
+  const toast = useToast();
   const [isUploading, setIsUploading] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -37,12 +42,38 @@ export function CsvImport({ onImportComplete, mode = 'preview' }: CsvImportProps
   const [importComplete, setImportComplete] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+  const ALLOWED_EXTENSIONS = ['.csv'];
+  const ALLOWED_MIME_TYPES = ['text/csv', 'application/vnd.ms-excel', 'text/plain'];
+
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    if (!file.name.endsWith('.csv')) {
+    // 拡張子の検証
+    const hasValidExtension = ALLOWED_EXTENSIONS.some(ext =>
+      file.name.toLowerCase().endsWith(ext)
+    );
+    if (!hasValidExtension) {
       setError('CSVファイルを選択してください');
+      return;
+    }
+
+    // MIMEタイプの検証（ブラウザによって異なる場合があるので緩めに）
+    if (file.type && !ALLOWED_MIME_TYPES.includes(file.type)) {
+      setError('無効なファイル形式です。CSVファイルを選択してください');
+      return;
+    }
+
+    // ファイルサイズの検証
+    if (file.size > MAX_FILE_SIZE) {
+      setError('ファイルサイズは10MB以下にしてください');
+      return;
+    }
+
+    // ファイルが空でないか確認
+    if (file.size === 0) {
+      setError('ファイルが空です');
       return;
     }
 
@@ -66,8 +97,10 @@ export function CsvImport({ onImportComplete, mode = 'preview' }: CsvImportProps
       onImportComplete(hierarchy);
       setError(null);
     } catch (err) {
-      setError('ファイルの読み込みに失敗しました');
-      console.error('CSV import error:', err);
+      const message = 'ファイルの読み込みに失敗しました';
+      setError(message);
+      toast.error('エラー', message);
+      logger.error('CSV import error:', err);
     } finally {
       setIsUploading(false);
     }
@@ -308,7 +341,7 @@ export function CsvImport({ onImportComplete, mode = 'preview' }: CsvImportProps
             success: prev.success + 1,
           }));
         } catch (err) {
-          console.error('Error importing product:', product, err);
+          logger.error('Error importing product:', product, err);
           setProgress((prev) => prev && ({
             ...prev,
             processed: prev.processed + 1,
@@ -320,7 +353,7 @@ export function CsvImport({ onImportComplete, mode = 'preview' }: CsvImportProps
 
       setImportComplete(true);
     } catch (err) {
-      console.error('Import error:', err);
+      logger.error('Import error:', err);
       setError('インポート中にエラーが発生しました');
     } finally {
       setIsImporting(false);
@@ -441,7 +474,7 @@ export function CsvImport({ onImportComplete, mode = 'preview' }: CsvImportProps
                 </thead>
                 <tbody className="divide-y">
                   {parsedData.slice(0, 20).map((item, index) => (
-                    <tr key={index} className="hover:bg-gray-50">
+                    <tr key={`${item.product}-${item.color}-${index}`} className="hover:bg-gray-50">
                       <td className="px-3 py-2">
                         {item.category1} &gt; {item.category2} &gt; {item.category3}
                       </td>

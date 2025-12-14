@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import type { Category } from '../../types/product';
 import type { FilterOptions } from '../../types/filter';
 import { useProductStore } from '../../stores/useProductStore';
@@ -58,27 +58,27 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
     return sortCategories(unsortedCategories, orderConfig);
   }, [catalogType, exteriorProducts, interiorProducts, waterProducts]);
   
-  const handleCategoryToggle = (categoryId: string) => {
+  const handleCategoryToggle = useCallback((categoryId: string) => {
     const newCategories = filters.categories.includes(categoryId)
       ? filters.categories.filter((id) => id !== categoryId)
       : [...filters.categories, categoryId];
-    
+
     onFilterChange({
       ...filters,
       categories: newCategories,
     });
-  };
-  
-  const handleSubcategoryToggle = (subcategory: string) => {
+  }, [filters, onFilterChange]);
+
+  const handleSubcategoryToggle = useCallback((subcategory: string) => {
     const newSubcategories = filters.subcategories.includes(subcategory)
       ? filters.subcategories.filter((s) => s !== subcategory)
       : [...filters.subcategories, subcategory];
-    
+
     onFilterChange({
       ...filters,
       subcategories: newSubcategories,
     });
-  };
+  }, [filters, onFilterChange]);
 
   return (
     <div className="w-64 bg-white p-6 rounded-lg shadow-sm border border-gray-200">

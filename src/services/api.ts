@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase';
+import { createLogger } from '../lib/logger';
 import type {
   Category,
   CategoryWithChildren,
@@ -20,6 +21,8 @@ import type {
   CreateItemVariantInput,
   CreateItemPricingInput,
 } from '../types/database';
+
+const logger = createLogger('API');
 
 // ========================================
 // Products (Plans)
@@ -468,7 +471,7 @@ export const projectsApi = {
     });
 
     if (error) {
-      console.error('Error acquiring lock:', error);
+      logger.error('Error acquiring lock:', error);
       return false;
     }
 
@@ -482,7 +485,7 @@ export const projectsApi = {
     });
 
     if (error) {
-      console.error('Error releasing lock:', error);
+      logger.error('Error releasing lock:', error);
       return false;
     }
 
@@ -495,7 +498,7 @@ export const projectsApi = {
     });
 
     if (error) {
-      console.error('Error force releasing lock:', error);
+      logger.error('Error force releasing lock:', error);
       return false;
     }
 
@@ -558,7 +561,7 @@ export const selectionsApi = {
 
     // Log warning if no pricing found (but continue with 0)
     if (unitPrice === 0) {
-      console.warn(`No pricing found for item_id: ${selection.item_id}, variant_id: ${selection.variant_id || 'null'}`);
+      logger.warn(`No pricing found for item_id: ${selection.item_id}, variant_id: ${selection.variant_id || 'null'}`);
     }
 
     const totalPrice = unitPrice * selection.quantity;

@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect, memo, useCallback } from 'react';
 import type { Product } from '../../types/product';
 import { UNIT_SYMBOLS } from '../../types/product';
 import { Card } from '../common/Card';
 import { Badge } from '../common/Badge';
-import { formatPrice } from '../../lib/utils';
+import { formatPrice, getProductPrice } from '../../lib/utils';
 import { generateProductPlaceholder } from '../../utils/imageUtils';
 import { getHexColor } from '../../utils/colorMapping';
 
@@ -12,9 +12,31 @@ interface ProductCardProps {
   onSelect: (product: Product) => void;
 }
 
-export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect }) => {
+const ProductCardComponent: React.FC<ProductCardProps> = ({ product, onSelect }) => {
   const [imageError, setImageError] = useState(false);
-  const price = product.pricing.find((p) => p.plan === 'LACIE' || p.planId === 'LACIE')?.price || 0;
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const imgRef = useRef<HTMLDivElement>(null);
+
+  // IntersectionObserver for lazy loading
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '100px' }
+    );
+
+    if (imgRef.current) {
+      observer.observe(imgRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+  const price = getProductPrice(product.pricing);
   const defaultVariant = product.variants[0];
 
   const imagePlaceholder = generateProductPlaceholder(
@@ -26,19 +48,47 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect }) =
     ? imagePlaceholder
     : (defaultVariant?.imageUrl || defaultVariant?.thumbnailUrl || imagePlaceholder);
 
+  const handleSelect = useCallback(() => {
+    onSelect(product);
+  }, [onSelect, product]);
+
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleSelect();
+    }
+  }, [handleSelect]);
+
   return (
     <Card
       hoverable
-      onClick={() => onSelect(product)}
+      onClick={handleSelect}
       className="overflow-hidden"
+      role="button"
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
+      aria-label={`${product.name}の詳細を見る。価格: ${price === 0 ? '標準仕様' : formatPrice(price)}`}
     >
-      <div className="aspect-w-16 aspect-h-12 bg-gray-100">
-        <img
-          src={displayImage}
-          alt={product.name}
-          className="w-full h-32 sm:h-48 object-cover"
-          onError={() => setImageError(true)}
-        />
+      <div ref={imgRef} className="aspect-w-16 aspect-h-12 bg-gray-100 dark:bg-gray-800 relative">
+        {/* Loading Skeleton */}
+        {(!imageLoaded || !isVisible) && (
+          <div className="absolute inset-0 animate-pulse bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 dark:from-gray-700 dark:via-gray-600 dark:to-gray-700 bg-[length:200%_100%]" />
+        )}
+        {isVisible && (
+          <img
+            src={displayImage}
+            alt={product.name}
+            className={`w-full h-32 sm:h-48 object-cover transition-opacity duration-300 ${
+              imageLoaded ? 'opacity-100' : 'opacity-0'
+            }`}
+            loading="lazy"
+            onLoad={() => setImageLoaded(true)}
+            onError={() => {
+              setImageError(true);
+              setImageLoaded(true);
+            }}
+          />
+        )}
       </div>
       
       <div className="p-2 sm:p-4">
@@ -100,3 +150,28 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect }) =
     </Card>
   );
 };
+
+// React.memoでメモ化（商品データとコールバックの変更を検知）
+export const ProductCard = memo(ProductCardComponent, (prevProps, nextProps) => {
+  const prevProduct = prevProps.product;
+  const nextProduct = nextProps.product;
+
+  // 基本プロパティの比較
+  if (prevProduct.id !== nextProduct.id) return false;
+  if (prevProduct.name !== nextProduct.name) return false;
+  if (prevProduct.isOption !== nextProduct.isOption) return false;
+  if (prevProduct.manufacturer !== nextProduct.manufacturer) return false;
+
+  // 価格の比較
+  const prevPrice = getProductPrice(prevProduct.pricing);
+  const nextPrice = getProductPrice(nextProduct.pricing);
+  if (prevPrice !== nextPrice) return false;
+
+  // バリアント数の比較（カラーバリエーション表示に影響）
+  if (prevProduct.variants.length !== nextProduct.variants.length) return false;
+
+  // コールバック参照の比較
+  if (prevProps.onSelect !== nextProps.onSelect) return false;
+
+  return true;
+});

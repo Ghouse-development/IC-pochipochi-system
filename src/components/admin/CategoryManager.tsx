@@ -11,6 +11,7 @@ import {
   X
 } from 'lucide-react';
 import { CategoryService, type Category } from '../../services/databaseService';
+import { ConfirmDialog } from '../common/ConfirmDialog';
 
 export function CategoryManager() {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -19,6 +20,7 @@ export function CategoryManager() {
   const [isCreating, setIsCreating] = useState(false);
   const [parentId, setParentId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [deleteTarget, setDeleteTarget] = useState<Category | null>(null);
 
   useEffect(() => {
     loadCategories();
@@ -85,15 +87,18 @@ export function CategoryManager() {
     setIsCreating(false);
   };
 
-  const handleDelete = async (category: Category) => {
-    if (!confirm(`「${category.name}」を削除してもよろしいですか？\n※ サブカテゴリも一緒に削除されます。`)) {
-      return;
-    }
+  const handleDelete = (category: Category) => {
+    setDeleteTarget(category);
+  };
 
-    const success = await CategoryService.deleteCategory(category.id);
+  const executeDelete = async () => {
+    if (!deleteTarget) return;
+
+    const success = await CategoryService.deleteCategory(deleteTarget.id);
     if (success) {
       await loadCategories();
     }
+    setDeleteTarget(null);
   };
 
   const renderCategory = (category: Category, level: number = 0) => {
@@ -313,6 +318,17 @@ export function CategoryManager() {
           </div>
         </div>
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={!!deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={executeDelete}
+        title="カテゴリの削除"
+        message={`「${deleteTarget?.name}」を削除してもよろしいですか？\n※ サブカテゴリも一緒に削除されます。`}
+        variant="danger"
+        confirmText="削除する"
+      />
     </div>
   );
 }

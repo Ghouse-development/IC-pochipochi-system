@@ -1,4 +1,8 @@
 import { supabase } from '../lib/supabase';
+import { createLogger } from '../lib/logger';
+import { STORAGE_KEYS } from '../lib/constants';
+
+const logger = createLogger('AuditService');
 
 // JSON型定義（監査ログ用）
 export type JsonValue = string | number | boolean | null | JsonObject | JsonArray;
@@ -59,7 +63,7 @@ export class AuditService {
     changes?: JsonObject
   ): Promise<void> {
     try {
-      const user = JSON.parse(localStorage.getItem('stylebook_user') || '{}');
+      const user = JSON.parse(localStorage.getItem(STORAGE_KEYS.USER) || '{}');
 
       const logData = {
         user_email: user.email || 'unknown',
@@ -79,7 +83,7 @@ export class AuditService {
 
       if (error) throw error;
     } catch (error) {
-      console.error('Error logging audit:', error);
+      logger.error('Error logging audit:', error);
     }
   }
 
@@ -96,7 +100,7 @@ export class AuditService {
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error('Error fetching audit logs:', error);
+      logger.error('Error fetching audit logs:', error);
       return [];
     }
   }
@@ -115,7 +119,7 @@ export class AuditService {
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error('Error fetching table audit logs:', error);
+      logger.error('Error fetching table audit logs:', error);
       return [];
     }
   }
@@ -134,7 +138,7 @@ export class AuditService {
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error('Error fetching record audit logs:', error);
+      logger.error('Error fetching record audit logs:', error);
       return [];
     }
   }
@@ -153,7 +157,7 @@ export class AuditService {
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error('Error fetching user audit logs:', error);
+      logger.error('Error fetching user audit logs:', error);
       return [];
     }
   }
@@ -174,7 +178,7 @@ export class AuditService {
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error('Error fetching daily summary:', error);
+      logger.error('Error fetching daily summary:', error);
       return [];
     }
   }

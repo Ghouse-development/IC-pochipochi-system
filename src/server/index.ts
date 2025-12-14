@@ -18,7 +18,6 @@ app.post('/api/products/bulk', async (req, res) => {
 
     // ここで実際のDB保存処理を行う
     // 今回はモックレスポンスを返す
-    console.log(`Importing ${products.length} products...`);
 
     res.json({
       success: true,
@@ -32,5 +31,5 @@ app.post('/api/products/bulk', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`API Server is running on http://localhost:${PORT}`);
+  // Server started on PORT
 });

@@ -1,5 +1,9 @@
 import { Component, type ReactNode } from 'react';
 import { AlertTriangle, RefreshCw, Home, Bug } from 'lucide-react';
+import { createLogger } from '../../lib/logger';
+import { STORAGE_KEYS } from '../../lib/constants';
+
+const logger = createLogger('ErrorBoundary');
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -31,7 +35,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     this.setState({ errorInfo });
 
     // エラーログを送信（本番環境ではSentryなどを使用）
-    console.error('ErrorBoundary caught an error:', error, errorInfo);
+    logger.error('ErrorBoundary caught an error:', error, errorInfo);
 
     // カスタムエラーハンドラを呼び出し
     this.props.onError?.(error, errorInfo);
@@ -45,12 +49,12 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
         timestamp: new Date().toISOString(),
         url: window.location.href,
       };
-      const existingLogs = JSON.parse(localStorage.getItem('errorLogs') || '[]');
+      const existingLogs = JSON.parse(localStorage.getItem(STORAGE_KEYS.ERROR_LOGS) || '[]');
       existingLogs.push(errorLog);
       // 最新10件のみ保持
-      localStorage.setItem('errorLogs', JSON.stringify(existingLogs.slice(-10)));
+      localStorage.setItem(STORAGE_KEYS.ERROR_LOGS, JSON.stringify(existingLogs.slice(-10)));
     } catch (e) {
-      console.error('Failed to save error log:', e);
+      logger.error('Failed to save error log:', e);
     }
   }
 
@@ -201,6 +205,61 @@ export function getSupabaseErrorMessage(error: { code?: string; message?: string
   }
 
   return error.message || '操作に失敗しました';
+}
+
+/**
+ * セクション用の軽量エラーバウンダリ
+ * データ取得コンポーネントをラップして、エラー時にコンパクトなUIを表示
+ */
+export class SectionErrorBoundary extends Component<
+  { children: ReactNode; sectionName?: string },
+  { hasError: boolean; error: Error | null }
+> {
+  constructor(props: { children: ReactNode; sectionName?: string }) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    logger.error(`Section error${this.props.sectionName ? ` in ${this.props.sectionName}` : ''}:`, error, errorInfo);
+  }
+
+  handleRetry = () => {
+    this.setState({ hasError: false, error: null });
+  };
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
+          <div className="flex items-center gap-3">
+            <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0" />
+            <div className="flex-1">
+              <p className="text-sm font-medium text-red-800 dark:text-red-200">
+                {this.props.sectionName ? `${this.props.sectionName}の` : ''}読み込みエラー
+              </p>
+              <p className="text-xs text-red-600 dark:text-red-400 mt-0.5">
+                {this.state.error?.message || 'エラーが発生しました'}
+              </p>
+            </div>
+            <button
+              onClick={this.handleRetry}
+              className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-red-700 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-900/30 rounded transition-colors"
+            >
+              <RefreshCw className="w-3 h-3" />
+              再試行
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
 }
 
 export default ErrorBoundary;

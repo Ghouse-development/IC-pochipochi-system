@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {
   Users,
   Plus,
@@ -16,6 +16,11 @@ import {
 import { usersApi } from '../../services/api';
 import type { User, UserRole } from '../../types/database';
 import { supabase } from '../../lib/supabase';
+import { ConfirmDialog } from '../common/ConfirmDialog';
+import { useDebounce } from '../../hooks/useDebounce';
+import { createLogger } from '../../lib/logger';
+
+const logger = createLogger('UserManager');
 
 interface UserManagerProps {
   onBack?: () => void;
@@ -48,12 +53,16 @@ export function UserManager({ onBack }: UserManagerProps) {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
   const [filterRole, setFilterRole] = useState<UserRole | 'all'>('all');
   const [filterStatus, setFilterStatus] = useState<'all' | 'active' | 'inactive'>('all');
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+
+  // Password reset confirmation
+  const [resetPasswordUser, setResetPasswordUser] = useState<User | null>(null);
 
   // New user form state
   const [newUserForm, setNewUserForm] = useState({
@@ -75,7 +84,7 @@ export function UserManager({ onBack }: UserManagerProps) {
       const data = await usersApi.getAll();
       setUsers(data);
     } catch (err) {
-      console.error('Error loading users:', err);
+      logger.error('Error loading users:', err);
       setError('ユーザーの読み込みに失敗しました');
     } finally {
       setLoading(false);
@@ -124,7 +133,7 @@ export function UserManager({ onBack }: UserManagerProps) {
       });
       await loadUsers();
     } catch (err: unknown) {
-      console.error('Error creating user:', err);
+      logger.error('Error creating user:', err);
       setError(err instanceof Error ? err.message : 'ユーザーの作成に失敗しました');
     }
   };
@@ -145,7 +154,7 @@ export function UserManager({ onBack }: UserManagerProps) {
       setEditingUser(null);
       await loadUsers();
     } catch (err) {
-      console.error('Error updating user:', err);
+      logger.error('Error updating user:', err);
       setError('ユーザーの更新に失敗しました');
     }
   };
@@ -160,45 +169,52 @@ export function UserManager({ onBack }: UserManagerProps) {
       setSuccess(user.is_active ? 'ユーザーを無効化しました' : 'ユーザーを有効化しました');
       await loadUsers();
     } catch (err) {
-      console.error('Error toggling user status:', err);
+      logger.error('Error toggling user status:', err);
       setError('ステータスの変更に失敗しました');
     }
   };
 
-  const handleResetPassword = async (user: User) => {
-    if (!confirm(`${user.full_name || user.email} にパスワードリセットメールを送信しますか？`)) {
-      return;
-    }
+  const handleResetPassword = (user: User) => {
+    setResetPasswordUser(user);
+  };
+
+  const executeResetPassword = async () => {
+    if (!resetPasswordUser) return;
 
     try {
       setError(null);
-      const { error } = await supabase.auth.resetPasswordForEmail(user.email, {
+      const { error } = await supabase.auth.resetPasswordForEmail(resetPasswordUser.email, {
         redirectTo: `${window.location.origin}/reset-password`,
       });
 
       if (error) throw error;
       setSuccess('パスワードリセットメールを送信しました');
     } catch (err) {
-      console.error('Error resetting password:', err);
+      logger.error('Error resetting password:', err);
       setError('パスワードリセットメールの送信に失敗しました');
+    } finally {
+      setResetPasswordUser(null);
     }
   };
 
-  // Filter users
-  const filteredUsers = users.filter(user => {
-    const matchesSearch =
-      user.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.phone?.includes(searchTerm);
+  // Filter users (memoized with debounced search)
+  const filteredUsers = useMemo(() => {
+    const searchLower = debouncedSearchTerm.toLowerCase();
+    return users.filter(user => {
+      const matchesSearch =
+        user.full_name?.toLowerCase().includes(searchLower) ||
+        user.email.toLowerCase().includes(searchLower) ||
+        user.phone?.includes(debouncedSearchTerm);
 
-    const matchesRole = filterRole === 'all' || user.role === filterRole;
-    const matchesStatus =
-      filterStatus === 'all' ||
-      (filterStatus === 'active' && user.is_active) ||
-      (filterStatus === 'inactive' && !user.is_active);
+      const matchesRole = filterRole === 'all' || user.role === filterRole;
+      const matchesStatus =
+        filterStatus === 'all' ||
+        (filterStatus === 'active' && user.is_active) ||
+        (filterStatus === 'inactive' && !user.is_active);
 
-    return matchesSearch && matchesRole && matchesStatus;
-  });
+      return matchesSearch && matchesRole && matchesStatus;
+    });
+  }, [users, debouncedSearchTerm, filterRole, filterStatus]);
 
   // Stats
   const stats = {
@@ -587,6 +603,18 @@ export function UserManager({ onBack }: UserManagerProps) {
           </div>
         </div>
       )}
+
+      {/* Password Reset Confirm Dialog */}
+      <ConfirmDialog
+        isOpen={!!resetPasswordUser}
+        onClose={() => setResetPasswordUser(null)}
+        onConfirm={executeResetPassword}
+        title="パスワードリセット"
+        message={`${resetPasswordUser?.full_name || resetPasswordUser?.email} にパスワードリセットメールを送信しますか？`}
+        confirmText="送信"
+        cancelText="キャンセル"
+        variant="info"
+      />
     </div>
   );
 }

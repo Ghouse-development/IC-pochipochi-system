@@ -1,17 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
-import { X, Plus, Minus, ShoppingCart, Check, AlertCircle, Info, FileText } from 'lucide-react';
+import { X, Plus, Minus, ShoppingCart, Check, AlertCircle, Info, FileText, QrCode } from 'lucide-react';
+import { QRCodeSVG } from 'qrcode.react';
 import type { Product, ProductVariant } from '../../types/product';
 import { UNIT_SYMBOLS } from '../../types/product';
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
 import { useToast } from '../common/Toast';
-import { formatPrice } from '../../lib/utils';
+import { formatPrice, getProductPrice } from '../../lib/utils';
 import { useCartStore } from '../../stores/useCartStore';
 import { useStatisticsStore } from '../../stores/useStatisticsStore';
+import { useRecentlyViewedStore } from '../../stores/useRecentlyViewedStore';
 import { cn } from '../../lib/utils';
 import { getCategoryRule } from '../../config/categoryRules';
 import { getHexColor } from '../../utils/colorMapping';
+import { useTimeout } from '../../hooks/useTimeout';
 
 interface ProductDetailModalProps {
   product: Product | null;
@@ -27,10 +30,14 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [isAdded, setIsAdded] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [showQR, setShowQR] = useState(false);
   const { addItem, items } = useCartStore();
   const recordView = useStatisticsStore((state) => state.recordView);
   const recordAdoption = useStatisticsStore((state) => state.recordAdoption);
+  const addRecentlyViewed = useRecentlyViewedStore((state) => state.addItem);
   const toast = useToast();
+  const { setTimeout } = useTimeout();
 
   // 開いた時にリセット & 閲覧記録
   useEffect(() => {
@@ -38,35 +45,60 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
       setSelectedVariant(product.variants[0] || null);
       setQuantity(1);
       setIsAdded(false);
+      setImageLoaded(false);
 
-      // 商品閲覧を記録
+      // 商品閲覧を記録（統計）
       recordView(product.id, product.name, product.categoryName);
+
+      // 最近閲覧した商品に追加
+      const price = getProductPrice(product.pricing);
+      addRecentlyViewed({
+        id: product.id,
+        name: product.name,
+        imageUrl: product.variants[0]?.imageUrl || product.variants[0]?.thumbnailUrl,
+        categoryName: product.categoryName,
+        price,
+      });
     }
-  }, [isOpen, product, recordView]);
+  }, [isOpen, product, recordView, addRecentlyViewed]);
 
-  if (!product) return null;
+  // バリアント変更時に画像リセット
+  useEffect(() => {
+    setImageLoaded(false);
+  }, [selectedVariant]);
 
-  const variant = selectedVariant || product.variants[0];
-  const price = product.pricing.find((p) => p.plan === 'LACIE' || p.planId === 'LACIE')?.price || 0;
+  // すべてのフックを早期リターンの前に配置（React Hooks のルール遵守）
+  const variant = selectedVariant || product?.variants[0] || null;
+  const price = product ? getProductPrice(product.pricing) : 0;
   const totalPrice = price * quantity;
 
   // カテゴリルールを取得
-  const categoryRule = getCategoryRule(product.categoryName);
+  const categoryRule = useMemo(
+    () => getCategoryRule(product?.categoryName || ''),
+    [product?.categoryName]
+  );
   const isSingleSelection = categoryRule.selectionType === 'single';
 
   // 同じカテゴリの商品がカートにあるかチェック
-  const hasSameCategoryItem = items.some(
-    item => item.product.categoryName === product.categoryName &&
-           item.product.id !== product.id
-  );
+  const hasSameCategoryItem = useMemo(() => {
+    if (!product) return false;
+    return items.some(
+      item => item.product.categoryName === product.categoryName &&
+             item.product.id !== product.id
+    );
+  }, [items, product]);
 
   // 同じカテゴリの商品数をカウント
-  const sameCategoryCount = items.filter(
-    item => item.product.categoryName === product.categoryName
-  ).length;
+  const sameCategoryCount = useMemo(() => {
+    if (!product) return 0;
+    return items.filter(
+      item => item.product.categoryName === product.categoryName
+    ).length;
+  }, [items, product]);
 
   // 選択可能かチェック
-  const canAddToCart = () => {
+  const canAddToCart = useMemo(() => {
+    if (!product) return false;
     if (isSingleSelection && hasSameCategoryItem) {
       return false;
     }
@@ -74,19 +106,24 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
       return false;
     }
     return true;
-  };
+  }, [product, isSingleSelection, hasSameCategoryItem, categoryRule.maxSelection, sameCategoryCount]);
 
-  const imagePlaceholder = `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(`
+  const imagePlaceholder = useMemo(() => {
+    const productName = product?.name || '商品';
+    return `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(`
     <svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
       <rect width="600" height="400" fill="#f3f4f6"/>
       <text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="#9ca3af" font-family="sans-serif" font-size="20">
-        ${product.name}
+        ${productName}
       </text>
     </svg>
   `)))}`;
+  }, [product?.name]);
 
-  const handleAddToCart = () => {
-    if (!canAddToCart()) {
+  const handleAddToCart = useCallback(() => {
+    if (!product || !variant) return;
+
+    if (!canAddToCart) {
       if (isSingleSelection) {
         toast.warning('選択制限', `${product.categoryName}は1つのみ選択可能です。既に選択されている商品を削除してから追加してください。`);
       } else if (categoryRule.maxSelection) {
@@ -105,14 +142,17 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
       setIsAdded(false);
       onClose();
     }, 1000);
-  };
+  }, [product, variant, canAddToCart, isSingleSelection, categoryRule.maxSelection, quantity, addItem, recordAdoption, price, toast, setTimeout, onClose]);
 
-  const handleQuantityChange = (delta: number) => {
+  const handleQuantityChange = useCallback((delta: number) => {
     const newQuantity = quantity + delta;
     if (newQuantity >= 1 && newQuantity <= 99) {
       setQuantity(newQuantity);
     }
-  };
+  }, [quantity]);
+
+  // 早期リターンはすべてのフックの後に配置
+  if (!product) return null;
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={onClose}>
@@ -135,12 +175,21 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
             {/* 画像エリア */}
             <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 p-6">
               <div className="aspect-video max-w-md mx-auto relative rounded-xl overflow-hidden bg-white dark:bg-gray-900 shadow-lg">
+                {/* Loading Skeleton */}
+                {!imageLoaded && (
+                  <div className="absolute inset-0 animate-pulse bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 dark:from-gray-700 dark:via-gray-600 dark:to-gray-700" />
+                )}
                 <img
                   src={variant?.imageUrl || imagePlaceholder}
                   alt={product.name}
-                  className="w-full h-full object-contain"
+                  className={`w-full h-full object-contain transition-opacity duration-300 ${
+                    imageLoaded ? 'opacity-100' : 'opacity-0'
+                  }`}
+                  loading="lazy"
+                  onLoad={() => setImageLoaded(true)}
                   onError={(e) => {
                     e.currentTarget.src = imagePlaceholder;
+                    setImageLoaded(true);
                   }}
                 />
               </div>
@@ -274,6 +323,33 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                 </div>
               )}
 
+              {/* QRコード */}
+              <div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4">
+                <button
+                  onClick={() => setShowQR(!showQR)}
+                  className="flex items-center gap-2 w-full"
+                >
+                  <QrCode className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                  <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200">商品QRコード</h3>
+                  <span className="text-xs text-gray-500 ml-auto">{showQR ? '閉じる' : '表示'}</span>
+                </button>
+                {showQR && (
+                  <div className="mt-4 flex flex-col items-center gap-3">
+                    <div className="bg-white p-4 rounded-lg shadow-inner">
+                      <QRCodeSVG
+                        value={`${window.location.origin}/product/${product.id}`}
+                        size={150}
+                        level="M"
+                        includeMargin
+                      />
+                    </div>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
+                      スキャンして商品ページを共有
+                    </p>
+                  </div>
+                )}
+              </div>
+
               {/* 仕様情報 */}
               <div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4">
                 <div className="flex items-center gap-2 mb-3">
@@ -313,7 +389,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
               )}
 
               {/* 選択制限の警告 */}
-              {!canAddToCart() && (
+              {!canAddToCart && (
                 <div className="p-3 bg-red-50 dark:bg-red-900/30 rounded-xl border border-red-100 dark:border-red-800">
                   <div className="flex items-start gap-2">
                     <AlertCircle className="w-4 h-4 text-red-600 dark:text-red-400 mt-0.5 flex-shrink-0" />
@@ -345,7 +421,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                 variant="primary"
                 onClick={handleAddToCart}
                 className="flex-[2] py-3"
-                disabled={isAdded || !canAddToCart()}
+                disabled={isAdded || !canAddToCart}
               >
                 {isAdded ? (
                   <>

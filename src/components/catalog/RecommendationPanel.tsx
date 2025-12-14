@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { Sparkles, TrendingUp, Shuffle, ShoppingCart } from 'lucide-react';
 import type { Product } from '../../types/product';
 import { recommendationEngine } from '../../services/recommendationEngine';
-import { formatPrice } from '../../lib/utils';
+import { formatPrice, getProductPrice } from '../../lib/utils';
 import { UNIT_SYMBOLS } from '../../types/product';
 import { useCartStore } from '../../stores/useCartStore';
 import { getHexColor } from '../../utils/colorMapping';
@@ -65,7 +65,7 @@ export const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
             {recommendations.map(product => {
               const variant = product.variants[0];
-              const price = product.pricing.find(p => p.plan === 'LACIE' || p.planId === 'LACIE')?.price || 0;
+              const price = getProductPrice(product.pricing);
               const imagePlaceholder = generateProductPlaceholder(product.name, variant?.color);
               const hexColor = variant ? getHexColor(variant.colorCode || variant.color) : '#CCCCCC';
 
@@ -123,7 +123,7 @@ export const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
           <div className="flex gap-3 overflow-x-auto pb-2">
             {frequentlyBoughtTogether.map(product => {
               const variant = product.variants[0];
-              const price = product.pricing.find(p => p.plan === 'LACIE' || p.planId === 'LACIE')?.price || 0;
+              const price = getProductPrice(product.pricing);
               const imagePlaceholder = generateProductPlaceholder(product.name, variant?.color);
 
               return (

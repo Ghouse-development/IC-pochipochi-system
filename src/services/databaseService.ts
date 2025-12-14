@@ -1,4 +1,7 @@
 import { supabase } from '../lib/supabase';
+import { createLogger } from '../lib/logger';
+
+const logger = createLogger('DatabaseService');
 
 // ========================================
 // Types
@@ -153,7 +156,7 @@ export class CategoryService {
 
       return roots;
     } catch (error) {
-      console.error('Error fetching category tree:', error);
+      logger.error('Error fetching category tree:', error);
       return [];
     }
   }
@@ -172,7 +175,7 @@ export class CategoryService {
       if (error) throw error;
       return data;
     } catch (error) {
-      console.error('Error creating category:', error);
+      logger.error('Error creating category:', error);
       return null;
     }
   }
@@ -192,7 +195,7 @@ export class CategoryService {
       if (error) throw error;
       return data;
     } catch (error) {
-      console.error('Error updating category:', error);
+      logger.error('Error updating category:', error);
       return null;
     }
   }
@@ -210,7 +213,7 @@ export class CategoryService {
       if (error) throw error;
       return true;
     } catch (error) {
-      console.error('Error deleting category:', error);
+      logger.error('Error deleting category:', error);
       return false;
     }
   }
@@ -249,7 +252,7 @@ export class ProductService {
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error('Error fetching products:', error);
+      logger.error('Error fetching products:', error);
       return [];
     }
   }
@@ -276,7 +279,7 @@ export class ProductService {
       if (error) throw error;
       return data;
     } catch (error) {
-      console.error('Error fetching product:', error);
+      logger.error('Error fetching product:', error);
       return null;
     }
   }
@@ -295,7 +298,7 @@ export class ProductService {
       if (error) throw error;
       return data;
     } catch (error) {
-      console.error('Error creating product:', error);
+      logger.error('Error creating product:', error);
       return null;
     }
   }
@@ -315,7 +318,7 @@ export class ProductService {
       if (error) throw error;
       return data;
     } catch (error) {
-      console.error('Error updating product:', error);
+      logger.error('Error updating product:', error);
       return null;
     }
   }
@@ -333,7 +336,7 @@ export class ProductService {
       if (error) throw error;
       return true;
     } catch (error) {
-      console.error('Error deleting product:', error);
+      logger.error('Error deleting product:', error);
       return false;
     }
   }
@@ -358,7 +361,7 @@ export class VariantService {
       if (error) throw error;
       return data;
     } catch (error) {
-      console.error('Error creating variant:', error);
+      logger.error('Error creating variant:', error);
       return null;
     }
   }
@@ -378,7 +381,7 @@ export class VariantService {
       if (error) throw error;
       return data;
     } catch (error) {
-      console.error('Error updating variant:', error);
+      logger.error('Error updating variant:', error);
       return null;
     }
   }
@@ -396,7 +399,7 @@ export class VariantService {
       if (error) throw error;
       return true;
     } catch (error) {
-      console.error('Error deleting variant:', error);
+      logger.error('Error deleting variant:', error);
       return false;
     }
   }
@@ -415,7 +418,7 @@ export class VariantService {
       if (error) throw error;
       return data;
     } catch (error) {
-      console.error('Error upserting pricing:', error);
+      logger.error('Error upserting pricing:', error);
       return null;
     }
   }
@@ -465,7 +468,7 @@ export class VariantService {
       if (error) throw error;
       return data;
     } catch (error) {
-      console.error('Error uploading variant image:', error);
+      logger.error('Error uploading variant image:', error);
       return null;
     }
   }
@@ -509,7 +512,7 @@ export class AnalyticsService {
 
       if (error) throw error;
     } catch (error) {
-      console.error('Error tracking event:', error);
+      logger.error('Error tracking event:', error);
     }
   }
 
@@ -526,7 +529,7 @@ export class AnalyticsService {
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error('Error fetching popular products:', error);
+      logger.error('Error fetching popular products:', error);
       return [];
     }
   }
@@ -566,7 +569,7 @@ export class AnalyticsService {
 
       return summary;
     } catch (error) {
-      console.error('Error fetching analytics summary:', error);
+      logger.error('Error fetching analytics summary:', error);
       return null;
     }
   }

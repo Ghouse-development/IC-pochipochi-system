@@ -195,9 +195,9 @@ export const OnboardingGuide: React.FC<OnboardingGuideProps> = ({
 
           {/* ヒント */}
           <div className="space-y-3">
-            {step.tips.map((tip, index) => (
+            {step.tips.map((tip, tipIndex) => (
               <div
-                key={index}
+                key={`${step.id}-tip-${tipIndex}`}
                 className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg"
               >
                 <CheckCircle className="w-5 h-5 text-teal-500 flex-shrink-0 mt-0.5" />
@@ -241,9 +241,9 @@ export const OnboardingGuide: React.FC<OnboardingGuideProps> = ({
 
         {/* ステップインジケーター */}
         <div className="flex justify-center gap-2 pb-4">
-          {ONBOARDING_STEPS.map((_, index) => (
+          {ONBOARDING_STEPS.map((stepItem, index) => (
             <button
-              key={index}
+              key={stepItem.id}
               onClick={() => setCurrentStep(index)}
               className={`w-2 h-2 rounded-full transition-all ${
                 index === currentStep

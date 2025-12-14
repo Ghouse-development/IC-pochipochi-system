@@ -1,5 +1,9 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import { supabase } from '../lib/supabase';
+import { createLogger } from '../lib/logger';
+import { STORAGE_KEYS } from '../lib/constants';
+
+const logger = createLogger('UserContext');
 
 export interface User {
   id: string;
@@ -25,7 +29,7 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export function UserProvider({ children }: { children: ReactNode }) {
   const [currentUser, setCurrentUser] = useState<User | null>(() => {
     // ローカルストレージから復元
-    const stored = localStorage.getItem('stylebook_user');
+    const stored = localStorage.getItem(STORAGE_KEYS.USER);
     if (stored) {
       try {
         return JSON.parse(stored);
@@ -48,14 +52,14 @@ export function UserProvider({ children }: { children: ReactNode }) {
         last_login_at: new Date().toISOString()
       };
       setCurrentUser(defaultUser);
-      localStorage.setItem('stylebook_user', JSON.stringify(defaultUser));
+      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(defaultUser));
     }
   }, []);
 
   useEffect(() => {
     // ユーザー情報が変更されたらローカルストレージに保存
     if (currentUser) {
-      localStorage.setItem('stylebook_user', JSON.stringify(currentUser));
+      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(currentUser));
 
       // Supabaseのユーザーセッションを設定（簡易版）
       // 本番環境では適切な認証を実装してください
@@ -70,7 +74,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
         .update({ last_login_at: new Date().toISOString() })
         .eq('email', email);
     } catch (error) {
-      console.error('Error updating last login:', error);
+      logger.error('Error updating last login:', error);
     }
   };
 
@@ -106,7 +110,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
 
       setCurrentUser(finalUser as User);
     } catch (error) {
-      console.error('Login error:', error);
+      logger.error('Login error:', error);
       // エラーが発生してもデモ用ユーザーを設定
       const demoUser: User = {
         id: `demo-${Date.now()}`,
@@ -122,7 +126,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
 
   const logout = () => {
     setCurrentUser(null);
-    localStorage.removeItem('stylebook_user');
+    localStorage.removeItem(STORAGE_KEYS.USER);
   };
 
   const isAdmin = currentUser?.role === 'admin';

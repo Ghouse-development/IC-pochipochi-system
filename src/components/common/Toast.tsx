@@ -1,5 +1,8 @@
 import { useState, useEffect, createContext, useContext, useCallback, type ReactNode } from 'react';
 import { X, CheckCircle, AlertCircle, Info, AlertTriangle } from 'lucide-react';
+import { createLogger } from '../../lib/logger';
+
+const logger = createLogger('Toast');
 
 type ToastType = 'success' | 'error' | 'warning' | 'info';
 
@@ -89,7 +92,13 @@ function ToastContainer({
   removeToast: (id: string) => void;
 }) {
   return (
-    <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none">
+    <div
+      className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"
+      role="region"
+      aria-label="通知"
+      aria-live="polite"
+      aria-atomic="false"
+    >
       {toasts.map((toast) => (
         <ToastItem key={toast.id} toast={toast} onClose={() => removeToast(toast.id)} />
       ))}
@@ -135,6 +144,8 @@ function ToastItem({ toast, onClose }: { toast: Toast; onClose: () => void }) {
 
   return (
     <div
+      role="alert"
+      aria-live={toast.type === 'error' ? 'assertive' : 'polite'}
       className={`
         pointer-events-auto
         flex items-start gap-3 p-4 rounded-lg border shadow-lg
@@ -142,7 +153,7 @@ function ToastItem({ toast, onClose }: { toast: Toast; onClose: () => void }) {
         ${backgrounds[toast.type]}
       `}
     >
-      {icons[toast.type]}
+      <span aria-hidden="true">{icons[toast.type]}</span>
       <div className="flex-1 min-w-0">
         <p className={`font-medium ${titleColors[toast.type]}`}>{toast.title}</p>
         {toast.message && (
@@ -152,8 +163,9 @@ function ToastItem({ toast, onClose }: { toast: Toast; onClose: () => void }) {
       <button
         onClick={onClose}
         className="p-1 hover:bg-black/5 rounded transition-colors"
+        aria-label="通知を閉じる"
       >
-        <X className="w-4 h-4 text-gray-400" />
+        <X className="w-4 h-4 text-gray-400" aria-hidden="true" />
       </button>
     </div>
   );
@@ -170,7 +182,7 @@ export function showToast(type: ToastType, title: string, message?: string) {
   if (globalToast) {
     globalToast.addToast({ type, title, message });
   } else {
-    console.warn('Toast provider not initialized');
+    logger.warn('Toast provider not initialized');
   }
 }
 

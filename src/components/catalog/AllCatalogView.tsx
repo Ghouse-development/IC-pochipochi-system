@@ -5,6 +5,7 @@ import { ProductDetailModal } from './ProductDetailModal';
 import { FilterSidebarNew as FilterSidebar } from './FilterSidebarNew';
 import { ChevronRight, ChevronDown } from 'lucide-react';
 import type { Product } from '../../types/product';
+import { getProductPrice } from '../../lib/utils';
 
 export const AllCatalogView: React.FC = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -61,7 +62,7 @@ export const AllCatalogView: React.FC = () => {
         if (filterType === 'option' && !product.isOption) return false;
 
         // 価格フィルター
-        const price = product.pricing.find(p => p.plan === 'LACIE' || p.planId === 'LACIE')?.price || 0;
+        const price = getProductPrice(product.pricing);
         if (price < priceRange[0] || price > priceRange[1]) return false;
 
         // カテゴリフィルター

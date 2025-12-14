@@ -3,6 +3,39 @@
 
 import { supabase } from '../lib/supabase';
 import { logger } from '../utils/logger';
+import { sanitizeText, sanitizeUrl, sanitizeEmail } from '../lib/sanitize';
+
+/**
+ * HTMLエスケープ（XSS対策）
+ */
+function escapeHtml(unsafe: string): string {
+  if (!unsafe || typeof unsafe !== 'string') return '';
+  return unsafe
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+/**
+ * メールテンプレート用データのサニタイズ
+ */
+function sanitizeTemplateData(data: Record<string, string>): Record<string, string> {
+  const sanitized: Record<string, string> = {};
+  for (const key in data) {
+    if (key.toLowerCase().includes('url')) {
+      // URLはサニタイズしてからエスケープ
+      sanitized[key] = sanitizeUrl(data[key]) || '';
+    } else if (key.toLowerCase().includes('email')) {
+      sanitized[key] = sanitizeEmail(data[key]) || '';
+    } else {
+      // 通常のテキストはHTMLエスケープ
+      sanitized[key] = escapeHtml(sanitizeText(data[key]));
+    }
+  }
+  return sanitized;
+}
 
 export interface EmailTemplate {
   subject: string;
@@ -35,9 +68,11 @@ export type NotificationType =
   | 'password_reset'
   | 'user_invitation';
 
-// メールテンプレート
+// メールテンプレート（データは自動的にサニタイズされる）
 const EMAIL_TEMPLATES: Record<NotificationType, (data: Record<string, string>) => EmailTemplate> = {
-  project_created: (data) => ({
+  project_created: (rawData) => {
+    const data = sanitizeTemplateData(rawData);
+    return {
     subject: `【IC-pochipochi】新規プロジェクト作成: ${data.projectName}`,
     body: `
 ${data.customerName} 様
@@ -96,9 +131,12 @@ IC-pochipochi システム
 </body>
 </html>
     `.trim(),
-  }),
+  };
+  },
 
-  project_confirmed: (data) => ({
+  project_confirmed: (rawData) => {
+    const data = sanitizeTemplateData(rawData);
+    return {
     subject: `【IC-pochipochi】プロジェクト確定: ${data.projectName}`,
     body: `
 ${data.customerName} 様
@@ -148,9 +186,12 @@ ${data.customerName} 様
 </body>
 </html>
     `.trim(),
-  }),
+  };
+  },
 
-  selection_updated: (data) => ({
+  selection_updated: (rawData) => {
+    const data = sanitizeTemplateData(rawData);
+    return {
     subject: `【IC-pochipochi】選択内容更新: ${data.projectName}`,
     body: `
 選択内容が更新されました。
@@ -163,9 +204,12 @@ ${data.customerName} 様
 ---
 IC-pochipochi システム
     `.trim(),
-  }),
+  };
+  },
 
-  estimate_generated: (data) => ({
+  estimate_generated: (rawData) => {
+    const data = sanitizeTemplateData(rawData);
+    return {
     subject: `【IC-pochipochi】見積書生成: ${data.projectName}`,
     body: `
 見積書が生成されました。
@@ -179,9 +223,12 @@ IC-pochipochi システム
 ---
 株式会社 Gハウス
     `.trim(),
-  }),
+  };
+  },
 
-  password_reset: (data) => ({
+  password_reset: (rawData) => {
+    const data = sanitizeTemplateData(rawData);
+    return {
     subject: '【IC-pochipochi】パスワードリセット',
     body: `
 パスワードリセットのリクエストを受け付けました。
@@ -220,9 +267,12 @@ IC-pochipochi システム
 </body>
 </html>
     `.trim(),
-  }),
+  };
+  },
 
-  user_invitation: (data) => ({
+  user_invitation: (rawData) => {
+    const data = sanitizeTemplateData(rawData);
+    return {
     subject: '【IC-pochipochi】システムへの招待',
     body: `
 ${data.userName} 様
@@ -238,7 +288,8 @@ ${data.inviteUrl}
 株式会社 Gハウス
 IC-pochipochi システム
     `.trim(),
-  }),
+  };
+  },
 };
 
 export class EmailService {

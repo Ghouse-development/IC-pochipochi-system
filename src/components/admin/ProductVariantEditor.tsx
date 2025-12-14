@@ -14,6 +14,9 @@ import {
   type ProductVariant,
   type VariantImage
 } from '../../services/databaseService';
+import { createLogger } from '../../lib/logger';
+
+const logger = createLogger('ProductVariantEditor');
 
 interface ProductVariantEditorProps {
   productId: string;
@@ -111,7 +114,7 @@ export function ProductVariantEditor({
         }
       }
     } catch (error) {
-      console.error('Error uploading images:', error);
+      logger.error('Error uploading images:', error);
     } finally {
       setUploading(false);
       if (fileInputRef.current) {
@@ -171,7 +174,7 @@ export function ProductVariantEditor({
         onSave(savedVariant);
       }
     } catch (error) {
-      console.error('Error saving variant:', error);
+      logger.error('Error saving variant:', error);
     } finally {
       setSaving(false);
     }

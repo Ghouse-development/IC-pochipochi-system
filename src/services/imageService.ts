@@ -1,4 +1,7 @@
 import { supabase, type ProductImage } from '../lib/supabase';
+import { createLogger } from '../lib/logger';
+
+const logger = createLogger('ImageService');
 
 export class ImageService {
   private static BUCKET_NAME = 'product-images';
@@ -11,20 +14,20 @@ export class ImageService {
       const { data: buckets, error } = await supabase.storage.listBuckets();
 
       if (error) {
-        console.error('Error listing buckets:', error);
+        logger.error('Error listing buckets:', error);
         return false;
       }
 
       const bucketExists = buckets?.some(bucket => bucket.id === this.BUCKET_NAME);
 
       if (!bucketExists) {
-        console.warn(`Bucket '${this.BUCKET_NAME}' does not exist. Please run the SQL script in sql/create_storage_bucket.sql`);
+        logger.warn(`Bucket '${this.BUCKET_NAME}' does not exist. Please run the SQL script in sql/create_storage_bucket.sql`);
         return false;
       }
 
       return true;
     } catch (error) {
-      console.error('Error checking bucket:', error);
+      logger.error('Error checking bucket:', error);
       return false;
     }
   }
@@ -37,21 +40,21 @@ export class ImageService {
       // Ensure bucket exists
       const bucketExists = await this.ensureBucketExists();
       if (!bucketExists) {
-        console.error('Storage bucket not found. Please create it first.');
+        logger.error('Storage bucket not found. Please create it first.');
         return null;
       }
 
       // Validate file
       const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'];
       if (!validTypes.includes(file.type)) {
-        console.error('Invalid file type:', file.type);
+        logger.error('Invalid file type:', file.type);
         return null;
       }
 
       // Check file size (5MB limit)
       const maxSize = 5 * 1024 * 1024; // 5MB
       if (file.size > maxSize) {
-        console.error('File size exceeds 5MB limit');
+        logger.error('File size exceeds 5MB limit');
         return null;
       }
 
@@ -68,15 +71,15 @@ export class ImageService {
         });
 
       if (error) {
-        console.error('Error uploading image:', error);
+        logger.error('Error uploading image:', error);
 
         // Handle specific error cases
         if (error.message?.includes('bucket') || error.message?.includes('not found')) {
-          console.error('Bucket not found. Please create the storage bucket first.');
+          logger.error('Bucket not found. Please create the storage bucket first.');
         } else if (error.message?.includes('duplicate')) {
-          console.error('File already exists. Try with a different name.');
+          logger.error('File already exists. Try with a different name.');
         } else if (error.message?.includes('size')) {
-          console.error('File size exceeds limit.');
+          logger.error('File size exceeds limit.');
         }
 
         return null;
@@ -89,7 +92,7 @@ export class ImageService {
 
       return publicUrl;
     } catch (error) {
-      console.error('Error in uploadImage:', error);
+      logger.error('Error in uploadImage:', error);
       return null;
     }
   }
@@ -106,13 +109,13 @@ export class ImageService {
         .single();
 
       if (error) {
-        console.error('Error saving image metadata:', error);
+        logger.error('Error saving image metadata:', error);
         return null;
       }
 
       return data;
     } catch (error) {
-      console.error('Error in saveImageMetadata:', error);
+      logger.error('Error in saveImageMetadata:', error);
       return null;
     }
   }
@@ -155,7 +158,7 @@ export class ImageService {
       // Save to database
       return await this.saveImageMetadata(imageData);
     } catch (error) {
-      console.error('Error in uploadProductImage:', error);
+      logger.error('Error in uploadProductImage:', error);
       return null;
     }
   }
@@ -172,13 +175,13 @@ export class ImageService {
         .order('display_order', { ascending: true });
 
       if (error) {
-        console.error('Error fetching product images:', error);
+        logger.error('Error fetching product images:', error);
         return [];
       }
 
       return data || [];
     } catch (error) {
-      console.error('Error in getProductImages:', error);
+      logger.error('Error in getProductImages:', error);
       return [];
     }
   }
@@ -196,13 +199,13 @@ export class ImageService {
         .single();
 
       if (error && error.code !== 'PGRST116') { // PGRST116 is "no rows returned"
-        console.error('Error fetching primary image:', error);
+        logger.error('Error fetching primary image:', error);
         return null;
       }
 
       return data || null;
     } catch (error) {
-      console.error('Error in getPrimaryImage:', error);
+      logger.error('Error in getPrimaryImage:', error);
       return null;
     }
   }
@@ -223,13 +226,13 @@ export class ImageService {
         .single();
 
       if (error) {
-        console.error('Error updating image metadata:', error);
+        logger.error('Error updating image metadata:', error);
         return null;
       }
 
       return data;
     } catch (error) {
-      console.error('Error in updateImageMetadata:', error);
+      logger.error('Error in updateImageMetadata:', error);
       return null;
     }
   }
@@ -246,7 +249,7 @@ export class ImageService {
           .remove([imagePath]);
 
         if (storageError) {
-          console.error('Error deleting from storage:', storageError);
+          logger.error('Error deleting from storage:', storageError);
         }
       }
 
@@ -257,13 +260,13 @@ export class ImageService {
         .eq('id', imageId);
 
       if (dbError) {
-        console.error('Error deleting from database:', dbError);
+        logger.error('Error deleting from database:', dbError);
         return false;
       }
 
       return true;
     } catch (error) {
-      console.error('Error in deleteImage:', error);
+      logger.error('Error in deleteImage:', error);
       return false;
     }
   }
@@ -280,7 +283,7 @@ export class ImageService {
         .eq('product_code', productCode);
 
       if (unsetError) {
-        console.error('Error unsetting primary images:', unsetError);
+        logger.error('Error unsetting primary images:', unsetError);
         return false;
       }
 
@@ -291,13 +294,13 @@ export class ImageService {
         .eq('id', imageId);
 
       if (setError) {
-        console.error('Error setting primary image:', setError);
+        logger.error('Error setting primary image:', setError);
         return false;
       }
 
       return true;
     } catch (error) {
-      console.error('Error in setPrimaryImage:', error);
+      logger.error('Error in setPrimaryImage:', error);
       return false;
     }
   }
@@ -315,13 +318,13 @@ export class ImageService {
         .order('display_order', { ascending: true });
 
       if (error) {
-        console.error('Error fetching images by category:', error);
+        logger.error('Error fetching images by category:', error);
         return [];
       }
 
       return data || [];
     } catch (error) {
-      console.error('Error in getImagesByCategory:', error);
+      logger.error('Error in getImagesByCategory:', error);
       return [];
     }
   }

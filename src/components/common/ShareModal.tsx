@@ -4,6 +4,7 @@ import { X, Copy, Check, Share2, Mail, MessageCircle } from 'lucide-react';
 import { useShareableUrl } from '../../hooks/useShareableUrl';
 import { useCartStore } from '../../stores/useCartStore';
 import { formatPrice } from '../../lib/utils';
+import { useTimeout } from '../../hooks/useTimeout';
 
 interface ShareModalProps {
   isOpen: boolean;
@@ -14,6 +15,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose }) => {
   const { shareableUrl, copyToClipboard, shareToLine, shareByEmail } = useShareableUrl();
   const { items, getTotalPrice } = useCartStore();
   const [copied, setCopied] = useState(false);
+  const { setTimeout } = useTimeout();
 
   const handleCopy = async () => {
     const success = await copyToClipboard();

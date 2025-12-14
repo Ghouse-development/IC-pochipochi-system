@@ -1,18 +1,26 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { cn } from '../../lib/utils';
 
-interface CardProps {
+export interface CardProps {
   children: React.ReactNode;
   className?: string;
   onClick?: () => void;
   hoverable?: boolean;
+  role?: string;
+  tabIndex?: number;
+  onKeyDown?: (e: React.KeyboardEvent) => void;
+  'aria-label'?: string;
 }
 
-export const Card: React.FC<CardProps> = ({
+export const Card = memo<CardProps>(({
   children,
   className,
   onClick,
   hoverable = false,
+  role,
+  tabIndex,
+  onKeyDown,
+  'aria-label': ariaLabel,
 }) => {
   return (
     <div
@@ -22,8 +30,12 @@ export const Card: React.FC<CardProps> = ({
         className
       )}
       onClick={onClick}
+      role={role}
+      tabIndex={tabIndex}
+      onKeyDown={onKeyDown}
+      aria-label={ariaLabel}
     >
       {children}
     </div>
   );
-};
+});

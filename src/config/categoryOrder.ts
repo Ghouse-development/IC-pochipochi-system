@@ -255,7 +255,6 @@ export function sortCategories(
       };
     })
     .sort((a, b) => a._order - b._order)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     .map(({ _order, ...rest }) => rest);
 }
 

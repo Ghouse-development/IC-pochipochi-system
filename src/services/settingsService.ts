@@ -116,7 +116,9 @@ export class SettingsService {
       this.getTaxRate(),
       this.getEstimateValidityDays(),
       this.getCompanyInfo(),
-      this.getSetting<{ enabled?: boolean }>('email_notification', {}).then(s => s.enabled ?? false),
+      this.getSetting<{ enabled?: boolean }>('email_notification', {})
+        .then(s => s.enabled ?? false)
+        .catch(() => false),
     ]);
 
     return {

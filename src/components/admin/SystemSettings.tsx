@@ -2,12 +2,17 @@ import { useState, useEffect } from 'react';
 import { Save, RefreshCw, Building, Percent, Ruler, Mail, Bell, FileText } from 'lucide-react';
 import { settingsApi } from '../../services/api';
 import type { SystemSetting } from '../../types/database';
+import { useTimeout } from '../../hooks/useTimeout';
+import { createLogger } from '../../lib/logger';
+
+const logger = createLogger('SystemSettings');
 
 interface SettingValue {
   [key: string]: unknown;
 }
 
 export function SystemSettings() {
+  const { setTimeout } = useTimeout();
   const [, setSettings] = useState<SystemSetting[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -33,7 +38,7 @@ export function SystemSettings() {
       setEditedSettings(edited);
     } catch (err) {
       setError('設定の読み込みに失敗しました');
-      console.error(err);
+      logger.error(err);
     } finally {
       setIsLoading(false);
     }
@@ -49,7 +54,7 @@ export function SystemSettings() {
       setTimeout(() => setSuccessMessage(null), 3000);
     } catch (err) {
       setError('設定の保存に失敗しました');
-      console.error(err);
+      logger.error(err);
     } finally {
       setIsSaving(false);
     }

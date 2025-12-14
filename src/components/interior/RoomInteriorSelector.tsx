@@ -1,12 +1,13 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import { Trash2, ChevronDown, ChevronUp, Home, X, Copy, Wand2, Check, Search, Layers, Zap } from 'lucide-react';
-import type { Product, ProductVariant } from '../../types/product';
-import { formatPrice } from '../../lib/utils';
+import { Trash2, ChevronDown, ChevronUp, Home, X, Copy, Wand2, Check, Search, Layers, Zap, LayoutGrid, Table2 } from 'lucide-react';
+import type { Product } from '../../types/product';
+import { formatPrice, getProductPrice } from '../../lib/utils';
 import { UNIT_SYMBOLS } from '../../types/product';
 import { getHexColor } from '../../utils/colorMapping';
 import { useCartStore } from '../../stores/useCartStore';
 import { useToast } from '../common/Toast';
 import { ConfirmDialog } from '../common/ConfirmDialog';
+import { useDebounce } from '../../hooks/useDebounce';
 
 // 部屋タイプの定義（適用可能パーツを明確化）
 const ROOM_TYPES = [
@@ -130,8 +131,10 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
     bulkGroup?: string;
   } | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
   const [showBulkPanel, setShowBulkPanel] = useState(false);
   const [showConfirmAddToCart, setShowConfirmAddToCart] = useState(false);
+  const [viewMode, setViewMode] = useState<'card' | 'table'>('table'); // デフォルトは表形式
 
   // 階ごとに部屋をグループ化
   const roomsByFloor = useMemo(() => {
@@ -250,9 +253,9 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
       return categoryMatch || subcategoryMatch || categoryIdMatch;
     });
 
-    // 検索フィルター
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase();
+    // 検索フィルター（デバウンス適用）
+    if (debouncedSearchQuery) {
+      const q = debouncedSearchQuery.toLowerCase();
       products = products.filter(p =>
         p.name.toLowerCase().includes(q) ||
         p.manufacturer.toLowerCase().includes(q) ||
@@ -263,13 +266,13 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
 
     // 標準品を先に、オプション品を後に
     products.sort((a, b) => {
-      const priceA = a.pricing.find(pr => pr.plan === 'LACIE' || pr.planId === 'LACIE')?.price ?? 999999;
-      const priceB = b.pricing.find(pr => pr.plan === 'LACIE' || pr.planId === 'LACIE')?.price ?? 999999;
+      const priceA = getProductPrice(a.pricing, 'LACIE', 999999);
+      const priceB = getProductPrice(b.pricing, 'LACIE', 999999);
       return priceA - priceB;
     });
 
     return products;
-  }, [interiorProducts, searchQuery]);
+  }, [interiorProducts, debouncedSearchQuery]);
 
   // 部屋の展開/折りたたみ
   const toggleRoom = (roomId: string) => {
@@ -386,11 +389,10 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
   const addSelectionsToCart = () => {
     let addedCount = 0;
     rooms.forEach(room => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       Object.entries(room.parts).forEach(([_partId, selection]) => {
         if (selection.product) {
           const variant = selection.product.variants.find(v => v.id === selection.variantId);
-          addItem(selection.product as unknown as Product, 1, variant as unknown as ProductVariant);
+          addItem(selection.product, 1, variant);
           addedCount++;
         }
       });
@@ -409,7 +411,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
           const products = getProductsForPart(part.id);
           const standardProduct = products.find(p => {
             // plan または planId の両方に対応
-            const price = p.pricing.find(pr => pr.plan === 'LACIE' || pr.planId === 'LACIE')?.price ?? 0;
+            const price = getProductPrice(p.pricing);
             return price === 0;
           });
           if (standardProduct && standardProduct.variants.length > 0) {
@@ -435,7 +437,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
     rooms.forEach(room => {
       Object.values(room.parts).forEach(part => {
         if (part.product) {
-          const price = part.product.pricing.find(p => p.plan === 'LACIE' || p.planId === 'LACIE')?.price ?? 0;
+          const price = getProductPrice(part.product.pricing);
           total += price;
         }
       });
@@ -521,22 +523,50 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
             標準仕様で自動設定
           </button>
 
-          <button
-            onClick={() => toggleAllRooms(expandedRooms.size < rooms.length)}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full text-xs font-medium hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
-          >
-            {expandedRooms.size < rooms.length ? (
-              <>
-                <ChevronDown className="w-3.5 h-3.5" />
-                全て展開
-              </>
-            ) : (
-              <>
-                <ChevronUp className="w-3.5 h-3.5" />
-                全て閉じる
-              </>
-            )}
-          </button>
+          {viewMode === 'card' && (
+            <button
+              onClick={() => toggleAllRooms(expandedRooms.size < rooms.length)}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full text-xs font-medium hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+            >
+              {expandedRooms.size < rooms.length ? (
+                <>
+                  <ChevronDown className="w-3.5 h-3.5" />
+                  全て展開
+                </>
+              ) : (
+                <>
+                  <ChevronUp className="w-3.5 h-3.5" />
+                  全て閉じる
+                </>
+              )}
+            </button>
+          )}
+
+          {/* 表示モード切替 */}
+          <div className="ml-auto flex items-center gap-1 bg-white dark:bg-gray-700 rounded-full p-1">
+            <button
+              onClick={() => setViewMode('table')}
+              className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium transition-colors ${
+                viewMode === 'table'
+                  ? 'bg-indigo-600 text-white'
+                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
+              }`}
+            >
+              <Table2 className="w-3.5 h-3.5" />
+              表形式
+            </button>
+            <button
+              onClick={() => setViewMode('card')}
+              className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium transition-colors ${
+                viewMode === 'card'
+                  ? 'bg-indigo-600 text-white'
+                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
+              }`}
+            >
+              <LayoutGrid className="w-3.5 h-3.5" />
+              カード
+            </button>
+          </div>
         </div>
       </div>
 
@@ -565,7 +595,107 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
         </div>
       )}
 
-      {/* 部屋リスト */}
+      {/* 表形式ビュー */}
+      {viewMode === 'table' && (
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead className="bg-gray-100 dark:bg-gray-700 sticky top-0">
+              <tr>
+                <th className="px-3 py-3 text-left font-semibold text-gray-700 dark:text-gray-200 whitespace-nowrap border-b border-gray-200 dark:border-gray-600">
+                  部屋
+                </th>
+                {INTERIOR_PARTS.filter(p => ['flooring', 'wall', 'accent', 'door', 'lighting'].includes(p.id)).map(part => (
+                  <th
+                    key={part.id}
+                    className="px-2 py-3 text-center font-semibold text-gray-700 dark:text-gray-200 whitespace-nowrap border-b border-gray-200 dark:border-gray-600 min-w-[100px]"
+                  >
+                    <span className="flex flex-col items-center gap-1">
+                      <span className="text-lg">{part.icon}</span>
+                      <span className="text-xs">{part.name}</span>
+                    </span>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
+              {rooms.map((room, index) => {
+                const roomType = ROOM_TYPES.find(rt => room.roomId.startsWith(rt.id));
+                return (
+                  <tr
+                    key={room.roomId}
+                    className={`${index % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-750'} hover:bg-teal-50 dark:hover:bg-teal-900/20 transition-colors`}
+                  >
+                    <td className="px-3 py-3 font-medium text-gray-900 dark:text-gray-100 whitespace-nowrap">
+                      <div className="flex items-center gap-2">
+                        <span className="text-lg">{roomType?.icon || '🏠'}</span>
+                        <span>{room.roomName}</span>
+                        <span className="text-xs text-gray-400">
+                          {room.floor === 0 ? '共有' : `${room.floor}F`}
+                        </span>
+                      </div>
+                    </td>
+                    {INTERIOR_PARTS.filter(p => ['flooring', 'wall', 'accent', 'door', 'lighting'].includes(p.id)).map(part => {
+                      const selection = room.parts[part.id];
+                      const selectedVariant = selection?.product?.variants.find(
+                        v => v.id === selection?.variantId
+                      );
+                      const isApplicable = roomType?.applicableParts?.includes(part.id) ?? true;
+
+                      if (!isApplicable) {
+                        return (
+                          <td key={part.id} className="px-2 py-3 text-center">
+                            <span className="text-gray-300 dark:text-gray-600">-</span>
+                          </td>
+                        );
+                      }
+
+                      return (
+                        <td key={part.id} className="px-2 py-3">
+                          <button
+                            onClick={() => setSelectedPartForPicker({ roomId: room.roomId, partId: part.id })}
+                            className={`w-full flex items-center justify-center gap-2 p-2 rounded-lg transition-all ${
+                              selection?.product
+                                ? 'bg-teal-50 dark:bg-teal-900/30 border border-teal-300 dark:border-teal-600 hover:bg-teal-100 dark:hover:bg-teal-900/50'
+                                : part.required
+                                ? 'bg-orange-50 dark:bg-orange-900/20 border border-dashed border-orange-300 dark:border-orange-600 hover:bg-orange-100 dark:hover:bg-orange-900/30'
+                                : 'bg-gray-50 dark:bg-gray-700 border border-dashed border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600'
+                            }`}
+                          >
+                            {selection?.product ? (
+                              <div className="flex items-center gap-2">
+                                <div
+                                  className="w-8 h-8 rounded-lg border-2 border-white shadow-md flex-shrink-0"
+                                  style={{
+                                    backgroundColor: getHexColor(
+                                      selectedVariant?.colorCode || selectedVariant?.color || ''
+                                    ),
+                                  }}
+                                />
+                                <div className="text-left min-w-0">
+                                  <p className="text-xs font-medium text-gray-700 dark:text-gray-200 truncate max-w-[80px]">
+                                    {selectedVariant?.color || '選択済'}
+                                  </p>
+                                </div>
+                              </div>
+                            ) : (
+                              <span className={`text-xs ${part.required ? 'text-orange-500' : 'text-gray-400'}`}>
+                                {part.required ? '要選択' : '未設定'}
+                              </span>
+                            )}
+                          </button>
+                        </td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {/* カード形式ビュー（部屋リスト） */}
+      {viewMode === 'card' && (
       <div className="divide-y divide-gray-100 dark:divide-gray-700">
         {[1, 2, 0].map(floor => {
           const floorRooms = roomsByFloor[floor] || [];
@@ -773,6 +903,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
           );
         })}
       </div>
+      )}
 
       {/* 部屋追加ボタン */}
       <div className="p-4 border-t border-gray-200 dark:border-gray-700">
@@ -938,7 +1069,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
 
                 {getProductsForPart(selectedPartForPicker.partId).length === 0 && (
                   <div className="col-span-2 py-12 text-center text-gray-500 dark:text-gray-400">
-                    {searchQuery ? '検索結果がありません' : 'このカテゴリの製品がありません'}
+                    {debouncedSearchQuery ? '検索結果がありません' : 'このカテゴリの製品がありません'}
                   </div>
                 )}
               </div>

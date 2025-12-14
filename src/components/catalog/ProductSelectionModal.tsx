@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { X, Check, Palette, Info } from 'lucide-react';
 import type { Product, ProductVariant } from '../../types/product';
-import { formatPrice } from '../../lib/utils';
+import { formatPrice, getProductPrice } from '../../lib/utils';
 import { generateProductPlaceholder, getThumbnailUrl } from '../../utils/imageUtils';
 
 interface ProductSelectionModalProps {
@@ -18,7 +18,7 @@ export const ProductSelectionModal: React.FC<ProductSelectionModalProps> = ({
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(product.variants[0]);
   const [imageError, setImageError] = useState<Record<string, boolean>>({});
 
-  const price = product.pricing.find((p) => p.plan === 'LACIE' || p.planId === 'LACIE')?.price || 0;
+  const price = getProductPrice(product.pricing);
 
   const handleConfirm = () => {
     onSelect(product, selectedVariant);

@@ -1,13 +1,8 @@
 // エクステリア（外装）製品データ - FACADE Style Book
 // 色バリアント統合版 - 1製品 = 複数の色バリアント
 import type { Product } from '../types/product';
-import { exteriorProductsAdditional } from './exteriorProductsAdditional';
-import { exteriorProductsPage3to5 } from './exteriorProductsPage3to5';
-import { exteriorProductsPage16to20 } from './exteriorProductsPage16to20';
-import { exteriorProductsPage21to25 } from './exteriorProductsPage21to25';
-import { exteriorProductsPage26to29 } from './exteriorProductsPage26to29';
 
-const baseExteriorProducts: Product[] = [
+export const exteriorProducts: Product[] = [
   // ===== 外壁 - ニチハ モナビストーンV =====
   {
     id: 'ext-wall-monabistone-v',
@@ -777,14 +772,4 @@ const baseExteriorProducts: Product[] = [
       { plan: 'HOURS', price: 145000 }
     ]
   },
-];
-
-// 基本製品と追加製品をマージ
-export const exteriorProducts: Product[] = [
-  ...baseExteriorProducts,
-  ...exteriorProductsAdditional,
-  ...exteriorProductsPage3to5,
-  ...exteriorProductsPage16to20,
-  ...exteriorProductsPage21to25,
-  ...exteriorProductsPage26to29
 ];

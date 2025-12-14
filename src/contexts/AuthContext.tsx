@@ -2,6 +2,9 @@ import { createContext, useContext, useState, useEffect, type ReactNode } from '
 import { supabase } from '../lib/supabase';
 import type { User as SupabaseUser, Session } from '@supabase/supabase-js';
 import type { User, UserRole } from '../types/database';
+import { createLogger } from '../lib/logger';
+
+const logger = createLogger('AuthContext');
 
 interface AuthContextType {
   // Supabase Auth
@@ -42,7 +45,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .single();
 
     if (error) {
-      console.error('Error fetching user data:', error);
+      logger.error('Error fetching user data:', error);
       return null;
     }
 
@@ -68,7 +71,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .single();
 
     if (error) {
-      console.error('Error creating user record:', error);
+      logger.error('Error creating user record:', error);
       return null;
     }
 
@@ -85,22 +88,38 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setSupabaseUser(session?.user ?? null);
+    const initializeAuth = async () => {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
 
-      if (session?.user) {
-        fetchUserData(session.user.id).then((userData) => {
-          setUser(userData);
-          if (userData) {
-            updateLastLogin(userData.id);
-          }
+        if (error) {
+          logger.error('Error getting session:', error);
           setIsLoading(false);
-        });
-      } else {
+          return;
+        }
+
+        setSession(session);
+        setSupabaseUser(session?.user ?? null);
+
+        if (session?.user) {
+          try {
+            const userData = await fetchUserData(session.user.id);
+            setUser(userData);
+            if (userData) {
+              await updateLastLogin(userData.id);
+            }
+          } catch (fetchError) {
+            logger.error('Error fetching user data:', fetchError);
+          }
+        }
+      } catch (error) {
+        logger.error('Error initializing auth:', error);
+      } finally {
         setIsLoading(false);
       }
-    });
+    };
+
+    initializeAuth();
 
     // Listen for auth changes
     const {
@@ -110,10 +129,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSupabaseUser(session?.user ?? null);
 
       if (session?.user) {
-        const userData = await fetchUserData(session.user.id);
-        setUser(userData);
-        if (userData) {
-          updateLastLogin(userData.id);
+        try {
+          const userData = await fetchUserData(session.user.id);
+          setUser(userData);
+          if (userData) {
+            await updateLastLogin(userData.id);
+          }
+        } catch (error) {
+          logger.error('Error in auth state change:', error);
         }
       } else {
         setUser(null);

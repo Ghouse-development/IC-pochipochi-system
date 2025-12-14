@@ -107,7 +107,14 @@ export const SwipeCarousel: React.FC<SwipeCarouselProps> = ({
   };
 
   return (
-    <div className={`relative ${className}`} onKeyDown={handleKeyDown} tabIndex={0}>
+    <div
+      className={`relative ${className}`}
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+      role="region"
+      aria-label="カルーセル"
+      aria-roledescription="carousel"
+    >
       {/* メインコンテナ */}
       <div
         ref={containerRef}
@@ -124,6 +131,8 @@ export const SwipeCarousel: React.FC<SwipeCarouselProps> = ({
         onTouchMove={handleDragMove}
         onTouchEnd={handleDragEnd}
         onScroll={handleScroll}
+        role="group"
+        aria-label={`${itemCount}件中${currentIndex + 1}〜${Math.min(currentIndex + visibleItems, itemCount)}件を表示中`}
       >
         <div
           className="flex"
@@ -131,7 +140,7 @@ export const SwipeCarousel: React.FC<SwipeCarouselProps> = ({
         >
           {children.map((child, index) => (
             <div
-              key={index}
+              key={React.isValidElement(child) && child.key ? child.key : `carousel-item-${index}`}
               className="flex-shrink-0 snap-start"
               style={{ width: `${itemWidth}px` }}
             >
@@ -147,35 +156,40 @@ export const SwipeCarousel: React.FC<SwipeCarouselProps> = ({
           <button
             onClick={() => scrollToIndex(currentIndex - 1)}
             disabled={currentIndex === 0}
+            aria-label="前へ"
             className={`absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 rounded-full shadow-lg flex items-center justify-center transition-all z-10 ${
               currentIndex === 0
                 ? 'opacity-0 pointer-events-none'
                 : 'hover:bg-white hover:scale-110'
             }`}
           >
-            <ChevronLeft className="w-6 h-6 text-gray-700" />
+            <ChevronLeft className="w-6 h-6 text-gray-700" aria-hidden="true" />
           </button>
           <button
             onClick={() => scrollToIndex(currentIndex + 1)}
             disabled={currentIndex >= maxIndex}
+            aria-label="次へ"
             className={`absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 rounded-full shadow-lg flex items-center justify-center transition-all z-10 ${
               currentIndex >= maxIndex
                 ? 'opacity-0 pointer-events-none'
                 : 'hover:bg-white hover:scale-110'
             }`}
           >
-            <ChevronRight className="w-6 h-6 text-gray-700" />
+            <ChevronRight className="w-6 h-6 text-gray-700" aria-hidden="true" />
           </button>
         </>
       )}
 
       {/* ドットインジケーター */}
       {showDots && itemCount > visibleItems && (
-        <div className="flex justify-center gap-2 mt-4">
+        <div className="flex justify-center gap-2 mt-4" role="tablist" aria-label="スライドナビゲーション">
           {Array.from({ length: maxIndex + 1 }).map((_, index) => (
             <button
               key={index}
               onClick={() => scrollToIndex(index)}
+              role="tab"
+              aria-selected={index === currentIndex}
+              aria-label={`スライド ${index + 1} / ${maxIndex + 1}`}
               className={`w-2 h-2 rounded-full transition-all ${
                 index === currentIndex
                   ? 'bg-teal-500 w-4'

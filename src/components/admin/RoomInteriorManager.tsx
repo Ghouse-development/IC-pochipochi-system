@@ -15,6 +15,10 @@ import {
 import { useToast } from '../common/Toast';
 import { supabase } from '../../lib/supabase';
 import type { Room, RoomSelection, Item, ItemVariant } from '../../types/database';
+import { ConfirmDialog } from '../common/ConfirmDialog';
+import { createLogger } from '../../lib/logger';
+
+const logger = createLogger('RoomInteriorManager');
 
 interface RoomInteriorManagerProps {
   projectId: string;
@@ -62,6 +66,7 @@ export function RoomInteriorManager({ projectId, onUpdate }: RoomInteriorManager
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const toast = useToast();
+  const [deleteRoomId, setDeleteRoomId] = useState<string | null>(null);
 
   useEffect(() => {
     loadRoomsAndSelections();
@@ -104,7 +109,7 @@ export function RoomInteriorManager({ projectId, onUpdate }: RoomInteriorManager
       const floor1Rooms = roomsWithSelections.filter(r => r.floor === 1).map(r => r.id);
       setExpandedRooms(new Set(floor1Rooms));
     } catch (err) {
-      console.error('Error loading rooms:', err);
+      logger.error('Error loading rooms:', err);
       setError('部屋情報の読み込みに失敗しました');
     } finally {
       setIsLoading(false);
@@ -130,26 +135,30 @@ export function RoomInteriorManager({ projectId, onUpdate }: RoomInteriorManager
       await loadRoomsAndSelections();
       onUpdate?.();
     } catch (err) {
-      console.error('Error adding room:', err);
+      logger.error('Error adding room:', err);
       setError('部屋の追加に失敗しました');
     }
   };
 
-  const handleDeleteRoom = async (roomId: string) => {
-    if (!confirm('この部屋を削除しますか？関連する選択も削除されます。')) return;
+  const handleDeleteRoom = (roomId: string) => {
+    setDeleteRoomId(roomId);
+  };
+
+  const executeDeleteRoom = async () => {
+    if (!deleteRoomId) return;
 
     try {
       // まず関連する選択を削除
       await supabase
         .from('room_selections')
         .delete()
-        .eq('room_id', roomId);
+        .eq('room_id', deleteRoomId);
 
       // 部屋を論理削除
       const { error } = await supabase
         .from('rooms')
         .update({ is_active: false })
-        .eq('id', roomId);
+        .eq('id', deleteRoomId);
 
       if (error) throw error;
 
@@ -157,13 +166,15 @@ export function RoomInteriorManager({ projectId, onUpdate }: RoomInteriorManager
       await loadRoomsAndSelections();
       onUpdate?.();
     } catch (err) {
-      console.error('Error deleting room:', err);
+      logger.error('Error deleting room:', err);
       setError('部屋の削除に失敗しました');
+    } finally {
+      setDeleteRoomId(null);
     }
   };
 
-  // TODO: アイテム選択モーダル実装時に有効化
-  // handleSaveSelection は将来のアイテム選択機能で使用予定
+  // FUTURE: アイテム選択モーダル実装時に有効化
+  // handleSaveSelection は将来のアイテム選択機能で使用予定（v2.18.0予定）
 
   const handleRemoveSelection = async (selectionId: string) => {
     try {
@@ -178,7 +189,7 @@ export function RoomInteriorManager({ projectId, onUpdate }: RoomInteriorManager
       await loadRoomsAndSelections();
       onUpdate?.();
     } catch (err) {
-      console.error('Error removing selection:', err);
+      logger.error('Error removing selection:', err);
       setError('選択の削除に失敗しました');
     }
   };
@@ -352,7 +363,7 @@ export function RoomInteriorManager({ projectId, onUpdate }: RoomInteriorManager
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          // TODO: 部屋名編集モーダル実装予定
+                          // FUTURE: 部屋名編集モーダル実装予定（v2.18.0）
                           toast.info('準備中', '部屋名の編集機能は準備中です');
                         }}
                         className="p-1 hover:bg-gray-100 rounded"
@@ -413,7 +424,7 @@ export function RoomInteriorManager({ projectId, onUpdate }: RoomInteriorManager
                                 <button
                                   className="text-sm text-teal-600 hover:text-teal-700"
                                   onClick={() => {
-                                    // TODO: アイテム選択モーダルを開く
+                                    // FUTURE: アイテム選択モーダルを開く（v2.18.0）
                                     toast.info('準備中', 'アイテム選択機能は準備中です');
                                   }}
                                 >
@@ -446,6 +457,17 @@ export function RoomInteriorManager({ projectId, onUpdate }: RoomInteriorManager
           </button>
         </div>
       )}
+
+      {/* Delete Room Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={!!deleteRoomId}
+        onClose={() => setDeleteRoomId(null)}
+        onConfirm={executeDeleteRoom}
+        title="部屋の削除"
+        message="この部屋を削除しますか？関連する選択も削除されます。"
+        variant="danger"
+        confirmText="削除する"
+      />
     </div>
   );
 }

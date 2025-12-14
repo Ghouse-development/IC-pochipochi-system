@@ -6,7 +6,8 @@ import { useCartStore } from '../../stores/useCartStore';
 import { useNotificationStore } from '../../stores/useNotificationStore';
 import { useStatisticsStore } from '../../stores/useStatisticsStore';
 import { useToast } from '../common/Toast';
-import { formatPrice } from '../../lib/utils';
+import { formatPrice, getProductPrice } from '../../lib/utils';
+import { useTimeout } from '../../hooks/useTimeout';
 
 interface ConfirmOrderModalProps {
   isOpen: boolean;
@@ -25,17 +26,32 @@ export const ConfirmOrderModal: React.FC<ConfirmOrderModalProps> = ({
   const addNotification = useNotificationStore((state) => state.addNotification);
   const recordAdoption = useStatisticsStore((state) => state.recordAdoption);
   const toast = useToast();
+  const { setTimeout } = useTimeout();
   const totalPrice = getTotalPrice();
 
+  // メールアドレスのバリデーション
+  const isValidEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const handleConfirm = () => {
-    if (!customerName || !customerEmail) {
-      toast.warning('入力エラー', 'お客様情報を入力してください');
+    if (!customerName.trim()) {
+      toast.warning('入力エラー', 'お客様名を入力してください');
+      return;
+    }
+    if (!customerEmail.trim()) {
+      toast.warning('入力エラー', 'メールアドレスを入力してください');
+      return;
+    }
+    if (!isValidEmail(customerEmail)) {
+      toast.warning('入力エラー', '有効なメールアドレスを入力してください');
       return;
     }
     
     // 統計を記録
     items.forEach(item => {
-      const price = item.product.pricing.find(p => p.plan === 'LACIE' || p.planId === 'LACIE')?.price || 0;
+      const price = getProductPrice(item.product.pricing);
       recordAdoption(
         item.product.id,
         item.product.name,

@@ -1,489 +1,40 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { Search, ShoppingCart, Check, Sparkles, Star, ChevronRight, X, Package, Home, Sofa, Wrench, Eye, Scale, Zap, Heart, Clock } from 'lucide-react';
+import { Search, ShoppingCart, Check, Star, ChevronRight, Home, Zap, Heart, Clock, X, Scale } from 'lucide-react';
 import { useToast } from '../common/Toast';
+import { useTimeout } from '../../hooks/useTimeout';
+import { useDebounce } from '../../hooks/useDebounce';
 import { supabase } from '../../lib/supabase';
+import { createLogger } from '../../lib/logger';
+
+const logger = createLogger('CatalogWithTabs');
 import { useCartStore } from '../../stores/useCartStore';
 import { useProductStore } from '../../stores/useProductStore';
 import { useFavoritesStore } from '../../stores/useFavoritesStore';
 import { formatPrice } from '../../lib/utils';
+import { sanitizeSearchQuery } from '../../lib/sanitize';
+import { ANIMATION_DURATIONS, CART_MILESTONES, CATEGORY_GROUPS } from '../../lib/constants';
 import type { ItemWithDetails, Category, Product } from '../../types/database';
 import { RecommendationPanel } from './RecommendationPanel';
 import { ProductDetailModal } from './ProductDetailModal';
 import { ProductCompareModal } from './ProductCompareModal';
+import { RecentlyViewed } from './RecentlyViewed';
 import { RoomInteriorSelector } from '../interior/RoomInteriorSelector';
 import * as Dialog from '@radix-ui/react-dialog';
 import type { Product as CatalogProduct } from '../../types/product';
 
-// 100点UIアニメーション
-const animations = `
-  @keyframes pochipochi {
-    0% { transform: scale(1); }
-    25% { transform: scale(0.95); }
-    50% { transform: scale(1.08); }
-    75% { transform: scale(1.02); }
-    100% { transform: scale(1); }
-  }
-  @keyframes bounce-in {
-    0% { transform: scale(0.3); opacity: 0; }
-    50% { transform: scale(1.05); }
-    70% { transform: scale(0.9); }
-    100% { transform: scale(1); opacity: 1; }
-  }
-  @keyframes confetti-fall {
-    0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
-    100% { transform: translateY(100vh) rotate(720deg) scale(0); opacity: 0; }
-  }
-  @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
-  }
-  @keyframes pulse-ring {
-    0% { transform: scale(0.8); opacity: 1; }
-    100% { transform: scale(2); opacity: 0; }
-  }
-  @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-  }
-  @keyframes sparkle {
-    0%, 100% { opacity: 0; transform: scale(0); }
-    50% { opacity: 1; transform: scale(1); }
-  }
-  @keyframes slide-up {
-    from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-  }
-  @keyframes gradient-shift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-  .animate-pochipochi { animation: pochipochi 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
-  .animate-bounce-in { animation: bounce-in 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
-  .animate-shimmer {
-    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-  }
-  .animate-float { animation: float 3s ease-in-out infinite; }
-  .animate-slide-up { animation: slide-up 0.3s ease-out; }
-  .gradient-animate {
-    background-size: 200% 200%;
-    animation: gradient-shift 3s ease infinite;
-  }
-`;
+// 抽出したコンポーネント・ユーティリティ
+import { ItemCard } from './ItemCard';
+import { catalogAnimations, SkeletonCard, EmptyState, Confetti } from './CatalogUIComponents';
+import {
+  convertToCartItem,
+  convertStaticToItemWithDetails,
+  convertToCatalogProduct,
+  STEPS,
+  type FilterTypeValue,
+} from './catalogUtils';
 
-// DBアイテムをカート用のProduct型に変換
-const convertToCartItem = (item: ItemWithDetails): CatalogProduct => {
-  const pricing = item.pricing?.find(p => p.product?.code === 'LACIE');
-
-  return {
-    id: item.id,
-    categoryId: item.category_id || '',
-    categoryName: item.category?.name || '',
-    subcategory: item.category_name || '',
-    name: item.name,
-    manufacturer: item.manufacturer || '',
-    modelNumber: item.model_number || '',
-    unit: (item.unit?.symbol || '式') as CatalogProduct['unit'],
-    isOption: pricing ? !pricing.is_standard : false,
-    description: item.note || '',
-    pricing: item.pricing?.map(p => ({
-      plan: (p.product?.code || 'LACIE') as 'LACIE' | 'HOURS' | 'LIFE',
-      planId: (p.product?.code || 'LACIE') as 'LACIE' | 'HOURS' | 'LIFE',
-      price: p.price,
-    })) || [],
-    variants: item.variants?.map(v => ({
-      id: v.id,
-      color: v.color_name,
-      colorCode: v.color_code || undefined,
-      imageUrl: v.images?.[0]?.image_url,
-      thumbnailUrl: v.images?.[0]?.thumbnail_url || undefined,
-    })) || [],
-  };
-};
-
-// 静的データ（Product）をItemWithDetails形式に変換（フォールバック用）
-const convertStaticToItemWithDetails = (product: CatalogProduct, categoryType: string): ItemWithDetails => {
-  return {
-    id: product.id,
-    name: product.name,
-    manufacturer: product.manufacturer,
-    model_number: product.modelNumber,
-    category_id: product.categoryId,
-    category_name: product.subcategory, // サブカテゴリ名
-    note: product.description,
-    is_active: true,
-    display_order: 0,
-    category: {
-      id: product.categoryId,
-      name: product.categoryName,
-      category_type: categoryType,
-      is_active: true,
-      display_order: 0,
-    },
-    unit: {
-      id: 'unit-1',
-      symbol: product.unit,
-      name: product.unit,
-    },
-    variants: product.variants?.map((v, idx) => ({
-      id: v.id || `variant-${idx}`,
-      color_name: v.color,
-      color_code: v.colorCode || v.color,
-      images: v.imageUrl
-        ? [{ id: 'img-1', image_url: v.imageUrl, thumbnail_url: v.thumbnailUrl }]
-        : (v.images?.length ? v.images.map((img, i) => ({ id: `img-${i}`, image_url: img, thumbnail_url: img })) : []),
-    })) || [],
-    pricing: product.pricing?.map(p => ({
-      id: `pricing-${p.plan || p.planId}`,
-      price: p.price,
-      is_standard: p.price === 0,
-      product: {
-        id: `plan-${p.plan || p.planId}`,
-        code: (p.plan || p.planId) as string,
-        name: (p.plan || p.planId) as string,
-      },
-    })) || [],
-  } as ItemWithDetails;
-};
-
-// DBアイテムをRecommendation用のCatalogProductに変換
-const convertToCatalogProduct = (item: ItemWithDetails): CatalogProduct => {
-  const pricing = item.pricing?.find(p => p.product?.code === 'LACIE');
-
-  return {
-    id: item.id,
-    categoryId: item.category_id || '',
-    categoryName: item.category?.name || '',
-    subcategory: item.category_name || '', // サブカテゴリ（例: 窯業系サイディング、モナビストーンV）
-    name: item.name,
-    manufacturer: item.manufacturer || '',
-    modelNumber: item.model_number || '',
-    unit: (item.unit?.symbol || '式') as CatalogProduct['unit'],
-    isOption: pricing ? !pricing.is_standard : false,
-    description: item.note || '', // noteフィールドをdescriptionにマッピング
-    pricing: item.pricing?.map(p => ({
-      plan: (p.product?.code || 'LACIE') as 'LACIE' | 'HOURS' | 'LIFE',
-      planId: (p.product?.code || undefined) as 'LACIE' | 'HOURS' | 'LIFE' | undefined,
-      price: p.price,
-    })) || [],
-    variants: item.variants?.map(v => ({
-      id: v.id,
-      color: v.color_name,
-      colorCode: v.color_code || undefined,
-      imageUrl: v.images?.[0]?.image_url,
-      thumbnailUrl: v.images?.[0]?.thumbnail_url || undefined,
-    })) || [],
-  };
-};
-
-// ステップ定義
-type StepId = 'exterior' | 'interior' | 'equipment';
-type FilterTypeValue = 'all' | 'standard' | 'option';
-
-const STEPS: { id: StepId; label: string; icon: typeof Home; emoji: string; gradient: string }[] = [
-  { id: 'exterior', label: '外装', icon: Home, emoji: '🏠', gradient: 'from-emerald-500 to-teal-500' },
-  { id: 'interior', label: '内装', icon: Sofa, emoji: '🛋️', gradient: 'from-blue-500 to-indigo-500' },
-  { id: 'equipment', label: '設備', icon: Wrench, emoji: '🚿', gradient: 'from-cyan-500 to-blue-500' },
-];
-
-// スケルトンカード
-const SkeletonCard = () => (
-  <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm overflow-hidden border border-gray-100 dark:border-gray-700">
-    <div className="aspect-square animate-shimmer dark:opacity-20" />
-    <div className="p-3 space-y-2">
-      <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded animate-shimmer w-1/3" />
-      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-shimmer" />
-      <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded-xl animate-shimmer mt-3" />
-    </div>
-  </div>
-);
-
-// 検索ハイライトコンポーネント
-const HighlightText: React.FC<{ text: string; searchTerm: string }> = ({ text, searchTerm }) => {
-  if (!searchTerm.trim()) return <>{text}</>;
-
-  const parts = text.split(new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'));
-
-  return (
-    <>
-      {parts.map((part, i) =>
-        part.toLowerCase() === searchTerm.toLowerCase() ? (
-          <mark key={i} className="bg-yellow-200 text-gray-900 px-0.5 rounded">{part}</mark>
-        ) : (
-          <span key={i}>{part}</span>
-        )
-      )}
-    </>
-  );
-};
-
-// 商品カードコンポーネント
-interface ItemCardProps {
-  item: ItemWithDetails;
-  index: number;
-  getPrice: (item: ItemWithDetails) => number;
-  isStandard: (item: ItemWithDetails) => boolean;
-  getImageUrl: (item: ItemWithDetails) => string | null;
-  cartItemIds: Set<string>;
-  addedItemId: string | null;
-  hoveredItem: string | null;
-  setHoveredItem: (id: string | null) => void;
-  handleOpenDetail: (item: ItemWithDetails) => void;
-  handleAddToCart: (item: ItemWithDetails) => void;
-  handleRemoveFromCart: (itemId: string) => void;
-  handleToggleCompare: (item: ItemWithDetails) => void;
-  isInCompare: (itemId: string) => boolean;
-  handleToggleFavorite: (itemId: string) => void;
-  isFavorite: (itemId: string) => boolean;
-  searchTerm: string;
-  showManufacturer?: boolean;
-}
-
-const ItemCard: React.FC<ItemCardProps> = ({
-  item,
-  index,
-  getPrice,
-  isStandard,
-  getImageUrl,
-  cartItemIds,
-  addedItemId,
-  hoveredItem,
-  setHoveredItem,
-  handleOpenDetail,
-  handleAddToCart,
-  handleRemoveFromCart,
-  handleToggleCompare,
-  isInCompare,
-  handleToggleFavorite,
-  isFavorite,
-  searchTerm,
-  showManufacturer = true,
-}) => {
-  const price = getPrice(item);
-  const standard = isStandard(item);
-  const imageUrl = getImageUrl(item);
-  const inCart = cartItemIds.has(item.id);
-  const isJustAdded = addedItemId === item.id;
-  const isHovered = hoveredItem === item.id;
-  const variant = item.variants?.[0];
-  const inCompare = isInCompare(item.id);
-  const inFavorite = isFavorite(item.id);
-  const hasMultipleVariants = (item.variants?.length || 0) > 1;
-
-  return (
-    <div
-      className={`group bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden border-2 transition-all duration-200 cursor-pointer ${
-        inCart
-          ? 'border-teal-400 shadow-md shadow-teal-100 dark:shadow-teal-900/30 ring-2 ring-teal-50 dark:ring-teal-900/50'
-          : inCompare
-          ? 'border-purple-400 shadow-md shadow-purple-100 dark:shadow-purple-900/30'
-          : 'border-transparent hover:border-gray-200 dark:hover:border-gray-600 hover:shadow-lg'
-      } ${isJustAdded ? 'animate-pochipochi' : ''}`}
-      style={{ animationDelay: `${index * 30}ms` }}
-      onMouseEnter={() => setHoveredItem(item.id)}
-      onMouseLeave={() => setHoveredItem(null)}
-      onClick={() => handleOpenDetail(item)}
-    >
-      {/* 画像エリア - よりコンパクトに */}
-      <div className="aspect-[4/3] bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
-        {imageUrl ? (
-          <img
-            src={imageUrl}
-            alt={item.name}
-            loading="lazy"
-            decoding="async"
-            className={`w-full h-full object-cover transition-transform duration-300 ${isHovered ? 'scale-105' : ''}`}
-          />
-        ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center p-3">
-            <div
-              className={`w-16 h-16 rounded-xl mb-2 transition-transform duration-200 ${isHovered ? 'scale-105' : ''}`}
-              style={{
-                background: variant?.color_code
-                  ? `linear-gradient(135deg, ${variant.color_code}, ${variant.color_code}88)`
-                  : 'linear-gradient(135deg, #e5e7eb, #d1d5db)'
-              }}
-            />
-            <span className="text-xs text-gray-400 text-center line-clamp-1">{variant?.color_name || ''}</span>
-          </div>
-        )}
-
-        {/* バッジ - コンパクト化 */}
-        <div className="absolute top-1.5 left-1.5">
-          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold shadow-sm ${
-            standard
-              ? 'bg-teal-500 text-white'
-              : 'bg-orange-500 text-white'
-          }`}>
-            {standard ? '標準' : 'OP'}
-          </span>
-        </div>
-
-        {/* HITバッジ & お気に入り & 比較ボタン */}
-        <div className="absolute top-1.5 right-1.5 flex flex-col gap-1">
-          {item.is_hit && (
-            <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-red-500 text-white shadow-sm flex items-center gap-0.5">
-              <Sparkles className="w-2.5 h-2.5" />
-            </span>
-          )}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleToggleFavorite(item.id);
-            }}
-            className={`p-1.5 rounded-full shadow-sm transition-all ${
-              inFavorite
-                ? 'bg-pink-500 text-white'
-                : 'bg-white/90 text-gray-400 hover:text-pink-500'
-            }`}
-            title={inFavorite ? 'お気に入りから削除' : 'お気に入りに追加'}
-          >
-            <Heart className={`w-3.5 h-3.5 ${inFavorite ? 'fill-current' : ''}`} />
-          </button>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleToggleCompare(item);
-            }}
-            className={`p-1.5 rounded-full shadow-sm transition-all ${
-              inCompare
-                ? 'bg-purple-500 text-white'
-                : 'bg-white/90 text-gray-400 hover:text-purple-500'
-            }`}
-            title={inCompare ? '比較から削除' : '比較に追加'}
-          >
-            <Scale className="w-3.5 h-3.5" />
-          </button>
-        </div>
-
-        {/* 選択済みオーバーレイ */}
-        {inCart && (
-          <div className="absolute inset-0 bg-teal-500/20 flex items-center justify-center">
-            <div className="bg-white rounded-full p-2 shadow-lg">
-              <Check className="w-6 h-6 text-teal-600" strokeWidth={3} />
-            </div>
-          </div>
-        )}
-
-        {/* 比較中マーク */}
-        {inCompare && !inCart && (
-          <div className="absolute bottom-1.5 right-1.5">
-            <div className="bg-purple-500 rounded-full p-1">
-              <Scale className="w-3 h-3 text-white" />
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* 情報エリア - コンパクト化 */}
-      <div className="p-2.5">
-        {showManufacturer && (
-          <p className="text-[10px] text-gray-400 dark:text-gray-500 font-medium mb-0.5 truncate">{item.manufacturer}</p>
-        )}
-        <h3 className="font-medium text-xs text-gray-800 dark:text-gray-200 line-clamp-2 min-h-[2rem] mb-1.5 leading-tight">
-          <HighlightText text={item.name} searchTerm={searchTerm} />
-        </h3>
-
-        {/* 価格と単位 */}
-        <div className="flex items-baseline gap-1 mb-2">
-          <span className={`text-base font-bold ${price === 0 ? 'text-teal-600 dark:text-teal-400' : 'text-gray-900 dark:text-gray-100'}`}>
-            {price === 0 ? '標準' : formatPrice(price)}
-          </span>
-          {item.unit && (
-            <span className="text-[10px] text-gray-400 dark:text-gray-500">/{item.unit.symbol}</span>
-          )}
-        </div>
-
-        {/* アクションボタン - タップしやすく */}
-        {inCart ? (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleRemoveFromCart(item.id);
-            }}
-            className="w-full py-2 rounded-lg text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 dark:hover:text-red-400 flex items-center justify-center gap-1.5 transition-all active:scale-95"
-          >
-            <X className="w-3.5 h-3.5" />
-            解除
-          </button>
-        ) : hasMultipleVariants ? (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleOpenDetail(item);
-            }}
-            className="w-full py-2 rounded-lg text-xs font-bold bg-gradient-to-r from-blue-500 to-indigo-500 text-white flex items-center justify-center gap-1.5 shadow-sm transition-all active:scale-95"
-          >
-            <Eye className="w-3.5 h-3.5" />
-            {item.variants?.length}色
-          </button>
-        ) : (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleAddToCart(item);
-            }}
-            className="w-full py-2 rounded-lg text-xs font-bold bg-gradient-to-r from-teal-500 to-emerald-500 text-white flex items-center justify-center gap-1.5 shadow-sm transition-all active:scale-95"
-          >
-            <ShoppingCart className="w-3.5 h-3.5" />
-            選択
-          </button>
-        )}
-      </div>
-    </div>
-  );
-};
-
-// 空状態
-const EmptyState = ({ searchTerm, onClear }: { searchTerm: string; onClear: () => void }) => (
-  <div className="flex flex-col items-center justify-center py-20 animate-slide-up">
-    <div className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 rounded-full flex items-center justify-center mb-6 animate-float">
-      <Package className="w-12 h-12 text-gray-400 dark:text-gray-500" />
-    </div>
-    <h3 className="text-xl font-bold text-gray-700 dark:text-gray-200 mb-2">商品が見つかりません</h3>
-    <p className="text-gray-500 dark:text-gray-400 mb-6 text-center max-w-sm">
-      {searchTerm
-        ? `「${searchTerm}」に一致する商品がありません`
-        : 'このカテゴリには商品がありません'}
-    </p>
-    {searchTerm && (
-      <button
-        onClick={onClear}
-        className="px-6 py-2.5 bg-teal-500 text-white rounded-full font-medium hover:bg-teal-600 transition-all hover:scale-105 active:scale-95"
-      >
-        検索をクリア
-      </button>
-    )}
-  </div>
-);
-
-// 紙吹雪コンポーネント
-const Confetti = ({ show }: { show: boolean }) => {
-  if (!show) return null;
-  const confettiItems = ['🎉', '✨', '⭐', '🌟', '💫', '🎊', '💎', '🔮'];
-
-  return (
-    <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
-      {[...Array(40)].map((_, i) => (
-        <div
-          key={i}
-          className="absolute text-2xl"
-          style={{
-            left: `${Math.random() * 100}%`,
-            top: '-50px',
-            animation: `confetti-fall ${2 + Math.random() * 2}s linear forwards`,
-            animationDelay: `${Math.random() * 0.5}s`,
-          }}
-        >
-          {confettiItems[i % confettiItems.length]}
-        </div>
-      ))}
-    </div>
-  );
-};
+// ユーティリティ関数とコンポーネント (ItemCard, SkeletonCard, EmptyState, Confetti) はインポート済み
 
 interface CatalogWithTabsProps {
   onCartClick?: () => void;
@@ -505,6 +56,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
   // URLクエリパラメータから検索・フィルターを取得
   const searchTerm = searchParams.get('q') || '';
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
   const filterType = (searchParams.get('filter') as 'all' | 'standard' | 'option') || 'all';
   const selectedSubcategory = searchParams.get('sub') || '';
   const selectedColor = searchParams.get('color') || '';
@@ -512,9 +64,10 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
   // 検索・フィルター更新関数（URL同期）
   const setSearchTerm = useCallback((term: string) => {
+    const sanitized = sanitizeSearchQuery(term);
     setSearchParams(prev => {
-      if (term) {
-        prev.set('q', term);
+      if (sanitized) {
+        prev.set('q', sanitized);
       } else {
         prev.delete('q');
       }
@@ -600,6 +153,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   const cartItemIds = useMemo(() => new Set(cartItems.map(i => i.product.id)), [cartItems]);
   const totalPrice = getTotalPrice();
   const toast = useToast();
+  const { setTimeout } = useTimeout();
 
   // 静的データ（フォールバック用）
   const { exteriorProducts, interiorProducts, waterProducts } = useProductStore();
@@ -765,7 +319,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
         const { data: supabaseItems, error: fetchError } = await query;
 
         if (fetchError) {
-          console.error('Supabase fetch error:', fetchError);
+          logger.error('Supabase fetch error:', fetchError);
         }
 
         // Supabaseにデータがあり、バリアント情報も含まれている場合はそれを使用
@@ -785,7 +339,6 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
         }
 
         // Supabaseにデータがない、またはバリアント情報がない場合は静的データを使用
-        console.log('Supabaseにデータがないため、静的データを使用します');
         const staticItems = getStaticItems(activeTab);
 
         // カテゴリでフィルタリング
@@ -802,7 +355,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
         setItems(filteredStaticItems);
       } catch (err) {
-        console.error('Error fetching items:', err);
+        logger.error('Error fetching items:', err);
         setError('データの取得に失敗しました');
         // エラー時も静的データにフォールバック
         const staticItems = getStaticItems(activeTab);
@@ -834,12 +387,12 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     return Array.from(colors).sort((a, b) => a.localeCompare(b, 'ja'));
   }, [items]);
 
-  // フィルタリング
+  // フィルタリング（デバウンス適用）
   const filteredItems = useMemo(() => {
     const filtered = items.filter(item => {
       // 検索フィルター（あいまい検索対応）
-      if (searchTerm) {
-        const term = searchTerm.toLowerCase();
+      if (debouncedSearchTerm) {
+        const term = debouncedSearchTerm.toLowerCase();
         // ひらがな→カタカナ変換
         const toKatakana = (str: string) => str.replace(/[\u3041-\u3096]/g, ch =>
           String.fromCharCode(ch.charCodeAt(0) + 0x60));
@@ -916,7 +469,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
       // 4. 商品名順
       return (a.name || '').localeCompare(b.name || '', 'ja');
     });
-  }, [items, searchTerm, filterType, selectedPlanId, selectedSubcategory, selectedColor, priceMax, showFavoritesOnly, favorites, hideDiscontinued]);
+  }, [items, debouncedSearchTerm, filterType, selectedPlanId, selectedSubcategory, selectedColor, priceMax, showFavoritesOnly, favorites, hideDiscontinued]);
 
   // レコメンド用にCatalogProduct形式に変換
   const catalogProducts = useMemo(() => {
@@ -952,16 +505,16 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     useCartStore.getState().setSelectedPlanId(selectedPlanId);
 
     setAddedItemId(item.id);
-    setTimeout(() => setAddedItemId(null), 500);
+    setTimeout(() => setAddedItemId(null), ANIMATION_DURATIONS.CART_ITEM_HIGHLIGHT);
 
     // Toast通知
     toast.success('追加しました', item.name);
 
     // マイルストーン演出
     const newCount = cartItems.length + 1;
-    if (newCount === 5 || newCount === 10 || newCount === 15 || newCount === 20) {
+    if (CART_MILESTONES.CONFETTI_THRESHOLDS.includes(newCount)) {
       setShowConfetti(true);
-      setTimeout(() => setShowConfetti(false), 3000);
+      setTimeout(() => setShowConfetti(false), ANIMATION_DURATIONS.CONFETTI);
     }
   }, [addItem, cartItems.length, selectedPlanId, toast]);
 
@@ -995,7 +548,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     // 紙吹雪
     if (standardItems.length >= 3) {
       setShowConfetti(true);
-      setTimeout(() => setShowConfetti(false), 3000);
+      setTimeout(() => setShowConfetti(false), ANIMATION_DURATIONS.CONFETTI);
     }
   }, [filteredItems, selectedPlanId, cartItemIds, addItem, toast]);
 
@@ -1052,9 +605,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   const getStepCount = (stepId: string) => {
     return cartItems.filter(i => {
       const cat = i.product.categoryName;
-      if (stepId === 'exterior') return ['外壁', 'ポーチ', '屋根', '樋', '軒天', '破風', '雨戸'].some(c => cat?.includes(c));
-      if (stepId === 'interior') return ['床材', '壁クロス', '天井クロス', '巾木', '建具', '収納'].some(c => cat?.includes(c));
-      return ['キッチン', 'バス', '洗面台', 'トイレ', '給湯器', 'エアコン', '照明'].some(c => cat?.includes(c));
+      if (stepId === 'exterior') return CATEGORY_GROUPS.EXTERIOR.some(c => cat?.includes(c));
+      if (stepId === 'interior') return CATEGORY_GROUPS.INTERIOR.some(c => cat?.includes(c));
+      return CATEGORY_GROUPS.EQUIPMENT.some(c => cat?.includes(c));
     }).length;
   };
 
@@ -1090,7 +643,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     if (currentIndex < STEPS.length - 1) {
       setActiveTab(STEPS[currentIndex + 1].id);
       setShowConfetti(true);
-      setTimeout(() => setShowConfetti(false), 3000);
+      setTimeout(() => setShowConfetti(false), ANIMATION_DURATIONS.CONFETTI);
     }
   }, [activeTab]);
 
@@ -1181,7 +734,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
   return (
     <>
-      <style>{animations}</style>
+      <style>{catalogAnimations}</style>
       <Confetti show={showConfetti} />
 
       <div className="flex flex-col h-full bg-gray-50 dark:bg-gray-900">
@@ -1190,7 +743,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
           {/* ステップナビゲーション */}
           <div className="px-4 py-4">
             <div className="flex items-center justify-between max-w-6xl mx-auto">
-              <div className="flex items-center gap-2 sm:gap-4">
+              <div className="flex items-center gap-2 sm:gap-4" data-tutorial="main-tabs">
                 {STEPS.map((step, index) => {
                   const isActive = step.id === activeTab;
                   const stepCount = getStepCount(step.id);
@@ -1231,7 +784,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   <p className="text-xs text-white/70">オプション合計</p>
                   <p className="text-lg sm:text-xl font-bold">{formatPrice(totalPrice)}</p>
                 </div>
-                <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-3 sm:px-4 py-1.5 sm:py-2 flex items-center gap-2">
+                <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-3 sm:px-4 py-1.5 sm:py-2 flex items-center gap-2" data-tutorial="cart-button">
                   <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" />
                   <span className="font-bold text-lg">{cartItems.length}</span>
                 </div>
@@ -1268,7 +821,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
         {/* カテゴリナビゲーション - 決定/未決ステータス表示 */}
         <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
-          <div className="flex items-center gap-2 px-4 py-3 overflow-x-auto scrollbar-thin">
+          <div className="flex items-center gap-2 px-4 py-3 overflow-x-auto scrollbar-thin" data-tutorial="category-list">
             {categories.map((cat, idx) => {
               const count = getCategoryCount(cat.name);
               const isDecided = count > 0;
@@ -1309,11 +862,11 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
         </div>
 
         <div className="flex flex-1 overflow-hidden">
-          {/* サイドバー (PC) - 未決/決定表示 */}
-          <div className="hidden lg:flex flex-col w-72 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 overflow-y-auto">
+          {/* サイドバー (PC) - 未決/決定表示 - スティッキー */}
+          <div className="hidden lg:flex flex-col w-72 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 sticky top-0 h-[calc(100vh-180px)] overflow-y-auto">
             <div className="p-4 space-y-4">
               {/* プラン選択（コンパクト） */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2" data-tutorial="plan-selector">
                 <Star className="w-4 h-4 text-yellow-500" />
                 <select
                   value={selectedPlanId}
@@ -1524,8 +1077,10 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
               <div className="flex items-center gap-2 max-w-4xl mx-auto">
                 {/* 検索 */}
                 <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
+                  <label htmlFor="catalog-search" className="sr-only">商品を検索</label>
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" aria-hidden="true" />
                   <input
+                    id="catalog-search"
                     type="text"
                     placeholder="検索... (/ でフォーカス)"
                     value={searchTerm}
@@ -1576,10 +1131,13 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
             <div className="lg:hidden bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 px-3 py-2">
               <div className="flex items-center gap-2">
                 {/* プラン選択 */}
+                <label htmlFor="mobile-plan-select" className="sr-only">プランを選択</label>
                 <select
+                  id="mobile-plan-select"
                   value={selectedPlanId}
                   onChange={(e) => setSelectedPlanId(e.target.value)}
                   className="flex-1 px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-teal-500"
+                  aria-label="プランを選択"
                 >
                   {plans.map(plan => (
                     <option key={plan.id} value={plan.code}>{plan.name}</option>
@@ -1649,8 +1207,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   {/* サブカテゴリフィルター */}
                   {availableSubcategories.length > 1 && (
                     <div className="flex items-center gap-1">
-                      <span className="text-xs text-gray-500 dark:text-gray-400">種類:</span>
+                      <label htmlFor="subcategory-filter" className="text-xs text-gray-500 dark:text-gray-400">種類:</label>
                       <select
+                        id="subcategory-filter"
                         value={selectedSubcategory}
                         onChange={(e) => setSelectedSubcategory(e.target.value)}
                         className="px-2 py-1.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-xs font-medium text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-teal-500"
@@ -1665,8 +1224,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   {/* 色フィルター */}
                   {availableColors.length > 1 && (
                     <div className="flex items-center gap-1">
-                      <span className="text-xs text-gray-500 dark:text-gray-400">色:</span>
+                      <label htmlFor="color-filter" className="text-xs text-gray-500 dark:text-gray-400">色:</label>
                       <select
+                        id="color-filter"
                         value={selectedColor}
                         onChange={(e) => setSelectedColor(e.target.value)}
                         className="px-2 py-1.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-xs font-medium text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-teal-500"
@@ -1680,8 +1240,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   )}
                   {/* 価格フィルター */}
                   <div className="flex items-center gap-1">
-                    <span className="text-xs text-gray-500 dark:text-gray-400">上限:</span>
+                    <label htmlFor="price-filter" className="text-xs text-gray-500 dark:text-gray-400">上限:</label>
                     <select
+                      id="price-filter"
                       value={priceMax}
                       onChange={(e) => setPriceMax(parseInt(e.target.value, 10))}
                       className="px-2 py-1.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-xs font-medium text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-teal-500"
@@ -1726,23 +1287,45 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
             )}
 
             {/* 商品グリッド */}
-            <div className="flex-1 overflow-y-auto p-3 sm:p-4 pb-24 lg:pb-4">
+            <div className="flex-1 overflow-y-auto p-3 sm:p-4 pb-24 lg:pb-4" data-tutorial="product-grid">
+              {/* 最近閲覧した商品 */}
+              <RecentlyViewed
+                onProductClick={(productId) => {
+                  const item = items.find(i => i.id === productId);
+                  if (item) {
+                    setSelectedProductForDetail(convertToCatalogProduct(item));
+                  }
+                }}
+                maxItems={6}
+              />
+
               {isLoading ? (
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
                   {[...Array(10)].map((_, i) => <SkeletonCard key={i} />)}
                 </div>
               ) : error ? (
                 <div className="flex flex-col items-center justify-center py-20">
-                  <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
+                  <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mb-4">
                     <X className="w-8 h-8 text-red-500" />
                   </div>
-                  <p className="text-red-500 font-medium">{error}</p>
-                  <button
-                    onClick={() => window.location.reload()}
-                    className="mt-4 px-6 py-2 bg-red-500 text-white rounded-full hover:bg-red-600"
-                  >
-                    再読み込み
-                  </button>
+                  <p className="text-red-500 dark:text-red-400 font-medium mb-2">{error}</p>
+                  <p className="text-gray-500 dark:text-gray-400 text-sm mb-4">
+                    接続を確認して再試行してください
+                  </p>
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => setError(null)}
+                      className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 text-sm"
+                    >
+                      エラーをクリア
+                    </button>
+                    <button
+                      onClick={() => window.location.reload()}
+                      className="px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 text-sm"
+                    >
+                      再読み込み
+                    </button>
+                  </div>
                 </div>
               ) : filteredItems.length === 0 ? (
                 <EmptyState searchTerm={searchTerm} onClear={() => setSearchTerm('')} />

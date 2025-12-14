@@ -17,6 +17,9 @@ import type {
   Selection,
   ItemVariant,
 } from '../types/database';
+import { createLogger } from '../lib/logger';
+
+const logger = createLogger('SelectionPage');
 
 interface SelectionPageProps {
   projectId: string;
@@ -38,59 +41,58 @@ export function SelectionPage({ projectId, onBack }: SelectionPageProps) {
 
   // Load project and categories
   useEffect(() => {
-    loadInitialData();
-  }, [projectId]);
+    const loadData = async () => {
+      setIsLoading(true);
+      try {
+        const [projectData, categoriesData, selectionsData] = await Promise.all([
+          projectsApi.getById(projectId),
+          categoriesApi.getWithChildren(),
+          selectionsApi.getByProject(projectId),
+        ]);
 
-  const loadInitialData = async () => {
-    setIsLoading(true);
-    try {
-      const [projectData, categoriesData, selectionsData] = await Promise.all([
-        projectsApi.getById(projectId),
-        categoriesApi.getWithChildren(),
-        selectionsApi.getByProject(projectId),
-      ]);
+        setProject(projectData);
+        setCategories(categoriesData);
+        setSelections(selectionsData);
 
-      setProject(projectData);
-      setCategories(categoriesData);
-      setSelections(selectionsData);
-
-      // Set first category as active
-      if (categoriesData.length > 0) {
-        const firstParent = categoriesData[0];
-        const firstChild = firstParent.children?.[0];
-        setActiveCategory(firstChild || firstParent);
+        // Set first category as active
+        if (categoriesData.length > 0) {
+          const firstParent = categoriesData[0];
+          const firstChild = firstParent.children?.[0];
+          setActiveCategory(firstChild || firstParent);
+        }
+      } catch (err) {
+        logger.error('Error loading data:', err);
+        setError('データの読み込みに失敗しました');
+      } finally {
+        setIsLoading(false);
       }
-    } catch (err) {
-      console.error('Error loading data:', err);
-      setError('データの読み込みに失敗しました');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    };
+    loadData();
+  }, [projectId]);
 
   // Load items when category changes
   useEffect(() => {
+    const loadCategoryItems = async () => {
+      if (!activeCategory || !project?.product_id) return;
+
+      setItemsLoading(true);
+      try {
+        const itemsData = await itemsApi.getByProductAndCategory(
+          project.product_id,
+          activeCategory.id
+        );
+        setItems(itemsData);
+      } catch (err) {
+        logger.error('Error loading items:', err);
+      } finally {
+        setItemsLoading(false);
+      }
+    };
+
     if (activeCategory && project?.product_id) {
-      loadItems();
+      loadCategoryItems();
     }
   }, [activeCategory, project?.product_id]);
-
-  const loadItems = async () => {
-    if (!activeCategory || !project?.product_id) return;
-
-    setItemsLoading(true);
-    try {
-      const itemsData = await itemsApi.getByProductAndCategory(
-        project.product_id,
-        activeCategory.id
-      );
-      setItems(itemsData);
-    } catch (err) {
-      console.error('Error loading items:', err);
-    } finally {
-      setItemsLoading(false);
-    }
-  };
 
   // Get selection for item
   const getSelectionForItem = (itemId: string) => {
@@ -130,7 +132,7 @@ export function SelectionPage({ projectId, onBack }: SelectionPageProps) {
       setSelectedItem(null);
       setSelectedVariant(null);
     } catch (err) {
-      console.error('Error selecting item:', err);
+      logger.error('Error selecting item:', err);
       setError('アイテムの選択に失敗しました');
     }
   };

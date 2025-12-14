@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Building2,
   Users,
@@ -18,10 +18,14 @@ import {
   XCircle,
   BarChart3
 } from 'lucide-react';
+import { createLogger } from '../../lib/logger';
+
+const logger = createLogger('OrganizationManager');
 import { supabase } from '../../lib/supabase';
 import { Button } from '../common/Button';
 import { Card } from '../common/Card';
 import { useAuth } from '../../contexts/AuthContext';
+import { useDebounce } from '../../hooks/useDebounce';
 
 interface OrganizationStats {
   id: string;
@@ -39,6 +43,7 @@ export const OrganizationManager: React.FC = () => {
   const [organizations, setOrganizations] = useState<OrganizationStats[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
   const [filterType, setFilterType] = useState<string>('all');
   const [_showAddModal, setShowAddModal] = useState(false);
 
@@ -91,23 +96,25 @@ export const OrganizationManager: React.FC = () => {
 
       setOrganizations(stats);
     } catch (error) {
-      console.error('Failed to fetch organizations:', error);
+      logger.error('Failed to fetch organizations:', error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  // フィルタリング
-  const filteredOrganizations = organizations.filter(org => {
-    const matchesSearch =
-      org.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      org.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (org.prefecture?.toLowerCase() || '').includes(searchQuery.toLowerCase());
+  // フィルタリング（デバウンス適用）
+  const filteredOrganizations = useMemo(() => {
+    return organizations.filter(org => {
+      const matchesSearch =
+        org.name.toLowerCase().includes(debouncedSearchQuery.toLowerCase()) ||
+        org.code.toLowerCase().includes(debouncedSearchQuery.toLowerCase()) ||
+        (org.prefecture?.toLowerCase() || '').includes(debouncedSearchQuery.toLowerCase());
 
-    const matchesType = filterType === 'all' || org.type === filterType;
+      const matchesType = filterType === 'all' || org.type === filterType;
 
-    return matchesSearch && matchesType;
-  });
+      return matchesSearch && matchesType;
+    });
+  }, [organizations, debouncedSearchQuery, filterType]);
 
   // 統計
   const stats = {
@@ -214,6 +221,7 @@ export const OrganizationManager: React.FC = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100"
+              aria-label="組織検索"
             />
           </div>
           <div className="flex items-center gap-2">
@@ -222,6 +230,7 @@ export const OrganizationManager: React.FC = () => {
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}
               className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100"
+              aria-label="組織タイプでフィルター"
             >
               <option value="all">すべて</option>
               <option value="headquarters">本部</option>

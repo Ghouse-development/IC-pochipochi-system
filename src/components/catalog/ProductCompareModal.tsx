@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
-import { X, ShoppingCart } from 'lucide-react';
+import { X, ShoppingCart, Printer, Star, Check, AlertCircle, Share2, FileSpreadsheet } from 'lucide-react';
 import type { Product } from '../../types/product';
 import { UNIT_SYMBOLS } from '../../types/product';
-import { formatPrice } from '../../lib/utils';
+import { formatPrice, getProductPrice } from '../../lib/utils';
 import { useCartStore } from '../../stores/useCartStore';
+import { useToast } from '../common/Toast';
 import { getHexColor } from '../../utils/colorMapping';
 import { generateProductPlaceholder } from '../../utils/imageUtils';
+import { useTimeout } from '../../hooks/useTimeout';
 
 interface ProductCompareModalProps {
   products: Product[];
@@ -22,19 +24,35 @@ export const ProductCompareModal: React.FC<ProductCompareModalProps> = ({
   onRemoveProduct,
 }) => {
   const { addItem } = useCartStore();
+  const { setTimeout } = useTimeout();
+  const toast = useToast();
+  const [highlightBest, setHighlightBest] = useState(true);
+  const [showDifferences, setShowDifferences] = useState(true);
+  const [copied, setCopied] = useState(false);
 
   if (products.length === 0) return null;
 
   // 比較項目を抽出
   const compareItems = [
-    { key: 'manufacturer', label: 'メーカー' },
-    { key: 'modelNumber', label: '品番' },
-    { key: 'unit', label: '単位' },
-    { key: 'isOption', label: '仕様' },
-    { key: 'variants', label: 'カラー数' },
-    { key: 'price', label: '価格' },
-    { key: 'description', label: '説明' },
+    { key: 'manufacturer', label: 'メーカー', type: 'text' },
+    { key: 'modelNumber', label: '品番', type: 'text' },
+    { key: 'unit', label: '単位', type: 'text' },
+    { key: 'isOption', label: '仕様', type: 'badge' },
+    { key: 'variants', label: 'カラー数', type: 'number', higherBetter: true },
+    { key: 'price', label: '価格', type: 'price', higherBetter: false },
+    { key: 'description', label: '説明', type: 'text' },
   ];
+
+  const getNumericValue = (product: Product, key: string): number | null => {
+    switch (key) {
+      case 'variants':
+        return product.variants.length;
+      case 'price':
+        return getProductPrice(product.pricing);
+      default:
+        return null;
+    }
+  };
 
   const getValue = (product: Product, key: string) => {
     switch (key) {
@@ -49,7 +67,7 @@ export const ProductCompareModal: React.FC<ProductCompareModalProps> = ({
       case 'variants':
         return `${product.variants.length}色`;
       case 'price': {
-        const price = product.pricing.find(p => p.plan === 'LACIE' || p.planId === 'LACIE')?.price || 0;
+        const price = getProductPrice(product.pricing);
         return price === 0 ? '標準仕様' : `${formatPrice(price)}/${UNIT_SYMBOLS[product.unit] || product.unit}`;
       }
       case 'description':
@@ -59,8 +77,70 @@ export const ProductCompareModal: React.FC<ProductCompareModalProps> = ({
     }
   };
 
+  // 最良値を判定
+  const getBestValue = (key: string, higherBetter: boolean): number | null => {
+    const values = products.map(p => getNumericValue(p, key)).filter((v): v is number => v !== null);
+    if (values.length === 0) return null;
+    return higherBetter ? Math.max(...values) : Math.min(...values);
+  };
+
+  // 値が異なるかチェック
+  const hasDifferentValues = (key: string): boolean => {
+    const values = products.map(p => getValue(p, key));
+    return new Set(values).size > 1;
+  };
+
+  // 最良値かどうかチェック
+  const isBestValue = (product: Product, key: string, higherBetter: boolean): boolean => {
+    const value = getNumericValue(product, key);
+    const best = getBestValue(key, higherBetter);
+    return value !== null && best !== null && value === best;
+  };
+
   const handleAddToCart = (product: Product) => {
     addItem(product, 1, product.variants[0]);
+  };
+
+  // CSV出力
+  const exportToCSV = () => {
+    const headers = ['項目', ...products.map(p => p.name)];
+    const rows = compareItems.map(item => [
+      item.label,
+      ...products.map(p => getValue(p, item.key))
+    ]);
+    rows.push(['カラー数', ...products.map(p => `${p.variants.length}色`)]);
+
+    const csvContent = [headers, ...rows]
+      .map(row => row.map(cell => `"${cell}"`).join(','))
+      .join('\n');
+
+    const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `商品比較_${new Date().toLocaleDateString('ja-JP')}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  // 印刷
+  const handlePrint = () => {
+    window.print();
+  };
+
+  // 共有URL生成
+  const generateShareUrl = () => {
+    const productIds = products.map(p => p.id).join(',');
+    const url = `${window.location.origin}/compare?products=${productIds}`;
+    navigator.clipboard.writeText(url)
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+        toast.success('URLをコピーしました');
+      })
+      .catch(() => {
+        toast.error('コピー失敗', 'クリップボードへのアクセスが許可されていません');
+      });
   };
 
   return (
@@ -69,11 +149,66 @@ export const ProductCompareModal: React.FC<ProductCompareModalProps> = ({
         <Dialog.Overlay className="fixed inset-0 bg-black/50 z-50" />
         <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-xl w-[95vw] max-w-5xl max-h-[90vh] overflow-hidden z-50">
           {/* ヘッダー */}
-          <div className="sticky top-0 bg-gradient-to-r from-teal-600 to-teal-500 text-white p-4 flex items-center justify-between">
-            <h2 className="text-lg font-bold">商品比較 ({products.length}件)</h2>
-            <Dialog.Close className="p-1 hover:bg-white/20 rounded-full">
-              <X className="w-5 h-5" />
-            </Dialog.Close>
+          <div className="sticky top-0 z-20">
+            <div className="bg-gradient-to-r from-teal-600 to-teal-500 text-white p-4 flex items-center justify-between">
+              <h2 className="text-lg font-bold">商品比較 ({products.length}件)</h2>
+              <Dialog.Close className="p-1 hover:bg-white/20 rounded-full">
+                <X className="w-5 h-5" />
+              </Dialog.Close>
+            </div>
+
+            {/* ツールバー */}
+            <div className="bg-gray-100 dark:bg-gray-800 p-2 flex flex-wrap items-center justify-between gap-2 border-b border-gray-200 dark:border-gray-700">
+              <div className="flex items-center gap-3">
+                <label className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-300 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={highlightBest}
+                    onChange={(e) => setHighlightBest(e.target.checked)}
+                    className="rounded text-teal-600 focus:ring-teal-500"
+                  />
+                  <Star className="w-4 h-4" />
+                  最良値ハイライト
+                </label>
+                <label className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-300 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={showDifferences}
+                    onChange={(e) => setShowDifferences(e.target.checked)}
+                    className="rounded text-teal-600 focus:ring-teal-500"
+                  />
+                  <AlertCircle className="w-4 h-4" />
+                  差分表示
+                </label>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={generateShareUrl}
+                  className="flex items-center gap-1 px-3 py-1.5 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+                  title="共有URLをコピー"
+                >
+                  {copied ? <Check className="w-4 h-4 text-green-500" /> : <Share2 className="w-4 h-4" />}
+                  {copied ? 'コピー完了' : '共有'}
+                </button>
+                <button
+                  onClick={exportToCSV}
+                  className="flex items-center gap-1 px-3 py-1.5 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+                  title="CSVとしてエクスポート"
+                >
+                  <FileSpreadsheet className="w-4 h-4" />
+                  CSV
+                </button>
+                <button
+                  onClick={handlePrint}
+                  className="flex items-center gap-1 px-3 py-1.5 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors print:hidden"
+                  title="印刷"
+                >
+                  <Printer className="w-4 h-4" />
+                  印刷
+                </button>
+              </div>
+            </div>
           </div>
 
           {/* 比較テーブル */}
@@ -101,6 +236,7 @@ export const ProductCompareModal: React.FC<ProductCompareModalProps> = ({
                             <img
                               src={variant?.imageUrl || imagePlaceholder}
                               alt={product.name}
+                              loading="lazy"
                               className="w-full h-full object-cover"
                               onError={(e) => {
                                 e.currentTarget.src = imagePlaceholder;
@@ -120,32 +256,65 @@ export const ProductCompareModal: React.FC<ProductCompareModalProps> = ({
 
               {/* 比較行 */}
               <tbody>
-                {compareItems.map((item, index) => (
-                  <tr key={item.key} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                    <td className="p-4 text-sm font-medium text-gray-700 sticky left-0 bg-inherit">
-                      {item.label}
-                    </td>
-                    {products.map(product => (
-                      <td key={product.id} className="p-4 text-center text-sm text-gray-900">
-                        {item.key === 'isOption' ? (
-                          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                            product.isOption
-                              ? 'bg-orange-100 text-orange-700'
-                              : 'bg-green-100 text-green-700'
-                          }`}>
-                            {getValue(product, item.key)}
-                          </span>
-                        ) : item.key === 'description' ? (
-                          <span className="text-xs text-gray-600 line-clamp-3">
-                            {getValue(product, item.key)}
-                          </span>
-                        ) : (
-                          getValue(product, item.key)
-                        )}
+                {compareItems.map((item, index) => {
+                  const isDifferent = hasDifferentValues(item.key);
+                  const itemConfig = item as typeof compareItems[0] & { higherBetter?: boolean };
+
+                  return (
+                    <tr
+                      key={item.key}
+                      className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} ${
+                        showDifferences && isDifferent ? 'ring-1 ring-inset ring-yellow-300' : ''
+                      }`}
+                    >
+                      <td className={`p-4 text-sm font-medium text-gray-700 sticky left-0 bg-inherit ${
+                        showDifferences && isDifferent ? 'bg-yellow-50' : ''
+                      }`}>
+                        <div className="flex items-center gap-1">
+                          {item.label}
+                          {showDifferences && isDifferent && (
+                            <AlertCircle className="w-3 h-3 text-yellow-600" aria-label="値が異なります" />
+                          )}
+                        </div>
                       </td>
-                    ))}
-                  </tr>
-                ))}
+                      {products.map(product => {
+                        const isBest = highlightBest &&
+                          itemConfig.higherBetter !== undefined &&
+                          isBestValue(product, item.key, itemConfig.higherBetter);
+
+                        return (
+                          <td
+                            key={product.id}
+                            className={`p-4 text-center text-sm text-gray-900 transition-colors ${
+                              isBest ? 'bg-green-50 ring-2 ring-inset ring-green-400' : ''
+                            }`}
+                          >
+                            <div className="flex items-center justify-center gap-1">
+                              {isBest && <Star className="w-4 h-4 text-green-600 fill-green-600" />}
+                              {item.key === 'isOption' ? (
+                                <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                                  product.isOption
+                                    ? 'bg-orange-100 text-orange-700'
+                                    : 'bg-green-100 text-green-700'
+                                }`}>
+                                  {getValue(product, item.key)}
+                                </span>
+                              ) : item.key === 'description' ? (
+                                <span className="text-xs text-gray-600 line-clamp-3">
+                                  {getValue(product, item.key)}
+                                </span>
+                              ) : (
+                                <span className={isBest ? 'font-bold text-green-700' : ''}>
+                                  {getValue(product, item.key)}
+                                </span>
+                              )}
+                            </div>
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  );
+                })}
 
                 {/* カラーバリエーション行 */}
                 <tr className="bg-white">

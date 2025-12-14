@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useCallback } from 'react';
 import {
   Zap,
   Star,
@@ -13,6 +13,8 @@ import { Card } from '../common/Card';
 import { useCartStore } from '../../stores/useCartStore';
 import { formatPrice } from '../../lib/utils';
 import type { Product } from '../../types/product';
+import { useTimeout } from '../../hooks/useTimeout';
+import { STORAGE_KEYS } from '../../lib/constants';
 
 interface QuickSelectPanelProps {
   products: Product[];
@@ -33,8 +35,11 @@ export const QuickSelectPanel: React.FC<QuickSelectPanelProps> = ({
   products,
 }) => {
   const { addItem, items } = useCartStore();
+  const { setTimeout } = useTimeout();
   const [selectedSetId, setSelectedSetId] = useState<string | null>(null);
   const [isApplying, setIsApplying] = useState(false);
+  const [focusedIndex, setFocusedIndex] = useState(-1);
+  const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   // 標準品のみ抽出
   const standardProducts = useMemo(() => {
@@ -77,7 +82,7 @@ export const QuickSelectPanel: React.FC<QuickSelectPanelProps> = ({
   }, [standardProducts, popularProducts]);
 
   // セット適用
-  const applyQuickSet = async (set: QuickSelectSet) => {
+  const applyQuickSet = useCallback(async (set: QuickSelectSet) => {
     setIsApplying(true);
     setSelectedSetId(set.id);
 
@@ -96,7 +101,7 @@ export const QuickSelectPanel: React.FC<QuickSelectPanelProps> = ({
         addItem(product, 1, selectedVariant);
 
         // 視覚的フィードバック用の遅延
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise(resolve => globalThis.setTimeout(resolve, 100));
       }
     }
 
@@ -104,7 +109,48 @@ export const QuickSelectPanel: React.FC<QuickSelectPanelProps> = ({
       setIsApplying(false);
       setSelectedSetId(null);
     }, 500);
-  };
+  }, [items, addItem, setTimeout]);
+
+  // キーボードナビゲーション
+  const handleKeyDown = useCallback((e: React.KeyboardEvent, index: number, set: QuickSelectSet) => {
+    const totalButtons = quickSets.length;
+
+    switch (e.key) {
+      case 'ArrowDown': {
+        e.preventDefault();
+        const nextIndex = (index + 1) % totalButtons;
+        setFocusedIndex(nextIndex);
+        buttonRefs.current[nextIndex]?.focus();
+        break;
+      }
+      case 'ArrowUp': {
+        e.preventDefault();
+        const prevIndex = (index - 1 + totalButtons) % totalButtons;
+        setFocusedIndex(prevIndex);
+        buttonRefs.current[prevIndex]?.focus();
+        break;
+      }
+      case 'Enter':
+      case ' ':
+        e.preventDefault();
+        if (!isApplying && set.products.length > 0) {
+          applyQuickSet(set);
+        }
+        break;
+      case 'Home':
+        e.preventDefault();
+        setFocusedIndex(0);
+        buttonRefs.current[0]?.focus();
+        break;
+      case 'End': {
+        e.preventDefault();
+        const lastIndex = totalButtons - 1;
+        setFocusedIndex(lastIndex);
+        buttonRefs.current[lastIndex]?.focus();
+        break;
+      }
+    }
+  }, [quickSets.length, isApplying, applyQuickSet]);
 
   // 選択済み商品数
   const selectedCount = useMemo(() => {
@@ -138,13 +184,19 @@ export const QuickSelectPanel: React.FC<QuickSelectPanelProps> = ({
       </div>
 
       {/* クイックセット */}
-      <div className="space-y-3">
-        {quickSets.map(set => (
+      <div className="space-y-3" role="listbox" aria-label="クイックセレクトオプション">
+        {quickSets.map((set, index) => (
           <button
             key={set.id}
+            ref={(el) => { buttonRefs.current[index] = el; }}
             onClick={() => applyQuickSet(set)}
+            onKeyDown={(e) => handleKeyDown(e, index, set)}
+            onFocus={() => setFocusedIndex(index)}
             disabled={isApplying || set.products.length === 0}
-            className={`w-full p-4 rounded-xl border-2 transition-all duration-300 ${
+            role="option"
+            aria-selected={selectedSetId === set.id}
+            tabIndex={focusedIndex === index || (focusedIndex === -1 && index === 0) ? 0 : -1}
+            className={`w-full p-4 rounded-xl border-2 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${
               selectedSetId === set.id
                 ? 'border-indigo-500 bg-indigo-100 dark:bg-indigo-900/50 scale-[1.02]'
                 : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-indigo-300 hover:shadow-lg'
@@ -229,7 +281,7 @@ export const RecentSelectionsPanel: React.FC<{
   // ローカルストレージから最近の選択を取得
   const recentSelections = useMemo(() => {
     try {
-      const stored = localStorage.getItem('lifex-recent-selections');
+      const stored = localStorage.getItem(STORAGE_KEYS.RECENT_SELECTIONS);
       return stored ? JSON.parse(stored).slice(0, 5) : [];
     } catch {
       return [];

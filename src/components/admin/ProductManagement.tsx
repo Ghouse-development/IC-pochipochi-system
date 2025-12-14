@@ -4,6 +4,8 @@ import type { Product, ProductVariant, PlanType, UnitType } from '../../types/pr
 import { ImageUpload } from './ImageUpload';
 import { ImageService } from '../../services/imageService';
 import type { ProductImage } from '../../lib/supabase';
+import { ConfirmDialog } from '../common/ConfirmDialog';
+import { getProductPrice } from '../../lib/utils';
 
 interface ProductManagementProps {
   products: Product[];
@@ -21,6 +23,7 @@ export function ProductManagement({ products, onProductsChange }: ProductManagem
   const [showImageUpload, setShowImageUpload] = useState(false);
   const [selectedProductForImage, setSelectedProductForImage] = useState<Product | null>(null);
   const [productImages, setProductImages] = useState<{ [key: string]: ProductImage[] }>({});
+  const [deleteTarget, setDeleteTarget] = useState<Product | null>(null);
 
   useEffect(() => {
     setLocalProducts(products);
@@ -92,12 +95,16 @@ export function ProductManagement({ products, onProductsChange }: ProductManagem
     setIsCreating(true);
   };
 
-  const handleDelete = (productId: string) => {
-    if (confirm('この製品を削除してもよろしいですか？')) {
-      const updatedProducts = localProducts.filter(p => p.id !== productId);
-      setLocalProducts(updatedProducts);
-      onProductsChange(updatedProducts);
-    }
+  const handleDelete = (product: Product) => {
+    setDeleteTarget(product);
+  };
+
+  const executeDelete = () => {
+    if (!deleteTarget) return;
+    const updatedProducts = localProducts.filter(p => p.id !== deleteTarget.id);
+    setLocalProducts(updatedProducts);
+    onProductsChange(updatedProducts);
+    setDeleteTarget(null);
   };
 
   const handleSave = () => {
@@ -290,7 +297,7 @@ export function ProductManagement({ products, onProductsChange }: ProductManagem
                   </div>
                 </td>
                 <td className="p-3">
-                  ¥{(product.pricing.find(p => p.plan === 'LACIE')?.price || 0).toLocaleString()}
+                  ¥{getProductPrice(product.pricing).toLocaleString()}
                 </td>
                 <td className="p-3">
                   <div className="flex gap-2">
@@ -316,7 +323,7 @@ export function ProductManagement({ products, onProductsChange }: ProductManagem
                       <Copy className="w-4 h-4" />
                     </button>
                     <button
-                      onClick={() => handleDelete(product.id)}
+                      onClick={() => handleDelete(product)}
                       className="p-1 text-red-600 hover:bg-red-50 rounded"
                       title="削除"
                     >
@@ -442,7 +449,7 @@ export function ProductManagement({ products, onProductsChange }: ProductManagem
                     <label className="block text-sm font-medium mb-1">LACIE価格</label>
                     <input
                       type="number"
-                      value={editingProduct.pricing.find(p => p.plan === 'LACIE')?.price || 0}
+                      value={getProductPrice(editingProduct.pricing)}
                       onChange={(e) => handlePricingChange('LACIE', Number(e.target.value))}
                       className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
@@ -620,6 +627,17 @@ export function ProductManagement({ products, onProductsChange }: ProductManagem
           </div>
         </div>
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={!!deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={executeDelete}
+        title="製品の削除"
+        message={`「${deleteTarget?.name}」を削除してもよろしいですか？`}
+        variant="danger"
+        confirmText="削除する"
+      />
     </div>
   );
 }

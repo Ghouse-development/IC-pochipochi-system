@@ -1,4 +1,4 @@
-import * as XLSX from 'xlsx';
+import { loadXLSX } from '../lib/xlsxLoader';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import type { CartItem } from '../types/product';
@@ -49,6 +49,7 @@ export const exportToExcel = async (
     };
   }
 ) => {
+  const XLSX = await loadXLSX();
   const planId = options?.planId || 'LACIE';
   // システム設定から税率を取得（オプションで上書き可能）
   const taxRate = options?.taxRate ?? await SettingsService.getTaxRate().catch(() => DEFAULT_TAX_RATE);
@@ -371,7 +372,7 @@ export const exportToPDF = async (
 };
 
 // 仕様書生成（A3横 Excel形式）
-export const exportSpecificationSheet = (
+export const exportSpecificationSheet = async (
   items: CartItem[],
   customerName: string,
   projectName: string,
@@ -383,6 +384,7 @@ export const exportSpecificationSheet = (
     fireResistance: string;
   }
 ) => {
+  const XLSX = await loadXLSX();
   const wb = XLSX.utils.book_new();
 
   // ヘッダー
@@ -475,6 +477,7 @@ export const exportPresentationData = async (
     companyName?: string;
   }
 ) => {
+  const XLSX = await loadXLSX();
   const wb = XLSX.utils.book_new();
 
   // 表紙シート
@@ -570,7 +573,7 @@ export const exportAllFormats = async (
   const [excelFile, pdfFile, specFile, presentationFile] = await Promise.all([
     exportToExcel(items, customerName, projectName, options),
     exportToPDF(items, customerName, projectName, options),
-    Promise.resolve(exportSpecificationSheet(items, customerName, projectName, options?.buildingInfo)),
+    exportSpecificationSheet(items, customerName, projectName, options?.buildingInfo),
     exportPresentationData(items, customerName, projectName, {
       companyName: options?.companyInfo?.name,
       logoUrl: options?.companyInfo?.logoUrl,

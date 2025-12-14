@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {
   Plus,
   Search,
@@ -13,6 +13,11 @@ import {
 } from 'lucide-react';
 import { projectsApi, productsApi, usersApi } from '../../services/api';
 import type { Project, Product, User as UserType } from '../../types/database';
+import { ConfirmDialog } from '../common/ConfirmDialog';
+import { createLogger } from '../../lib/logger';
+import { useDebounce } from '../../hooks/useDebounce';
+
+const logger = createLogger('ProjectManager');
 
 interface ProjectManagerProps {
   onSelectProject?: (projectId: string) => void;
@@ -24,11 +29,13 @@ export function ProjectManager({ onSelectProject }: ProjectManagerProps) {
   const [coordinators, setCoordinators] = useState<UserType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [productFilter, setProductFilter] = useState<string>('all');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [lockReleaseProjectId, setLockReleaseProjectId] = useState<string | null>(null);
 
   useEffect(() => {
     loadData();
@@ -48,21 +55,24 @@ export function ProjectManager({ onSelectProject }: ProjectManagerProps) {
       setCoordinators(coordinatorsData);
     } catch (err) {
       setError('データの読み込みに失敗しました');
-      console.error(err);
+      logger.error(err);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const filteredProjects = projects.filter((project) => {
-    const matchesSearch =
-      project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      project.project_code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      project.customer_name?.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || project.status === statusFilter;
-    const matchesProduct = productFilter === 'all' || project.product_id === productFilter;
-    return matchesSearch && matchesStatus && matchesProduct;
-  });
+  // フィルタリング（デバウンス適用）
+  const filteredProjects = useMemo(() => {
+    return projects.filter((project) => {
+      const matchesSearch =
+        project.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+        project.project_code.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+        project.customer_name?.toLowerCase().includes(debouncedSearchTerm.toLowerCase());
+      const matchesStatus = statusFilter === 'all' || project.status === statusFilter;
+      const matchesProduct = productFilter === 'all' || project.product_id === productFilter;
+      return matchesSearch && matchesStatus && matchesProduct;
+    });
+  }, [projects, debouncedSearchTerm, statusFilter, productFilter]);
 
   const getStatusBadge = (status: string) => {
     const styles: Record<string, string> = {
@@ -86,13 +96,19 @@ export function ProjectManager({ onSelectProject }: ProjectManagerProps) {
     );
   };
 
-  const handleForceReleaseLock = async (projectId: string) => {
-    if (!confirm('編集ロックを強制解除しますか？')) return;
+  const handleForceReleaseLock = (projectId: string) => {
+    setLockReleaseProjectId(projectId);
+  };
+
+  const executeForceReleaseLock = async () => {
+    if (!lockReleaseProjectId) return;
     try {
-      await projectsApi.forceReleaseLock(projectId);
+      await projectsApi.forceReleaseLock(lockReleaseProjectId);
       await loadData();
     } catch (err) {
-      console.error('Failed to release lock:', err);
+      logger.error('Failed to release lock:', err);
+    } finally {
+      setLockReleaseProjectId(null);
     }
   };
 
@@ -137,6 +153,7 @@ export function ProjectManager({ onSelectProject }: ProjectManagerProps) {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                aria-label="プロジェクト検索"
               />
             </div>
           </div>
@@ -145,6 +162,7 @@ export function ProjectManager({ onSelectProject }: ProjectManagerProps) {
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
               className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+              aria-label="ステータスでフィルター"
             >
               <option value="all">全ステータス</option>
               <option value="draft">下書き</option>
@@ -157,6 +175,7 @@ export function ProjectManager({ onSelectProject }: ProjectManagerProps) {
               value={productFilter}
               onChange={(e) => setProductFilter(e.target.value)}
               className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+              aria-label="プランでフィルター"
             >
               <option value="all">全プラン</option>
               {products.map((product) => (
@@ -335,6 +354,17 @@ export function ProjectManager({ onSelectProject }: ProjectManagerProps) {
           }}
         />
       )}
+
+      {/* Lock Release Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={!!lockReleaseProjectId}
+        onClose={() => setLockReleaseProjectId(null)}
+        onConfirm={executeForceReleaseLock}
+        title="ロック解除"
+        message="編集ロックを強制解除しますか？"
+        variant="warning"
+        confirmText="解除する"
+      />
     </div>
   );
 }
@@ -413,7 +443,7 @@ function CreateProjectModal({
       onCreated();
     } catch (err) {
       setError('プロジェクトの作成に失敗しました');
-      console.error(err);
+      logger.error(err);
     } finally {
       setIsSaving(false);
     }
@@ -592,7 +622,7 @@ function EditProjectModal({
       onUpdated();
     } catch (err) {
       setError('プロジェクトの更新に失敗しました');
-      console.error(err);
+      logger.error(err);
     } finally {
       setIsSaving(false);
     }

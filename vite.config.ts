@@ -21,6 +21,10 @@ export default defineConfig({
           'state': ['zustand'],
           // ユーティリティ
           'utils': ['html2canvas', 'dompurify'],
+          // 仮想スクロール
+          'virtual': ['@tanstack/react-virtual'],
+          // QRコード
+          'qrcode': ['qrcode.react'],
         },
       },
     },
@@ -30,6 +34,11 @@ export default defineConfig({
     sourcemap: false,
     // minify設定（esbuild使用 - Vite内蔵）
     minify: 'esbuild',
+  },
+  // esbuild設定（本番ビルドでconsole.log除去）
+  esbuild: {
+    drop: process.env.NODE_ENV === 'production' ? ['console', 'debugger'] : [],
+    pure: process.env.NODE_ENV === 'production' ? ['console.log', 'console.info', 'console.debug'] : [],
   },
   // 開発サーバー設定
   server: {

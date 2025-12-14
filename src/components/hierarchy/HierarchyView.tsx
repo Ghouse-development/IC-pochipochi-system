@@ -86,8 +86,8 @@ function TreeNode({ node, level }: TreeNodeProps) {
 
       {isExpanded && hasChildren && (
         <div>
-          {node.children!.map((child, index) => (
-            <TreeNode key={`${child.name}-${index}`} node={child} level={level + 1} />
+          {node.children!.map((child) => (
+            <TreeNode key={`${child.type}-${child.name}`} node={child} level={level + 1} />
           ))}
         </div>
       )}
@@ -155,8 +155,8 @@ export function HierarchyView({ data }: HierarchyViewProps) {
             データがありません
           </p>
         ) : (
-          filteredData.map((node, index) => (
-            <TreeNode key={`${node.name}-${index}`} node={node} level={0} />
+          filteredData.map((node) => (
+            <TreeNode key={`${node.type}-${node.name}`} node={node} level={0} />
           ))
         )}
       </div>

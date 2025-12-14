@@ -33,7 +33,7 @@ const shouldLog = (level: LogLevel): boolean => {
 };
 
 const formatMessage = (level: LogLevel, message: string): string => {
-  const timestamp = new Date().toISOString().substr(11, 12);
+  const timestamp = new Date().toISOString().slice(11, 23);
   return `${config.prefix} [${timestamp}] [${level.toUpperCase()}] ${message}`;
 };
 

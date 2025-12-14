@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Trash2, Plus, Minus, Save, CheckCircle, Download, FileText, Star, ShoppingBag, FileSpreadsheet, Presentation, Package } from 'lucide-react';
 import { useCartStore } from '../../stores/useCartStore';
+import { useOperationLogStore } from '../../stores/useOperationLogStore';
 import { formatPrice } from '../../lib/utils';
 import { UNIT_SYMBOLS } from '../../types/product';
 import { Badge } from '../common/Badge';
@@ -8,6 +9,10 @@ import { useToast } from '../common/Toast';
 import { ConfirmDialog } from '../common/ConfirmDialog';
 import { exportToExcel, exportToPDF, exportSpecificationSheet, exportPresentationData, exportAllFormats } from '../../utils/exportEstimate';
 import { supabase } from '../../lib/supabase';
+import { createLogger } from '../../lib/logger';
+import { STORAGE_KEYS } from '../../lib/constants';
+
+const logger = createLogger('CartSidebarEnhanced');
 
 interface CartSidebarEnhancedProps {
   isOpen: boolean;
@@ -16,6 +21,7 @@ interface CartSidebarEnhancedProps {
 
 export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen, onClose }) => {
   const { items, removeItem, updateQuantity, getTotalPrice, clearCart, selectedPlanId } = useCartStore();
+  const addLog = useOperationLogStore((state) => state.addLog);
   const toast = useToast();
   const [isFinalized, setIsFinalized] = useState(false);
   const [customerName, setCustomerName] = useState('');
@@ -42,6 +48,41 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
     fetchPlanName();
   }, [selectedPlanId]);
 
+  // 下書き見積の自動復元（マウント時に一度だけ実行）
+  useEffect(() => {
+    const draftData = localStorage.getItem(STORAGE_KEYS.DRAFT_ESTIMATE);
+    // items.length === 0 はガード条件として使用（依存配列に含めると無限ループの原因となる）
+    if (draftData && items.length === 0) {
+      try {
+        const parsed = JSON.parse(draftData);
+        // データの形式チェック
+        if (!parsed || typeof parsed !== 'object' || !parsed.date) {
+          throw new Error('Invalid draft format');
+        }
+        // 24時間以内の下書きのみ復元
+        const draftDate = new Date(parsed.date);
+        if (isNaN(draftDate.getTime())) {
+          throw new Error('Invalid date format');
+        }
+        const hoursSinceSave = (Date.now() - draftDate.getTime()) / (1000 * 60 * 60);
+        if (hoursSinceSave < 24 && parsed.customerName) {
+          setCustomerName((parsed.customerName || '').trim());
+          setProjectName((parsed.projectName || '').trim());
+          toast.info('下書き復元', '前回の入力内容を復元しました');
+        } else if (hoursSinceSave >= 24) {
+          // 古い下書きは削除
+          localStorage.removeItem(STORAGE_KEYS.DRAFT_ESTIMATE);
+        }
+      } catch (error) {
+        // 破損した下書きを削除
+        logger.warn('Draft restore failed:', error);
+        localStorage.removeItem('lifex_draft_estimate');
+        addLog('error', '下書き復元エラー', { error: String(error) });
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [addLog, toast]);
+
   const handleTemporarySave = () => {
     const saveData = {
       items,
@@ -50,15 +91,26 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
       date: new Date().toISOString(),
       status: 'draft'
     };
-    localStorage.setItem('lifex_draft_estimate', JSON.stringify(saveData));
+    localStorage.setItem(STORAGE_KEYS.DRAFT_ESTIMATE, JSON.stringify(saveData));
+    addLog('estimate_save', '見積を一時保存', { customerName, projectName, itemCount: items.length });
     toast.success('一時保存完了', '見積が一時保存されました');
   };
 
   const handleFinalize = () => {
-    if (!customerName || !projectName) {
+    const trimmedCustomerName = customerName.trim();
+    const trimmedProjectName = projectName.trim();
+
+    if (!trimmedCustomerName || !trimmedProjectName) {
       toast.warning('入力エラー', 'お客様名と工事名を入力してください');
       return;
     }
+    if (trimmedCustomerName.length > 100 || trimmedProjectName.length > 100) {
+      toast.warning('入力エラー', 'お客様名・工事名は100文字以内で入力してください');
+      return;
+    }
+    // トリムした値を反映
+    setCustomerName(trimmedCustomerName);
+    setProjectName(trimmedProjectName);
     setShowFinalizeConfirm(true);
   };
 
@@ -73,10 +125,23 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
     };
 
     // 確定データを保存
-    const existingData = JSON.parse(localStorage.getItem('lifex_finalized_estimates') || '[]');
+    let existingData: typeof finalData[] = [];
+    try {
+      const stored = localStorage.getItem(STORAGE_KEYS.FINALIZED_ESTIMATES);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) {
+          existingData = parsed;
+        }
+      }
+    } catch (error) {
+      logger.warn('Failed to parse finalized estimates:', error);
+      addLog('error', '確定データの読み込みエラー', { error: String(error) });
+    }
     existingData.push(finalData);
-    localStorage.setItem('lifex_finalized_estimates', JSON.stringify(existingData));
+    localStorage.setItem(STORAGE_KEYS.FINALIZED_ESTIMATES, JSON.stringify(existingData));
 
+    addLog('estimate_finalize', '見積を確定', { customerName, projectName, totalPrice, itemCount: items.length });
     setIsFinalized(true);
     setShowFinalizeConfirm(false);
     toast.success('確定完了', '見積が確定されました');
@@ -87,6 +152,7 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
   };
 
   const executeClearCart = () => {
+    addLog('cart_clear', 'カートをクリア', { itemCount: items.length });
     clearCart();
     setShowClearConfirm(false);
     toast.success('クリア完了', '選択をクリアしました');
@@ -97,6 +163,7 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
       toast.warning('入力エラー', 'お客様名と工事名を入力してください');
       return;
     }
+    addLog('excel_export', 'Excel見積書を出力', { customerName, projectName });
     exportToExcel(items, customerName, projectName);
     toast.success('Excel出力完了', '見積書をダウンロードしました');
   };
@@ -106,7 +173,17 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
       toast.warning('入力エラー', 'お客様名と工事名を入力してください');
       return;
     }
+    addLog('pdf_export', 'PDF見積書を出力', { customerName, projectName });
     exportToPDF(items, customerName, projectName);
+    toast.success('PDF出力完了', '見積書をダウンロードしました');
+  };
+
+  // ワンクリックPDF出力（名前未入力でもデフォルト値で出力）
+  const handleQuickPDF = () => {
+    const name = customerName || 'お客様';
+    const project = projectName || `見積_${new Date().toLocaleDateString('ja-JP').replace(/\//g, '')}`;
+    addLog('pdf_export', 'クイックPDF出力', { customerName: name, projectName: project, itemCount: items.length });
+    exportToPDF(items, name, project);
     toast.success('PDF出力完了', '見積書をダウンロードしました');
   };
 
@@ -115,6 +192,7 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
       toast.warning('入力エラー', 'お客様名と工事名を入力してください');
       return;
     }
+    addLog('spec_export', '仕様書を出力', { customerName, projectName, itemCount: items.length });
     exportSpecificationSheet(items, customerName, projectName);
     toast.success('仕様書出力完了', '仕様書をダウンロードしました');
   };
@@ -124,6 +202,7 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
       toast.warning('入力エラー', 'お客様名と工事名を入力してください');
       return;
     }
+    addLog('presentation_export', '提案資料を出力', { customerName, projectName, itemCount: items.length });
     await exportPresentationData(items, customerName, projectName);
     toast.success('提案資料出力完了', '提案資料をダウンロードしました');
   };
@@ -134,11 +213,12 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
       return;
     }
     setIsExporting(true);
+    addLog('bulk_export', '一括出力を実行', { customerName, projectName, itemCount: items.length });
     try {
       await exportAllFormats(items, customerName, projectName);
       toast.success('一括出力完了', '全形式のダウンロードが完了しました');
     } catch (error) {
-      console.error('Export error:', error);
+      logger.error('Export error:', error);
       toast.error('エラー', 'エクスポート中にエラーが発生しました');
     } finally {
       setIsExporting(false);
@@ -329,6 +409,15 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
             <div className="space-y-2">
               {!isFinalized ? (
                 <>
+                  {/* ワンクリックPDF出力ボタン */}
+                  <button
+                    onClick={handleQuickPDF}
+                    className="w-full px-4 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl font-medium hover:from-red-600 hover:to-red-700 transition-colors flex items-center justify-center gap-2 shadow-lg"
+                  >
+                    <FileText className="w-5 h-5" />
+                    PDF見積書をダウンロード
+                  </button>
+
                   <div className="flex gap-2">
                     <button
                       onClick={handleTemporarySave}

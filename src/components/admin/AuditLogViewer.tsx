@@ -15,6 +15,9 @@ import {
 } from 'lucide-react';
 import { AuditService, type AuditLogSummary, type DailyChangeSummary } from '../../services/auditService';
 import { useUser } from '../../contexts/UserContext';
+import { createLogger } from '../../lib/logger';
+
+const logger = createLogger('AuditLogViewer');
 
 export function AuditLogViewer() {
   const { currentUser } = useUser();
@@ -46,7 +49,7 @@ export function AuditLogViewer() {
 
       setLogs(data);
     } catch (error) {
-      console.error('Error loading logs:', error);
+      logger.error('Error loading logs:', error);
     } finally {
       setLoading(false);
     }
@@ -57,7 +60,7 @@ export function AuditLogViewer() {
       const data = await AuditService.getDailyChangeSummary(30);
       setDailySummary(data);
     } catch (error) {
-      console.error('Error loading daily summary:', error);
+      logger.error('Error loading daily summary:', error);
     }
   };
 

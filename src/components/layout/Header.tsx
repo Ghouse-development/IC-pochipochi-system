@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { ShoppingCart, User, Settings, Menu, X, FileText, Upload, Share2, Scale, Moon, Sun, LogOut, BarChart3 } from 'lucide-react';
 import { useCartStore } from '../../stores/useCartStore';
 import { useThemeStore } from '../../stores/useThemeStore';
@@ -34,6 +34,21 @@ export const Header: React.FC<HeaderProps> = ({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
+  // キーボードイベント: Escapeでメニューを閉じる
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      if (isUserMenuOpen) setIsUserMenuOpen(false);
+      if (isMobileMenuOpen) setIsMobileMenuOpen(false);
+    }
+  }, [isUserMenuOpen, isMobileMenuOpen]);
+
+  useEffect(() => {
+    if (isUserMenuOpen || isMobileMenuOpen) {
+      document.addEventListener('keydown', handleKeyDown);
+      return () => document.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [isUserMenuOpen, isMobileMenuOpen, handleKeyDown]);
+
   return (
     <>
       <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-40">
@@ -44,6 +59,9 @@ export const Header: React.FC<HeaderProps> = ({
               <button
                 className="lg:hidden p-2 hover:bg-gray-100 rounded-lg"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                aria-label={isMobileMenuOpen ? 'メニューを閉じる' : 'メニューを開く'}
+                aria-expanded={isMobileMenuOpen}
+                aria-controls="mobile-menu"
               >
                 {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>
@@ -123,6 +141,10 @@ export const Header: React.FC<HeaderProps> = ({
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                   className="hidden sm:flex items-center gap-2 p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                  aria-label="ユーザーメニュー"
+                  aria-expanded={isUserMenuOpen}
+                  aria-haspopup="menu"
+                  aria-controls="user-menu"
                 >
                   <User className="w-5 h-5 text-gray-700 dark:text-gray-300" />
                   {user && (
@@ -136,8 +158,14 @@ export const Header: React.FC<HeaderProps> = ({
                     <div
                       className="fixed inset-0 z-40"
                       onClick={() => setIsUserMenuOpen(false)}
+                      aria-hidden="true"
                     />
-                    <div className="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 z-50 py-2">
+                    <div
+                      id="user-menu"
+                      role="menu"
+                      aria-label="ユーザーメニュー"
+                      className="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 z-50 py-2"
+                    >
                       <div className="px-4 py-2 border-b border-gray-100 dark:border-gray-700">
                         <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
                           {user?.email}
@@ -149,6 +177,7 @@ export const Header: React.FC<HeaderProps> = ({
                       {isAdmin && (
                         <>
                           <button
+                            role="menuitem"
                             onClick={() => {
                               setIsUserMenuOpen(false);
                               onAdminClick?.();
@@ -159,6 +188,7 @@ export const Header: React.FC<HeaderProps> = ({
                             管理画面
                           </button>
                           <button
+                            role="menuitem"
                             onClick={() => {
                               setIsUserMenuOpen(false);
                               onHierarchyClick?.();
@@ -171,6 +201,7 @@ export const Header: React.FC<HeaderProps> = ({
                         </>
                       )}
                       <button
+                        role="menuitem"
                         onClick={() => {
                           setIsUserMenuOpen(false);
                           signOut?.();
@@ -224,17 +255,24 @@ export const Header: React.FC<HeaderProps> = ({
       
       {/* モバイルメニュー */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden fixed inset-0 z-50 bg-black/50" onClick={() => setIsMobileMenuOpen(false)}>
-          <div className="bg-white w-64 h-full shadow-xl" onClick={(e) => e.stopPropagation()}>
+        <div className="lg:hidden fixed inset-0 z-50 bg-black/50" onClick={() => setIsMobileMenuOpen(false)} aria-hidden="true">
+          <nav
+            id="mobile-menu"
+            role="navigation"
+            aria-label="モバイルメニュー"
+            className="bg-white w-64 h-full shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="p-4 border-b">
               <h2 className="font-bold text-lg">メニュー</h2>
             </div>
-            <nav className="p-4">
-              <ul className="space-y-2">
+            <div className="p-4">
+              <ul className="space-y-2" role="menu">
                 {isAdmin && (
                   <>
-                    <li className="pt-4 border-t">
+                    <li className="pt-4 border-t" role="none">
                       <button
+                        role="menuitem"
                         onClick={() => {
                           if (onHierarchyClick) onHierarchyClick();
                           setIsMobileMenuOpen(false);
@@ -244,8 +282,9 @@ export const Header: React.FC<HeaderProps> = ({
                         階層表示
                       </button>
                     </li>
-                    <li>
+                    <li role="none">
                       <button
+                        role="menuitem"
                         onClick={() => {
                           if (onAdminClick) onAdminClick();
                           setIsMobileMenuOpen(false);
@@ -258,8 +297,8 @@ export const Header: React.FC<HeaderProps> = ({
                   </>
                 )}
               </ul>
-            </nav>
-          </div>
+            </div>
+          </nav>
         </div>
       )}
     </>

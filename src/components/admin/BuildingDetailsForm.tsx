@@ -12,6 +12,9 @@ import {
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import type { Project } from '../../types/database';
+import { createLogger } from '../../lib/logger';
+
+const logger = createLogger('BuildingDetailsForm');
 
 interface BuildingDetailsFormProps {
   projectId: string;
@@ -122,7 +125,7 @@ export function BuildingDetailsForm({ projectId, onUpdate }: BuildingDetailsForm
         });
       }
     } catch (err) {
-      console.error('Error loading project:', err);
+      logger.error('Error loading project:', err);
       setError('プロジェクト情報の読み込みに失敗しました');
     } finally {
       setIsLoading(false);
@@ -133,6 +136,23 @@ export function BuildingDetailsForm({ projectId, onUpdate }: BuildingDetailsForm
     setIsSaving(true);
     setError(null);
     setSuccess(null);
+
+    // バリデーション
+    if (formData.floors < 1 || formData.floors > 10) {
+      setError('階数は1〜10の範囲で入力してください');
+      setIsSaving(false);
+      return;
+    }
+    if (formData.floor_area !== null && (formData.floor_area < 10 || formData.floor_area > 1000)) {
+      setError('延床面積は10〜1000㎡の範囲で入力してください');
+      setIsSaving(false);
+      return;
+    }
+    if (formData.ceiling_height !== null && (formData.ceiling_height < 2000 || formData.ceiling_height > 5000)) {
+      setError('天井高は2000〜5000mmの範囲で入力してください');
+      setIsSaving(false);
+      return;
+    }
 
     try {
       const { error } = await supabase
@@ -157,7 +177,7 @@ export function BuildingDetailsForm({ projectId, onUpdate }: BuildingDetailsForm
       setSuccess('建物情報を保存しました');
       onUpdate?.(formData);
     } catch (err) {
-      console.error('Error saving project:', err);
+      logger.error('Error saving project:', err);
       setError('保存に失敗しました');
     } finally {
       setIsSaving(false);
@@ -419,6 +439,8 @@ export function BuildingDetailsForm({ projectId, onUpdate }: BuildingDetailsForm
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
                   placeholder="例: 120"
                   step="0.01"
+                  min="10"
+                  max="1000"
                 />
               </div>
               <div>
@@ -434,6 +456,8 @@ export function BuildingDetailsForm({ projectId, onUpdate }: BuildingDetailsForm
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
                   placeholder="例: 2400"
                   step="10"
+                  min="2000"
+                  max="5000"
                 />
               </div>
             </div>

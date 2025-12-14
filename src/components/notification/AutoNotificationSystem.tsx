@@ -299,8 +299,8 @@ export const AutoNotificationSystem: React.FC<AutoNotificationSystemProps> = ({
 
 // 通知送信ユーティリティ
 export const sendDepartmentNotification = async (
-  departmentId: string,
-  projectData: {
+  _departmentId: string,
+  _projectData: {
     projectId: string;
     projectName: string;
     customerName: string;
@@ -310,6 +310,6 @@ export const sendDepartmentNotification = async (
 ) => {
   // Supabase Edge Functionを使用した通知送信
   // 実際の実装ではここでAPIを呼び出す
-  console.log('Sending notification to department:', departmentId, projectData);
+  // デバッグ: Sending notification to department: _departmentId, _projectData
   return { success: true };
 };

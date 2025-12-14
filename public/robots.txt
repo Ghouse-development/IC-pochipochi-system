@@ -1,0 +1,28 @@
+# IC-ぽちぽちシステム robots.txt
+
+User-agent: *
+Allow: /
+
+# 管理画面はクロール除外
+Disallow: /admin
+Disallow: /admin/*
+
+# APIエンドポイントは除外
+Disallow: /api/
+Disallow: /api/*
+
+# 認証関連は除外
+Disallow: /auth/
+Disallow: /login
+Disallow: /logout
+
+# 静的アセット
+Allow: /assets/
+Allow: /icons/
+Allow: /images/
+
+# サイトマップ
+Sitemap: https://ic-pochipochi-system.vercel.app/sitemap.xml
+
+# クロール間隔（秒）
+Crawl-delay: 1

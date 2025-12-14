@@ -1,7 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Upload, X, Image as ImageIcon, Loader2 } from 'lucide-react';
 import { ImageService } from '../../services/imageService';
 import type { ProductImage } from '../../lib/supabase';
+import { createLogger } from '../../lib/logger';
+
+const logger = createLogger('ImageUpload');
 
 interface ImageUploadProps {
   productCode: string;
@@ -25,20 +28,44 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // 許可する画像形式（SVGを除外してXSSリスクを回避）
+  const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+  const ACCEPT_STRING = ALLOWED_IMAGE_TYPES.join(',');
+
+  // ObjectURLのクリーンアップ（コンポーネントアンマウント時）
+  useEffect(() => {
+    return () => {
+      previewUrls.forEach(url => URL.revokeObjectURL(url));
+    };
+  }, [previewUrls]);
+
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (!files || files.length === 0) return;
+
+    // ファイルタイプのバリデーション
+    const validFiles = Array.from(files).filter(file => {
+      if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+        logger.warn(`Invalid file type: ${file.type}. Allowed: ${ALLOWED_IMAGE_TYPES.join(', ')}`);
+        return false;
+      }
+      return true;
+    });
+
+    if (validFiles.length === 0) {
+      return;
+    }
 
     setUploading(true);
 
     try {
       // Create preview URLs
-      const previews = Array.from(files).map(file => URL.createObjectURL(file));
+      const previews = validFiles.map(file => URL.createObjectURL(file));
       setPreviewUrls(previews);
 
       // Upload images
       const uploadedImages = await ImageService.batchUploadImages(
-        Array.from(files),
+        validFiles,
         productCode,
         productName,
         category,
@@ -54,7 +81,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
       previews.forEach(url => URL.revokeObjectURL(url));
       setPreviewUrls([]);
     } catch (error) {
-      console.error('Error uploading images:', error);
+      logger.error('Error uploading images:', error);
     } finally {
       setUploading(false);
       if (fileInputRef.current) {
@@ -87,10 +114,12 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
           ref={fileInputRef}
           type="file"
           multiple
-          accept="image/*"
+          accept={ACCEPT_STRING}
           onChange={handleFileSelect}
           className="hidden"
           disabled={uploading}
+          aria-label="画像ファイルを選択"
+          id="image-upload-input"
         />
 
         <button
@@ -118,11 +147,11 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
       {/* Preview URLs */}
       {previewUrls.length > 0 && (
         <div className="grid grid-cols-4 gap-4">
-          {previewUrls.map((url, index) => (
-            <div key={index} className="relative">
+          {previewUrls.map((url) => (
+            <div key={url} className="relative">
               <img
                 src={url}
-                alt={`Preview ${index + 1}`}
+                alt="Preview"
                 className="w-full h-32 object-cover rounded-lg"
               />
               <div className="absolute inset-0 bg-black bg-opacity-50 rounded-lg flex items-center justify-center">

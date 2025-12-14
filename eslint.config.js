@@ -6,7 +6,7 @@ import tseslint from 'typescript-eslint'
 import { globalIgnores } from 'eslint/config'
 
 export default tseslint.config([
-  globalIgnores(['dist']),
+  globalIgnores(['dist', 'public/sw.js']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
@@ -26,6 +26,24 @@ export default tseslint.config([
       '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
       // React Hooks依存関係は警告のみ
       'react-hooks/exhaustive-deps': 'warn',
+
+      // === セキュリティルール ===
+      // eval系の禁止
+      'no-eval': 'error',
+      'no-implied-eval': 'error',
+      'no-new-func': 'error',
+
+      // 危険なプロパティアクセスの警告
+      'no-script-url': 'error',
+
+      // コードスタイル
+      'prefer-const': 'warn',
+      'no-var': 'error',
+
+      // TypeScript厳格化
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/explicit-function-return-type': 'off',
+      '@typescript-eslint/no-non-null-assertion': 'warn',
     },
   },
 ])

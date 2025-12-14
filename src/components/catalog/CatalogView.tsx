@@ -93,7 +93,8 @@ export const CatalogView: React.FC<CatalogViewProps> = ({ catalogType = 'interio
   };
 
   const handleProductVariantSelect = () => {
-    // TODO: 選択された製品とバリアントを見積もりに追加する処理を実装
+    // NOTE: 製品選択時の見積追加処理はProductDetailModal内で実装済み
+    // このコールバックはモーダルを閉じる役割のみ
     setIsModalOpen(false);
     setSelectedProduct(null);
   };

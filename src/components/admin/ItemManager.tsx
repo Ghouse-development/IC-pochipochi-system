@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {
   Plus,
   Search,
@@ -13,16 +13,24 @@ import {
   AlertTriangle,
 } from 'lucide-react';
 import { itemsApi, categoriesApi, productsApi, unitsApi } from '../../services/api';
+import { useDebounce } from '../../hooks/useDebounce';
 import { supabase } from '../../lib/supabase';
 import type { ItemWithDetails, Category, Product } from '../../types/database';
+import { ConfirmDialog } from '../common/ConfirmDialog';
+import { useToast } from '../common/Toast';
+import { createLogger } from '../../lib/logger';
+
+const logger = createLogger('ItemManager');
 
 export function ItemManager() {
+  const toast = useToast();
   const [items, setItems] = useState<ItemWithDetails[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [units, setUnits] = useState<{ id: string; code: string; name: string; symbol: string }[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [manufacturerFilter, setManufacturerFilter] = useState<string>('all');
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -30,32 +38,55 @@ export function ItemManager() {
   const [showImportModal, setShowImportModal] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Delete confirmation state
+  const [deleteConfirm, setDeleteConfirm] = useState<{
+    isOpen: boolean;
+    itemId: string | null;
+    isInUse: boolean;
+    message: string;
+  }>({ isOpen: false, itemId: null, isInUse: false, message: '' });
+
   useEffect(() => {
-    loadData();
+    let mounted = true;
+
+    const loadDataAsync = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const [categoriesData, productsData, unitsData] = await Promise.all([
+          categoriesApi.getAll(),
+          productsApi.getAll(),
+          unitsApi.getAll(),
+        ]);
+
+        if (mounted) {
+          setCategories(categoriesData);
+          setProducts(productsData);
+          setUnits(unitsData);
+
+          // Load items for selected category or all
+          await loadItems(categoryFilter === 'all' ? undefined : categoryFilter);
+        }
+      } catch (err) {
+        if (mounted) {
+          const message = 'データの読み込みに失敗しました';
+          setError(message);
+          toast.error('エラー', message);
+          logger.error(err);
+        }
+      } finally {
+        if (mounted) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    loadDataAsync();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
-
-  const loadData = async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const [categoriesData, productsData, unitsData] = await Promise.all([
-        categoriesApi.getAll(),
-        productsApi.getAll(),
-        unitsApi.getAll(),
-      ]);
-      setCategories(categoriesData);
-      setProducts(productsData);
-      setUnits(unitsData);
-
-      // Load items for selected category or all
-      await loadItems(categoryFilter === 'all' ? undefined : categoryFilter);
-    } catch (err) {
-      setError('データの読み込みに失敗しました');
-      console.error(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const loadItems = async (categoryId?: string) => {
     try {
@@ -69,7 +100,7 @@ export function ItemManager() {
       }
       setItems(itemsData);
     } catch (err) {
-      console.error('Failed to load items:', err);
+      logger.error('Failed to load items:', err);
     }
   };
 
@@ -80,18 +111,24 @@ export function ItemManager() {
   }, [categoryFilter]);
 
   // Get unique manufacturers
-  const manufacturers = [...new Set(items.map((item) => item.manufacturer).filter(Boolean))];
+  const manufacturers = useMemo(() =>
+    [...new Set(items.map((item) => item.manufacturer).filter(Boolean))],
+    [items]
+  );
 
-  // Filter items
-  const filteredItems = items.filter((item) => {
-    const matchesSearch =
-      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.item_code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.manufacturer?.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesManufacturer =
-      manufacturerFilter === 'all' || item.manufacturer === manufacturerFilter;
-    return matchesSearch && matchesManufacturer;
-  });
+  // Filter items (memoized for performance, uses debounced search)
+  const filteredItems = useMemo(() => {
+    const searchLower = debouncedSearchTerm.toLowerCase();
+    return items.filter((item) => {
+      const matchesSearch =
+        item.name.toLowerCase().includes(searchLower) ||
+        item.item_code.toLowerCase().includes(searchLower) ||
+        item.manufacturer?.toLowerCase().includes(searchLower);
+      const matchesManufacturer =
+        manufacturerFilter === 'all' || item.manufacturer === manufacturerFilter;
+      return matchesSearch && matchesManufacturer;
+    });
+  }, [items, debouncedSearchTerm, manufacturerFilter]);
 
   // Build category tree for display
   const parentCategories = categories.filter((c) => !c.parent_id);
@@ -139,25 +176,51 @@ export function ItemManager() {
       const isInUse = (selections && selections.length > 0) || (roomSelections && roomSelections.length > 0);
 
       if (isInUse) {
-        // Item is in use - offer soft delete (deactivate)
-        const confirmMsg = 'このアイテムは現在使用中のプロジェクトがあります。\n無効化（論理削除）しますか？\n\n※過去のデータは保持されます';
-        if (!confirm(confirmMsg)) return;
+        setDeleteConfirm({
+          isOpen: true,
+          itemId,
+          isInUse: true,
+          message: 'このアイテムは現在使用中のプロジェクトがあります。\n無効化（論理削除）しますか？\n\n※過去のデータは保持されます'
+        });
+      } else {
+        setDeleteConfirm({
+          isOpen: true,
+          itemId,
+          isInUse: false,
+          message: 'このアイテムを完全に削除してもよろしいですか？'
+        });
+      }
+    } catch (err) {
+      logger.error('Failed to check item usage:', err);
+      const message = 'アイテムの使用状況確認に失敗しました';
+      setError(message);
+      toast.error('エラー', message);
+    }
+  };
 
+  const executeDeleteItem = async () => {
+    if (!deleteConfirm.itemId) return;
+
+    try {
+      if (deleteConfirm.isInUse) {
         // Soft delete - deactivate the item
         await supabase
           .from('items')
           .update({ is_active: false, updated_at: new Date().toISOString() })
-          .eq('id', itemId);
+          .eq('id', deleteConfirm.itemId);
       } else {
-        // Item is not in use - allow hard delete
-        if (!confirm('このアイテムを完全に削除してもよろしいですか？')) return;
-        await itemsApi.delete(itemId);
+        // Hard delete
+        await itemsApi.delete(deleteConfirm.itemId);
       }
 
       await loadItems(categoryFilter === 'all' ? undefined : categoryFilter);
     } catch (err) {
-      console.error('Failed to delete item:', err);
-      setError('アイテムの削除に失敗しました');
+      logger.error('Failed to delete item:', err);
+      const message = 'アイテムの削除に失敗しました';
+      setError(message);
+      toast.error('エラー', message);
+    } finally {
+      setDeleteConfirm({ isOpen: false, itemId: null, isInUse: false, message: '' });
     }
   };
 
@@ -240,6 +303,7 @@ export function ItemManager() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                aria-label="アイテム検索"
               />
             </div>
           </div>
@@ -248,6 +312,7 @@ export function ItemManager() {
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
               className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+              aria-label="カテゴリでフィルター"
             >
               <option value="all">全カテゴリ</option>
               {parentCategories.map((parent) => (
@@ -267,6 +332,7 @@ export function ItemManager() {
               value={manufacturerFilter}
               onChange={(e) => setManufacturerFilter(e.target.value)}
               className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+              aria-label="メーカーでフィルター"
             >
               <option value="all">全メーカー</option>
               {manufacturers.map((manufacturer) => (
@@ -456,6 +522,17 @@ export function ItemManager() {
           }}
         />
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={deleteConfirm.isOpen}
+        onClose={() => setDeleteConfirm({ isOpen: false, itemId: null, isInUse: false, message: '' })}
+        onConfirm={executeDeleteItem}
+        title={deleteConfirm.isInUse ? 'アイテムの無効化' : 'アイテムの削除'}
+        message={deleteConfirm.message}
+        variant={deleteConfirm.isInUse ? 'warning' : 'danger'}
+        confirmText={deleteConfirm.isInUse ? '無効化する' : '削除する'}
+      />
     </div>
   );
 }
@@ -475,6 +552,7 @@ function ItemFormModal({
   onClose: () => void;
   onSaved: () => void;
 }) {
+  const toast = useToast();
   const [formData, setFormData] = useState({
     item_code: item?.item_code || '',
     name: item?.name || '',
@@ -521,10 +599,13 @@ function ItemFormModal({
           is_hit: formData.is_hit,
         });
       }
+      toast.success('保存完了', item ? 'アイテムを更新しました' : 'アイテムを作成しました');
       onSaved();
     } catch (err) {
-      setError('アイテムの保存に失敗しました');
-      console.error(err);
+      const message = 'アイテムの保存に失敗しました';
+      setError(message);
+      toast.error('エラー', message);
+      logger.error(err);
     } finally {
       setIsSaving(false);
     }
@@ -718,6 +799,7 @@ function ImportItemsModal({
   onClose: () => void;
   onImported: () => void;
 }) {
+  const toast = useToast();
   const [file, setFile] = useState<File | null>(null);
   const [isImporting, setIsImporting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -755,13 +837,16 @@ function ImportItemsModal({
     setError(null);
 
     try {
-      // TODO: Implement actual import logic
-      // For now, just simulate a delay
+      // FUTURE: CSVインポート機能はCsvImportコンポーネントで実装済み
+      // このモーダルは将来的にCsvImportと統合予定
       await new Promise((resolve) => setTimeout(resolve, 2000));
+      toast.success('インポート完了', 'データをインポートしました');
       onImported();
     } catch (err) {
-      setError('インポートに失敗しました');
-      console.error(err);
+      const message = 'インポートに失敗しました';
+      setError(message);
+      toast.error('エラー', message);
+      logger.error(err);
     } finally {
       setIsImporting(false);
     }

@@ -1,22 +1,40 @@
-import { useState } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { AuthProvider, DemoAuthProvider, useAuth } from './contexts/AuthContext';
+import { createLogger } from './lib/logger';
+
+const logger = createLogger('App');
+import { QueryProvider } from './lib/QueryProvider';
 import { LoginPage } from './pages/LoginPage';
 import { Header } from './components/layout/Header';
 import { CatalogWithTabs } from './components/catalog/CatalogWithTabs';
 import { CartSidebarEnhanced } from './components/cart/CartSidebarEnhanced';
 import { ConfirmOrderModal } from './components/catalog/ConfirmOrderModal';
-import { AdminDashboard } from './components/admin/AdminDashboard';
-import { HierarchyPage } from './pages/HierarchyPage';
-import { ImageTestPage } from './pages/ImageTestPage';
 import { ShareModal } from './components/common/ShareModal';
 import { ProductCompareModal } from './components/catalog/ProductCompareModal';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { OnboardingGuide, HelpButton, useOnboarding } from './components/common/OnboardingGuide';
+import { InteractiveTutorial, DEFAULT_TUTORIAL_STEPS } from './components/common/InteractiveTutorial';
+import { useTutorialStore } from './stores/useTutorialStore';
 import { ToastProvider } from './components/common/Toast';
 import { useVersionStore } from './stores/useVersionStore';
 import { useCartStore } from './stores/useCartStore';
 import type { Product } from './types/product';
+
+// Lazy loaded components for code splitting
+const AdminDashboard = lazy(() => import('./components/admin/AdminDashboard').then(m => ({ default: m.AdminDashboard })));
+const HierarchyPage = lazy(() => import('./pages/HierarchyPage').then(m => ({ default: m.HierarchyPage })));
+const ImageTestPage = lazy(() => import('./pages/ImageTestPage').then(m => ({ default: m.ImageTestPage })));
+
+// Loading fallback component
+const PageLoader = () => (
+  <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+    <div className="text-center">
+      <div className="w-8 h-8 border-4 border-teal-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+      <p className="text-gray-600">読み込み中...</p>
+    </div>
+  </div>
+);
 
 // Environment check for demo mode
 const isDemoMode = import.meta.env.VITE_DEMO_MODE === 'true' || !import.meta.env.VITE_SUPABASE_URL;
@@ -42,10 +60,32 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
   // オンボーディングガイド
   const {
     showOnboarding,
-    openOnboarding,
     closeOnboarding,
     completeOnboarding,
   } = useOnboarding();
+
+  // インタラクティブチュートリアル
+  const {
+    isOpen: isTutorialOpen,
+    isFirstVisit,
+    hasCompletedTutorial,
+    openTutorial,
+    closeTutorial,
+    completeTutorial,
+    markAsVisited,
+  } = useTutorialStore();
+
+  // 初回訪問時に自動でチュートリアル表示
+  useEffect(() => {
+    if (isFirstVisit && !hasCompletedTutorial) {
+      // 少し遅延させてからチュートリアルを表示
+      const timer = globalThis.setTimeout(() => {
+        openTutorial();
+        markAsVisited();
+      }, 1500);
+      return () => globalThis.clearTimeout(timer);
+    }
+  }, [isFirstVisit, hasCompletedTutorial, openTutorial, markAsVisited]);
 
   const handleCartClose = () => {
     setIsCartOpen(false);
@@ -93,10 +133,22 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
           <Route path="/catalog/:step/:categoryId" element={<CatalogWithTabs onCartClick={() => setIsCartOpen(true)} />} />
           <Route path="/catalog/:step/:categoryId/:productId" element={<CatalogWithTabs onCartClick={() => setIsCartOpen(true)} />} />
 
-          {/* 管理画面 */}
-          <Route path="/admin" element={<AdminDashboard onBack={() => window.history.back()} />} />
-          <Route path="/hierarchy" element={<HierarchyPage onBack={() => window.history.back()} />} />
-          <Route path="/image-test" element={<ImageTestPage />} />
+          {/* 管理画面 - Lazy loaded */}
+          <Route path="/admin" element={
+            <Suspense fallback={<PageLoader />}>
+              <AdminDashboard onBack={() => window.history.back()} />
+            </Suspense>
+          } />
+          <Route path="/hierarchy" element={
+            <Suspense fallback={<PageLoader />}>
+              <HierarchyPage onBack={() => window.history.back()} />
+            </Suspense>
+          } />
+          <Route path="/image-test" element={
+            <Suspense fallback={<PageLoader />}>
+              <ImageTestPage />
+            </Suspense>
+          } />
         </Routes>
       </main>
 
@@ -125,10 +177,20 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
         onRemoveProduct={(productId) => setCompareProducts(prev => prev.filter(p => p.id !== productId))}
       />
 
-      {/* ヘルプボタン */}
-      <HelpButton onClick={openOnboarding} />
+      {/* ヘルプボタン（チュートリアル開始） */}
+      <HelpButton onClick={openTutorial} />
 
-      {/* オンボーディングガイド */}
+      {/* インタラクティブチュートリアル */}
+      <InteractiveTutorial
+        steps={DEFAULT_TUTORIAL_STEPS}
+        isOpen={isTutorialOpen}
+        onClose={closeTutorial}
+        onComplete={completeTutorial}
+        showProgress={true}
+        allowSkip={true}
+      />
+
+      {/* オンボーディングガイド（従来のスライド形式） */}
       <OnboardingGuide
         isOpen={showOnboarding}
         onClose={closeOnboarding}
@@ -145,8 +207,8 @@ function App() {
   const wrappedContent = (isDemoMode: boolean, onDemoSwitch?: () => void) => (
     <ErrorBoundary
       onError={(error, errorInfo) => {
-        console.error('App error caught:', error.message);
-        console.error('Component stack:', errorInfo.componentStack);
+        logger.error('App error caught:', error.message);
+        logger.error('Component stack:', errorInfo.componentStack);
       }}
     >
       <BrowserRouter>
@@ -158,21 +220,25 @@ function App() {
   // Use Demo provider if in demo mode
   if (useDemoMode) {
     return (
-      <ToastProvider>
-        <DemoAuthProvider>
-          {wrappedContent(true)}
-        </DemoAuthProvider>
-      </ToastProvider>
+      <QueryProvider>
+        <ToastProvider>
+          <DemoAuthProvider>
+            {wrappedContent(true)}
+          </DemoAuthProvider>
+        </ToastProvider>
+      </QueryProvider>
     );
   }
 
   // Use real auth provider
   return (
-    <ToastProvider>
-      <AuthProvider>
-        {wrappedContent(false, () => setUseDemoMode(true))}
-      </AuthProvider>
-    </ToastProvider>
+    <QueryProvider>
+      <ToastProvider>
+        <AuthProvider>
+          {wrappedContent(false, () => setUseDemoMode(true))}
+        </AuthProvider>
+      </ToastProvider>
+    </QueryProvider>
   );
 }
 

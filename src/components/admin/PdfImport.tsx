@@ -19,14 +19,37 @@ export const PdfImport: React.FC = () => {
   const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState<string>('');
 
+  const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
+  const ALLOWED_TYPES = ['application/pdf'];
+
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
-    if (selectedFile && selectedFile.type === 'application/pdf') {
-      setFile(selectedFile);
-      setError('');
-    } else {
-      setError('PDFファイルを選択してください');
+    if (!selectedFile) {
+      setError('ファイルを選択してください');
+      return;
     }
+
+    // ファイルタイプの検証
+    if (!ALLOWED_TYPES.includes(selectedFile.type)) {
+      setError('PDFファイルのみアップロード可能です');
+      return;
+    }
+
+    // ファイルサイズの検証
+    if (selectedFile.size > MAX_FILE_SIZE) {
+      setError('ファイルサイズは50MB以下にしてください');
+      return;
+    }
+
+    // ファイル名の検証（危険な文字を含まないか）
+    const safeFileName = /^[a-zA-Z0-9\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF\s\-_().]+\.pdf$/i;
+    if (!safeFileName.test(selectedFile.name)) {
+      setError('ファイル名に不正な文字が含まれています');
+      return;
+    }
+
+    setFile(selectedFile);
+    setError('');
   };
 
   const handleParse = async () => {
@@ -185,7 +208,7 @@ export const PdfImport: React.FC = () => {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {extractedProducts.map((product, index) => (
-                    <tr key={index}>
+                    <tr key={`${product.name}-${product.sku || index}`}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {product.name}
                       </td>

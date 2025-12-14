@@ -6,8 +6,8 @@ import { useToast } from '../common/Toast';
 import { useCartStore } from '../../stores/useCartStore';
 import { useVendorOrderStore, type Vendor, type VendorOrder } from '../../stores/useVendorOrderStore';
 import { useStatisticsStore } from '../../stores/useStatisticsStore';
-import { formatPrice } from '../../lib/utils';
-import * as XLSX from 'xlsx';
+import { formatPrice, getProductPrice } from '../../lib/utils';
+import { loadXLSX } from '../../lib/xlsxLoader';
 
 export const VendorOrderManager: React.FC = () => {
   const [filterStatus, setFilterStatus] = useState<string>('all');
@@ -81,7 +81,7 @@ export const VendorOrderManager: React.FC = () => {
       color: item.selectedVariant?.color || item.product.variants[0]?.color || '',
       quantity: item.quantity,
       unit: item.product.unit,
-      price: item.product.pricing.find(p => p.plan === 'LACIE' || p.planId === 'LACIE')?.price || 0,
+      price: getProductPrice(item.product.pricing),
     }));
 
     const totalAmount = orderItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -138,7 +138,8 @@ export const VendorOrderManager: React.FC = () => {
   };
 
   // 発注書をExcelでエクスポート
-  const exportOrderToExcel = (order: VendorOrder) => {
+  const exportOrderToExcel = async (order: VendorOrder) => {
+    const XLSX = await loadXLSX();
     const wb = XLSX.utils.book_new();
 
     const headerData = [
