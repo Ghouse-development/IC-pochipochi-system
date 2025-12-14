@@ -1,0 +1,419 @@
+/**
+ * レスポンシブ修正CSS
+ * - 全デバイスでの文字・画像の被りを防止
+ * - タッチフレンドリーなインタラクション
+ * - 印刷最適化
+ */
+
+/* ============================================
+   ベースレスポンシブ設定
+   ============================================ */
+
+/* タッチデバイスでのタップターゲット最小サイズ */
+@media (pointer: coarse) {
+  button,
+  a,
+  [role="button"],
+  input[type="checkbox"],
+  input[type="radio"],
+  select {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* ホバー効果はマウスデバイスのみ */
+@media (hover: none) {
+  .hover\:bg-gray-100:hover,
+  .hover\:bg-gray-200:hover,
+  .hover\:shadow-lg:hover {
+    background-color: inherit;
+    box-shadow: inherit;
+  }
+}
+
+/* ============================================
+   モバイル（〜639px）
+   ============================================ */
+
+@media screen and (max-width: 639px) {
+  /* カード内のテキスト被り防止 */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    word-break: break-word;
+    hyphens: auto;
+  }
+
+  /* カート内のアイテム */
+  .cart-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .cart-item-info {
+    width: 100%;
+  }
+
+  .cart-item-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  /* モーダル */
+  [role="dialog"] {
+    inset: 0 !important;
+    transform: none !important;
+    border-radius: 0 !important;
+    max-height: 100vh !important;
+    max-width: 100vw !important;
+  }
+
+  /* ナビゲーションタブ */
+  .step-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+  }
+
+  .step-tabs > button {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+  }
+
+  /* 価格表示 */
+  .price-display {
+    font-size: clamp(1rem, 4vw, 1.5rem);
+  }
+
+  /* テーブル横スクロール */
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .table-container table {
+    min-width: 600px;
+  }
+
+  /* フォーム要素 */
+  input,
+  select,
+  textarea {
+    font-size: 16px !important; /* iOS zoom 防止 */
+  }
+
+  /* 検索バー */
+  .search-bar {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    padding: 12px;
+    background: white;
+  }
+
+  /* カテゴリフィルター */
+  .category-filter {
+    display: flex;
+    overflow-x: auto;
+    gap: 8px;
+    padding: 8px 0;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .category-filter > button {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  /* 商品カードグリッド */
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+  }
+
+  /* 商品詳細モーダル */
+  .product-detail-modal {
+    padding: 16px;
+  }
+
+  .product-detail-image {
+    aspect-ratio: 4/3;
+    max-height: 40vh;
+  }
+
+  /* カートサイドバー */
+  .cart-sidebar {
+    width: 100vw !important;
+    max-width: none !important;
+  }
+
+  /* フローティングボタン */
+  .floating-cart-button {
+    bottom: 16px;
+    right: 16px;
+    width: 56px;
+    height: 56px;
+  }
+}
+
+/* ============================================
+   タブレット（640px〜1023px）
+   ============================================ */
+
+@media screen and (min-width: 640px) and (max-width: 1023px) {
+  /* 商品カードグリッド */
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  /* サイドバー */
+  .cart-sidebar {
+    width: 400px;
+    max-width: 80vw;
+  }
+
+  /* モーダル */
+  [role="dialog"] {
+    max-width: 90vw;
+    max-height: 90vh;
+  }
+
+  /* ダッシュボード */
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ============================================
+   デスクトップ（1024px〜）
+   ============================================ */
+
+@media screen and (min-width: 1024px) {
+  /* 商品カードグリッド */
+  .product-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  /* 大画面では5列も可 */
+  @media screen and (min-width: 1440px) {
+    .product-grid {
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
+
+  /* サイドバー */
+  .cart-sidebar {
+    width: 480px;
+  }
+}
+
+/* ============================================
+   ダークモード対応
+   ============================================ */
+
+@media (prefers-color-scheme: dark) {
+  .auto-dark {
+    background-color: #1a1a2e;
+    color: #e5e7eb;
+  }
+
+  .auto-dark-card {
+    background-color: #16213e;
+    border-color: #374151;
+  }
+}
+
+/* ============================================
+   印刷スタイル
+   ============================================ */
+
+@media print {
+  /* 不要な要素を非表示 */
+  button:not(.print-show),
+  .no-print,
+  .floating-cart-button,
+  .cart-sidebar,
+  header nav,
+  .search-bar,
+  .category-filter {
+    display: none !important;
+  }
+
+  /* 背景色を印刷 */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* ページ設定 */
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+
+  body {
+    font-size: 10pt;
+    line-height: 1.4;
+  }
+
+  /* テーブルの改ページ制御 */
+  table {
+    page-break-inside: auto;
+  }
+
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  /* 商品カード印刷用 */
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
+  }
+
+  .product-card {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
+
+/* ============================================
+   アニメーション軽減（アクセシビリティ）
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================
+   テキスト被り防止ユーティリティ
+   ============================================ */
+
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-wrap-break {
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+/* フレックスボックスでの被り防止 */
+.flex-item-safe {
+  min-width: 0;
+  flex-shrink: 1;
+}
+
+/* グリッドでの被り防止 */
+.grid-item-safe {
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* ============================================
+   スクロールバー改善
+   ============================================ */
+
+/* Webkit系 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+/* ダークモードのスクロールバー */
+@media (prefers-color-scheme: dark) {
+  ::-webkit-scrollbar-track {
+    background: #1a1a2e;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #4a5568;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #718096;
+  }
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 #f1f1f1;
+}
+
+@media (prefers-color-scheme: dark) {
+  * {
+    scrollbar-color: #4a5568 #1a1a2e;
+  }
+}
+
+/* ============================================
+   フォーカス可視性改善
+   ============================================ */
+
+:focus-visible {
+  outline: 2px solid #14b8a6;
+  outline-offset: 2px;
+}
+
+/* ボタンのフォーカスリング */
+button:focus-visible,
+[role="button"]:focus-visible {
+  box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.3);
+}
+
+/* ============================================
+   Safe Area（ノッチ対応）
+   ============================================ */
+
+@supports (padding: max(0px)) {
+  .safe-area-inset {
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+
+  .floating-cart-button {
+    bottom: max(16px, env(safe-area-inset-bottom));
+    right: max(16px, env(safe-area-inset-right));
+  }
+}

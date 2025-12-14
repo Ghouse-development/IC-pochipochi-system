@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { BarChart3, TrendingUp, TrendingDown, Eye, ShoppingCart, Target, Percent } from 'lucide-react';
+import { BarChart3, TrendingUp, TrendingDown, Eye, ShoppingCart, Target, Percent, Clock } from 'lucide-react';
 import { useStatisticsStore } from '../../stores/useStatisticsStore';
 import { formatPrice } from '../../lib/utils';
 
@@ -11,11 +11,13 @@ export const UserBehaviorAnalytics: React.FC = () => {
     getUnselectedProducts,
     getLowAdoptionProducts,
     getCategoryAdoptionRates,
+    getLongestViewedProducts,
   } = useStatisticsStore();
 
   const topProducts = useMemo(() => getTopProducts(10), [getTopProducts]);
   const monthlyStats = useMemo(() => getMonthlyStats(), [getMonthlyStats]);
   const unselectedProducts = useMemo(() => getUnselectedProducts().slice(0, 5), [getUnselectedProducts]);
+  const longestViewedProducts = useMemo(() => getLongestViewedProducts(5), [getLongestViewedProducts]);
   const lowAdoptionProducts = useMemo(() => getLowAdoptionProducts(30).slice(0, 5), [getLowAdoptionProducts]);
   const categoryAdoptionRates = useMemo(() => getCategoryAdoptionRates(), [getCategoryAdoptionRates]);
 
@@ -197,6 +199,49 @@ export const UserBehaviorAnalytics: React.FC = () => {
             </div>
           )}
         </div>
+      </div>
+
+      {/* 閲覧時間分析セクション */}
+      <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+          <Clock className="w-5 h-5 text-purple-600" />
+          長時間閲覧されている商品TOP5
+        </h3>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+          顧客が長く見ている商品 = 興味を引いている可能性が高い
+        </p>
+        {longestViewedProducts.length === 0 ? (
+          <p className="text-gray-500 dark:text-gray-400 text-center py-8">データがありません</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            {longestViewedProducts.map((p, idx) => {
+              const formatDuration = (seconds: number) => {
+                if (seconds < 60) return `${seconds}秒`;
+                const mins = Math.floor(seconds / 60);
+                const secs = seconds % 60;
+                return secs > 0 ? `${mins}分${secs}秒` : `${mins}分`;
+              };
+              return (
+                <div key={p.productId} className="bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 p-4 rounded-xl">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className={`w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold ${
+                      idx < 3 ? 'bg-purple-500 text-white' : 'bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-300'
+                    }`}>
+                      {idx + 1}
+                    </span>
+                    <span className="text-xs text-purple-600 dark:text-purple-400">{p.categoryName}</span>
+                  </div>
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate mb-2">{p.productName}</p>
+                  <div className="flex items-center gap-1">
+                    <Clock className="w-4 h-4 text-purple-500" />
+                    <span className="text-lg font-bold text-purple-600">{formatDuration(p.avgViewDuration)}</span>
+                  </div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">平均閲覧時間</p>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

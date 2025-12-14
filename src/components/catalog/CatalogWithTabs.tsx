@@ -20,6 +20,7 @@ import { ProductDetailModal } from './ProductDetailModal';
 import { ProductCompareModal } from './ProductCompareModal';
 import { RecentlyViewed } from './RecentlyViewed';
 import { RoomInteriorSelector } from '../interior/RoomInteriorSelector';
+import { useCustomerMode, CustomerWelcomeBanner } from '../customer/CustomerModeWrapper';
 import * as Dialog from '@radix-ui/react-dialog';
 import type { Product as CatalogProduct } from '../../types/product';
 
@@ -154,6 +155,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   const totalPrice = getTotalPrice();
   const toast = useToast();
   const { setTimeout } = useTimeout();
+
+  // 顧客モード
+  const { isCustomerMode, customerName } = useCustomerMode();
 
   // 静的データ（フォールバック用）
   const { exteriorProducts, interiorProducts, waterProducts } = useProductStore();
@@ -677,6 +681,12 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     }
   }, [navigate, activeTab, selectedCategoryId]);
 
+  // レコメンドから商品を選択した時の処理
+  const handleRecommendedProductSelect = useCallback((product: CatalogProduct) => {
+    setSelectedProductForDetail(product);
+    setIsDetailModalOpen(true);
+  }, []);
+
   // キーボードショートカット
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -736,6 +746,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     <>
       <style>{catalogAnimations}</style>
       <Confetti show={showConfetti} />
+
+      {/* 顧客モード時のウェルカムバナー */}
+      {isCustomerMode && <CustomerWelcomeBanner />}
 
       <div className="flex flex-col h-full bg-gray-50 dark:bg-gray-900">
         {/* ヘッダー - 統一デザイン */}
@@ -1331,23 +1344,33 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 <EmptyState searchTerm={searchTerm} onClear={() => setSearchTerm('')} />
               ) : (
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-                  {filteredItems.map((item, index) => {
-                    // サブカテゴリが変わったらヘッダーを表示
-                    const prevItem = index > 0 ? filteredItems[index - 1] : null;
-                    const showSubcategoryHeader = !prevItem || prevItem.category_name !== item.category_name;
+                  {(() => {
+                    // サブカテゴリごとのアイテム数をカウント
+                    const subcategoryCounts = filteredItems.reduce((acc, item) => {
+                      const key = item.category_name || '';
+                      acc[key] = (acc[key] || 0) + 1;
+                      return acc;
+                    }, {} as Record<string, number>);
 
-                    return (
-                      <React.Fragment key={item.id}>
-                        {showSubcategoryHeader && item.category_name && (
-                          <div className="col-span-full flex items-center gap-3 py-3 mt-2 first:mt-0">
-                            <div className="h-px flex-1 bg-gradient-to-r from-teal-200 to-transparent dark:from-teal-800" />
-                            <span className="px-4 py-1.5 bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 text-sm font-bold rounded-full whitespace-nowrap">
-                              {item.category_name}
-                            </span>
-                            <div className="h-px flex-1 bg-gradient-to-l from-teal-200 to-transparent dark:from-teal-800" />
-                          </div>
-                        )}
-                        <ItemCard
+                    return filteredItems.map((item, index) => {
+                      // 同一サブカテゴリに2件以上ある場合のみヘッダーを表示
+                      const subcategoryCount = subcategoryCounts[item.category_name || ''] || 0;
+                      const prevItem = index > 0 ? filteredItems[index - 1] : null;
+                      const isNewSubcategory = !prevItem || prevItem.category_name !== item.category_name;
+                      const showSubcategoryHeader = isNewSubcategory && item.category_name && subcategoryCount >= 2;
+
+                      return (
+                        <React.Fragment key={item.id}>
+                          {showSubcategoryHeader && (
+                            <div className="col-span-full flex items-center gap-3 py-3 mt-2 first:mt-0">
+                              <div className="h-px flex-1 bg-gradient-to-r from-teal-200 to-transparent dark:from-teal-800" />
+                              <span className="px-4 py-1.5 bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 text-sm font-bold rounded-full whitespace-nowrap">
+                                {item.category_name}
+                              </span>
+                              <div className="h-px flex-1 bg-gradient-to-l from-teal-200 to-transparent dark:from-teal-800" />
+                            </div>
+                          )}
+                          <ItemCard
                           item={item}
                           index={index}
                           getPrice={getPrice}
@@ -1369,7 +1392,8 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                         />
                       </React.Fragment>
                     );
-                  })}
+                  });
+                  })()}
                 </div>
               )}
 
@@ -1594,6 +1618,8 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
         product={selectedProductForDetail}
         isOpen={isDetailModalOpen}
         onClose={handleCloseDetailModal}
+        allProducts={catalogProducts}
+        onProductSelect={handleRecommendedProductSelect}
       />
 
       {/* 比較モーダル */}

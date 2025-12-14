@@ -159,3 +159,6 @@
     color: black !important;
   }
 }
+
+/* レスポンシブ修正のインポート */
+@import './styles/responsive-fixes.css';

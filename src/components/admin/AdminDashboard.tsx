@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { BarChart3, Package, Bell, TrendingUp, Upload, Settings, Users, FolderTree, Briefcase, Wrench, Truck, Database, Building2, ShieldAlert } from 'lucide-react';
+import { BarChart3, Package, Bell, TrendingUp, Upload, Settings, Users, FolderTree, Briefcase, Wrench, Truck, Database, Building2, ShieldAlert, DollarSign, Activity } from 'lucide-react';
 import { Button } from '../common/Button';
 import { Card } from '../common/Card';
 import { SectionErrorBoundary } from '../common/ErrorBoundary';
@@ -16,6 +16,8 @@ import { useOrderStore } from '../../stores/useOrderStore';
 import { useStatisticsStore } from '../../stores/useStatisticsStore';
 import { formatPrice } from '../../lib/utils';
 import { PdfImport } from './PdfImport';
+import { StaffOptionDashboard } from './StaffOptionDashboard';
+import { UserBehaviorAnalytics } from './UserBehaviorAnalytics';
 import { useAuth } from '../../contexts/AuthContext';
 
 interface AdminDashboardProps {
@@ -29,7 +31,7 @@ type MainTab = 'products' | 'statistics' | 'projects' | 'vendors' | 'data' | 'sy
 type ProductSubTab = 'items' | 'categories';
 
 // 統計のサブタブ
-type StatsSubTab = 'dashboard' | 'adoption';
+type StatsSubTab = 'dashboard' | 'adoption' | 'staffOption' | 'behavior';
 
 // データ管理のサブタブ
 type DataSubTab = 'backup' | 'pdf' | 'versions';
@@ -278,10 +280,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
         )}
 
         {activeTab === 'statistics' && (
-          <div className="flex gap-2 mb-4">
+          <div className="flex gap-2 mb-4 overflow-x-auto pb-1">
             <button
               onClick={() => setStatsSubTab('dashboard')}
-              className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
+              className={`px-3 py-1.5 text-sm rounded-lg transition-colors whitespace-nowrap ${
                 statsSubTab === 'dashboard'
                   ? 'bg-blue-100 text-blue-700 font-medium'
                   : 'text-gray-600 hover:bg-gray-100'
@@ -294,7 +296,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
             </button>
             <button
               onClick={() => setStatsSubTab('adoption')}
-              className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
+              className={`px-3 py-1.5 text-sm rounded-lg transition-colors whitespace-nowrap ${
                 statsSubTab === 'adoption'
                   ? 'bg-blue-100 text-blue-700 font-medium'
                   : 'text-gray-600 hover:bg-gray-100'
@@ -303,6 +305,32 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
               <div className="flex items-center gap-1.5">
                 <TrendingUp className="w-3.5 h-3.5" />
                 採用統計
+              </div>
+            </button>
+            <button
+              onClick={() => setStatsSubTab('staffOption')}
+              className={`px-3 py-1.5 text-sm rounded-lg transition-colors whitespace-nowrap ${
+                statsSubTab === 'staffOption'
+                  ? 'bg-blue-100 text-blue-700 font-medium'
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              <div className="flex items-center gap-1.5">
+                <DollarSign className="w-3.5 h-3.5" />
+                担当者別オプション
+              </div>
+            </button>
+            <button
+              onClick={() => setStatsSubTab('behavior')}
+              className={`px-3 py-1.5 text-sm rounded-lg transition-colors whitespace-nowrap ${
+                statsSubTab === 'behavior'
+                  ? 'bg-blue-100 text-blue-700 font-medium'
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              <div className="flex items-center gap-1.5">
+                <Activity className="w-3.5 h-3.5" />
+                行動分析
               </div>
             </button>
           </div>
@@ -743,6 +771,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
                   </div>
                 </Card>
               </div>
+            )}
+
+            {/* 担当者別オプション */}
+            {statsSubTab === 'staffOption' && (
+              <SectionErrorBoundary sectionName="担当者別オプション">
+                <StaffOptionDashboard />
+              </SectionErrorBoundary>
+            )}
+
+            {/* ユーザー行動分析 */}
+            {statsSubTab === 'behavior' && (
+              <SectionErrorBoundary sectionName="ユーザー行動分析">
+                <UserBehaviorAnalytics />
+              </SectionErrorBoundary>
             )}
           </div>
         )}

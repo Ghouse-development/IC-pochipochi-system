@@ -1,27 +1,95 @@
 {
   "name": "IC-ぽちぽちシステム",
   "short_name": "ぽちぽち",
-  "description": "住宅建築用商品選択システム",
+  "description": "住宅建築用商品選択システム - 外装・内装・水廻りの商品をぽちぽち選んで見積作成",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#14b8a6",
-  "orientation": "portrait-primary",
+  "orientation": "any",
   "icons": [
+    {
+      "src": "/icons/icon-72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-152.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    },
     {
       "src": "/icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-384.png",
+      "sizes": "384x384",
+      "type": "image/png"
     },
     {
       "src": "/icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
-  "categories": ["business", "productivity"],
+  "shortcuts": [
+    {
+      "name": "外装カタログ",
+      "short_name": "外装",
+      "description": "外装商品を選択",
+      "url": "/catalog/exterior",
+      "icons": [{ "src": "/icons/shortcut-exterior.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "内装カタログ",
+      "short_name": "内装",
+      "description": "内装商品を選択",
+      "url": "/catalog/interior",
+      "icons": [{ "src": "/icons/shortcut-interior.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "水廻りカタログ",
+      "short_name": "水廻り",
+      "description": "水廻り商品を選択",
+      "url": "/catalog/equipment",
+      "icons": [{ "src": "/icons/shortcut-equipment.png", "sizes": "96x96" }]
+    }
+  ],
+  "categories": ["business", "productivity", "utilities"],
   "lang": "ja",
-  "dir": "ltr"
+  "dir": "ltr",
+  "prefer_related_applications": false,
+  "handle_links": "preferred"
 }

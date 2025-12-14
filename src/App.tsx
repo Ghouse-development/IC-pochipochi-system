@@ -1,6 +1,7 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { AuthProvider, DemoAuthProvider, useAuth } from './contexts/AuthContext';
+import { CustomerModeProvider } from './components/customer/CustomerModeWrapper';
 import { createLogger } from './lib/logger';
 
 const logger = createLogger('App');
@@ -12,11 +13,16 @@ import { CartSidebarEnhanced } from './components/cart/CartSidebarEnhanced';
 import { ConfirmOrderModal } from './components/catalog/ConfirmOrderModal';
 import { ShareModal } from './components/common/ShareModal';
 import { ProductCompareModal } from './components/catalog/ProductCompareModal';
-import { ErrorBoundary } from './components/common/ErrorBoundary';
+import { GlobalErrorBoundary } from './components/common/GlobalErrorHandler';
 import { OnboardingGuide, HelpButton, useOnboarding } from './components/common/OnboardingGuide';
 import { InteractiveTutorial, DEFAULT_TUTORIAL_STEPS } from './components/common/InteractiveTutorial';
 import { useTutorialStore } from './stores/useTutorialStore';
 import { ToastProvider } from './components/common/Toast';
+import { AnnouncerProvider } from './components/common/ScreenReaderAnnouncer';
+import { HelpProvider } from './components/common/InAppHelp';
+import { NetworkStatusBanner } from './components/common/NetworkStatusBanner';
+import { ShortcutHelpModal } from './components/common/ShortcutHelpModal';
+import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { useVersionStore } from './stores/useVersionStore';
 import { useCartStore } from './stores/useCartStore';
 import type { Product } from './types/product';
@@ -52,10 +58,28 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
+  const [isShortcutHelpOpen, setIsShortcutHelpOpen] = useState(false);
   const [compareProducts, setCompareProducts] = useState<Product[]>([]);
 
   const currentVersion = useVersionStore((state) => state.currentVersion);
   const items = useCartStore((state) => state.items);
+
+  // キーボードショートカットの設定
+  useKeyboardShortcuts({
+    onSearch: () => {
+      const searchInput = document.querySelector<HTMLInputElement>('[data-search-input]');
+      searchInput?.focus();
+    },
+    onOpenCart: () => setIsCartOpen(true),
+    onEscape: () => {
+      setIsCartOpen(false);
+      setIsConfirmModalOpen(false);
+      setIsShareModalOpen(false);
+      setIsCompareModalOpen(false);
+      setIsShortcutHelpOpen(false);
+    },
+    onHelp: () => setIsShortcutHelpOpen(true),
+  });
 
   // オンボーディングガイド
   const {
@@ -196,6 +220,15 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
         onClose={closeOnboarding}
         onComplete={completeOnboarding}
       />
+
+      {/* キーボードショートカットヘルプ */}
+      <ShortcutHelpModal
+        isOpen={isShortcutHelpOpen}
+        onClose={() => setIsShortcutHelpOpen(false)}
+      />
+
+      {/* ネットワーク状態バナー */}
+      <NetworkStatusBanner />
     </div>
   );
 }
@@ -203,29 +236,35 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
 function App() {
   const [useDemoMode, setUseDemoMode] = useState(isDemoMode);
 
-  // ErrorBoundaryでラップしたコンテンツ
+  // GlobalErrorBoundaryでラップしたコンテンツ（強化版エラーハンドリング）
   const wrappedContent = (isDemoMode: boolean, onDemoSwitch?: () => void) => (
-    <ErrorBoundary
+    <GlobalErrorBoundary
       onError={(error, errorInfo) => {
         logger.error('App error caught:', error.message);
         logger.error('Component stack:', errorInfo.componentStack);
       }}
     >
       <BrowserRouter>
-        <MainContent isDemoMode={isDemoMode} onDemoSwitch={onDemoSwitch} />
+        <CustomerModeProvider>
+          <MainContent isDemoMode={isDemoMode} onDemoSwitch={onDemoSwitch} />
+        </CustomerModeProvider>
       </BrowserRouter>
-    </ErrorBoundary>
+    </GlobalErrorBoundary>
   );
 
   // Use Demo provider if in demo mode
   if (useDemoMode) {
     return (
       <QueryProvider>
-        <ToastProvider>
-          <DemoAuthProvider>
-            {wrappedContent(true)}
-          </DemoAuthProvider>
-        </ToastProvider>
+        <AnnouncerProvider>
+          <ToastProvider>
+            <HelpProvider>
+              <DemoAuthProvider>
+                {wrappedContent(true)}
+              </DemoAuthProvider>
+            </HelpProvider>
+          </ToastProvider>
+        </AnnouncerProvider>
       </QueryProvider>
     );
   }
@@ -233,11 +272,15 @@ function App() {
   // Use real auth provider
   return (
     <QueryProvider>
-      <ToastProvider>
-        <AuthProvider>
-          {wrappedContent(false, () => setUseDemoMode(true))}
-        </AuthProvider>
-      </ToastProvider>
+      <AnnouncerProvider>
+        <ToastProvider>
+          <HelpProvider>
+            <AuthProvider>
+              {wrappedContent(false, () => setUseDemoMode(true))}
+            </AuthProvider>
+          </HelpProvider>
+        </ToastProvider>
+      </AnnouncerProvider>
     </QueryProvider>
   );
 }

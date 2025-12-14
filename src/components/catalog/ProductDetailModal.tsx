@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
-import { X, Plus, Minus, ShoppingCart, Check, AlertCircle, Info, FileText, QrCode } from 'lucide-react';
+import { X, Plus, Minus, ShoppingCart, Check, AlertCircle, Info, FileText, QrCode, Sparkles } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import type { Product, ProductVariant } from '../../types/product';
 import { UNIT_SYMBOLS } from '../../types/product';
@@ -15,17 +15,23 @@ import { cn } from '../../lib/utils';
 import { getCategoryRule } from '../../config/categoryRules';
 import { getHexColor } from '../../utils/colorMapping';
 import { useTimeout } from '../../hooks/useTimeout';
+import { RecommendationPanel } from '../customer/RecommendationPanel';
+import { useWarningCheck } from '../common/MaterialWarningSystem';
 
 interface ProductDetailModalProps {
   product: Product | null;
   isOpen: boolean;
   onClose: () => void;
+  allProducts?: Product[];
+  onProductSelect?: (product: Product, variant?: ProductVariant) => void;
 }
 
 export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   product,
   isOpen,
   onClose,
+  allProducts = [],
+  onProductSelect,
 }) => {
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
   const [quantity, setQuantity] = useState(1);
@@ -34,10 +40,13 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   const [showQR, setShowQR] = useState(false);
   const { addItem, items } = useCartStore();
   const recordView = useStatisticsStore((state) => state.recordView);
+  const recordViewDuration = useStatisticsStore((state) => state.recordViewDuration);
   const recordAdoption = useStatisticsStore((state) => state.recordAdoption);
   const addRecentlyViewed = useRecentlyViewedStore((state) => state.addItem);
   const toast = useToast();
   const { setTimeout } = useTimeout();
+  const viewStartTime = useRef<number | null>(null);
+  const { checkWarnings, warningModal } = useWarningCheck();
 
   // 開いた時にリセット & 閲覧記録
   useEffect(() => {
@@ -46,6 +55,9 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
       setQuantity(1);
       setIsAdded(false);
       setImageLoaded(false);
+
+      // 閲覧開始時刻を記録
+      viewStartTime.current = Date.now();
 
       // 商品閲覧を記録（統計）
       recordView(product.id, product.name, product.categoryName);
@@ -59,8 +71,15 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
         categoryName: product.categoryName,
         price,
       });
+    } else if (!isOpen && viewStartTime.current && product) {
+      // 閲覧終了時に閲覧時間を記録
+      const durationSeconds = Math.round((Date.now() - viewStartTime.current) / 1000);
+      if (durationSeconds > 0) {
+        recordViewDuration(product.id, durationSeconds);
+      }
+      viewStartTime.current = null;
     }
-  }, [isOpen, product, recordView, addRecentlyViewed]);
+  }, [isOpen, product, recordView, recordViewDuration, addRecentlyViewed]);
 
   // バリアント変更時に画像リセット
   useEffect(() => {
@@ -108,6 +127,18 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
     return true;
   }, [product, isSingleSelection, hasSameCategoryItem, categoryRule.maxSelection, sameCategoryCount]);
 
+  // カートにある商品IDのセット（レコメンド用）
+  const cartProductIds = useMemo(() => {
+    return new Set(items.map(item => item.product.id));
+  }, [items]);
+
+  // レコメンド商品選択ハンドラ
+  const handleRecommendedProductSelect = useCallback((recProduct: Product, recVariant?: ProductVariant) => {
+    if (onProductSelect) {
+      onProductSelect(recProduct, recVariant);
+    }
+  }, [onProductSelect]);
+
   const imagePlaceholder = useMemo(() => {
     const productName = product?.name || '商品';
     return `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(`
@@ -119,6 +150,22 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
     </svg>
   `)))}`;
   }, [product?.name]);
+
+  // 実際にカートに追加する処理
+  const executeAddToCart = useCallback(() => {
+    if (!product || !variant) return;
+
+    addItem(product, quantity, variant);
+    // 採用を記録
+    recordAdoption(product.id, product.name, product.categoryName, price * quantity);
+    toast.success('追加完了', `「${product.name}」をカートに追加しました`);
+
+    setIsAdded(true);
+    setTimeout(() => {
+      setIsAdded(false);
+      onClose();
+    }, 1000);
+  }, [product, variant, quantity, addItem, recordAdoption, price, toast, setTimeout, onClose]);
 
   const handleAddToCart = useCallback(() => {
     if (!product || !variant) return;
@@ -132,17 +179,14 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
       return;
     }
 
-    addItem(product, quantity, variant);
-    // 採用を記録
-    recordAdoption(product.id, product.name, product.categoryName, price * quantity);
-    toast.success('追加完了', `「${product.name}」をカートに追加しました`);
-
-    setIsAdded(true);
-    setTimeout(() => {
-      setIsAdded(false);
-      onClose();
-    }, 1000);
-  }, [product, variant, canAddToCart, isSingleSelection, categoryRule.maxSelection, quantity, addItem, recordAdoption, price, toast, setTimeout, onClose]);
+    // 部材注意点があるかチェック（あれば確認モーダル表示）
+    checkWarnings(
+      product.id,
+      product.name,
+      product.categoryName,
+      executeAddToCart
+    );
+  }, [product, variant, canAddToCart, isSingleSelection, categoryRule.maxSelection, toast, checkWarnings, executeAddToCart]);
 
   const handleQuantityChange = useCallback((delta: number) => {
     const newQuantity = quantity + delta;
@@ -155,6 +199,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   if (!product) return null;
 
   return (
+    <>
     <Dialog.Root open={isOpen} onOpenChange={onClose}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/60 z-50 backdrop-blur-sm" />
@@ -404,6 +449,17 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                   </div>
                 </div>
               )}
+
+              {/* レコメンドパネル */}
+              {allProducts.length > 0 && selectedVariant && (
+                <RecommendationPanel
+                  selectedProduct={product}
+                  selectedVariant={selectedVariant}
+                  allProducts={allProducts}
+                  cartProductIds={cartProductIds}
+                  onProductSelect={handleRecommendedProductSelect}
+                />
+              )}
             </div>
           </div>
 
@@ -440,5 +496,9 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
+
+    {/* 部材注意点警告モーダル */}
+    {warningModal}
+  </>
   );
 };

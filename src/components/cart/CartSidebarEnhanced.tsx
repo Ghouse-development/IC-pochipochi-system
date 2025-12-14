@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Trash2, Plus, Minus, Save, CheckCircle, Download, FileText, Star, ShoppingBag, FileSpreadsheet, Presentation, Package } from 'lucide-react';
+import { X, Trash2, Plus, Minus, Save, CheckCircle, Download, FileText, Star, ShoppingBag, FileSpreadsheet, Presentation, Package, Building2 } from 'lucide-react';
 import { useCartStore } from '../../stores/useCartStore';
 import { useOperationLogStore } from '../../stores/useOperationLogStore';
 import { formatPrice } from '../../lib/utils';
@@ -8,9 +8,11 @@ import { Badge } from '../common/Badge';
 import { useToast } from '../common/Toast';
 import { ConfirmDialog } from '../common/ConfirmDialog';
 import { exportToExcel, exportToPDF, exportSpecificationSheet, exportPresentationData, exportAllFormats } from '../../utils/exportEstimate';
+import { openSpecificationWindow } from '../../utils/specificationPDF';
 import { supabase } from '../../lib/supabase';
 import { createLogger } from '../../lib/logger';
 import { STORAGE_KEYS } from '../../lib/constants';
+import { ShowroomEstimateManager } from '../showroom/ShowroomEstimateManager';
 
 const logger = createLogger('CartSidebarEnhanced');
 
@@ -31,6 +33,7 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
   const [isExporting, setIsExporting] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [showFinalizeConfirm, setShowFinalizeConfirm] = useState(false);
+  const [showShowroomManager, setShowShowroomManager] = useState(false);
 
   const totalPrice = getTotalPrice();
 
@@ -260,6 +263,17 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
             </div>
           )}
 
+          {/* ショールーム見積追加ボタン */}
+          {!isFinalized && (
+            <button
+              onClick={() => setShowShowroomManager(true)}
+              className="mt-3 w-full py-2 px-3 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium flex items-center justify-center gap-2 transition-colors"
+            >
+              <Building2 className="w-4 h-4" />
+              ショールーム見積を追加
+            </button>
+          )}
+
           {isFinalized && (
             <div className="mt-3 p-2 bg-white/20 rounded-lg flex items-center gap-2">
               <CheckCircle className="w-5 h-5" />
@@ -486,6 +500,29 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
                       </button>
 
                       <button
+                        onClick={() => {
+                          if (!customerName || !projectName) {
+                            toast.warning('入力エラー', 'お客様名と工事名を入力してください');
+                            return;
+                          }
+                          openSpecificationWindow({
+                            customerName,
+                            projectName,
+                            planName: planName || 'LACIE',
+                            date: new Date().toLocaleDateString('ja-JP'),
+                            items,
+                            staffName: '',
+                            companyName: 'Gハウス'
+                          });
+                        }}
+                        className="w-full px-3 py-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-lg text-sm hover:from-indigo-600 hover:to-purple-600 transition-colors flex items-center gap-2"
+                      >
+                        <FileText className="w-4 h-4" />
+                        美しい仕様書（印刷用）
+                        <span className="text-xs text-white/70 ml-auto">推奨</span>
+                      </button>
+
+                      <button
                         onClick={handleExportPresentation}
                         className="w-full px-3 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm hover:bg-gray-100 transition-colors flex items-center gap-2"
                       >
@@ -541,6 +578,12 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
         message={`確定後は変更できません。\n以下の内容で確定してよろしいですか？\n\nお客様名: ${customerName}\n工事名: ${projectName}\n合計金額: ${formatPrice(totalPrice)}`}
         variant="warning"
         confirmText="確定する"
+      />
+
+      {/* ショールーム見積マネージャー */}
+      <ShowroomEstimateManager
+        isOpen={showShowroomManager}
+        onClose={() => setShowShowroomManager(false)}
       />
     </>
   );

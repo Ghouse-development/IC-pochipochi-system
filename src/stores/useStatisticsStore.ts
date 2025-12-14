@@ -10,6 +10,8 @@ interface ProductStatistic {
   lastAdopted: Date | null;
   lastViewed: Date | null;
   totalRevenue: number;
+  totalViewDuration: number; // 総閲覧時間（秒）
+  avgViewDuration: number; // 平均閲覧時間（秒）
 }
 
 interface AdoptionRateInfo {
@@ -28,6 +30,9 @@ interface StatisticsStore {
   // 商品が閲覧された時に呼ばれる
   recordView: (productId: string, productName: string, categoryName: string) => void;
 
+  // 閲覧終了時に呼ばれる（閲覧時間を記録）
+  recordViewDuration: (productId: string, durationSeconds: number) => void;
+
   // 商品が採用された時に呼ばれる
   recordAdoption: (productId: string, productName: string, categoryName: string, price: number) => void;
 
@@ -36,6 +41,10 @@ interface StatisticsStore {
   getTopProducts: (limit?: number) => ProductStatistic[];
   getMonthlyStats: () => { month: number; count: number; revenue: number }[];
   getCategoryStats: () => { category: string; count: number; revenue: number }[];
+
+  // 閲覧時間分析
+  getViewDurationStats: () => { productId: string; productName: string; categoryName: string; avgViewDuration: number; totalViews: number }[];
+  getLongestViewedProducts: (limit?: number) => { productId: string; productName: string; categoryName: string; avgViewDuration: number }[];
 
   // 採用率分析
   getAdoptionRates: () => AdoptionRateInfo[];
@@ -74,9 +83,31 @@ export const useStatisticsStore = create<StatisticsStore>()(
               viewCount: 1,
               lastAdopted: null,
               lastViewed: new Date(),
-              totalRevenue: 0
+              totalRevenue: 0,
+              totalViewDuration: 0,
+              avgViewDuration: 0
             });
           }
+
+          return { productStats: updatedStats };
+        });
+      },
+
+      recordViewDuration: (productId, durationSeconds) => {
+        set((state) => {
+          const existingStatIndex = state.productStats.findIndex(s => s.productId === productId);
+          if (existingStatIndex < 0) return state;
+
+          const updatedStats = [...state.productStats];
+          const current = updatedStats[existingStatIndex];
+          const newTotalDuration = current.totalViewDuration + durationSeconds;
+          const newAvgDuration = current.viewCount > 0 ? Math.round(newTotalDuration / current.viewCount) : durationSeconds;
+
+          updatedStats[existingStatIndex] = {
+            ...current,
+            totalViewDuration: newTotalDuration,
+            avgViewDuration: newAvgDuration
+          };
 
           return { productStats: updatedStats };
         });
@@ -106,7 +137,9 @@ export const useStatisticsStore = create<StatisticsStore>()(
               viewCount: 1, // 採用時は最低1回は見たとみなす
               lastAdopted: new Date(),
               lastViewed: new Date(),
-              totalRevenue: price
+              totalRevenue: price,
+              totalViewDuration: 0,
+              avgViewDuration: 0
             });
           }
           
@@ -156,6 +189,36 @@ export const useStatisticsStore = create<StatisticsStore>()(
           count: data.count,
           revenue: data.revenue
         }));
+      },
+
+      // 閲覧時間統計
+      getViewDurationStats: () => {
+        const stats = get().productStats;
+        return stats
+          .filter(s => s.totalViewDuration > 0)
+          .map(s => ({
+            productId: s.productId,
+            productName: s.productName,
+            categoryName: s.categoryName,
+            avgViewDuration: s.avgViewDuration,
+            totalViews: s.viewCount
+          }))
+          .sort((a, b) => b.avgViewDuration - a.avgViewDuration);
+      },
+
+      // 長時間閲覧された商品
+      getLongestViewedProducts: (limit = 10) => {
+        const stats = get().productStats;
+        return stats
+          .filter(s => s.avgViewDuration > 0)
+          .map(s => ({
+            productId: s.productId,
+            productName: s.productName,
+            categoryName: s.categoryName,
+            avgViewDuration: s.avgViewDuration
+          }))
+          .sort((a, b) => b.avgViewDuration - a.avgViewDuration)
+          .slice(0, limit);
       },
 
       // 採用率分析
