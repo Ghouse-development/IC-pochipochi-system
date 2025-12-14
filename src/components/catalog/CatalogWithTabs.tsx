@@ -817,7 +817,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
   // フィルタリング
   const filteredItems = useMemo(() => {
-    return items.filter(item => {
+    const filtered = items.filter(item => {
       // 検索フィルター
       if (searchTerm) {
         const term = searchTerm.toLowerCase();
@@ -838,6 +838,29 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
         if (!hasColor) return false;
       }
       return true;
+    });
+
+    // ソート: サブカテゴリ → 標準品優先 → メーカー名
+    return filtered.sort((a, b) => {
+      // 1. サブカテゴリでグループ化
+      const subA = a.category_name || '';
+      const subB = b.category_name || '';
+      if (subA !== subB) return subA.localeCompare(subB, 'ja');
+
+      // 2. 標準品を先に
+      const pricingA = a.pricing?.find(p => p.product?.code === selectedPlanId);
+      const pricingB = b.pricing?.find(p => p.product?.code === selectedPlanId);
+      const isStandardA = pricingA?.is_standard ?? false;
+      const isStandardB = pricingB?.is_standard ?? false;
+      if (isStandardA !== isStandardB) return isStandardA ? -1 : 1;
+
+      // 3. メーカー名順
+      const manuA = a.manufacturer || '';
+      const manuB = b.manufacturer || '';
+      if (manuA !== manuB) return manuA.localeCompare(manuB, 'ja');
+
+      // 4. 商品名順
+      return (a.name || '').localeCompare(b.name || '', 'ja');
     });
   }, [items, searchTerm, filterType, selectedPlanId, selectedSubcategory, selectedColor]);
 
