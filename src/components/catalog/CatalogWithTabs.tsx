@@ -508,6 +508,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   const filterType = (searchParams.get('filter') as 'all' | 'standard' | 'option') || 'all';
   const selectedSubcategory = searchParams.get('sub') || '';
   const selectedColor = searchParams.get('color') || '';
+  const priceMax = parseInt(searchParams.get('maxPrice') || '0', 10) || 0;
 
   // 検索・フィルター更新関数（URL同期）
   const setSearchTerm = useCallback((term: string) => {
@@ -553,6 +554,18 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
       return prev;
     });
   }, [setSearchParams]);
+
+  const setPriceMax = useCallback((price: number) => {
+    setSearchParams(prev => {
+      if (price > 0) {
+        prev.set('maxPrice', price.toString());
+      } else {
+        prev.delete('maxPrice');
+      }
+      return prev;
+    });
+  }, [setSearchParams]);
+
   const [selectedPlanId, setSelectedPlanId] = useState<string>('LACIE');
   const [addedItemId, setAddedItemId] = useState<string | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -568,6 +581,12 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
   // 部屋別内装プランナー
   const [isRoomPlannerOpen, setIsRoomPlannerOpen] = useState(false);
+
+  // お気に入りフィルター
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+
+  // 廃番商品を非表示（デフォルトで非表示）
+  const [hideDiscontinued, setHideDiscontinued] = useState(true);
 
   // データ
   const [items, setItems] = useState<ItemWithDetails[]>([]);
@@ -818,13 +837,34 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   // フィルタリング
   const filteredItems = useMemo(() => {
     const filtered = items.filter(item => {
-      // 検索フィルター
+      // 検索フィルター（あいまい検索対応）
       if (searchTerm) {
         const term = searchTerm.toLowerCase();
-        if (!item.name.toLowerCase().includes(term) &&
-            !item.manufacturer?.toLowerCase().includes(term)) {
-          return false;
-        }
+        // ひらがな→カタカナ変換
+        const toKatakana = (str: string) => str.replace(/[\u3041-\u3096]/g, ch =>
+          String.fromCharCode(ch.charCodeAt(0) + 0x60));
+        // カタカナ→ひらがな変換
+        const toHiragana = (str: string) => str.replace(/[\u30A1-\u30F6]/g, ch =>
+          String.fromCharCode(ch.charCodeAt(0) - 0x60));
+
+        const termKata = toKatakana(term);
+        const termHira = toHiragana(term);
+        const name = item.name.toLowerCase();
+        const nameKata = toKatakana(name);
+        const nameHira = toHiragana(name);
+        const manu = (item.manufacturer || '').toLowerCase();
+        const manuKata = toKatakana(manu);
+        const model = (item.model_number || '').toLowerCase();
+
+        const matches =
+          name.includes(term) || name.includes(termKata) || name.includes(termHira) ||
+          nameKata.includes(term) || nameKata.includes(termKata) ||
+          nameHira.includes(term) || nameHira.includes(termHira) ||
+          manu.includes(term) || manu.includes(termKata) ||
+          manuKata.includes(term) || manuKata.includes(termKata) ||
+          model.includes(term);
+
+        if (!matches) return false;
       }
       // 標準/オプションフィルター
       const pricing = item.pricing?.find(p => p.product?.code === selectedPlanId);
@@ -836,6 +876,20 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
       if (selectedColor) {
         const hasColor = item.variants?.some(v => v.color_name === selectedColor);
         if (!hasColor) return false;
+      }
+      // 価格フィルター
+      if (priceMax > 0) {
+        const pricing = item.pricing?.find(p => p.product?.code === selectedPlanId);
+        const price = pricing?.price ?? 0;
+        if (price > priceMax) return false;
+      }
+      // お気に入りフィルター
+      if (showFavoritesOnly && !favorites.includes(item.id)) {
+        return false;
+      }
+      // 廃番フィルター
+      if (hideDiscontinued && item.is_discontinued) {
+        return false;
       }
       return true;
     });
@@ -862,7 +916,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
       // 4. 商品名順
       return (a.name || '').localeCompare(b.name || '', 'ja');
     });
-  }, [items, searchTerm, filterType, selectedPlanId, selectedSubcategory, selectedColor]);
+  }, [items, searchTerm, filterType, selectedPlanId, selectedSubcategory, selectedColor, priceMax, showFavoritesOnly, favorites, hideDiscontinued]);
 
   // レコメンド用にCatalogProduct形式に変換
   const catalogProducts = useMemo(() => {
@@ -1557,6 +1611,22 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   ))}
                 </div>
 
+                {/* お気に入りフィルター */}
+                {favorites.length > 0 && (
+                  <button
+                    onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+                    className={`p-2.5 rounded-xl transition-all flex items-center gap-1.5 ${
+                      showFavoritesOnly
+                        ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-lg'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 hover:text-pink-500'
+                    }`}
+                    title={showFavoritesOnly ? 'すべて表示' : `お気に入りのみ (${favorites.length})`}
+                  >
+                    <Heart className={`w-4 h-4 ${showFavoritesOnly ? 'fill-current' : ''}`} />
+                    {showFavoritesOnly && <span className="text-xs font-bold">{favorites.length}</span>}
+                  </button>
+                )}
+
                 {/* クイック選択モード */}
                 <button
                   onClick={() => setQuickSelectMode(!quickSelectMode)}
@@ -1608,12 +1678,39 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                       </select>
                     </div>
                   )}
+                  {/* 価格フィルター */}
+                  <div className="flex items-center gap-1">
+                    <span className="text-xs text-gray-500 dark:text-gray-400">上限:</span>
+                    <select
+                      value={priceMax}
+                      onChange={(e) => setPriceMax(parseInt(e.target.value, 10))}
+                      className="px-2 py-1.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-xs font-medium text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-teal-500"
+                    >
+                      <option value="0">上限なし</option>
+                      <option value="10000">1万円以下</option>
+                      <option value="30000">3万円以下</option>
+                      <option value="50000">5万円以下</option>
+                      <option value="100000">10万円以下</option>
+                      <option value="200000">20万円以下</option>
+                    </select>
+                  </div>
+                  {/* 廃番表示切替 */}
+                  <label className="flex items-center gap-1.5 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={!hideDiscontinued}
+                      onChange={(e) => setHideDiscontinued(!e.target.checked)}
+                      className="w-3.5 h-3.5 rounded border-gray-300 text-teal-500 focus:ring-teal-500"
+                    />
+                    <span className="text-xs text-gray-500 dark:text-gray-400">廃番も表示</span>
+                  </label>
                   {/* フィルタークリア */}
-                  {(selectedSubcategory || selectedColor) && (
+                  {(selectedSubcategory || selectedColor || priceMax > 0) && (
                     <button
                       onClick={() => {
                         setSelectedSubcategory('');
                         setSelectedColor('');
+                        setPriceMax(0);
                       }}
                       className="px-2 py-1 text-xs text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
                     >
@@ -1651,29 +1748,45 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 <EmptyState searchTerm={searchTerm} onClear={() => setSearchTerm('')} />
               ) : (
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-                  {filteredItems.map((item, index) => (
-                    <ItemCard
-                      key={item.id}
-                      item={item}
-                      index={index}
-                      getPrice={getPrice}
-                      isStandard={isStandard}
-                      getImageUrl={getImageUrl}
-                      cartItemIds={cartItemIds}
-                      addedItemId={addedItemId}
-                      hoveredItem={hoveredItem}
-                      setHoveredItem={setHoveredItem}
-                      handleOpenDetail={handleOpenDetail}
-                      handleAddToCart={handleAddToCart}
-                      handleRemoveFromCart={handleRemoveFromCart}
-                      handleToggleCompare={handleToggleCompare}
-                      isInCompare={isInCompare}
-                      handleToggleFavorite={handleToggleFavorite}
-                      isFavorite={isFavorite}
-                      searchTerm={searchTerm}
-                      showManufacturer={true}
-                    />
-                  ))}
+                  {filteredItems.map((item, index) => {
+                    // サブカテゴリが変わったらヘッダーを表示
+                    const prevItem = index > 0 ? filteredItems[index - 1] : null;
+                    const showSubcategoryHeader = !prevItem || prevItem.category_name !== item.category_name;
+
+                    return (
+                      <React.Fragment key={item.id}>
+                        {showSubcategoryHeader && item.category_name && (
+                          <div className="col-span-full flex items-center gap-3 py-3 mt-2 first:mt-0">
+                            <div className="h-px flex-1 bg-gradient-to-r from-teal-200 to-transparent dark:from-teal-800" />
+                            <span className="px-4 py-1.5 bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 text-sm font-bold rounded-full whitespace-nowrap">
+                              {item.category_name}
+                            </span>
+                            <div className="h-px flex-1 bg-gradient-to-l from-teal-200 to-transparent dark:from-teal-800" />
+                          </div>
+                        )}
+                        <ItemCard
+                          item={item}
+                          index={index}
+                          getPrice={getPrice}
+                          isStandard={isStandard}
+                          getImageUrl={getImageUrl}
+                          cartItemIds={cartItemIds}
+                          addedItemId={addedItemId}
+                          hoveredItem={hoveredItem}
+                          setHoveredItem={setHoveredItem}
+                          handleOpenDetail={handleOpenDetail}
+                          handleAddToCart={handleAddToCart}
+                          handleRemoveFromCart={handleRemoveFromCart}
+                          handleToggleCompare={handleToggleCompare}
+                          isInCompare={isInCompare}
+                          handleToggleFavorite={handleToggleFavorite}
+                          isFavorite={isFavorite}
+                          searchTerm={searchTerm}
+                          showManufacturer={true}
+                        />
+                      </React.Fragment>
+                    );
+                  })}
                 </div>
               )}
 
