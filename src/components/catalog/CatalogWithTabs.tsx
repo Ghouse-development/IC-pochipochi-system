@@ -1344,56 +1344,29 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 <EmptyState searchTerm={searchTerm} onClear={() => setSearchTerm('')} />
               ) : (
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-                  {(() => {
-                    // サブカテゴリごとのアイテム数をカウント
-                    const subcategoryCounts = filteredItems.reduce((acc, item) => {
-                      const key = item.category_name || '';
-                      acc[key] = (acc[key] || 0) + 1;
-                      return acc;
-                    }, {} as Record<string, number>);
-
-                    return filteredItems.map((item, index) => {
-                      // サブカテゴリヘッダーは5件以上ある場合のみ表示（グリッドレイアウトを崩さないため）
-                      const subcategoryCount = subcategoryCounts[item.category_name || ''] || 0;
-                      const prevItem = index > 0 ? filteredItems[index - 1] : null;
-                      const isNewSubcategory = !prevItem || prevItem.category_name !== item.category_name;
-                      const showSubcategoryHeader = isNewSubcategory && item.category_name && subcategoryCount >= 5;
-
-                      return (
-                        <React.Fragment key={item.id}>
-                          {showSubcategoryHeader && (
-                            <div className="col-span-full flex items-center gap-3 py-3 mt-4 first:mt-0">
-                              <div className="h-px flex-1 bg-gradient-to-r from-teal-200 to-transparent dark:from-teal-800" />
-                              <span className="px-4 py-1.5 bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 text-sm font-bold rounded-full whitespace-nowrap">
-                                {item.category_name} ({subcategoryCount})
-                              </span>
-                              <div className="h-px flex-1 bg-gradient-to-l from-teal-200 to-transparent dark:from-teal-800" />
-                            </div>
-                          )}
-                          <ItemCard
-                          item={item}
-                          index={index}
-                          getPrice={getPrice}
-                          isStandard={isStandard}
-                          getImageUrl={getImageUrl}
-                          cartItemIds={cartItemIds}
-                          addedItemId={addedItemId}
-                          hoveredItem={hoveredItem}
-                          setHoveredItem={setHoveredItem}
-                          handleOpenDetail={handleOpenDetail}
-                          handleAddToCart={handleAddToCart}
-                          handleRemoveFromCart={handleRemoveFromCart}
-                          handleToggleCompare={handleToggleCompare}
-                          isInCompare={isInCompare}
-                          handleToggleFavorite={handleToggleFavorite}
-                          isFavorite={isFavorite}
-                          searchTerm={searchTerm}
-                          showManufacturer={true}
-                        />
-                      </React.Fragment>
-                    );
-                  });
-                  })()}
+                  {filteredItems.map((item, index) => (
+                    <ItemCard
+                      key={item.id}
+                      item={item}
+                      index={index}
+                      getPrice={getPrice}
+                      isStandard={isStandard}
+                      getImageUrl={getImageUrl}
+                      cartItemIds={cartItemIds}
+                      addedItemId={addedItemId}
+                      hoveredItem={hoveredItem}
+                      setHoveredItem={setHoveredItem}
+                      handleOpenDetail={handleOpenDetail}
+                      handleAddToCart={handleAddToCart}
+                      handleRemoveFromCart={handleRemoveFromCart}
+                      handleToggleCompare={handleToggleCompare}
+                      isInCompare={isInCompare}
+                      handleToggleFavorite={handleToggleFavorite}
+                      isFavorite={isFavorite}
+                      searchTerm={searchTerm}
+                      showManufacturer={true}
+                    />
+                  ))}
                 </div>
               )}
 
