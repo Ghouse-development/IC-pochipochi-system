@@ -92,9 +92,9 @@ describe('useStatisticsStore', () => {
     it('should return stats sorted by adoption count', () => {
       useStatisticsStore.setState({
         productStats: [
-          { productId: 'p1', productName: '商品1', categoryName: '外壁', adoptionCount: 5, viewCount: 10, lastAdopted: null, lastViewed: null, totalRevenue: 0 },
-          { productId: 'p2', productName: '商品2', categoryName: '屋根', adoptionCount: 10, viewCount: 15, lastAdopted: null, lastViewed: null, totalRevenue: 0 },
-          { productId: 'p3', productName: '商品3', categoryName: '内装', adoptionCount: 3, viewCount: 5, lastAdopted: null, lastViewed: null, totalRevenue: 0 },
+          { productId: 'p1', productName: '商品1', categoryName: '外壁', adoptionCount: 5, viewCount: 10, lastAdopted: null, lastViewed: null, totalRevenue: 0, totalViewDuration: 0, avgViewDuration: 0 },
+          { productId: 'p2', productName: '商品2', categoryName: '屋根', adoptionCount: 10, viewCount: 15, lastAdopted: null, lastViewed: null, totalRevenue: 0, totalViewDuration: 0, avgViewDuration: 0 },
+          { productId: 'p3', productName: '商品3', categoryName: '内装', adoptionCount: 3, viewCount: 5, lastAdopted: null, lastViewed: null, totalRevenue: 0, totalViewDuration: 0, avgViewDuration: 0 },
         ],
         yearlyAdoptions: [],
       });
@@ -120,6 +120,8 @@ describe('useStatisticsStore', () => {
           lastAdopted: null,
           lastViewed: null,
           totalRevenue: 0,
+          totalViewDuration: 0,
+          avgViewDuration: 0,
         })),
         yearlyAdoptions: [],
       });
@@ -142,6 +144,8 @@ describe('useStatisticsStore', () => {
           lastAdopted: null,
           lastViewed: null,
           totalRevenue: 0,
+          totalViewDuration: 0,
+          avgViewDuration: 0,
         })),
         yearlyAdoptions: [],
       });
@@ -168,9 +172,9 @@ describe('useStatisticsStore', () => {
     it('should aggregate stats by category', () => {
       useStatisticsStore.setState({
         productStats: [
-          { productId: 'p1', productName: '商品1', categoryName: '外壁', adoptionCount: 5, viewCount: 10, lastAdopted: null, lastViewed: null, totalRevenue: 10000 },
-          { productId: 'p2', productName: '商品2', categoryName: '外壁', adoptionCount: 3, viewCount: 8, lastAdopted: null, lastViewed: null, totalRevenue: 8000 },
-          { productId: 'p3', productName: '商品3', categoryName: '屋根', adoptionCount: 2, viewCount: 5, lastAdopted: null, lastViewed: null, totalRevenue: 5000 },
+          { productId: 'p1', productName: '商品1', categoryName: '外壁', adoptionCount: 5, viewCount: 10, lastAdopted: null, lastViewed: null, totalRevenue: 10000, totalViewDuration: 0, avgViewDuration: 0 },
+          { productId: 'p2', productName: '商品2', categoryName: '外壁', adoptionCount: 3, viewCount: 8, lastAdopted: null, lastViewed: null, totalRevenue: 8000, totalViewDuration: 0, avgViewDuration: 0 },
+          { productId: 'p3', productName: '商品3', categoryName: '屋根', adoptionCount: 2, viewCount: 5, lastAdopted: null, lastViewed: null, totalRevenue: 5000, totalViewDuration: 0, avgViewDuration: 0 },
         ],
         yearlyAdoptions: [],
       });
@@ -188,8 +192,8 @@ describe('useStatisticsStore', () => {
     it('should calculate adoption rates', () => {
       useStatisticsStore.setState({
         productStats: [
-          { productId: 'p1', productName: '商品1', categoryName: '外壁', adoptionCount: 5, viewCount: 10, lastAdopted: null, lastViewed: null, totalRevenue: 0 },
-          { productId: 'p2', productName: '商品2', categoryName: '屋根', adoptionCount: 8, viewCount: 10, lastAdopted: null, lastViewed: null, totalRevenue: 0 },
+          { productId: 'p1', productName: '商品1', categoryName: '外壁', adoptionCount: 5, viewCount: 10, lastAdopted: null, lastViewed: null, totalRevenue: 0, totalViewDuration: 0, avgViewDuration: 0 },
+          { productId: 'p2', productName: '商品2', categoryName: '屋根', adoptionCount: 8, viewCount: 10, lastAdopted: null, lastViewed: null, totalRevenue: 0, totalViewDuration: 0, avgViewDuration: 0 },
         ],
         yearlyAdoptions: [],
       });
@@ -204,8 +208,8 @@ describe('useStatisticsStore', () => {
     it('should sort by adoption rate descending', () => {
       useStatisticsStore.setState({
         productStats: [
-          { productId: 'p1', productName: '商品1', categoryName: '外壁', adoptionCount: 2, viewCount: 10, lastAdopted: null, lastViewed: null, totalRevenue: 0 },
-          { productId: 'p2', productName: '商品2', categoryName: '屋根', adoptionCount: 8, viewCount: 10, lastAdopted: null, lastViewed: null, totalRevenue: 0 },
+          { productId: 'p1', productName: '商品1', categoryName: '外壁', adoptionCount: 2, viewCount: 10, lastAdopted: null, lastViewed: null, totalRevenue: 0, totalViewDuration: 0, avgViewDuration: 0 },
+          { productId: 'p2', productName: '商品2', categoryName: '屋根', adoptionCount: 8, viewCount: 10, lastAdopted: null, lastViewed: null, totalRevenue: 0, totalViewDuration: 0, avgViewDuration: 0 },
         ],
         yearlyAdoptions: [],
       });
@@ -221,9 +225,9 @@ describe('useStatisticsStore', () => {
     it('should return products with views but no adoptions', () => {
       useStatisticsStore.setState({
         productStats: [
-          { productId: 'p1', productName: '商品1', categoryName: '外壁', adoptionCount: 0, viewCount: 10, lastAdopted: null, lastViewed: null, totalRevenue: 0 },
-          { productId: 'p2', productName: '商品2', categoryName: '屋根', adoptionCount: 5, viewCount: 10, lastAdopted: null, lastViewed: null, totalRevenue: 0 },
-          { productId: 'p3', productName: '商品3', categoryName: '内装', adoptionCount: 0, viewCount: 5, lastAdopted: null, lastViewed: null, totalRevenue: 0 },
+          { productId: 'p1', productName: '商品1', categoryName: '外壁', adoptionCount: 0, viewCount: 10, lastAdopted: null, lastViewed: null, totalRevenue: 0, totalViewDuration: 0, avgViewDuration: 0 },
+          { productId: 'p2', productName: '商品2', categoryName: '屋根', adoptionCount: 5, viewCount: 10, lastAdopted: null, lastViewed: null, totalRevenue: 0, totalViewDuration: 0, avgViewDuration: 0 },
+          { productId: 'p3', productName: '商品3', categoryName: '内装', adoptionCount: 0, viewCount: 5, lastAdopted: null, lastViewed: null, totalRevenue: 0, totalViewDuration: 0, avgViewDuration: 0 },
         ],
         yearlyAdoptions: [],
       });
@@ -238,8 +242,8 @@ describe('useStatisticsStore', () => {
     it('should sort by view count descending', () => {
       useStatisticsStore.setState({
         productStats: [
-          { productId: 'p1', productName: '商品1', categoryName: '外壁', adoptionCount: 0, viewCount: 5, lastAdopted: null, lastViewed: null, totalRevenue: 0 },
-          { productId: 'p2', productName: '商品2', categoryName: '屋根', adoptionCount: 0, viewCount: 15, lastAdopted: null, lastViewed: null, totalRevenue: 0 },
+          { productId: 'p1', productName: '商品1', categoryName: '外壁', adoptionCount: 0, viewCount: 5, lastAdopted: null, lastViewed: null, totalRevenue: 0, totalViewDuration: 0, avgViewDuration: 0 },
+          { productId: 'p2', productName: '商品2', categoryName: '屋根', adoptionCount: 0, viewCount: 15, lastAdopted: null, lastViewed: null, totalRevenue: 0, totalViewDuration: 0, avgViewDuration: 0 },
         ],
         yearlyAdoptions: [],
       });
@@ -255,9 +259,9 @@ describe('useStatisticsStore', () => {
     it('should return products below threshold', () => {
       useStatisticsStore.setState({
         productStats: [
-          { productId: 'p1', productName: '商品1', categoryName: '外壁', adoptionCount: 1, viewCount: 10, lastAdopted: null, lastViewed: null, totalRevenue: 0 }, // 10%
-          { productId: 'p2', productName: '商品2', categoryName: '屋根', adoptionCount: 5, viewCount: 10, lastAdopted: null, lastViewed: null, totalRevenue: 0 }, // 50%
-          { productId: 'p3', productName: '商品3', categoryName: '内装', adoptionCount: 1, viewCount: 5, lastAdopted: null, lastViewed: null, totalRevenue: 0 }, // 20%
+          { productId: 'p1', productName: '商品1', categoryName: '外壁', adoptionCount: 1, viewCount: 10, lastAdopted: null, lastViewed: null, totalRevenue: 0, totalViewDuration: 0, avgViewDuration: 0 }, // 10%
+          { productId: 'p2', productName: '商品2', categoryName: '屋根', adoptionCount: 5, viewCount: 10, lastAdopted: null, lastViewed: null, totalRevenue: 0, totalViewDuration: 0, avgViewDuration: 0 }, // 50%
+          { productId: 'p3', productName: '商品3', categoryName: '内装', adoptionCount: 1, viewCount: 5, lastAdopted: null, lastViewed: null, totalRevenue: 0, totalViewDuration: 0, avgViewDuration: 0 }, // 20%
         ],
         yearlyAdoptions: [],
       });
@@ -274,8 +278,8 @@ describe('useStatisticsStore', () => {
     it('should exclude products with less than 3 views', () => {
       useStatisticsStore.setState({
         productStats: [
-          { productId: 'p1', productName: '商品1', categoryName: '外壁', adoptionCount: 0, viewCount: 2, lastAdopted: null, lastViewed: null, totalRevenue: 0 },
-          { productId: 'p2', productName: '商品2', categoryName: '屋根', adoptionCount: 1, viewCount: 5, lastAdopted: null, lastViewed: null, totalRevenue: 0 },
+          { productId: 'p1', productName: '商品1', categoryName: '外壁', adoptionCount: 0, viewCount: 2, lastAdopted: null, lastViewed: null, totalRevenue: 0, totalViewDuration: 0, avgViewDuration: 0 },
+          { productId: 'p2', productName: '商品2', categoryName: '屋根', adoptionCount: 1, viewCount: 5, lastAdopted: null, lastViewed: null, totalRevenue: 0, totalViewDuration: 0, avgViewDuration: 0 },
         ],
         yearlyAdoptions: [],
       });
@@ -291,9 +295,9 @@ describe('useStatisticsStore', () => {
     it('should calculate adoption rates by category', () => {
       useStatisticsStore.setState({
         productStats: [
-          { productId: 'p1', productName: '商品1', categoryName: '外壁', adoptionCount: 5, viewCount: 10, lastAdopted: null, lastViewed: null, totalRevenue: 0 },
-          { productId: 'p2', productName: '商品2', categoryName: '外壁', adoptionCount: 5, viewCount: 10, lastAdopted: null, lastViewed: null, totalRevenue: 0 },
-          { productId: 'p3', productName: '商品3', categoryName: '屋根', adoptionCount: 2, viewCount: 10, lastAdopted: null, lastViewed: null, totalRevenue: 0 },
+          { productId: 'p1', productName: '商品1', categoryName: '外壁', adoptionCount: 5, viewCount: 10, lastAdopted: null, lastViewed: null, totalRevenue: 0, totalViewDuration: 0, avgViewDuration: 0 },
+          { productId: 'p2', productName: '商品2', categoryName: '外壁', adoptionCount: 5, viewCount: 10, lastAdopted: null, lastViewed: null, totalRevenue: 0, totalViewDuration: 0, avgViewDuration: 0 },
+          { productId: 'p3', productName: '商品3', categoryName: '屋根', adoptionCount: 2, viewCount: 10, lastAdopted: null, lastViewed: null, totalRevenue: 0, totalViewDuration: 0, avgViewDuration: 0 },
         ],
         yearlyAdoptions: [],
       });
@@ -310,8 +314,8 @@ describe('useStatisticsStore', () => {
     it('should sort by adoption rate descending', () => {
       useStatisticsStore.setState({
         productStats: [
-          { productId: 'p1', productName: '商品1', categoryName: '外壁', adoptionCount: 2, viewCount: 10, lastAdopted: null, lastViewed: null, totalRevenue: 0 },
-          { productId: 'p2', productName: '商品2', categoryName: '屋根', adoptionCount: 8, viewCount: 10, lastAdopted: null, lastViewed: null, totalRevenue: 0 },
+          { productId: 'p1', productName: '商品1', categoryName: '外壁', adoptionCount: 2, viewCount: 10, lastAdopted: null, lastViewed: null, totalRevenue: 0, totalViewDuration: 0, avgViewDuration: 0 },
+          { productId: 'p2', productName: '商品2', categoryName: '屋根', adoptionCount: 8, viewCount: 10, lastAdopted: null, lastViewed: null, totalRevenue: 0, totalViewDuration: 0, avgViewDuration: 0 },
         ],
         yearlyAdoptions: [],
       });

@@ -157,7 +157,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   const { setTimeout } = useTimeout();
 
   // 顧客モード
-  const { isCustomerMode, customerName } = useCustomerMode();
+  const { isCustomerMode } = useCustomerMode();
 
   // 静的データ（フォールバック用）
   const { exteriorProducts, interiorProducts, waterProducts } = useProductStore();

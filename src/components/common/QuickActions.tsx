@@ -10,12 +10,10 @@ import {
   Search,
   ShoppingCart,
   FileText,
-  Download,
   Settings,
   HelpCircle,
   Home,
   BarChart3,
-  Users,
   Package,
   Printer,
   Moon,
@@ -289,7 +287,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
                       </div>
                       {filteredActions
                         .filter((a) => a.category === 'navigation')
-                        .map((action, index) => {
+                        .map((action) => {
                           const globalIndex = filteredActions.indexOf(action);
                           return (
                             <button

@@ -5,7 +5,7 @@
  * - 手入力での追加
  */
 import React, { useState, useCallback } from 'react';
-import { Plus, Upload, Search, Package, Building2, X, Check, AlertTriangle } from 'lucide-react';
+import { Plus, Upload, Package, Building2, X, Check } from 'lucide-react';
 import { useCartStore } from '../../stores/useCartStore';
 import { useToast } from '../common/Toast';
 import { formatPrice } from '../../lib/utils';

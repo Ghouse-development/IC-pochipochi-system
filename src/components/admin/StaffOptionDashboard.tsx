@@ -5,7 +5,7 @@
  * - 月別推移グラフ
  */
 import React, { useState, useMemo } from 'react';
-import { Users, TrendingUp, DollarSign, Award, Calendar, BarChart3, Filter } from 'lucide-react';
+import { Users, TrendingUp, DollarSign, Award, BarChart3, Filter } from 'lucide-react';
 import { formatPrice } from '../../lib/utils';
 
 interface StaffSales {
@@ -219,9 +219,7 @@ export const StaffOptionDashboard: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
-              {staffData.map((staff) => {
-                const optionRate = Math.round((staff.totalOptionAmount / (staff.totalOptionAmount + staff.totalStandardAmount)) * 100);
-                return (
+              {staffData.map((staff) => (
                   <tr
                     key={staff.staffId}
                     onClick={() => setSelectedStaff(selectedStaff === staff.staffId ? null : staff.staffId)}
@@ -269,8 +267,7 @@ export const StaffOptionDashboard: React.FC = () => {
                       </div>
                     </td>
                   </tr>
-                );
-              })}
+              ))}
             </tbody>
           </table>
         </div>

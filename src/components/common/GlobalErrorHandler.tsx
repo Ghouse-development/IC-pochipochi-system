@@ -6,7 +6,7 @@
  * - 自動リカバリー試行
  */
 import React, { Component, type ReactNode, type ErrorInfo } from 'react';
-import { AlertTriangle, RefreshCw, Home, MessageCircle, Copy, Check } from 'lucide-react';
+import { AlertTriangle, RefreshCw, Home, Copy, Check } from 'lucide-react';
 
 interface ErrorState {
   hasError: boolean;

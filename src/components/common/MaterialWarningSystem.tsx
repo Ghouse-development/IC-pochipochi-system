@@ -5,7 +5,7 @@
  * - 重要度別の警告レベル
  */
 import React, { useState, useCallback, useEffect } from 'react';
-import { AlertTriangle, AlertCircle, Info, CheckCircle, X, Eye, Clock } from 'lucide-react';
+import { AlertTriangle, AlertCircle, Info, CheckCircle, Eye, Clock } from 'lucide-react';
 import * as Dialog from '@radix-ui/react-dialog';
 
 export type WarningLevel = 'critical' | 'warning' | 'info';

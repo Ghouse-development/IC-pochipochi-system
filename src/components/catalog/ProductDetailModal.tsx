@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
-import { X, Plus, Minus, ShoppingCart, Check, AlertCircle, Info, FileText, QrCode, Sparkles } from 'lucide-react';
+import { X, Plus, Minus, ShoppingCart, Check, AlertCircle, Info, FileText, QrCode } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import type { Product, ProductVariant } from '../../types/product';
 import { UNIT_SYMBOLS } from '../../types/product';
