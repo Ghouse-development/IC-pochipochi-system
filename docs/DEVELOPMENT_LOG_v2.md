@@ -2243,4 +2243,101 @@ Build: Success (14.30s)
 ```
 
 ---
-最終更新: 2025年12月14日
+
+## 2025年12月16日 グリッドレイアウト修正 & ビルドエラー解消
+
+### 問題の概要
+外壁カテゴリの商品が縦に並んで表示される問題（グリッドレイアウトが崩れる）
+
+### 原因調査
+以下の可能性を網羅的に調査：
+
+| # | 原因候補 | 調査結果 |
+|---|----------|---------|
+| 1 | サブカテゴリヘッダーの`col-span-full` | ✅ **原因特定** |
+| 2 | 表示モード切替（リスト/グリッド） | 該当なし |
+| 3 | 外壁カテゴリ専用のレンダリングロジック | 該当なし |
+| 4 | 親コンテナのCSS（flex-col等） | 該当なし |
+| 5 | 別コンポーネントでの表示 | 該当なし |
+| 6 | responsive-fixes.cssの上書き | 該当なし |
+| 7 | ItemCard.tsxのwidth設定 | 該当なし |
+
+### 修正内容
+
+#### 1. サブカテゴリヘッダー削除 (`src/components/catalog/CatalogWithTabs.tsx`)
+
+**修正前（問題のコード）**:
+```tsx
+<div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+  {(() => {
+    return filteredItems.map((item, index) => {
+      const showSubcategoryHeader = isNewSubcategory && item.category_name;
+      return (
+        <React.Fragment key={item.id}>
+          {showSubcategoryHeader && (
+            <div className="col-span-full ...">  {/* ← これがグリッドを崩す */}
+              {item.category_name}
+            </div>
+          )}
+          <ItemCard ... />
+        </React.Fragment>
+      );
+    });
+  })()}
+</div>
+```
+
+**修正後（シンプルなグリッド）**:
+```tsx
+<div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+  {filteredItems.map((item, index) => (
+    <ItemCard
+      key={item.id}
+      item={item}
+      index={index}
+      ...
+    />
+  ))}
+</div>
+```
+
+#### 2. TypeScriptビルドエラー修正（8ファイル）
+
+| ファイル | 修正内容 |
+|----------|---------|
+| `StaffOptionDashboard.tsx` | 未使用の`Calendar`インポート、`optionRate`変数を削除 |
+| `ProductDetailModal.tsx` | 未使用の`Sparkles`インポートを削除 |
+| `GlobalErrorHandler.tsx` | 未使用の`MessageCircle`インポートを削除 |
+| `MaterialWarningSystem.tsx` | 未使用の`X`インポートを削除 |
+| `QuickActions.tsx` | 未使用の`Download`, `Users`インポート、`index`パラメータを削除 |
+| `ShowroomEstimateManager.tsx` | 未使用の`Search`, `AlertTriangle`インポートを削除 |
+| `CatalogWithTabs.tsx` | 未使用の`customerName`変数を削除 |
+| `useStatisticsStore.test.ts` | `totalViewDuration`, `avgViewDuration`プロパティを追加 |
+
+### デプロイ
+
+```bash
+# Vercel CLIで本番デプロイ
+npx vercel --prod --yes
+
+# 結果
+Build: ✓ 2512 modules transformed.
+Status: ● Ready
+Time: 26s
+URL: https://ic-pochipochi-system.vercel.app
+```
+
+### コミット履歴
+```
+87f7d43 fix: TypeScriptビルドエラーを修正
+71c2909 fix: サブカテゴリヘッダーを完全に削除（グリッドレイアウト修正）
+d5a02f4 fix: サブカテゴリヘッダーの表示条件を5件以上に変更（グリッドレイアウト改善）
+```
+
+### 学んだこと
+- CSS Gridで`col-span-full`を持つ要素を`map()`内で挿入すると、グリッドフローが崩れる
+- サブカテゴリのグループ化表示は、グリッド外で行うか、別のアプローチが必要
+- Vercelのデプロイが反映されるまで、ブラウザキャッシュのクリア（Ctrl+Shift+R）が必要
+
+---
+最終更新: 2025年12月16日
