@@ -1113,15 +1113,16 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 </div>
 
                 {/* フィルターボタン（すべて/標準/オプション） */}
-                <div className="hidden sm:flex bg-gray-100 dark:bg-gray-700 p-1 rounded-xl">
+                <div className="hidden sm:flex bg-gray-100 dark:bg-gray-700 p-1 rounded-xl" title="標準＝追加料金なし / オプション＝追加料金あり">
                   {[
-                    { value: 'all', label: 'すべて' },
-                    { value: 'standard', label: '標準' },
-                    { value: 'option', label: 'オプション' },
+                    { value: 'all', label: 'すべて', title: 'すべての商品を表示' },
+                    { value: 'standard', label: '標準', title: '追加料金なしの商品のみ表示' },
+                    { value: 'option', label: 'オプション', title: '追加料金ありの商品のみ表示' },
                   ].map(opt => (
                     <button
                       key={opt.value}
                       onClick={() => setFilterType(opt.value as FilterTypeValue)}
+                      title={opt.title}
                       className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${
                         filterType === opt.value
                           ? opt.value === 'standard'
