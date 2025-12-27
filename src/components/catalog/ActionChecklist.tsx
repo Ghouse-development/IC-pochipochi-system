@@ -125,7 +125,7 @@ export const ActionChecklist: React.FC<ActionChecklistProps> = ({
       <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-800 border-b border-blue-100 dark:border-gray-700">
         <h2 className="text-sm font-bold text-gray-800 dark:text-white mb-3 flex items-center gap-2">
           <TrendingUp className="w-4 h-4 text-blue-600" />
-          アクションチェックリスト
+          選ぶもの一覧
         </h2>
 
         {/* 進捗バー - メイン */}
@@ -265,9 +265,9 @@ export const ActionChecklist: React.FC<ActionChecklistProps> = ({
                           : 'bg-white dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-800 hover:shadow-sm'
                       }`}
                     >
-                      {/* 番号 */}
-                      <div className="w-7 h-7 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center flex-shrink-0 text-xs font-bold text-gray-500 dark:text-gray-400">
-                        {idx + 1}
+                      {/* 空のチェックマーク */}
+                      <div className="w-7 h-7 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center flex-shrink-0">
+                        <Circle className="w-4 h-4 text-gray-400" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-1">

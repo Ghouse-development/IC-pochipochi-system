@@ -962,21 +962,27 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 const isComplete = decidedCount === totalCount && totalCount > 0;
                 return (
                   <div className="flex items-center gap-3">
-                    <div className="flex-1 h-2 bg-white/20 rounded-full overflow-hidden">
+                    {/* 進捗数字 */}
+                    <div className="text-sm font-bold text-white/90 min-w-[60px]">
+                      {decidedCount}/{totalCount}
+                    </div>
+                    {/* プログレスバー */}
+                    <div className="flex-1 h-2.5 bg-white/20 rounded-full overflow-hidden">
                       <div
                         className={`h-full rounded-full transition-all duration-500 ${isComplete ? 'bg-emerald-400' : 'bg-white'}`}
                         style={{ width: `${catProgressPercent}%` }}
                       />
                     </div>
-                    <div className="text-right min-w-[100px]">
+                    {/* ステータス */}
+                    <div className="text-right min-w-[80px]">
                       {isComplete ? (
-                        <span className="text-xs font-bold text-emerald-300 flex items-center gap-1">
-                          <Check className="w-3.5 h-3.5" />
+                        <span className="text-sm font-bold text-emerald-300 flex items-center gap-1">
+                          <Check className="w-4 h-4" />
                           完了！
                         </span>
                       ) : (
-                        <span className="text-xs font-medium text-white/90 whitespace-nowrap">
-                          あと <span className="font-bold text-white">{totalCount - decidedCount}</span> 項目
+                        <span className="text-sm font-medium text-white whitespace-nowrap">
+                          残り{totalCount - decidedCount}
                         </span>
                       )}
                     </div>
@@ -1070,12 +1076,12 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 <button
                   onClick={() => setShowActionChecklist(true)}
                   className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
-                  title="サイドバーを開く"
+                  title="一覧を開く"
                 >
                   <ChevronRight className="w-5 h-5 text-gray-400" />
                 </button>
                 <div className="writing-mode-vertical text-xs text-gray-500 font-medium">
-                  チェックリスト
+                  選ぶもの
                 </div>
                 <div className="text-xs font-bold text-teal-600">
                   {decidedCategories.length}/{categories.length}
@@ -1113,11 +1119,11 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 </div>
 
                 {/* フィルターボタン（すべて/標準/オプション） */}
-                <div className="hidden sm:flex bg-gray-100 dark:bg-gray-700 p-1 rounded-xl" title="標準＝追加料金なし / オプション＝追加料金あり">
+                <div className="hidden sm:flex bg-gray-100 dark:bg-gray-700 p-1 rounded-xl">
                   {[
                     { value: 'all', label: 'すべて', title: 'すべての商品を表示' },
-                    { value: 'standard', label: '標準', title: '追加料金なしの商品のみ表示' },
-                    { value: 'option', label: 'オプション', title: '追加料金ありの商品のみ表示' },
+                    { value: 'standard', label: '標準 ¥0', title: '追加料金なし（プラン内）' },
+                    { value: 'option', label: '+オプション', title: '追加料金あり' },
                   ].map(opt => (
                     <button
                       key={opt.value}
@@ -1172,9 +1178,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 {/* タイプフィルター */}
                 <div className="flex bg-gray-100 dark:bg-gray-700 p-1 rounded-xl">
                   {[
-                    { value: 'all', label: 'すべて', color: 'gray' },
-                    { value: 'standard', label: '標準', color: 'teal' },
-                    { value: 'option', label: 'OP', color: 'orange' },
+                    { value: 'all', label: '全部', color: 'gray' },
+                    { value: 'standard', label: '¥0', color: 'teal' },
+                    { value: 'option', label: '+¥', color: 'orange' },
                   ].map(opt => (
                     <button
                       key={opt.value}

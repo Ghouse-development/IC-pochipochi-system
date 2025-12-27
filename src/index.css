@@ -1,3 +1,6 @@
+/* レスポンシブ修正のインポート（@importは先頭に配置） */
+@import './styles/responsive-fixes.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -165,6 +168,3 @@
     color: black !important;
   }
 }
-
-/* レスポンシブ修正のインポート */
-@import './styles/responsive-fixes.css';
