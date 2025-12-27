@@ -74,6 +74,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   const searchTerm = searchParams.get('q') || '';
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
   const filterType = (searchParams.get('filter') as 'all' | 'standard' | 'option') || 'all';
+  const selectedMaterialType = searchParams.get('material') || ''; // 素材タイプフィルター
   const selectedSubcategory = searchParams.get('sub') || '';
   const selectedColor = searchParams.get('color') || '';
   const priceMax = parseInt(searchParams.get('maxPrice') || '0', 10) || 0;
@@ -98,6 +99,19 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
       } else {
         prev.delete('filter');
       }
+      return prev;
+    });
+  }, [setSearchParams]);
+
+  const setSelectedMaterialType = useCallback((material: string) => {
+    setSearchParams(prev => {
+      if (material) {
+        prev.set('material', material);
+      } else {
+        prev.delete('material');
+      }
+      // 素材タイプを変更したらサブカテゴリをリセット
+      prev.delete('sub');
       return prev;
     });
   }, [setSearchParams]);
@@ -502,24 +516,38 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     fetchItems();
   }, [activeTab, selectedCategoryId, getStaticItems, categories]);
 
-  // 利用可能なサブカテゴリと色を抽出
+  // 利用可能な素材タイプを抽出
+  const availableMaterialTypes = useMemo(() => {
+    const materials = new Set<string>();
+    items.forEach(item => {
+      if (item.material_type) materials.add(item.material_type);
+    });
+    return Array.from(materials).sort((a, b) => a.localeCompare(b, 'ja'));
+  }, [items]);
+
+  // 利用可能なサブカテゴリを抽出（素材タイプでフィルタ）
   const availableSubcategories = useMemo(() => {
     const subs = new Set<string>();
     items.forEach(item => {
+      // 素材タイプが選択されている場合、その素材タイプのアイテムのみ対象
+      if (selectedMaterialType && item.material_type !== selectedMaterialType) return;
       if (item.category_name) subs.add(item.category_name);
     });
     return Array.from(subs).sort((a, b) => a.localeCompare(b, 'ja'));
-  }, [items]);
+  }, [items, selectedMaterialType]);
 
   const availableColors = useMemo(() => {
     const colors = new Set<string>();
     items.forEach(item => {
+      // 素材タイプ・サブカテゴリでフィルタ
+      if (selectedMaterialType && item.material_type !== selectedMaterialType) return;
+      if (selectedSubcategory && item.category_name !== selectedSubcategory) return;
       item.variants?.forEach(v => {
         if (v.color_name) colors.add(v.color_name);
       });
     });
     return Array.from(colors).sort((a, b) => a.localeCompare(b, 'ja'));
-  }, [items]);
+  }, [items, selectedMaterialType, selectedSubcategory]);
 
   // フィルタリング（デバウンス適用）
   const filteredItems = useMemo(() => {
@@ -557,7 +585,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
       const pricing = item.pricing?.find(p => p.product?.code === selectedPlanId);
       if (filterType === 'standard' && pricing && !pricing.is_standard) return false;
       if (filterType === 'option' && pricing?.is_standard) return false;
-      // サブカテゴリフィルター
+      // 素材タイプフィルター
+      if (selectedMaterialType && item.material_type !== selectedMaterialType) return false;
+      // サブカテゴリフィルター（商品名）
       if (selectedSubcategory && item.category_name !== selectedSubcategory) return false;
       // 色フィルター
       if (selectedColor) {
@@ -603,7 +633,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
       // 4. 商品名順
       return (a.name || '').localeCompare(b.name || '', 'ja');
     });
-  }, [items, debouncedSearchTerm, filterType, selectedPlanId, selectedSubcategory, selectedColor, priceMax, showFavoritesOnly, favorites, hideDiscontinued]);
+  }, [items, debouncedSearchTerm, filterType, selectedPlanId, selectedMaterialType, selectedSubcategory, selectedColor, priceMax, showFavoritesOnly, favorites, hideDiscontinued]);
 
   // ページネーション計算
   const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
@@ -616,7 +646,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   // フィルター変更時にページをリセット
   useEffect(() => {
     setCurrentPage(1);
-  }, [debouncedSearchTerm, filterType, selectedSubcategory, selectedColor, priceMax, showFavoritesOnly, hideDiscontinued, selectedCategoryId]);
+  }, [debouncedSearchTerm, filterType, selectedMaterialType, selectedSubcategory, selectedColor, priceMax, showFavoritesOnly, hideDiscontinued, selectedCategoryId]);
 
   // レコメンド用にCatalogProduct形式に変換
   const catalogProducts = useMemo(() => {
@@ -1216,14 +1246,31 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
               </div>
             </div>
 
-            {/* サブカテゴリ・色フィルター（カテゴリ選択時のみ表示） */}
-            {selectedCategoryId && (availableSubcategories.length > 1 || availableColors.length > 1) && (
+            {/* 素材タイプ・サブカテゴリ・色フィルター（カテゴリ選択時のみ表示） */}
+            {selectedCategoryId && (availableMaterialTypes.length > 1 || availableSubcategories.length > 1 || availableColors.length > 1) && (
               <div className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 px-3 py-2">
                 <div className="flex flex-wrap items-center gap-2">
-                  {/* サブカテゴリフィルター */}
+                  {/* 素材タイプフィルター（2段階目: 窯業系/金属/塗り壁 等） */}
+                  {availableMaterialTypes.length > 1 && (
+                    <div className="flex items-center gap-1">
+                      <label htmlFor="material-filter" className="text-xs text-gray-500 dark:text-gray-400">素材:</label>
+                      <select
+                        id="material-filter"
+                        value={selectedMaterialType}
+                        onChange={(e) => setSelectedMaterialType(e.target.value)}
+                        className="px-2 py-1.5 bg-teal-50 dark:bg-teal-900/30 border border-teal-200 dark:border-teal-700 rounded-lg text-xs font-medium text-teal-700 dark:text-teal-200 focus:ring-2 focus:ring-teal-500"
+                      >
+                        <option value="">すべての素材 ({availableMaterialTypes.length}種)</option>
+                        {availableMaterialTypes.map(mat => (
+                          <option key={mat} value={mat}>{mat}</option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+                  {/* サブカテゴリフィルター（商品シリーズ名） */}
                   {availableSubcategories.length > 1 && (
                     <div className="flex items-center gap-1">
-                      <label htmlFor="subcategory-filter" className="text-xs text-gray-500 dark:text-gray-400">種類:</label>
+                      <label htmlFor="subcategory-filter" className="text-xs text-gray-500 dark:text-gray-400">商品:</label>
                       <select
                         id="subcategory-filter"
                         value={selectedSubcategory}
@@ -1282,9 +1329,10 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                     <span className="text-xs text-gray-500 dark:text-gray-400">廃番も表示</span>
                   </label>
                   {/* フィルタークリア */}
-                  {(selectedSubcategory || selectedColor || priceMax > 0) && (
+                  {(selectedMaterialType || selectedSubcategory || selectedColor || priceMax > 0) && (
                     <button
                       onClick={() => {
+                        setSelectedMaterialType('');
                         setSelectedSubcategory('');
                         setSelectedColor('');
                         setPriceMax(0);

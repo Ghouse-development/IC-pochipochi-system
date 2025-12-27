@@ -42,6 +42,7 @@ export const convertStaticToItemWithDetails = (product: CatalogProduct, category
     model_number: product.modelNumber,
     category_id: product.categoryId,
     category_name: product.subcategory,
+    material_type: product.materialType || null, // 素材タイプ
     note: product.description,
     is_active: true,
     display_order: 0,

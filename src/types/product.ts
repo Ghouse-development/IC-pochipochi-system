@@ -46,6 +46,11 @@ export interface PricingInfo {
   price: number;
 }
 
+// 素材タイプ（カテゴリ内のサブグループ）
+// 外壁: 窯業系サイディング / 金属サイディング / 塗り壁
+// 床材: 突板 / シート / 挽板 / 無垢 / CFシート / タイルフロア / カーペット
+export type MaterialType = string;
+
 export interface Product {
   id: string;
   categoryId: string;
@@ -59,6 +64,7 @@ export interface Product {
   variants: ProductVariant[];
   pricing: PricingInfo[];
   description?: string;
+  materialType?: MaterialType; // 素材タイプ（外壁: 窯業系/金属/塗り壁、床材: 突板/シート等）
 }
 
 export interface Category {

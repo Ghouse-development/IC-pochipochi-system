@@ -158,6 +158,7 @@ export interface Item {
   discontinue_date: string | null;
   discontinue_note: string | null;
   display_order: number;
+  material_type: string | null; // 素材タイプ（外壁: 窯業系/金属/塗り壁、床材: 突板/シート等）
   created_at: string;
   updated_at: string;
   // Joined data
