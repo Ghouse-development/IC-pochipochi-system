@@ -7,7 +7,10 @@ import {
   DollarSign,
   Image as ImageIcon,
   Trash2,
-  Check
+  Check,
+  Link,
+  Plus,
+  AlertCircle
 } from 'lucide-react';
 import {
   VariantService,
@@ -63,6 +66,11 @@ export function ProductVariantEditor({
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // 画像URL直接入力用
+  const [imageUrl, setImageUrl] = useState('');
+  const [urlError, setUrlError] = useState('');
+  const [addingUrl, setAddingUrl] = useState(false);
 
   useEffect(() => {
     // 既存の価格情報を読み込み
@@ -132,6 +140,60 @@ export function ProductVariantEditor({
       ...img,
       is_primary: img.id === imageId
     })));
+  };
+
+  // URL直接入力で画像を追加
+  const handleAddImageFromUrl = async () => {
+    if (!imageUrl.trim()) {
+      setUrlError('URLを入力してください');
+      return;
+    }
+
+    // URL形式のバリデーション
+    try {
+      new URL(imageUrl);
+    } catch {
+      setUrlError('有効なURLを入力してください');
+      return;
+    }
+
+    // 画像URLかどうかの簡易チェック
+    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'];
+    const url = imageUrl.toLowerCase();
+    const isImageUrl = imageExtensions.some(ext => url.includes(ext)) ||
+                       url.includes('image') ||
+                       url.includes('/img/') ||
+                       url.includes('/images/');
+
+    if (!isImageUrl) {
+      // 画像URLでなくても追加可能（警告なし）
+      logger.info('URL may not be an image, but adding anyway:', imageUrl);
+    }
+
+    setAddingUrl(true);
+    setUrlError('');
+
+    try {
+      // 画像を追加（DBへの保存は後で行う、まずは表示用に追加）
+      const newImage: VariantImage = {
+        id: `url_${Date.now()}`,
+        variant_id: variant?.id || '',
+        image_url: imageUrl.trim(),
+        thumbnail_url: imageUrl.trim(),
+        is_primary: images.length === 0, // 最初の画像はプライマリに
+        display_order: images.length,
+        alt_text: formData.color_name,
+      };
+
+      setImages(prev => [...prev, newImage]);
+      setImageUrl(''); // 入力をクリア
+      logger.info('Image added from URL:', imageUrl);
+    } catch (error) {
+      logger.error('Error adding image from URL:', error);
+      setUrlError('画像の追加に失敗しました');
+    } finally {
+      setAddingUrl(false);
+    }
   };
 
   const handleSave = async () => {
@@ -359,27 +421,85 @@ export function ProductVariantEditor({
                 className="hidden"
               />
 
+              {/* URL直接入力（推奨） */}
+              <div className="mb-4 p-4 bg-teal-50 border border-teal-200 rounded-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <Link className="w-4 h-4 text-teal-600" />
+                  <span className="text-sm font-medium text-teal-700">画像URLを直接入力（推奨）</span>
+                </div>
+                <p className="text-xs text-teal-600 mb-3">
+                  メーカーサイトの画像URLをコピー＆ペーストできます
+                </p>
+                <div className="flex gap-2">
+                  <input
+                    type="url"
+                    value={imageUrl}
+                    onChange={(e) => {
+                      setImageUrl(e.target.value);
+                      setUrlError('');
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleAddImageFromUrl();
+                      }
+                    }}
+                    placeholder="https://example.com/image.jpg"
+                    className="flex-1 px-3 py-2 border border-teal-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm"
+                  />
+                  <button
+                    onClick={handleAddImageFromUrl}
+                    disabled={addingUrl || !imageUrl.trim()}
+                    className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm font-medium"
+                  >
+                    {addingUrl ? (
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    ) : (
+                      <Plus className="w-4 h-4" />
+                    )}
+                    追加
+                  </button>
+                </div>
+                {urlError && (
+                  <div className="mt-2 flex items-center gap-1 text-red-500 text-xs">
+                    <AlertCircle className="w-3 h-3" />
+                    {urlError}
+                  </div>
+                )}
+              </div>
+
+              {/* または区切り */}
+              <div className="flex items-center gap-4 my-4">
+                <div className="flex-1 border-t border-gray-300"></div>
+                <span className="text-xs text-gray-500">または</span>
+                <div className="flex-1 border-t border-gray-300"></div>
+              </div>
+
+              {/* ファイルアップロード */}
               <button
                 onClick={() => fileInputRef.current?.click()}
                 disabled={uploading}
-                className="w-full border-2 border-dashed border-gray-300 rounded-lg p-8 hover:border-blue-500 transition-colors"
+                className="w-full border-2 border-dashed border-gray-300 rounded-lg p-6 hover:border-blue-500 transition-colors"
               >
                 {uploading ? (
                   <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
                     <p className="mt-2 text-sm text-gray-600">アップロード中...</p>
                   </div>
                 ) : (
                   <div className="text-center">
-                    <Upload className="w-12 h-12 text-gray-400 mx-auto" />
+                    <Upload className="w-8 h-8 text-gray-400 mx-auto" />
                     <p className="mt-2 text-sm text-gray-600">
-                      クリックまたはドラッグ＆ドロップで画像をアップロード
+                      ファイルをアップロード
+                    </p>
+                    <p className="text-xs text-gray-400 mt-1">
+                      ローカルファイルをドラッグ＆ドロップ
                     </p>
                   </div>
                 )}
               </button>
 
-              {/* アップロード済み画像 */}
+              {/* 登録済み画像 */}
               {images.length > 0 && (
                 <div className="mt-4 grid grid-cols-4 gap-4">
                   {images.map(image => (
