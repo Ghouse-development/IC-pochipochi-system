@@ -334,6 +334,66 @@ INSERT INTO rooms (name, floor, room_type, display_order) VALUES
   ('WIC', 2, 'closet', 16)
 ON CONFLICT DO NOTHING;
 
+-- カテゴリ（外装）
+INSERT INTO categories (name, slug, category_type, is_required, display_order, description) VALUES
+  ('外壁', 'exterior-wall', 'exterior', true, 1, '家の外側の壁。見た目と耐久性に影響'),
+  ('ポーチ', 'porch', 'exterior', true, 2, '玄関前のタイル部分'),
+  ('屋根', 'roof', 'exterior', true, 3, '家の一番上を覆う部分'),
+  ('樋', 'gutter', 'exterior', true, 4, '雨水を流すパイプ（雨樋）'),
+  ('軒天', 'soffit', 'exterior', true, 5, '屋根の裏側で外から見える部分'),
+  ('窓', 'window', 'exterior', true, 6, 'サッシ・窓オプション'),
+  ('玄関ドア', 'entrance-door', 'exterior', true, 7, '家の入口のドア'),
+  ('外部設備', 'exterior-facility', 'exterior', false, 8, '外部コンセント・水栓など'),
+  ('エコキュート', 'ecocute', 'exterior', true, 9, '電気給湯器')
+ON CONFLICT (slug) DO UPDATE SET
+  name = EXCLUDED.name,
+  category_type = EXCLUDED.category_type,
+  is_required = EXCLUDED.is_required,
+  display_order = EXCLUDED.display_order,
+  description = EXCLUDED.description;
+
+-- カテゴリ（内装）
+INSERT INTO categories (name, slug, category_type, is_required, display_order, description) VALUES
+  ('床材', 'flooring', 'interior', true, 1, 'フローリング・床材'),
+  ('建具', 'interior-door', 'interior', true, 2, '室内ドア・引き戸'),
+  ('階段', 'stairs', 'interior', true, 3, '階段踏板・手摺'),
+  ('壁材', 'wallpaper', 'interior', true, 4, 'クロス・タイル'),
+  ('収納', 'storage', 'interior', false, 5, 'クローゼット・収納棚'),
+  ('造作', 'niche', 'interior', false, 6, 'ニッチ・造作'),
+  ('電気設備', 'electrical', 'interior', true, 7, 'スイッチ・コンセント'),
+  ('照明', 'lighting', 'interior', true, 8, 'ダウンライト・ペンダント'),
+  ('換気', 'ventilation', 'interior', true, 9, '換気システム・浴室乾燥機'),
+  ('空調', 'aircon', 'interior', false, 10, 'エアコン'),
+  ('カーテン', 'curtain', 'interior', false, 11, 'カーテン・レース'),
+  ('ブラインド', 'blind', 'interior', false, 12, 'アルミ・ウッドブラインド'),
+  ('造作家具', 'furniture', 'interior', false, 13, 'TVボード・カウンター'),
+  ('家具', 'dining-table', 'interior', false, 14, 'ダイニングテーブルなど'),
+  ('手摺', 'handrail', 'interior', false, 15, '室内手摺'),
+  ('物干し', 'hanger', 'interior', false, 16, '室内物干し')
+ON CONFLICT (slug) DO UPDATE SET
+  name = EXCLUDED.name,
+  category_type = EXCLUDED.category_type,
+  is_required = EXCLUDED.is_required,
+  display_order = EXCLUDED.display_order,
+  description = EXCLUDED.description;
+
+-- カテゴリ（設備）
+INSERT INTO categories (name, slug, category_type, is_required, display_order, description) VALUES
+  ('キッチン', 'kitchen', 'equipment', true, 1, 'システムキッチン'),
+  ('バスルーム', 'bathroom', 'equipment', true, 2, 'システムバス'),
+  ('トイレ', 'toilet', 'equipment', true, 3, 'トイレ本体'),
+  ('洗面化粧台', 'washroom', 'equipment', true, 4, '洗面台'),
+  ('給湯器', 'water-heater', 'equipment', true, 5, 'エコキュート・給湯器'),
+  ('バスルーム設備', 'bathroom-equipment', 'equipment', false, 6, '浴室暖房乾燥機'),
+  ('ランドリー', 'laundry', 'equipment', false, 7, '洗濯流し'),
+  ('水処理設備', 'water-equipment', 'equipment', false, 8, '軟水器など')
+ON CONFLICT (slug) DO UPDATE SET
+  name = EXCLUDED.name,
+  category_type = EXCLUDED.category_type,
+  is_required = EXCLUDED.is_required,
+  display_order = EXCLUDED.display_order,
+  description = EXCLUDED.description;
+
 -- システム設定
 INSERT INTO system_settings (setting_key, setting_value, description) VALUES
   ('company_info', '{"name": "Gハウス", "logo_url": "", "address": "", "phone": "", "email": ""}', '会社情報'),

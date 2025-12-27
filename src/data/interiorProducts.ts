@@ -428,7 +428,7 @@ export const interiorProducts: Product[] = [
   // ========== アクセントタイル ==========
   {
     id: 'int-tile-001',
-    categoryId: 'tile',
+    categoryId: 'wallpaper',
     categoryName: '壁材',
     subcategory: 'アクセントタイル',
     name: 'セメンティング',
@@ -449,7 +449,7 @@ export const interiorProducts: Product[] = [
   },
   {
     id: 'int-tile-002',
-    categoryId: 'tile',
+    categoryId: 'wallpaper',
     categoryName: '壁材',
     subcategory: 'アクセントタイル',
     name: 'モデネーゼ',
@@ -470,7 +470,7 @@ export const interiorProducts: Product[] = [
   },
   {
     id: 'int-tile-003',
-    categoryId: 'tile',
+    categoryId: 'wallpaper',
     categoryName: '壁材',
     subcategory: 'アクセントタイル',
     name: 'ラヴィータ',
@@ -491,7 +491,7 @@ export const interiorProducts: Product[] = [
   },
   {
     id: 'int-tile-004',
-    categoryId: 'tile',
+    categoryId: 'wallpaper',
     categoryName: '壁材',
     subcategory: 'アクセントタイル',
     name: 'ストーンベニア',

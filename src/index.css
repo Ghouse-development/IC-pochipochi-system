@@ -29,6 +29,12 @@
 }
 
 @layer utilities {
+  /* 縦書きスタイル */
+  .writing-mode-vertical {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+  }
+
   /* Toast アニメーション */
   @keyframes slide-in-right {
     from {

@@ -78,7 +78,7 @@ export const exteriorProducts: Product[] = [
   // ===== 外壁 - KMEW ルボン プレミアム Fuge =====
   {
     id: 'ext-wall-lubon-premium',
-    categoryId: 'exterior-wall-premium',
+    categoryId: 'exterior-wall',
     categoryName: '外壁',
     subcategory: 'ルボン プレミアム',
     name: 'ルボン プレミアム',
@@ -102,7 +102,7 @@ export const exteriorProducts: Product[] = [
   // ===== 外壁 - ニチハ モエンエクセラード16 Fuge =====
   {
     id: 'ext-wall-moene-fuge',
-    categoryId: 'exterior-wall-moene',
+    categoryId: 'exterior-wall',
     categoryName: '外壁',
     subcategory: 'モエンエクセラード16 Fuge',
     name: 'モエンエクセラード16 Fuge',
@@ -124,7 +124,7 @@ export const exteriorProducts: Product[] = [
   // ===== 外壁 - AICA COOL イルミオ =====
   {
     id: 'ext-wall-cool-illuminio',
-    categoryId: 'exterior-wall-cool',
+    categoryId: 'exterior-wall',
     categoryName: '外壁',
     subcategory: 'COOL イルミオ',
     name: 'COOL イルミオ',
@@ -148,7 +148,7 @@ export const exteriorProducts: Product[] = [
   // ===== 外壁 - KMEW 新フラット16 =====
   {
     id: 'ext-wall-flat16',
-    categoryId: 'exterior-wall-flat',
+    categoryId: 'exterior-wall',
     categoryName: '外壁',
     subcategory: '新フラット16',
     name: '新フラット16 フィエルテ',
@@ -170,7 +170,7 @@ export const exteriorProducts: Product[] = [
   // ===== 外壁 - KMEW カンターピレ =====
   {
     id: 'ext-wall-canterpile',
-    categoryId: 'exterior-wall-canter',
+    categoryId: 'exterior-wall',
     categoryName: '外壁',
     subcategory: 'カンターピレ',
     name: 'カンターピレ',
@@ -191,7 +191,7 @@ export const exteriorProducts: Product[] = [
   // ===== 外壁 - KONOSHIMA アルテミュール =====
   {
     id: 'ext-wall-artemur',
-    categoryId: 'exterior-wall-arte',
+    categoryId: 'exterior-wall',
     categoryName: '外壁',
     subcategory: 'アルテミュール',
     name: 'アルテミュール',
@@ -213,7 +213,7 @@ export const exteriorProducts: Product[] = [
   // ===== 外壁 - AICA ジョリパットネオ∞ =====
   {
     id: 'ext-wall-jolypate',
-    categoryId: 'exterior-wall-jolypate',
+    categoryId: 'exterior-wall',
     categoryName: '外壁',
     subcategory: 'ジョリパットネオ∞',
     name: 'ジョリパットネオ∞ エンシェントブリック',
@@ -234,7 +234,7 @@ export const exteriorProducts: Product[] = [
   // ===== 外壁 - KMEW SOLIDO =====
   {
     id: 'ext-wall-solido',
-    categoryId: 'exterior-wall-solido',
+    categoryId: 'exterior-wall',
     categoryName: '外壁',
     subcategory: 'SOLIDO',
     name: 'SOLIDO typeM_LAP',
@@ -260,7 +260,7 @@ export const exteriorProducts: Product[] = [
   // ===== ポーチタイル - LIXIL メンフィス =====
   {
     id: 'ext-porch-memphis',
-    categoryId: 'porch-tile',
+    categoryId: 'porch',
     categoryName: 'ポーチ',
     subcategory: 'メンフィス',
     name: 'メンフィス',
@@ -419,7 +419,7 @@ export const exteriorProducts: Product[] = [
   // ===== 窓オプション - 電動シャッター W1650まで =====
   {
     id: 'ext-window-shutter-w1650',
-    categoryId: 'window-option',
+    categoryId: 'window',
     categoryName: '窓',
     subcategory: '窓オプション',
     name: '電動シャッター W1650まで',
@@ -440,7 +440,7 @@ export const exteriorProducts: Product[] = [
   // ===== 窓オプション - 電動シャッター W2560まで =====
   {
     id: 'ext-window-shutter-w2560',
-    categoryId: 'window-option',
+    categoryId: 'window',
     categoryName: '窓',
     subcategory: '窓オプション',
     name: '電動シャッター W2560まで',

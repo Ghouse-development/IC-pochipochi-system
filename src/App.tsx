@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-route
 import { AuthProvider, DemoAuthProvider, useAuth } from './contexts/AuthContext';
 import { CustomerModeProvider } from './components/customer/CustomerModeWrapper';
 import { createLogger } from './lib/logger';
+import { DevToolbar } from './components/dev/DevToolbar';
 
 const logger = createLogger('App');
 import { QueryProvider } from './lib/QueryProvider';
@@ -60,6 +61,26 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
   const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
   const [isShortcutHelpOpen, setIsShortcutHelpOpen] = useState(false);
   const [compareProducts, setCompareProducts] = useState<Product[]>([]);
+
+  // ダークモード状態
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return document.documentElement.classList.contains('dark');
+    }
+    return false;
+  });
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(prev => {
+      const newValue = !prev;
+      if (newValue) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+      return newValue;
+    });
+  };
 
   const currentVersion = useVersionStore((state) => state.currentVersion);
   const items = useCartStore((state) => state.items);
@@ -229,6 +250,14 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
 
       {/* ネットワーク状態バナー */}
       <NetworkStatusBanner />
+
+      {/* 開発用ツールバー (開発環境のみ表示) */}
+      {import.meta.env.DEV && (
+        <DevToolbar
+          onToggleDarkMode={toggleDarkMode}
+          isDarkMode={isDarkMode}
+        />
+      )}
     </div>
   );
 }

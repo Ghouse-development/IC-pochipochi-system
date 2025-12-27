@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { Search, ShoppingCart, Check, Star, ChevronRight, Home, Zap, Heart, Clock, X, Scale } from 'lucide-react';
+import { Search, ShoppingCart, Check, Star, ChevronRight, ChevronLeft, Home, Zap, Heart, Clock, X, Scale, FileText, FileDown } from 'lucide-react';
 import { useToast } from '../common/Toast';
 import { useTimeout } from '../../hooks/useTimeout';
 import { useDebounce } from '../../hooks/useDebounce';
@@ -32,8 +32,13 @@ import {
   convertStaticToItemWithDetails,
   convertToCatalogProduct,
   STEPS,
+  DESIGN_CATEGORIES,
+  getRecommendBadge,
   type FilterTypeValue,
 } from './catalogUtils';
+import { ActionChecklist } from './ActionChecklist';
+import { BeginnerGuide } from './BeginnerGuide';
+import { EstimateExportDialog } from '../estimate/EstimateExportDialog';
 
 // ユーティリティ関数とコンポーネント (ItemCard, SkeletonCard, EmptyState, Confetti) はインポート済み
 
@@ -51,9 +56,20 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
+  // お客様モード判定（早期に取得）
+  const { isCustomerMode } = useCustomerMode();
+
   // URLからactiveTabを設定
-  const activeTab = (['exterior', 'interior', 'equipment'].includes(step) ? step : 'exterior') as 'exterior' | 'interior' | 'equipment';
+  // お客様モードでは設計タブにアクセスできない
+  const activeTab = (['design', 'exterior', 'interior', 'equipment'].includes(step) ? step : 'exterior') as 'design' | 'exterior' | 'interior' | 'equipment';
   const selectedCategoryId = urlCategoryId || null;
+
+  // お客様モードで設計タブにアクセスした場合は外装タブにリダイレクト
+  useEffect(() => {
+    if (isCustomerMode && activeTab === 'design') {
+      navigate('/catalog/exterior', { replace: true });
+    }
+  }, [isCustomerMode, activeTab, navigate]);
 
   // URLクエリパラメータから検索・フィルターを取得
   const searchTerm = searchParams.get('q') || '';
@@ -133,6 +149,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   const [compareProducts, setCompareProducts] = useState<CatalogProduct[]>([]);
   const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
 
+  // 見積書出力ダイアログ
+  const [isEstimateDialogOpen, setIsEstimateDialogOpen] = useState(false);
+
   // 部屋別内装プランナー
   const [isRoomPlannerOpen, setIsRoomPlannerOpen] = useState(false);
 
@@ -141,6 +160,13 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
   // 廃番商品を非表示（デフォルトで非表示）
   const [hideDiscontinued, setHideDiscontinued] = useState(true);
+
+  // ページネーション
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12; // 1ページあたりの表示件数（G HOUSE風に少なめで見やすく）
+
+  // アクションチェックリスト表示切り替え
+  const [showActionChecklist, setShowActionChecklist] = useState(true);
 
   // データ
   const [items, setItems] = useState<ItemWithDetails[]>([]);
@@ -155,9 +181,6 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   const totalPrice = getTotalPrice();
   const toast = useToast();
   const { setTimeout } = useTimeout();
-
-  // 顧客モード
-  const { isCustomerMode } = useCustomerMode();
 
   // 静的データ（フォールバック用）
   const { exteriorProducts, interiorProducts, waterProducts } = useProductStore();
@@ -178,7 +201,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   const [quickSelectMode, setQuickSelectMode] = useState(false);
 
   // タブ切替（URL遷移）
-  const setActiveTab = useCallback((newTab: 'exterior' | 'interior' | 'equipment') => {
+  const setActiveTab = useCallback((newTab: 'design' | 'exterior' | 'interior' | 'equipment') => {
     navigate(`/catalog/${newTab}`);
   }, [navigate]);
 
@@ -210,7 +233,70 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   // カテゴリ取得 - Supabaseから取得、フォールバックとして静的データを使用
   useEffect(() => {
     const fetchCategories = async () => {
-      // まずSupabaseからカテゴリを取得
+      // 「設計」タブの場合は、外装と設備からDESIGN_CATEGORIESを抽出
+      if (activeTab === 'design') {
+        // 外装と設備の両方からカテゴリを取得
+        const { data: extCategories } = await supabase
+          .from('categories')
+          .select('*')
+          .eq('category_type', 'exterior')
+          .eq('is_active', true)
+          .order('display_order');
+
+        const { data: eqCategories } = await supabase
+          .from('categories')
+          .select('*')
+          .eq('category_type', 'equipment')
+          .eq('is_active', true)
+          .order('display_order');
+
+        const allCategories = [...(extCategories || []), ...(eqCategories || [])];
+        // DESIGN_CATEGORIESに含まれるもののみをフィルタ
+        const designCategories = allCategories.filter(cat =>
+          DESIGN_CATEGORIES.some(dc => cat.name.includes(dc) || dc.includes(cat.name))
+        );
+
+        if (designCategories.length > 0) {
+          setCategories(designCategories);
+          const firstUndecided = designCategories.find(cat =>
+            !cartItems.some(item => item.product.categoryName === cat.name)
+          );
+          if (!selectedCategoryId) {
+            setSelectedCategoryId(firstUndecided?.id || designCategories[0]?.id || null);
+          }
+        } else {
+          // 静的データからフォールバック
+          const allProducts = [...exteriorProducts, ...waterProducts];
+          const categoryMap = new Map<string, Category>();
+          allProducts.forEach((p, idx) => {
+            if (p.categoryName && !categoryMap.has(p.categoryName) &&
+                DESIGN_CATEGORIES.some(dc => p.categoryName.includes(dc) || dc.includes(p.categoryName))) {
+              categoryMap.set(p.categoryName, {
+                id: `cat-design-${idx}`,
+                parent_id: null,
+                name: p.categoryName,
+                slug: p.categoryName.toLowerCase().replace(/\s+/g, '-'),
+                description: null,
+                category_type: 'exterior' as const,
+                is_active: true,
+                is_required: false,
+                display_order: idx,
+                icon: null,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+              });
+            }
+          });
+          const generatedCategories = Array.from(categoryMap.values());
+          setCategories(generatedCategories);
+          if (!selectedCategoryId && generatedCategories.length > 0) {
+            setSelectedCategoryId(generatedCategories[0]?.id || null);
+          }
+        }
+        return;
+      }
+
+      // 通常のタブ（外装・内装・設備）の場合
       const { data: supabaseCategories } = await supabase
         .from('categories')
         .select('*')
@@ -219,13 +305,19 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
         .order('display_order');
 
       if (supabaseCategories && supabaseCategories.length > 0) {
-        setCategories(supabaseCategories);
+        // DESIGN_CATEGORIESを除外（設計タブに移動したため）
+        const filteredCategories = activeTab === 'interior'
+          ? supabaseCategories
+          : supabaseCategories.filter(cat =>
+              !DESIGN_CATEGORIES.some(dc => cat.name.includes(dc) || dc.includes(cat.name))
+            );
+        setCategories(filteredCategories);
         // 最初の未決カテゴリを自動選択
-        const firstUndecided = supabaseCategories.find(cat =>
+        const firstUndecided = filteredCategories.find(cat =>
           !cartItems.some(item => item.product.categoryName === cat.name)
         );
         if (!selectedCategoryId) {
-          setSelectedCategoryId(firstUndecided?.id || supabaseCategories[0]?.id || null);
+          setSelectedCategoryId(firstUndecided?.id || filteredCategories[0]?.id || null);
         }
       } else {
         // Supabaseにデータがない場合は静的データからカテゴリを生成
@@ -240,7 +332,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
         const categoryMap = new Map<string, Category>();
         products.forEach((p, idx) => {
-          if (p.categoryName && !categoryMap.has(p.categoryName)) {
+          // DESIGN_CATEGORIESを除外（内装以外）
+          const isDesignCategory = DESIGN_CATEGORIES.some(dc => p.categoryName.includes(dc) || dc.includes(p.categoryName));
+          if (p.categoryName && !categoryMap.has(p.categoryName) && (activeTab === 'interior' || !isDesignCategory)) {
             categoryMap.set(p.categoryName, {
               id: `cat-${activeTab}-${idx}`,
               parent_id: null,
@@ -276,14 +370,26 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   // 静的データからItemWithDetails形式のデータを取得
   const getStaticItems = useCallback((tab: string): ItemWithDetails[] => {
     let products: CatalogProduct[] = [];
-    if (tab === 'exterior') {
-      products = exteriorProducts;
+    if (tab === 'design') {
+      // 設計タブ：外装と設備からDESIGN_CATEGORIESに該当するものを抽出
+      const allProducts = [...exteriorProducts, ...waterProducts];
+      products = allProducts.filter(p =>
+        DESIGN_CATEGORIES.some(dc => p.categoryName.includes(dc) || dc.includes(p.categoryName))
+      );
+    } else if (tab === 'exterior') {
+      // 外装タブ：DESIGN_CATEGORIESを除外
+      products = exteriorProducts.filter(p =>
+        !DESIGN_CATEGORIES.some(dc => p.categoryName.includes(dc) || dc.includes(p.categoryName))
+      );
     } else if (tab === 'interior') {
       products = interiorProducts;
     } else if (tab === 'equipment') {
-      products = waterProducts;
+      // 設備タブ：DESIGN_CATEGORIESを除外
+      products = waterProducts.filter(p =>
+        !DESIGN_CATEGORIES.some(dc => p.categoryName.includes(dc) || dc.includes(p.categoryName))
+      );
     }
-    return products.map(p => convertStaticToItemWithDetails(p, tab));
+    return products.map(p => convertStaticToItemWithDetails(p, tab === 'design' ? 'exterior' : tab));
   }, [exteriorProducts, interiorProducts, waterProducts]);
 
   // アイテム取得 - Supabaseから取得、データがない場合は静的データにフォールバック
@@ -315,6 +421,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
         // カテゴリでフィルタ
         if (selectedCategoryId) {
           query = query.eq('category_id', selectedCategoryId);
+        } else if (activeTab === 'design') {
+          // 設計タブ：外装と設備両方からフィルタ
+          query = query.in('category.category_type', ['exterior', 'equipment']);
         } else {
           // カテゴリタイプでフィルタ（カテゴリ未選択時）
           query = query.eq('category.category_type', activeTab);
@@ -333,9 +442,23 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
           if (hasVariants) {
             // カテゴリタイプでフィルタ（JOINの条件が効かない場合の補完）
-            const filteredItems = supabaseItems.filter(item =>
-              item.category?.category_type === activeTab
-            );
+            let filteredItems = supabaseItems;
+            if (activeTab === 'design') {
+              // 設計タブ：DESIGN_CATEGORIESに該当するものをフィルタ
+              filteredItems = supabaseItems.filter(item =>
+                DESIGN_CATEGORIES.some(dc => item.category?.name?.includes(dc) || dc.includes(item.category?.name || ''))
+              );
+            } else if (activeTab === 'interior') {
+              filteredItems = supabaseItems.filter(item =>
+                item.category?.category_type === activeTab
+              );
+            } else {
+              // 外装・設備タブ：DESIGN_CATEGORIESを除外
+              filteredItems = supabaseItems.filter(item =>
+                item.category?.category_type === activeTab &&
+                !DESIGN_CATEGORIES.some(dc => item.category?.name?.includes(dc) || dc.includes(item.category?.name || ''))
+              );
+            }
             setItems(filteredItems.length > 0 ? filteredItems : supabaseItems);
             setIsLoading(false);
             return;
@@ -474,6 +597,19 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
       return (a.name || '').localeCompare(b.name || '', 'ja');
     });
   }, [items, debouncedSearchTerm, filterType, selectedPlanId, selectedSubcategory, selectedColor, priceMax, showFavoritesOnly, favorites, hideDiscontinued]);
+
+  // ページネーション計算
+  const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+  const paginatedItems = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    return filteredItems.slice(start, end);
+  }, [filteredItems, currentPage, itemsPerPage]);
+
+  // フィルター変更時にページをリセット
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedSearchTerm, filterType, selectedSubcategory, selectedColor, priceMax, showFavoritesOnly, hideDiscontinued, selectedCategoryId]);
 
   // レコメンド用にCatalogProduct形式に変換
   const catalogProducts = useMemo(() => {
@@ -747,6 +883,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
       <style>{catalogAnimations}</style>
       <Confetti show={showConfetti} />
 
+      {/* 初心者向けガイド（初回のみ表示） */}
+      <BeginnerGuide onComplete={() => {}} />
+
       {/* 顧客モード時のウェルカムバナー */}
       {isCustomerMode && <CustomerWelcomeBanner />}
 
@@ -757,7 +896,8 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
           <div className="px-4 py-4">
             <div className="flex items-center justify-between max-w-6xl mx-auto">
               <div className="flex items-center gap-2 sm:gap-4" data-tutorial="main-tabs">
-                {STEPS.map((step, index) => {
+                {/* お客様モードでは設計タブを非表示 */}
+                {STEPS.filter(step => !isCustomerMode || step.id !== 'design').map((step, index, filteredSteps) => {
                   const isActive = step.id === activeTab;
                   const stepCount = getStepCount(step.id);
                   const Icon = step.icon;
@@ -783,7 +923,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                           </span>
                         )}
                       </button>
-                      {index < STEPS.length - 1 && (
+                      {index < filteredSteps.length - 1 && (
                         <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-white/40" />
                       )}
                     </React.Fragment>
@@ -832,264 +972,111 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
           </div>
         </div>
 
-        {/* カテゴリナビゲーション - 決定/未決ステータス表示 */}
-        <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
-          <div className="flex items-center gap-2 px-4 py-3 overflow-x-auto scrollbar-thin" data-tutorial="category-list">
-            {categories.map((cat, idx) => {
-              const count = getCategoryCount(cat.name);
-              const isDecided = count > 0;
-              const isSelected = selectedCategoryId === cat.id;
-              return (
-                <button
-                  key={cat.id}
-                  onClick={() => setSelectedCategoryId(cat.id)}
-                  className={`flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                    isSelected
-                      ? isDecided
-                        ? 'bg-gradient-to-r from-teal-500 to-emerald-500 text-white shadow-lg'
-                        : 'bg-gradient-to-r from-orange-400 to-amber-500 text-white shadow-lg'
-                      : isDecided
-                        ? 'bg-teal-100 text-teal-700 border-2 border-teal-300'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  }`}
-                >
-                  {isDecided ? (
-                    <Check className="w-4 h-4" />
-                  ) : (
-                    <span className="w-4 h-4 flex items-center justify-center text-xs font-bold rounded-full bg-current/20">
-                      {idx + 1}
-                    </span>
-                  )}
-                  <span>{cat.name}</span>
-                  {isDecided && (
-                    <span className={`text-xs px-1.5 py-0.5 rounded-full ${
-                      isSelected ? 'bg-white/30' : 'bg-teal-200'
-                    }`}>
-                      {count}件
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-        </div>
 
         <div className="flex flex-1 overflow-hidden">
-          {/* サイドバー (PC) - 未決/決定表示 - スティッキー */}
-          <div className="hidden lg:flex flex-col w-72 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 sticky top-0 h-[calc(100vh-180px)] overflow-y-auto">
-            <div className="p-4 space-y-4">
-              {/* プラン選択（コンパクト） */}
-              <div className="flex items-center gap-2" data-tutorial="plan-selector">
-                <Star className="w-4 h-4 text-yellow-500" />
-                <select
-                  value={selectedPlanId}
-                  onChange={(e) => setSelectedPlanId(e.target.value)}
-                  className="flex-1 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-medium focus:ring-2 focus:ring-teal-500"
+          {/* 左サイドバー - アクションチェックリスト (G HOUSE風) - 常時表示 */}
+          <div className={`flex flex-col bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 h-[calc(100vh-180px)] transition-all duration-300 flex-shrink-0 ${
+            showActionChecklist ? 'w-80' : 'w-14'
+          }`}>
+            {showActionChecklist ? (
+              <>
+                {/* プラン選択 */}
+                <div className="p-3 border-b border-gray-200 dark:border-gray-700">
+                  <div className="flex items-center gap-2" data-tutorial="plan-selector">
+                    <Star className="w-4 h-4 text-yellow-500" />
+                    <select
+                      value={selectedPlanId}
+                      onChange={(e) => setSelectedPlanId(e.target.value)}
+                      className="flex-1 px-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm font-medium focus:ring-2 focus:ring-teal-500"
+                    >
+                      {plans.map(plan => (
+                        <option key={plan.id} value={plan.code}>{plan.name}</option>
+                      ))}
+                    </select>
+                    <button
+                      onClick={() => setShowActionChecklist(false)}
+                      className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                      title="サイドバーを閉じる"
+                    >
+                      <ChevronLeft className="w-4 h-4 text-gray-400" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* アクションチェックリスト */}
+                <ActionChecklist
+                  categories={categories}
+                  cartItems={cartItems}
+                  totalPrice={totalPrice}
+                  selectedCategoryId={selectedCategoryId}
+                  onCategorySelect={(catId) => setSelectedCategoryId(catId)}
+                  onReportClick={onCartClick}
+                />
+
+                {/* 部屋別プランナー（内装タブの時のみ） */}
+                {activeTab === 'interior' && (
+                  <div className="p-3 border-t border-gray-200 dark:border-gray-700">
+                    <button
+                      onClick={() => setIsRoomPlannerOpen(true)}
+                      className="w-full flex items-center justify-center gap-2 px-3 py-2.5 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg font-medium text-sm hover:from-blue-600 hover:to-indigo-600 transition-all shadow-md"
+                    >
+                      <Home className="w-4 h-4" />
+                      部屋別プランナー
+                    </button>
+                  </div>
+                )}
+
+                {/* アクションボタン */}
+                <div className="p-3 border-t border-gray-200 dark:border-gray-700">
+                  {isCurrentStepComplete ? (
+                    <button
+                      onClick={goToNextStep}
+                      aria-label="次のステップへ進む"
+                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-medium transition-colors"
+                    >
+                      次のステップへ
+                      <ChevronRight className="w-5 h-5" />
+                    </button>
+                  ) : isCurrentCategoryDecided && undecidedCategories.length > 0 ? (
+                    <button
+                      onClick={goToNextCategory}
+                      aria-label="次のカテゴリへ進む"
+                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-teal-500 hover:bg-teal-600 text-white rounded-xl font-medium transition-colors"
+                    >
+                      次のカテゴリへ
+                      <ChevronRight className="w-5 h-5" />
+                    </button>
+                  ) : null}
+                </div>
+              </>
+            ) : (
+              /* 折りたたみ時の表示 */
+              <div className="flex flex-col items-center py-4 gap-4">
+                <button
+                  onClick={() => setShowActionChecklist(true)}
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                  title="サイドバーを開く"
                 >
-                  {plans.map(plan => (
-                    <option key={plan.id} value={plan.code}>{plan.name}</option>
-                  ))}
-                </select>
+                  <ChevronRight className="w-5 h-5 text-gray-400" />
+                </button>
+                <div className="writing-mode-vertical text-xs text-gray-500 font-medium">
+                  チェックリスト
+                </div>
+                <div className="text-xs font-bold text-teal-600">
+                  {decidedCategories.length}/{categories.length}
+                </div>
               </div>
-
-              {/* 進捗サマリー */}
-              {(() => {
-                const decidedCategories = categories.filter(cat =>
-                  cartItems.some(item => item.product.categoryName === cat.name)
-                );
-                const undecidedCategories = categories.filter(cat =>
-                  !cartItems.some(item => item.product.categoryName === cat.name)
-                );
-                const progressPercent = categories.length > 0
-                  ? Math.round((decidedCategories.length / categories.length) * 100)
-                  : 0;
-
-                return (
-                  <>
-                    {/* 進捗バー - シンプル */}
-                    <div className="bg-gray-50 rounded-xl p-3">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm font-medium text-gray-600">
-                          {STEPS.find(s => s.id === activeTab)?.label}
-                        </span>
-                        <span className="text-sm font-bold text-teal-600">
-                          {decidedCategories.length}/{categories.length}
-                        </span>
-                      </div>
-                      <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-teal-500 rounded-full transition-all duration-500"
-                          style={{ width: `${progressPercent}%` }}
-                        />
-                      </div>
-                    </div>
-
-                    {/* 未決項目 */}
-                    {undecidedCategories.length > 0 && (
-                      <div>
-                        <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
-                          未選択 ({undecidedCategories.length})
-                        </h3>
-                        <div className="space-y-1">
-                          {undecidedCategories.map(cat => (
-                            <button
-                              key={cat.id}
-                              onClick={() => setSelectedCategoryId(cat.id)}
-                              aria-label={`${cat.name}カテゴリを選択`}
-                              className={`w-full flex items-center justify-between p-2.5 rounded-lg text-sm transition-all ${
-                                selectedCategoryId === cat.id
-                                  ? 'bg-teal-50 border border-teal-300 text-teal-700'
-                                  : 'bg-white hover:bg-gray-50 text-gray-700 border border-gray-200'
-                              }`}
-                            >
-                              <span className="font-medium">{cat.name}</span>
-                              <ChevronRight className="w-4 h-4 text-gray-400" />
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* 決定項目 */}
-                    {decidedCategories.length > 0 && (
-                      <div>
-                        <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2 flex items-center gap-1">
-                          <Check className="w-3.5 h-3.5 text-emerald-500" />
-                          選択済み ({decidedCategories.length})
-                        </h3>
-                        <div className="space-y-1">
-                          {decidedCategories.map(cat => {
-                            const selectedItems = cartItems.filter(
-                              item => item.product.categoryName === cat.name
-                            );
-                            return (
-                              <button
-                                key={cat.id}
-                                onClick={() => setSelectedCategoryId(cat.id)}
-                                aria-label={`${cat.name}カテゴリを編集`}
-                                className={`w-full p-2.5 rounded-lg text-sm transition-all text-left ${
-                                  selectedCategoryId === cat.id
-                                    ? 'bg-emerald-50 border border-emerald-300'
-                                    : 'bg-emerald-50/50 hover:bg-emerald-50 border border-emerald-200'
-                                }`}
-                              >
-                                <div className="flex items-center justify-between">
-                                  <span className="font-medium text-gray-700">{cat.name}</span>
-                                  <span className="text-xs text-emerald-600 font-medium">
-                                    {selectedItems.length}件
-                                  </span>
-                                </div>
-                                <p className="text-xs text-gray-500 truncate mt-0.5">
-                                  {selectedItems.map(i => i.product.name).join(', ')}
-                                </p>
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    )}
-                  </>
-                );
-              })()}
-
-              {/* お気に入り - シンプル */}
-              {favorites.length > 0 && (
-                <div className="pt-3 border-t border-gray-100">
-                  <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2 flex items-center gap-1">
-                    <Heart className="w-3.5 h-3.5 text-pink-500" />
-                    お気に入り ({favorites.length})
-                  </h3>
-                  <div className="space-y-1">
-                    {favorites.slice(0, 3).map(favId => {
-                      const item = items.find(i => i.id === favId);
-                      if (!item) return null;
-                      return (
-                        <button
-                          key={favId}
-                          onClick={() => handleOpenDetail(item)}
-                          aria-label={`${item.name}を表示`}
-                          className="w-full flex items-center justify-between p-2 bg-white hover:bg-gray-50 rounded-lg text-sm transition-all border border-gray-200"
-                        >
-                          <span className="text-gray-700 truncate">{item.name}</span>
-                          <ChevronRight className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-
-              {/* 最近見た商品 - シンプル */}
-              {recentlyViewed.length > 0 && (
-                <div className="pt-3 border-t border-gray-100">
-                  <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2 flex items-center gap-1">
-                    <Clock className="w-3.5 h-3.5 text-gray-400" />
-                    履歴
-                  </h3>
-                  <div className="flex flex-wrap gap-1">
-                    {recentlyViewed.slice(0, 5).map(viewedId => {
-                      const item = items.find(i => i.id === viewedId);
-                      if (!item) return null;
-                      return (
-                        <button
-                          key={viewedId}
-                          onClick={() => handleOpenDetail(item)}
-                          aria-label={`${item.name}を表示`}
-                          className="px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded text-xs text-gray-600 transition-colors truncate max-w-[120px]"
-                        >
-                          {item.name}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-
-              {/* 部屋別プランナー（内装タブの時のみ） */}
-              {activeTab === 'interior' && (
-                <div className="pt-3 border-t border-gray-200">
-                  <button
-                    onClick={() => setIsRoomPlannerOpen(true)}
-                    className="w-full flex items-center justify-center gap-2 px-3 py-2.5 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg font-medium text-sm hover:from-blue-600 hover:to-indigo-600 transition-all shadow-md"
-                  >
-                    <Home className="w-4 h-4" />
-                    部屋別プランナー
-                  </button>
-                </div>
-              )}
-
-              {/* アクションボタン */}
-              <div className="pt-3 border-t border-gray-100">
-                {isCurrentStepComplete ? (
-                  <button
-                    onClick={goToNextStep}
-                    aria-label="次のステップへ進む"
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-medium transition-colors"
-                  >
-                    次のステップへ
-                    <ChevronRight className="w-5 h-5" />
-                  </button>
-                ) : isCurrentCategoryDecided && undecidedCategories.length > 0 ? (
-                  <button
-                    onClick={goToNextCategory}
-                    aria-label="次のカテゴリへ進む"
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-teal-500 hover:bg-teal-600 text-white rounded-xl font-medium transition-colors"
-                  >
-                    次のカテゴリへ
-                    <ChevronRight className="w-5 h-5" />
-                  </button>
-                ) : null}
-              </div>
-            </div>
+            )}
           </div>
+
 
           {/* メインエリア */}
           <div className="flex-1 flex flex-col overflow-hidden">
             {/* 検索バー＋フィルター */}
             <div className="sticky top-0 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md border-b border-gray-100 dark:border-gray-700 z-10 p-3">
-              <div className="flex items-center gap-2 max-w-4xl mx-auto">
+              <div className="flex items-center gap-3 max-w-5xl mx-auto">
                 {/* 検索 */}
-                <div className="relative flex-1">
+                <div className="relative flex-1 max-w-md">
                   <label htmlFor="catalog-search" className="sr-only">商品を検索</label>
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" aria-hidden="true" />
                   <input
@@ -1100,21 +1087,42 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="w-full pl-10 pr-3 py-2.5 bg-gray-50 dark:bg-gray-700 dark:text-gray-100 border-0 rounded-xl text-sm focus:ring-2 focus:ring-teal-500 focus:bg-white dark:focus:bg-gray-600 transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
                   />
-                  {searchTerm ? (
+                  {searchTerm && (
                     <button
                       onClick={() => setSearchTerm('')}
                       className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full"
                     >
                       <X className="w-3 h-3 text-gray-400 dark:text-gray-500" />
                     </button>
-                  ) : (
-                    <span className="hidden sm:block absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-gray-400 dark:text-gray-500 bg-gray-200 dark:bg-gray-600 px-1.5 py-0.5 rounded">
-                      /
-                    </span>
                   )}
                 </div>
 
-                {/* アクションボタン群 - シンプル化 */}
+                {/* フィルターボタン（すべて/標準/オプション） */}
+                <div className="hidden sm:flex bg-gray-100 dark:bg-gray-700 p-1 rounded-xl">
+                  {[
+                    { value: 'all', label: 'すべて' },
+                    { value: 'standard', label: '標準' },
+                    { value: 'option', label: 'オプション' },
+                  ].map(opt => (
+                    <button
+                      key={opt.value}
+                      onClick={() => setFilterType(opt.value as FilterTypeValue)}
+                      className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${
+                        filterType === opt.value
+                          ? opt.value === 'standard'
+                            ? 'bg-emerald-500 text-white shadow-sm'
+                            : opt.value === 'option'
+                            ? 'bg-orange-500 text-white shadow-sm'
+                            : 'bg-white dark:bg-gray-600 text-gray-700 dark:text-gray-200 shadow-sm'
+                          : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
+                      }`}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+
+                {/* アクションボタン群 */}
                 <div className="hidden sm:flex items-center gap-1">
                   <button
                     onClick={handleSelectAllStandard}
@@ -1123,18 +1131,6 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                     aria-label="標準品を一括選択"
                   >
                     <Check className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={() => setQuickSelectMode(!quickSelectMode)}
-                    className={`p-2.5 rounded-lg transition-colors ${
-                      quickSelectMode
-                        ? 'bg-amber-500 text-white'
-                        : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'
-                    }`}
-                    title="クイック選択モード (Q)"
-                    aria-label="クイック選択モード"
-                  >
-                    <Zap className="w-4 h-4" />
                   </button>
                 </div>
               </div>
@@ -1343,31 +1339,140 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
               ) : filteredItems.length === 0 ? (
                 <EmptyState searchTerm={searchTerm} onClear={() => setSearchTerm('')} />
               ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-                  {filteredItems.map((item, index) => (
-                    <ItemCard
-                      key={item.id}
-                      item={item}
-                      index={index}
-                      getPrice={getPrice}
-                      isStandard={isStandard}
-                      getImageUrl={getImageUrl}
-                      cartItemIds={cartItemIds}
-                      addedItemId={addedItemId}
-                      hoveredItem={hoveredItem}
-                      setHoveredItem={setHoveredItem}
-                      handleOpenDetail={handleOpenDetail}
-                      handleAddToCart={handleAddToCart}
-                      handleRemoveFromCart={handleRemoveFromCart}
-                      handleToggleCompare={handleToggleCompare}
-                      isInCompare={isInCompare}
-                      handleToggleFavorite={handleToggleFavorite}
-                      isFavorite={isFavorite}
-                      searchTerm={searchTerm}
-                      showManufacturer={true}
-                    />
-                  ))}
-                </div>
+                <>
+                  {/* 商品グリッド - 4列表示 */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    {(() => {
+                      // カテゴリごとの最初の標準品IDを計算
+                      const firstStandardByCategory = new Map<string, string>();
+                      filteredItems.forEach(item => {
+                        const catName = item.category?.name || '';
+                        if (!firstStandardByCategory.has(catName) && isStandard(item)) {
+                          firstStandardByCategory.set(catName, item.id);
+                        }
+                      });
+
+                      return paginatedItems.map((item, index) => {
+                        const catName = item.category?.name || '';
+                        const isFirstStandard = firstStandardByCategory.get(catName) === item.id;
+                        const badge = getRecommendBadge(item, isStandard(item), isFirstStandard);
+
+                        return (
+                          <ItemCard
+                            key={item.id}
+                            item={item}
+                            index={index}
+                            getPrice={getPrice}
+                            isStandard={isStandard}
+                            getImageUrl={getImageUrl}
+                            cartItemIds={cartItemIds}
+                            addedItemId={addedItemId}
+                            hoveredItem={hoveredItem}
+                            setHoveredItem={setHoveredItem}
+                            handleOpenDetail={handleOpenDetail}
+                            handleAddToCart={handleAddToCart}
+                            handleRemoveFromCart={handleRemoveFromCart}
+                            handleToggleCompare={handleToggleCompare}
+                            isInCompare={isInCompare}
+                            handleToggleFavorite={handleToggleFavorite}
+                            isFavorite={isFavorite}
+                            searchTerm={searchTerm}
+                            showManufacturer={true}
+                            planName={selectedPlanId}
+                            recommendBadge={badge}
+                          />
+                        );
+                      });
+                    })()}
+                  </div>
+
+                  {/* ページネーション (G HOUSE風) */}
+                  {totalPages > 1 && (
+                    <div className="flex items-center justify-center gap-2 mt-6 pb-4">
+                      {/* 前へボタン */}
+                      <button
+                        onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                        disabled={currentPage === 1}
+                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                          currentPage === 1
+                            ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                            : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300 shadow-sm'
+                        }`}
+                      >
+                        <span className="flex items-center gap-1">
+                          <ChevronLeft className="w-4 h-4" />
+                          前へ
+                        </span>
+                      </button>
+
+                      {/* ページ番号 */}
+                      <div className="flex items-center gap-1">
+                        {(() => {
+                          const pages: (number | string)[] = [];
+                          const showPages = 7; // 表示するページ数
+
+                          if (totalPages <= showPages) {
+                            // 全ページ表示
+                            for (let i = 1; i <= totalPages; i++) {
+                              pages.push(i);
+                            }
+                          } else {
+                            // 省略表示
+                            if (currentPage <= 4) {
+                              for (let i = 1; i <= 5; i++) pages.push(i);
+                              pages.push('...');
+                              pages.push(totalPages);
+                            } else if (currentPage >= totalPages - 3) {
+                              pages.push(1);
+                              pages.push('...');
+                              for (let i = totalPages - 4; i <= totalPages; i++) pages.push(i);
+                            } else {
+                              pages.push(1);
+                              pages.push('...');
+                              for (let i = currentPage - 1; i <= currentPage + 1; i++) pages.push(i);
+                              pages.push('...');
+                              pages.push(totalPages);
+                            }
+                          }
+
+                          return pages.map((page, idx) => (
+                            page === '...' ? (
+                              <span key={`ellipsis-${idx}`} className="px-2 text-gray-400">...</span>
+                            ) : (
+                              <button
+                                key={page}
+                                onClick={() => setCurrentPage(page as number)}
+                                className={`w-10 h-10 rounded-lg text-sm font-medium transition-all ${
+                                  currentPage === page
+                                    ? 'bg-blue-600 text-white shadow-md'
+                                    : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
+                                }`}
+                              >
+                                {page}
+                              </button>
+                            )
+                          ));
+                        })()}
+                      </div>
+
+                      {/* 次へボタン */}
+                      <button
+                        onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                        disabled={currentPage === totalPages}
+                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                          currentPage === totalPages
+                            ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                            : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300 shadow-sm'
+                        }`}
+                      >
+                        <span className="flex items-center gap-1">
+                          次へ
+                          <ChevronRight className="w-4 h-4" />
+                        </span>
+                      </button>
+                    </div>
+                  )}
+                </>
               )}
 
               {/* レコメンドパネル */}
@@ -1442,6 +1547,16 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 {categories.find(c => c.id === selectedCategoryId)?.name || 'カテゴリ'}を選択中
               </div>
             )}
+
+            {/* 見積書出力 */}
+            <button
+              onClick={() => setIsEstimateDialogOpen(true)}
+              className="relative p-3 bg-indigo-500 text-white rounded-xl active:scale-95 transition-transform hover:bg-indigo-600"
+              aria-label="見積書を出力"
+              title="見積書を出力（PDF/Excel）"
+            >
+              <FileDown className="w-5 h-5" />
+            </button>
 
             {/* カート */}
             <button
@@ -1601,6 +1716,12 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
         isOpen={isCompareModalOpen}
         onClose={() => setIsCompareModalOpen(false)}
         onRemoveProduct={(productId) => setCompareProducts(prev => prev.filter(p => p.id !== productId))}
+      />
+
+      {/* 見積書出力ダイアログ */}
+      <EstimateExportDialog
+        isOpen={isEstimateDialogOpen}
+        onClose={() => setIsEstimateDialogOpen(false)}
       />
 
       {/* 部屋別プランナーモーダル */}
