@@ -37,9 +37,11 @@ import {
   type FilterTypeValue,
 } from './catalogUtils';
 import { NotNeededCard } from './NotNeededCard';
+import { RoomSelectionModal } from './RoomSelectionModal';
 import { ActionChecklist } from './ActionChecklist';
 import { BeginnerGuide } from './BeginnerGuide';
 import { EstimateExportDialog } from '../estimate/EstimateExportDialog';
+import { useSelectionStore } from '../../stores/useSelectionStore';
 
 // ユーティリティ関数とコンポーネント (ItemCard, SkeletonCard, EmptyState, Confetti) はインポート済み
 
@@ -176,8 +178,23 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   // 廃番商品を非表示（デフォルトで非表示）
   const [hideDiscontinued, setHideDiscontinued] = useState(true);
 
-  // カテゴリごとの「不要」選択状態
-  const [notNeededCategories, setNotNeededCategories] = useState<Set<string>>(new Set());
+  // 選択状態ストア（永続化対応）
+  const {
+    setNotNeeded,
+    setProductSelection,
+    clearSelection,
+    getSelectionStatus,
+  } = useSelectionStore();
+
+  // 部屋選択モーダル用
+  const [roomSelectionModal, setRoomSelectionModal] = useState<{
+    isOpen: boolean;
+    categoryName: string;
+    productId: string;
+    productName: string;
+    variantId?: string;
+    variantName?: string;
+  } | null>(null);
 
   // ページネーション
   const [currentPage, setCurrentPage] = useState(1);
@@ -680,11 +697,36 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     })) as CatalogProduct[];
   }, [cartItems]);
 
-  // カートに追加
-  const handleAddToCart = useCallback((item: ItemWithDetails) => {
+  // カートに追加（部屋選択が必要な場合はモーダルを表示）
+  const handleAddToCart = useCallback((item: ItemWithDetails, skipRoomSelection?: boolean) => {
+    const categoryName = item.category?.name || '';
+    const notNeededOption = getNotNeededOption(categoryName);
+
+    // 部屋選択が必要な場合（かつスキップフラグがない場合）
+    if (notNeededOption?.requiresRoomSelection && !skipRoomSelection) {
+      setRoomSelectionModal({
+        isOpen: true,
+        categoryName,
+        productId: item.id,
+        productName: item.name,
+        variantId: item.variants?.[0]?.id,
+        variantName: item.variants?.[0]?.color_name,
+      });
+      return;
+    }
+
     const cartProduct = convertToCartItem(item);
     addItem(cartProduct, 1);
     useCartStore.getState().setSelectedPlanId(selectedPlanId);
+
+    // 選択状態ストアにも保存
+    setProductSelection(
+      categoryName,
+      item.id,
+      item.name,
+      item.variants?.[0]?.id,
+      item.variants?.[0]?.color_name
+    );
 
     setAddedItemId(item.id);
     setTimeout(() => setAddedItemId(null), ANIMATION_DURATIONS.CART_ITEM_HIGHLIGHT);
@@ -698,7 +740,32 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), ANIMATION_DURATIONS.CONFETTI);
     }
-  }, [addItem, cartItems.length, selectedPlanId, toast]);
+  }, [addItem, cartItems.length, selectedPlanId, toast, setProductSelection]);
+
+  // 部屋選択完了時のハンドラー
+  const handleRoomSelectionConfirm = useCallback((selectedRooms: string[]) => {
+    if (!roomSelectionModal) return;
+
+    const { categoryName, productId, productName, variantId, variantName } = roomSelectionModal;
+
+    // 選択状態ストアに保存（部屋情報付き）
+    setProductSelection(categoryName, productId, productName, variantId, variantName, selectedRooms);
+
+    // カートにも追加
+    const item = items.find(i => i.id === productId);
+    if (item) {
+      const cartProduct = convertToCartItem(item);
+      addItem(cartProduct, 1);
+      useCartStore.getState().setSelectedPlanId(selectedPlanId);
+
+      setAddedItemId(item.id);
+      setTimeout(() => setAddedItemId(null), ANIMATION_DURATIONS.CART_ITEM_HIGHLIGHT);
+
+      toast.success('追加しました', `${productName}（${selectedRooms.length}部屋）`);
+    }
+
+    setRoomSelectionModal(null);
+  }, [roomSelectionModal, items, addItem, selectedPlanId, setProductSelection, toast]);
 
   const handleRemoveFromCart = useCallback((itemId: string) => {
     const item = cartItems.find(i => i.product.id === itemId);
@@ -1400,7 +1467,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                         ? getNotNeededOption(currentCategoryName)
                         : null;
                       const isNotNeededSelected = currentCategoryName
-                        ? notNeededCategories.has(currentCategoryName)
+                        ? getSelectionStatus(currentCategoryName) === 'not_needed'
                         : false;
 
                       // カテゴリごとの最初の標準品IDを計算
@@ -1422,16 +1489,15 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                               description={notNeededOption.description}
                               isSelected={isNotNeededSelected}
                               onSelect={() => {
-                                setNotNeededCategories(prev => {
-                                  const newSet = new Set(prev);
-                                  if (newSet.has(currentCategoryName)) {
-                                    newSet.delete(currentCategoryName);
-                                  } else {
-                                    newSet.add(currentCategoryName);
-                                  }
-                                  return newSet;
-                                });
-                                toast.success(`${currentCategoryName}: ${isNotNeededSelected ? '選択解除' : notNeededOption.title}`);
+                                if (isNotNeededSelected) {
+                                  // 選択解除
+                                  clearSelection(currentCategoryName);
+                                  toast.info(`${currentCategoryName}: 選択解除`);
+                                } else {
+                                  // 不要として設定
+                                  setNotNeeded(currentCategoryName, notNeededOption.title);
+                                  toast.success(`${currentCategoryName}: ${notNeededOption.title}`);
+                                }
                               }}
                             />
                           )}
@@ -1810,6 +1876,17 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
         isOpen={isEstimateDialogOpen}
         onClose={() => setIsEstimateDialogOpen(false)}
       />
+
+      {/* 部屋選択モーダル（商品の適用部屋を選択） */}
+      {roomSelectionModal && (
+        <RoomSelectionModal
+          isOpen={roomSelectionModal.isOpen}
+          onClose={() => setRoomSelectionModal(null)}
+          onConfirm={handleRoomSelectionConfirm}
+          categoryName={roomSelectionModal.categoryName}
+          productName={roomSelectionModal.productName}
+        />
+      )}
 
       {/* 部屋別プランナーモーダル */}
       <Dialog.Root open={isRoomPlannerOpen} onOpenChange={setIsRoomPlannerOpen}>

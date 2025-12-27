@@ -1,12 +1,12 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { CartItem, Product, ProductVariant, PlanType } from '../types/product';
-import { useOperationLogStore } from './useOperationLogStore';
+import { useOperationLogStore, type ActionType } from './useOperationLogStore';
 
 // 操作ログを追加するヘルパー関数
 const addOperationLog = (
   type: 'cart_add' | 'cart_remove' | 'cart_update' | 'cart_clear',
-  action: string,
+  action: ActionType,
   details?: Record<string, unknown>
 ) => {
   // storeからaddLogを直接取得して呼び出す
@@ -51,9 +51,10 @@ export const useCartStore = create<CartStore>()(
       );
 
       // 操作ログを記録
-      addOperationLog('cart_add', `${product.name}をカートに追加`, {
+      addOperationLog('cart_add', 'select', {
         productId: product.id,
         productName: product.name,
+        itemName: `${product.name}をカートに追加`,
         quantity,
         variant: selectedVariant.color,
         isUpdate: !!existingItem,
@@ -86,9 +87,10 @@ export const useCartStore = create<CartStore>()(
     const state = get();
     const item = state.items.find((i) => i.product.id === productId);
     if (item) {
-      addOperationLog('cart_remove', `${item.product.name}をカートから削除`, {
+      addOperationLog('cart_remove', 'remove', {
         productId,
         productName: item.product.name,
+        itemName: `${item.product.name}をカートから削除`,
       });
     }
     set((state) => ({
@@ -106,9 +108,10 @@ export const useCartStore = create<CartStore>()(
     const state = get();
     const item = state.items.find((i) => i.product.id === productId);
     if (item) {
-      addOperationLog('cart_update', `${item.product.name}の数量を${quantity}に変更`, {
+      addOperationLog('cart_update', 'other', {
         productId,
         productName: item.product.name,
+        itemName: `${item.product.name}の数量を${quantity}に変更`,
         oldQuantity: item.quantity,
         newQuantity: quantity,
       });
@@ -130,7 +133,8 @@ export const useCartStore = create<CartStore>()(
 
   clearCart: () => {
     const state = get();
-    addOperationLog('cart_clear', 'カートをクリア', {
+    addOperationLog('cart_clear', 'remove', {
+      itemName: 'カートをクリア',
       itemCount: state.items.length,
     });
     set({ items: [], lastUpdated: new Date().toISOString() });

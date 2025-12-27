@@ -2,9 +2,13 @@
  * プレゼンテーション自動生成
  * - 外装プレゼン資料
  * - 内装プレゼン資料
+ * - 部屋別適用情報
+ * - 「不要」選択の表示
  * - PDF出力
  */
 import type { CartItem, Product } from '../types/product';
+import type { CategorySelection } from '../stores/useSelectionStore';
+import { getRoomNames } from '../stores/useSelectionStore';
 
 interface PresentationConfig {
   projectName: string;
@@ -13,13 +17,28 @@ interface PresentationConfig {
   companyLogo?: string;
   planType: string;
   createdDate: Date;
+  // 選択状態（部屋適用・不要選択など）
+  selections?: Record<string, CategorySelection>;
 }
 
 interface SlideData {
-  type: 'cover' | 'category' | 'product' | 'summary' | 'comparison';
+  type: 'cover' | 'category' | 'product' | 'summary' | 'comparison' | 'not_needed' | 'room_plan';
   title: string;
   subtitle?: string;
   content: Record<string, unknown>;
+}
+
+// 「不要」選択のカテゴリ情報
+interface NotNeededCategory {
+  categoryName: string;
+  note?: string;
+}
+
+// 部屋適用情報
+interface RoomApplication {
+  categoryName: string;
+  productName: string;
+  rooms: string[];
 }
 
 /**
@@ -151,6 +170,21 @@ export const generateInteriorPresentation = (
   config: PresentationConfig
 ): SlideData[] => {
   const slides: SlideData[] = [];
+  const selections = config.selections || {};
+
+  // 「不要」選択カテゴリを抽出
+  const notNeededCategories: NotNeededCategory[] = Object.entries(selections)
+    .filter(([, sel]) => sel.status === 'not_needed')
+    .map(([categoryName, sel]) => ({ categoryName, note: sel.note }));
+
+  // 部屋適用情報を抽出
+  const roomApplications: RoomApplication[] = Object.entries(selections)
+    .filter(([, sel]) => sel.status === 'selected' && sel.appliedRooms && sel.appliedRooms.length > 0)
+    .map(([categoryName, sel]) => ({
+      categoryName,
+      productName: sel.selectedProductName || '',
+      rooms: sel.appliedRooms || [],
+    }));
 
   // 表紙
   slides.push({
@@ -204,6 +238,10 @@ export const generateInteriorPresentation = (
           (p) => p.plan === 'LACIE' || p.planId === 'LACIE'
         )?.price || 0;
 
+        // 選択状態から部屋情報を取得
+        const categorySelection = selections[item.product.categoryName];
+        const appliedRooms = categorySelection?.appliedRooms || [];
+
         slides.push({
           type: 'product',
           title: item.product.name,
@@ -220,11 +258,40 @@ export const generateInteriorPresentation = (
             description: item.product.description,
             features: extractFeatures(item.product),
             imageUrl: item.selectedVariant?.imageUrl,
+            appliedRooms: appliedRooms.length > 0 ? getRoomNames(appliedRooms) : [],
           },
         });
       });
     }
   });
+
+  // 部屋別適用スライド（部屋適用情報がある場合）
+  if (roomApplications.length > 0) {
+    slides.push({
+      type: 'room_plan',
+      title: '部屋別適用一覧',
+      subtitle: '各部屋に適用される仕様',
+      content: {
+        applications: roomApplications.map(app => ({
+          categoryName: app.categoryName,
+          productName: app.productName,
+          rooms: getRoomNames(app.rooms),
+        })),
+      },
+    });
+  }
+
+  // 「不要」選択スライド（不要選択がある場合）
+  if (notNeededCategories.length > 0) {
+    slides.push({
+      type: 'not_needed',
+      title: '設置しない項目',
+      subtitle: 'お客様のご希望により設置しない項目',
+      content: {
+        categories: notNeededCategories,
+      },
+    });
+  }
 
   // カラーコーディネートスライド
   const colorPalette = extractColorPalette(items);
@@ -402,6 +469,7 @@ export const generatePresentationHTML = (
           `;
 
         case 'product':
+          const appliedRooms = slide.content.appliedRooms as string[] || [];
           return `
             <div class="slide product">
               <div class="slide-number">${index + 1} / ${slides.length}</div>
@@ -421,6 +489,12 @@ export const generatePresentationHTML = (
                     <span class="label">カラー</span>
                     <span class="value">${slide.content.color}</span>
                   </div>
+                  ${appliedRooms.length > 0 ? `
+                  <div class="detail-row rooms">
+                    <span class="label">適用部屋</span>
+                    <span class="value room-tags">${appliedRooms.map(r => `<span class="room-tag">${r}</span>`).join('')}</span>
+                  </div>
+                  ` : ''}
                   <div class="detail-row">
                     <span class="label">数量</span>
                     <span class="value">${slide.content.quantity} ${slide.content.unit}</span>
@@ -465,6 +539,51 @@ export const generatePresentationHTML = (
                       .map((c) => `<li><span>${c.name}</span><span>${c.count}点</span></li>`)
                       .join('')}
                   </ul>
+                </div>
+              </div>
+            </div>
+          `;
+
+        case 'room_plan':
+          const applications = slide.content.applications as { categoryName: string; productName: string; rooms: string[] }[];
+          return `
+            <div class="slide room-plan" style="background: linear-gradient(135deg, ${themeColor}11, ${themeColor}05);">
+              <div class="slide-number">${index + 1} / ${slides.length}</div>
+              <div class="content">
+                <h2>${slide.title}</h2>
+                <p class="subtitle">${slide.subtitle || ''}</p>
+                <div class="room-applications">
+                  ${applications.map(app => `
+                    <div class="room-app-item">
+                      <div class="app-header">
+                        <span class="app-category">${app.categoryName}</span>
+                        <span class="app-product">${app.productName}</span>
+                      </div>
+                      <div class="app-rooms">
+                        ${app.rooms.map(r => `<span class="room-tag">${r}</span>`).join('')}
+                      </div>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+          `;
+
+        case 'not_needed':
+          const notNeededCategories = slide.content.categories as { categoryName: string; note?: string }[];
+          return `
+            <div class="slide not-needed">
+              <div class="slide-number">${index + 1} / ${slides.length}</div>
+              <div class="content">
+                <h2>${slide.title}</h2>
+                <p class="subtitle">${slide.subtitle || ''}</p>
+                <div class="not-needed-list">
+                  ${notNeededCategories.map(cat => `
+                    <div class="not-needed-item">
+                      <span class="category-name">${cat.categoryName}</span>
+                      <span class="category-note">${cat.note || '設置しない'}</span>
+                    </div>
+                  `).join('')}
                 </div>
               </div>
             </div>
@@ -604,6 +723,46 @@ export const generatePresentationHTML = (
           padding: 8px 0;
           border-bottom: 1px solid #f3f4f6;
         }
+        /* 部屋タグスタイル */
+        .room-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+        .room-tag {
+          display: inline-block;
+          padding: 4px 10px;
+          background: ${themeColor}15;
+          color: ${themeColor};
+          border-radius: 12px;
+          font-size: 12px;
+          font-weight: 500;
+        }
+        /* 部屋別適用スライド */
+        .room-plan h2 { font-size: 32px; text-align: center; margin-bottom: 16px; color: #333; }
+        .room-plan .subtitle { text-align: center; color: #666; margin-bottom: 40px; }
+        .room-applications { max-width: 700px; margin: 0 auto; }
+        .room-app-item {
+          background: white;
+          border-radius: 12px;
+          padding: 20px;
+          margin-bottom: 16px;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .app-header { display: flex; justify-content: space-between; margin-bottom: 12px; }
+        .app-category { font-weight: bold; color: #333; font-size: 16px; }
+        .app-product { color: #666; font-size: 14px; }
+        .app-rooms { display: flex; flex-wrap: wrap; gap: 8px; }
+        /* 不要選択スライド */
+        .not-needed h2 { font-size: 32px; text-align: center; margin-bottom: 16px; color: #333; }
+        .not-needed .subtitle { text-align: center; color: #666; margin-bottom: 40px; }
+        .not-needed-list { max-width: 500px; margin: 0 auto; }
+        .not-needed-item {
+          display: flex;
+          justify-content: space-between;
+          background: #f5f5f5;
+          border-radius: 8px;
+          padding: 16px 20px;
+          margin-bottom: 12px;
+        }
+        .category-name { font-weight: 500; color: #333; }
+        .category-note { color: #888; font-size: 14px; }
         @media print {
           .slide { padding: 20mm; }
           .slide-number { position: fixed; }
@@ -636,5 +795,54 @@ export const openPresentationWindow = (
   if (printWindow) {
     printWindow.document.write(html);
     printWindow.document.close();
+  }
+};
+
+// ========================================
+// ExportPanel向けラッパー関数
+// ========================================
+interface GeneratePresentationOptions {
+  customerName: string;
+  projectName: string;
+  selections?: Record<string, import('../stores/useSelectionStore').CategorySelection>;
+}
+
+export const generatePresentation = async (
+  items: CartItem[],
+  options: GeneratePresentationOptions
+): Promise<void> => {
+  // 外装アイテムと内装アイテムを分類
+  const exteriorKeywords = ['外壁', '屋根', '玄関', 'サッシ', '軒天', '破風', '雨樋', 'ポスト', '表札', 'ポーチ', '換気'];
+  const exteriorItems = items.filter(item =>
+    exteriorKeywords.some(kw => item.product.categoryName.includes(kw))
+  );
+  const interiorItems = items.filter(item =>
+    !exteriorKeywords.some(kw => item.product.categoryName.includes(kw))
+  );
+
+  const config: PresentationConfig = {
+    customerName: options.customerName,
+    projectName: options.projectName,
+    companyName: 'Gハウス',
+    planType: 'LACIE',
+    createdDate: new Date(),
+    selections: options.selections,
+  };
+
+  // 両方のプレゼンテーションを生成
+  if (exteriorItems.length > 0) {
+    openPresentationWindow(exteriorItems, 'exterior', config);
+  }
+
+  // 内装は少し遅延して開く（ブラウザのポップアップブロック対策）
+  if (interiorItems.length > 0) {
+    setTimeout(() => {
+      openPresentationWindow(interiorItems, 'interior', config);
+    }, 500);
+  }
+
+  // どちらもない場合は内装として空で開く
+  if (exteriorItems.length === 0 && interiorItems.length === 0) {
+    openPresentationWindow(items, 'interior', config);
   }
 };

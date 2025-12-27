@@ -2,9 +2,13 @@
  * 仕様書PDF出力機能
  * - 美しいデザインの仕様書
  * - カテゴリ別整理
+ * - 部屋適用情報の表示
+ * - 「不要」選択の表示
  * - 印刷最適化
  */
 import type { CartItem } from '../types/product';
+import type { CategorySelection } from '../stores/useSelectionStore';
+import { getRoomNames } from '../stores/useSelectionStore';
 
 interface SpecificationData {
   customerName: string;
@@ -14,6 +18,8 @@ interface SpecificationData {
   items: CartItem[];
   staffName?: string;
   companyName?: string;
+  // 選択状態（「不要」選択や部屋適用情報を含む）
+  selections?: Record<string, CategorySelection>;
 }
 
 // カテゴリ別にアイテムをグループ化
@@ -33,8 +39,13 @@ const groupByCategory = (items: CartItem[]): Map<string, CartItem[]> => {
 
 // 仕様書HTMLを生成
 export const generateSpecificationHTML = (data: SpecificationData): string => {
-  const { customerName, projectName, planName, date, items, staffName, companyName } = data;
+  const { customerName, projectName, planName, date, items, staffName, companyName, selections = {} } = data;
   const categoryGroups = groupByCategory(items);
+
+  // 「不要」選択のカテゴリを抽出
+  const notNeededCategories = Object.entries(selections)
+    .filter(([, sel]) => sel.status === 'not_needed')
+    .map(([categoryName, sel]) => ({ categoryName, note: sel.note }));
 
   const formatPrice = (price: number): string => {
     if (price === 0) return '標準';
@@ -66,12 +77,20 @@ export const generateSpecificationHTML = (data: SpecificationData): string => {
       const price = item.product.pricing.find(p => p.plan === 'LACIE' || p.planId === 'LACIE')?.price || 0;
       const totalPrice = price * item.quantity;
 
+      // 選択状態から部屋情報を取得
+      const categorySelection = selections[item.product.categoryName];
+      const appliedRooms = categorySelection?.appliedRooms || [];
+      const roomNamesText = appliedRooms.length > 0
+        ? getRoomNames(appliedRooms).join('、')
+        : '';
+
       itemRows += `
         <tr class="item-row ${item.product.isOption ? 'option-item' : 'standard-item'}">
           <td class="item-num">${categoryIndex}-${idx + 1}</td>
           <td class="item-name">
             <div class="product-name">${item.product.name}</div>
             <div class="product-detail">${item.product.manufacturer} ${item.product.modelNumber || ''}</div>
+            ${roomNamesText ? `<div class="room-info">📍 ${roomNamesText}</div>` : ''}
           </td>
           <td class="item-color">${item.selectedVariant?.color || '標準色'}</td>
           <td class="item-type ${item.product.isOption ? 'type-option' : 'type-standard'}">
@@ -292,6 +311,13 @@ export const generateSpecificationHTML = (data: SpecificationData): string => {
       color: #888;
     }
 
+    .room-info {
+      font-size: 8pt;
+      color: #0d9488;
+      margin-top: 2px;
+      font-weight: 500;
+    }
+
     .item-color {
       text-align: center;
       font-size: 8pt;
@@ -352,6 +378,48 @@ export const generateSpecificationHTML = (data: SpecificationData): string => {
     .subtotal-price {
       text-align: right;
       font-weight: bold;
+    }
+
+    /* 不要選択セクション */
+    .not-needed-section {
+      margin-top: 20px;
+      margin-bottom: 20px;
+      padding: 15px;
+      background: #f5f5f5;
+      border-radius: 8px;
+      border-left: 4px solid #9e9e9e;
+    }
+
+    .not-needed-title {
+      font-weight: bold;
+      font-size: 11pt;
+      color: #666;
+      margin-bottom: 10px;
+    }
+
+    .not-needed-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .not-needed-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 12px;
+      margin-bottom: 4px;
+      background: white;
+      border-radius: 4px;
+      border: 1px solid #e0e0e0;
+    }
+
+    .not-needed-category {
+      font-weight: 500;
+      color: #333;
+    }
+
+    .not-needed-note {
+      font-size: 9pt;
+      color: #888;
     }
 
     /* 合計セクション */
@@ -491,6 +559,20 @@ export const generateSpecificationHTML = (data: SpecificationData): string => {
       </tbody>
     </table>
 
+    ${notNeededCategories.length > 0 ? `
+    <section class="not-needed-section">
+      <h3 class="not-needed-title">設置しない項目</h3>
+      <ul class="not-needed-list">
+        ${notNeededCategories.map(({ categoryName, note }) => `
+          <li class="not-needed-item">
+            <span class="not-needed-category">${categoryName}</span>
+            <span class="not-needed-note">${note || '設置しない'}</span>
+          </li>
+        `).join('')}
+      </ul>
+    </section>
+    ` : ''}
+
     <div class="total-section">
       <div class="total-row">
         <span class="total-label">標準仕様 合計</span>
@@ -561,4 +643,35 @@ export const openSpecificationWindow = (data: SpecificationData): void => {
     printButton.onclick = () => newWindow.print();
     newWindow.document.body.appendChild(printButton);
   }
+};
+
+// ========================================
+// ExportPanel向けラッパー関数
+// ========================================
+interface GenerateSpecificationPDFOptions {
+  customerName: string;
+  projectName: string;
+  planName?: string;
+  selections?: Record<string, CategorySelection>;
+}
+
+export const generateSpecificationPDF = async (
+  items: CartItem[],
+  options: GenerateSpecificationPDFOptions
+): Promise<void> => {
+  const data: SpecificationData = {
+    customerName: options.customerName,
+    projectName: options.projectName,
+    planName: options.planName || 'LACIE',
+    date: new Date().toLocaleDateString('ja-JP', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }),
+    items,
+    selections: options.selections,
+    companyName: 'Gハウス',
+  };
+
+  openSpecificationWindow(data);
 };

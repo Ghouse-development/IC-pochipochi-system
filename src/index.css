@@ -95,24 +95,32 @@
   nav,
   .no-print,
   button:not(.print-button),
-  .fixed,
+  .fixed:not(.print-show),
   .sticky,
   [role="dialog"],
-  .toast-container {
+  .toast-container,
+  .dev-toolbar,
+  aside {
     display: none !important;
   }
 
   /* ページ設定 */
   @page {
     size: A4;
-    margin: 15mm;
+    margin: 12mm 15mm;
+  }
+
+  @page :first {
+    margin-top: 15mm;
   }
 
   body {
     background: white !important;
     color: black !important;
-    font-size: 12pt;
+    font-size: 10pt;
     line-height: 1.5;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 
   /* コンテンツエリアを全幅に */
@@ -128,16 +136,18 @@
   .grid {
     display: grid !important;
     grid-template-columns: repeat(3, 1fr) !important;
-    gap: 10mm !important;
+    gap: 8mm !important;
   }
 
   /* カード内の調整 */
   .product-card,
   [class*="rounded-xl"] {
     page-break-inside: avoid;
+    break-inside: avoid;
     border: 1px solid #ddd !important;
     box-shadow: none !important;
     background: white !important;
+    border-radius: 4px !important;
   }
 
   /* 画像 */
@@ -150,21 +160,184 @@
   table {
     border-collapse: collapse;
     width: 100%;
+    font-size: 9pt;
   }
 
   th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
+    border: 1px solid #ccc;
+    padding: 6px 8px;
     text-align: left;
+  }
+
+  th {
+    background: #f5f5f5 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    font-weight: bold;
   }
 
   /* 見出し */
   h1, h2, h3 {
     page-break-after: avoid;
+    break-after: avoid;
+  }
+
+  h1 {
+    font-size: 18pt;
+    margin-bottom: 12pt;
+  }
+
+  h2 {
+    font-size: 14pt;
+    margin-bottom: 8pt;
+  }
+
+  h3 {
+    font-size: 12pt;
+    margin-bottom: 6pt;
   }
 
   /* 価格表示 */
   .font-bold {
     color: black !important;
+  }
+
+  /* グラデーション背景を印刷用に調整 */
+  [class*="bg-gradient"] {
+    background: #f0f7ff !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* チェックリスト印刷用 */
+  .checklist-item {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* 選択サマリー印刷用 */
+  .selection-summary {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* セクション区切り */
+  section {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin-bottom: 16pt;
+  }
+
+  /* 印刷時に色を維持 */
+  .bg-green-100, .bg-green-50 {
+    background: #dcfce7 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .bg-blue-100, .bg-blue-50 {
+    background: #dbeafe !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .bg-orange-100, .bg-orange-50 {
+    background: #ffedd5 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .bg-purple-100, .bg-purple-50 {
+    background: #f3e8ff !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .bg-gray-100, .bg-gray-50 {
+    background: #f5f5f5 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* テキスト色を維持 */
+  .text-green-600, .text-green-700 {
+    color: #16a34a !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .text-blue-600, .text-blue-700 {
+    color: #2563eb !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .text-orange-600 {
+    color: #ea580c !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* バッジ・ラベル */
+  .badge, [class*="rounded-full"] {
+    border: 1px solid currentColor !important;
+  }
+
+  /* 進捗バー */
+  .progress-bar {
+    background: #e5e7eb !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* リンクのURL表示 */
+  a[href]:after {
+    content: none;
+  }
+
+  /* ページフッター */
+  .print-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 8pt;
+    color: #666;
+    border-top: 1px solid #ddd;
+    padding-top: 4pt;
+  }
+
+  /* 印刷ページ番号 */
+  .page-number::after {
+    counter-increment: page;
+    content: "Page " counter(page);
+  }
+
+  /* 孤立行の制御 */
+  p, li {
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* 印刷用の可視性 */
+  .print-only {
+    display: block !important;
+  }
+
+  .screen-only {
+    display: none !important;
+  }
+}
+
+/* 通常表示時は印刷専用要素を非表示 */
+.print-only {
+  display: none;
+}
+
+/* 印刷プレビュー通知 */
+@media print {
+  .print-preview-notice {
+    display: none !important;
   }
 }

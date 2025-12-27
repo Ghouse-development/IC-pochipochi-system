@@ -12,17 +12,17 @@ describe('useOperationLogStore', () => {
   describe('addLog', () => {
     it('should add a log entry', () => {
       const store = useOperationLogStore.getState();
-      store.addLog('page_view', 'ホームページ閲覧');
+      store.addLog('page_view', 'view');
 
       const state = useOperationLogStore.getState();
       expect(state.logs).toHaveLength(1);
-      expect(state.logs[0].action).toBe('ホームページ閲覧');
+      expect(state.logs[0].action).toBe('view');
       expect(state.logs[0].type).toBe('page_view');
     });
 
     it('should add log with details', () => {
       const store = useOperationLogStore.getState();
-      store.addLog('product_view', '商品閲覧', { productId: '123' });
+      store.addLog('product_view', 'view', { productId: '123' });
 
       const state = useOperationLogStore.getState();
       expect(state.logs[0].details).toEqual({ productId: '123' });
@@ -30,17 +30,17 @@ describe('useOperationLogStore', () => {
 
     it('should add logs at the beginning', () => {
       const store = useOperationLogStore.getState();
-      store.addLog('page_view', 'アクション1');
-      store.addLog('page_view', 'アクション2');
+      store.addLog('page_view', 'view');
+      store.addLog('page_view', 'select');
 
       const state = useOperationLogStore.getState();
-      expect(state.logs[0].action).toBe('アクション2');
-      expect(state.logs[1].action).toBe('アクション1');
+      expect(state.logs[0].action).toBe('select');
+      expect(state.logs[1].action).toBe('view');
     });
 
     it('should include sessionId', () => {
       const store = useOperationLogStore.getState();
-      store.addLog('page_view', 'テスト');
+      store.addLog('page_view', 'view');
 
       const state = useOperationLogStore.getState();
       expect(state.logs[0].sessionId).toBe('test-session-id');
@@ -49,7 +49,7 @@ describe('useOperationLogStore', () => {
     it('should limit to 1000 logs', { timeout: 30000 }, () => {
       const store = useOperationLogStore.getState();
       for (let i = 0; i < 1100; i++) {
-        store.addLog('page_view', `アクション${i}`);
+        store.addLog('page_view', 'view');
       }
 
       const state = useOperationLogStore.getState();
@@ -61,7 +61,7 @@ describe('useOperationLogStore', () => {
     it('should return limited logs', () => {
       const store = useOperationLogStore.getState();
       for (let i = 0; i < 150; i++) {
-        store.addLog('page_view', `アクション${i}`);
+        store.addLog('page_view', 'view');
       }
 
       const logs = store.getLogs(50);
@@ -71,7 +71,7 @@ describe('useOperationLogStore', () => {
     it('should default to 100 logs', () => {
       const store = useOperationLogStore.getState();
       for (let i = 0; i < 150; i++) {
-        store.addLog('page_view', `アクション${i}`);
+        store.addLog('page_view', 'view');
       }
 
       const logs = store.getLogs();
@@ -82,9 +82,9 @@ describe('useOperationLogStore', () => {
   describe('getLogsByType', () => {
     it('should filter logs by type', () => {
       const store = useOperationLogStore.getState();
-      store.addLog('page_view', 'ページ閲覧');
-      store.addLog('cart_add', 'カート追加');
-      store.addLog('page_view', '別のページ閲覧');
+      store.addLog('page_view', 'view');
+      store.addLog('cart_add', 'select');
+      store.addLog('page_view', 'view');
 
       const pageViewLogs = store.getLogsByType('page_view');
       expect(pageViewLogs).toHaveLength(2);
@@ -92,7 +92,7 @@ describe('useOperationLogStore', () => {
 
     it('should return empty array if no matching type', () => {
       const store = useOperationLogStore.getState();
-      store.addLog('page_view', 'ページ閲覧');
+      store.addLog('page_view', 'view');
 
       const cartLogs = store.getLogsByType('cart_add');
       expect(cartLogs).toHaveLength(0);
@@ -108,7 +108,7 @@ describe('useOperationLogStore', () => {
       tomorrow.setDate(tomorrow.getDate() + 1);
 
       const store = useOperationLogStore.getState();
-      store.addLog('page_view', '今日のログ');
+      store.addLog('page_view', 'view');
 
       const logs = store.getLogsByDateRange(yesterday, tomorrow);
       expect(logs.length).toBeGreaterThanOrEqual(1);
@@ -130,15 +130,15 @@ describe('useOperationLogStore', () => {
       store.startNewSession();
 
       const state = useOperationLogStore.getState();
-      expect(state.logs.some(log => log.action === 'セッション開始')).toBe(true);
+      expect(state.logs.some(log => log.action === 'login')).toBe(true);
     });
   });
 
   describe('clearLogs', () => {
     it('should clear all logs', () => {
       const store = useOperationLogStore.getState();
-      store.addLog('page_view', 'テスト1');
-      store.addLog('page_view', 'テスト2');
+      store.addLog('page_view', 'view');
+      store.addLog('page_view', 'select');
 
       store.clearLogs();
 
@@ -150,9 +150,9 @@ describe('useOperationLogStore', () => {
   describe('getOperationStats', () => {
     it('should return operation statistics', () => {
       const store = useOperationLogStore.getState();
-      store.addLog('page_view', 'テスト1');
-      store.addLog('page_view', 'テスト2');
-      store.addLog('cart_add', 'カート追加');
+      store.addLog('page_view', 'view');
+      store.addLog('page_view', 'view');
+      store.addLog('cart_add', 'select');
 
       const stats = store.getOperationStats();
       expect(stats).toContainEqual({ type: 'page_view', count: 2 });
@@ -161,10 +161,10 @@ describe('useOperationLogStore', () => {
 
     it('should sort by count descending', () => {
       const store = useOperationLogStore.getState();
-      store.addLog('cart_add', 'カート1');
-      store.addLog('page_view', 'ページ1');
-      store.addLog('page_view', 'ページ2');
-      store.addLog('page_view', 'ページ3');
+      store.addLog('cart_add', 'select');
+      store.addLog('page_view', 'view');
+      store.addLog('page_view', 'view');
+      store.addLog('page_view', 'view');
 
       const stats = store.getOperationStats();
       expect(stats[0].type).toBe('page_view');
@@ -175,7 +175,7 @@ describe('useOperationLogStore', () => {
   describe('getTodayLogs', () => {
     it('should return only today logs', () => {
       const store = useOperationLogStore.getState();
-      store.addLog('page_view', '今日のログ');
+      store.addLog('page_view', 'view');
 
       const todayLogs = store.getTodayLogs();
       expect(todayLogs.length).toBeGreaterThanOrEqual(1);

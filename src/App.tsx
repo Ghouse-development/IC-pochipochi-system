@@ -32,6 +32,8 @@ import type { Product } from './types/product';
 const AdminDashboard = lazy(() => import('./components/admin/AdminDashboard').then(m => ({ default: m.AdminDashboard })));
 const HierarchyPage = lazy(() => import('./pages/HierarchyPage').then(m => ({ default: m.HierarchyPage })));
 const ImageTestPage = lazy(() => import('./pages/ImageTestPage').then(m => ({ default: m.ImageTestPage })));
+const StaffDashboard = lazy(() => import('./pages/StaffDashboard').then(m => ({ default: m.StaffDashboard })));
+const CustomerPage = lazy(() => import('./pages/CustomerPage').then(m => ({ default: m.CustomerPage })));
 
 // Loading fallback component
 const PageLoader = () => (
@@ -167,6 +169,7 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
         onAdminClick={() => navigate('/admin')}
         onHierarchyClick={() => navigate('/hierarchy')}
         onImageTestClick={() => navigate('/image-test')}
+        onStaffDashboardClick={() => navigate('/staff')}
       />
 
       <main className="flex-1 overflow-hidden">
@@ -192,6 +195,16 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
           <Route path="/image-test" element={
             <Suspense fallback={<PageLoader />}>
               <ImageTestPage />
+            </Suspense>
+          } />
+          <Route path="/staff" element={
+            <Suspense fallback={<PageLoader />}>
+              <StaffDashboard onBack={() => navigate('/catalog')} />
+            </Suspense>
+          } />
+          <Route path="/customer" element={
+            <Suspense fallback={<PageLoader />}>
+              <CustomerPage />
             </Suspense>
           } />
         </Routes>

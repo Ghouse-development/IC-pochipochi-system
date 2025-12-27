@@ -3,6 +3,8 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import type { CartItem, PlanType } from '../types/product';
+import type { CategorySelection } from '../stores/useSelectionStore';
+import { getRoomNames } from '../stores/useSelectionStore';
 
 // jspdf-autotable の型定義
 declare module 'jspdf' {
@@ -51,6 +53,9 @@ export interface EstimateData {
 
   // 備考
   notes?: string;
+
+  // 選択状態（「不要」選択や部屋適用情報を含む）
+  selections?: Record<string, CategorySelection>;
 }
 
 interface EstimateItem {
@@ -64,18 +69,34 @@ interface EstimateItem {
   unitPrice: number;
   totalPrice: number;
   isOption: boolean;
+  appliedRooms?: string[]; // 適用部屋
+}
+
+// 「不要」選択のカテゴリ情報
+interface NotNeededCategory {
+  categoryName: string;
+  note?: string;
 }
 
 // カートアイテムを見積書用に変換
-const convertToEstimateItems = (items: CartItem[], planType: PlanType): EstimateItem[] => {
+const convertToEstimateItems = (
+  items: CartItem[],
+  planType: PlanType,
+  selections?: Record<string, CategorySelection>
+): EstimateItem[] => {
   return items.map(item => {
     const pricing = item.product.pricing?.find(
       p => p.planId === planType || p.plan === planType
     );
     const unitPrice = pricing?.price || 0;
+    const categoryName = item.product.categoryName || '未分類';
+
+    // 選択状態から部屋情報を取得
+    const categorySelection = selections?.[categoryName];
+    const appliedRooms = categorySelection?.appliedRooms;
 
     return {
-      category: item.product.categoryName || '未分類',
+      category: categoryName,
       name: item.product.name,
       manufacturer: item.product.manufacturer || '',
       modelNumber: item.product.modelNumber || '',
@@ -85,8 +106,19 @@ const convertToEstimateItems = (items: CartItem[], planType: PlanType): Estimate
       unitPrice,
       totalPrice: unitPrice * item.quantity,
       isOption: item.product.isOption || false,
+      appliedRooms,
     };
   });
+};
+
+// 「不要」選択カテゴリを抽出
+const extractNotNeededCategories = (
+  selections?: Record<string, CategorySelection>
+): NotNeededCategory[] => {
+  if (!selections) return [];
+  return Object.entries(selections)
+    .filter(([, sel]) => sel.status === 'not_needed')
+    .map(([categoryName, sel]) => ({ categoryName, note: sel.note }));
 };
 
 // カテゴリ別にグループ化
@@ -145,8 +177,9 @@ export const generateEstimatePDF = async (data: EstimateData): Promise<Blob> => 
   validUntil.setDate(validUntil.getDate() + (data.validDays || 30));
 
   // 見積書アイテムの準備
-  const estimateItems = convertToEstimateItems(data.items, data.planType);
+  const estimateItems = convertToEstimateItems(data.items, data.planType, data.selections);
   const groupedItems = groupByCategory(estimateItems);
+  const notNeededCategories = extractNotNeededCategories(data.selections);
 
   // 合計計算
   const standardTotal = estimateItems
@@ -245,13 +278,19 @@ export const generateEstimatePDF = async (data: EstimateData): Promise<Blob> => 
         { content: `${category}`, colSpan: 4, styles: { fillColor: [100, 100, 100] } },
         { content: formatCurrency(categoryTotal), colSpan: 1, styles: { fillColor: [100, 100, 100], halign: 'right' as const } },
       ]],
-      body: items.map(item => [
-        item.name,
-        item.variant,
-        item.unit,
-        item.quantity.toString(),
-        formatCurrency(item.totalPrice),
-      ]),
+      body: items.map(item => {
+        // 部屋情報がある場合は商品名に付加
+        const roomInfo = item.appliedRooms && item.appliedRooms.length > 0
+          ? ` [${getRoomNames(item.appliedRooms).join(', ')}]`
+          : '';
+        return [
+          item.name + roomInfo,
+          item.variant,
+          item.unit,
+          item.quantity.toString(),
+          formatCurrency(item.totalPrice),
+        ];
+      }),
       theme: 'grid',
       headStyles: {
         fillColor: [100, 100, 100],
@@ -274,6 +313,40 @@ export const generateEstimatePDF = async (data: EstimateData): Promise<Blob> => 
 
     yPos = doc.lastAutoTable.finalY + 5;
   });
+
+  // ========== 不要選択セクション ==========
+  if (notNeededCategories.length > 0) {
+    yPos += 5;
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Not Selected Items', margin, yPos);
+    yPos += 5;
+
+    doc.autoTable({
+      startY: yPos,
+      head: [['Category', 'Status']],
+      body: notNeededCategories.map(({ categoryName, note }) => [
+        categoryName,
+        note || 'Not installed',
+      ]),
+      theme: 'grid',
+      headStyles: {
+        fillColor: [158, 158, 158],
+        textColor: [255, 255, 255],
+        fontSize: 10,
+      },
+      bodyStyles: {
+        fontSize: 9,
+      },
+      columnStyles: {
+        0: { cellWidth: 80 },
+        1: { cellWidth: 85 },
+      },
+      margin: { left: margin, right: margin },
+    });
+
+    yPos = doc.lastAutoTable.finalY + 5;
+  }
 
   // ========== 備考 ==========
   if (data.notes) {
@@ -321,7 +394,8 @@ export const generateEstimateExcel = (data: EstimateData): Blob => {
   validUntil.setDate(validUntil.getDate() + (data.validDays || 30));
 
   // 見積書アイテムの準備
-  const estimateItems = convertToEstimateItems(data.items, data.planType);
+  const estimateItems = convertToEstimateItems(data.items, data.planType, data.selections);
+  const notNeededCategories = extractNotNeededCategories(data.selections);
 
   // 合計計算
   const standardTotal = estimateItems
@@ -357,22 +431,38 @@ export const generateEstimateExcel = (data: EstimateData): Blob => {
     ['消費税（10%）', taxAmount],
     [],
     ['【明細】'],
-    ['カテゴリ', '商品名', 'メーカー', '型番', 'バリアント', '単位', '数量', '単価', '金額', '区分'],
+    ['カテゴリ', '商品名', 'メーカー', '型番', 'バリアント', '適用部屋', '単位', '数量', '単価', '金額', '区分'],
   ];
 
-  // 明細行
-  const detailRows = estimateItems.map(item => [
-    item.category,
-    item.name,
-    item.manufacturer,
-    item.modelNumber,
-    item.variant,
-    item.unit,
-    item.quantity,
-    item.unitPrice,
-    item.totalPrice,
-    item.isOption ? 'オプション' : '標準',
-  ]);
+  // 明細行（部屋情報付き）
+  const detailRows = estimateItems.map(item => {
+    const roomInfo = item.appliedRooms && item.appliedRooms.length > 0
+      ? getRoomNames(item.appliedRooms).join('、')
+      : '';
+    return [
+      item.category,
+      item.name,
+      item.manufacturer,
+      item.modelNumber,
+      item.variant,
+      roomInfo, // 適用部屋列を追加
+      item.unit,
+      item.quantity,
+      item.unitPrice,
+      item.totalPrice,
+      item.isOption ? 'オプション' : '標準',
+    ];
+  });
+
+  // 不要選択行
+  const notNeededRows: (string | number | null)[][] = notNeededCategories.length > 0
+    ? [
+        [],
+        ['【設置しない項目】'],
+        ['カテゴリ', '状態'],
+        ...notNeededCategories.map(({ categoryName, note }) => [categoryName, note || '設置しない']),
+      ]
+    : [];
 
   // 備考行
   const footerRows: (string | number | null)[][] = [
@@ -385,7 +475,7 @@ export const generateEstimateExcel = (data: EstimateData): Blob => {
   ];
 
   // シート作成
-  const allRows = [...headerRows, ...detailRows, ...footerRows];
+  const allRows = [...headerRows, ...detailRows, ...notNeededRows, ...footerRows];
   const ws = XLSX.utils.aoa_to_sheet(allRows);
 
   // カラム幅設定
@@ -395,6 +485,7 @@ export const generateEstimateExcel = (data: EstimateData): Blob => {
     { wch: 15 }, // メーカー
     { wch: 20 }, // 型番
     { wch: 15 }, // バリアント
+    { wch: 20 }, // 適用部屋
     { wch: 8 },  // 単位
     { wch: 8 },  // 数量
     { wch: 12 }, // 単価
@@ -459,4 +550,39 @@ export const downloadEstimateExcel = (data: EstimateData, filename?: string): vo
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
+};
+
+// ========================================
+// ExportPanel向けラッパー関数
+// ========================================
+interface ExportToExcelOptions {
+  customerName: string;
+  projectName: string;
+  selections?: Record<string, import('../stores/useSelectionStore').CategorySelection>;
+  showroomEstimates?: Array<{
+    id: string;
+    categoryLabel: string;
+    manufacturer: string;
+    productName: string;
+    modelNumber: string;
+    totalPrice: number;
+  }>;
+}
+
+export const exportToExcel = async (
+  items: CartItem[],
+  options: ExportToExcelOptions
+): Promise<void> => {
+  const data: EstimateData = {
+    customerName: options.customerName,
+    projectName: options.projectName,
+    projectCode: `PRJ-${Date.now()}`,
+    planType: 'LACIE',
+    planName: 'LACIE',
+    items,
+    selections: options.selections,
+    createdAt: new Date(),
+  };
+
+  downloadEstimateExcel(data, `見積書_${options.customerName}_${new Date().toLocaleDateString('ja-JP').replace(/\//g, '')}.xlsx`);
 };

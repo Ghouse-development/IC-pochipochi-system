@@ -17,6 +17,7 @@ import { getHexColor } from '../../utils/colorMapping';
 import { useTimeout } from '../../hooks/useTimeout';
 import { RecommendationPanel } from '../customer/RecommendationPanel';
 import { useWarningCheck } from '../common/MaterialWarningSystem';
+import { useActivityLogger } from '../../hooks/useActivityLogger';
 
 interface ProductDetailModalProps {
   product: Product | null;
@@ -47,6 +48,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   const { setTimeout } = useTimeout();
   const viewStartTime = useRef<number | null>(null);
   const { checkWarnings, warningModal } = useWarningCheck();
+  const { logProductView, logProductSelect } = useActivityLogger();
 
   // 開いた時にリセット & 閲覧記録
   useEffect(() => {
@@ -61,6 +63,8 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
 
       // 商品閲覧を記録（統計）
       recordView(product.id, product.name, product.categoryName);
+      // アクティビティログに記録
+      logProductView(product.id, product.name, product.categoryName);
 
       // 最近閲覧した商品に追加
       const price = getProductPrice(product.pricing);
@@ -79,7 +83,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
       }
       viewStartTime.current = null;
     }
-  }, [isOpen, product, recordView, recordViewDuration, addRecentlyViewed]);
+  }, [isOpen, product, recordView, recordViewDuration, addRecentlyViewed, logProductView]);
 
   // バリアント変更時に画像リセット
   useEffect(() => {
@@ -158,6 +162,8 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
     addItem(product, quantity, variant);
     // 採用を記録
     recordAdoption(product.id, product.name, product.categoryName, price * quantity);
+    // アクティビティログに記録
+    logProductSelect(product.id, product.name, product.categoryName, variant.id);
     toast.success('選択完了', `「${product.name}」を選択しました`);
 
     setIsAdded(true);
@@ -165,7 +171,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
       setIsAdded(false);
       onClose();
     }, 1000);
-  }, [product, variant, quantity, addItem, recordAdoption, price, toast, setTimeout, onClose]);
+  }, [product, variant, quantity, addItem, recordAdoption, logProductSelect, price, toast, setTimeout, onClose]);
 
   const handleAddToCart = useCallback(() => {
     if (!product || !variant) return;

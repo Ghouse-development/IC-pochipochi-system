@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { FileDown, FileSpreadsheet, FileText, X, Loader2, Check } from 'lucide-react';
 import { useCartStore } from '../../stores/useCartStore';
+import { useSelectionStore } from '../../stores/useSelectionStore';
 import {
   downloadEstimatePDF,
   downloadEstimateExcel,
@@ -24,6 +25,7 @@ const PLAN_NAMES: Record<PlanType, string> = {
 
 export const EstimateExportDialog = ({ isOpen, onClose }: EstimateExportDialogProps) => {
   const { items, selectedPlanId, getTotalPrice } = useCartStore();
+  const { selections } = useSelectionStore();
 
   const [formData, setFormData] = useState({
     customerName: '',
@@ -64,6 +66,7 @@ export const EstimateExportDialog = ({ isOpen, onClose }: EstimateExportDialogPr
     createdAt: new Date(),
     validDays: 30,
     notes: formData.notes,
+    selections, // 選択状態（部屋適用・不要選択など）
   });
 
   const handleExportPDF = async () => {

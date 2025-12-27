@@ -22,30 +22,46 @@ export type OperationType =
   | 'logout'
   | 'error';
 
+// アクションタイプ（UsageDashboard用）
+export type ActionType = 'view' | 'select' | 'remove' | 'filter' | 'search' | 'login' | 'export' | 'other';
+
+// ユーザータイプ
+export type UserType = 'customer' | 'staff' | 'unknown';
+
 export interface OperationLog {
   id: string;
   timestamp: Date;
   type: OperationType;
-  action: string;
-  details?: Record<string, unknown>;
+  action: ActionType;
+  details?: Record<string, unknown> & {
+    categoryName?: string;
+    itemName?: string;
+    productId?: string;
+  };
   userId?: string;
+  userType?: UserType;
   sessionId: string;
 }
 
 interface OperationLogStore {
   logs: OperationLog[];
   sessionId: string;
+  currentUserType: UserType;
 
   // ログを追加
-  addLog: (type: OperationType, action: string, details?: Record<string, unknown>) => void;
+  addLog: (type: OperationType, action: ActionType, details?: Record<string, unknown>) => void;
 
   // ログを取得
   getLogs: (limit?: number) => OperationLog[];
+  getRecentLogs: (limit?: number) => OperationLog[];
   getLogsByType: (type: OperationType) => OperationLog[];
+  getLogsByAction: (action: ActionType) => OperationLog[];
   getLogsByDateRange: (start: Date, end: Date) => OperationLog[];
+  getCustomerLogs: (limit?: number) => OperationLog[];
 
   // セッション管理
-  startNewSession: () => void;
+  startNewSession: (userType?: UserType) => void;
+  setUserType: (userType: UserType) => void;
 
   // ログをクリア
   clearLogs: () => void;
@@ -53,6 +69,12 @@ interface OperationLogStore {
   // 統計
   getOperationStats: () => { type: OperationType; count: number }[];
   getTodayLogs: () => OperationLog[];
+  getCustomerStats: () => {
+    totalViews: number;
+    totalSelects: number;
+    loginDays: number;
+    lastActivity: Date | null;
+  };
 }
 
 // セッションIDを生成
@@ -65,6 +87,7 @@ export const useOperationLogStore = create<OperationLogStore>()(
     (set, get) => ({
       logs: [],
       sessionId: generateSessionId(),
+      currentUserType: 'unknown' as UserType,
 
       addLog: (type, action, details) => {
         const newLog: OperationLog = {
@@ -73,6 +96,7 @@ export const useOperationLogStore = create<OperationLogStore>()(
           type,
           action,
           details,
+          userType: get().currentUserType,
           sessionId: get().sessionId,
         };
 
@@ -85,8 +109,16 @@ export const useOperationLogStore = create<OperationLogStore>()(
         return get().logs.slice(0, limit);
       },
 
+      getRecentLogs: (limit = 100) => {
+        return get().logs.slice(0, limit);
+      },
+
       getLogsByType: (type) => {
         return get().logs.filter((log) => log.type === type);
+      },
+
+      getLogsByAction: (action) => {
+        return get().logs.filter((log) => log.action === action);
       },
 
       getLogsByDateRange: (start, end) => {
@@ -96,10 +128,18 @@ export const useOperationLogStore = create<OperationLogStore>()(
         });
       },
 
-      startNewSession: () => {
+      getCustomerLogs: (limit = 100) => {
+        return get().logs.filter((log) => log.userType === 'customer').slice(0, limit);
+      },
+
+      startNewSession: (userType = 'unknown') => {
         const newSessionId = generateSessionId();
-        set({ sessionId: newSessionId });
-        get().addLog('page_view', 'セッション開始');
+        set({ sessionId: newSessionId, currentUserType: userType });
+        get().addLog('login', 'login', { action: 'セッション開始' });
+      },
+
+      setUserType: (userType) => {
+        set({ currentUserType: userType });
       },
 
       clearLogs: () => {
@@ -128,10 +168,35 @@ export const useOperationLogStore = create<OperationLogStore>()(
 
         return get().getLogsByDateRange(today, tomorrow);
       },
+
+      getCustomerStats: () => {
+        const customerLogs = get().logs.filter((log) => log.userType === 'customer');
+        const viewLogs = customerLogs.filter((log) => log.action === 'view');
+        const selectLogs = customerLogs.filter((log) => log.action === 'select');
+
+        // ユニークなログイン日をカウント
+        const loginDates = new Set(
+          customerLogs
+            .filter((log) => log.action === 'login')
+            .map((log) => new Date(log.timestamp).toLocaleDateString('ja-JP'))
+        );
+
+        // 最終アクティビティ
+        const lastActivity = customerLogs[0]?.timestamp
+          ? new Date(customerLogs[0].timestamp)
+          : null;
+
+        return {
+          totalViews: viewLogs.length,
+          totalSelects: selectLogs.length,
+          loginDays: loginDates.size,
+          lastActivity,
+        };
+      },
     }),
     {
       name: 'ic-operation-log-storage',
-      version: 1,
+      version: 2,
     }
   )
 );

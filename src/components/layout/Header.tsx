@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { ClipboardCheck, User, Settings, Menu, X, FileText, Upload, Share2, Scale, Moon, Sun, LogOut, BarChart3 } from 'lucide-react';
+import { ClipboardCheck, User, Settings, Menu, X, FileText, Upload, Share2, Scale, Moon, Sun, LogOut, BarChart3, Briefcase } from 'lucide-react';
 import { useCartStore } from '../../stores/useCartStore';
 import { useThemeStore } from '../../stores/useThemeStore';
 import { formatPrice } from '../../lib/utils';
@@ -14,6 +14,7 @@ interface HeaderProps {
   onAdminClick?: () => void;
   onHierarchyClick?: () => void;
   onImageTestClick?: () => void;
+  onStaffDashboardClick?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -24,7 +25,8 @@ export const Header: React.FC<HeaderProps> = ({
   isAdmin = false,
   onAdminClick,
   onHierarchyClick,
-  onImageTestClick
+  onImageTestClick,
+  onStaffDashboardClick,
 }) => {
   const { items, getTotalPrice } = useCartStore();
   const { isDark, toggle: toggleTheme } = useThemeStore();
@@ -181,6 +183,17 @@ export const Header: React.FC<HeaderProps> = ({
                             role="menuitem"
                             onClick={() => {
                               setIsUserMenuOpen(false);
+                              onStaffDashboardClick?.();
+                            }}
+                            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                          >
+                            <Briefcase className="w-4 h-4" />
+                            スタッフダッシュボード
+                          </button>
+                          <button
+                            role="menuitem"
+                            onClick={() => {
+                              setIsUserMenuOpen(false);
                               onAdminClick?.();
                             }}
                             className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
@@ -224,6 +237,14 @@ export const Header: React.FC<HeaderProps> = ({
         {isAdmin && (
           <div className="px-4 sm:px-6 py-2 bg-gray-50 border-t border-gray-100">
             <div className="flex justify-end gap-2">
+              <button
+                onClick={onStaffDashboardClick}
+                className="flex items-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 text-xs text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded transition-colors font-medium"
+              >
+                <Briefcase className="w-3 h-3" />
+                <span className="hidden sm:inline">スタッフダッシュボード</span>
+                <span className="sm:hidden">スタッフ</span>
+              </button>
               <button
                 onClick={onHierarchyClick}
                 className="flex items-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 text-xs text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded transition-colors"
@@ -272,6 +293,18 @@ export const Header: React.FC<HeaderProps> = ({
                 {isAdmin && (
                   <>
                     <li className="pt-4 border-t" role="none">
+                      <button
+                        role="menuitem"
+                        onClick={() => {
+                          if (onStaffDashboardClick) onStaffDashboardClick();
+                          setIsMobileMenuOpen(false);
+                        }}
+                        className="w-full text-left px-4 py-2 hover:bg-blue-50 rounded-lg text-blue-600 font-medium"
+                      >
+                        スタッフダッシュボード
+                      </button>
+                    </li>
+                    <li role="none">
                       <button
                         role="menuitem"
                         onClick={() => {
