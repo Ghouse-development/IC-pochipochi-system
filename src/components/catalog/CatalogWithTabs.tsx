@@ -33,8 +33,10 @@ import {
   STEPS,
   DESIGN_CATEGORIES,
   getRecommendBadge,
+  getNotNeededOption,
   type FilterTypeValue,
 } from './catalogUtils';
+import { NotNeededCard } from './NotNeededCard';
 import { ActionChecklist } from './ActionChecklist';
 import { BeginnerGuide } from './BeginnerGuide';
 import { EstimateExportDialog } from '../estimate/EstimateExportDialog';
@@ -173,6 +175,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
   // 廃番商品を非表示（デフォルトで非表示）
   const [hideDiscontinued, setHideDiscontinued] = useState(true);
+
+  // カテゴリごとの「不要」選択状態
+  const [notNeededCategories, setNotNeededCategories] = useState<Set<string>>(new Set());
 
   // ページネーション
   const [currentPage, setCurrentPage] = useState(1);
@@ -1387,6 +1392,17 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   {/* 商品グリッド - 最大6列表示 */}
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
                     {(() => {
+                      // 現在のカテゴリ用の「不要」オプションを取得
+                      const currentCategoryName = selectedCategoryId
+                        ? categories.find(c => c.id === selectedCategoryId)?.name
+                        : null;
+                      const notNeededOption = currentCategoryName
+                        ? getNotNeededOption(currentCategoryName)
+                        : null;
+                      const isNotNeededSelected = currentCategoryName
+                        ? notNeededCategories.has(currentCategoryName)
+                        : false;
+
                       // カテゴリごとの最初の標準品IDを計算
                       const firstStandardByCategory = new Map<string, string>();
                       filteredItems.forEach(item => {
@@ -1396,7 +1412,32 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                         }
                       });
 
-                      return paginatedItems.map((item, index) => {
+                      return (
+                        <>
+                          {/* 「不要」カード（対象カテゴリの場合のみ表示） */}
+                          {notNeededOption && currentCategoryName && (
+                            <NotNeededCard
+                              categoryName={currentCategoryName}
+                              title={notNeededOption.title}
+                              description={notNeededOption.description}
+                              isSelected={isNotNeededSelected}
+                              onSelect={() => {
+                                setNotNeededCategories(prev => {
+                                  const newSet = new Set(prev);
+                                  if (newSet.has(currentCategoryName)) {
+                                    newSet.delete(currentCategoryName);
+                                  } else {
+                                    newSet.add(currentCategoryName);
+                                  }
+                                  return newSet;
+                                });
+                                toast.success(`${currentCategoryName}: ${isNotNeededSelected ? '選択解除' : notNeededOption.title}`);
+                              }}
+                            />
+                          )}
+
+                          {/* 商品カード */}
+                          {paginatedItems.map((item, index) => {
                         const catName = item.category?.name || '';
                         const isFirstStandard = firstStandardByCategory.get(catName) === item.id;
                         const badge = getRecommendBadge(item, isStandard(item), isFirstStandard);
@@ -1426,7 +1467,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                             recommendBadge={badge}
                           />
                         );
-                      });
+                      })}
+                        </>
+                      );
                     })()}
                   </div>
 

@@ -389,3 +389,107 @@ export const getRecommendBadge = (
   }
   return null;
 };
+
+// ========================================
+// 「不要」オプション設定
+// ========================================
+
+export interface NotNeededOption {
+  title: string;
+  description: string;
+  // 部屋適用が必要かどうか
+  requiresRoomSelection?: boolean;
+}
+
+// カテゴリごとの「不要」オプション設定
+// 設定があるカテゴリは「不要」カードを表示する
+export const NOT_NEEDED_OPTIONS: Record<string, NotNeededOption> = {
+  // 外装オプション
+  'TVアンテナ': {
+    title: 'つけない',
+    description: '引き渡し後に光ケーブル契約をして視聴する場合など',
+  },
+  '屋外カメラ': {
+    title: '設置しない',
+    description: '防犯カメラを設置しない場合',
+  },
+  '宅配ボックス': {
+    title: '設置しない',
+    description: '宅配ボックスを設置しない場合',
+  },
+  '庇': {
+    title: '設置しない',
+    description: '玄関・窓上に庇を設置しない場合',
+  },
+
+  // 内装オプション
+  '造作ニッチ': {
+    title: '不要',
+    description: 'ニッチ（壁の凹み収納）を設置しない場合',
+    requiresRoomSelection: true,
+  },
+  'アクセントクロス': {
+    title: '不要',
+    description: 'アクセントクロスを使用しない場合',
+    requiresRoomSelection: true,
+  },
+  'アクセントタイル': {
+    title: '不要',
+    description: 'タイル仕上げを使用しない場合',
+    requiresRoomSelection: true,
+  },
+  'ウッドパネル': {
+    title: '不要',
+    description: 'ウッドパネルを使用しない場合',
+    requiresRoomSelection: true,
+  },
+  'カーテン': {
+    title: '施主支給',
+    description: 'カーテンを自分で用意する場合',
+    requiresRoomSelection: true,
+  },
+  'ブラインド': {
+    title: '不要',
+    description: 'ブラインドを設置しない場合',
+    requiresRoomSelection: true,
+  },
+
+  // 設備オプション
+  '太陽光': {
+    title: '設置しない',
+    description: '太陽光パネルを設置しない場合',
+  },
+  '蓄電池': {
+    title: '設置しない',
+    description: '蓄電池を設置しない場合',
+  },
+  '床暖房': {
+    title: '設置しない',
+    description: '床暖房を設置しない場合',
+    requiresRoomSelection: true,
+  },
+};
+
+// カテゴリに「不要」オプションがあるかチェック
+export const hasNotNeededOption = (categoryName: string): boolean => {
+  return categoryName in NOT_NEEDED_OPTIONS;
+};
+
+// カテゴリの「不要」オプションを取得
+export const getNotNeededOption = (categoryName: string): NotNeededOption | null => {
+  return NOT_NEEDED_OPTIONS[categoryName] || null;
+};
+
+// ========================================
+// 選択状態の種類
+// ========================================
+
+export type SelectionStatus = 'unconfirmed' | 'not_needed' | 'selected';
+
+export interface CategorySelectionState {
+  status: SelectionStatus;
+  selectedProductId?: string;
+  selectedVariantId?: string;
+  appliedRooms?: string[]; // 適用する部屋のIDリスト
+  note?: string;
+}
