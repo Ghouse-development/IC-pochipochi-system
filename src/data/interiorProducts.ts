@@ -3948,5 +3948,1303 @@ export const interiorProducts: Product[] = [
       { plan: 'LIFE+', price: 27000 },
       { plan: 'LIFE', price: 27000 }
     ]
+  },
+
+  // ========== 可動棚（PDF37追加）==========
+  {
+    id: 'int-movable-shelf-001',
+    categoryId: 'storage',
+    categoryName: '収納',
+    subcategory: '可動棚',
+    name: '可動棚 両壁収まり C300-2',
+    manufacturer: 'Gハウス',
+    modelNumber: 'C300-2',
+    unit: 'piece',
+    isOption: true,
+    description: '可動棚 D300×2枚 W〜900mm',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] },
+      { id: 'v2', color: 'ダークグレー', colorCode: '#404040', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 25000 },
+      { plan: 'HOURS', price: 25000 },
+      { plan: 'LIFE+', price: 25000 },
+      { plan: 'LIFE', price: 25000 }
+    ]
+  },
+  {
+    id: 'int-movable-shelf-002',
+    categoryId: 'storage',
+    categoryName: '収納',
+    subcategory: '可動棚',
+    name: '可動棚 両壁収まり C300-4',
+    manufacturer: 'Gハウス',
+    modelNumber: 'C300-4',
+    unit: 'piece',
+    isOption: true,
+    description: '可動棚 D300×4枚 W〜900mm',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] },
+      { id: 'v2', color: 'ダークグレー', colorCode: '#404040', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 32000 },
+      { plan: 'HOURS', price: 32000 },
+      { plan: 'LIFE+', price: 32000 },
+      { plan: 'LIFE', price: 32000 }
+    ]
+  },
+  {
+    id: 'int-movable-shelf-003',
+    categoryId: 'storage',
+    categoryName: '収納',
+    subcategory: '可動棚',
+    name: '可動棚 両壁収まり C300-6',
+    manufacturer: 'Gハウス',
+    modelNumber: 'C300-6',
+    unit: 'piece',
+    isOption: true,
+    description: '可動棚 D300×6枚 W〜900mm',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] },
+      { id: 'v2', color: 'ダークグレー', colorCode: '#404040', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 37000 },
+      { plan: 'HOURS', price: 37000 },
+      { plan: 'LIFE+', price: 37000 },
+      { plan: 'LIFE', price: 37000 }
+    ]
+  },
+  {
+    id: 'int-movable-shelf-004',
+    categoryId: 'storage',
+    categoryName: '収納',
+    subcategory: '可動棚',
+    name: '可動棚 両壁収まり C450-4',
+    manufacturer: 'Gハウス',
+    modelNumber: 'C450-4',
+    unit: 'piece',
+    isOption: true,
+    description: '可動棚 D450×4枚 W〜900mm',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] },
+      { id: 'v2', color: 'ダークグレー', colorCode: '#404040', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 37000 },
+      { plan: 'HOURS', price: 37000 },
+      { plan: 'LIFE+', price: 37000 },
+      { plan: 'LIFE', price: 37000 }
+    ]
+  },
+  {
+    id: 'int-movable-shelf-005',
+    categoryId: 'storage',
+    categoryName: '収納',
+    subcategory: '可動棚',
+    name: '可動棚 両壁収まり C450-6',
+    manufacturer: 'Gハウス',
+    modelNumber: 'C450-6',
+    unit: 'piece',
+    isOption: true,
+    description: '可動棚 D450×6枚 W〜900mm',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] },
+      { id: 'v2', color: 'ダークグレー', colorCode: '#404040', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 43000 },
+      { plan: 'HOURS', price: 43000 },
+      { plan: 'LIFE+', price: 43000 },
+      { plan: 'LIFE', price: 43000 }
+    ]
+  },
+  {
+    id: 'int-movable-shelf-006',
+    categoryId: 'storage',
+    categoryName: '収納',
+    subcategory: '可動棚',
+    name: 'ランドリー可動棚 W600',
+    manufacturer: 'Gハウス',
+    modelNumber: 'LAUNDRY-SHELF-600',
+    unit: 'piece',
+    isOption: true,
+    description: 'ランドリー可動棚 D300棚板+パイプ付棚板',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 30000 },
+      { plan: 'HOURS', price: 30000 },
+      { plan: 'LIFE+', price: 30000 },
+      { plan: 'LIFE', price: 30000 }
+    ]
+  },
+
+  // ========== 樹脂製可動棚・ハンガーパイプ（PDF38追加）==========
+  {
+    id: 'int-resin-shelf-001',
+    categoryId: 'storage',
+    categoryName: '収納',
+    subcategory: '樹脂製可動棚',
+    name: '樹脂製可動棚 S1',
+    manufacturer: 'Gハウス',
+    modelNumber: 'RESIN-S1',
+    unit: 'piece',
+    isOption: true,
+    description: '樹脂製可動棚 D300×8枚 W756',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] },
+      { id: 'v2', color: 'ダークグレー', colorCode: '#404040', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 71000 },
+      { plan: 'HOURS', price: 71000 },
+      { plan: 'LIFE+', price: 71000 },
+      { plan: 'LIFE', price: 71000 }
+    ]
+  },
+  {
+    id: 'int-resin-shelf-002',
+    categoryId: 'storage',
+    categoryName: '収納',
+    subcategory: '樹脂製可動棚',
+    name: '樹脂製可動棚 S2',
+    manufacturer: 'Gハウス',
+    modelNumber: 'RESIN-S2',
+    unit: 'piece',
+    isOption: true,
+    description: '樹脂製可動棚 D300×8枚 W1132',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] },
+      { id: 'v2', color: 'ダークグレー', colorCode: '#404040', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 120000 },
+      { plan: 'HOURS', price: 120000 },
+      { plan: 'LIFE+', price: 120000 },
+      { plan: 'LIFE', price: 120000 }
+    ]
+  },
+  {
+    id: 'int-resin-shelf-003',
+    categoryId: 'storage',
+    categoryName: '収納',
+    subcategory: '樹脂製可動棚',
+    name: '樹脂製可動棚 S3',
+    manufacturer: 'Gハウス',
+    modelNumber: 'RESIN-S3',
+    unit: 'piece',
+    isOption: true,
+    description: '樹脂製可動棚 D300×8枚 W1682',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] },
+      { id: 'v2', color: 'ダークグレー', colorCode: '#404040', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 141000 },
+      { plan: 'HOURS', price: 141000 },
+      { plan: 'LIFE+', price: 141000 },
+      { plan: 'LIFE', price: 141000 }
+    ]
+  },
+  {
+    id: 'int-hanger-pipe-001',
+    categoryId: 'storage',
+    categoryName: '収納',
+    subcategory: 'ハンガーパイプ',
+    name: 'ハンガーパイプセット P1',
+    manufacturer: 'Gハウス',
+    modelNumber: 'HANGER-P1',
+    unit: 'piece',
+    isOption: true,
+    description: 'ハンガーパイプセット① W〜2900mm',
+    variants: [
+      { id: 'v1', color: 'シルバー', colorCode: '#C0C0C0', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 37000 },
+      { plan: 'HOURS', price: 37000 },
+      { plan: 'LIFE+', price: 37000 },
+      { plan: 'LIFE', price: 37000 }
+    ]
+  },
+  {
+    id: 'int-hanger-pipe-002',
+    categoryId: 'storage',
+    categoryName: '収納',
+    subcategory: 'ハンガーパイプ',
+    name: 'ハンガーパイプセット P2',
+    manufacturer: 'Gハウス',
+    modelNumber: 'HANGER-P2',
+    unit: 'piece',
+    isOption: true,
+    description: 'ハンガーパイプセット② 2段タイプ',
+    variants: [
+      { id: 'v1', color: 'シルバー', colorCode: '#C0C0C0', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 50000 },
+      { plan: 'HOURS', price: 50000 },
+      { plan: 'LIFE+', price: 50000 },
+      { plan: 'LIFE', price: 50000 }
+    ]
+  },
+  {
+    id: 'int-hanger-pipe-003',
+    categoryId: 'storage',
+    categoryName: '収納',
+    subcategory: 'ハンガーパイプ',
+    name: 'ハンガーパイプセット P3',
+    manufacturer: 'Gハウス',
+    modelNumber: 'HANGER-P3',
+    unit: 'piece',
+    isOption: true,
+    description: 'ハンガーパイプセット③ W〜2900mm 2段',
+    variants: [
+      { id: 'v1', color: 'シルバー', colorCode: '#C0C0C0', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 80000 },
+      { plan: 'HOURS', price: 80000 },
+      { plan: 'LIFE+', price: 80000 },
+      { plan: 'LIFE', price: 80000 }
+    ]
+  },
+  {
+    id: 'int-hanger-pipe-004',
+    categoryId: 'storage',
+    categoryName: '収納',
+    subcategory: 'ハンガーパイプ',
+    name: 'ハンガーパイプセット P4',
+    manufacturer: 'Gハウス',
+    modelNumber: 'HANGER-P4',
+    unit: 'piece',
+    isOption: true,
+    description: 'ハンガーパイプセット④ 大型2段',
+    variants: [
+      { id: 'v1', color: 'シルバー', colorCode: '#C0C0C0', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 110000 },
+      { plan: 'HOURS', price: 110000 },
+      { plan: 'LIFE+', price: 110000 },
+      { plan: 'LIFE', price: 110000 }
+    ]
+  },
+
+  // ========== 玄関靴箱（PDF39追加）==========
+  {
+    id: 'int-shoebox-001',
+    categoryId: 'storage',
+    categoryName: '収納',
+    subcategory: '玄関靴箱',
+    name: 'コンポリア W800',
+    manufacturer: 'Panasonic',
+    modelNumber: 'COMPOLIA-W800',
+    unit: 'piece',
+    isOption: true,
+    description: '玄関靴箱 フロートタイプ W800 H2070',
+    variants: [
+      { id: 'v1', color: 'ソフトウォールナット柄', colorCode: '#5C4033', images: [] },
+      { id: 'v2', color: 'ウォールナット柄', colorCode: '#4A3728', images: [] },
+      { id: 'v3', color: 'チェリー柄', colorCode: '#B5651D', images: [] },
+      { id: 'v4', color: 'ホワイトオーク柄', colorCode: '#E8DCC8', images: [] },
+      { id: 'v5', color: 'ホワイトアッシュ柄', colorCode: '#F5F5DC', images: [] },
+      { id: 'v6', color: 'しっくいホワイト柄', colorCode: '#FFFFFF', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 100000 },
+      { plan: 'HOURS', price: 100000 },
+      { plan: 'LIFE+', price: 100000 },
+      { plan: 'LIFE', price: 100000 }
+    ]
+  },
+  {
+    id: 'int-shoebox-002',
+    categoryId: 'storage',
+    categoryName: '収納',
+    subcategory: '玄関靴箱',
+    name: 'コンポリア W1200',
+    manufacturer: 'Panasonic',
+    modelNumber: 'COMPOLIA-W1200',
+    unit: 'piece',
+    isOption: true,
+    description: '玄関靴箱 フロートタイプ W1200 H2070',
+    variants: [
+      { id: 'v1', color: 'ソフトウォールナット柄', colorCode: '#5C4033', images: [] },
+      { id: 'v2', color: 'ウォールナット柄', colorCode: '#4A3728', images: [] },
+      { id: 'v3', color: 'チェリー柄', colorCode: '#B5651D', images: [] },
+      { id: 'v4', color: 'ホワイトオーク柄', colorCode: '#E8DCC8', images: [] },
+      { id: 'v5', color: 'ホワイトアッシュ柄', colorCode: '#F5F5DC', images: [] },
+      { id: 'v6', color: 'しっくいホワイト柄', colorCode: '#FFFFFF', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 150000 },
+      { plan: 'HOURS', price: 150000 },
+      { plan: 'LIFE+', price: 150000 },
+      { plan: 'LIFE', price: 150000 }
+    ]
+  },
+  {
+    id: 'int-shoebox-003',
+    categoryId: 'storage',
+    categoryName: '収納',
+    subcategory: '玄関靴箱',
+    name: 'コンポリア W1600',
+    manufacturer: 'Panasonic',
+    modelNumber: 'COMPOLIA-W1600',
+    unit: 'piece',
+    isOption: true,
+    description: '玄関靴箱 フロートタイプ W1600 H2070',
+    variants: [
+      { id: 'v1', color: 'ソフトウォールナット柄', colorCode: '#5C4033', images: [] },
+      { id: 'v2', color: 'ウォールナット柄', colorCode: '#4A3728', images: [] },
+      { id: 'v3', color: 'チェリー柄', colorCode: '#B5651D', images: [] },
+      { id: 'v4', color: 'ホワイトオーク柄', colorCode: '#E8DCC8', images: [] },
+      { id: 'v5', color: 'ホワイトアッシュ柄', colorCode: '#F5F5DC', images: [] },
+      { id: 'v6', color: 'しっくいホワイト柄', colorCode: '#FFFFFF', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 200000 },
+      { plan: 'HOURS', price: 200000 },
+      { plan: 'LIFE+', price: 200000 },
+      { plan: 'LIFE', price: 200000 }
+    ]
+  },
+  {
+    id: 'int-shoebox-004',
+    categoryId: 'storage',
+    categoryName: '収納',
+    subcategory: '玄関靴箱',
+    name: 'コンポリア ミラー追加',
+    manufacturer: 'Panasonic',
+    modelNumber: 'COMPOLIA-MIRROR',
+    unit: 'piece',
+    isOption: true,
+    description: '玄関靴箱用ミラー追加',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 36000 },
+      { plan: 'HOURS', price: 36000 },
+      { plan: 'LIFE+', price: 36000 },
+      { plan: 'LIFE', price: 36000 }
+    ]
+  },
+
+  // ========== トイレ収納（PDF40追加）==========
+  {
+    id: 'int-toilet-storage-001',
+    categoryId: 'storage',
+    categoryName: '収納',
+    subcategory: 'トイレ収納',
+    name: '造作トイレ 背面収納スペース',
+    manufacturer: 'Gハウス',
+    modelNumber: 'TOILET-ZS',
+    unit: 'piece',
+    isOption: true,
+    description: 'トイレ背面収納スペース（棚板なし）',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 35000 },
+      { plan: 'HOURS', price: 35000 },
+      { plan: 'LIFE+', price: 35000 },
+      { plan: 'LIFE', price: 35000 }
+    ]
+  },
+  {
+    id: 'int-toilet-storage-002',
+    categoryId: 'storage',
+    categoryName: '収納',
+    subcategory: 'トイレ収納',
+    name: '造作トイレ 収納',
+    manufacturer: 'Gハウス',
+    modelNumber: 'TOILET-TZ',
+    unit: 'piece',
+    isOption: true,
+    description: 'トイレ造作収納 W150×D130 棚板3枚',
+    variants: [
+      { id: 'v1', color: 'シェルホワイト', colorCode: '#F5F5F5', images: [] },
+      { id: 'v2', color: 'ナチュラルバーチ', colorCode: '#D4B896', images: [] },
+      { id: 'v3', color: 'アッシュウォールナット', colorCode: '#8B7355', images: [] },
+      { id: 'v4', color: 'ブライトウォールナット', colorCode: '#5C4033', images: [] },
+      { id: 'v5', color: 'ダークグレー', colorCode: '#404040', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 47000 },
+      { plan: 'HOURS', price: 47000 },
+      { plan: 'LIFE+', price: 47000 },
+      { plan: 'LIFE', price: 47000 }
+    ]
+  },
+  {
+    id: 'int-toilet-storage-003',
+    categoryId: 'storage',
+    categoryName: '収納',
+    subcategory: 'トイレ収納',
+    name: 'トイレ上部収納',
+    manufacturer: 'Gハウス',
+    modelNumber: 'TOILET-TR-TK',
+    unit: 'piece',
+    isOption: true,
+    description: 'トイレ上部収納 W905×H470×D300',
+    variants: [
+      { id: 'v1', color: 'クリアホワイト', colorCode: '#FFFFFF', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 60000 },
+      { plan: 'HOURS', price: 60000 },
+      { plan: 'LIFE+', price: 60000 },
+      { plan: 'LIFE', price: 60000 }
+    ]
+  },
+  {
+    id: 'int-toilet-storage-004',
+    categoryId: 'storage',
+    categoryName: '収納',
+    subcategory: 'トイレ収納',
+    name: 'サニタトイレ収納ボックス Sタイプ',
+    manufacturer: 'Panasonic',
+    modelNumber: 'SANITA-S',
+    unit: 'piece',
+    isOption: true,
+    description: 'トイレ収納ボックス W300×H740×D117',
+    variants: [
+      { id: 'v1', color: 'クリアホワイト', colorCode: '#FFFFFF', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 53000 },
+      { plan: 'HOURS', price: 53000 },
+      { plan: 'LIFE+', price: 53000 },
+      { plan: 'LIFE', price: 53000 }
+    ]
+  },
+
+  // ========== スロップシンク・洗濯パン（PDF41追加）==========
+  {
+    id: 'int-slop-sink-001',
+    categoryId: 'sanitary',
+    categoryName: '設備',
+    subcategory: 'スロップシンク',
+    name: 'スロップシンク',
+    manufacturer: 'TOTO',
+    modelNumber: 'SK507-SLOP',
+    unit: 'set',
+    isOption: true,
+    description: 'スロップシンク ボウル/水栓/排水Pトラップセット',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 115000 },
+      { plan: 'HOURS', price: 115000 },
+      { plan: 'LIFE+', price: 115000 },
+      { plan: 'LIFE', price: 115000 }
+    ]
+  },
+  {
+    id: 'int-washing-pan-001',
+    categoryId: 'sanitary',
+    categoryName: '設備',
+    subcategory: '洗濯パン',
+    name: '洗濯パン',
+    manufacturer: 'Panasonic',
+    modelNumber: 'GB745-881',
+    unit: 'piece',
+    isOption: true,
+    description: '洗濯パン GB745+排水トラップGB881セット',
+    variants: [
+      { id: 'v1', color: 'クールホワイト', colorCode: '#F5F5F5', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 24000 },
+      { plan: 'HOURS', price: 24000 },
+      { plan: 'LIFE+', price: 24000 },
+      { plan: 'LIFE', price: 24000 }
+    ]
+  },
+
+  // ========== 玄関手洗い（PDF42追加）==========
+  {
+    id: 'int-entrance-wash-001',
+    categoryId: 'sanitary',
+    categoryName: '設備',
+    subcategory: '玄関手洗い',
+    name: '玄関手洗い ボウルA',
+    manufacturer: 'KAKUDAI',
+    modelNumber: 'LY-493231',
+    unit: 'piece',
+    isOption: true,
+    description: '玄関手洗いボウル 角型',
+    variants: [
+      { id: 'v1', color: 'マットホワイト', colorCode: '#F5F5F5', images: [] },
+      { id: 'v2', color: 'マットブラック', colorCode: '#1A1A1A', images: [] },
+      { id: 'v3', color: 'マットグレー', colorCode: '#808080', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 99000 },
+      { plan: 'HOURS', price: 99000 },
+      { plan: 'LIFE+', price: 99000 },
+      { plan: 'LIFE', price: 99000 }
+    ]
+  },
+  {
+    id: 'int-entrance-wash-002',
+    categoryId: 'sanitary',
+    categoryName: '設備',
+    subcategory: '玄関手洗い',
+    name: '玄関手洗い ボウルB',
+    manufacturer: 'KAKUDAI',
+    modelNumber: 'LY-493232',
+    unit: 'piece',
+    isOption: true,
+    description: '玄関手洗いボウル 丸型深',
+    variants: [
+      { id: 'v1', color: 'マットホワイト', colorCode: '#F5F5F5', images: [] },
+      { id: 'v2', color: 'マットブラック', colorCode: '#1A1A1A', images: [] },
+      { id: 'v3', color: 'マットグレー', colorCode: '#808080', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 85000 },
+      { plan: 'HOURS', price: 85000 },
+      { plan: 'LIFE+', price: 85000 },
+      { plan: 'LIFE', price: 85000 }
+    ]
+  },
+  {
+    id: 'int-entrance-wash-003',
+    categoryId: 'sanitary',
+    categoryName: '設備',
+    subcategory: '玄関手洗い',
+    name: '玄関手洗い ステンレスコーナーカウンター',
+    manufacturer: 'KAKUDAI',
+    modelNumber: 'STAINLESS-CORNER',
+    unit: 'set',
+    isOption: true,
+    description: 'ステンレスボウル一体型コーナーカウンター（ボウル+排水+水栓）',
+    variants: [
+      { id: 'v1', color: 'ステンレス', colorCode: '#C0C0C0', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 96000 },
+      { plan: 'HOURS', price: 96000 },
+      { plan: 'LIFE+', price: 96000 },
+      { plan: 'LIFE', price: 96000 }
+    ]
+  },
+
+  // ========== 物干し金物（PDF43追加）==========
+  {
+    id: 'int-laundry-pole-001',
+    categoryId: 'hanger',
+    categoryName: '物干し',
+    subcategory: '室内物干し',
+    name: 'Kacu',
+    manufacturer: '森田アルミ工業',
+    modelNumber: 'KACU',
+    unit: 'piece',
+    isOption: true,
+    description: '室内物干し金物 2カ所目から',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] },
+      { id: 'v2', color: 'ブラック', colorCode: '#1A1A1A', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 24000 },
+      { plan: 'HOURS', price: 24000 },
+      { plan: 'LIFE+', price: 24000 },
+      { plan: 'LIFE', price: 24000 }
+    ]
+  },
+  {
+    id: 'int-laundry-pole-002',
+    categoryId: 'hanger',
+    categoryName: '物干し',
+    subcategory: '室内物干し',
+    name: 'Pid4M',
+    manufacturer: '森田アルミ工業',
+    modelNumber: 'PID4M',
+    unit: 'piece',
+    isOption: true,
+    description: 'ワイヤー式室内物干し 2カ所目から',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 24000 },
+      { plan: 'HOURS', price: 24000 },
+      { plan: 'LIFE+', price: 24000 },
+      { plan: 'LIFE', price: 24000 }
+    ]
+  },
+  {
+    id: 'int-laundry-pole-003',
+    categoryId: 'hanger',
+    categoryName: '物干し',
+    subcategory: '室内物干し',
+    name: 'ホスクリーン昇降タイプ UTM',
+    manufacturer: '川口技研',
+    modelNumber: 'UTM-S-W',
+    unit: 'piece',
+    isOption: true,
+    description: 'ホスクリーン昇降タイプ（ヒモ操作）2カ所目から',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 24000 },
+      { plan: 'HOURS', price: 24000 },
+      { plan: 'LIFE+', price: 24000 },
+      { plan: 'LIFE', price: 24000 }
+    ]
+  },
+  {
+    id: 'int-laundry-pole-004',
+    categoryId: 'hanger',
+    categoryName: '物干し',
+    subcategory: '室内物干し',
+    name: 'ホスクリーン昇降タイプ URM',
+    manufacturer: '川口技研',
+    modelNumber: 'URM-S-W',
+    unit: 'piece',
+    isOption: true,
+    description: 'ホスクリーン昇降タイプ（操作棒）2カ所目から',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 24000 },
+      { plan: 'HOURS', price: 24000 },
+      { plan: 'LIFE+', price: 24000 },
+      { plan: 'LIFE', price: 24000 }
+    ]
+  },
+
+  // ========== 乾太くん（PDF43追加）==========
+  {
+    id: 'int-dryer-001',
+    categoryId: 'appliance',
+    categoryName: '設備',
+    subcategory: 'ガス乾燥機',
+    name: '乾太くん スタンダード 5kg',
+    manufacturer: 'リンナイ',
+    modelNumber: 'RDT-54S',
+    unit: 'piece',
+    isOption: true,
+    description: 'ガス衣類乾燥機 スタンダードタイプ 5kg',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 272000 },
+      { plan: 'HOURS', price: 272000 },
+      { plan: 'LIFE+', price: 272000 },
+      { plan: 'LIFE', price: 272000 }
+    ]
+  },
+  {
+    id: 'int-dryer-002',
+    categoryId: 'appliance',
+    categoryName: '設備',
+    subcategory: 'ガス乾燥機',
+    name: '乾太くん デラックス 6kg',
+    manufacturer: 'リンナイ',
+    modelNumber: 'RDT-63',
+    unit: 'piece',
+    isOption: true,
+    description: 'ガス衣類乾燥機 デラックスタイプ 6kg',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 297000 },
+      { plan: 'HOURS', price: 297000 },
+      { plan: 'LIFE+', price: 297000 },
+      { plan: 'LIFE', price: 297000 }
+    ]
+  },
+  {
+    id: 'int-dryer-003',
+    categoryId: 'appliance',
+    categoryName: '設備',
+    subcategory: 'ガス乾燥機',
+    name: '乾太くん デラックス 9kg',
+    manufacturer: 'リンナイ',
+    modelNumber: 'RDT-93',
+    unit: 'piece',
+    isOption: true,
+    description: 'ガス衣類乾燥機 デラックスタイプ 9kg',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 330000 },
+      { plan: 'HOURS', price: 330000 },
+      { plan: 'LIFE+', price: 330000 },
+      { plan: 'LIFE', price: 330000 }
+    ]
+  },
+  {
+    id: 'int-dryer-004',
+    categoryId: 'appliance',
+    categoryName: '設備',
+    subcategory: 'ガス乾燥機',
+    name: '乾太くん専用架台',
+    manufacturer: 'リンナイ',
+    modelNumber: 'DS-KADAI',
+    unit: 'piece',
+    isOption: true,
+    description: '乾太くん専用架台',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 30000 },
+      { plan: 'HOURS', price: 30000 },
+      { plan: 'LIFE+', price: 30000 },
+      { plan: 'LIFE', price: 30000 }
+    ]
+  },
+  {
+    id: 'int-dryer-005',
+    categoryId: 'appliance',
+    categoryName: '設備',
+    subcategory: 'ガス乾燥機',
+    name: '乾太くん専用収納ユニット',
+    manufacturer: 'リンナイ',
+    modelNumber: 'DS-UNIT',
+    unit: 'piece',
+    isOption: true,
+    description: '乾太くん専用収納ユニット',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 140000 },
+      { plan: 'HOURS', price: 140000 },
+      { plan: 'LIFE+', price: 140000 },
+      { plan: 'LIFE', price: 140000 }
+    ]
+  },
+  {
+    id: 'int-gas-001',
+    categoryId: 'appliance',
+    categoryName: '設備',
+    subcategory: 'ガス工事',
+    name: 'ガス引込工事',
+    manufacturer: 'Gハウス',
+    modelNumber: 'GAS-INSTALL',
+    unit: 'set',
+    isOption: true,
+    description: 'ガス引込工事（最低ガス栓3カ所取付必要）',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 350000 },
+      { plan: 'HOURS', price: 350000 },
+      { plan: 'LIFE+', price: 350000 },
+      { plan: 'LIFE', price: 350000 }
+    ]
+  },
+
+  // ========== スイッチ・コンセント（PDF44追加）==========
+  {
+    id: 'int-switch-001',
+    categoryId: 'electrical',
+    categoryName: '電気設備',
+    subcategory: 'スイッチ',
+    name: 'スイッチ追加',
+    manufacturer: 'Panasonic',
+    modelNumber: 'SWITCH-ADD',
+    unit: 'piece',
+    isOption: true,
+    description: 'スイッチ追加（コスモワイド21）',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 5000 },
+      { plan: 'HOURS', price: 5000 },
+      { plan: 'LIFE+', price: 5000 },
+      { plan: 'LIFE', price: 5000 }
+    ]
+  },
+  {
+    id: 'int-outlet-001',
+    categoryId: 'electrical',
+    categoryName: '電気設備',
+    subcategory: 'コンセント',
+    name: 'コンセント追加',
+    manufacturer: 'Panasonic',
+    modelNumber: 'OUTLET-ADD',
+    unit: 'piece',
+    isOption: true,
+    description: 'コンセント追加（2口）',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 6000 },
+      { plan: 'HOURS', price: 6000 },
+      { plan: 'LIFE+', price: 6000 },
+      { plan: 'LIFE', price: 6000 }
+    ]
+  },
+  {
+    id: 'int-outlet-002',
+    categoryId: 'electrical',
+    categoryName: '電気設備',
+    subcategory: 'コンセント',
+    name: '4口コンセント',
+    manufacturer: 'Panasonic',
+    modelNumber: 'OUTLET-4',
+    unit: 'piece',
+    isOption: true,
+    description: '4口コンセント追加',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 8000 },
+      { plan: 'HOURS', price: 8000 },
+      { plan: 'LIFE+', price: 8000 },
+      { plan: 'LIFE', price: 8000 }
+    ]
+  },
+  {
+    id: 'int-outlet-003',
+    categoryId: 'electrical',
+    categoryName: '電気設備',
+    subcategory: 'コンセント',
+    name: '床用コンセント F型アップコン',
+    manufacturer: 'Panasonic',
+    modelNumber: 'FLOOR-OUTLET',
+    unit: 'piece',
+    isOption: true,
+    description: '床用コンセント F型アップコン',
+    variants: [
+      { id: 'v1', color: 'アイボリー', colorCode: '#FFFFF0', images: [] },
+      { id: 'v2', color: 'ブラウン', colorCode: '#8B4513', images: [] },
+      { id: 'v3', color: 'ダークブラウン', colorCode: '#5C4033', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 12000 },
+      { plan: 'HOURS', price: 12000 },
+      { plan: 'LIFE+', price: 12000 },
+      { plan: 'LIFE', price: 12000 }
+    ]
+  },
+  {
+    id: 'int-outlet-004',
+    categoryId: 'electrical',
+    categoryName: '電気設備',
+    subcategory: 'コンセント',
+    name: 'アドバンスシリーズ一式',
+    manufacturer: 'Panasonic',
+    modelNumber: 'ADVANCE-SERIES',
+    unit: 'set',
+    isOption: true,
+    description: 'アドバンスシリーズ全箇所変更',
+    variants: [
+      { id: 'v1', color: 'マットホワイト', colorCode: '#F5F5F5', images: [] },
+      { id: 'v2', color: 'マットグレー', colorCode: '#808080', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 72000 },
+      { plan: 'HOURS', price: 72000 },
+      { plan: 'LIFE+', price: 72000 },
+      { plan: 'LIFE', price: 72000 }
+    ]
+  },
+  {
+    id: 'int-lan-001',
+    categoryId: 'electrical',
+    categoryName: '電気設備',
+    subcategory: '配管',
+    name: 'LAN用空配管追加',
+    manufacturer: 'Panasonic',
+    modelNumber: 'LAN-CONDUIT',
+    unit: 'piece',
+    isOption: true,
+    description: 'LAN用空配管追加',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 12000 },
+      { plan: 'HOURS', price: 12000 },
+      { plan: 'LIFE+', price: 12000 },
+      { plan: 'LIFE', price: 12000 }
+    ]
+  },
+  {
+    id: 'int-tv-001',
+    categoryId: 'electrical',
+    categoryName: '電気設備',
+    subcategory: '配管',
+    name: '壁掛けテレビ用空配管',
+    manufacturer: 'Panasonic',
+    modelNumber: 'TV-CONDUIT',
+    unit: 'piece',
+    isOption: true,
+    description: '壁掛けテレビ用空配管',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 15000 },
+      { plan: 'HOURS', price: 15000 },
+      { plan: 'LIFE+', price: 15000 },
+      { plan: 'LIFE', price: 15000 }
+    ]
+  },
+
+  // ========== インターホン（PDF44追加）==========
+  {
+    id: 'int-intercom-001',
+    categoryId: 'electrical',
+    categoryName: '電気設備',
+    subcategory: 'インターホン',
+    name: '外でもドアホン VL-SVD505KF変更',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VL-SVD505KF',
+    unit: 'set',
+    isOption: true,
+    description: '外でもドアホン（スマホ対応）への変更',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 37000 },
+      { plan: 'HOURS', price: 37000 },
+      { plan: 'LIFE+', price: 37000 },
+      { plan: 'LIFE', price: 37000 }
+    ]
+  },
+  {
+    id: 'int-intercom-002',
+    categoryId: 'electrical',
+    categoryName: '電気設備',
+    subcategory: 'インターホン',
+    name: '外でもドアホン VL-SVD710KF変更',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VL-SVD710KF',
+    unit: 'set',
+    isOption: true,
+    description: '外でもドアホン上位機種（スマホ対応）への変更',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 50000 },
+      { plan: 'HOURS', price: 50000 },
+      { plan: 'LIFE+', price: 50000 },
+      { plan: 'LIFE', price: 50000 }
+    ]
+  },
+  {
+    id: 'int-intercom-003',
+    categoryId: 'electrical',
+    categoryName: '電気設備',
+    subcategory: 'インターホン',
+    name: 'テレビドアホン VL-SE50KPA変更',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VL-SE50KPA',
+    unit: 'set',
+    isOption: true,
+    description: 'テレビドアホンへの変更',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 27000 },
+      { plan: 'HOURS', price: 27000 },
+      { plan: 'LIFE+', price: 27000 },
+      { plan: 'LIFE', price: 27000 }
+    ]
+  },
+
+  // ========== エアコン（PDF45追加）==========
+  {
+    id: 'int-aircon-daikin-e6',
+    categoryId: 'aircon',
+    categoryName: 'エアコン',
+    subcategory: 'ダイキン',
+    name: 'ダイキン Eシリーズ 6畳用',
+    manufacturer: 'ダイキン',
+    modelNumber: 'S225ATES-W',
+    unit: 'piece',
+    isOption: true,
+    description: 'ダイキン Eシリーズ 6畳用 100V 施工費込',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 110000 },
+      { plan: 'HOURS', price: 110000 },
+      { plan: 'LIFE+', price: 110000 },
+      { plan: 'LIFE', price: 110000 }
+    ]
+  },
+  {
+    id: 'int-aircon-daikin-e10',
+    categoryId: 'aircon',
+    categoryName: 'エアコン',
+    subcategory: 'ダイキン',
+    name: 'ダイキン Eシリーズ 10畳用',
+    manufacturer: 'ダイキン',
+    modelNumber: 'S285ATES-W',
+    unit: 'piece',
+    isOption: true,
+    description: 'ダイキン Eシリーズ 10畳用 100V 施工費込',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 150000 },
+      { plan: 'HOURS', price: 150000 },
+      { plan: 'LIFE+', price: 150000 },
+      { plan: 'LIFE', price: 150000 }
+    ]
+  },
+  {
+    id: 'int-aircon-daikin-e14',
+    categoryId: 'aircon',
+    categoryName: 'エアコン',
+    subcategory: 'ダイキン',
+    name: 'ダイキン Eシリーズ 14畳用',
+    manufacturer: 'ダイキン',
+    modelNumber: 'S405ATEP-W',
+    unit: 'piece',
+    isOption: true,
+    description: 'ダイキン Eシリーズ 14畳用 200V 施工費込',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 192000 },
+      { plan: 'HOURS', price: 192000 },
+      { plan: 'LIFE+', price: 192000 },
+      { plan: 'LIFE', price: 192000 }
+    ]
+  },
+  {
+    id: 'int-aircon-daikin-gx6',
+    categoryId: 'aircon',
+    categoryName: 'エアコン',
+    subcategory: 'ダイキン',
+    name: 'ダイキン GXシリーズ 6畳用',
+    manufacturer: 'ダイキン',
+    modelNumber: 'S224ATGS-W',
+    unit: 'piece',
+    isOption: true,
+    description: 'ダイキン GXシリーズ 6畳用 100V 施工費込（さらら除湿）',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 165000 },
+      { plan: 'HOURS', price: 165000 },
+      { plan: 'LIFE+', price: 165000 },
+      { plan: 'LIFE', price: 165000 }
+    ]
+  },
+  {
+    id: 'int-aircon-daikin-gx10',
+    categoryId: 'aircon',
+    categoryName: 'エアコン',
+    subcategory: 'ダイキン',
+    name: 'ダイキン GXシリーズ 10畳用',
+    manufacturer: 'ダイキン',
+    modelNumber: 'S284ATGS-W',
+    unit: 'piece',
+    isOption: true,
+    description: 'ダイキン GXシリーズ 10畳用 100V 施工費込（さらら除湿）',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 188000 },
+      { plan: 'HOURS', price: 188000 },
+      { plan: 'LIFE+', price: 188000 },
+      { plan: 'LIFE', price: 188000 }
+    ]
+  },
+  {
+    id: 'int-aircon-daikin-gx14',
+    categoryId: 'aircon',
+    categoryName: 'エアコン',
+    subcategory: 'ダイキン',
+    name: 'ダイキン GXシリーズ 14畳用',
+    manufacturer: 'ダイキン',
+    modelNumber: 'S404ATGP-W',
+    unit: 'piece',
+    isOption: true,
+    description: 'ダイキン GXシリーズ 14畳用 200V 施工費込（さらら除湿）',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 218000 },
+      { plan: 'HOURS', price: 218000 },
+      { plan: 'LIFE+', price: 218000 },
+      { plan: 'LIFE', price: 218000 }
+    ]
+  },
+  {
+    id: 'int-aircon-mitsubishi-z6',
+    categoryId: 'aircon',
+    categoryName: 'エアコン',
+    subcategory: '三菱電機',
+    name: '三菱電機 霧ヶ峰 Zシリーズ 6畳用',
+    manufacturer: '三菱電機',
+    modelNumber: 'MSZ-ZXV2225',
+    unit: 'piece',
+    isOption: true,
+    description: '霧ヶ峰 Zシリーズ 6畳用 100V 施工費込（さらっと除湿冷房）',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 235000 },
+      { plan: 'HOURS', price: 235000 },
+      { plan: 'LIFE+', price: 235000 },
+      { plan: 'LIFE', price: 235000 }
+    ]
+  },
+  {
+    id: 'int-aircon-mitsubishi-z10',
+    categoryId: 'aircon',
+    categoryName: 'エアコン',
+    subcategory: '三菱電機',
+    name: '三菱電機 霧ヶ峰 Zシリーズ 10畳用',
+    manufacturer: '三菱電機',
+    modelNumber: 'MSZ-ZXV2825S',
+    unit: 'piece',
+    isOption: true,
+    description: '霧ヶ峰 Zシリーズ 10畳用 200V 施工費込（さらっと除湿冷房）',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 274000 },
+      { plan: 'HOURS', price: 274000 },
+      { plan: 'LIFE+', price: 274000 },
+      { plan: 'LIFE', price: 274000 }
+    ]
+  },
+  {
+    id: 'int-aircon-mitsubishi-z14',
+    categoryId: 'aircon',
+    categoryName: 'エアコン',
+    subcategory: '三菱電機',
+    name: '三菱電機 霧ヶ峰 Zシリーズ 14畳用',
+    manufacturer: '三菱電機',
+    modelNumber: 'MSZ-ZXV4025S',
+    unit: 'piece',
+    isOption: true,
+    description: '霧ヶ峰 Zシリーズ 14畳用 200V 施工費込（さらっと除湿冷房）',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 300000 },
+      { plan: 'HOURS', price: 300000 },
+      { plan: 'LIFE+', price: 300000 },
+      { plan: 'LIFE', price: 300000 }
+    ]
+  },
+
+  // ========== その他設備（PDF45追加）==========
+  {
+    id: 'int-downlight-001',
+    categoryId: 'lighting',
+    categoryName: '照明',
+    subcategory: 'ダウンライト',
+    name: 'ダウンライト施工費（10個まで）',
+    manufacturer: 'Gハウス',
+    modelNumber: 'DOWNLIGHT-10',
+    unit: 'set',
+    isOption: true,
+    description: 'ダウンライト施工費（10個まで）※照明器具別途',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 60000 },
+      { plan: 'HOURS', price: 60000 },
+      { plan: 'LIFE+', price: 60000 },
+      { plan: 'LIFE', price: 60000 }
+    ]
+  },
+  {
+    id: 'int-downlight-002',
+    categoryId: 'lighting',
+    categoryName: '照明',
+    subcategory: 'ダウンライト',
+    name: 'ダウンライト施工費（11個目以降）',
+    manufacturer: 'Gハウス',
+    modelNumber: 'DOWNLIGHT-ADD',
+    unit: 'piece',
+    isOption: true,
+    description: 'ダウンライト施工費（11個目から1個あたり）',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 3000 },
+      { plan: 'HOURS', price: 3000 },
+      { plan: 'LIFE+', price: 3000 },
+      { plan: 'LIFE', price: 3000 }
+    ]
+  },
+  {
+    id: 'int-washing-faucet-001',
+    categoryId: 'sanitary',
+    categoryName: '設備',
+    subcategory: '水栓',
+    name: '洗濯機混合水栓へ変更',
+    manufacturer: 'Gハウス',
+    modelNumber: 'WASH-FAUCET-MIX',
+    unit: 'piece',
+    isOption: true,
+    description: '洗濯機用水栓を混合水栓へ変更',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 36000 },
+      { plan: 'HOURS', price: 36000 },
+      { plan: 'LIFE+', price: 36000 },
+      { plan: 'LIFE', price: 36000 }
+    ]
+  },
+  {
+    id: 'int-nanobubble-001',
+    categoryId: 'sanitary',
+    categoryName: '設備',
+    subcategory: 'ナノバブル',
+    name: 'ナノバブル発生装置 BeautyAqua',
+    manufacturer: 'BeautyAqua',
+    modelNumber: 'BEAUTYAQUA-20A',
+    unit: 'set',
+    isOption: true,
+    description: 'ナノバブル発生装置 20A',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 200000 },
+      { plan: 'HOURS', price: 200000 },
+      { plan: 'LIFE+', price: 200000 },
+      { plan: 'LIFE', price: 200000 }
+    ]
   }
 ];
