@@ -1,11 +1,8 @@
 // IC-ぽちぽちシステム Service Worker
-const CACHE_NAME = 'ic-pochipochi-v2';
+const CACHE_NAME = 'ic-pochipochi-v3';
 const STATIC_ASSETS = [
   '/',
-  '/index.html',
   '/manifest.json',
-  '/icons/icon-192.png',
-  '/icons/icon-512.png',
 ];
 
 // エラーログ用の関数
@@ -44,6 +41,12 @@ self.addEventListener('activate', (event) => {
 // フェッチ時のキャッシュ戦略
 self.addEventListener('fetch', (event) => {
   const { request } = event;
+
+  // http/https以外のスキームはスキップ（chrome-extension等）
+  if (!request.url.startsWith('http://') && !request.url.startsWith('https://')) {
+    return;
+  }
+
   const url = new URL(request.url);
 
   // API リクエストはネットワーク優先
