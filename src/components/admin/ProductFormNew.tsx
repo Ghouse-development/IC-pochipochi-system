@@ -24,17 +24,38 @@ export const ProductFormNew: React.FC<ProductFormNewProps> = ({
     unit: product?.unit || 'piece',
     isOption: product?.isOption ?? true,
     description: product?.description || '',
-    variants: product?.variants || [{ 
-      id: 'v1', 
-      color: '', 
+    materialType: product?.materialType || '',
+    variants: product?.variants || [{
+      id: 'v1',
+      color: '',
       colorCode: '',
       imageUrl: '',
-      images: [] 
+      images: []
     }],
     pricing: product?.pricing || [
       { planId: 'LACIE', price: 0 }
     ]
   });
+
+  // カテゴリに応じた素材タイプの選択肢
+  const getMaterialTypeOptions = (categoryName: string) => {
+    const normalized = categoryName?.toLowerCase() || '';
+    if (normalized.includes('外壁') || normalized.includes('サイディング')) {
+      return ['窯業系サイディング', '金属サイディング', '塗り壁'];
+    }
+    if (normalized.includes('床') || normalized.includes('フローリング')) {
+      return ['突板', 'シート', '挽板', '無垢', 'CFシート', 'タイルフロア', 'カーペット'];
+    }
+    if (normalized.includes('屋根')) {
+      return ['ガルバリウム鋼板', 'スレート', '瓦'];
+    }
+    if (normalized.includes('壁') || normalized.includes('クロス')) {
+      return ['ビニールクロス', '織物クロス', '紙クロス', '珪藻土'];
+    }
+    return [];
+  };
+
+  const materialTypeOptions = getMaterialTypeOptions(formData.categoryName || '');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -105,12 +126,34 @@ export const ProductFormNew: React.FC<ProductFormNewProps> = ({
                     type="text"
                     required
                     value={formData.categoryName}
-                    onChange={(e) => setFormData({ ...formData, categoryName: e.target.value })}
+                    onChange={(e) => setFormData({ ...formData, categoryName: e.target.value, materialType: '' })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="例: 床材"
                   />
                 </div>
-                
+
+                {/* 素材タイプ（カテゴリに応じて表示） */}
+                {materialTypeOptions.length > 0 && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      素材タイプ
+                    </label>
+                    <select
+                      value={formData.materialType || ''}
+                      onChange={(e) => setFormData({ ...formData, materialType: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="">選択してください</option>
+                      {materialTypeOptions.map((option) => (
+                        <option key={option} value={option}>{option}</option>
+                      ))}
+                    </select>
+                    <p className="text-xs text-gray-500 mt-1">
+                      カタログのフィルターに使用されます
+                    </p>
+                  </div>
+                )}
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     商品名 *
