@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { createLogger } from './logger';
 
 const logger = createLogger('Supabase');
@@ -6,21 +6,38 @@ const logger = createLogger('Supabase');
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  logger.warn('Supabase credentials not found. Please check your .env file.');
+// ダミークライアント（環境変数未設定時用）
+const createDummyClient = (): SupabaseClient => {
+  // ダミーURLとキーで初期化（実際のリクエストは失敗するが、エラーは投げない）
+  return createClient(
+    'https://placeholder.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsYWNlaG9sZGVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NDU0MzIwMDAsImV4cCI6MTk2MTAwODAwMH0.placeholder',
+    {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+      },
+    }
+  );
+};
+
+// 環境変数が設定されているかチェック
+export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey);
+
+if (!isSupabaseConfigured) {
+  logger.warn('Supabase credentials not found. Using offline mode with static data.');
 }
 
-export const supabase = createClient(
-  supabaseUrl || '',
-  supabaseAnonKey || '',
-  {
-    auth: {
-      autoRefreshToken: true,
-      persistSession: true,
-      detectSessionInUrl: true,
-    },
-  }
-);
+// Supabaseクライアント（環境変数未設定時はダミークライアント）
+export const supabase: SupabaseClient = isSupabaseConfigured
+  ? createClient(supabaseUrl!, supabaseAnonKey!, {
+      auth: {
+        autoRefreshToken: true,
+        persistSession: true,
+        detectSessionInUrl: true,
+      },
+    })
+  : createDummyClient();
 
 // Storage bucket names
 export const STORAGE_BUCKETS = {
