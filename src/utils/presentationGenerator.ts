@@ -468,7 +468,7 @@ export const generatePresentationHTML = (
             </div>
           `;
 
-        case 'product':
+        case 'product': {
           const appliedRooms = slide.content.appliedRooms as string[] || [];
           return `
             <div class="slide product">
@@ -515,6 +515,7 @@ export const generatePresentationHTML = (
               </div>
             </div>
           `;
+        }
 
         case 'summary':
           return `
@@ -544,7 +545,7 @@ export const generatePresentationHTML = (
             </div>
           `;
 
-        case 'room_plan':
+        case 'room_plan': {
           const applications = slide.content.applications as { categoryName: string; productName: string; rooms: string[] }[];
           return `
             <div class="slide room-plan" style="background: linear-gradient(135deg, ${themeColor}11, ${themeColor}05);">
@@ -568,8 +569,9 @@ export const generatePresentationHTML = (
               </div>
             </div>
           `;
+        }
 
-        case 'not_needed':
+        case 'not_needed': {
           const notNeededCategories = slide.content.categories as { categoryName: string; note?: string }[];
           return `
             <div class="slide not-needed">
@@ -588,6 +590,7 @@ export const generatePresentationHTML = (
               </div>
             </div>
           `;
+        }
 
         default:
           return '';
