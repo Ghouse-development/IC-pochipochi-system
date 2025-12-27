@@ -410,10 +410,54 @@ function sortSubcategories(subcategories: string[], order?: string[]): string[] 
   });
 }
 
+// 家具・家電カテゴリ順序
+export const FURNITURE_CATEGORY_ORDER: CategoryOrderConfig[] = [
+  {
+    name: 'カーテン',
+    icon: '🪞',
+    subcategoryOrder: ['カーテンレール', 'カーテン']
+  },
+  {
+    name: 'カーテンBOX',
+    icon: '📦',
+    subcategoryOrder: ['カーテンBOX']
+  },
+  {
+    name: 'ブラインド',
+    icon: '🪟',
+    subcategoryOrder: ['ブラインド', 'ロールスクリーン']
+  },
+  {
+    name: 'エアコン',
+    icon: '❄️',
+    subcategoryOrder: ['ダイキン', '三菱電機', 'エアコン']
+  },
+  {
+    name: '空調',
+    icon: '🌀',
+    subcategoryOrder: ['エアコン', '換気扇']
+  },
+  {
+    name: 'ダイニングテーブル',
+    icon: '🍽️',
+    subcategoryOrder: ['ダイニングテーブル']
+  },
+  {
+    name: '造作家具',
+    icon: '🪑',
+    subcategoryOrder: ['ダイニングテーブル', 'カウンター', 'デスク']
+  },
+  {
+    name: '家具',
+    icon: '🪑',
+    subcategoryOrder: ['ダイニングテーブル', 'カウンター']
+  },
+];
+
 /**
  * カタログタイプに応じたカテゴリ順序設定を取得
  */
-export function getCategoryOrderConfig(catalogType: 'exterior' | 'interior' | 'water'): CategoryOrderConfig[] {
+export function getCategoryOrderConfig(catalogType: 'exterior' | 'interior' | 'water' | 'furniture'): CategoryOrderConfig[] {
   switch (catalogType) {
     case 'exterior':
       return EXTERIOR_CATEGORY_ORDER;
@@ -421,6 +465,8 @@ export function getCategoryOrderConfig(catalogType: 'exterior' | 'interior' | 'w
       return INTERIOR_CATEGORY_ORDER;
     case 'water':
       return WATER_CATEGORY_ORDER;
+    case 'furniture':
+      return FURNITURE_CATEGORY_ORDER;
     default:
       return [];
   }

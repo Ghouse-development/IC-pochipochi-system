@@ -32,6 +32,7 @@ import {
   convertToCatalogProduct,
   STEPS,
   DESIGN_CATEGORIES,
+  FURNITURE_CATEGORIES,
   getRecommendBadge,
   getNotNeededOption,
   type FilterTypeValue,
@@ -64,7 +65,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
   // URLからactiveTabを設定
   // お客様モードでは設計タブにアクセスできない
-  const activeTab = (['design', 'exterior', 'interior', 'equipment'].includes(step) ? step : 'exterior') as 'design' | 'exterior' | 'interior' | 'equipment';
+  const activeTab = (['design', 'exterior', 'interior', 'equipment', 'furniture'].includes(step) ? step : 'exterior') as 'design' | 'exterior' | 'interior' | 'equipment' | 'furniture';
   const selectedCategoryId = urlCategoryId || null;
 
   // お客様モードで設計タブにアクセスした場合は外装タブにリダイレクト
@@ -236,7 +237,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   const [quickSelectMode, setQuickSelectMode] = useState(false);
 
   // タブ切替（URL遷移）
-  const setActiveTab = useCallback((newTab: 'design' | 'exterior' | 'interior' | 'equipment') => {
+  const setActiveTab = useCallback((newTab: 'design' | 'exterior' | 'interior' | 'equipment' | 'furniture') => {
     navigate(`/catalog/${newTab}`);
   }, [navigate]);
 
@@ -425,14 +426,22 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
         !DESIGN_CATEGORIES.some(dc => p.categoryName.includes(dc) || dc.includes(p.categoryName))
       );
     } else if (tab === 'interior') {
-      products = interiorProducts;
+      // 内装タブ：FURNITURE_CATEGORIESを除外
+      products = interiorProducts.filter(p =>
+        !FURNITURE_CATEGORIES.some(fc => p.categoryName.includes(fc) || fc.includes(p.categoryName))
+      );
+    } else if (tab === 'furniture') {
+      // 家具・家電タブ：内装からFURNITURE_CATEGORIESに該当するものを抽出
+      products = interiorProducts.filter(p =>
+        FURNITURE_CATEGORIES.some(fc => p.categoryName.includes(fc) || fc.includes(p.categoryName))
+      );
     } else if (tab === 'equipment') {
       // 設備タブ：DESIGN_CATEGORIESを除外
       products = waterProducts.filter(p =>
         !DESIGN_CATEGORIES.some(dc => p.categoryName.includes(dc) || dc.includes(p.categoryName))
       );
     }
-    return products.map(p => convertStaticToItemWithDetails(p, tab === 'design' ? 'exterior' : tab));
+    return products.map(p => convertStaticToItemWithDetails(p, tab === 'design' ? 'exterior' : (tab === 'furniture' ? 'interior' : tab)));
   }, [exteriorProducts, interiorProducts, waterProducts]);
 
   // アイテム取得 - Supabaseから取得、データがない場合は静的データにフォールバック

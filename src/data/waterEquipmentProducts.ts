@@ -663,33 +663,6 @@ export const waterEquipmentProductsLifePlus: Product[] = [
     ]
   },
 
-  // Water Softener
-  {
-    id: 'water-softener-001',
-    categoryId: 'water-equipment',
-    categoryName: '水処理設備',
-    subcategory: '軟水器',
-    name: '全館軟水システム',
-    manufacturer: 'パナソニック',
-    modelNumber: 'SOFT-WATER-SYSTEM',
-    unit: 'set',
-    isOption: true,
-    description: '全館軟水化システム、自動再生機能付き',
-    variants: [
-      {
-        id: 'v1',
-        color: 'ホワイト',
-        colorCode: 'WHITE',
-        images: []
-      }
-    ],
-    pricing: [
-      { plan: 'LIFE+', price: 200000 },
-      { plan: 'LIFE', price: 200000 },
-      { plan: 'HOURS', price: 250000 },
-      { plan: 'LACIE', price: 300000 }
-    ]
-  },
 
   // Second Washroom Options
   {

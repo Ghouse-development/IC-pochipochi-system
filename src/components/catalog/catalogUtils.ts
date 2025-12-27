@@ -1,4 +1,4 @@
-import { Home, Sofa, Wrench, Ruler } from 'lucide-react';
+import { Home, Sofa, Wrench, Ruler, Armchair } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import type { ItemWithDetails } from '../../types/database';
 import type { Product as CatalogProduct } from '../../types/product';
@@ -110,7 +110,7 @@ export const convertToCatalogProduct = (item: ItemWithDetails): CatalogProduct =
 };
 
 // ステップ定義
-export type StepId = 'design' | 'exterior' | 'interior' | 'equipment';
+export type StepId = 'design' | 'exterior' | 'interior' | 'equipment' | 'furniture';
 export type FilterTypeValue = 'all' | 'standard' | 'option';
 
 export interface StepDefinition {
@@ -127,6 +127,7 @@ export const STEPS: StepDefinition[] = [
   { id: 'exterior', label: '外装', description: '外壁・屋根・玄関', icon: Home, emoji: '🏠', gradient: 'from-emerald-500 to-teal-500' },
   { id: 'interior', label: '内装', description: '床・壁・ドア', icon: Sofa, emoji: '🛋️', gradient: 'from-blue-500 to-indigo-500' },
   { id: 'equipment', label: '設備', description: 'キッチン・バス・トイレ', icon: Wrench, emoji: '🚿', gradient: 'from-cyan-500 to-blue-500' },
+  { id: 'furniture', label: '家具・家電', description: 'カーテン・エアコン', icon: Armchair, emoji: '🪑', gradient: 'from-amber-500 to-orange-500' },
 ];
 
 // 「設計」に属するカテゴリ名（間取りによって決まる項目）
@@ -145,6 +146,65 @@ export const DESIGN_CATEGORIES = [
   '蓄電池',
   '太陽光',
 ];
+
+// 「家具・家電」に属するカテゴリ名
+export const FURNITURE_CATEGORIES = [
+  'ダイニングテーブル',
+  '造作家具',
+  'カーテン',
+  'カーテンBOX',
+  'ブラインド',
+  'エアコン',
+  '空調',
+  '家具',
+];
+
+// IC提案依頼が有効なカテゴリ
+// これらのカテゴリは間取り・部屋によって最適な選択が異なるため
+// インテリアコーディネーターに相談できるオプションを表示
+export interface ICConsultationOption {
+  title: string;
+  description: string;
+  benefit: string;
+}
+
+export const IC_CONSULTATION_CATEGORIES: Record<string, ICConsultationOption> = {
+  'カーテン': {
+    title: 'ICにおまかせ',
+    description: '間取りや窓サイズに合わせて、最適なカーテンをご提案します',
+    benefit: '窓ごとに最適な素材・スタイルをプロが選定',
+  },
+  'ブラインド': {
+    title: 'ICにおまかせ',
+    description: '採光・プライバシーを考慮した最適なブラインドをご提案します',
+    benefit: '部屋の用途に合わせた機能性をプロが提案',
+  },
+  'ダイニングテーブル': {
+    title: 'ICにおまかせ',
+    description: 'LDKの広さやインテリアに合わせて最適な家具をご提案します',
+    benefit: 'サイズ・デザイン・素材をトータルコーディネート',
+  },
+  '造作家具': {
+    title: 'ICに相談',
+    description: 'オーダー家具で理想の空間を実現します',
+    benefit: 'ミリ単位でのサイズ調整で無駄のない収納',
+  },
+  '家具': {
+    title: 'ICにおまかせ',
+    description: 'お部屋に合った家具選びをお手伝いします',
+    benefit: 'インテリア全体の統一感をプロが提案',
+  },
+};
+
+// カテゴリにIC提案オプションがあるかチェック
+export const hasICConsultationOption = (categoryName: string): boolean => {
+  return categoryName in IC_CONSULTATION_CATEGORIES;
+};
+
+// カテゴリのIC提案オプションを取得
+export const getICConsultationOption = (categoryName: string): ICConsultationOption | null => {
+  return IC_CONSULTATION_CATEGORIES[categoryName] || null;
+};
 
 // 必須カテゴリ（選ばないと家が建たない項目）
 export const REQUIRED_CATEGORIES = [

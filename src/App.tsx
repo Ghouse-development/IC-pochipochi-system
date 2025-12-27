@@ -96,6 +96,7 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
     if (path.includes('/catalog/exterior')) return 'exterior';
     if (path.includes('/catalog/interior')) return 'interior';
     if (path.includes('/catalog/equipment')) return 'equipment';
+    if (path.includes('/catalog/furniture')) return 'furniture';
     return null;
   })();
 
