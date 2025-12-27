@@ -95,6 +95,21 @@ export const EXTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
     subcategoryOrder: ['ガレージシャッター', 'ガレージシャッターオプション']
   },
   {
+    name: '電動ガレージシャッター',
+    icon: '🚗',
+    subcategoryOrder: ['電動ガレージシャッター']
+  },
+  {
+    name: '破風',
+    icon: '🏠',
+    subcategoryOrder: ['破風']
+  },
+  {
+    name: '外部配管',
+    icon: '🔧',
+    subcategoryOrder: ['外部配管']
+  },
+  {
     name: '外部設備',
     icon: '🔌',
     subcategoryOrder: [
@@ -137,12 +152,25 @@ export const INTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
       'ライブナチュラルプラス',
       'エクオスピュアシルク',
       'フローリング',
+      'フロアタイル',
+      'カーペットタイル',
+      '畳',
     ]
   },
   {
     name: '壁材',
     icon: '🧱',
-    subcategoryOrder: ['クロス', 'アクセントクロス', 'タイル']
+    subcategoryOrder: ['クロス', 'アクセントクロス', 'タイル', 'エコカラット']
+  },
+  {
+    name: '壁',
+    icon: '🧱',
+    subcategoryOrder: ['クロス', 'アクセントクロス', 'タイル', 'エコカラット']
+  },
+  {
+    name: '天井',
+    icon: '⬆️',
+    subcategoryOrder: ['天井クロス', '天井高変更']
   },
   {
     name: '建具',
@@ -152,6 +180,7 @@ export const INTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
       'クローゼットドア',
       '引き戸',
       'ドアノブ',
+      'ハイドア',
     ]
   },
   {
@@ -162,17 +191,54 @@ export const INTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
       'シューズボックス',
       '収納棚',
       '可動棚',
+      '樹脂製可動棚',
+      'ハンガーパイプ',
     ]
+  },
+  {
+    name: 'トイレ収納',
+    icon: '🚽',
+    subcategoryOrder: ['トイレ収納', 'トイレカウンター']
   },
   {
     name: '階段',
     icon: '🪜',
-    subcategoryOrder: ['階段', '手すり']
+    subcategoryOrder: ['階段', '手すり', 'アイアン階段', 'ささら桁階段']
   },
   {
-    name: '窓装飾',
-    icon: '🪞',
-    subcategoryOrder: ['カーテンレール', 'ブラインド', 'ロールスクリーン']
+    name: '手摺',
+    icon: '🛡️',
+    subcategoryOrder: ['手摺']
+  },
+  {
+    name: '室内窓',
+    icon: '🪟',
+    subcategoryOrder: ['室内窓', 'FIX窓']
+  },
+  {
+    name: '格子',
+    icon: '📐',
+    subcategoryOrder: ['格子', 'ルーバー']
+  },
+  {
+    name: '間仕切り',
+    icon: '🚧',
+    subcategoryOrder: ['間仕切り', 'パーティション']
+  },
+  {
+    name: '造作',
+    icon: '🔨',
+    subcategoryOrder: ['ニッチ', 'カウンター', '飾り棚']
+  },
+  {
+    name: 'カウンター',
+    icon: '🍽️',
+    subcategoryOrder: ['カウンター', 'ダイニングカウンター']
+  },
+  {
+    name: '造作家具',
+    icon: '🪑',
+    subcategoryOrder: ['ダイニングテーブル', 'カウンター', 'デスク']
   },
   {
     name: '家具',
@@ -180,14 +246,69 @@ export const INTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
     subcategoryOrder: ['ダイニングテーブル', 'カウンター']
   },
   {
+    name: 'カーテン',
+    icon: '🪞',
+    subcategoryOrder: ['カーテンレール', 'カーテン']
+  },
+  {
+    name: 'カーテンBOX',
+    icon: '📦',
+    subcategoryOrder: ['カーテンBOX']
+  },
+  {
+    name: 'ブラインド',
+    icon: '🪟',
+    subcategoryOrder: ['ブラインド', 'ロールスクリーン']
+  },
+  {
     name: '照明',
     icon: '💡',
     subcategoryOrder: ['ダウンライト', 'シーリングライト', 'ペンダントライト']
   },
   {
-    name: 'コンセント・スイッチ',
+    name: '間接照明',
+    icon: '✨',
+    subcategoryOrder: ['間接照明', 'ライン照明']
+  },
+  {
+    name: '電気設備',
     icon: '🔌',
-    subcategoryOrder: ['コンセント', 'スイッチ', 'マルチメディア']
+    subcategoryOrder: ['コンセント', 'スイッチ', 'インターホン', 'マルチメディア']
+  },
+  {
+    name: 'エアコン',
+    icon: '❄️',
+    subcategoryOrder: ['ダイキン', '三菱電機', 'エアコン']
+  },
+  {
+    name: '空調',
+    icon: '🌀',
+    subcategoryOrder: ['エアコン', '換気扇']
+  },
+  {
+    name: '換気',
+    icon: '💨',
+    subcategoryOrder: ['換気扇', '24時間換気']
+  },
+  {
+    name: '換気システム',
+    icon: '🌬️',
+    subcategoryOrder: ['換気システム']
+  },
+  {
+    name: '設備',
+    icon: '⚙️',
+    subcategoryOrder: ['物干し', '乾燥機', 'スロップシンク', '洗濯パン']
+  },
+  {
+    name: '物干し',
+    icon: '👕',
+    subcategoryOrder: ['室内物干し', 'ホスクリーン', 'Pid']
+  },
+  {
+    name: '補強・下地',
+    icon: '🏗️',
+    subcategoryOrder: ['壁補強', '下地補強', 'エアコン下地']
   },
 ];
 
@@ -215,7 +336,32 @@ export const WATER_CATEGORY_ORDER: CategoryOrderConfig[] = [
     ]
   },
   {
+    name: 'バスルーム',
+    icon: '🛁',
+    subcategoryOrder: [
+      'ユニットバス',
+      '浴槽',
+      'シャワー',
+      '浴室乾燥機',
+    ]
+  },
+  {
+    name: 'バスルーム設備',
+    icon: '🚿',
+    subcategoryOrder: ['浴室乾燥機', 'シャワー', 'バスアクセサリー']
+  },
+  {
     name: '洗面',
+    icon: '🪥',
+    subcategoryOrder: [
+      '洗面台',
+      '洗面ボウル',
+      '洗面水栓',
+      '洗面ミラー',
+    ]
+  },
+  {
+    name: '洗面化粧台',
     icon: '🪥',
     subcategoryOrder: [
       '洗面台',
@@ -232,6 +378,21 @@ export const WATER_CATEGORY_ORDER: CategoryOrderConfig[] = [
       '手洗い器',
       'トイレアクセサリー',
     ]
+  },
+  {
+    name: '給湯器',
+    icon: '♨️',
+    subcategoryOrder: ['給湯器', 'エコキュート']
+  },
+  {
+    name: 'ランドリー',
+    icon: '🧺',
+    subcategoryOrder: ['洗濯機', '乾燥機', '洗濯パン']
+  },
+  {
+    name: '水処理設備',
+    icon: '💧',
+    subcategoryOrder: ['浄水器', 'ナノバブル']
   },
 ];
 
