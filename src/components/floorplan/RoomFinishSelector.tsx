@@ -24,9 +24,9 @@ export const RoomFinishSelector: React.FC<RoomFinishSelectorProps> = ({
   type,
   items,
   getImageUrl,
-  onMainSelectionChange,
+  onMainSelectionChange: _onMainSelectionChange,
 }) => {
-  const { rooms, mainSelections, setMainSelection, setRoomSelection } = useFloorPlanStore();
+  const { rooms, mainSelections, setMainSelection: _setMainSelection, setRoomSelection } = useFloorPlanStore();
   const [isExpanded, setIsExpanded] = useState(false);
   const [expandedFloors, setExpandedFloors] = useState<number[]>([1, 2]);
 
@@ -82,12 +82,6 @@ export const RoomFinishSelector: React.FC<RoomFinishSelectorProps> = ({
           !item.category_name?.includes('畳')
         );
     }
-  };
-
-  // メイン選択を変更
-  const handleMainSelect = (itemId: string) => {
-    setMainSelection(type, itemId);
-    onMainSelectionChange?.(itemId);
   };
 
   // 部屋個別の選択を変更

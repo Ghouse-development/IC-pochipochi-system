@@ -58,7 +58,7 @@ interface DBItem {
   }>;
 }
 
-const convertDBItemToProduct = (item: DBItem, categoryType: string): Product => {
+const convertDBItemToProduct = (item: DBItem, _categoryType: string): Product => {
   // noteから[subcategory]を抽出
   let subcategory = '';
   if (item.note) {

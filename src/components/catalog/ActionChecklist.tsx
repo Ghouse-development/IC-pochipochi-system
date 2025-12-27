@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { Check, ChevronRight, FileText, AlertCircle, TrendingUp, Circle, HelpCircle, Lightbulb, X } from 'lucide-react';
 import { formatPrice } from '../../lib/utils';
 import type { Category } from '../../types/database';
-import type { CartItem } from '../../stores/useCartStore';
+import type { CartItem } from '../../types/product';
 import { isRequiredCategory, getCategoryExplanation } from './catalogUtils';
 
 // 用語説明ポップオーバー
@@ -321,7 +321,7 @@ export const ActionChecklist: React.FC<ActionChecklistProps> = ({
                 const isSelected = selectedCategoryId === cat.id;
                 const firstItem = items[0];
                 const itemPrice = items.reduce((sum, item) => {
-                  const price = item.product.pricing?.find(p => p.price)?.price || 0;
+                  const price = item.product.pricing?.find((p: { price: number }) => p.price)?.price || 0;
                   return sum + price * item.quantity;
                 }, 0);
 
@@ -365,9 +365,9 @@ export const ActionChecklist: React.FC<ActionChecklistProps> = ({
                             className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-700 overflow-hidden border-2 border-white dark:border-gray-800 shadow-sm"
                             style={{ zIndex: 3 - idx }}
                           >
-                            {item.product.imageUrl ? (
+                            {item.product.variants?.[0]?.imageUrl ? (
                               <img
-                                src={item.product.imageUrl}
+                                src={item.product.variants[0].imageUrl}
                                 alt={item.product.name}
                                 className="w-full h-full object-cover"
                               />

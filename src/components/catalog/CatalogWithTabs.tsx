@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { Search, ShoppingCart, Check, Star, ChevronRight, ChevronLeft, Home, Zap, Heart, Clock, X, Scale, FileText, FileDown } from 'lucide-react';
+import { Search, ShoppingCart, Check, Star, ChevronRight, ChevronLeft, Home, Zap, Heart, X, Scale, FileDown } from 'lucide-react';
 import { useToast } from '../common/Toast';
 import { useTimeout } from '../../hooks/useTimeout';
 import { useDebounce } from '../../hooks/useDebounce';
@@ -186,7 +186,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   const { exteriorProducts, interiorProducts, waterProducts } = useProductStore();
 
   // お気に入り・履歴
-  const { favorites, toggleFavorite, isFavorite, addRecentlyViewed, recentlyViewed } = useFavoritesStore();
+  const { favorites, toggleFavorite, isFavorite, addRecentlyViewed } = useFavoritesStore();
   const handleToggleFavorite = useCallback((itemId: string) => {
     toggleFavorite(itemId);
     const wasFavorite = favorites.includes(itemId);
@@ -737,10 +737,6 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     return variant?.images?.[0]?.image_url || variant?.images?.[0]?.thumbnail_url || null;
   };
 
-  const getCategoryCount = (categoryName: string) => {
-    return cartItems.filter(i => i.product.categoryName === categoryName).length;
-  };
-
   // 各ステップの選択数
   const getStepCount = (stepId: string) => {
     return cartItems.filter(i => {
@@ -906,15 +902,24 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                     <React.Fragment key={step.id}>
                       <button
                         onClick={() => setActiveTab(step.id)}
-                        className={`relative flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-2xl transition-all duration-300 ${
+                        title={step.description}
+                        className={`group relative flex flex-col items-center px-3 sm:px-5 py-2 sm:py-2.5 rounded-2xl transition-all duration-300 ${
                           isActive
                             ? 'bg-white text-teal-600 shadow-xl scale-105'
                             : 'bg-white/20 hover:bg-white/30 backdrop-blur-sm'
                         }`}
                       >
-                        <Icon className={`w-4 h-4 sm:w-5 sm:h-5 ${isActive ? 'text-teal-500' : ''}`} />
-                        <span className="hidden sm:inline font-semibold">{step.label}</span>
-                        <span className="sm:hidden text-lg">{step.emoji}</span>
+                        <div className="flex items-center gap-1.5 sm:gap-2">
+                          <Icon className={`w-4 h-4 sm:w-5 sm:h-5 ${isActive ? 'text-teal-500' : ''}`} />
+                          <span className="hidden sm:inline font-semibold">{step.label}</span>
+                          <span className="sm:hidden text-lg">{step.emoji}</span>
+                        </div>
+                        {/* サブテキスト（説明） - アクティブ時のみ表示 */}
+                        {isActive && (
+                          <span className="hidden sm:block text-[10px] text-teal-500/80 mt-0.5 font-normal">
+                            {step.description}
+                          </span>
+                        )}
                         {stepCount > 0 && (
                           <span className={`absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center rounded-full text-xs font-bold animate-bounce-in ${
                             isActive ? 'bg-teal-500 text-white' : 'bg-white text-teal-600'
@@ -945,7 +950,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
             </div>
           </div>
 
-          {/* プログレスバー - シンプル化 */}
+          {/* プログレスバー - ゴール明確化 */}
           <div className="px-4 pb-3">
             <div className="max-w-6xl mx-auto">
               {(() => {
@@ -954,17 +959,27 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 ).length;
                 const totalCount = categories.length;
                 const catProgressPercent = totalCount > 0 ? (decidedCount / totalCount) * 100 : 0;
+                const isComplete = decidedCount === totalCount && totalCount > 0;
                 return (
                   <div className="flex items-center gap-3">
-                    <div className="flex-1 h-1.5 bg-white/20 rounded-full overflow-hidden">
+                    <div className="flex-1 h-2 bg-white/20 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-white rounded-full transition-all duration-500"
+                        className={`h-full rounded-full transition-all duration-500 ${isComplete ? 'bg-emerald-400' : 'bg-white'}`}
                         style={{ width: `${catProgressPercent}%` }}
                       />
                     </div>
-                    <span className="text-xs font-medium text-white/90 whitespace-nowrap">
-                      {decidedCount}/{totalCount}
-                    </span>
+                    <div className="text-right min-w-[100px]">
+                      {isComplete ? (
+                        <span className="text-xs font-bold text-emerald-300 flex items-center gap-1">
+                          <Check className="w-3.5 h-3.5" />
+                          完了！
+                        </span>
+                      ) : (
+                        <span className="text-xs font-medium text-white/90 whitespace-nowrap">
+                          あと <span className="font-bold text-white">{totalCount - decidedCount}</span> 項目
+                        </span>
+                      )}
+                    </div>
                   </div>
                 );
               })()}

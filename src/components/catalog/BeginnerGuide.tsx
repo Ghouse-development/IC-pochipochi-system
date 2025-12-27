@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, ChevronRight, ChevronLeft, Lightbulb, Home, Sofa, Wrench, Ruler, CheckCircle } from 'lucide-react';
+import { X, ChevronRight, ChevronLeft, Lightbulb, Home, Sofa, Ruler, CheckCircle } from 'lucide-react';
 
 interface GuideStep {
   id: number;

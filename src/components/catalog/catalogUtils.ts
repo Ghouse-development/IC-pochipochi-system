@@ -115,16 +115,17 @@ export type FilterTypeValue = 'all' | 'standard' | 'option';
 export interface StepDefinition {
   id: StepId;
   label: string;
+  description: string; // 説明文を追加
   icon: LucideIcon;
   emoji: string;
   gradient: string;
 }
 
 export const STEPS: StepDefinition[] = [
-  { id: 'design', label: '設計', icon: Ruler, emoji: '📐', gradient: 'from-purple-500 to-violet-500' },
-  { id: 'exterior', label: '外装', icon: Home, emoji: '🏠', gradient: 'from-emerald-500 to-teal-500' },
-  { id: 'interior', label: '内装', icon: Sofa, emoji: '🛋️', gradient: 'from-blue-500 to-indigo-500' },
-  { id: 'equipment', label: '設備', icon: Wrench, emoji: '🚿', gradient: 'from-cyan-500 to-blue-500' },
+  { id: 'design', label: '設計', description: '間取りで決まる項目', icon: Ruler, emoji: '📐', gradient: 'from-purple-500 to-violet-500' },
+  { id: 'exterior', label: '外装', description: '外壁・屋根・玄関', icon: Home, emoji: '🏠', gradient: 'from-emerald-500 to-teal-500' },
+  { id: 'interior', label: '内装', description: '床・壁・ドア', icon: Sofa, emoji: '🛋️', gradient: 'from-blue-500 to-indigo-500' },
+  { id: 'equipment', label: '設備', description: 'キッチン・バス・トイレ', icon: Wrench, emoji: '🚿', gradient: 'from-cyan-500 to-blue-500' },
 ];
 
 // 「設計」に属するカテゴリ名（間取りによって決まる項目）

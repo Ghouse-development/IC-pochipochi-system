@@ -98,7 +98,7 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
   isFavorite,
   searchTerm,
   showManufacturer = true,
-  planName,
+  planName: _planName,
   recommendBadge,
 }) => {
   const price = getPrice(item);
