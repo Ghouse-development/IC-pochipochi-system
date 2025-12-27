@@ -251,7 +251,7 @@ export const ActionChecklist: React.FC<ActionChecklistProps> = ({
               </span>
             </div>
             <div className="space-y-1.5">
-              {optionalUnselected.map((cat, idx) => {
+              {optionalUnselected.map((cat) => {
                 const isSelected = selectedCategoryId === cat.id;
                 const hasExplanation = getCategoryExplanation(cat.name) !== null;
 
