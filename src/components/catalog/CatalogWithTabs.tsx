@@ -254,14 +254,18 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
         const designCategories = allCategories.filter(cat =>
           DESIGN_CATEGORIES.some(dc => cat.name.includes(dc) || dc.includes(cat.name))
         );
+        // 重複除去（同名カテゴリがある場合は最初のものを使用）
+        const uniqueDesignCategories = designCategories.filter((cat, index, self) =>
+          index === self.findIndex(c => c.name === cat.name)
+        );
 
-        if (designCategories.length > 0) {
-          setCategories(designCategories);
-          const firstUndecided = designCategories.find(cat =>
+        if (uniqueDesignCategories.length > 0) {
+          setCategories(uniqueDesignCategories);
+          const firstUndecided = uniqueDesignCategories.find(cat =>
             !cartItems.some(item => item.product.categoryName === cat.name)
           );
           if (!selectedCategoryId) {
-            setSelectedCategoryId(firstUndecided?.id || designCategories[0]?.id || null);
+            setSelectedCategoryId(firstUndecided?.id || uniqueDesignCategories[0]?.id || null);
           }
         } else {
           // 静的データからフォールバック
@@ -310,13 +314,17 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
           : supabaseCategories.filter(cat =>
               !DESIGN_CATEGORIES.some(dc => cat.name.includes(dc) || dc.includes(cat.name))
             );
-        setCategories(filteredCategories);
+        // 重複除去（同名カテゴリがある場合は最初のものを使用）
+        const uniqueCategories = filteredCategories.filter((cat, index, self) =>
+          index === self.findIndex(c => c.name === cat.name)
+        );
+        setCategories(uniqueCategories);
         // 最初の未決カテゴリを自動選択
-        const firstUndecided = filteredCategories.find(cat =>
+        const firstUndecided = uniqueCategories.find(cat =>
           !cartItems.some(item => item.product.categoryName === cat.name)
         );
         if (!selectedCategoryId) {
-          setSelectedCategoryId(firstUndecided?.id || filteredCategories[0]?.id || null);
+          setSelectedCategoryId(firstUndecided?.id || uniqueCategories[0]?.id || null);
         }
       } else {
         // Supabaseにデータがない場合は静的データからカテゴリを生成

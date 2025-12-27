@@ -163,11 +163,6 @@ export const INTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
     subcategoryOrder: ['クロス', 'アクセントクロス', 'タイル', 'エコカラット']
   },
   {
-    name: '壁',
-    icon: '🧱',
-    subcategoryOrder: ['クロス', 'アクセントクロス', 'タイル', 'エコカラット']
-  },
-  {
     name: '天井',
     icon: '⬆️',
     subcategoryOrder: ['天井クロス', '天井高変更']
@@ -326,16 +321,6 @@ export const WATER_CATEGORY_ORDER: CategoryOrderConfig[] = [
     ]
   },
   {
-    name: '浴室',
-    icon: '🛁',
-    subcategoryOrder: [
-      'ユニットバス',
-      '浴槽',
-      'シャワー',
-      '浴室乾燥機',
-    ]
-  },
-  {
     name: 'バスルーム',
     icon: '🛁',
     subcategoryOrder: [
@@ -349,16 +334,6 @@ export const WATER_CATEGORY_ORDER: CategoryOrderConfig[] = [
     name: 'バスルーム設備',
     icon: '🚿',
     subcategoryOrder: ['浴室乾燥機', 'シャワー', 'バスアクセサリー']
-  },
-  {
-    name: '洗面',
-    icon: '🪥',
-    subcategoryOrder: [
-      '洗面台',
-      '洗面ボウル',
-      '洗面水栓',
-      '洗面ミラー',
-    ]
   },
   {
     name: '洗面化粧台',
