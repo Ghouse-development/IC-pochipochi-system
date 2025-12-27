@@ -2383,5 +2383,1570 @@ export const interiorProducts: Product[] = [
       { plan: 'LACIE', price: 85000 },
       { plan: 'HOURS', price: 90000 }
     ]
+  },
+
+  // ========== フロアタイル（PDF16-18追加）==========
+  {
+    id: 'int-floortile-001',
+    categoryId: 'flooring',
+    categoryName: '床材',
+    subcategory: 'フロアタイル',
+    name: 'ロイヤルストーン コンクリート調',
+    manufacturer: '東リ',
+    modelNumber: 'PST2170-2175',
+    unit: 'sqm',
+    isOption: true,
+    description: 'コンクリート調フロアタイル 457×457mm',
+    variants: [
+      { id: 'v1', color: 'PST2170', colorCode: '#B0B0B0', images: [] },
+      { id: 'v2', color: 'PST2171', colorCode: '#8C8C8C', images: [] },
+      { id: 'v3', color: 'PST2172', colorCode: '#707070', images: [] },
+      { id: 'v4', color: 'PST2173', colorCode: '#5A5A5A', images: [] },
+      { id: 'v5', color: 'PST2174', colorCode: '#404040', images: [] },
+      { id: 'v6', color: 'PST2175', colorCode: '#2D2D2D', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 10000 },
+      { plan: 'HOURS', price: 10000 },
+      { plan: 'LIFE+', price: 10000 },
+      { plan: 'LIFE', price: 10000 }
+    ]
+  },
+  {
+    id: 'int-floortile-002',
+    categoryId: 'flooring',
+    categoryName: '床材',
+    subcategory: 'フロアタイル',
+    name: 'ロイヤルストーン 石目調',
+    manufacturer: '東リ',
+    modelNumber: 'PST2067-2084',
+    unit: 'sqm',
+    isOption: true,
+    description: '石目調フロアタイル 457×457mm',
+    variants: [
+      { id: 'v1', color: 'PST2067 モカ', colorCode: '#8B7355', images: [] },
+      { id: 'v2', color: 'PST2068 グレー', colorCode: '#808080', images: [] },
+      { id: 'v3', color: 'PST2073 ベージュ', colorCode: '#D4C4A8', images: [] },
+      { id: 'v4', color: 'PST2084 ホワイト', colorCode: '#F0F0F0', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 10000 },
+      { plan: 'HOURS', price: 10000 },
+      { plan: 'LIFE+', price: 10000 },
+      { plan: 'LIFE', price: 10000 }
+    ]
+  },
+  {
+    id: 'int-floortile-003',
+    categoryId: 'flooring',
+    categoryName: '床材',
+    subcategory: 'フロアタイル',
+    name: 'ロイヤルウッド 木目調',
+    manufacturer: '東リ',
+    modelNumber: 'PWT2403-2437',
+    unit: 'sqm',
+    isOption: true,
+    description: '木目調フロアタイル 152×914mm',
+    variants: [
+      { id: 'v1', color: 'PWT2403 ライトオーク', colorCode: '#D4B896', images: [] },
+      { id: 'v2', color: 'PWT2414 ミディアムオーク', colorCode: '#B8956E', images: [] },
+      { id: 'v3', color: 'PWT2421 ウォールナット', colorCode: '#5C4033', images: [] },
+      { id: 'v4', color: 'PWT2437 ダークウォールナット', colorCode: '#3D2B1F', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 10000 },
+      { plan: 'HOURS', price: 10000 },
+      { plan: 'LIFE+', price: 10000 },
+      { plan: 'LIFE', price: 10000 }
+    ]
+  },
+
+  // ========== カーペットタイル（PDF20追加）==========
+  {
+    id: 'int-carpet-001',
+    categoryId: 'flooring',
+    categoryName: '床材',
+    subcategory: 'カーペットタイル',
+    name: 'カーペットタイル NTシリーズ',
+    manufacturer: 'サンゲツ',
+    modelNumber: 'NT-311-382',
+    unit: 'sqm',
+    isOption: true,
+    description: 'カーペットタイル 500×500mm',
+    variants: [
+      { id: 'v1', color: 'NT-311', images: [] },
+      { id: 'v2', color: 'NT-316', images: [] },
+      { id: 'v3', color: 'NT-336', images: [] },
+      { id: 'v4', color: 'NT-339', images: [] },
+      { id: 'v5', color: 'NT-340', images: [] },
+      { id: 'v6', color: 'NT-341', images: [] },
+      { id: 'v7', color: 'NT-342', images: [] },
+      { id: 'v8', color: 'NT-344', images: [] },
+      { id: 'v9', color: 'NT-371', images: [] },
+      { id: 'v10', color: 'NT-376', images: [] },
+      { id: 'v11', color: 'NT-379', images: [] },
+      { id: 'v12', color: 'NT-382', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 10000 },
+      { plan: 'HOURS', price: 10000 },
+      { plan: 'LIFE+', price: 10000 },
+      { plan: 'LIFE', price: 10000 }
+    ]
+  },
+  {
+    id: 'int-carpet-002',
+    categoryId: 'flooring',
+    categoryName: '床材',
+    subcategory: 'カーペットタイル',
+    name: 'カーペットタイル DTシリーズ',
+    manufacturer: 'サンゲツ',
+    modelNumber: 'DT-2201-2207',
+    unit: 'sqm',
+    isOption: true,
+    description: 'カーペットタイル 500×500mm（プレミアム）',
+    variants: [
+      { id: 'v1', color: 'DT-2201', images: [] },
+      { id: 'v2', color: 'DT-2202', images: [] },
+      { id: 'v3', color: 'DT-2204', images: [] },
+      { id: 'v4', color: 'DT-2207', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 13000 },
+      { plan: 'HOURS', price: 13000 },
+      { plan: 'LIFE+', price: 13000 },
+      { plan: 'LIFE', price: 13000 }
+    ]
+  },
+
+  // ========== 床材タイル（PDF21追加）==========
+  {
+    id: 'int-tile-floor-001',
+    categoryId: 'flooring',
+    categoryName: '床材',
+    subcategory: 'タイル',
+    name: 'ランドストン',
+    manufacturer: 'Nagoya mozaic',
+    modelNumber: 'LANDSTONE',
+    unit: 'sqm',
+    isOption: true,
+    description: '大判床タイル',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#F5F5F5', images: [] },
+      { id: 'v2', color: 'ベージュ', colorCode: '#D4C4A8', images: [] },
+      { id: 'v3', color: 'グレー', colorCode: '#808080', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 30000 },
+      { plan: 'HOURS', price: 30000 },
+      { plan: 'LIFE+', price: 30000 },
+      { plan: 'LIFE', price: 30000 }
+    ]
+  },
+  {
+    id: 'int-tile-floor-002',
+    categoryId: 'flooring',
+    categoryName: '床材',
+    subcategory: 'タイル',
+    name: 'ピエトラソーニ',
+    manufacturer: 'Nagoya mozaic',
+    modelNumber: 'PIETRA-SONI',
+    unit: 'sqm',
+    isOption: true,
+    description: '大判床タイル',
+    variants: [
+      { id: 'v1', color: 'ライトグレー', colorCode: '#C0C0C0', images: [] },
+      { id: 'v2', color: 'ダークグレー', colorCode: '#505050', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 30000 },
+      { plan: 'HOURS', price: 30000 },
+      { plan: 'LIFE+', price: 30000 },
+      { plan: 'LIFE', price: 30000 }
+    ]
+  },
+  {
+    id: 'int-tile-floor-003',
+    categoryId: 'flooring',
+    categoryName: '床材',
+    subcategory: 'タイル',
+    name: 'メンフィス',
+    manufacturer: 'LIXIL',
+    modelNumber: 'MEMPHIS',
+    unit: 'sqm',
+    isOption: true,
+    description: '床タイル',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] },
+      { id: 'v2', color: 'グレー', colorCode: '#808080', images: [] },
+      { id: 'v3', color: 'ブラック', colorCode: '#2D2D2D', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 25000 },
+      { plan: 'HOURS', price: 25000 },
+      { plan: 'LIFE+', price: 25000 },
+      { plan: 'LIFE', price: 25000 }
+    ]
+  },
+
+  // ========== 畳・小上がり（PDF22追加）==========
+  {
+    id: 'int-tatami-001',
+    categoryId: 'flooring',
+    categoryName: '床材',
+    subcategory: '畳',
+    name: '健やかたたみおもて 清流',
+    manufacturer: '大建工業',
+    modelNumber: 'SUKOYAKA-SEIRYU',
+    unit: 'piece',
+    isOption: true,
+    description: '機能畳 半畳タイプ',
+    variants: [
+      { id: 'v1', color: '銀白色', colorCode: '#E8E8D0', images: [] },
+      { id: 'v2', color: '黄金色', colorCode: '#DAA520', images: [] },
+      { id: 'v3', color: '亜麻色', colorCode: '#C4B7A6', images: [] },
+      { id: 'v4', color: '墨染色', colorCode: '#595857', images: [] },
+      { id: 'v5', color: '乳白色', colorCode: '#F5F5DC', images: [] },
+      { id: 'v6', color: '白茶色', colorCode: '#C5A882', images: [] },
+      { id: 'v7', color: '灰桜色', colorCode: '#E8D3D1', images: [] },
+      { id: 'v8', color: '胡桃色', colorCode: '#8B6914', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 20000 },
+      { plan: 'HOURS', price: 20000 },
+      { plan: 'LIFE+', price: 20000 },
+      { plan: 'LIFE', price: 20000 }
+    ]
+  },
+  {
+    id: 'int-koagari-001',
+    categoryId: 'flooring',
+    categoryName: '床材',
+    subcategory: '小上がり',
+    name: '小上がりスペース',
+    manufacturer: 'Gハウス',
+    modelNumber: 'KOAGARI-001',
+    unit: 'sqm',
+    isOption: true,
+    description: '小上がり造作工事',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 29000 },
+      { plan: 'HOURS', price: 29000 },
+      { plan: 'LIFE+', price: 29000 },
+      { plan: 'LIFE', price: 29000 }
+    ]
+  },
+  {
+    id: 'int-koagari-002',
+    categoryId: 'storage',
+    categoryName: '収納',
+    subcategory: '小上がり下収納',
+    name: '小上がり下引出収納 W910',
+    manufacturer: 'Gハウス',
+    modelNumber: 'KOAGARI-STR-910',
+    unit: 'piece',
+    isOption: true,
+    description: '小上がり下収納 引出タイプ W910',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 87000 },
+      { plan: 'HOURS', price: 87000 },
+      { plan: 'LIFE+', price: 87000 },
+      { plan: 'LIFE', price: 87000 }
+    ]
+  },
+  {
+    id: 'int-koagari-003',
+    categoryId: 'storage',
+    categoryName: '収納',
+    subcategory: '小上がり下収納',
+    name: '小上がり下引出収納 W1365',
+    manufacturer: 'Gハウス',
+    modelNumber: 'KOAGARI-STR-1365',
+    unit: 'piece',
+    isOption: true,
+    description: '小上がり下収納 引出タイプ W1365',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 92000 },
+      { plan: 'HOURS', price: 92000 },
+      { plan: 'LIFE+', price: 92000 },
+      { plan: 'LIFE', price: 92000 }
+    ]
+  },
+
+  // ========== 点検口・床下収納（PDF23追加）==========
+  {
+    id: 'int-storage-floor-001',
+    categoryId: 'storage',
+    categoryName: '収納',
+    subcategory: '床下収納',
+    name: '床下収納庫',
+    manufacturer: '城東テクノ',
+    modelNumber: 'SPF-R60F',
+    unit: 'piece',
+    isOption: true,
+    description: '床下収納庫 600型',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 47000 },
+      { plan: 'HOURS', price: 47000 },
+      { plan: 'LIFE+', price: 47000 },
+      { plan: 'LIFE', price: 47000 }
+    ]
+  },
+
+  // ========== 換気システム（PDF23追加）==========
+  {
+    id: 'int-ventilation-001',
+    categoryId: 'ventilation',
+    categoryName: '換気システム',
+    subcategory: '第一種換気',
+    name: 'DSDD換気システム',
+    manufacturer: 'DSDD',
+    modelNumber: 'DSDD-SYSTEM',
+    unit: 'set',
+    isOption: true,
+    description: 'DSDD第一種全熱交換換気システムへ変更',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 1500000 },
+      { plan: 'HOURS', price: 1500000 },
+      { plan: 'LIFE+', price: 1500000 },
+      { plan: 'LIFE', price: 1500000 }
+    ]
+  },
+
+  // ========== 階段（PDF24-25追加）==========
+  {
+    id: 'int-stair-001',
+    categoryId: 'stairs',
+    categoryName: '階段',
+    subcategory: '階段踏板',
+    name: '階段踏板/蹴込板 パナソニック仕様',
+    manufacturer: 'Panasonic',
+    modelNumber: 'STAIR-PNS',
+    unit: 'set',
+    isOption: false,
+    description: '階段踏板・蹴込板（標準）',
+    variants: [
+      { id: 'v1', color: 'ホワイトオーク', colorCode: '#E8DCC8', images: [] },
+      { id: 'v2', color: 'チェリー', colorCode: '#B5651D', images: [] },
+      { id: 'v3', color: 'ウォールナット', colorCode: '#5C4033', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+  {
+    id: 'int-stair-002',
+    categoryId: 'stairs',
+    categoryName: '階段',
+    subcategory: '階段踏板',
+    name: '階段踏板/蹴込板 WOODTEC仕様',
+    manufacturer: 'WOODTEC',
+    modelNumber: 'STAIR-WT',
+    unit: 'set',
+    isOption: true,
+    description: '階段踏板・蹴込板（WOODTEC）',
+    variants: [
+      { id: 'v1', color: 'オーク', colorCode: '#D4B896', images: [] },
+      { id: 'v2', color: 'アッシュ', colorCode: '#C4B7A6', images: [] },
+      { id: 'v3', color: 'ウォールナット', colorCode: '#5C4033', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 200000 },
+      { plan: 'HOURS', price: 200000 },
+      { plan: 'LIFE+', price: 200000 },
+      { plan: 'LIFE', price: 200000 }
+    ]
+  },
+  {
+    id: 'int-stair-003',
+    categoryId: 'stairs',
+    categoryName: '階段',
+    subcategory: '階段踏板',
+    name: '階段踏板/蹴込板 ikuta仕様',
+    manufacturer: 'ikuta',
+    modelNumber: 'STAIR-IKT',
+    unit: 'set',
+    isOption: true,
+    description: '階段踏板・蹴込板（ikuta）',
+    variants: [
+      { id: 'v1', color: 'オーク', colorCode: '#D4B896', images: [] },
+      { id: 'v2', color: 'ウォールナット', colorCode: '#5C4033', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 350000 },
+      { plan: 'HOURS', price: 350000 },
+      { plan: 'LIFE+', price: 350000 },
+      { plan: 'LIFE', price: 350000 }
+    ]
+  },
+  {
+    id: 'int-stair-004',
+    categoryId: 'stairs',
+    categoryName: '階段',
+    subcategory: 'アイアン階段',
+    name: 'アイアン階段 スレート',
+    manufacturer: 'Gハウス',
+    modelNumber: 'IRON-STAIR-SLATE',
+    unit: 'set',
+    isOption: true,
+    description: 'アイアン階段（スレートタイプ）',
+    variants: [
+      { id: 'v1', color: 'ブラック', colorCode: '#1A1A1A', images: [] },
+      { id: 'v2', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 950000 },
+      { plan: 'HOURS', price: 950000 },
+      { plan: 'LIFE+', price: 950000 },
+      { plan: 'LIFE', price: 950000 }
+    ]
+  },
+  {
+    id: 'int-stair-005',
+    categoryId: 'stairs',
+    categoryName: '階段',
+    subcategory: 'アイアン手すり',
+    name: 'ホール アイアン手すり',
+    manufacturer: 'Gハウス',
+    modelNumber: 'IRON-HANDRAIL',
+    unit: 'set',
+    isOption: true,
+    description: 'ホール用アイアン手すり',
+    variants: [
+      { id: 'v1', color: 'ブラック', colorCode: '#1A1A1A', images: [] },
+      { id: 'v2', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 240000 },
+      { plan: 'HOURS', price: 240000 },
+      { plan: 'LIFE+', price: 240000 },
+      { plan: 'LIFE', price: 240000 }
+    ]
+  },
+  {
+    id: 'int-stair-006',
+    categoryId: 'stairs',
+    categoryName: '階段',
+    subcategory: 'カーペット階段',
+    name: 'カーペット階段',
+    manufacturer: 'Gハウス',
+    modelNumber: 'CARPET-STAIR',
+    unit: 'set',
+    isOption: true,
+    description: 'カーペット仕上げ階段',
+    variants: [
+      { id: 'v1', color: 'グレー', colorCode: '#808080', images: [] },
+      { id: 'v2', color: 'ベージュ', colorCode: '#D4C4A8', images: [] },
+      { id: 'v3', color: 'ブラウン', colorCode: '#8B4513', images: [] },
+      { id: 'v4', color: 'ネイビー', colorCode: '#000080', images: [] },
+      { id: 'v5', color: 'グリーン', colorCode: '#2E8B57', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 210000 },
+      { plan: 'HOURS', price: 210000 },
+      { plan: 'LIFE+', price: 210000 },
+      { plan: 'LIFE', price: 210000 }
+    ]
+  },
+
+  // ========== 壁・腰壁（PDF26追加）==========
+  {
+    id: 'int-wall-001',
+    categoryId: 'wall',
+    categoryName: '壁',
+    subcategory: '腰壁',
+    name: '腰壁',
+    manufacturer: 'Gハウス',
+    modelNumber: 'KOSHIKABE-001',
+    unit: 'meter',
+    isOption: true,
+    description: '腰壁造作',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] },
+      { id: 'v2', color: 'オーク', colorCode: '#D4B896', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 15000 },
+      { plan: 'HOURS', price: 15000 },
+      { plan: 'LIFE+', price: 15000 },
+      { plan: 'LIFE', price: 15000 }
+    ]
+  },
+  {
+    id: 'int-wall-002',
+    categoryId: 'wall',
+    categoryName: '壁',
+    subcategory: '垂壁',
+    name: '垂壁',
+    manufacturer: 'Gハウス',
+    modelNumber: 'TAREKABE-001',
+    unit: 'meter',
+    isOption: true,
+    description: '垂壁造作',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 24000 },
+      { plan: 'HOURS', price: 24000 },
+      { plan: 'LIFE+', price: 24000 },
+      { plan: 'LIFE', price: 24000 }
+    ]
+  },
+  {
+    id: 'int-wall-003',
+    categoryId: 'wall',
+    categoryName: '壁',
+    subcategory: '垂壁',
+    name: 'アーチ垂壁',
+    manufacturer: 'Gハウス',
+    modelNumber: 'ARCH-TAREKABE',
+    unit: 'piece',
+    isOption: true,
+    description: 'アーチ型垂壁造作',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 36000 },
+      { plan: 'HOURS', price: 36000 },
+      { plan: 'LIFE+', price: 36000 },
+      { plan: 'LIFE', price: 36000 }
+    ]
+  },
+
+  // ========== 室内ドア（PDF27追加）==========
+  {
+    id: 'int-door-001',
+    categoryId: 'door',
+    categoryName: '建具',
+    subcategory: '室内ドア',
+    name: 'VERITIS ハイドアH2400 ペイントカラー',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VERITIS-H2400-PAINT',
+    unit: 'piece',
+    isOption: true,
+    description: 'ハイドアH2400 ペイントカラー変更',
+    variants: [
+      { id: 'v1', color: 'ネイビーブルー', colorCode: '#000080', images: [] },
+      { id: 'v2', color: 'カーキ', colorCode: '#808000', images: [] },
+      { id: 'v3', color: 'グレージュ', colorCode: '#A9A9A9', images: [] },
+      { id: 'v4', color: 'ピンクベージュ', colorCode: '#E8C4B8', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 10000 },
+      { plan: 'HOURS', price: 10000 },
+      { plan: 'LIFE+', price: 10000 },
+      { plan: 'LIFE', price: 10000 }
+    ]
+  },
+  {
+    id: 'int-door-002',
+    categoryId: 'door',
+    categoryName: '建具',
+    subcategory: '室内ドア',
+    name: 'VERITIS ハイドアH2400 ソリッドカラー',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VERITIS-H2400-SOLID',
+    unit: 'piece',
+    isOption: true,
+    description: 'ハイドアH2400 ソリッドカラー変更',
+    variants: [
+      { id: 'v1', color: 'マットブラック', colorCode: '#1A1A1A', images: [] },
+      { id: 'v2', color: 'グレー', colorCode: '#808080', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 20000 },
+      { plan: 'HOURS', price: 20000 },
+      { plan: 'LIFE+', price: 20000 },
+      { plan: 'LIFE', price: 20000 }
+    ]
+  },
+  {
+    id: 'int-door-003',
+    categoryId: 'door',
+    categoryName: '建具',
+    subcategory: '収納建具',
+    name: '収納用建具 折戸タイプ',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VERITIS-CL-FOLD',
+    unit: 'piece',
+    isOption: true,
+    description: '収納用建具 折戸タイプ',
+    variants: [
+      { id: 'v1', color: '標準9色', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 50000 },
+      { plan: 'HOURS', price: 50000 },
+      { plan: 'LIFE+', price: 50000 },
+      { plan: 'LIFE', price: 50000 }
+    ]
+  },
+  {
+    id: 'int-door-004',
+    categoryId: 'door',
+    categoryName: '建具',
+    subcategory: '室内ドア',
+    name: '建具デザイン変更 ガラス入り',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VERITIS-GLASS',
+    unit: 'piece',
+    isOption: true,
+    description: '建具デザイン ガラス入りへ変更',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 50000 },
+      { plan: 'HOURS', price: 50000 },
+      { plan: 'LIFE+', price: 50000 },
+      { plan: 'LIFE', price: 50000 }
+    ]
+  },
+  {
+    id: 'int-door-005',
+    categoryId: 'door',
+    categoryName: '建具',
+    subcategory: '室内ドア',
+    name: 'ペットドア',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VERITIS-PET',
+    unit: 'piece',
+    isOption: true,
+    description: 'ペット用くぐり戸付きドア',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 50000 },
+      { plan: 'HOURS', price: 50000 },
+      { plan: 'LIFE+', price: 50000 },
+      { plan: 'LIFE', price: 50000 }
+    ]
+  },
+
+  // ========== 室内窓（PDF28追加）==========
+  {
+    id: 'int-window-001',
+    categoryId: 'window-interior',
+    categoryName: '室内窓',
+    subcategory: '室内窓',
+    name: '室内窓 Aパターン',
+    manufacturer: 'Panasonic',
+    modelNumber: 'INT-WINDOW-A',
+    unit: 'set',
+    isOption: true,
+    description: '室内窓 Aパターン（小サイズ）',
+    variants: [
+      { id: 'v1', color: 'ホワイトアッシュ', colorCode: '#E8E8E8', images: [] },
+      { id: 'v2', color: 'スモークオーク', colorCode: '#8B7355', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 71000 },
+      { plan: 'HOURS', price: 71000 },
+      { plan: 'LIFE+', price: 71000 },
+      { plan: 'LIFE', price: 71000 }
+    ]
+  },
+  {
+    id: 'int-window-002',
+    categoryId: 'window-interior',
+    categoryName: '室内窓',
+    subcategory: '室内窓',
+    name: '室内窓 Bパターン',
+    manufacturer: 'Panasonic',
+    modelNumber: 'INT-WINDOW-B',
+    unit: 'set',
+    isOption: true,
+    description: '室内窓 Bパターン（中サイズ）',
+    variants: [
+      { id: 'v1', color: 'ホワイトアッシュ', colorCode: '#E8E8E8', images: [] },
+      { id: 'v2', color: 'スモークオーク', colorCode: '#8B7355', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 135000 },
+      { plan: 'HOURS', price: 135000 },
+      { plan: 'LIFE+', price: 135000 },
+      { plan: 'LIFE', price: 135000 }
+    ]
+  },
+  {
+    id: 'int-window-003',
+    categoryId: 'window-interior',
+    categoryName: '室内窓',
+    subcategory: '室内窓',
+    name: '室内窓 Cパターン',
+    manufacturer: 'Panasonic',
+    modelNumber: 'INT-WINDOW-C',
+    unit: 'set',
+    isOption: true,
+    description: '室内窓 Cパターン（大サイズ）',
+    variants: [
+      { id: 'v1', color: 'ホワイトアッシュ', colorCode: '#E8E8E8', images: [] },
+      { id: 'v2', color: 'スモークオーク', colorCode: '#8B7355', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 197000 },
+      { plan: 'HOURS', price: 197000 },
+      { plan: 'LIFE+', price: 197000 },
+      { plan: 'LIFE', price: 197000 }
+    ]
+  },
+
+  // ========== アクセントパネル（PDF29追加）==========
+  {
+    id: 'int-panel-001',
+    categoryId: 'wall',
+    categoryName: '壁',
+    subcategory: 'アクセントパネル',
+    name: 'THE WALL オーク',
+    manufacturer: '朝日ウッドテック',
+    modelNumber: 'THEWALL-OAK',
+    unit: 'sqm',
+    isOption: true,
+    description: '無垢ウッドパネル オーク',
+    variants: [
+      { id: 'v1', color: 'ナチュラル', colorCode: '#D4B896', images: [] },
+      { id: 'v2', color: 'ホワイト', colorCode: '#F5F5DC', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 15000 },
+      { plan: 'HOURS', price: 15000 },
+      { plan: 'LIFE+', price: 15000 },
+      { plan: 'LIFE', price: 15000 }
+    ]
+  },
+  {
+    id: 'int-panel-002',
+    categoryId: 'wall',
+    categoryName: '壁',
+    subcategory: 'アクセントパネル',
+    name: 'THE WALL レッドシダー',
+    manufacturer: '朝日ウッドテック',
+    modelNumber: 'THEWALL-REDCEDAR',
+    unit: 'sqm',
+    isOption: true,
+    description: '無垢ウッドパネル レッドシダー',
+    variants: [
+      { id: 'v1', color: 'ナチュラル', colorCode: '#B5651D', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 45000 },
+      { plan: 'HOURS', price: 45000 },
+      { plan: 'LIFE+', price: 45000 },
+      { plan: 'LIFE', price: 45000 }
+    ]
+  },
+  {
+    id: 'int-panel-003',
+    categoryId: 'wall',
+    categoryName: '壁',
+    subcategory: 'アクセントパネル',
+    name: 'THE WALL ヘムロック',
+    manufacturer: '朝日ウッドテック',
+    modelNumber: 'THEWALL-HEMLOCK',
+    unit: 'sqm',
+    isOption: true,
+    description: '無垢ウッドパネル ヘムロック',
+    variants: [
+      { id: 'v1', color: 'ナチュラル', colorCode: '#E8DCC8', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 30000 },
+      { plan: 'HOURS', price: 30000 },
+      { plan: 'LIFE+', price: 30000 },
+      { plan: 'LIFE', price: 30000 }
+    ]
+  },
+  {
+    id: 'int-panel-004',
+    categoryId: 'wall',
+    categoryName: '壁',
+    subcategory: 'アクセントパネル',
+    name: 'セラールパネル ヘアライン',
+    manufacturer: 'AICA',
+    modelNumber: 'CERARL-HAIRLINE',
+    unit: 'piece',
+    isOption: true,
+    description: 'セラールパネル ヘアライン仕上げ 3×8',
+    variants: [
+      { id: 'v1', color: 'シルバー', colorCode: '#C0C0C0', images: [] },
+      { id: 'v2', color: 'ブラック', colorCode: '#1A1A1A', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 33000 },
+      { plan: 'HOURS', price: 33000 },
+      { plan: 'LIFE+', price: 33000 },
+      { plan: 'LIFE', price: 33000 }
+    ]
+  },
+  {
+    id: 'int-panel-005',
+    categoryId: 'wall',
+    categoryName: '壁',
+    subcategory: 'アクセントパネル',
+    name: 'セラールパネル コンクリート調',
+    manufacturer: 'AICA',
+    modelNumber: 'CERARL-CONCRETE',
+    unit: 'piece',
+    isOption: true,
+    description: 'セラールパネル コンクリート調 3×8',
+    variants: [
+      { id: 'v1', color: 'グレー', colorCode: '#808080', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 44000 },
+      { plan: 'HOURS', price: 44000 },
+      { plan: 'LIFE+', price: 44000 },
+      { plan: 'LIFE', price: 44000 }
+    ]
+  },
+
+  // ========== 格子（PDF30追加）==========
+  {
+    id: 'int-lattice-001',
+    categoryId: 'partition',
+    categoryName: '間仕切り',
+    subcategory: '格子',
+    name: 'インテリア格子',
+    manufacturer: 'LIXIL',
+    modelNumber: 'INT-LATTICE',
+    unit: 'piece',
+    isOption: true,
+    description: 'インテリア格子（室内用）',
+    variants: [
+      { id: 'v1', color: 'クリエペール', colorCode: '#E8DCC8', images: [] },
+      { id: 'v2', color: 'クリエラスク', colorCode: '#B8956E', images: [] },
+      { id: 'v3', color: 'クリエダーク', colorCode: '#5C4033', images: [] },
+      { id: 'v4', color: 'コウノキ', colorCode: '#8B7355', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 110000 },
+      { plan: 'HOURS', price: 110000 },
+      { plan: 'LIFE+', price: 110000 },
+      { plan: 'LIFE', price: 110000 }
+    ]
+  },
+
+  // ========== アクセントタイル（PDF31-34追加）==========
+  {
+    id: 'int-tile-001',
+    categoryId: 'wall',
+    categoryName: '壁',
+    subcategory: 'アクセントタイル',
+    name: 'スカンジナビアストン',
+    manufacturer: '名古屋モザイク',
+    modelNumber: 'SCANDINAVIA-STONE',
+    unit: 'sqm',
+    isOption: true,
+    description: 'アクセントタイル',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#F5F5F5', images: [] },
+      { id: 'v2', color: 'グレー', colorCode: '#808080', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 26000 },
+      { plan: 'HOURS', price: 26000 },
+      { plan: 'LIFE+', price: 26000 },
+      { plan: 'LIFE', price: 26000 }
+    ]
+  },
+  {
+    id: 'int-tile-002',
+    categoryId: 'wall',
+    categoryName: '壁',
+    subcategory: 'アクセントタイル',
+    name: 'バイオフィリック',
+    manufacturer: '名古屋モザイク',
+    modelNumber: 'BIOPHILIC',
+    unit: 'sqm',
+    isOption: true,
+    description: 'アクセントタイル',
+    variants: [
+      { id: 'v1', color: 'グリーン', colorCode: '#2E8B57', images: [] },
+      { id: 'v2', color: 'ベージュ', colorCode: '#D4C4A8', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 28000 },
+      { plan: 'HOURS', price: 28000 },
+      { plan: 'LIFE+', price: 28000 },
+      { plan: 'LIFE', price: 28000 }
+    ]
+  },
+  {
+    id: 'int-tile-003',
+    categoryId: 'wall',
+    categoryName: '壁',
+    subcategory: 'アクセントタイル',
+    name: 'セメンティング',
+    manufacturer: '名古屋モザイク',
+    modelNumber: 'CEMENTING',
+    unit: 'sqm',
+    isOption: true,
+    description: 'アクセントタイル コンクリート調',
+    variants: [
+      { id: 'v1', color: 'グレー', colorCode: '#808080', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 30000 },
+      { plan: 'HOURS', price: 30000 },
+      { plan: 'LIFE+', price: 30000 },
+      { plan: 'LIFE', price: 30000 }
+    ]
+  },
+  {
+    id: 'int-tile-004',
+    categoryId: 'wall',
+    categoryName: '壁',
+    subcategory: 'アクセントタイル',
+    name: 'モデネーゼ',
+    manufacturer: '名古屋モザイク',
+    modelNumber: 'MODENESE',
+    unit: 'sqm',
+    isOption: true,
+    description: 'アクセントタイル',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#F5F5F5', images: [] },
+      { id: 'v2', color: 'グレー', colorCode: '#808080', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 28000 },
+      { plan: 'HOURS', price: 28000 },
+      { plan: 'LIFE+', price: 28000 },
+      { plan: 'LIFE', price: 28000 }
+    ]
+  },
+  {
+    id: 'int-tile-005',
+    categoryId: 'wall',
+    categoryName: '壁',
+    subcategory: 'アクセントタイル',
+    name: 'ラヴィータ',
+    manufacturer: '名古屋モザイク',
+    modelNumber: 'LAVITA',
+    unit: 'sqm',
+    isOption: true,
+    description: 'アクセントタイル',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#F5F5F5', images: [] },
+      { id: 'v2', color: 'ベージュ', colorCode: '#D4C4A8', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 22000 },
+      { plan: 'HOURS', price: 22000 },
+      { plan: 'LIFE+', price: 22000 },
+      { plan: 'LIFE', price: 22000 }
+    ]
+  },
+  {
+    id: 'int-tile-006',
+    categoryId: 'wall',
+    categoryName: '壁',
+    subcategory: 'アクセントタイル',
+    name: 'ファータ',
+    manufacturer: '名古屋モザイク',
+    modelNumber: 'FATA',
+    unit: 'sqm',
+    isOption: true,
+    description: 'アクセントタイル',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#F5F5F5', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 22000 },
+      { plan: 'HOURS', price: 22000 },
+      { plan: 'LIFE+', price: 22000 },
+      { plan: 'LIFE', price: 22000 }
+    ]
+  },
+  {
+    id: 'int-tile-007',
+    categoryId: 'wall',
+    categoryName: '壁',
+    subcategory: 'アクセントタイル',
+    name: 'エキピズム',
+    manufacturer: '名古屋モザイク',
+    modelNumber: 'EKIPISM',
+    unit: 'sqm',
+    isOption: true,
+    description: 'アクセントタイル',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#F5F5F5', images: [] },
+      { id: 'v2', color: 'グレー', colorCode: '#808080', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 30000 },
+      { plan: 'HOURS', price: 30000 },
+      { plan: 'LIFE+', price: 30000 },
+      { plan: 'LIFE', price: 30000 }
+    ]
+  },
+  {
+    id: 'int-tile-008',
+    categoryId: 'wall',
+    categoryName: '壁',
+    subcategory: 'アクセントタイル',
+    name: 'マットアンドモア',
+    manufacturer: '名古屋モザイク',
+    modelNumber: 'MAT-AND-MORE',
+    unit: 'sqm',
+    isOption: true,
+    description: 'アクセントタイル',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#F5F5F5', images: [] },
+      { id: 'v2', color: 'グレー', colorCode: '#808080', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 30000 },
+      { plan: 'HOURS', price: 30000 },
+      { plan: 'LIFE+', price: 30000 },
+      { plan: 'LIFE', price: 30000 }
+    ]
+  },
+  {
+    id: 'int-tile-009',
+    categoryId: 'wall',
+    categoryName: '壁',
+    subcategory: 'アクセントタイル',
+    name: 'WIG-WAG',
+    manufacturer: '平田タイル',
+    modelNumber: 'WIG-WAG',
+    unit: 'sqm',
+    isOption: true,
+    description: 'アクセントタイル',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#F5F5F5', images: [] },
+      { id: 'v2', color: 'グリーン', colorCode: '#2E8B57', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 31000 },
+      { plan: 'HOURS', price: 31000 },
+      { plan: 'LIFE+', price: 31000 },
+      { plan: 'LIFE', price: 31000 }
+    ]
+  },
+  {
+    id: 'int-tile-010',
+    categoryId: 'wall',
+    categoryName: '壁',
+    subcategory: 'アクセントタイル',
+    name: 'パレッタ',
+    manufacturer: '平田タイル',
+    modelNumber: 'PALETTA',
+    unit: 'sqm',
+    isOption: true,
+    description: 'アクセントタイル',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#F5F5F5', images: [] },
+      { id: 'v2', color: 'グレー', colorCode: '#808080', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 27000 },
+      { plan: 'HOURS', price: 27000 },
+      { plan: 'LIFE+', price: 27000 },
+      { plan: 'LIFE', price: 27000 }
+    ]
+  },
+  {
+    id: 'int-tile-011',
+    categoryId: 'wall',
+    categoryName: '壁',
+    subcategory: 'アクセントタイル',
+    name: 'マーブルモザイク',
+    manufacturer: '平田タイル',
+    modelNumber: 'MARBLE-MOSAIC',
+    unit: 'sqm',
+    isOption: true,
+    description: 'アクセントタイル 大理石調',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#F5F5F5', images: [] },
+      { id: 'v2', color: 'グレー', colorCode: '#808080', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 53000 },
+      { plan: 'HOURS', price: 53000 },
+      { plan: 'LIFE+', price: 53000 },
+      { plan: 'LIFE', price: 53000 }
+    ]
+  },
+  {
+    id: 'int-tile-012',
+    categoryId: 'wall',
+    categoryName: '壁',
+    subcategory: 'アクセントタイル',
+    name: 'Britz',
+    manufacturer: '平田タイル',
+    modelNumber: 'BRITZ',
+    unit: 'sqm',
+    isOption: true,
+    description: 'アクセントタイル',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#F5F5F5', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 25000 },
+      { plan: 'HOURS', price: 25000 },
+      { plan: 'LIFE+', price: 25000 },
+      { plan: 'LIFE', price: 25000 }
+    ]
+  },
+  {
+    id: 'int-tile-013',
+    categoryId: 'wall',
+    categoryName: '壁',
+    subcategory: 'アクセントタイル',
+    name: '10Thirty',
+    manufacturer: '平田タイル',
+    modelNumber: '10THIRTY',
+    unit: 'sqm',
+    isOption: true,
+    description: 'アクセントタイル',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#F5F5F5', images: [] },
+      { id: 'v2', color: 'グレー', colorCode: '#808080', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 31000 },
+      { plan: 'HOURS', price: 31000 },
+      { plan: 'LIFE+', price: 31000 },
+      { plan: 'LIFE', price: 31000 }
+    ]
+  },
+  {
+    id: 'int-tile-014',
+    categoryId: 'wall',
+    categoryName: '壁',
+    subcategory: 'アクセントタイル',
+    name: 'レシピ',
+    manufacturer: '平田タイル',
+    modelNumber: 'RECIPE',
+    unit: 'sqm',
+    isOption: true,
+    description: 'アクセントタイル',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#F5F5F5', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 34000 },
+      { plan: 'HOURS', price: 34000 },
+      { plan: 'LIFE+', price: 34000 },
+      { plan: 'LIFE', price: 34000 }
+    ]
+  },
+  {
+    id: 'int-tile-015',
+    categoryId: 'wall',
+    categoryName: '壁',
+    subcategory: 'アクセントタイル',
+    name: '釉かげ',
+    manufacturer: 'LIXIL',
+    modelNumber: 'YUKAGE',
+    unit: 'sqm',
+    isOption: true,
+    description: 'アクセントタイル',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#F5F5F5', images: [] },
+      { id: 'v2', color: 'グレー', colorCode: '#808080', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 22000 },
+      { plan: 'HOURS', price: 22000 },
+      { plan: 'LIFE+', price: 22000 },
+      { plan: 'LIFE', price: 22000 }
+    ]
+  },
+  {
+    id: 'int-tile-016',
+    categoryId: 'wall',
+    categoryName: '壁',
+    subcategory: 'アクセントタイル',
+    name: 'シャインリーフ',
+    manufacturer: 'LIXIL',
+    modelNumber: 'SHINE-LEAF',
+    unit: 'sqm',
+    isOption: true,
+    description: 'アクセントタイル',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#F5F5F5', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 59000 },
+      { plan: 'HOURS', price: 59000 },
+      { plan: 'LIFE+', price: 59000 },
+      { plan: 'LIFE', price: 59000 }
+    ]
+  },
+  {
+    id: 'int-tile-017',
+    categoryId: 'wall',
+    categoryName: '壁',
+    subcategory: 'アクセントタイル',
+    name: 'イノセントマーブル',
+    manufacturer: 'LIXIL',
+    modelNumber: 'INNOCENT-MARBLE',
+    unit: 'sqm',
+    isOption: true,
+    description: 'アクセントタイル 大理石調',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#F5F5F5', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 63000 },
+      { plan: 'HOURS', price: 63000 },
+      { plan: 'LIFE+', price: 63000 },
+      { plan: 'LIFE', price: 63000 }
+    ]
+  },
+  {
+    id: 'int-tile-018',
+    categoryId: 'wall',
+    categoryName: '壁',
+    subcategory: 'アクセントタイル',
+    name: 'グラベルガラス',
+    manufacturer: 'LIXIL',
+    modelNumber: 'GRAVEL-GLASS',
+    unit: 'sqm',
+    isOption: true,
+    description: 'アクセントタイル ガラス',
+    variants: [
+      { id: 'v1', color: 'クリア', colorCode: '#E8E8E8', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 61000 },
+      { plan: 'HOURS', price: 61000 },
+      { plan: 'LIFE+', price: 61000 },
+      { plan: 'LIFE', price: 61000 }
+    ]
+  },
+
+  // ========== エコカラット（PDF34追加）==========
+  {
+    id: 'int-ecocarat-001',
+    categoryId: 'wall',
+    categoryName: '壁',
+    subcategory: 'エコカラット',
+    name: 'エコカラット グランクォーツ',
+    manufacturer: 'LIXIL',
+    modelNumber: 'ECOCARAT-GRANQUARTZ',
+    unit: 'sqm',
+    isOption: true,
+    description: 'エコカラット 606×303mm',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#F5F5F5', images: [] },
+      { id: 'v2', color: 'グレー', colorCode: '#808080', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 32000 },
+      { plan: 'HOURS', price: 32000 },
+      { plan: 'LIFE+', price: 32000 },
+      { plan: 'LIFE', price: 32000 }
+    ]
+  },
+  {
+    id: 'int-ecocarat-002',
+    categoryId: 'wall',
+    categoryName: '壁',
+    subcategory: 'エコカラット',
+    name: 'エコカラット ラフセメント',
+    manufacturer: 'LIXIL',
+    modelNumber: 'ECOCARAT-ROUGHCEMENT',
+    unit: 'sqm',
+    isOption: true,
+    description: 'エコカラット 606×151mm',
+    variants: [
+      { id: 'v1', color: 'グレー', colorCode: '#808080', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 32000 },
+      { plan: 'HOURS', price: 32000 },
+      { plan: 'LIFE+', price: 32000 },
+      { plan: 'LIFE', price: 32000 }
+    ]
+  },
+  {
+    id: 'int-ecocarat-003',
+    categoryId: 'wall',
+    categoryName: '壁',
+    subcategory: 'エコカラット',
+    name: 'エコカラット ヴァルスロック',
+    manufacturer: 'LIXIL',
+    modelNumber: 'ECOCARAT-VALSROCK',
+    unit: 'sqm',
+    isOption: true,
+    description: 'エコカラット 303×151mm',
+    variants: [
+      { id: 'v1', color: 'グレー', colorCode: '#808080', images: [] },
+      { id: 'v2', color: 'ベージュ', colorCode: '#D4C4A8', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 32000 },
+      { plan: 'HOURS', price: 32000 },
+      { plan: 'LIFE+', price: 32000 },
+      { plan: 'LIFE', price: 32000 }
+    ]
+  },
+  {
+    id: 'int-ecocarat-004',
+    categoryId: 'wall',
+    categoryName: '壁',
+    subcategory: 'エコカラット',
+    name: 'エコカラット ストーングレース',
+    manufacturer: 'LIXIL',
+    modelNumber: 'ECOCARAT-STONEGRACE',
+    unit: 'sqm',
+    isOption: true,
+    description: 'エコカラット 606×303mm',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#F5F5F5', images: [] },
+      { id: 'v2', color: 'グレー', colorCode: '#808080', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 32000 },
+      { plan: 'HOURS', price: 32000 },
+      { plan: 'LIFE+', price: 32000 },
+      { plan: 'LIFE', price: 32000 }
+    ]
+  },
+  {
+    id: 'int-ecocarat-005',
+    categoryId: 'wall',
+    categoryName: '壁',
+    subcategory: 'エコカラット',
+    name: 'エコカラット ラフクォーツ',
+    manufacturer: 'LIXIL',
+    modelNumber: 'ECOCARAT-ROUGHQUARTZ',
+    unit: 'sqm',
+    isOption: true,
+    description: 'エコカラット 303×75mm',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#F5F5F5', images: [] },
+      { id: 'v2', color: 'グレー', colorCode: '#808080', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 32000 },
+      { plan: 'HOURS', price: 32000 },
+      { plan: 'LIFE+', price: 32000 },
+      { plan: 'LIFE', price: 32000 }
+    ]
+  },
+
+  // ========== インテリアカウンター（PDF35追加）==========
+  {
+    id: 'int-counter-001',
+    categoryId: 'furniture',
+    categoryName: '造作家具',
+    subcategory: 'カウンター',
+    name: 'インテリアカウンター1（トイレ用）',
+    manufacturer: 'Panasonic',
+    modelNumber: 'INT-COUNTER-1',
+    unit: 'piece',
+    isOption: true,
+    description: 'トイレ用ちょい置きカウンター',
+    variants: [
+      { id: 'v1', color: 'ホワイトオーク', colorCode: '#E8DCC8', images: [] },
+      { id: 'v2', color: 'チェリー', colorCode: '#B5651D', images: [] },
+      { id: 'v3', color: 'ウォールナット', colorCode: '#5C4033', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 20000 },
+      { plan: 'HOURS', price: 20000 },
+      { plan: 'LIFE+', price: 20000 },
+      { plan: 'LIFE', price: 20000 }
+    ]
+  },
+  {
+    id: 'int-counter-002',
+    categoryId: 'furniture',
+    categoryName: '造作家具',
+    subcategory: 'カウンター',
+    name: 'インテリアカウンター2 D150',
+    manufacturer: 'Panasonic',
+    modelNumber: 'INT-COUNTER-2-D150',
+    unit: 'piece',
+    isOption: true,
+    description: 'インテリアカウンター 奥行150mm',
+    variants: [
+      { id: 'v1', color: 'ホワイトオーク', colorCode: '#E8DCC8', images: [] },
+      { id: 'v2', color: 'チェリー', colorCode: '#B5651D', images: [] },
+      { id: 'v3', color: 'ウォールナット', colorCode: '#5C4033', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 41000 },
+      { plan: 'HOURS', price: 41000 },
+      { plan: 'LIFE+', price: 41000 },
+      { plan: 'LIFE', price: 41000 }
+    ]
+  },
+  {
+    id: 'int-counter-003',
+    categoryId: 'furniture',
+    categoryName: '造作家具',
+    subcategory: 'カウンター',
+    name: 'インテリアカウンター2 D300',
+    manufacturer: 'Panasonic',
+    modelNumber: 'INT-COUNTER-2-D300',
+    unit: 'piece',
+    isOption: true,
+    description: 'インテリアカウンター 奥行300mm',
+    variants: [
+      { id: 'v1', color: 'ホワイトオーク', colorCode: '#E8DCC8', images: [] },
+      { id: 'v2', color: 'チェリー', colorCode: '#B5651D', images: [] },
+      { id: 'v3', color: 'ウォールナット', colorCode: '#5C4033', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 82000 },
+      { plan: 'HOURS', price: 82000 },
+      { plan: 'LIFE+', price: 82000 },
+      { plan: 'LIFE', price: 82000 }
+    ]
+  },
+  {
+    id: 'int-counter-004',
+    categoryId: 'furniture',
+    categoryName: '造作家具',
+    subcategory: 'カウンター',
+    name: 'インテリアカウンター2 D450',
+    manufacturer: 'Panasonic',
+    modelNumber: 'INT-COUNTER-2-D450',
+    unit: 'piece',
+    isOption: true,
+    description: 'インテリアカウンター 奥行450mm（デスク用）',
+    variants: [
+      { id: 'v1', color: 'ホワイトオーク', colorCode: '#E8DCC8', images: [] },
+      { id: 'v2', color: 'チェリー', colorCode: '#B5651D', images: [] },
+      { id: 'v3', color: 'ウォールナット', colorCode: '#5C4033', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 192000 },
+      { plan: 'HOURS', price: 192000 },
+      { plan: 'LIFE+', price: 192000 },
+      { plan: 'LIFE', price: 192000 }
+    ]
+  },
+
+  // ========== 収納棚（PDF36追加）==========
+  {
+    id: 'int-shelf-001',
+    categoryId: 'storage',
+    categoryName: '収納',
+    subcategory: '枕棚',
+    name: '枕棚+PH（2カ所目以降）W910',
+    manufacturer: 'Panasonic',
+    modelNumber: 'SHELF-PH-910',
+    unit: 'piece',
+    isOption: true,
+    description: '枕棚+パイプハンガー W910',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 20000 },
+      { plan: 'HOURS', price: 20000 },
+      { plan: 'LIFE+', price: 20000 },
+      { plan: 'LIFE', price: 20000 }
+    ]
+  },
+  {
+    id: 'int-shelf-002',
+    categoryId: 'storage',
+    categoryName: '収納',
+    subcategory: '枕棚',
+    name: '枕棚+PH（2カ所目以降）W1820',
+    manufacturer: 'Panasonic',
+    modelNumber: 'SHELF-PH-1820',
+    unit: 'piece',
+    isOption: true,
+    description: '枕棚+パイプハンガー W1820',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 35000 },
+      { plan: 'HOURS', price: 35000 },
+      { plan: 'LIFE+', price: 35000 },
+      { plan: 'LIFE', price: 35000 }
+    ]
+  },
+  {
+    id: 'int-shelf-003',
+    categoryId: 'storage',
+    categoryName: '収納',
+    subcategory: '枕棚',
+    name: '枕棚+PH（2カ所目以降）W2730',
+    manufacturer: 'Panasonic',
+    modelNumber: 'SHELF-PH-2730',
+    unit: 'piece',
+    isOption: true,
+    description: '枕棚+パイプハンガー W2730',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 47000 },
+      { plan: 'HOURS', price: 47000 },
+      { plan: 'LIFE+', price: 47000 },
+      { plan: 'LIFE', price: 47000 }
+    ]
+  },
+  {
+    id: 'int-shelf-004',
+    categoryId: 'storage',
+    categoryName: '収納',
+    subcategory: '枕棚',
+    name: '枕棚のみ W910',
+    manufacturer: 'Panasonic',
+    modelNumber: 'SHELF-ONLY-910',
+    unit: 'piece',
+    isOption: true,
+    description: '枕棚のみ W910',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 18000 },
+      { plan: 'HOURS', price: 18000 },
+      { plan: 'LIFE+', price: 18000 },
+      { plan: 'LIFE', price: 18000 }
+    ]
+  },
+  {
+    id: 'int-shelf-005',
+    categoryId: 'storage',
+    categoryName: '収納',
+    subcategory: '枕棚',
+    name: '枕棚+中段 W910',
+    manufacturer: 'Panasonic',
+    modelNumber: 'SHELF-MID-910',
+    unit: 'piece',
+    isOption: true,
+    description: '枕棚+中段 W910',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 27000 },
+      { plan: 'HOURS', price: 27000 },
+      { plan: 'LIFE+', price: 27000 },
+      { plan: 'LIFE', price: 27000 }
+    ]
   }
 ];
