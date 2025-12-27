@@ -155,7 +155,7 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
   };
 
   const executeClearCart = () => {
-    addLog('cart_clear', 'カートをクリア', { itemCount: items.length });
+    addLog('cart_clear', '選択をクリア', { itemCount: items.length });
     clearCart();
     setShowClearConfirm(false);
     toast.success('クリア完了', '選択をクリアしました');
@@ -314,7 +314,7 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
           </div>
         </div>
         
-        {/* カート内容 */}
+        {/* 選択内容 */}
         <div className="flex-1 overflow-y-auto p-4">
           {items.length === 0 ? (
             <div className="text-center py-12">

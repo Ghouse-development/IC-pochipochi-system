@@ -2871,7 +2871,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'int-wall-001',
     categoryId: 'wall',
-    categoryName: '壁',
+    categoryName: '壁材',
     subcategory: '腰壁',
     name: '腰壁',
     manufacturer: 'Gハウス',
@@ -2893,7 +2893,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'int-wall-002',
     categoryId: 'wall',
-    categoryName: '壁',
+    categoryName: '壁材',
     subcategory: '垂壁',
     name: '垂壁',
     manufacturer: 'Gハウス',
@@ -2914,7 +2914,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'int-wall-003',
     categoryId: 'wall',
-    categoryName: '壁',
+    categoryName: '壁材',
     subcategory: '垂壁',
     name: 'アーチ垂壁',
     manufacturer: 'Gハウス',
@@ -3116,7 +3116,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'int-panel-001',
     categoryId: 'wall',
-    categoryName: '壁',
+    categoryName: '壁材',
     subcategory: 'アクセントパネル',
     name: 'THE WALL オーク',
     manufacturer: '朝日ウッドテック',
@@ -3138,7 +3138,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'int-panel-002',
     categoryId: 'wall',
-    categoryName: '壁',
+    categoryName: '壁材',
     subcategory: 'アクセントパネル',
     name: 'THE WALL レッドシダー',
     manufacturer: '朝日ウッドテック',
@@ -3159,7 +3159,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'int-panel-003',
     categoryId: 'wall',
-    categoryName: '壁',
+    categoryName: '壁材',
     subcategory: 'アクセントパネル',
     name: 'THE WALL ヘムロック',
     manufacturer: '朝日ウッドテック',
@@ -3180,7 +3180,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'int-panel-004',
     categoryId: 'wall',
-    categoryName: '壁',
+    categoryName: '壁材',
     subcategory: 'アクセントパネル',
     name: 'セラールパネル ヘアライン',
     manufacturer: 'AICA',
@@ -3202,7 +3202,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'int-panel-005',
     categoryId: 'wall',
-    categoryName: '壁',
+    categoryName: '壁材',
     subcategory: 'アクセントパネル',
     name: 'セラールパネル コンクリート調',
     manufacturer: 'AICA',
@@ -3251,7 +3251,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'int-tile-001',
     categoryId: 'wall',
-    categoryName: '壁',
+    categoryName: '壁材',
     subcategory: 'アクセントタイル',
     name: 'スカンジナビアストン',
     manufacturer: '名古屋モザイク',
@@ -3273,7 +3273,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'int-tile-002',
     categoryId: 'wall',
-    categoryName: '壁',
+    categoryName: '壁材',
     subcategory: 'アクセントタイル',
     name: 'バイオフィリック',
     manufacturer: '名古屋モザイク',
@@ -3295,7 +3295,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'int-tile-003',
     categoryId: 'wall',
-    categoryName: '壁',
+    categoryName: '壁材',
     subcategory: 'アクセントタイル',
     name: 'セメンティング',
     manufacturer: '名古屋モザイク',
@@ -3316,7 +3316,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'int-tile-004',
     categoryId: 'wall',
-    categoryName: '壁',
+    categoryName: '壁材',
     subcategory: 'アクセントタイル',
     name: 'モデネーゼ',
     manufacturer: '名古屋モザイク',
@@ -3338,7 +3338,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'int-tile-005',
     categoryId: 'wall',
-    categoryName: '壁',
+    categoryName: '壁材',
     subcategory: 'アクセントタイル',
     name: 'ラヴィータ',
     manufacturer: '名古屋モザイク',
@@ -3360,7 +3360,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'int-tile-006',
     categoryId: 'wall',
-    categoryName: '壁',
+    categoryName: '壁材',
     subcategory: 'アクセントタイル',
     name: 'ファータ',
     manufacturer: '名古屋モザイク',
@@ -3381,7 +3381,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'int-tile-007',
     categoryId: 'wall',
-    categoryName: '壁',
+    categoryName: '壁材',
     subcategory: 'アクセントタイル',
     name: 'エキピズム',
     manufacturer: '名古屋モザイク',
@@ -3403,7 +3403,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'int-tile-008',
     categoryId: 'wall',
-    categoryName: '壁',
+    categoryName: '壁材',
     subcategory: 'アクセントタイル',
     name: 'マットアンドモア',
     manufacturer: '名古屋モザイク',
@@ -3425,7 +3425,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'int-tile-009',
     categoryId: 'wall',
-    categoryName: '壁',
+    categoryName: '壁材',
     subcategory: 'アクセントタイル',
     name: 'WIG-WAG',
     manufacturer: '平田タイル',
@@ -3447,7 +3447,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'int-tile-010',
     categoryId: 'wall',
-    categoryName: '壁',
+    categoryName: '壁材',
     subcategory: 'アクセントタイル',
     name: 'パレッタ',
     manufacturer: '平田タイル',
@@ -3469,7 +3469,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'int-tile-011',
     categoryId: 'wall',
-    categoryName: '壁',
+    categoryName: '壁材',
     subcategory: 'アクセントタイル',
     name: 'マーブルモザイク',
     manufacturer: '平田タイル',
@@ -3491,7 +3491,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'int-tile-012',
     categoryId: 'wall',
-    categoryName: '壁',
+    categoryName: '壁材',
     subcategory: 'アクセントタイル',
     name: 'Britz',
     manufacturer: '平田タイル',
@@ -3512,7 +3512,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'int-tile-013',
     categoryId: 'wall',
-    categoryName: '壁',
+    categoryName: '壁材',
     subcategory: 'アクセントタイル',
     name: '10Thirty',
     manufacturer: '平田タイル',
@@ -3534,7 +3534,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'int-tile-014',
     categoryId: 'wall',
-    categoryName: '壁',
+    categoryName: '壁材',
     subcategory: 'アクセントタイル',
     name: 'レシピ',
     manufacturer: '平田タイル',
@@ -3555,7 +3555,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'int-tile-015',
     categoryId: 'wall',
-    categoryName: '壁',
+    categoryName: '壁材',
     subcategory: 'アクセントタイル',
     name: '釉かげ',
     manufacturer: 'LIXIL',
@@ -3577,7 +3577,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'int-tile-016',
     categoryId: 'wall',
-    categoryName: '壁',
+    categoryName: '壁材',
     subcategory: 'アクセントタイル',
     name: 'シャインリーフ',
     manufacturer: 'LIXIL',
@@ -3598,7 +3598,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'int-tile-017',
     categoryId: 'wall',
-    categoryName: '壁',
+    categoryName: '壁材',
     subcategory: 'アクセントタイル',
     name: 'イノセントマーブル',
     manufacturer: 'LIXIL',
@@ -3619,7 +3619,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'int-tile-018',
     categoryId: 'wall',
-    categoryName: '壁',
+    categoryName: '壁材',
     subcategory: 'アクセントタイル',
     name: 'グラベルガラス',
     manufacturer: 'LIXIL',
@@ -3642,7 +3642,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'int-ecocarat-001',
     categoryId: 'wall',
-    categoryName: '壁',
+    categoryName: '壁材',
     subcategory: 'エコカラット',
     name: 'エコカラット グランクォーツ',
     manufacturer: 'LIXIL',
@@ -3664,7 +3664,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'int-ecocarat-002',
     categoryId: 'wall',
-    categoryName: '壁',
+    categoryName: '壁材',
     subcategory: 'エコカラット',
     name: 'エコカラット ラフセメント',
     manufacturer: 'LIXIL',
@@ -3685,7 +3685,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'int-ecocarat-003',
     categoryId: 'wall',
-    categoryName: '壁',
+    categoryName: '壁材',
     subcategory: 'エコカラット',
     name: 'エコカラット ヴァルスロック',
     manufacturer: 'LIXIL',
@@ -3707,7 +3707,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'int-ecocarat-004',
     categoryId: 'wall',
-    categoryName: '壁',
+    categoryName: '壁材',
     subcategory: 'エコカラット',
     name: 'エコカラット ストーングレース',
     manufacturer: 'LIXIL',
@@ -3729,7 +3729,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'int-ecocarat-005',
     categoryId: 'wall',
-    categoryName: '壁',
+    categoryName: '壁材',
     subcategory: 'エコカラット',
     name: 'エコカラット ラフクォーツ',
     manufacturer: 'LIXIL',

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { ShoppingCart, User, Settings, Menu, X, FileText, Upload, Share2, Scale, Moon, Sun, LogOut, BarChart3 } from 'lucide-react';
+import { ClipboardCheck, User, Settings, Menu, X, FileText, Upload, Share2, Scale, Moon, Sun, LogOut, BarChart3 } from 'lucide-react';
 import { useCartStore } from '../../stores/useCartStore';
 import { useThemeStore } from '../../stores/useThemeStore';
 import { formatPrice } from '../../lib/utils';
@@ -104,13 +104,14 @@ export const Header: React.FC<HeaderProps> = ({
                 </button>
               )}
 
-              {/* カートボタン */}
+              {/* 選択リストボタン */}
               <button
                 onClick={onCartClick}
                 className="flex items-center gap-2 px-3 py-2 hover:bg-gray-50 rounded-lg transition-colors"
+                aria-label="選択した仕様を確認"
               >
                 <div className="relative">
-                  <ShoppingCart className="w-5 h-5 text-gray-700" />
+                  <ClipboardCheck className="w-5 h-5 text-gray-700" />
                   {itemCount > 0 && (
                     <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                       {itemCount}
@@ -118,7 +119,7 @@ export const Header: React.FC<HeaderProps> = ({
                   )}
                 </div>
                 <div className="hidden sm:block text-left">
-                  <p className="text-xs text-gray-500">合計<span className="ml-1 text-gray-400">税別</span></p>
+                  <p className="text-xs text-gray-500">選択中<span className="ml-1 text-gray-400">{itemCount}件</span></p>
                   <p className="text-sm font-bold text-gray-900">{formatPrice(totalPrice)}</p>
                 </div>
               </button>

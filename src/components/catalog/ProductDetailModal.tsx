@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
-import { X, Plus, Minus, ShoppingCart, Check, AlertCircle, Info, FileText, QrCode } from 'lucide-react';
+import { X, Plus, Minus, CheckCircle, Check, AlertCircle, Info, FileText, QrCode } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import type { Product, ProductVariant } from '../../types/product';
 import { UNIT_SYMBOLS } from '../../types/product';
@@ -158,7 +158,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
     addItem(product, quantity, variant);
     // 採用を記録
     recordAdoption(product.id, product.name, product.categoryName, price * quantity);
-    toast.success('追加完了', `「${product.name}」をカートに追加しました`);
+    toast.success('選択完了', `「${product.name}」を選択しました`);
 
     setIsAdded(true);
     setTimeout(() => {
@@ -482,12 +482,12 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                 {isAdded ? (
                   <>
                     <Check className="w-5 h-5 mr-2" />
-                    追加しました
+                    選択しました
                   </>
                 ) : (
                   <>
-                    <ShoppingCart className="w-5 h-5 mr-2" />
-                    {variant ? `「${variant.color}」を追加` : 'カートに追加'}
+                    <CheckCircle className="w-5 h-5 mr-2" />
+                    {variant ? `「${variant.color}」を選択` : 'この仕様を選択'}
                   </>
                 )}
               </Button>

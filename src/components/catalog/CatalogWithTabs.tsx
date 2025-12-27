@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { Search, ShoppingCart, Check, Star, ChevronRight, ChevronLeft, Home, Zap, Heart, X, Scale, FileDown } from 'lucide-react';
+import { Search, ClipboardCheck, Check, Star, ChevronRight, ChevronLeft, Home, Zap, Heart, X, Scale, FileDown } from 'lucide-react';
 import { useToast } from '../common/Toast';
 import { useTimeout } from '../../hooks/useTimeout';
 import { useDebounce } from '../../hooks/useDebounce';
@@ -932,7 +932,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   <p className="text-sm font-bold">{formatPrice(totalPrice)}</p>
                 </div>
                 <div className="bg-white/20 rounded-lg px-2 py-1 flex items-center gap-1" data-tutorial="cart-button">
-                  <ShoppingCart className="w-4 h-4" />
+                  <ClipboardCheck className="w-4 h-4" />
                   <span className="font-bold text-sm">{cartItems.length}</span>
                 </div>
               </div>
@@ -1546,13 +1546,13 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
               <FileDown className="w-5 h-5" />
             </button>
 
-            {/* カート */}
+            {/* 選択リスト */}
             <button
               onClick={onCartClick}
               className="relative p-3 bg-teal-500 text-white rounded-xl active:scale-95 transition-transform"
-              aria-label={`カートを開く（${cartItems.length}件）`}
+              aria-label={`選択した仕様を確認（${cartItems.length}件）`}
             >
-              <ShoppingCart className="w-5 h-5" />
+              <ClipboardCheck className="w-5 h-5" />
               {cartItems.length > 0 && (
                 <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
                   {cartItems.length}
