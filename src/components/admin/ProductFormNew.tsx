@@ -37,21 +37,18 @@ export const ProductFormNew: React.FC<ProductFormNewProps> = ({
     ]
   });
 
-  // カテゴリに応じた素材タイプの選択肢
+  // カテゴリに応じた素材タイプの選択肢（実際の製品データに基づく）
   const getMaterialTypeOptions = (categoryName: string) => {
     const normalized = categoryName?.toLowerCase() || '';
     if (normalized.includes('外壁') || normalized.includes('サイディング')) {
+      // 外壁: ニチハ/KMEW=窯業系、IG工業=金属、AICA=塗り壁
       return ['窯業系サイディング', '金属サイディング', '塗り壁'];
     }
     if (normalized.includes('床') || normalized.includes('フローリング')) {
-      return ['突板', 'シート', '挽板', '無垢', 'CFシート', 'タイルフロア', 'カーペット'];
+      // 床材: シート=ベリティス、突板=ライブナチュラル、無垢=チャネル、等
+      return ['シート', '突板', '無垢', 'フロアタイル', 'CFシート', 'カーペットタイル', 'タイル'];
     }
-    if (normalized.includes('屋根')) {
-      return ['ガルバリウム鋼板', 'スレート', '瓦'];
-    }
-    if (normalized.includes('壁') || normalized.includes('クロス')) {
-      return ['ビニールクロス', '織物クロス', '紙クロス', '珪藻土'];
-    }
+    // 屋根はガルバリウム鋼板のみ（ニスクカラーSGL）なので選択肢なし
     return [];
   };
 
