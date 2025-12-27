@@ -18,7 +18,6 @@ import type { ItemWithDetails, Category, Product } from '../../types/database';
 import { RecommendationPanel } from './RecommendationPanel';
 import { ProductDetailModal } from './ProductDetailModal';
 import { ProductCompareModal } from './ProductCompareModal';
-import { RecentlyViewed } from './RecentlyViewed';
 import { RoomInteriorSelector } from '../interior/RoomInteriorSelector';
 import { useCustomerMode, CustomerWelcomeBanner } from '../customer/CustomerModeWrapper';
 import * as Dialog from '@radix-ui/react-dialog';
@@ -163,7 +162,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
   // ページネーション
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 12; // 1ページあたりの表示件数（G HOUSE風に少なめで見やすく）
+  const itemsPerPage = 24; // 1ページあたりの表示件数（グリッド拡大に伴い増加）
 
   // アクションチェックリスト表示切り替え
   const [showActionChecklist, setShowActionChecklist] = useState(true);
@@ -186,7 +185,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   const { exteriorProducts, interiorProducts, waterProducts } = useProductStore();
 
   // お気に入り・履歴
-  const { favorites, toggleFavorite, isFavorite, addRecentlyViewed } = useFavoritesStore();
+  const { favorites, toggleFavorite, isFavorite } = useFavoritesStore();
   const handleToggleFavorite = useCallback((itemId: string) => {
     toggleFavorite(itemId);
     const wasFavorite = favorites.includes(itemId);
@@ -697,13 +696,11 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     const product = convertToCatalogProduct(item);
     setSelectedProductForDetail(product);
     setIsDetailModalOpen(true);
-    // 最近見た商品に追加
-    addRecentlyViewed(item.id);
     // URLを更新（ブラウザ履歴に追加）
     if (selectedCategoryId) {
       navigate(`/catalog/${activeTab}/${selectedCategoryId}/${item.id}`);
     }
-  }, [navigate, activeTab, selectedCategoryId, addRecentlyViewed]);
+  }, [navigate, activeTab, selectedCategoryId]);
 
   // 比較に追加/削除
   const handleToggleCompare = useCallback((item: ItemWithDetails) => {
@@ -886,11 +883,11 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
       {isCustomerMode && <CustomerWelcomeBanner />}
 
       <div className="flex flex-col h-full bg-gray-50 dark:bg-gray-900">
-        {/* ヘッダー - 統一デザイン */}
+        {/* ヘッダー - コンパクト */}
         <div className="bg-teal-600 text-white shadow-lg">
           {/* ステップナビゲーション */}
-          <div className="px-4 py-4">
-            <div className="flex items-center justify-between max-w-6xl mx-auto">
+          <div className="px-4 py-2">
+            <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 sm:gap-4" data-tutorial="main-tabs">
                 {/* お客様モードでは設計タブを非表示 */}
                 {STEPS.filter(step => !isCustomerMode || step.id !== 'design').map((step, index, filteredSteps) => {
@@ -903,25 +900,17 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                       <button
                         onClick={() => setActiveTab(step.id)}
                         title={step.description}
-                        className={`group relative flex flex-col items-center px-3 sm:px-5 py-2 sm:py-2.5 rounded-2xl transition-all duration-300 ${
+                        className={`group relative flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all duration-200 ${
                           isActive
-                            ? 'bg-white text-teal-600 shadow-xl scale-105'
-                            : 'bg-white/20 hover:bg-white/30 backdrop-blur-sm'
+                            ? 'bg-white text-teal-600 shadow-md'
+                            : 'bg-white/20 hover:bg-white/30'
                         }`}
                       >
-                        <div className="flex items-center gap-1.5 sm:gap-2">
-                          <Icon className={`w-4 h-4 sm:w-5 sm:h-5 ${isActive ? 'text-teal-500' : ''}`} />
-                          <span className="hidden sm:inline font-semibold">{step.label}</span>
-                          <span className="sm:hidden text-lg">{step.emoji}</span>
-                        </div>
-                        {/* サブテキスト（説明） - アクティブ時のみ表示 */}
-                        {isActive && (
-                          <span className="hidden sm:block text-[10px] text-teal-500/80 mt-0.5 font-normal">
-                            {step.description}
-                          </span>
-                        )}
+                        <Icon className={`w-4 h-4 ${isActive ? 'text-teal-500' : ''}`} />
+                        <span className="hidden sm:inline text-sm font-medium">{step.label}</span>
+                        <span className="sm:hidden text-sm">{step.emoji}</span>
                         {stepCount > 0 && (
-                          <span className={`absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center rounded-full text-xs font-bold animate-bounce-in ${
+                          <span className={`absolute -top-1 -right-1 w-4 h-4 flex items-center justify-center rounded-full text-[10px] font-bold ${
                             isActive ? 'bg-teal-500 text-white' : 'bg-white text-teal-600'
                           }`}>
                             {stepCount}
@@ -936,23 +925,23 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 })}
               </div>
 
-              {/* 合計表示 */}
-              <div className="flex items-center gap-2 sm:gap-4">
+              {/* 合計表示 - コンパクト */}
+              <div className="flex items-center gap-2">
                 <div className="text-right hidden sm:block">
-                  <p className="text-xs text-white/70">オプション合計</p>
-                  <p className="text-lg sm:text-xl font-bold">{formatPrice(totalPrice)}</p>
+                  <p className="text-[10px] text-white/70">合計</p>
+                  <p className="text-sm font-bold">{formatPrice(totalPrice)}</p>
                 </div>
-                <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-3 sm:px-4 py-1.5 sm:py-2 flex items-center gap-2" data-tutorial="cart-button">
-                  <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" />
-                  <span className="font-bold text-lg">{cartItems.length}</span>
+                <div className="bg-white/20 rounded-lg px-2 py-1 flex items-center gap-1" data-tutorial="cart-button">
+                  <ShoppingCart className="w-4 h-4" />
+                  <span className="font-bold text-sm">{cartItems.length}</span>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* プログレスバー - ゴール明確化 */}
-          <div className="px-4 pb-3">
-            <div className="max-w-6xl mx-auto">
+          {/* プログレスバー - コンパクト */}
+          <div className="px-4 pb-2">
+            <div>
               {(() => {
                 const decidedCount = categories.filter(cat =>
                   cartItems.some(item => item.product.categoryName === cat.name)
@@ -961,31 +950,19 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 const catProgressPercent = totalCount > 0 ? (decidedCount / totalCount) * 100 : 0;
                 const isComplete = decidedCount === totalCount && totalCount > 0;
                 return (
-                  <div className="flex items-center gap-3">
-                    {/* 進捗数字 */}
-                    <div className="text-sm font-bold text-white/90 min-w-[60px]">
-                      {decidedCount}/{totalCount}
-                    </div>
-                    {/* プログレスバー */}
-                    <div className="flex-1 h-2.5 bg-white/20 rounded-full overflow-hidden">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-medium text-white/80">{decidedCount}/{totalCount}</span>
+                    <div className="flex-1 h-1.5 bg-white/20 rounded-full overflow-hidden">
                       <div
-                        className={`h-full rounded-full transition-all duration-500 ${isComplete ? 'bg-emerald-400' : 'bg-white'}`}
+                        className={`h-full rounded-full transition-all duration-300 ${isComplete ? 'bg-emerald-400' : 'bg-white'}`}
                         style={{ width: `${catProgressPercent}%` }}
                       />
                     </div>
-                    {/* ステータス */}
-                    <div className="text-right min-w-[80px]">
-                      {isComplete ? (
-                        <span className="text-sm font-bold text-emerald-300 flex items-center gap-1">
-                          <Check className="w-4 h-4" />
-                          完了！
-                        </span>
-                      ) : (
-                        <span className="text-sm font-medium text-white whitespace-nowrap">
-                          残り{totalCount - decidedCount}
-                        </span>
-                      )}
-                    </div>
+                    {isComplete ? (
+                      <span className="text-xs font-bold text-emerald-300">完了</span>
+                    ) : (
+                      <span className="text-xs text-white/80">残{totalCount - decidedCount}</span>
+                    )}
                   </div>
                 );
               })()}
@@ -995,9 +972,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
 
         <div className="flex flex-1 overflow-hidden">
-          {/* 左サイドバー - アクションチェックリスト (G HOUSE風) - 常時表示 */}
-          <div className={`flex flex-col bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 h-[calc(100vh-180px)] transition-all duration-300 flex-shrink-0 ${
-            showActionChecklist ? 'w-80' : 'w-14'
+          {/* 左サイドバー - アクションチェックリスト - コンパクト */}
+          <div className={`flex flex-col bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 h-[calc(100vh-140px)] transition-all duration-300 flex-shrink-0 ${
+            showActionChecklist ? 'w-64' : 'w-12'
           }`}>
             {showActionChecklist ? (
               <>
@@ -1093,20 +1070,20 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
           {/* メインエリア */}
           <div className="flex-1 flex flex-col overflow-hidden">
-            {/* 検索バー＋フィルター */}
-            <div className="sticky top-0 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md border-b border-gray-100 dark:border-gray-700 z-10 p-3">
-              <div className="flex items-center gap-3 max-w-5xl mx-auto">
+            {/* 検索バー＋フィルター - コンパクト */}
+            <div className="sticky top-0 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md border-b border-gray-100 dark:border-gray-700 z-10 px-3 py-2">
+              <div className="flex items-center gap-2">
                 {/* 検索 */}
-                <div className="relative flex-1 max-w-md">
+                <div className="relative flex-1 max-w-xs">
                   <label htmlFor="catalog-search" className="sr-only">商品を検索</label>
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" aria-hidden="true" />
+                  <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 dark:text-gray-500" aria-hidden="true" />
                   <input
                     id="catalog-search"
                     type="text"
-                    placeholder="検索... (/ でフォーカス)"
+                    placeholder="検索..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-3 py-2.5 bg-gray-50 dark:bg-gray-700 dark:text-gray-100 border-0 rounded-xl text-sm focus:ring-2 focus:ring-teal-500 focus:bg-white dark:focus:bg-gray-600 transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
+                    className="w-full pl-8 pr-2 py-1.5 bg-gray-50 dark:bg-gray-700 dark:text-gray-100 border-0 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 focus:bg-white dark:focus:bg-gray-600 transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
                   />
                   {searchTerm && (
                     <button
@@ -1118,24 +1095,24 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   )}
                 </div>
 
-                {/* フィルターボタン（すべて/標準/オプション） */}
-                <div className="hidden sm:flex bg-gray-100 dark:bg-gray-700 p-1 rounded-xl">
+                {/* フィルターボタン - コンパクト */}
+                <div className="hidden sm:flex bg-gray-100 dark:bg-gray-700 p-0.5 rounded-lg">
                   {[
-                    { value: 'all', label: 'すべて', title: 'すべての商品を表示' },
-                    { value: 'standard', label: '標準 ¥0', title: '追加料金なし（プラン内）' },
-                    { value: 'option', label: '+オプション', title: '追加料金あり' },
+                    { value: 'all', label: '全', title: 'すべて' },
+                    { value: 'standard', label: '¥0', title: '標準品（追加なし）' },
+                    { value: 'option', label: '+¥', title: 'オプション' },
                   ].map(opt => (
                     <button
                       key={opt.value}
                       onClick={() => setFilterType(opt.value as FilterTypeValue)}
                       title={opt.title}
-                      className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${
+                      className={`px-2.5 py-1 rounded text-xs font-bold transition-all ${
                         filterType === opt.value
                           ? opt.value === 'standard'
-                            ? 'bg-emerald-500 text-white shadow-sm'
+                            ? 'bg-emerald-500 text-white'
                             : opt.value === 'option'
-                            ? 'bg-orange-500 text-white shadow-sm'
-                            : 'bg-white dark:bg-gray-600 text-gray-700 dark:text-gray-200 shadow-sm'
+                            ? 'bg-orange-500 text-white'
+                            : 'bg-white dark:bg-gray-600 text-gray-700 dark:text-gray-200'
                           : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
                       }`}
                     >
@@ -1319,20 +1296,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
             {/* 商品グリッド */}
             <div className="flex-1 overflow-y-auto p-3 sm:p-4 pb-24 lg:pb-4" data-tutorial="product-grid">
-              {/* 最近閲覧した商品 */}
-              <RecentlyViewed
-                onProductClick={(productId) => {
-                  const item = items.find(i => i.id === productId);
-                  if (item) {
-                    setSelectedProductForDetail(convertToCatalogProduct(item));
-                  }
-                }}
-                maxItems={6}
-              />
-
               {isLoading ? (
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-                  {[...Array(10)].map((_, i) => <SkeletonCard key={i} />)}
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+                  {[...Array(12)].map((_, i) => <SkeletonCard key={i} />)}
                 </div>
               ) : error ? (
                 <div className="flex flex-col items-center justify-center py-20">
@@ -1362,8 +1328,8 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 <EmptyState searchTerm={searchTerm} onClear={() => setSearchTerm('')} />
               ) : (
                 <>
-                  {/* 商品グリッド - 4列表示 */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                  {/* 商品グリッド - 最大6列表示 */}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
                     {(() => {
                       // カテゴリごとの最初の標準品IDを計算
                       const firstStandardByCategory = new Map<string, string>();
