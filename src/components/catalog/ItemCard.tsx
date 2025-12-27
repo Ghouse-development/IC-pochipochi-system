@@ -101,6 +101,7 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
   planName: _planName,
   recommendBadge,
 }) => {
+  const [imageError, setImageError] = React.useState(false);
   const price = getPrice(item);
   const standard = isStandard(item);
   const imageUrl = getImageUrl(item);
@@ -136,13 +137,14 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
     >
       {/* 画像エリア */}
       <div className="aspect-[4/3] bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
-        {imageUrl ? (
+        {imageUrl && !imageError ? (
           <img
             src={imageUrl}
             alt={item.name}
             loading="lazy"
             decoding="async"
             className={`w-full h-full object-cover transition-transform duration-300 ${isHovered ? 'scale-105' : ''}`}
+            onError={() => setImageError(true)}
           />
         ) : (
           (() => {
