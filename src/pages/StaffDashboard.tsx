@@ -312,25 +312,27 @@ export const StaffDashboard: React.FC<StaffDashboardProps> = ({ onBack }) => {
         return (
           <div className="space-y-4">
             {/* プロジェクトサブタブ */}
-            <div className="flex gap-2 bg-white rounded-lg p-1 shadow-sm border">
+            <div className="flex gap-1 sm:gap-2 bg-white rounded-lg p-1 shadow-sm border overflow-x-auto">
               {[
-                { id: 'list' as ProjectSubTab, label: 'プロジェクト一覧', icon: FolderOpen },
-                { id: 'create' as ProjectSubTab, label: '新規作成', icon: FolderPlus },
-                { id: 'invite' as ProjectSubTab, label: 'お客様招待', icon: Mail },
+                { id: 'list' as ProjectSubTab, label: 'プロジェクト一覧', shortLabel: '一覧', icon: FolderOpen },
+                { id: 'create' as ProjectSubTab, label: '新規作成', shortLabel: '新規', icon: FolderPlus },
+                { id: 'invite' as ProjectSubTab, label: 'お客様招待', shortLabel: '招待', icon: Mail },
               ].map((tab) => {
                 const Icon = tab.icon;
                 return (
                   <button
                     key={tab.id}
                     onClick={() => setProjectSubTab(tab.id)}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                    className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${
                       projectSubTab === tab.id
                         ? 'bg-blue-100 text-blue-700'
                         : 'text-gray-600 hover:bg-gray-100'
                     }`}
+                    title={tab.label}
                   >
                     <Icon className="w-4 h-4" />
-                    {tab.label}
+                    <span className="hidden sm:inline">{tab.label}</span>
+                    <span className="sm:hidden">{tab.shortLabel}</span>
                   </button>
                 );
               })}
@@ -342,26 +344,28 @@ export const StaffDashboard: React.FC<StaffDashboardProps> = ({ onBack }) => {
         return (
           <div className="space-y-4">
             {/* IC確認サブタブ */}
-            <div className="flex gap-2 bg-white rounded-lg p-1 shadow-sm border">
+            <div className="flex gap-1 sm:gap-2 bg-white rounded-lg p-1 shadow-sm border overflow-x-auto">
               {[
-                { id: 'status' as ReviewSubTab, label: '確定フロー', icon: CheckCircle },
-                { id: 'progress' as ReviewSubTab, label: '選択進捗', icon: BarChart3 },
-                { id: 'summary' as ReviewSubTab, label: 'サマリー', icon: ClipboardCheck },
-                { id: 'checklist' as ReviewSubTab, label: 'チェックリスト', icon: ClipboardCheck },
+                { id: 'status' as ReviewSubTab, label: '確定フロー', shortLabel: '確定', icon: CheckCircle },
+                { id: 'progress' as ReviewSubTab, label: '選択進捗', shortLabel: '進捗', icon: BarChart3 },
+                { id: 'summary' as ReviewSubTab, label: 'サマリー', shortLabel: '要約', icon: ClipboardCheck },
+                { id: 'checklist' as ReviewSubTab, label: 'チェックリスト', shortLabel: 'CL', icon: ClipboardCheck },
               ].map((tab) => {
                 const Icon = tab.icon;
                 return (
                   <button
                     key={tab.id}
                     onClick={() => setReviewSubTab(tab.id)}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                    className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${
                       reviewSubTab === tab.id
                         ? 'bg-green-100 text-green-700'
                         : 'text-gray-600 hover:bg-gray-100'
                     }`}
+                    title={tab.label}
                   >
                     <Icon className="w-4 h-4" />
-                    {tab.label}
+                    <span className="hidden sm:inline">{tab.label}</span>
+                    <span className="sm:hidden">{tab.shortLabel}</span>
                   </button>
                 );
               })}
@@ -419,23 +423,25 @@ export const StaffDashboard: React.FC<StaffDashboardProps> = ({ onBack }) => {
         </div>
 
         {/* メインタブナビゲーション */}
-        <div className="px-4 sm:px-6 overflow-x-auto">
-          <nav className="flex gap-1 border-t pt-2 -mb-px" aria-label="タブ">
+        <div className="px-4 sm:px-6">
+          <nav className="flex justify-between sm:justify-start sm:gap-1 border-t pt-2 -mb-px" aria-label="タブ">
             {mainTabs.map((tab) => {
               const Icon = tab.icon;
               return (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
+                  className={`flex flex-col sm:flex-row items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-medium whitespace-nowrap border-b-2 transition-colors min-w-0 ${
                     activeTab === tab.id
                       ? 'border-blue-500 text-blue-600'
                       : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                   }`}
                   aria-current={activeTab === tab.id ? 'page' : undefined}
+                  title={tab.label}
                 >
-                  <Icon className="w-4 h-4" />
-                  {tab.label}
+                  <Icon className="w-5 h-5 sm:w-4 sm:h-4" />
+                  <span className="hidden sm:inline">{tab.label}</span>
+                  <span className="sm:hidden text-[10px] truncate max-w-[50px]">{tab.label}</span>
                 </button>
               );
             })}

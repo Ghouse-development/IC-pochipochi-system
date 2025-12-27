@@ -1,6 +1,7 @@
 // 見積書出力ダイアログ
 import { useState } from 'react';
 import { FileDown, FileSpreadsheet, FileText, X, Loader2, Check } from 'lucide-react';
+import { useToast } from '../common/Toast';
 import { useCartStore } from '../../stores/useCartStore';
 import { useSelectionStore } from '../../stores/useSelectionStore';
 import {
@@ -26,6 +27,7 @@ const PLAN_NAMES: Record<PlanType, string> = {
 export const EstimateExportDialog = ({ isOpen, onClose }: EstimateExportDialogProps) => {
   const { items, selectedPlanId, getTotalPrice } = useCartStore();
   const { selections } = useSelectionStore();
+  const toast = useToast();
 
   const [formData, setFormData] = useState({
     customerName: '',
@@ -79,7 +81,7 @@ export const EstimateExportDialog = ({ isOpen, onClose }: EstimateExportDialogPr
       setTimeout(() => setExportSuccess(null), 3000);
     } catch (error) {
       console.error('PDF export error:', error);
-      alert('PDFの出力に失敗しました');
+      toast.error('エラー', 'PDFの出力に失敗しました。再度お試しください。');
     } finally {
       setIsExporting(null);
     }
@@ -95,7 +97,7 @@ export const EstimateExportDialog = ({ isOpen, onClose }: EstimateExportDialogPr
       setTimeout(() => setExportSuccess(null), 3000);
     } catch (error) {
       console.error('Excel export error:', error);
-      alert('Excelの出力に失敗しました');
+      toast.error('エラー', 'Excelの出力に失敗しました。再度お試しください。');
     } finally {
       setIsExporting(null);
     }

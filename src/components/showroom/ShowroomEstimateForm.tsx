@@ -9,6 +9,7 @@ import {
   SHOWROOM_CATEGORIES,
   type ShowroomEstimateItem,
 } from '../../stores/useShowroomEstimateStore';
+import { useToast } from '../common/Toast';
 
 interface FormData {
   category: ShowroomEstimateItem['category'];
@@ -40,6 +41,7 @@ export const ShowroomEstimateForm: React.FC = () => {
   const { items, addItem, removeItem, getTotalPrice } = useShowroomEstimateStore();
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const toast = useToast();
 
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -56,7 +58,7 @@ export const ShowroomEstimateForm: React.FC = () => {
     (e: React.FormEvent) => {
       e.preventDefault();
       if (!formData.manufacturer || !formData.productName) {
-        alert('メーカー名と商品名は必須です');
+        toast.warning('入力エラー', 'メーカー名と商品名は必須です');
         return;
       }
 
