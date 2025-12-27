@@ -200,7 +200,6 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
       {/* Version display */}
       <div className="fixed bottom-4 left-4 bg-white px-3 py-1 rounded-lg shadow-md text-xs text-gray-600 z-30">
         Ver. {currentVersion}
-        {isDemo && <span className="ml-2 text-orange-500">(Demo)</span>}
       </div>
 
       <CartSidebarEnhanced isOpen={isCartOpen} onClose={handleCartClose} />
