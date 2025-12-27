@@ -29,6 +29,7 @@ export function sanitizeText(text: string): string {
  * SQLインジェクション対策用のエスケープ
  */
 export function escapeSQL(str: string): string {
+  // eslint-disable-next-line no-control-regex
   return str.replace(/['"\\\x00\n\r\x1a]/g, (char) => {
     switch (char) {
       case "'": return "''";
@@ -48,6 +49,7 @@ export function escapeSQL(str: string): string {
  */
 export function sanitizeFileName(fileName: string): string {
   return fileName
+    // eslint-disable-next-line no-control-regex
     .replace(/[<>:"/\\|?*\x00-\x1f]/g, '_')
     .replace(/\.{2,}/g, '.')
     .replace(/^\.+|\.+$/g, '')
