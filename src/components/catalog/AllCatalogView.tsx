@@ -188,8 +188,14 @@ export const AllCatalogView: React.FC = () => {
           </div>
 
           {Object.keys(filteredGroupedProducts).length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-gray-500">該当する商品が見つかりませんでした</p>
+            <div className="text-center py-12 px-4">
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">🔍</span>
+              </div>
+              <h3 className="font-medium text-gray-900 mb-2">該当する商品が見つかりませんでした</h3>
+              <p className="text-sm text-gray-500">
+                検索条件を変更してお試しください
+              </p>
             </div>
           )}
         </div>

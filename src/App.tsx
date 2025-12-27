@@ -1,5 +1,5 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { AuthProvider, DemoAuthProvider, useAuth } from './contexts/AuthContext';
 import { CustomerModeProvider } from './components/customer/CustomerModeWrapper';
 import { createLogger } from './lib/logger';
@@ -26,6 +26,8 @@ import { ShortcutHelpModal } from './components/common/ShortcutHelpModal';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { useVersionStore } from './stores/useVersionStore';
 import { useCartStore } from './stores/useCartStore';
+import { WorkflowGuide } from './components/common/WorkflowGuide';
+import { CompletionCelebration } from './components/common/CompletionCelebration';
 import type { Product } from './types/product';
 
 // Lazy loaded components for code splitting
@@ -57,6 +59,7 @@ interface MainContentProps {
 function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
   const { user, isLoading, isAdmin } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
@@ -86,6 +89,18 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
 
   const currentVersion = useVersionStore((state) => state.currentVersion);
   const items = useCartStore((state) => state.items);
+
+  // 現在のカタログステップを判定（ワークフローガイド用）
+  const currentCatalogStep = (() => {
+    const path = location.pathname;
+    if (path.includes('/catalog/exterior')) return 'exterior';
+    if (path.includes('/catalog/interior')) return 'interior';
+    if (path.includes('/catalog/equipment')) return 'equipment';
+    return null;
+  })();
+
+  // カタログページかどうか
+  const isCatalogPage = location.pathname.includes('/catalog');
 
   // キーボードショートカットの設定
   useKeyboardShortcuts({
@@ -262,6 +277,19 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
 
       {/* ネットワーク状態バナー */}
       <NetworkStatusBanner />
+
+      {/* ワークフローガイド（カタログページのみ表示） */}
+      {isCatalogPage && (
+        <WorkflowGuide onCartClick={() => setIsCartOpen(true)} />
+      )}
+
+      {/* カテゴリ完了時の祝福 */}
+      {currentCatalogStep && (
+        <CompletionCelebration
+          currentCategoryId={currentCatalogStep}
+          onCartClick={() => setIsCartOpen(true)}
+        />
+      )}
 
       {/* 開発用ツールバー (開発環境のみ表示) */}
       {import.meta.env.DEV && (

@@ -317,8 +317,23 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
         {/* 選択内容 */}
         <div className="flex-1 overflow-y-auto p-4">
           {items.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-gray-500">商品が選択されていません</p>
+            <div className="text-center py-12 px-4">
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <ShoppingBag className="w-8 h-8 text-gray-400" />
+              </div>
+              <h3 className="font-medium text-gray-900 mb-2">商品が選択されていません</h3>
+              <p className="text-sm text-gray-500 mb-6">
+                カタログから商品を選んで、<br />
+                「選択する」ボタンを押してください
+              </p>
+              <div className="bg-blue-50 rounded-lg p-4 text-left">
+                <p className="text-xs font-medium text-blue-800 mb-2">選び方のコツ</p>
+                <ul className="text-xs text-blue-700 space-y-1">
+                  <li>• 外装 → 内装 → 設備 の順に選ぶとスムーズ</li>
+                  <li>• 迷ったら「不要」で後から検討できます</li>
+                  <li>• 右下の進捗バーで残りを確認</li>
+                </ul>
+              </div>
             </div>
           ) : (
             <div className="space-y-4">
