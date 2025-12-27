@@ -11,14 +11,12 @@ import {
   X,
   Sparkles,
   CheckCircle2,
-  Home,
   Paintbrush,
   Bath,
   FileText,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useSelectionStore } from '../../stores/useSelectionStore';
-import { useCartStore } from '../../stores/useCartStore';
 
 interface CategoryConfig {
   id: string;
@@ -77,8 +75,7 @@ export const CompletionCelebration: React.FC<CompletionCelebrationProps> = ({
   onCartClick,
 }) => {
   const navigate = useNavigate();
-  const { getSelectionStatus, selections } = useSelectionStore();
-  const { items } = useCartStore();
+  const { getSelectionStatus } = useSelectionStore();
   const [showBanner, setShowBanner] = useState(false);
   const [celebratedCategories, setCelebratedCategories] = useState<Set<string>>(new Set());
 

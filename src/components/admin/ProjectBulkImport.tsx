@@ -12,7 +12,7 @@ import {
   Download,
   Loader2,
 } from 'lucide-react';
-import { useProjectStore, type Project } from '../../stores/useProjectStore';
+import { useProjectStore } from '../../stores/useProjectStore';
 import { useToast } from '../common/Toast';
 import * as XLSX from 'xlsx';
 

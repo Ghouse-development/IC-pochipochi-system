@@ -22,7 +22,6 @@ import {
 } from 'lucide-react';
 import { useCartStore } from '../../stores/useCartStore';
 import { useSelectionStore } from '../../stores/useSelectionStore';
-import { REQUIRED_CATEGORIES } from '../catalog/catalogUtils';
 
 interface WorkflowStep {
   id: string;
@@ -266,7 +265,6 @@ export const WorkflowGuide: React.FC<WorkflowGuideProps> = ({ onCartClick }) => 
         {isExpanded && (
           <div className="px-4 py-3 space-y-2">
             {WORKFLOW_STEPS.slice(0, 3).map((step, index) => {
-              const Icon = step.icon;
               const progress = stepProgress[step.id];
               const isActive = currentStep === step.id;
               const isComplete = progress.percentage === 100;
