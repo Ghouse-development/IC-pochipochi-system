@@ -4,7 +4,7 @@
  * - QRコード表示
  * - メール送信リンク
  */
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import {
   Link,
   Copy,
@@ -16,38 +16,64 @@ import {
   AlertCircle,
   User,
   Key,
+  Loader2,
 } from 'lucide-react';
+import { QRCodeSVG } from 'qrcode.react';
 import { useProjectStore } from '../../stores/useProjectStore';
+import { useToast } from '../common/Toast';
 
 interface CustomerInvitationProps {
   projectId?: string;
 }
 
 export const CustomerInvitation: React.FC<CustomerInvitationProps> = ({ projectId }) => {
-  const { currentProject, projects } = useProjectStore();
+  const { currentProject, projects, setAccessCode: saveAccessCode } = useProjectStore();
+  const toast = useToast();
   const [copied, setCopied] = useState(false);
   const [showQR, setShowQR] = useState(false);
   const [accessCode, setAccessCode] = useState<string | null>(null);
+  const [isSendingEmail, setIsSendingEmail] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
 
   // 対象プロジェクト
   const project = projectId
     ? projects.find((p) => p.id === projectId)
     : currentProject;
 
+  // 既存のアクセスコードがあれば読み込む
+  React.useEffect(() => {
+    if (project?.accessCode && !accessCode) {
+      setAccessCode(project.accessCode);
+    }
+  }, [project?.accessCode, accessCode]);
+
   // アクセスコード生成
-  const generateAccessCode = () => {
+  const generateAccessCode = useCallback(() => {
     const code = Math.random().toString(36).substring(2, 8).toUpperCase();
     setAccessCode(code);
+    // プロジェクトに保存
+    if (project) {
+      saveAccessCode(project.id, code);
+      toast.success('コード生成', '新しいアクセスコードを生成しました');
+    }
     return code;
-  };
+  }, [project, saveAccessCode, toast]);
 
   // 招待URL生成
   const invitationUrl = useMemo(() => {
     if (!project) return null;
     const baseUrl = window.location.origin;
-    const code = accessCode || generateAccessCode();
+    // 既存コードがあれば使用、なければ生成
+    const code = accessCode || project.accessCode;
+    if (!code) {
+      // 初回アクセス時にコードを生成
+      const newCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+      setAccessCode(newCode);
+      saveAccessCode(project.id, newCode);
+      return `${baseUrl}/customer?project=${project.id}&code=${newCode}`;
+    }
     return `${baseUrl}/customer?project=${project.id}&code=${code}`;
-  }, [project, accessCode]);
+  }, [project, accessCode, saveAccessCode]);
 
   // URLをクリップボードにコピー
   const handleCopyUrl = async () => {
@@ -55,31 +81,48 @@ export const CustomerInvitation: React.FC<CustomerInvitationProps> = ({ projectI
     try {
       await navigator.clipboard.writeText(invitationUrl);
       setCopied(true);
+      toast.success('コピー完了', '招待URLをクリップボードにコピーしました');
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
       console.error('Failed to copy:', err);
+      toast.error('コピー失敗', 'URLのコピーに失敗しました');
     }
   };
 
   // メール作成
-  const handleSendEmail = () => {
+  const handleSendEmail = useCallback(() => {
     if (!project || !invitationUrl) return;
-    const subject = encodeURIComponent(
-      `【STYLEBOOK】${project.name} 仕様選択のご案内`
-    );
-    const body = encodeURIComponent(
-      `${project.customer.name}様\n\n` +
-      `お世話になっております。\n` +
-      `下記URLより、住宅仕様の選択をお願いいたします。\n\n` +
-      `▼ アクセスURL\n` +
-      `${invitationUrl}\n\n` +
-      `▼ アクセスコード\n` +
-      `${accessCode}\n\n` +
-      `ご不明な点がございましたら、お気軽にお問い合わせください。\n\n` +
-      `よろしくお願いいたします。`
-    );
-    window.open(`mailto:${project.customer.email}?subject=${subject}&body=${body}`);
-  };
+
+    setIsSendingEmail(true);
+
+    try {
+      const subject = encodeURIComponent(
+        `【STYLEBOOK】${project.name} 仕様選択のご案内`
+      );
+      const body = encodeURIComponent(
+        `${project.customer.name}様\n\n` +
+        `お世話になっております。\n` +
+        `下記URLより、住宅仕様の選択をお願いいたします。\n\n` +
+        `▼ アクセスURL\n` +
+        `${invitationUrl}\n\n` +
+        `▼ アクセスコード\n` +
+        `${accessCode}\n\n` +
+        `ご不明な点がございましたら、お気軽にお問い合わせください。\n\n` +
+        `よろしくお願いいたします。`
+      );
+
+      window.open(`mailto:${project.customer.email}?subject=${subject}&body=${body}`);
+
+      setEmailSent(true);
+      toast.success('メール準備完了', 'メールアプリが開きました。送信してください。');
+      setTimeout(() => setEmailSent(false), 5000);
+    } catch (err) {
+      console.error('Failed to open mail client:', err);
+      toast.error('エラー', 'メールアプリを開けませんでした');
+    } finally {
+      setIsSendingEmail(false);
+    }
+  }, [project, invitationUrl, accessCode, toast]);
 
   // アクセスコード再生成
   const handleRegenerateCode = () => {
@@ -184,10 +227,21 @@ export const CustomerInvitation: React.FC<CustomerInvitationProps> = ({ projectI
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <button
           onClick={handleSendEmail}
-          className="flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          disabled={isSendingEmail}
+          className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg transition-colors ${
+            emailSent
+              ? 'bg-green-600 text-white'
+              : 'bg-blue-600 text-white hover:bg-blue-700'
+          } disabled:opacity-50`}
         >
-          <Mail className="w-5 h-5" />
-          メールで送信
+          {isSendingEmail ? (
+            <Loader2 className="w-5 h-5 animate-spin" />
+          ) : emailSent ? (
+            <Check className="w-5 h-5" />
+          ) : (
+            <Mail className="w-5 h-5" />
+          )}
+          {emailSent ? '送信準備完了' : 'メールで送信'}
         </button>
         <button
           onClick={() => setShowQR(!showQR)}
@@ -206,21 +260,24 @@ export const CustomerInvitation: React.FC<CustomerInvitationProps> = ({ projectI
       </div>
 
       {/* QRコード表示 */}
-      {showQR && (
+      {showQR && invitationUrl && (
         <div className="bg-white rounded-xl shadow-sm border p-6 text-center">
           <h3 className="font-bold text-gray-900 mb-4">QRコード</h3>
           <div className="inline-block p-4 bg-white border-2 border-gray-200 rounded-lg">
-            {/* 実際のQRコード生成にはライブラリが必要 - ここではプレースホルダー */}
-            <div className="w-48 h-48 bg-gray-100 flex items-center justify-center text-gray-400">
-              <div className="text-center">
-                <QrCode className="w-16 h-16 mx-auto mb-2" />
-                <p className="text-xs">QRコード</p>
-                <p className="text-xs">(qrcode.react等で実装)</p>
-              </div>
-            </div>
+            <QRCodeSVG
+              value={invitationUrl}
+              size={192}
+              level="M"
+              includeMargin={true}
+              bgColor="#ffffff"
+              fgColor="#1f2937"
+            />
           </div>
           <p className="text-sm text-gray-500 mt-4">
             スマートフォンで読み取ると、招待URLにアクセスできます
+          </p>
+          <p className="text-xs text-gray-400 mt-2">
+            アクセスコード: <span className="font-mono font-bold">{accessCode}</span>
           </p>
         </div>
       )}

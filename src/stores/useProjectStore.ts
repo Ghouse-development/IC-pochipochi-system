@@ -49,6 +49,8 @@ export interface Project {
   land: LandInfo;
   building: BuildingInfo;
   assignedIC?: string;
+  accessCode?: string; // お客様アクセス用コード
+  accessCodeCreatedAt?: string; // コード生成日時
   createdAt: string;
   updatedAt: string;
 }
@@ -63,6 +65,8 @@ interface ProjectState {
   deleteProject: (id: string) => void;
   setCurrentProject: (project: Project | null) => void;
   getProjectById: (id: string) => Project | undefined;
+  setAccessCode: (projectId: string, code: string) => void;
+  validateAccessCode: (projectId: string, code: string) => boolean;
 }
 
 export const useProjectStore = create<ProjectState>()(
@@ -110,6 +114,27 @@ export const useProjectStore = create<ProjectState>()(
 
       getProjectById: (id) => {
         return get().projects.find((p) => p.id === id);
+      },
+
+      setAccessCode: (projectId, code) => {
+        const now = new Date().toISOString();
+        set((state) => ({
+          projects: state.projects.map((p) =>
+            p.id === projectId
+              ? { ...p, accessCode: code, accessCodeCreatedAt: now, updatedAt: now }
+              : p
+          ),
+          currentProject:
+            state.currentProject?.id === projectId
+              ? { ...state.currentProject, accessCode: code, accessCodeCreatedAt: now, updatedAt: now }
+              : state.currentProject,
+        }));
+      },
+
+      validateAccessCode: (projectId, code) => {
+        const project = get().projects.find((p) => p.id === projectId);
+        if (!project || !project.accessCode) return false;
+        return project.accessCode.toUpperCase() === code.toUpperCase();
       },
     }),
     {

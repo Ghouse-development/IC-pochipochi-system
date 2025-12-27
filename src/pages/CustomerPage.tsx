@@ -22,6 +22,7 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import { useProjectStore, type Project } from '../stores/useProjectStore';
+import { useToast } from '../components/common/Toast';
 import { useSelectionStore } from '../stores/useSelectionStore';
 import { useOperationLogStore } from '../stores/useOperationLogStore';
 import { useCartStore } from '../stores/useCartStore';
@@ -30,7 +31,8 @@ import { REQUIRED_CATEGORIES } from '../components/catalog/catalogUtils';
 export const CustomerPage: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { projects, setCurrentProject } = useProjectStore();
+  const { projects, setCurrentProject, validateAccessCode } = useProjectStore();
+  const toast = useToast();
   const { selections, setProjectInfo, setProjectStatus, getSelectionStatus } = useSelectionStore();
   const { startNewSession, setUserType } = useOperationLogStore();
   const { items } = useCartStore();
@@ -61,14 +63,21 @@ export const CustomerPage: React.FC = () => {
       return;
     }
 
+    if (!project) {
+      setError('プロジェクトが見つかりません');
+      return;
+    }
+
     setIsLoading(true);
     setError('');
 
-    // 簡易的な認証（実際にはバックエンドで検証）
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    // 少し遅延を入れてUX向上
+    await new Promise((resolve) => setTimeout(resolve, 800));
 
-    // デモ用：コードが6文字であれば認証成功とする
-    if (accessCode.length === 6 && project) {
+    // ストアのvalidateAccessCodeで認証
+    const isValid = validateAccessCode(project.id, accessCode);
+
+    if (isValid) {
       setAuthenticatedProject(project);
       setCurrentProject(project);
       setProjectInfo(project.name, project.customer.name, project.building.planType);
@@ -79,8 +88,11 @@ export const CustomerPage: React.FC = () => {
 
       // ステータスを「お客様選択中」に更新（まだdraftの場合）
       setProjectStatus('customer_selecting', project.customer.name);
+
+      toast.success('ログイン成功', `${project.customer.name}様、ようこそ`);
     } else {
       setError('アクセスコードが正しくありません');
+      toast.error('認証失敗', 'コードをご確認ください');
     }
 
     setIsLoading(false);
