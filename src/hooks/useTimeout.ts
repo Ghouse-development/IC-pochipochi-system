@@ -18,11 +18,12 @@ export function useTimeout() {
 
   // コンポーネントアンマウント時に全タイマーをクリア
   useEffect(() => {
+    const ids = timeoutIds.current;
     return () => {
-      timeoutIds.current.forEach((id) => {
+      ids.forEach((id) => {
         globalThis.clearTimeout(id);
       });
-      timeoutIds.current.clear();
+      ids.clear();
     };
   }, []);
 

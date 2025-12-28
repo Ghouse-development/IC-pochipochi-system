@@ -13,8 +13,8 @@ export const OperationLogViewer: React.FC = () => {
     return logs.filter(log => log.type === filterType).slice(0, 200);
   }, [logs, filterType, getLogs]);
 
-  const stats = useMemo(() => getOperationStats(), [logs, getOperationStats]);
-  const todayCount = useMemo(() => getTodayLogs().length, [logs, getTodayLogs]);
+  const stats = useMemo(() => getOperationStats(), [getOperationStats]);
+  const todayCount = useMemo(() => getTodayLogs().length, [getTodayLogs]);
 
   const getIcon = (type: OperationType) => {
     switch (type) {

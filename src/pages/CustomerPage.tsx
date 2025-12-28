@@ -33,7 +33,7 @@ export const CustomerPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const { projects, setCurrentProject, validateAccessCode } = useProjectStore();
   const toast = useToast();
-  const { selections, setProjectInfo, setProjectStatus, getSelectionStatus } = useSelectionStore();
+  const { setProjectInfo, setProjectStatus, getSelectionStatus } = useSelectionStore();
   const { startNewSession, setUserType } = useOperationLogStore();
   const { items } = useCartStore();
 
@@ -117,7 +117,7 @@ export const CustomerPage: React.FC = () => {
       remaining: total - completed - notNeeded,
       percentage: Math.round(((completed + notNeeded) / total) * 100),
     };
-  }, [selections, getSelectionStatus]);
+  }, [getSelectionStatus]);
 
   // カテゴリグループ
   const categoryGroups = useMemo(() => {
@@ -160,7 +160,7 @@ export const CustomerPage: React.FC = () => {
         total: group.categories.length,
       };
     });
-  }, [selections, getSelectionStatus]);
+  }, [getSelectionStatus]);
 
   // 認証済みの場合
   if (authenticatedProject) {

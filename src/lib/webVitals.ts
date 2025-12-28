@@ -58,7 +58,7 @@ async function sendMetric(metric: Metric) {
       // Beacon APIを使用（ページ離脱時も確実に送信）
       const blob = new Blob([JSON.stringify(body)], { type: 'application/json' });
       navigator.sendBeacon('/api/analytics/web-vitals', blob);
-    } catch (_error) {
+    } catch {
       // フォールバック: fetch API
       fetch('/api/analytics/web-vitals', {
         method: 'POST',

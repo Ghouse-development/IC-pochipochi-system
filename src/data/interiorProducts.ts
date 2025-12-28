@@ -1155,86 +1155,695 @@ export const interiorProducts: Product[] = [
     ]
   },
 
-  // ========== 室内ドア ==========
+  // ========== 室内ドア（Panasonic VERITIS）スタイルブックP27 ==========
+  // 標準デザイン - PAデザイン（全プラン標準）
   {
-    id: 'int-door-001',
+    id: 'door-std-pa',
     categoryId: 'interior-door',
     categoryName: '建具',
-    subcategory: 'スタンダードレーベル',
-    name: 'PAデザイン',
-    manufacturer: 'LIXIL',
-    modelNumber: 'PA',
+    subcategory: '室内ドア標準',
+    name: 'VERITIS PAデザイン ハイドアH2400',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VERITIS-PA-H2400',
     unit: 'piece',
     isOption: false,
-    description: 'ハイドア標準（H2400）',
+    description: 'ハイドア標準（H2400）開き戸・各居室・トイレ・脱衣室・ランドリーのみ標準装備',
     variants: [
-      { id: 'v1', color: 'ソフトウォールナット', images: [] },
-      { id: 'v2', color: 'ウォールナット', images: [] },
-      { id: 'v3', color: 'チェリー', images: [] },
-      { id: 'v4', color: 'グレージュアッシュ', images: [] },
-      { id: 'v5', color: 'イタリアオーク', images: [] },
-      { id: 'v6', color: 'メープル', images: [] },
-      { id: 'v7', color: 'ホワイトオーク', images: [] },
-      { id: 'v8', color: 'ホワイトアッシュ', images: [] },
-      { id: 'v9', color: 'しっくいホワイト', images: [] }
+      { id: 'v1', color: 'ソフトウォールナット柄', images: [] },
+      { id: 'v2', color: 'ウォールナット柄', images: [] },
+      { id: 'v3', color: 'チェリー柄', images: [] },
+      { id: 'v4', color: 'グレージュアッシュ柄', images: [] },
+      { id: 'v5', color: 'イデアオーク柄', images: [] },
+      { id: 'v6', color: 'メープル柄', images: [] },
+      { id: 'v7', color: 'ホワイトオーク柄', images: [] },
+      { id: 'v8', color: 'ホワイトアッシュ柄', images: [] },
+      { id: 'v9', color: 'しっくいホワイト柄', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 }
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+  // 標準デザイン - TAデザイン トイレ用扉（全プラン標準）
+  {
+    id: 'door-std-ta',
+    categoryId: 'interior-door',
+    categoryName: '建具',
+    subcategory: '室内ドア標準',
+    name: 'VERITIS TAデザイン トイレ用ハイドアH2400',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VERITIS-TA-H2400',
+    unit: 'piece',
+    isOption: false,
+    description: 'トイレ用扉（上部にスコープ有）ハイドア標準（H2400）',
+    variants: [
+      { id: 'v1', color: 'ソフトウォールナット柄', images: [] },
+      { id: 'v2', color: 'ウォールナット柄', images: [] },
+      { id: 'v3', color: 'チェリー柄', images: [] },
+      { id: 'v4', color: 'グレージュアッシュ柄', images: [] },
+      { id: 'v5', color: 'イデアオーク柄', images: [] },
+      { id: 'v6', color: 'メープル柄', images: [] },
+      { id: 'v7', color: 'ホワイトオーク柄', images: [] },
+      { id: 'v8', color: 'ホワイトアッシュ柄', images: [] },
+      { id: 'v9', color: 'しっくいホワイト柄', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+  // ペイントカラー変更（全プラン OP ¥10,000/カ所）
+  {
+    id: 'door-paint-blackoak',
+    categoryId: 'interior-door',
+    categoryName: '建具',
+    subcategory: '室内ドア ペイントカラー',
+    name: 'VERITIS ペイントカラー ブラックオーク柄',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VERITIS-PAINT-BLACKOAK',
+    unit: 'piece',
+    isOption: true,
+    description: 'ペイントカラー変更（扉1枚W900まで）',
+    variants: [
+      { id: 'v1', color: 'ブラックオーク柄', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 10000 },
+      { plan: 'HOURS', price: 10000 },
+      { plan: 'LIFE+', price: 10000 },
+      { plan: 'LIFE', price: 10000 }
     ]
   },
   {
-    id: 'int-door-002',
+    id: 'door-paint-navyoak',
     categoryId: 'interior-door',
     categoryName: '建具',
-    subcategory: 'スタンダードレーベル',
-    name: 'LAデザイン',
-    manufacturer: 'LIXIL',
-    modelNumber: 'LA',
+    subcategory: '室内ドア ペイントカラー',
+    name: 'VERITIS ペイントカラー ネイビーオーク柄',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VERITIS-PAINT-NAVYOAK',
     unit: 'piece',
-    isOption: false,
-    description: 'ハイドア標準（H2400）',
+    isOption: true,
+    description: 'ペイントカラー変更（扉1枚W900まで）',
     variants: [
-      { id: 'v1', color: 'ソフトウォールナット', images: [] },
-      { id: 'v2', color: 'ウォールナット', images: [] },
-      { id: 'v3', color: 'チェリー', images: [] },
-      { id: 'v4', color: 'グレージュアッシュ', images: [] },
-      { id: 'v5', color: 'イタリアオーク', images: [] },
-      { id: 'v6', color: 'メープル', images: [] },
-      { id: 'v7', color: 'ホワイトオーク', images: [] },
-      { id: 'v8', color: 'ホワイトアッシュ', images: [] },
-      { id: 'v9', color: 'しっくいホワイト', images: [] }
+      { id: 'v1', color: 'ネイビーオーク柄', images: [] }
     ],
     pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 }
+      { plan: 'LACIE', price: 10000 },
+      { plan: 'HOURS', price: 10000 },
+      { plan: 'LIFE+', price: 10000 },
+      { plan: 'LIFE', price: 10000 }
     ]
   },
   {
-    id: 'int-door-003',
+    id: 'door-paint-bluegrayoak',
     categoryId: 'interior-door',
     categoryName: '建具',
-    subcategory: 'スタンダードレーベル',
-    name: 'TAデザイン',
-    manufacturer: 'LIXIL',
-    modelNumber: 'TA',
+    subcategory: '室内ドア ペイントカラー',
+    name: 'VERITIS ペイントカラー ブルーグレーオーク柄',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VERITIS-PAINT-BLUEGRAYOAK',
+    unit: 'piece',
+    isOption: true,
+    description: 'ペイントカラー変更（扉1枚W900まで）',
+    variants: [
+      { id: 'v1', color: 'ブルーグレーオーク柄', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 10000 },
+      { plan: 'HOURS', price: 10000 },
+      { plan: 'LIFE+', price: 10000 },
+      { plan: 'LIFE', price: 10000 }
+    ]
+  },
+  {
+    id: 'door-paint-bitterwald',
+    categoryId: 'interior-door',
+    categoryName: '建具',
+    subcategory: '室内ドア ペイントカラー',
+    name: 'VERITIS ペイントカラー ビターウォルドオーク柄',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VERITIS-PAINT-BITTERWALD',
+    unit: 'piece',
+    isOption: true,
+    description: 'ペイントカラー変更（扉1枚W900まで）',
+    variants: [
+      { id: 'v1', color: 'ビターウォルドオーク柄', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 10000 },
+      { plan: 'HOURS', price: 10000 },
+      { plan: 'LIFE+', price: 10000 },
+      { plan: 'LIFE', price: 10000 }
+    ]
+  },
+  // ソリッドカラー変更（全プラン OP ¥20,000/カ所）
+  {
+    id: 'door-solid-soilblack',
+    categoryId: 'interior-door',
+    categoryName: '建具',
+    subcategory: '室内ドア ソリッドカラー',
+    name: 'VERITIS ソリッドカラー ソイルブラック柄',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VERITIS-SOLID-SOILBLACK',
+    unit: 'piece',
+    isOption: true,
+    description: 'ソリッドカラー変更（扉1枚W900まで）',
+    variants: [
+      { id: 'v1', color: 'ソイルブラック柄', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 20000 },
+      { plan: 'HOURS', price: 20000 },
+      { plan: 'LIFE+', price: 20000 },
+      { plan: 'LIFE', price: 20000 }
+    ]
+  },
+  {
+    id: 'door-solid-pearlgray',
+    categoryId: 'interior-door',
+    categoryName: '建具',
+    subcategory: '室内ドア ソリッドカラー',
+    name: 'VERITIS ソリッドカラー パールグレー柄',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VERITIS-SOLID-PEARLGRAY',
+    unit: 'piece',
+    isOption: true,
+    description: 'ソリッドカラー変更（扉1枚W900まで）',
+    variants: [
+      { id: 'v1', color: 'パールグレー柄', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 20000 },
+      { plan: 'HOURS', price: 20000 },
+      { plan: 'LIFE+', price: 20000 },
+      { plan: 'LIFE', price: 20000 }
+    ]
+  },
+  // 取手・ストッパーカラー（標準付属品）
+  {
+    id: 'door-handle-silver',
+    categoryId: 'interior-door',
+    categoryName: '建具',
+    subcategory: '取手・ストッパー',
+    name: 'ハンドル(A1型) サテンシルバー色',
+    manufacturer: 'Panasonic',
+    modelNumber: 'MJE1851ST',
     unit: 'piece',
     isOption: false,
-    description: 'ハイドア標準（H2400）',
+    description: '開き戸用ハンドル サテンシルバー色（塗装）',
     variants: [
-      { id: 'v1', color: 'ソフトウォールナット', images: [] },
-      { id: 'v2', color: 'ウォールナット', images: [] },
-      { id: 'v3', color: 'チェリー', images: [] },
-      { id: 'v4', color: 'グレージュアッシュ', images: [] },
-      { id: 'v5', color: 'イタリアオーク', images: [] },
-      { id: 'v6', color: 'メープル', images: [] },
-      { id: 'v7', color: 'ホワイトオーク', images: [] },
-      { id: 'v8', color: 'ホワイトアッシュ', images: [] },
-      { id: 'v9', color: 'しっくいホワイト', images: [] }
+      { id: 'v1', color: 'サテンシルバー色', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 }
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+  {
+    id: 'door-handle-black',
+    categoryId: 'interior-door',
+    categoryName: '建具',
+    subcategory: '取手・ストッパー',
+    name: 'ハンドル(A1型) オフブラック色',
+    manufacturer: 'Panasonic',
+    modelNumber: 'MJE1852ST',
+    unit: 'piece',
+    isOption: false,
+    description: '開き戸用ハンドル オフブラック色（塗装）',
+    variants: [
+      { id: 'v1', color: 'オフブラック色', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+  {
+    id: 'door-pull-silver',
+    categoryId: 'interior-door',
+    categoryName: '建具',
+    subcategory: '取手・ストッパー',
+    name: '角型引手(C1型) サテンシルバー色',
+    manufacturer: 'Panasonic',
+    modelNumber: 'MJE1851BN',
+    unit: 'piece',
+    isOption: false,
+    description: '引戸用引手 サテンシルバー色（塗装）',
+    variants: [
+      { id: 'v1', color: 'サテンシルバー色', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+  {
+    id: 'door-pull-black',
+    categoryId: 'interior-door',
+    categoryName: '建具',
+    subcategory: '取手・ストッパー',
+    name: '角型引手(C1型) オフブラック色',
+    manufacturer: 'Panasonic',
+    modelNumber: 'MJE1852BN',
+    unit: 'piece',
+    isOption: false,
+    description: '引戸用引手 オフブラック色（塗装）',
+    variants: [
+      { id: 'v1', color: 'オフブラック色', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+  // 収納用建具 - 折戸（全プラン OP ¥50,000/カ所）
+  {
+    id: 'door-storage-fold-ph',
+    categoryId: 'interior-door',
+    categoryName: '建具',
+    subcategory: '収納用建具',
+    name: 'VERITIS 収納用折戸 PHデザイン',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VERITIS-CL-FOLD-PH',
+    unit: 'piece',
+    isOption: true,
+    description: '折れ戸/壁芯々W910まで（H2400）取手レス',
+    variants: [
+      { id: 'v1', color: 'ソフトウォールナット柄', images: [] },
+      { id: 'v2', color: 'ウォールナット柄', images: [] },
+      { id: 'v3', color: 'チェリー柄', images: [] },
+      { id: 'v4', color: 'グレージュアッシュ柄', images: [] },
+      { id: 'v5', color: 'イデアオーク柄', images: [] },
+      { id: 'v6', color: 'メープル柄', images: [] },
+      { id: 'v7', color: 'ホワイトオーク柄', images: [] },
+      { id: 'v8', color: 'ホワイトアッシュ柄', images: [] },
+      { id: 'v9', color: 'しっくいホワイト柄', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 50000 },
+      { plan: 'HOURS', price: 50000 },
+      { plan: 'LIFE+', price: 50000 },
+      { plan: 'LIFE', price: 50000 }
+    ]
+  },
+  {
+    id: 'door-storage-fold-pa',
+    categoryId: 'interior-door',
+    categoryName: '建具',
+    subcategory: '収納用建具',
+    name: 'VERITIS 収納用折戸 PAデザイン',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VERITIS-CL-FOLD-PA',
+    unit: 'piece',
+    isOption: true,
+    description: '折れ戸/壁芯々W910まで（H2400）',
+    variants: [
+      { id: 'v1', color: 'ソフトウォールナット柄', images: [] },
+      { id: 'v2', color: 'ウォールナット柄', images: [] },
+      { id: 'v3', color: 'チェリー柄', images: [] },
+      { id: 'v4', color: 'グレージュアッシュ柄', images: [] },
+      { id: 'v5', color: 'イデアオーク柄', images: [] },
+      { id: 'v6', color: 'メープル柄', images: [] },
+      { id: 'v7', color: 'ホワイトオーク柄', images: [] },
+      { id: 'v8', color: 'ホワイトアッシュ柄', images: [] },
+      { id: 'v9', color: 'しっくいホワイト柄', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 50000 },
+      { plan: 'HOURS', price: 50000 },
+      { plan: 'LIFE+', price: 50000 },
+      { plan: 'LIFE', price: 50000 }
+    ]
+  },
+  // 収納用建具 - 折戸鏡付き（全プラン OP +¥30,000）
+  {
+    id: 'door-storage-fold-mirror',
+    categoryId: 'interior-door',
+    categoryName: '建具',
+    subcategory: '収納用建具',
+    name: 'VERITIS 収納用折戸 鏡追加',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VERITIS-CL-FOLD-MIRROR',
+    unit: 'piece',
+    isOption: true,
+    description: '折れ戸に鏡追加（折れ戸のみ対応可）',
+    variants: [
+      { id: 'v1', color: '鏡付き', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 30000 },
+      { plan: 'HOURS', price: 30000 },
+      { plan: 'LIFE+', price: 30000 },
+      { plan: 'LIFE', price: 30000 }
+    ]
+  },
+  // 収納用建具 - 2枚引き違い戸（全プラン OP ¥90,000/カ所）
+  {
+    id: 'door-storage-slide2',
+    categoryId: 'interior-door',
+    categoryName: '建具',
+    subcategory: '収納用建具',
+    name: 'VERITIS 収納用2枚引き違い戸',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VERITIS-CL-SLIDE2',
+    unit: 'piece',
+    isOption: true,
+    description: '2枚引き違い戸/壁芯々W1820まで（H2400）',
+    variants: [
+      { id: 'v1', color: 'ソフトウォールナット柄', images: [] },
+      { id: 'v2', color: 'ウォールナット柄', images: [] },
+      { id: 'v3', color: 'チェリー柄', images: [] },
+      { id: 'v4', color: 'グレージュアッシュ柄', images: [] },
+      { id: 'v5', color: 'イデアオーク柄', images: [] },
+      { id: 'v6', color: 'メープル柄', images: [] },
+      { id: 'v7', color: 'ホワイトオーク柄', images: [] },
+      { id: 'v8', color: 'ホワイトアッシュ柄', images: [] },
+      { id: 'v9', color: 'しっくいホワイト柄', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 90000 },
+      { plan: 'HOURS', price: 90000 },
+      { plan: 'LIFE+', price: 90000 },
+      { plan: 'LIFE', price: 90000 }
+    ]
+  },
+  // 建具デザイン変更 - アクリル・ガラス入り（全プラン OP ¥50,000/カ所）
+  {
+    id: 'door-design-wb',
+    categoryId: 'interior-door',
+    categoryName: '建具',
+    subcategory: '建具デザイン変更',
+    name: 'VERITIS WBデザイン 半透明アクリル板',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VERITIS-WB',
+    unit: 'piece',
+    isOption: true,
+    description: '建具デザイン変更 WBデザイン 開戸/引戸（半透明アクリル板）',
+    variants: [
+      { id: 'v1', color: '標準9色', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 50000 },
+      { plan: 'HOURS', price: 50000 },
+      { plan: 'LIFE+', price: 50000 },
+      { plan: 'LIFE', price: 50000 }
+    ]
+  },
+  {
+    id: 'door-design-wc',
+    categoryId: 'interior-door',
+    categoryName: '建具',
+    subcategory: '建具デザイン変更',
+    name: 'VERITIS WCデザイン 半透明あわせガラス',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VERITIS-WC',
+    unit: 'piece',
+    isOption: true,
+    description: '建具デザイン変更 WCデザイン 開戸/引戸（半透明あわせガラス）',
+    variants: [
+      { id: 'v1', color: '標準9色', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 50000 },
+      { plan: 'HOURS', price: 50000 },
+      { plan: 'LIFE+', price: 50000 },
+      { plan: 'LIFE', price: 50000 }
+    ]
+  },
+  {
+    id: 'door-design-ld',
+    categoryId: 'interior-door',
+    categoryName: '建具',
+    subcategory: '建具デザイン変更',
+    name: 'VERITIS LDデザイン 半透明アクリル板',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VERITIS-LD',
+    unit: 'piece',
+    isOption: true,
+    description: '建具デザイン変更 LDデザイン 開戸/引戸（半透明アクリル板）',
+    variants: [
+      { id: 'v1', color: '標準9色', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 50000 },
+      { plan: 'HOURS', price: 50000 },
+      { plan: 'LIFE+', price: 50000 },
+      { plan: 'LIFE', price: 50000 }
+    ]
+  },
+  {
+    id: 'door-design-mc',
+    categoryId: 'interior-door',
+    categoryName: '建具',
+    subcategory: '建具デザイン変更',
+    name: 'VERITIS MCデザイン 半透明あわせガラス',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VERITIS-MC',
+    unit: 'piece',
+    isOption: true,
+    description: '建具デザイン変更 MCデザイン 開戸/引戸（半透明あわせガラス）',
+    variants: [
+      { id: 'v1', color: '標準9色', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 50000 },
+      { plan: 'HOURS', price: 50000 },
+      { plan: 'LIFE+', price: 50000 },
+      { plan: 'LIFE', price: 50000 }
+    ]
+  },
+  {
+    id: 'door-design-lb',
+    categoryId: 'interior-door',
+    categoryName: '建具',
+    subcategory: '建具デザイン変更',
+    name: 'VERITIS LBデザイン 半透明アクリル板',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VERITIS-LB',
+    unit: 'piece',
+    isOption: true,
+    description: '建具デザイン変更 LBデザイン 開戸/引戸（半透明アクリル板）',
+    variants: [
+      { id: 'v1', color: '標準9色', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 50000 },
+      { plan: 'HOURS', price: 50000 },
+      { plan: 'LIFE+', price: 50000 },
+      { plan: 'LIFE', price: 50000 }
+    ]
+  },
+  // ペットドア（全プラン OP ¥50,000/カ所）
+  {
+    id: 'door-design-petdoor',
+    categoryId: 'interior-door',
+    categoryName: '建具',
+    subcategory: '建具デザイン変更',
+    name: 'VERITIS PAデザイン+ペットドア',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VERITIS-PA-PET',
+    unit: 'piece',
+    isOption: true,
+    description: 'PAデザイン+ペットドア 開戸（開口 H280×W180）',
+    variants: [
+      { id: 'v1', color: '標準9色', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 50000 },
+      { plan: 'HOURS', price: 50000 },
+      { plan: 'LIFE+', price: 50000 },
+      { plan: 'LIFE', price: 50000 }
+    ]
+  },
+  // HCデザイン 引戸のみ（全プラン OP 変更¥105,000/追加¥120,000）
+  {
+    id: 'door-design-hc-change',
+    categoryId: 'interior-door',
+    categoryName: '建具',
+    subcategory: '建具デザイン変更',
+    name: 'VERITIS HCデザイン ガラス引戸 変更',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VERITIS-HC-CHANGE',
+    unit: 'piece',
+    isOption: true,
+    description: 'HCデザイン（透明orフロスト長熱処理ガラス）引戸のみ対応・引戸変更費用含む',
+    variants: [
+      { id: 'v1', color: '透明ガラス', images: [] },
+      { id: 'v2', color: 'フロストガラス', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 105000 },
+      { plan: 'HOURS', price: 105000 },
+      { plan: 'LIFE+', price: 105000 },
+      { plan: 'LIFE', price: 105000 }
+    ]
+  },
+  {
+    id: 'door-design-hc-add',
+    categoryId: 'interior-door',
+    categoryName: '建具',
+    subcategory: '建具デザイン変更',
+    name: 'VERITIS HCデザイン ガラス引戸 追加',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VERITIS-HC-ADD',
+    unit: 'piece',
+    isOption: true,
+    description: 'HCデザイン（透明orフロスト長熱処理ガラス）引戸追加',
+    variants: [
+      { id: 'v1', color: '透明ガラス', images: [] },
+      { id: 'v2', color: 'フロストガラス', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 120000 },
+      { plan: 'HOURS', price: 120000 },
+      { plan: 'LIFE+', price: 120000 },
+      { plan: 'LIFE', price: 120000 }
+    ]
+  },
+  // HBデザイン 引戸のみ（全プラン OP 変更¥85,000/追加¥100,000〜¥120,000）
+  {
+    id: 'door-design-hb-change',
+    categoryId: 'interior-door',
+    categoryName: '建具',
+    subcategory: '建具デザイン変更',
+    name: 'VERITIS HBデザイン ガラス引戸 変更',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VERITIS-HB-CHANGE',
+    unit: 'piece',
+    isOption: true,
+    description: 'HBデザイン（透明orフロスト長熱処理ガラス）引戸のみ対応・引戸変更費用含む',
+    variants: [
+      { id: 'v1', color: '透明ガラス', images: [] },
+      { id: 'v2', color: 'フロストガラス', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 85000 },
+      { plan: 'HOURS', price: 85000 },
+      { plan: 'LIFE+', price: 85000 },
+      { plan: 'LIFE', price: 85000 }
+    ]
+  },
+  {
+    id: 'door-design-hb-add',
+    categoryId: 'interior-door',
+    categoryName: '建具',
+    subcategory: '建具デザイン変更',
+    name: 'VERITIS HBデザイン ガラス引戸 追加',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VERITIS-HB-ADD',
+    unit: 'piece',
+    isOption: true,
+    description: 'HBデザイン（透明orフロスト長熱処理ガラス）引戸追加',
+    variants: [
+      { id: 'v1', color: '透明ガラス', images: [] },
+      { id: 'v2', color: 'フロストガラス', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 100000 },
+      { plan: 'HOURS', price: 100000 },
+      { plan: 'LIFE+', price: 100000 },
+      { plan: 'LIFE', price: 100000 }
+    ]
+  },
+  // 追加オプション - 開き戸追加（全プラン OP ¥35,000/カ所）
+  {
+    id: 'door-add-swing',
+    categoryId: 'interior-door',
+    categoryName: '建具',
+    subcategory: '建具追加オプション',
+    name: 'VERITIS 開き戸追加',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VERITIS-ADD-SWING',
+    unit: 'piece',
+    isOption: true,
+    description: '開き戸追加（リビングドア・書斎・洗面室・収納等）',
+    variants: [
+      { id: 'v1', color: '標準9色', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 35000 },
+      { plan: 'HOURS', price: 35000 },
+      { plan: 'LIFE+', price: 35000 },
+      { plan: 'LIFE', price: 35000 }
+    ]
+  },
+  // 追加オプション - 片引戸変更（全プラン OP ¥36,000/カ所）
+  {
+    id: 'door-change-sliding',
+    categoryId: 'interior-door',
+    categoryName: '建具',
+    subcategory: '建具追加オプション',
+    name: 'VERITIS 標準開戸から片引戸へ変更',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VERITIS-CHANGE-SLIDE',
+    unit: 'piece',
+    isOption: true,
+    description: '標準開戸から片引戸へ変更差額（上吊りタイプ、下方レール無）※2枚まで標準で変更可能、3枚目からオプション',
+    variants: [
+      { id: 'v1', color: '標準9色', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 36000 },
+      { plan: 'HOURS', price: 36000 },
+      { plan: 'LIFE+', price: 36000 },
+      { plan: 'LIFE', price: 36000 }
+    ]
+  },
+  // 追加オプション - 表示錠追加（全プラン OP ¥5,000/カ所）
+  {
+    id: 'door-add-lock',
+    categoryId: 'interior-door',
+    categoryName: '建具',
+    subcategory: '建具追加オプション',
+    name: 'VERITIS 表示錠追加',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VERITIS-ADD-LOCK',
+    unit: 'piece',
+    isOption: true,
+    description: '表示錠付きに変更差額（※トイレ・脱衣室は標準で表示錠付属）',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 5000 },
+      { plan: 'HOURS', price: 5000 },
+      { plan: 'LIFE+', price: 5000 },
+      { plan: 'LIFE', price: 5000 }
+    ]
+  },
+  // 追加オプション - 引戸追加（全プラン OP ¥71,000/カ所）
+  {
+    id: 'door-add-sliding',
+    categoryId: 'interior-door',
+    categoryName: '建具',
+    subcategory: '建具追加オプション',
+    name: 'VERITIS 引戸追加',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VERITIS-ADD-SLIDE',
+    unit: 'piece',
+    isOption: true,
+    description: '引戸追加（リビングドア・書斎・洗面室・収納等）',
+    variants: [
+      { id: 'v1', color: '標準9色', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 71000 },
+      { plan: 'HOURS', price: 71000 },
+      { plan: 'LIFE+', price: 71000 },
+      { plan: 'LIFE', price: 71000 }
     ]
   },
 
@@ -1815,8 +2424,8 @@ export const interiorProducts: Product[] = [
 
   // ========== 壁材（クロス） ==========
   {
-    id: 'int-wall-001',
-    categoryId: 'wallpaper',
+    id: 'int-wall-base-001',
+    categoryId: 'wall',
     categoryName: '壁材',
     subcategory: 'ベースクロス',
     name: 'サンゲツ ベースクロス',
@@ -1834,92 +2443,52 @@ export const interiorProducts: Product[] = [
     ]
   },
   {
-    id: 'int-wall-002',
-    categoryId: 'wallpaper',
+    id: 'int-wall-accent-001',
+    categoryId: 'wall',
     categoryName: '壁材',
     subcategory: 'アクセントクロス',
-    name: 'サンゲツ厳選カタログ',
+    name: 'サンゲツ厳選カタログ 標準面積内',
     manufacturer: 'サンゲツ',
     modelNumber: 'SANGETSU-SELECT',
     unit: 'sqm',
     isOption: false,
-    description: '標準アクセントクロス（1室1面まで無料）',
+    description: '標準アクセントクロス 坪×2㎡＝標準面積まで無料',
     variants: [
       { id: 'v1', color: '厳選カタログから選択', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 }
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+  {
+    id: 'int-wall-accent-002',
+    categoryId: 'wall',
+    categoryName: '壁材',
+    subcategory: 'アクセントクロス',
+    name: 'アクセントクロス追加（標準面積超過分）',
+    manufacturer: 'サンゲツ',
+    modelNumber: 'SANGETSU-SELECT-EXTRA',
+    unit: 'sqm',
+    isOption: true,
+    description: '標準面積（坪×2㎡）を超える場合のオプション',
+    variants: [
+      { id: 'v1', color: '厳選カタログから選択', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 1400 },
+      { plan: 'HOURS', price: 1400 },
+      { plan: 'LIFE+', price: 1400 },
+      { plan: 'LIFE', price: 1400 }
     ]
   },
 
-  // ========== アクセントタイル ==========
+  // ========== アクセントタイル（ADVAN）==========
   {
-    id: 'int-tile-001',
-    categoryId: 'wallpaper',
-    categoryName: '壁材',
-    subcategory: 'アクセントタイル',
-    name: 'セメンティング',
-    manufacturer: '名古屋モザイク',
-    modelNumber: 'ORG-U7810',
-    unit: 'sqm',
-    isOption: true,
-    description: '598×298×9mm角平',
-    variants: [
-      { id: 'v1', color: 'ホワイト系', images: [] },
-      { id: 'v2', color: 'グレー系', images: [] },
-      { id: 'v3', color: 'ブラウン系', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 30000 },
-      { plan: 'HOURS', price: 32000 }
-    ]
-  },
-  {
-    id: 'int-tile-002',
-    categoryId: 'wallpaper',
-    categoryName: '壁材',
-    subcategory: 'アクセントタイル',
-    name: 'モデネーゼ',
-    manufacturer: '名古屋モザイク',
-    modelNumber: 'XCV-U3200',
-    unit: 'sqm',
-    isOption: true,
-    description: '600×298×10mm角平',
-    variants: [
-      { id: 'v1', color: 'ホワイト系', images: [] },
-      { id: 'v2', color: 'グレー系', images: [] },
-      { id: 'v3', color: 'ベージュ系', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 28000 },
-      { plan: 'HOURS', price: 30000 }
-    ]
-  },
-  {
-    id: 'int-tile-003',
-    categoryId: 'wallpaper',
-    categoryName: '壁材',
-    subcategory: 'アクセントタイル',
-    name: 'ラヴィータ',
-    manufacturer: '名古屋モザイク',
-    modelNumber: 'MSY-U9100',
-    unit: 'sqm',
-    isOption: true,
-    description: '600×298×8mm角平',
-    variants: [
-      { id: 'v1', color: 'ホワイト系', images: [] },
-      { id: 'v2', color: 'グレー系', images: [] },
-      { id: 'v3', color: 'ブラウン系', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 22000 },
-      { plan: 'HOURS', price: 24000 }
-    ]
-  },
-  {
-    id: 'int-tile-004',
-    categoryId: 'wallpaper',
+    id: 'int-tile-advan-001',
+    categoryId: 'wall',
     categoryName: '壁材',
     subcategory: 'アクセントタイル',
     name: 'ストーンベニア',
@@ -2101,103 +2670,6 @@ export const interiorProducts: Product[] = [
     ]
   },
 
-  // ========== エアコン ==========
-  {
-    id: 'int-ac-001',
-    categoryId: 'aircon',
-    categoryName: '空調',
-    subcategory: 'エアコン',
-    name: 'Eシリーズ 6畳用',
-    manufacturer: 'ダイキン',
-    modelNumber: 'S225ATES-W',
-    unit: 'piece',
-    isOption: true,
-    description: '100V対応、施工費含む',
-    variants: [
-      { id: 'v1', color: 'ホワイト', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 110000 },
-      { plan: 'HOURS', price: 110000 }
-    ]
-  },
-  {
-    id: 'int-ac-002',
-    categoryId: 'aircon',
-    categoryName: '空調',
-    subcategory: 'エアコン',
-    name: 'Eシリーズ 8畳用',
-    manufacturer: 'ダイキン',
-    modelNumber: 'S255ATES-W',
-    unit: 'piece',
-    isOption: true,
-    description: '100V対応、施工費含む',
-    variants: [
-      { id: 'v1', color: 'ホワイト', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 130000 },
-      { plan: 'HOURS', price: 130000 }
-    ]
-  },
-  {
-    id: 'int-ac-003',
-    categoryId: 'aircon',
-    categoryName: '空調',
-    subcategory: 'エアコン',
-    name: 'Eシリーズ 10畳用',
-    manufacturer: 'ダイキン',
-    modelNumber: 'S285ATES-W',
-    unit: 'piece',
-    isOption: true,
-    description: '100V対応、施工費含む',
-    variants: [
-      { id: 'v1', color: 'ホワイト', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 150000 },
-      { plan: 'HOURS', price: 150000 }
-    ]
-  },
-  {
-    id: 'int-ac-004',
-    categoryId: 'aircon',
-    categoryName: '空調',
-    subcategory: 'エアコン',
-    name: 'Eシリーズ 14畳用',
-    manufacturer: 'ダイキン',
-    modelNumber: 'S405ATEP-W',
-    unit: 'piece',
-    isOption: true,
-    description: '200V対応、施工費含む',
-    variants: [
-      { id: 'v1', color: 'ホワイト', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 192000 },
-      { plan: 'HOURS', price: 192000 }
-    ]
-  },
-  {
-    id: 'int-ac-005',
-    categoryId: 'aircon',
-    categoryName: '空調',
-    subcategory: 'エアコン',
-    name: 'Eシリーズ 18畳用',
-    manufacturer: 'ダイキン',
-    modelNumber: 'S565ATEP-W',
-    unit: 'piece',
-    isOption: true,
-    description: '200V対応、施工費含む',
-    variants: [
-      { id: 'v1', color: 'ホワイト', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 240000 },
-      { plan: 'HOURS', price: 240000 }
-    ]
-  },
-
   // ========== カーテン ==========
   {
     id: 'int-curtain-001',
@@ -2360,18 +2832,41 @@ export const interiorProducts: Product[] = [
     categoryId: 'hanger',
     categoryName: '物干し',
     subcategory: '室内物干し',
-    name: 'ホスクリーン',
+    name: 'ホスクリーン（1カ所標準）',
+    manufacturer: '川口技研',
+    modelNumber: 'SPC-W',
+    unit: 'set',
+    isOption: false,
+    description: '天井付け室内物干し（2本1組）※1カ所標準',
+    variants: [
+      { id: 'v1', color: 'ホワイト', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+  {
+    id: 'int-hanger-001-add',
+    categoryId: 'hanger',
+    categoryName: '物干し',
+    subcategory: '室内物干し',
+    name: 'ホスクリーン追加',
     manufacturer: '川口技研',
     modelNumber: 'SPC-W',
     unit: 'set',
     isOption: true,
-    description: '天井付け室内物干し（2本1組）',
+    description: '天井付け室内物干し 追加（2カ所目以降）',
     variants: [
       { id: 'v1', color: 'ホワイト', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 15000 },
-      { plan: 'HOURS', price: 16000 }
+      { plan: 'HOURS', price: 16000 },
+      { plan: 'LIFE+', price: 15000 },
+      { plan: 'LIFE', price: 15000 }
     ]
   },
   {
@@ -2950,132 +3445,22 @@ export const interiorProducts: Product[] = [
     ]
   },
 
-  // ========== 室内ドア（PDF27追加）==========
+  // ========== 室内窓（PDF28準拠）==========
+  // Aパターン（A-1〜A-4形状）
   {
-    id: 'int-door-001',
-    categoryId: 'door',
-    categoryName: '建具',
-    subcategory: '室内ドア',
-    name: 'VERITIS ハイドアH2400 ペイントカラー',
-    manufacturer: 'Panasonic',
-    modelNumber: 'VERITIS-H2400-PAINT',
-    unit: 'piece',
-    isOption: true,
-    description: 'ハイドアH2400 ペイントカラー変更',
-    variants: [
-      { id: 'v1', color: 'ネイビーブルー', colorCode: '#000080', images: [] },
-      { id: 'v2', color: 'カーキ', colorCode: '#808000', images: [] },
-      { id: 'v3', color: 'グレージュ', colorCode: '#A9A9A9', images: [] },
-      { id: 'v4', color: 'ピンクベージュ', colorCode: '#E8C4B8', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 10000 },
-      { plan: 'HOURS', price: 10000 },
-      { plan: 'LIFE+', price: 10000 },
-      { plan: 'LIFE', price: 10000 }
-    ]
-  },
-  {
-    id: 'int-door-002',
-    categoryId: 'door',
-    categoryName: '建具',
-    subcategory: '室内ドア',
-    name: 'VERITIS ハイドアH2400 ソリッドカラー',
-    manufacturer: 'Panasonic',
-    modelNumber: 'VERITIS-H2400-SOLID',
-    unit: 'piece',
-    isOption: true,
-    description: 'ハイドアH2400 ソリッドカラー変更',
-    variants: [
-      { id: 'v1', color: 'マットブラック', colorCode: '#1A1A1A', images: [] },
-      { id: 'v2', color: 'グレー', colorCode: '#808080', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 20000 },
-      { plan: 'HOURS', price: 20000 },
-      { plan: 'LIFE+', price: 20000 },
-      { plan: 'LIFE', price: 20000 }
-    ]
-  },
-  {
-    id: 'int-door-003',
-    categoryId: 'door',
-    categoryName: '建具',
-    subcategory: '収納建具',
-    name: '収納用建具 折戸タイプ',
-    manufacturer: 'Panasonic',
-    modelNumber: 'VERITIS-CL-FOLD',
-    unit: 'piece',
-    isOption: true,
-    description: '収納用建具 折戸タイプ',
-    variants: [
-      { id: 'v1', color: '標準9色', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 50000 },
-      { plan: 'HOURS', price: 50000 },
-      { plan: 'LIFE+', price: 50000 },
-      { plan: 'LIFE', price: 50000 }
-    ]
-  },
-  {
-    id: 'int-door-004',
-    categoryId: 'door',
-    categoryName: '建具',
-    subcategory: '室内ドア',
-    name: '建具デザイン変更 ガラス入り',
-    manufacturer: 'Panasonic',
-    modelNumber: 'VERITIS-GLASS',
-    unit: 'piece',
-    isOption: true,
-    description: '建具デザイン ガラス入りへ変更',
-    variants: [
-      { id: 'v1', color: '標準', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 50000 },
-      { plan: 'HOURS', price: 50000 },
-      { plan: 'LIFE+', price: 50000 },
-      { plan: 'LIFE', price: 50000 }
-    ]
-  },
-  {
-    id: 'int-door-005',
-    categoryId: 'door',
-    categoryName: '建具',
-    subcategory: '室内ドア',
-    name: 'ペットドア',
-    manufacturer: 'Panasonic',
-    modelNumber: 'VERITIS-PET',
-    unit: 'piece',
-    isOption: true,
-    description: 'ペット用くぐり戸付きドア',
-    variants: [
-      { id: 'v1', color: '標準', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 50000 },
-      { plan: 'HOURS', price: 50000 },
-      { plan: 'LIFE+', price: 50000 },
-      { plan: 'LIFE', price: 50000 }
-    ]
-  },
-
-  // ========== 室内窓（PDF28追加）==========
-  {
-    id: 'int-window-001',
+    id: 'int-window-a-standard',
     categoryId: 'window-interior',
     categoryName: '室内窓',
     subcategory: '室内窓',
-    name: '室内窓 Aパターン',
+    name: '室内窓 Aパターン 標準ガラス',
     manufacturer: 'Panasonic',
-    modelNumber: 'INT-WINDOW-A',
+    modelNumber: 'INT-WINDOW-A-STD',
     unit: 'set',
     isOption: true,
-    description: '室内窓 Aパターン（小サイズ）',
+    description: '室内窓 Aパターン（A-1〜A-4形状）FIX窓・透明熱処理ガラス',
     variants: [
-      { id: 'v1', color: 'ホワイトアッシュ', colorCode: '#E8E8E8', images: [] },
-      { id: 'v2', color: 'スモークオーク', colorCode: '#8B7355', images: [] }
+      { id: 'v1', color: 'オフブラック', images: [] },
+      { id: 'v2', color: 'ホワイト', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 71000 },
@@ -3085,19 +3470,42 @@ export const interiorProducts: Product[] = [
     ]
   },
   {
-    id: 'int-window-002',
+    id: 'int-window-a-option',
     categoryId: 'window-interior',
     categoryName: '室内窓',
     subcategory: '室内窓',
-    name: '室内窓 Bパターン',
+    name: '室内窓 Aパターン オプションガラス',
     manufacturer: 'Panasonic',
-    modelNumber: 'INT-WINDOW-B',
+    modelNumber: 'INT-WINDOW-A-OPT',
     unit: 'set',
     isOption: true,
-    description: '室内窓 Bパターン（中サイズ）',
+    description: '室内窓 Aパターン オプションガラス（カスミ/チェッカーアクリル/チェッカー/レイン/モール熱処理ガラス）',
     variants: [
-      { id: 'v1', color: 'ホワイトアッシュ', colorCode: '#E8E8E8', images: [] },
-      { id: 'v2', color: 'スモークオーク', colorCode: '#8B7355', images: [] }
+      { id: 'v1', color: 'オフブラック', images: [] },
+      { id: 'v2', color: 'ホワイト', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 105000 },
+      { plan: 'HOURS', price: 105000 },
+      { plan: 'LIFE+', price: 105000 },
+      { plan: 'LIFE', price: 105000 }
+    ]
+  },
+  // Bパターン（B-1〜B-5形状）
+  {
+    id: 'int-window-b-standard',
+    categoryId: 'window-interior',
+    categoryName: '室内窓',
+    subcategory: '室内窓',
+    name: '室内窓 Bパターン 標準ガラス',
+    manufacturer: 'Panasonic',
+    modelNumber: 'INT-WINDOW-B-STD',
+    unit: 'set',
+    isOption: true,
+    description: '室内窓 Bパターン（B-1〜B-5形状）FIX窓・透明熱処理ガラス',
+    variants: [
+      { id: 'v1', color: 'オフブラック', images: [] },
+      { id: 'v2', color: 'ホワイト', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 135000 },
@@ -3107,25 +3515,92 @@ export const interiorProducts: Product[] = [
     ]
   },
   {
-    id: 'int-window-003',
+    id: 'int-window-b-option',
     categoryId: 'window-interior',
     categoryName: '室内窓',
     subcategory: '室内窓',
-    name: '室内窓 Cパターン',
+    name: '室内窓 Bパターン オプションガラス',
     manufacturer: 'Panasonic',
-    modelNumber: 'INT-WINDOW-C',
+    modelNumber: 'INT-WINDOW-B-OPT',
     unit: 'set',
     isOption: true,
-    description: '室内窓 Cパターン（大サイズ）',
+    description: '室内窓 Bパターン オプションガラス（カスミ/チェッカーアクリル/チェッカー/レイン/モール熱処理ガラス）',
     variants: [
-      { id: 'v1', color: 'ホワイトアッシュ', colorCode: '#E8E8E8', images: [] },
-      { id: 'v2', color: 'スモークオーク', colorCode: '#8B7355', images: [] }
+      { id: 'v1', color: 'オフブラック', images: [] },
+      { id: 'v2', color: 'ホワイト', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 200000 },
+      { plan: 'HOURS', price: 200000 },
+      { plan: 'LIFE+', price: 200000 },
+      { plan: 'LIFE', price: 200000 }
+    ]
+  },
+  // Cパターン（C-1〜C-3形状）
+  {
+    id: 'int-window-c-standard',
+    categoryId: 'window-interior',
+    categoryName: '室内窓',
+    subcategory: '室内窓',
+    name: '室内窓 Cパターン 標準ガラス',
+    manufacturer: 'Panasonic',
+    modelNumber: 'INT-WINDOW-C-STD',
+    unit: 'set',
+    isOption: true,
+    description: '室内窓 Cパターン（C-1〜C-3形状）FIX窓・透明熱処理ガラス',
+    variants: [
+      { id: 'v1', color: 'オフブラック', images: [] },
+      { id: 'v2', color: 'ホワイト', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 197000 },
       { plan: 'HOURS', price: 197000 },
       { plan: 'LIFE+', price: 197000 },
       { plan: 'LIFE', price: 197000 }
+    ]
+  },
+  {
+    id: 'int-window-c-option',
+    categoryId: 'window-interior',
+    categoryName: '室内窓',
+    subcategory: '室内窓',
+    name: '室内窓 Cパターン オプションガラス',
+    manufacturer: 'Panasonic',
+    modelNumber: 'INT-WINDOW-C-OPT',
+    unit: 'set',
+    isOption: true,
+    description: '室内窓 Cパターン オプションガラス（カスミ/チェッカーアクリル/チェッカー/レイン/モール熱処理ガラス）',
+    variants: [
+      { id: 'v1', color: 'オフブラック', images: [] },
+      { id: 'v2', color: 'ホワイト', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 295000 },
+      { plan: 'HOURS', price: 295000 },
+      { plan: 'LIFE+', price: 295000 },
+      { plan: 'LIFE', price: 295000 }
+    ]
+  },
+  // 突き出し窓変更オプション
+  {
+    id: 'int-window-awning-change',
+    categoryId: 'window-interior',
+    categoryName: '室内窓',
+    subcategory: '室内窓オプション',
+    name: '室内窓 突き出し窓変更',
+    manufacturer: 'Panasonic',
+    modelNumber: 'INT-WINDOW-AWNING',
+    unit: 'piece',
+    isOption: true,
+    description: 'FIX窓から突き出し窓への変更（上部のみ開閉可能な形状に適用可）',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 15000 },
+      { plan: 'HOURS', price: 15000 },
+      { plan: 'LIFE+', price: 15000 },
+      { plan: 'LIFE', price: 15000 }
     ]
   },
 
@@ -4350,96 +4825,6 @@ export const interiorProducts: Product[] = [
       { plan: 'HOURS', price: 36000 },
       { plan: 'LIFE+', price: 36000 },
       { plan: 'LIFE', price: 36000 }
-    ]
-  },
-
-  // ========== トイレ収納（PDF40追加）==========
-  {
-    id: 'int-toilet-storage-001',
-    categoryId: 'storage',
-    categoryName: '収納',
-    subcategory: 'トイレ収納',
-    name: '造作トイレ 背面収納スペース',
-    manufacturer: 'Gハウス',
-    modelNumber: 'TOILET-ZS',
-    unit: 'piece',
-    isOption: true,
-    description: 'トイレ背面収納スペース（棚板なし）',
-    variants: [
-      { id: 'v1', color: '標準', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 35000 },
-      { plan: 'HOURS', price: 35000 },
-      { plan: 'LIFE+', price: 35000 },
-      { plan: 'LIFE', price: 35000 }
-    ]
-  },
-  {
-    id: 'int-toilet-storage-002',
-    categoryId: 'storage',
-    categoryName: '収納',
-    subcategory: 'トイレ収納',
-    name: '造作トイレ 収納',
-    manufacturer: 'Gハウス',
-    modelNumber: 'TOILET-TZ',
-    unit: 'piece',
-    isOption: true,
-    description: 'トイレ造作収納 W150×D130 棚板3枚',
-    variants: [
-      { id: 'v1', color: 'シェルホワイト', colorCode: '#F5F5F5', images: [] },
-      { id: 'v2', color: 'ナチュラルバーチ', colorCode: '#D4B896', images: [] },
-      { id: 'v3', color: 'アッシュウォールナット', colorCode: '#8B7355', images: [] },
-      { id: 'v4', color: 'ブライトウォールナット', colorCode: '#5C4033', images: [] },
-      { id: 'v5', color: 'ダークグレー', colorCode: '#404040', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 47000 },
-      { plan: 'HOURS', price: 47000 },
-      { plan: 'LIFE+', price: 47000 },
-      { plan: 'LIFE', price: 47000 }
-    ]
-  },
-  {
-    id: 'int-toilet-storage-003',
-    categoryId: 'storage',
-    categoryName: '収納',
-    subcategory: 'トイレ収納',
-    name: 'トイレ上部収納',
-    manufacturer: 'Gハウス',
-    modelNumber: 'TOILET-TR-TK',
-    unit: 'piece',
-    isOption: true,
-    description: 'トイレ上部収納 W905×H470×D300',
-    variants: [
-      { id: 'v1', color: 'クリアホワイト', colorCode: '#FFFFFF', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 60000 },
-      { plan: 'HOURS', price: 60000 },
-      { plan: 'LIFE+', price: 60000 },
-      { plan: 'LIFE', price: 60000 }
-    ]
-  },
-  {
-    id: 'int-toilet-storage-004',
-    categoryId: 'storage',
-    categoryName: '収納',
-    subcategory: 'トイレ収納',
-    name: 'サニタトイレ収納ボックス Sタイプ',
-    manufacturer: 'Panasonic',
-    modelNumber: 'SANITA-S',
-    unit: 'piece',
-    isOption: true,
-    description: 'トイレ収納ボックス W300×H740×D117',
-    variants: [
-      { id: 'v1', color: 'クリアホワイト', colorCode: '#FFFFFF', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 53000 },
-      { plan: 'HOURS', price: 53000 },
-      { plan: 'LIFE+', price: 53000 },
-      { plan: 'LIFE', price: 53000 }
     ]
   },
 

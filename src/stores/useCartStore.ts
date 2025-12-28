@@ -79,6 +79,37 @@ export const useCartStore = create<CartStore>()(
         plan: state.selectedPlanId as PlanType,
       };
 
+      // 壁クロス選択時は天井クロスとしても自動追加
+      const isWallCloth = product.categoryName?.includes('壁クロス') ||
+                          product.subcategory?.includes('ベースクロス') ||
+                          product.subcategory?.includes('壁クロス');
+
+      if (isWallCloth) {
+        // 天井クロス用のアイテムを作成（同じ製品、カテゴリ名を変更）
+        const ceilingProduct = {
+          ...product,
+          id: `${product.id}-ceiling-auto`,
+          categoryName: '天井クロス',
+          subcategory: '天井クロス（壁クロス連動）',
+        };
+        const ceilingItem: CartItem = {
+          product: ceilingProduct,
+          selectedVariant,
+          quantity,
+          plan: state.selectedPlanId as PlanType,
+        };
+
+        // 既存の天井クロス（自動追加分）を削除してから追加
+        const filteredItems = state.items.filter(
+          (i) => !i.product.id.endsWith('-ceiling-auto')
+        );
+
+        return {
+          items: [...filteredItems, newItem, ceilingItem],
+          lastUpdated: new Date().toISOString(),
+        };
+      }
+
       return { items: [...state.items, newItem], lastUpdated: new Date().toISOString() };
     });
   },
@@ -93,8 +124,20 @@ export const useCartStore = create<CartStore>()(
         itemName: `${item.product.name}をカートから削除`,
       });
     }
+
+    // 壁クロス削除時は連動する天井クロスも削除
+    const isWallCloth = item?.product.categoryName?.includes('壁クロス') ||
+                        item?.product.subcategory?.includes('ベースクロス') ||
+                        item?.product.subcategory?.includes('壁クロス');
+    const ceilingAutoId = `${productId}-ceiling-auto`;
+
     set((state) => ({
-      items: state.items.filter((item) => item.product.id !== productId),
+      items: state.items.filter((i) => {
+        if (i.product.id === productId) return false;
+        // 壁クロス削除時は連動する天井クロスも削除
+        if (isWallCloth && i.product.id === ceilingAutoId) return false;
+        return true;
+      }),
       lastUpdated: new Date().toISOString(),
     }));
   },

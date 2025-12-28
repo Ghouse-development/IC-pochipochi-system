@@ -148,7 +148,7 @@ export function useProjectUpdates(
   return useRealTimeUpdates({
     table: 'projects',
     filter: projectId ? `id=eq.${projectId}` : undefined,
-    onUpdate: callbacks.onUpdate ? ({ new: data }) => callbacks.onUpdate!(data) : undefined,
+    onUpdate: callbacks.onUpdate ? ({ new: data }) => callbacks.onUpdate?.(data) : undefined,
     enabled: !!projectId,
   });
 }
@@ -179,7 +179,7 @@ export function useCartSync(
   return useRealTimeUpdates({
     table: 'carts',
     filter: userId ? `user_id=eq.${userId}` : undefined,
-    onUpdate: callbacks.onCartUpdate ? ({ new: data }) => callbacks.onCartUpdate!(data) : undefined,
+    onUpdate: callbacks.onCartUpdate ? ({ new: data }) => callbacks.onCartUpdate?.(data) : undefined,
     enabled: !!userId,
   });
 }

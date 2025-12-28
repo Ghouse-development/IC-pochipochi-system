@@ -89,7 +89,7 @@ export const WorkflowGuide: React.FC<WorkflowGuideProps> = ({ onCartClick }) => 
   const navigate = useNavigate();
   const location = useLocation();
   const { items } = useCartStore();
-  const { getSelectionStatus, selections } = useSelectionStore();
+  const { getSelectionStatus } = useSelectionStore();
   const [isExpanded, setIsExpanded] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
 
@@ -132,7 +132,7 @@ export const WorkflowGuide: React.FC<WorkflowGuideProps> = ({ onCartClick }) => 
     });
 
     return progress;
-  }, [items.length, getSelectionStatus, selections]);
+  }, [items.length, getSelectionStatus]);
 
   // 全体の進捗
   const overallProgress = useMemo(() => {
@@ -345,7 +345,7 @@ export const WorkflowGuide: React.FC<WorkflowGuideProps> = ({ onCartClick }) => 
 export const WorkflowProgressBar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { getSelectionStatus, selections } = useSelectionStore();
+  const { getSelectionStatus } = useSelectionStore();
 
   const currentStep = useMemo(() => {
     const path = location.pathname;
@@ -373,7 +373,7 @@ export const WorkflowProgressBar: React.FC = () => {
         isCurrent: currentStep === step.id,
       };
     });
-  }, [currentStep, getSelectionStatus, selections]);
+  }, [currentStep, getSelectionStatus]);
 
   return (
     <div className="flex items-center gap-1 sm:gap-2">

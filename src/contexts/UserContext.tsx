@@ -34,27 +34,21 @@ export function UserProvider({ children }: { children: ReactNode }) {
       try {
         return JSON.parse(stored);
       } catch {
-        return null;
+        // パースに失敗した場合はデフォルトユーザーを設定
       }
     }
-    return null;
-  });
-
-  useEffect(() => {
     // デフォルトユーザーを設定（デモ用）
-    if (!currentUser) {
-      const defaultUser: User = {
-        id: 'demo-admin',
-        email: 'admin@stylebook.com',
-        name: '管理者',
-        role: 'admin',
-        is_active: true,
-        last_login_at: new Date().toISOString()
-      };
-      setCurrentUser(defaultUser);
-      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(defaultUser));
-    }
-  }, []);
+    const defaultUser: User = {
+      id: 'demo-admin',
+      email: 'admin@stylebook.com',
+      name: '管理者',
+      role: 'admin',
+      is_active: true,
+      last_login_at: new Date().toISOString()
+    };
+    localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(defaultUser));
+    return defaultUser;
+  });
 
   useEffect(() => {
     // ユーザー情報が変更されたらローカルストレージに保存

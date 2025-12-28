@@ -8,23 +8,43 @@ export default defineConfig({
     // コード分割の最適化
     rollupOptions: {
       output: {
-        manualChunks: {
+        manualChunks(id) {
           // Reactコア
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom') || id.includes('node_modules/react-router')) {
+            return 'react-vendor';
+          }
           // UI/アイコン
-          'ui-vendor': ['lucide-react', '@radix-ui/react-dialog', '@radix-ui/react-select', '@radix-ui/react-tabs'],
+          if (id.includes('lucide-react') || id.includes('@radix-ui')) {
+            return 'ui-vendor';
+          }
           // Supabase
-          'supabase': ['@supabase/supabase-js'],
+          if (id.includes('@supabase')) {
+            return 'supabase';
+          }
           // エクスポート関連
-          'export-vendor': ['xlsx', 'jspdf', 'jspdf-autotable'],
+          if (id.includes('xlsx') || id.includes('jspdf')) {
+            return 'export-vendor';
+          }
           // 状態管理
-          'state': ['zustand'],
+          if (id.includes('zustand')) {
+            return 'state';
+          }
           // ユーティリティ
-          'utils': ['html2canvas', 'dompurify'],
+          if (id.includes('html2canvas') || id.includes('dompurify')) {
+            return 'utils';
+          }
           // 仮想スクロール
-          'virtual': ['@tanstack/react-virtual'],
+          if (id.includes('@tanstack/react-virtual')) {
+            return 'virtual';
+          }
           // QRコード
-          'qrcode': ['qrcode.react'],
+          if (id.includes('qrcode')) {
+            return 'qrcode';
+          }
+          // 商品データ（大きなデータファイルを分離）
+          if (id.includes('src/data/interiorProducts') || id.includes('src/data/exteriorProducts')) {
+            return 'product-data';
+          }
         },
       },
     },

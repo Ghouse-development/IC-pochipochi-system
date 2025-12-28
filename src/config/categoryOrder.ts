@@ -110,6 +110,14 @@ export const EXTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
     subcategoryOrder: ['外部配管']
   },
   {
+    name: '笠木',
+    icon: '🏗️',
+    subcategoryOrder: [
+      'パラペット笠木',
+      'バルコニー笠木',
+    ]
+  },
+  {
     name: '外部設備',
     icon: '🔌',
     subcategoryOrder: [

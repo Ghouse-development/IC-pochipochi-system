@@ -138,7 +138,7 @@ export const ShowroomEstimateManager: React.FC<ShowroomEstimateManagerProps> = (
       } else {
         toast.warning('インポートエラー', '有効なデータが見つかりませんでした');
       }
-    } catch (error) {
+    } catch {
       toast.error('インポートエラー', 'データの解析に失敗しました');
     }
   }, [importText, selectedManufacturer, toast]);

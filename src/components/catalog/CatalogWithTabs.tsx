@@ -35,6 +35,7 @@ import {
   FURNITURE_CATEGORIES,
   getRecommendBadge,
   getNotNeededOption,
+  isHiddenCategory,
   type FilterTypeValue,
 } from './catalogUtils';
 import { NotNeededCard } from './NotNeededCard';
@@ -351,8 +352,12 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
           : supabaseCategories.filter(cat =>
               !DESIGN_CATEGORIES.some(dc => cat.name.includes(dc) || dc.includes(cat.name))
             );
+        // 非表示カテゴリを除外（天井クロスなど壁クロスに連動するもの）
+        const visibleCategories = filteredCategories.filter(cat =>
+          !isHiddenCategory(cat.name)
+        );
         // 重複除去（同名カテゴリがある場合は最初のものを使用）
-        const uniqueCategories = filteredCategories.filter((cat, index, self) =>
+        const uniqueCategories = visibleCategories.filter((cat, index, self) =>
           index === self.findIndex(c => c.name === cat.name)
         );
         setCategories(uniqueCategories);
@@ -378,7 +383,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
         products.forEach((p, idx) => {
           // DESIGN_CATEGORIESを除外（内装以外）
           const isDesignCategory = DESIGN_CATEGORIES.some(dc => p.categoryName.includes(dc) || dc.includes(p.categoryName));
-          if (p.categoryName && !categoryMap.has(p.categoryName) && (activeTab === 'interior' || !isDesignCategory)) {
+          // 非表示カテゴリを除外（天井クロスなど）
+          const isHidden = isHiddenCategory(p.categoryName);
+          if (p.categoryName && !categoryMap.has(p.categoryName) && !isHidden && (activeTab === 'interior' || !isDesignCategory)) {
             categoryMap.set(p.categoryName, {
               id: `cat-${activeTab}-${idx}`,
               parent_id: null,

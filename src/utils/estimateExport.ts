@@ -127,10 +127,9 @@ const groupByCategory = (items: EstimateItem[]): Map<string, EstimateItem[]> => 
 
   items.forEach(item => {
     const category = item.category;
-    if (!grouped.has(category)) {
-      grouped.set(category, []);
-    }
-    grouped.get(category)!.push(item);
+    const arr = grouped.get(category) ?? [];
+    arr.push(item);
+    grouped.set(category, arr);
   });
 
   return grouped;

@@ -79,7 +79,7 @@ export const SelectionProgressPanel: React.FC<SelectionProgressPanelProps> = ({
     });
 
     return stats;
-  }, [selections, getSelectionStatus]);
+  }, [getSelectionStatus]);
 
   // 全体の進捗
   const totalStats = useMemo(() => {
@@ -100,7 +100,7 @@ export const SelectionProgressPanel: React.FC<SelectionProgressPanelProps> = ({
       remaining: total - completed - notNeeded,
       percentage: Math.round(((completed + notNeeded) / total) * 100),
     };
-  }, [selections, getSelectionStatus]);
+  }, [getSelectionStatus]);
 
   const toggleGroup = (group: GroupKey) => {
     const newExpanded = new Set(expandedGroups);

@@ -142,7 +142,8 @@ export class CategoryService {
 
       // Second pass: build tree
       data?.forEach(cat => {
-        const category = categoryMap.get(cat.id)!;
+        const category = categoryMap.get(cat.id);
+        if (!category) return;
         if (cat.parent_id) {
           const parent = categoryMap.get(cat.parent_id);
           if (parent) {

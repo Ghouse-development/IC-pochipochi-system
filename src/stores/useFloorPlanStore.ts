@@ -170,16 +170,47 @@ export const useFloorPlanStore = create<FloorPlanState>()(
         rooms: state.rooms.filter((room) => room.id !== id),
       })),
 
-      setMainSelection: (type, itemId) => set((state) => ({
-        mainSelections: { ...state.mainSelections, [type]: itemId },
-      })),
+      setMainSelection: (type, itemId) => set((state) => {
+        // 壁クロス選択時は天井クロスも自動で同じものを設定
+        if (type === 'wallpaper') {
+          return {
+            mainSelections: {
+              ...state.mainSelections,
+              wallpaper: itemId,
+              ceiling: itemId  // 天井クロスも同じに
+            },
+          };
+        }
+        // 天井クロスは直接設定不可（壁クロスに連動）
+        if (type === 'ceiling') {
+          return state; // 変更しない
+        }
+        return {
+          mainSelections: { ...state.mainSelections, [type]: itemId },
+        };
+      }),
 
       setRoomSelection: (roomId, type, itemId) => set((state) => ({
-        rooms: state.rooms.map((room) =>
-          room.id === roomId
-            ? { ...room, selections: { ...room.selections, [type]: itemId } }
-            : room
-        ),
+        rooms: state.rooms.map((room) => {
+          if (room.id !== roomId) return room;
+
+          // 壁クロス選択時は天井クロスも自動で同じものを設定
+          if (type === 'wallpaper') {
+            return {
+              ...room,
+              selections: {
+                ...room.selections,
+                wallpaper: itemId,
+                ceiling: itemId  // 天井クロスも同じに
+              }
+            };
+          }
+          // 天井クロスは直接設定不可（壁クロスに連動）
+          if (type === 'ceiling') {
+            return room; // 変更しない
+          }
+          return { ...room, selections: { ...room.selections, [type]: itemId } };
+        }),
       })),
 
       setIsAnalyzing: (isAnalyzing) => set({ isAnalyzing }),

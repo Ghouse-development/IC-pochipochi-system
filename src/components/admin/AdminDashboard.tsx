@@ -90,10 +90,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
   const getCategoryAdoptionRates = useStatisticsStore((state) => state.getCategoryAdoptionRates);
 
   // 採用率分析データ
-  const adoptionRates = useMemo(() => getAdoptionRates(), [productStats, getAdoptionRates]);
-  const unselectedProducts = useMemo(() => getUnselectedProducts(), [productStats, getUnselectedProducts]);
-  const lowAdoptionProducts = useMemo(() => getLowAdoptionProducts(30), [productStats, getLowAdoptionProducts]);
-  const categoryAdoptionRates = useMemo(() => getCategoryAdoptionRates(), [productStats, getCategoryAdoptionRates]);
+  const adoptionRates = useMemo(() => getAdoptionRates(), [getAdoptionRates]);
+  const unselectedProducts = useMemo(() => getUnselectedProducts(), [getUnselectedProducts]);
+  const lowAdoptionProducts = useMemo(() => getLowAdoptionProducts(30), [getLowAdoptionProducts]);
+  const categoryAdoptionRates = useMemo(() => getCategoryAdoptionRates(), [getCategoryAdoptionRates]);
 
   const topProducts = useMemo(() =>
     [...productStats]

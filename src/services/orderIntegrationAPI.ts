@@ -138,7 +138,7 @@ export class OrderIntegrationService {
           ...(this.config.apiKey && { 'Authorization': `Bearer ${this.config.apiKey}` }),
         },
         body: JSON.stringify(orderData),
-        signal: AbortSignal.timeout(this.config.timeout!),
+        signal: AbortSignal.timeout(this.config.timeout ?? 30000),
       });
 
       if (!response.ok) {
@@ -165,7 +165,7 @@ export class OrderIntegrationService {
         headers: {
           ...(this.config.apiKey && { 'Authorization': `Bearer ${this.config.apiKey}` }),
         },
-        signal: AbortSignal.timeout(this.config.timeout!),
+        signal: AbortSignal.timeout(this.config.timeout ?? 30000),
       });
 
       if (!response.ok) {
@@ -194,7 +194,7 @@ export class OrderIntegrationService {
           ...(this.config.apiKey && { 'Authorization': `Bearer ${this.config.apiKey}` }),
         },
         body: JSON.stringify({ productCodes }),
-        signal: AbortSignal.timeout(this.config.timeout!),
+        signal: AbortSignal.timeout(this.config.timeout ?? 30000),
       });
 
       if (!response.ok) {

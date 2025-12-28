@@ -29,14 +29,21 @@ if (!isSupabaseConfigured) {
 }
 
 // Supabaseクライアント（環境変数未設定時はダミークライアント）
-export const supabase: SupabaseClient = isSupabaseConfigured
-  ? createClient(supabaseUrl!, supabaseAnonKey!, {
+const createConfiguredClient = (): SupabaseClient => {
+  if (supabaseUrl && supabaseAnonKey) {
+    return createClient(supabaseUrl, supabaseAnonKey, {
       auth: {
         autoRefreshToken: true,
         persistSession: true,
         detectSessionInUrl: true,
       },
-    })
+    });
+  }
+  return createDummyClient();
+};
+
+export const supabase: SupabaseClient = isSupabaseConfigured
+  ? createConfiguredClient()
   : createDummyClient();
 
 // Storage bucket names

@@ -86,7 +86,7 @@ export function buildHierarchy(products: HierarchicalProduct[]): CategoryNode[] 
   const root: CategoryNode[] = [];
   const categoryMap = new Map<string, CategoryNode>();
 
-  products.forEach(product => {
+  for (const product of products) {
     // Category 1
     const cat1Key = product.category1;
     if (!categoryMap.has(cat1Key)) {
@@ -98,7 +98,8 @@ export function buildHierarchy(products: HierarchicalProduct[]): CategoryNode[] 
       categoryMap.set(cat1Key, cat1Node);
       root.push(cat1Node);
     }
-    const cat1Node = categoryMap.get(cat1Key)!;
+    const cat1Node = categoryMap.get(cat1Key);
+    if (!cat1Node) continue;
 
     // Category 2
     const cat2Key = `${cat1Key}|${product.category2}`;
@@ -109,9 +110,10 @@ export function buildHierarchy(products: HierarchicalProduct[]): CategoryNode[] 
         children: []
       };
       categoryMap.set(cat2Key, cat2Node);
-      cat1Node.children!.push(cat2Node);
+      if (cat1Node.children) cat1Node.children.push(cat2Node);
     }
-    const cat2Node = categoryMap.get(cat2Key)!;
+    const cat2Node = categoryMap.get(cat2Key);
+    if (!cat2Node) continue;
 
     // Category 3
     const cat3Key = `${cat2Key}|${product.category3}`;
@@ -122,9 +124,10 @@ export function buildHierarchy(products: HierarchicalProduct[]): CategoryNode[] 
         children: []
       };
       categoryMap.set(cat3Key, cat3Node);
-      cat2Node.children!.push(cat3Node);
+      if (cat2Node.children) cat2Node.children.push(cat3Node);
     }
-    const cat3Node = categoryMap.get(cat3Key)!;
+    const cat3Node = categoryMap.get(cat3Key);
+    if (!cat3Node) continue;
 
     // Product
     const productKey = `${cat3Key}|${product.product}`;
@@ -135,9 +138,10 @@ export function buildHierarchy(products: HierarchicalProduct[]): CategoryNode[] 
         children: []
       };
       categoryMap.set(productKey, productNode);
-      cat3Node.children!.push(productNode);
+      if (cat3Node.children) cat3Node.children.push(productNode);
     }
-    const productNode = categoryMap.get(productKey)!;
+    const productNode = categoryMap.get(productKey);
+    if (!productNode) continue;
 
     // Color (variant)
     const colorNode: CategoryNode = {
@@ -145,8 +149,8 @@ export function buildHierarchy(products: HierarchicalProduct[]): CategoryNode[] 
       type: 'color',
       data: product
     };
-    productNode.children!.push(colorNode);
-  });
+    if (productNode.children) productNode.children.push(colorNode);
+  }
 
   return root;
 }

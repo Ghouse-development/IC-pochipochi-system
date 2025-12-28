@@ -376,7 +376,7 @@ const extractColorPalette = (
     .filter((item) => item.selectedVariant?.color)
     .map((item) => ({
       category: item.product.categoryName,
-      color: item.selectedVariant!.color,
+      color: item.selectedVariant?.color ?? '',
       colorCode: item.selectedVariant?.colorCode,
     }));
 };

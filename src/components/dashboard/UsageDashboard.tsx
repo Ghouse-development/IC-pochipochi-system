@@ -37,7 +37,6 @@ export const UsageDashboard: React.FC<UsageDashboardProps> = ({
   customerName,
 }) => {
   const {
-    logs,
     getRecentLogs,
     getLogsByAction,
     getCustomerLogs,
@@ -79,7 +78,7 @@ export const UsageDashboard: React.FC<UsageDashboardProps> = ({
       unconfirmedCategories,
       customerStats,
     };
-  }, [logs, getRecentLogs, getLogsByAction, getConfirmedCategories, getUnconfirmedCategories, getCustomerStats]);
+  }, [getRecentLogs, getLogsByAction, getConfirmedCategories, getUnconfirmedCategories, getCustomerStats]);
 
   // フィルタリングされたログ
   const filteredLogs = useMemo(() => {

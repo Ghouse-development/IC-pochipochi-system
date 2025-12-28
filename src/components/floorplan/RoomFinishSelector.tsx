@@ -139,17 +139,20 @@ export const RoomFinishSelector: React.FC<RoomFinishSelectorProps> = ({
             {mainSelectedItem ? (
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-700">
-                  {getImageUrl(mainSelectedItem) ? (
-                    <img
-                      src={getImageUrl(mainSelectedItem)!}
-                      alt={mainSelectedItem.name}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-gray-400">
-                      <Icon className="w-6 h-6" />
-                    </div>
-                  )}
+                  {(() => {
+                    const imgUrl = getImageUrl(mainSelectedItem);
+                    return imgUrl ? (
+                      <img
+                        src={imgUrl}
+                        alt={mainSelectedItem.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-400">
+                        <Icon className="w-6 h-6" />
+                      </div>
+                    );
+                  })()}
                 </div>
                 <div>
                   <div className="font-medium text-sm text-gray-800 dark:text-gray-200">
@@ -264,17 +267,20 @@ export const RoomFinishSelector: React.FC<RoomFinishSelectorProps> = ({
 
                           {selectedItem && (
                             <div className="w-10 h-10 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-600 flex-shrink-0">
-                              {getImageUrl(selectedItem) ? (
-                                <img
-                                  src={getImageUrl(selectedItem)!}
-                                  alt={selectedItem.name}
-                                  className="w-full h-full object-cover"
-                                />
-                              ) : (
-                                <div className="w-full h-full flex items-center justify-center">
-                                  <Check className="w-4 h-4 text-green-500" />
-                                </div>
-                              )}
+                              {(() => {
+                                const imgUrl = getImageUrl(selectedItem);
+                                return imgUrl ? (
+                                  <img
+                                    src={imgUrl}
+                                    alt={selectedItem.name}
+                                    className="w-full h-full object-cover"
+                                  />
+                                ) : (
+                                  <div className="w-full h-full flex items-center justify-center">
+                                    <Check className="w-4 h-4 text-green-500" />
+                                  </div>
+                                );
+                              })()}
                             </div>
                           )}
                         </div>

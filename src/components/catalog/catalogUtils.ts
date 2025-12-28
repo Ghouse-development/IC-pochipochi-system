@@ -130,6 +130,20 @@ export const STEPS: StepDefinition[] = [
   { id: 'furniture', label: '家具・家電', description: 'カーテン・エアコン', icon: Armchair, emoji: '🪑', gradient: 'from-amber-500 to-orange-500' },
 ];
 
+// お客様には非表示にするカテゴリ名（自動連動または設計者のみ選択）
+export const HIDDEN_CATEGORIES = [
+  '天井クロス',  // 壁クロスに連動して自動設定
+  '照明',        // 照明器具は設計者が決定（ダウンライト施工費は自動計上）
+  '間接照明',    // 間接照明は設計者が決定
+];
+
+// カテゴリがお客様に非表示かどうかをチェック
+export const isHiddenCategory = (categoryName: string): boolean => {
+  return HIDDEN_CATEGORIES.some(hidden =>
+    categoryName.includes(hidden) || hidden.includes(categoryName)
+  );
+};
+
 // 「設計」に属するカテゴリ名（間取りによって決まる項目）
 export const DESIGN_CATEGORIES = [
   '天井高',
@@ -142,9 +156,11 @@ export const DESIGN_CATEGORIES = [
   '電動ガレージシャッター',
   '換気システム',
   'エコキュート',
+  '給湯器',
   '太陽光・蓄電池',
   '蓄電池',
   '太陽光',
+  'スッキリポール',
 ];
 
 // 「家具・家電」に属するカテゴリ名

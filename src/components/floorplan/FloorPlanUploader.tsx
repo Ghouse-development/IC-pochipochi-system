@@ -77,7 +77,7 @@ export const FloorPlanUploader: React.FC = () => {
       // 既存の同じ階の部屋を削除して新しい部屋を追加
       const otherFloorRooms = rooms.filter(r => r.floor !== selectedFloor);
       setRooms([...otherFloorRooms, ...detectedRooms]);
-    } catch (err) {
+    } catch {
       setError('間取り画像の解析に失敗しました。手動で部屋を追加してください。');
     } finally {
       setIsAnalyzing(false);

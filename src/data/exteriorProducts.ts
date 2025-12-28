@@ -3226,4 +3226,185 @@ export const exteriorProducts: Product[] = [
       { plan: 'HOURS', price: 0 }
     ]
   },
+
+  // ===== パラペット笠木 =====
+  {
+    id: 'ext-parapet-coping',
+    categoryId: 'coping',
+    categoryName: '笠木',
+    subcategory: 'パラペット笠木',
+    name: 'パラペット笠木',
+    manufacturer: '標準',
+    modelNumber: 'PARAPET-COPING',
+    unit: 'set',
+    isOption: false,
+    description: 'パラペット笠木',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: 'ホワイト', images: [] },
+      { id: 'v2', color: 'ブラック', colorCode: 'ブラック', images: [] },
+      { id: 'v3', color: 'プラチナステン', colorCode: 'プラチナステン', images: [] },
+      { id: 'v4', color: 'ブラウン', colorCode: 'ブラウン', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 }
+    ]
+  },
+
+  // ===== バルコニー笠木 =====
+  {
+    id: 'ext-balcony-coping',
+    categoryId: 'coping',
+    categoryName: '笠木',
+    subcategory: 'バルコニー笠木',
+    name: 'バルコニー笠木',
+    manufacturer: '標準',
+    modelNumber: 'BALCONY-COPING',
+    unit: 'set',
+    isOption: false,
+    description: 'バルコニー笠木',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: 'ホワイト', images: [] },
+      { id: 'v2', color: 'ブラック', colorCode: 'ブラック', images: [] },
+      { id: 'v3', color: 'プラチナステン', colorCode: 'プラチナステン', images: [] },
+      { id: 'v4', color: 'ブラウン', colorCode: 'ブラウン', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 }
+    ]
+  },
+
+  // ===== 土台水切 =====
+  {
+    id: 'ext-foundation-flashing',
+    categoryId: 'exterior-facility',
+    categoryName: '外部設備',
+    subcategory: '土台水切',
+    name: '土台水切',
+    manufacturer: '城東テクノ',
+    modelNumber: 'WKF-N18',
+    unit: 'set',
+    isOption: false,
+    description: '土台水切',
+    variants: [
+      { id: 'v1', color: 'シルキーホワイト', colorCode: 'SW', images: [] },
+      { id: 'v2', color: 'ブラック', colorCode: 'BK', images: [] },
+      { id: 'v3', color: 'ステンカラー', colorCode: 'SC', images: [] },
+      { id: 'v4', color: 'ファッションブラウン', colorCode: 'FB', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 }
+    ]
+  },
+
+  // ===== ジョイントボックス =====
+  {
+    id: 'ext-joint-box',
+    categoryId: 'exterior-facility',
+    categoryName: '外部設備',
+    subcategory: '外部設備',
+    name: 'スマート防雨型ジョイントボックス',
+    manufacturer: 'Panasonic',
+    modelNumber: 'WK4201S',
+    unit: 'piece',
+    isOption: false,
+    description: 'スマート防雨型ジョイントボックス（ノックアウトG22〈φ27〉×3）',
+    variants: [
+      { id: 'v1', color: 'ミルキーホワイト', colorCode: 'ミルキーホワイト', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 }
+    ]
+  },
+
+  // ===== 換気フード（キッチン・浴室） =====
+  {
+    id: 'ext-ventilation-hood-kb',
+    categoryId: 'exterior-facility',
+    categoryName: '外部設備',
+    subcategory: '換気フード',
+    name: '換気フード（キッチン・浴室）TRDシリーズ',
+    manufacturer: 'Panasonic',
+    modelNumber: 'TRD',
+    unit: 'piece',
+    isOption: false,
+    description: '換気フード（キッチン・浴室）TRDシリーズ',
+    variants: [
+      { id: 'v1', color: 'シルバー', colorCode: 'シルバー', images: [] },
+      { id: 'v2', color: 'ホワイト', colorCode: 'ホワイト', images: [] },
+      { id: 'v3', color: 'ブラック', colorCode: 'ブラック', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 }
+    ]
+  },
+
+  // ===== ナノバブル発生装置 =====
+  {
+    id: 'ext-nanobubble',
+    categoryId: 'exterior-facility',
+    categoryName: '外部設備',
+    subcategory: '外部設備',
+    name: 'ナノバブル発生装置 Beauty Aqua（20A）',
+    manufacturer: '創建エース',
+    modelNumber: 'BA-20A',
+    unit: 'piece',
+    isOption: true,
+    description: 'ナノバブル発生装置 Beauty Aqua（20A）',
+    variants: [
+      { id: 'v1', color: '標準', colorCode: '標準', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 200000 },
+      { plan: 'HOURS', price: 200000 }
+    ]
+  },
+
+  // ===== スッキリポール スタンダードタイプ（設計カテゴリ） =====
+  {
+    id: 'ext-sukkiri-pole-standard',
+    categoryId: 'sukkiri-pole',
+    categoryName: 'スッキリポール',
+    subcategory: 'スッキリポール',
+    name: '中継ポール（スッキリポール スタンダードタイプ）電気メーター一体型',
+    manufacturer: 'Panasonic',
+    modelNumber: 'DDP8-STD',
+    unit: 'piece',
+    isOption: true,
+    description: '中継ポール（スッキリポール スタンダードタイプ）電気メーター一体型',
+    variants: [
+      { id: 'v1', color: 'アイボリー', colorCode: 'アイボリー', images: [] },
+      { id: 'v2', color: 'コーヒーブラウン', colorCode: 'コーヒーブラウン', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 520000 },
+      { plan: 'HOURS', price: 520000 }
+    ]
+  },
+
+  // ===== スッキリポール スマートタイプ（設計カテゴリ） =====
+  {
+    id: 'ext-sukkiri-pole-smart',
+    categoryId: 'sukkiri-pole',
+    categoryName: 'スッキリポール',
+    subcategory: 'スッキリポール',
+    name: '中継ポール（スッキリポール スマートタイプ）電気メーター一体型',
+    manufacturer: 'Panasonic',
+    modelNumber: 'DDP8-SMART',
+    unit: 'piece',
+    isOption: true,
+    description: '中継ポール（スッキリポール スマートタイプ）電気メーター一体型',
+    variants: [
+      { id: 'v1', color: 'ホワイトシルバー', colorCode: 'ホワイトシルバー', images: [] },
+      { id: 'v2', color: 'シャンパンブロンズ', colorCode: 'シャンパンブロンズ', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 580000 },
+      { plan: 'HOURS', price: 580000 }
+    ]
+  },
 ];

@@ -163,9 +163,9 @@ export function CategoryManager() {
           </div>
         </div>
 
-        {hasChildren && isExpanded && (
+        {hasChildren && isExpanded && category.children && (
           <div>
-            {category.children!.map(child => renderCategory(child, level + 1))}
+            {category.children.map(child => renderCategory(child, level + 1))}
           </div>
         )}
       </div>

@@ -28,10 +28,9 @@ const groupByCategory = (items: CartItem[]): Map<string, CartItem[]> => {
 
   items.forEach(item => {
     const category = item.product.categoryName;
-    if (!groups.has(category)) {
-      groups.set(category, []);
-    }
-    groups.get(category)!.push(item);
+    const arr = groups.get(category) ?? [];
+    arr.push(item);
+    groups.set(category, arr);
   });
 
   return groups;

@@ -112,7 +112,7 @@ async function importCategories(): Promise<Record<string, string>> {
     console.error('カテゴリ削除エラー:', deleteError);
   }
 
-  const categories = Array.from(categoryMap.entries()).map(([key, value], idx) => ({
+  const categories = Array.from(categoryMap.entries()).map(([_key, value], idx) => ({
     parent_id: null,
     category_type: value.type,
     name: value.name,

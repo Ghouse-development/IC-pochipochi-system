@@ -84,9 +84,9 @@ function TreeNode({ node, level }: TreeNodeProps) {
         )}
       </div>
 
-      {isExpanded && hasChildren && (
+      {isExpanded && hasChildren && node.children && (
         <div>
-          {node.children!.map((child) => (
+          {node.children.map((child) => (
             <TreeNode key={`${child.type}-${child.name}`} node={child} level={level + 1} />
           ))}
         </div>
