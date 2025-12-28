@@ -2,75 +2,6 @@
 import type { Product } from '../types/product';
 
 export const interiorProducts: Product[] = [
-  // ========== ダイニングテーブル（スクエア） ==========
-  {
-    id: 'int-dt-001',
-    categoryId: 'dining-table',
-    categoryName: '家具',
-    subcategory: 'ダイニングテーブル',
-    name: 'Gハウスオリジナル ダイニングテーブル スクエア',
-    manufacturer: 'Gハウス',
-    modelNumber: 'GH-DT-SQUARE',
-    unit: 'piece',
-    isOption: true,
-    description: 'メラミン化粧板天板、スチール脚（スクエア/ラウンド）、コンセント付き W1500〜1800×D900×H720',
-    variants: [
-      { id: 'v1', color: 'OKオーク×スクエア・ブラック', images: [] },
-      { id: 'v2', color: 'CRチェリー×スクエア・ブラック', images: [] },
-      { id: 'v3', color: 'WNウォールナット×スクエア・ブラック', images: [] },
-      { id: 'v4', color: 'DWダークWN×スクエア・ホワイト', images: [] },
-      { id: 'v5', color: 'DUダストグレー×スクエア・ホワイト', images: [] },
-      { id: 'v6', color: 'KRカブリード×ラウンド・ブラック', images: [] },
-      { id: 'v7', color: 'FMファインモルタル×ラウンド・ホワイト', images: [] },
-      { id: 'v8', color: 'APアンジェロプレーン×スクエア・ブラック', images: [] },
-      { id: 'v9', color: 'OWオフホワイト×スクエア・ホワイト', images: [] },
-      { id: 'v10', color: 'LBライトベージュ×スクエア・ホワイト', images: [] },
-      { id: 'v11', color: 'MBミディアムベージュ×スクエア・ブラック', images: [] },
-      { id: 'v12', color: 'DBダークベージュ×スクエア・ブラック', images: [] },
-      { id: 'v13', color: 'MGミディアムグレー×スクエア・ブラック', images: [] },
-      { id: 'v14', color: 'DGダークグレー×スクエア・ブラック', images: [] },
-      { id: 'v15', color: 'BKブラック×スクエア・ブラック', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 130000 },
-      { plan: 'HOURS', price: 130000 },
-      { plan: 'LIFE+', price: 140000 },
-      { plan: 'LIFE', price: 140000 }
-    ]
-  },
-
-  // ========== ダイニングテーブル（ラウンド） ==========
-  {
-    id: 'int-dt-002',
-    categoryId: 'dining-table',
-    categoryName: '家具',
-    subcategory: 'ダイニングテーブル',
-    name: 'Gハウスオリジナル ダイニングテーブル ラウンド',
-    manufacturer: 'Gハウス',
-    modelNumber: 'GH-DT-ROUND',
-    unit: 'piece',
-    isOption: true,
-    description: 'メラミン化粧板天板（丸形）、スチール脚（クワトロ/オクタ）Φ1100〜1200×H720',
-    variants: [
-      { id: 'v1', color: 'OKオーク×クワトロ・ブラック', images: [] },
-      { id: 'v2', color: 'CRチェリー×クワトロ・ブラック', images: [] },
-      { id: 'v3', color: 'WNウォールナット×クワトロ・ホワイト', images: [] },
-      { id: 'v4', color: 'DWダークWN×オクタ・ブラック', images: [] },
-      { id: 'v5', color: 'DUダストグレー×オクタ・ホワイト', images: [] },
-      { id: 'v6', color: 'KRカブリード×クワトロ・ブラック', images: [] },
-      { id: 'v7', color: 'FMファインモルタル×オクタ・ホワイト', images: [] },
-      { id: 'v8', color: 'APアンジェロプレーン×クワトロ・ブラック', images: [] },
-      { id: 'v9', color: 'OWオフホワイト×クワトロ・ホワイト', images: [] },
-      { id: 'v10', color: 'BKブラック×オクタ・ブラック', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 120000, planId: 'LACIE' },
-      { plan: 'HOURS', price: 120000, planId: 'HOURS' },
-      { plan: 'LIFE+', price: 166000, planId: 'LIFE+' },
-      { plan: 'LIFE', price: 166000, planId: 'LIFE' }
-    ]
-  },
-
   // ========== フローリング - ベリティスフロアーベースコート（Panasonic）標準 ==========
   {
     id: 'int-floor-veritis-basecoat',
@@ -186,8 +117,9 @@ export const interiorProducts: Product[] = [
       { id: 'v2', color: 'アカシアクリア', images: [] },
       { id: 'v3', color: 'バーチラスティッククリア', images: [] },
       { id: 'v4', color: 'バーチクリア', images: [] },
-      { id: 'v5', color: 'メープルクリア', images: [] },
-      { id: 'v6', color: 'アッシュクリア', images: [] }
+      { id: 'v5', color: 'アッシュクリア', images: [] },
+      { id: 'v6', color: 'メープルクリア', images: [] },
+      { id: 'v7', color: 'ハードメープル', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 3000 },
@@ -249,10 +181,10 @@ export const interiorProducts: Product[] = [
       { id: 'v6', color: 'グランモルタル', images: [] }
     ],
     pricing: [
-      { plan: 'LACIE', price: 5000 },
-      { plan: 'HOURS', price: 5000 },
-      { plan: 'LIFE+', price: 2000 },
-      { plan: 'LIFE', price: 2000 }
+      { plan: 'LACIE', price: 2000 },
+      { plan: 'HOURS', price: 2000 },
+      { plan: 'LIFE+', price: 5000 },
+      { plan: 'LIFE', price: 5000 }
     ]
   },
 
@@ -277,10 +209,10 @@ export const interiorProducts: Product[] = [
       { id: 'v5', color: 'エイジングビター', images: [] }
     ],
     pricing: [
-      { plan: 'LACIE', price: 6000 },
+      { plan: 'LACIE', price: 3000 },
       { plan: 'HOURS', price: 3000 },
-      { plan: 'LIFE+', price: 3000 },
-      { plan: 'LIFE', price: 3000 }
+      { plan: 'LIFE+', price: 6000 },
+      { plan: 'LIFE', price: 6000 }
     ]
   },
 
@@ -305,10 +237,10 @@ export const interiorProducts: Product[] = [
       { id: 'v5', color: 'カエデ', images: [] }
     ],
     pricing: [
-      { plan: 'LACIE', price: 13000 },
+      { plan: 'LACIE', price: 10000 },
       { plan: 'HOURS', price: 10000 },
-      { plan: 'LIFE+', price: 10000 },
-      { plan: 'LIFE', price: 10000 }
+      { plan: 'LIFE+', price: 13000 },
+      { plan: 'LIFE', price: 13000 }
     ]
   },
 
@@ -333,10 +265,10 @@ export const interiorProducts: Product[] = [
       { id: 'v5', color: 'バーチ', images: [] }
     ],
     pricing: [
-      { plan: 'LACIE', price: 16000 },
+      { plan: 'LACIE', price: 13000 },
       { plan: 'HOURS', price: 13000 },
-      { plan: 'LIFE+', price: 13000 },
-      { plan: 'LIFE', price: 13000 }
+      { plan: 'LIFE+', price: 16000 },
+      { plan: 'LIFE', price: 16000 }
     ]
   },
 
@@ -579,14 +511,14 @@ export const interiorProducts: Product[] = [
       { id: 'v25', color: 'CF9696', images: [] }
     ],
     pricing: [
-      { plan: 'LACIE', price: 3000 },
-      { plan: 'HOURS', price: 3000 },
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
       { plan: 'LIFE+', price: 0 },
       { plan: 'LIFE', price: 0 }
     ]
   },
 
-  // ========== カーペットタイル（sangetsu）==========
+  // ========== カーペットタイル（sangetsu）PDF19追加 ==========
   {
     id: 'int-floor-carpet',
     categoryId: 'flooring',
@@ -595,7 +527,49 @@ export const interiorProducts: Product[] = [
     materialType: 'カーペットタイル',
     name: 'カーペットタイル',
     manufacturer: 'sangetsu',
-    modelNumber: 'NT/DT',
+    modelNumber: 'NTP/NTH/NT',
+    unit: 'sqm',
+    isOption: true,
+    description: '耐久性・クッション性を兼ねそろえた素材 床に座って過ごすことが多いお部屋におすすめ',
+    variants: [
+      { id: 'v1', color: 'NTP-70801', images: [] },
+      { id: 'v2', color: 'NTP-71101', images: [] },
+      { id: 'v3', color: 'NTP-71102', images: [] },
+      { id: 'v4', color: 'NTP-71105', images: [] },
+      { id: 'v5', color: 'NTP-71114', images: [] },
+      { id: 'v6', color: 'NTH-84009', images: [] },
+      { id: 'v7', color: 'NTH-84010', images: [] },
+      { id: 'v8', color: 'NTH-824', images: [] },
+      { id: 'v9', color: 'NTH-841', images: [] },
+      { id: 'v10', color: 'NT-31104', images: [] },
+      { id: 'v11', color: 'NT-31402', images: [] },
+      { id: 'v12', color: 'NT-31403', images: [] },
+      { id: 'v13', color: 'NT-31505', images: [] },
+      { id: 'v14', color: 'NT-31507', images: [] },
+      { id: 'v15', color: 'NT-31801', images: [] },
+      { id: 'v16', color: 'NT-31803', images: [] },
+      { id: 'v17', color: 'NT-31901', images: [] },
+      { id: 'v18', color: 'NT-35003', images: [] },
+      { id: 'v19', color: 'NT-35006', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 13000 },
+      { plan: 'HOURS', price: 10000 },
+      { plan: 'LIFE+', price: 10000 },
+      { plan: 'LIFE', price: 10000 }
+    ]
+  },
+
+  // ========== カーペットタイル NTシリーズ（PDF20追加）==========
+  {
+    id: 'int-floor-carpet-nt',
+    categoryId: 'flooring',
+    categoryName: '床材',
+    subcategory: 'カーペットタイル',
+    materialType: 'カーペットタイル',
+    name: 'カーペットタイル NTシリーズ',
+    manufacturer: 'sangetsu',
+    modelNumber: 'NT-311-382',
     unit: 'sqm',
     isOption: true,
     description: '耐久性・クッション性を兼ねそろえた素材 床に座って過ごすことが多いお部屋におすすめ',
@@ -611,17 +585,40 @@ export const interiorProducts: Product[] = [
       { id: 'v9', color: 'NT-371', images: [] },
       { id: 'v10', color: 'NT-376', images: [] },
       { id: 'v11', color: 'NT-379', images: [] },
-      { id: 'v12', color: 'NT-382', images: [] },
-      { id: 'v13', color: 'DT-2201', images: [] },
-      { id: 'v14', color: 'DT-2202', images: [] },
-      { id: 'v15', color: 'DT-2204', images: [] },
-      { id: 'v16', color: 'DT-2207', images: [] }
+      { id: 'v12', color: 'NT-382', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 10000 },
+      { plan: 'HOURS', price: 10000 },
+      { plan: 'LIFE+', price: 10000 },
+      { plan: 'LIFE', price: 10000 }
+    ]
+  },
+
+  // ========== カーペットタイル DTシリーズ（PDF20追加）==========
+  {
+    id: 'int-floor-carpet-dt',
+    categoryId: 'flooring',
+    categoryName: '床材',
+    subcategory: 'カーペットタイル',
+    materialType: 'カーペットタイル',
+    name: 'カーペットタイル DTシリーズ（プレミアム）',
+    manufacturer: 'sangetsu',
+    modelNumber: 'DT-2201-2207',
+    unit: 'sqm',
+    isOption: true,
+    description: '耐久性・クッション性を兼ねそろえた素材 床に座って過ごすことが多いお部屋におすすめ（プレミアム）',
+    variants: [
+      { id: 'v1', color: 'DT-2201', images: [] },
+      { id: 'v2', color: 'DT-2202', images: [] },
+      { id: 'v3', color: 'DT-2204', images: [] },
+      { id: 'v4', color: 'DT-2207', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 13000 },
       { plan: 'HOURS', price: 13000 },
-      { plan: 'LIFE+', price: 10000 },
-      { plan: 'LIFE', price: 10000 }
+      { plan: 'LIFE+', price: 13000 },
+      { plan: 'LIFE', price: 13000 }
     ]
   },
 
@@ -2279,6 +2276,60 @@ export const interiorProducts: Product[] = [
     ]
   },
 
+  // ========== リモコンニッチ ==========
+  {
+    id: 'int-niche-remote-b',
+    categoryId: 'niche',
+    categoryName: '造作',
+    subcategory: 'リモコンニッチ',
+    name: 'リモコンニッチ パターンB（H650×W500）',
+    manufacturer: 'Gハウス',
+    modelNumber: 'REMOTE-NICHE-B',
+    unit: 'piece',
+    isOption: true,
+    description: '配線スペース確保のため背面にふかし壁が必要な場合あり。ふかし壁を設けない場合は棚板奥行約30〜40mm',
+    variants: [
+      { id: 'v1', color: 'シェルホワイト', images: [] },
+      { id: 'v2', color: 'ナチュラルバーチ', images: [] },
+      { id: 'v3', color: 'ブライトウォールナット', images: [] },
+      { id: 'v4', color: 'アッシュウォールナット', images: [] },
+      { id: 'v5', color: 'ダークグレー', images: [] },
+      { id: 'v6', color: 'ゴム集成クリア塗装', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 30000 },
+      { plan: 'HOURS', price: 30000 },
+      { plan: 'LIFE+', price: 30000 },
+      { plan: 'LIFE', price: 30000 }
+    ]
+  },
+  {
+    id: 'int-niche-remote-e',
+    categoryId: 'niche',
+    categoryName: '造作',
+    subcategory: 'リモコンニッチ',
+    name: 'リモコンニッチ パターンE（H250×W1600）',
+    manufacturer: 'Gハウス',
+    modelNumber: 'REMOTE-NICHE-E',
+    unit: 'piece',
+    isOption: true,
+    description: '配線スペース確保のため背面にふかし壁が必要な場合あり。ふかし壁を設けない場合は棚板奥行約30〜40mm',
+    variants: [
+      { id: 'v1', color: 'シェルホワイト', images: [] },
+      { id: 'v2', color: 'ナチュラルバーチ', images: [] },
+      { id: 'v3', color: 'ブライトウォールナット', images: [] },
+      { id: 'v4', color: 'アッシュウォールナット', images: [] },
+      { id: 'v5', color: 'ダークグレー', images: [] },
+      { id: 'v6', color: 'ゴム集成クリア塗装', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 30000 },
+      { plan: 'HOURS', price: 30000 },
+      { plan: 'LIFE+', price: 30000 },
+      { plan: 'LIFE', price: 30000 }
+    ]
+  },
+
   // ========== 補強・下地 ==========
   {
     id: 'int-reinforce-wall',
@@ -2534,46 +2585,6 @@ export const interiorProducts: Product[] = [
       { plan: 'HOURS', price: 0 }
     ]
   },
-  {
-    id: 'int-elec-002',
-    categoryId: 'electrical',
-    categoryName: '電気設備',
-    subcategory: 'スイッチ/コンセント',
-    name: 'アドバンスシリーズ',
-    manufacturer: 'Panasonic',
-    modelNumber: 'ADVANCE-21',
-    unit: 'piece',
-    isOption: true,
-    description: 'デザインスイッチ',
-    variants: [
-      { id: 'v1', color: 'マットホワイト', images: [] },
-      { id: 'v2', color: 'マットグレー', images: [] },
-      { id: 'v3', color: 'マットブラック', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 3000 },
-      { plan: 'HOURS', price: 3000 }
-    ]
-  },
-  {
-    id: 'int-elec-003',
-    categoryId: 'electrical',
-    categoryName: '電気設備',
-    subcategory: 'USB付コンセント',
-    name: 'USB充電用コンセント',
-    manufacturer: 'Panasonic',
-    modelNumber: 'WTF14714W',
-    unit: 'piece',
-    isOption: true,
-    description: 'USB Type-A×2口付きコンセント',
-    variants: [
-      { id: 'v1', color: 'ホワイト', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 8000 },
-      { plan: 'HOURS', price: 8000 }
-    ]
-  },
 
   // ========== 照明器具 ==========
   {
@@ -2642,18 +2653,67 @@ export const interiorProducts: Product[] = [
     categoryId: 'ventilation',
     categoryName: '換気',
     subcategory: '換気システム',
-    name: '第一種換気システム',
+    name: '第一種換気システム 熱交換ユニット本体',
     manufacturer: 'Panasonic',
-    modelNumber: 'FY-GPP024-W',
+    modelNumber: 'FY-VENT-UNIT',
     unit: 'set',
     isOption: false,
-    description: '熱交換ユニット、給気グリル、排気グリル',
+    description: '熱交換ユニット本体（リモコンは本体と同色）',
     variants: [
-      { id: 'v1', color: 'ホワイト', images: [] }
+      { id: 'v1', color: 'ホワイト', images: [] },
+      { id: 'v2', color: 'グレー', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 }
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+  {
+    id: 'int-vent-grill-supply',
+    categoryId: 'ventilation',
+    categoryName: '換気',
+    subcategory: '換気システム',
+    name: '給気グリル（天井付）',
+    manufacturer: 'Panasonic',
+    modelNumber: 'FY-GPP024',
+    unit: 'piece',
+    isOption: false,
+    description: '第一種換気 給気グリル',
+    variants: [
+      { id: 'v1', color: 'ホワイト（FY-GPP024-W）', images: [] },
+      { id: 'v2', color: 'ライトブラウン（FY-GPP024-T）', images: [] },
+      { id: 'v3', color: 'グレー（FY-GPP024-H）', images: [] },
+      { id: 'v4', color: 'ブラック（FY-GPP024-K）', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+  {
+    id: 'int-vent-grill-exhaust',
+    categoryId: 'ventilation',
+    categoryName: '換気',
+    subcategory: '換気システム',
+    name: '排気グリル（トイレ用天井付）',
+    manufacturer: 'Panasonic',
+    modelNumber: 'VB-GMR50PFC',
+    unit: 'piece',
+    isOption: false,
+    description: '第一種換気 排気グリル',
+    variants: [
+      { id: 'v1', color: 'ホワイト（VB-GMR50PFC-W）', images: [] },
+      { id: 'v2', color: 'ライトブラウン（VB-GMR50PFC-T）', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
     ]
   },
   {
@@ -2673,139 +2733,6 @@ export const interiorProducts: Product[] = [
     pricing: [
       { plan: 'LACIE', price: 85000 },
       { plan: 'HOURS', price: 90000 }
-    ]
-  },
-
-  // ========== カーテン ==========
-  {
-    id: 'int-curtain-001',
-    categoryId: 'curtain',
-    categoryName: 'カーテン',
-    subcategory: 'ドレープカーテン',
-    name: '遮光カーテン',
-    manufacturer: 'サンゲツ',
-    modelNumber: 'SC-3351',
-    unit: 'set',
-    isOption: false,
-    description: '標準遮光カーテン（寝室用）',
-    variants: [
-      { id: 'v1', color: 'アイボリー', images: [] },
-      { id: 'v2', color: 'ベージュ', images: [] },
-      { id: 'v3', color: 'グレー', images: [] },
-      { id: 'v4', color: 'ブラウン', images: [] },
-      { id: 'v5', color: 'ネイビー', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 }
-    ]
-  },
-  {
-    id: 'int-curtain-002',
-    categoryId: 'curtain',
-    categoryName: 'カーテン',
-    subcategory: 'レースカーテン',
-    name: 'ミラーレースカーテン',
-    manufacturer: 'サンゲツ',
-    modelNumber: 'SC-3851',
-    unit: 'set',
-    isOption: false,
-    description: '標準レースカーテン（全室）',
-    variants: [
-      { id: 'v1', color: 'ホワイト', images: [] },
-      { id: 'v2', color: 'オフホワイト', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 }
-    ]
-  },
-
-  // ========== ブラインド ==========
-  {
-    id: 'int-blind-001',
-    categoryId: 'blind',
-    categoryName: 'ブラインド',
-    subcategory: 'アルミブラインド',
-    name: 'アルミブラインド 25mm',
-    manufacturer: 'タチカワブラインド',
-    modelNumber: 'SB-25',
-    unit: 'set',
-    isOption: true,
-    description: 'スラット幅25mm',
-    variants: [
-      { id: 'v1', color: 'ホワイト', images: [] },
-      { id: 'v2', color: 'シルバー', images: [] },
-      { id: 'v3', color: 'ブラック', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 15000 },
-      { plan: 'HOURS', price: 16000 }
-    ]
-  },
-  {
-    id: 'int-blind-002',
-    categoryId: 'blind',
-    categoryName: 'ブラインド',
-    subcategory: 'ウッドブラインド',
-    name: 'ウッドブラインド 35mm',
-    manufacturer: 'タチカワブラインド',
-    modelNumber: 'WB-35',
-    unit: 'set',
-    isOption: true,
-    description: 'スラット幅35mm',
-    variants: [
-      { id: 'v1', color: 'ナチュラル', images: [] },
-      { id: 'v2', color: 'ダークブラウン', images: [] },
-      { id: 'v3', color: 'ホワイト', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 35000 },
-      { plan: 'HOURS', price: 38000 }
-    ]
-  },
-
-  // ========== 造作家具 ==========
-  {
-    id: 'int-furniture-001',
-    categoryId: 'furniture',
-    categoryName: '造作家具',
-    subcategory: 'TVボード',
-    name: '造作TVボード',
-    manufacturer: 'Gハウス',
-    modelNumber: 'GH-TV-001',
-    unit: 'piece',
-    isOption: true,
-    description: 'W1800×D450×H400 壁掛け式',
-    variants: [
-      { id: 'v1', color: 'ホワイト', images: [] },
-      { id: 'v2', color: 'オーク', images: [] },
-      { id: 'v3', color: 'ウォールナット', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 150000 },
-      { plan: 'HOURS', price: 160000 }
-    ]
-  },
-  {
-    id: 'int-furniture-002',
-    categoryId: 'furniture',
-    categoryName: '造作家具',
-    subcategory: 'カウンター',
-    name: '造作カウンター',
-    manufacturer: 'Gハウス',
-    modelNumber: 'GH-COUNTER-001',
-    unit: 'piece',
-    isOption: true,
-    description: 'スタディカウンター W1800×D600',
-    variants: [
-      { id: 'v1', color: 'ホワイト', images: [] },
-      { id: 'v2', color: 'オーク', images: [] },
-      { id: 'v3', color: 'ウォールナット', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 120000 },
-      { plan: 'HOURS', price: 130000 }
     ]
   },
 
@@ -2895,142 +2822,96 @@ export const interiorProducts: Product[] = [
     ]
   },
 
-  // ========== フロアタイル（PDF16-18追加）==========
+  // ========== フロアタイル コンクリート調（PDF16追加）==========
   {
     id: 'int-floortile-001',
     categoryId: 'flooring',
     categoryName: '床材',
     subcategory: 'フロアタイル',
     materialType: 'フロアタイル',
-    name: 'ロイヤルストーン コンクリート調',
+    name: 'フロアタイル コンクリート調',
     manufacturer: '東リ',
-    modelNumber: 'PST2170-2175',
+    modelNumber: 'PST4019-4035',
     unit: 'sqm',
     isOption: true,
-    description: 'コンクリート調フロアタイル 457×457mm',
+    description: 'コンクリート調フロアタイル ※水廻りにご使用可能 ※水廻り以外でご使用の場合は追加費用',
     variants: [
-      { id: 'v1', color: 'PST2170', colorCode: '#B0B0B0', images: [] },
-      { id: 'v2', color: 'PST2171', colorCode: '#8C8C8C', images: [] },
-      { id: 'v3', color: 'PST2172', colorCode: '#707070', images: [] },
-      { id: 'v4', color: 'PST2173', colorCode: '#5A5A5A', images: [] },
-      { id: 'v5', color: 'PST2174', colorCode: '#404040', images: [] },
-      { id: 'v6', color: 'PST2175', colorCode: '#2D2D2D', images: [] }
+      { id: 'v1', color: 'PST4019 スムースコンクリート', images: [] },
+      { id: 'v2', color: 'PST4020 スムースコンクリート', images: [] },
+      { id: 'v3', color: 'PST4021 スムースコンクリート', images: [] },
+      { id: 'v4', color: 'PST4022 スムースコンクリート', images: [] },
+      { id: 'v5', color: 'PST4023 スムースコンクリート', images: [] },
+      { id: 'v6', color: 'PST4032 コンクリート', images: [] },
+      { id: 'v7', color: 'PST4001 コンコット', images: [] },
+      { id: 'v8', color: 'PST4005 コンコット', images: [] },
+      { id: 'v9', color: 'PST4006 コンコット', images: [] },
+      { id: 'v10', color: 'PST4034 フランモルタル', images: [] },
+      { id: 'v11', color: 'PST4035 フランモルタル', images: [] }
     ],
     pricing: [
-      { plan: 'LACIE', price: 10000 },
-      { plan: 'HOURS', price: 10000 },
-      { plan: 'LIFE+', price: 10000 },
-      { plan: 'LIFE', price: 10000 }
+      { plan: 'LACIE', price: 6500 },
+      { plan: 'HOURS', price: 5000 },
+      { plan: 'LIFE+', price: 5000 },
+      { plan: 'LIFE', price: 5000 }
     ]
   },
+
+  // ========== フロアタイル 石目調（PDF17追加）==========
   {
     id: 'int-floortile-002',
     categoryId: 'flooring',
     categoryName: '床材',
     subcategory: 'フロアタイル',
     materialType: 'フロアタイル',
-    name: 'ロイヤルストーン 石目調',
+    name: 'フロアタイル 石目調',
     manufacturer: '東リ',
-    modelNumber: 'PST2067-2084',
+    modelNumber: 'PST4077-4123',
     unit: 'sqm',
     isOption: true,
-    description: '石目調フロアタイル 457×457mm',
+    description: '石目調フロアタイル ※水廻りにご使用可能',
     variants: [
-      { id: 'v1', color: 'PST2067 モカ', colorCode: '#8B7355', images: [] },
-      { id: 'v2', color: 'PST2068 グレー', colorCode: '#808080', images: [] },
-      { id: 'v3', color: 'PST2073 ベージュ', colorCode: '#D4C4A8', images: [] },
-      { id: 'v4', color: 'PST2084 ホワイト', colorCode: '#F0F0F0', images: [] }
+      { id: 'v1', color: 'PST4093 ジオールストーン', images: [] },
+      { id: 'v2', color: 'PST4095 ジオールストーン', images: [] },
+      { id: 'v3', color: 'PST4077 フォグライム', images: [] },
+      { id: 'v4', color: 'PST4080 フォグライム', images: [] },
+      { id: 'v5', color: 'PST4083 フォグライム', images: [] },
+      { id: 'v6', color: 'PST4086 フォグライム', images: [] },
+      { id: 'v7', color: 'PST4089 フォグライム', images: [] },
+      { id: 'v8', color: 'PST4122 クロムスレート', images: [] },
+      { id: 'v9', color: 'PST4123 クロムスレート', images: [] },
+      { id: 'v10', color: 'PST4108 カララホワイト', images: [] }
     ],
     pricing: [
-      { plan: 'LACIE', price: 10000 },
-      { plan: 'HOURS', price: 10000 },
-      { plan: 'LIFE+', price: 10000 },
-      { plan: 'LIFE', price: 10000 }
+      { plan: 'LACIE', price: 6500 },
+      { plan: 'HOURS', price: 5000 },
+      { plan: 'LIFE+', price: 5000 },
+      { plan: 'LIFE', price: 5000 }
     ]
   },
+
+  // ========== フロアタイル 木目調（PDF18追加）==========
   {
     id: 'int-floortile-003',
     categoryId: 'flooring',
     categoryName: '床材',
     subcategory: 'フロアタイル',
     materialType: 'フロアタイル',
-    name: 'ロイヤルウッド 木目調',
+    name: 'フロアタイル 木目調',
     manufacturer: '東リ',
-    modelNumber: 'PWT2403-2437',
+    modelNumber: 'PWT4228-4309',
     unit: 'sqm',
     isOption: true,
-    description: '木目調フロアタイル 152×914mm',
+    description: '木目調フロアタイル ※水廻りにご使用可能',
     variants: [
-      { id: 'v1', color: 'PWT2403 ライトオーク', colorCode: '#D4B896', images: [] },
-      { id: 'v2', color: 'PWT2414 ミディアムオーク', colorCode: '#B8956E', images: [] },
-      { id: 'v3', color: 'PWT2421 ウォールナット', colorCode: '#5C4033', images: [] },
-      { id: 'v4', color: 'PWT2437 ダークウォールナット', colorCode: '#3D2B1F', images: [] }
+      { id: 'v1', color: 'PWT4309 籐', images: [] },
+      { id: 'v2', color: 'PWT4228 フレンチヘリンボーン', images: [] },
+      { id: 'v3', color: 'PWT4229 フレンチヘリンボーン', images: [] }
     ],
     pricing: [
-      { plan: 'LACIE', price: 10000 },
-      { plan: 'HOURS', price: 10000 },
-      { plan: 'LIFE+', price: 10000 },
-      { plan: 'LIFE', price: 10000 }
-    ]
-  },
-
-  // ========== カーペットタイル（PDF20追加）==========
-  {
-    id: 'int-carpet-001',
-    categoryId: 'flooring',
-    categoryName: '床材',
-    subcategory: 'カーペットタイル',
-    materialType: 'カーペットタイル',
-    name: 'カーペットタイル NTシリーズ',
-    manufacturer: 'サンゲツ',
-    modelNumber: 'NT-311-382',
-    unit: 'sqm',
-    isOption: true,
-    description: 'カーペットタイル 500×500mm',
-    variants: [
-      { id: 'v1', color: 'NT-311', images: [] },
-      { id: 'v2', color: 'NT-316', images: [] },
-      { id: 'v3', color: 'NT-336', images: [] },
-      { id: 'v4', color: 'NT-339', images: [] },
-      { id: 'v5', color: 'NT-340', images: [] },
-      { id: 'v6', color: 'NT-341', images: [] },
-      { id: 'v7', color: 'NT-342', images: [] },
-      { id: 'v8', color: 'NT-344', images: [] },
-      { id: 'v9', color: 'NT-371', images: [] },
-      { id: 'v10', color: 'NT-376', images: [] },
-      { id: 'v11', color: 'NT-379', images: [] },
-      { id: 'v12', color: 'NT-382', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 10000 },
-      { plan: 'HOURS', price: 10000 },
-      { plan: 'LIFE+', price: 10000 },
-      { plan: 'LIFE', price: 10000 }
-    ]
-  },
-  {
-    id: 'int-carpet-002',
-    categoryId: 'flooring',
-    categoryName: '床材',
-    subcategory: 'カーペットタイル',
-    materialType: 'カーペットタイル',
-    name: 'カーペットタイル DTシリーズ',
-    manufacturer: 'サンゲツ',
-    modelNumber: 'DT-2201-2207',
-    unit: 'sqm',
-    isOption: true,
-    description: 'カーペットタイル 500×500mm（プレミアム）',
-    variants: [
-      { id: 'v1', color: 'DT-2201', images: [] },
-      { id: 'v2', color: 'DT-2202', images: [] },
-      { id: 'v3', color: 'DT-2204', images: [] },
-      { id: 'v4', color: 'DT-2207', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 13000 },
-      { plan: 'HOURS', price: 13000 },
-      { plan: 'LIFE+', price: 13000 },
-      { plan: 'LIFE', price: 13000 }
+      { plan: 'LACIE', price: 6500 },
+      { plan: 'HOURS', price: 5000 },
+      { plan: 'LIFE+', price: 5000 },
+      { plan: 'LIFE', price: 5000 }
     ]
   },
 
@@ -3043,14 +2924,20 @@ export const interiorProducts: Product[] = [
     materialType: 'タイル',
     name: 'ランドストン',
     manufacturer: 'Nagoya mozaic',
-    modelNumber: 'LANDSTONE',
+    modelNumber: 'CRD-X/PAN-X',
     unit: 'sqm',
     isOption: true,
-    description: '大判床タイル',
+    description: '内装壁、内装床で使用可能 600×600/300×600 工事費用一式¥30,000 6㎡以下の場合追加¥50,000',
     variants: [
-      { id: 'v1', color: 'ホワイト', colorCode: '#F5F5F5', images: [] },
-      { id: 'v2', color: 'ベージュ', colorCode: '#D4C4A8', images: [] },
-      { id: 'v3', color: 'グレー', colorCode: '#808080', images: [] }
+      { id: 'v1', color: 'CRD-X3810', images: [] },
+      { id: 'v2', color: 'CRD-X3820', images: [] },
+      { id: 'v3', color: 'CRD-X3830', images: [] },
+      { id: 'v4', color: 'CRD-X3840', images: [] },
+      { id: 'v5', color: 'PAN-X8010', images: [] },
+      { id: 'v6', color: 'PAN-X8020', images: [] },
+      { id: 'v7', color: 'PAN-X8030', images: [] },
+      { id: 'v8', color: 'PAN-X8040', images: [] },
+      { id: 'v9', color: 'PAN-X8050', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 30000 },
@@ -3067,13 +2954,16 @@ export const interiorProducts: Product[] = [
     materialType: 'タイル',
     name: 'ピエトラソーニ',
     manufacturer: 'Nagoya mozaic',
-    modelNumber: 'PIETRA-SONI',
+    modelNumber: 'IPF-600/MMP',
     unit: 'sqm',
     isOption: true,
-    description: '大判床タイル',
+    description: '内装壁、内装床で使用可能 600×600/300×600 工事費用一式¥30,000 6㎡以下の場合追加¥50,000',
     variants: [
-      { id: 'v1', color: 'ライトグレー', colorCode: '#C0C0C0', images: [] },
-      { id: 'v2', color: 'ダークグレー', colorCode: '#505050', images: [] }
+      { id: 'v1', color: 'IPF-600/MMP-21', images: [] },
+      { id: 'v2', color: 'IPF-600/MMP-22', images: [] },
+      { id: 'v3', color: 'IPF-600/MMP-23', images: [] },
+      { id: 'v4', color: 'IPF-600/MMP-24', images: [] },
+      { id: 'v5', color: 'IPF-600/MMP-25', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 30000 },
@@ -3090,14 +2980,16 @@ export const interiorProducts: Product[] = [
     materialType: 'タイル',
     name: 'メンフィス',
     manufacturer: 'LIXIL',
-    modelNumber: 'MEMPHIS',
+    modelNumber: 'IPF-600/MNP',
     unit: 'sqm',
     isOption: true,
-    description: '床タイル',
+    description: '内装壁、内装床で使用可能 600×600/300×600 工事費用一式¥30,000 6㎡以下の場合追加¥50,000',
     variants: [
-      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] },
-      { id: 'v2', color: 'グレー', colorCode: '#808080', images: [] },
-      { id: 'v3', color: 'ブラック', colorCode: '#2D2D2D', images: [] }
+      { id: 'v1', color: 'IPF-600/MNP-21', images: [] },
+      { id: 'v2', color: 'IPF-600/MNP-22', images: [] },
+      { id: 'v3', color: 'IPF-600/MNP-23', images: [] },
+      { id: 'v4', color: 'IPF-600/MNP-24', images: [] },
+      { id: 'v5', color: 'IPF-600/MNP-25', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 25000 },
@@ -3120,14 +3012,18 @@ export const interiorProducts: Product[] = [
     isOption: true,
     description: '機能畳 半畳タイプ',
     variants: [
-      { id: 'v1', color: '銀白色', colorCode: '#E8E8D0', images: [] },
-      { id: 'v2', color: '黄金色', colorCode: '#DAA520', images: [] },
-      { id: 'v3', color: '亜麻色', colorCode: '#C4B7A6', images: [] },
-      { id: 'v4', color: '墨染色', colorCode: '#595857', images: [] },
-      { id: 'v5', color: '乳白色', colorCode: '#F5F5DC', images: [] },
-      { id: 'v6', color: '白茶色', colorCode: '#C5A882', images: [] },
-      { id: 'v7', color: '灰桜色', colorCode: '#E8D3D1', images: [] },
-      { id: 'v8', color: '胡桃色', colorCode: '#8B6914', images: [] }
+      { id: 'v1', color: '01 銀白色（ぎんぱくしょく）', colorCode: '#E8E8D0', images: [] },
+      { id: 'v2', color: '02 黄金色（こがねいろ）', colorCode: '#DAA520', images: [] },
+      { id: 'v3', color: '06 亜麻色（あまいろ）', colorCode: '#C4B7A6', images: [] },
+      { id: 'v4', color: '09 墨染色（すみぞめいろ）', colorCode: '#595857', images: [] },
+      { id: 'v5', color: '10 乳白色（にゅうはくしょく）', colorCode: '#F5F5DC', images: [] },
+      { id: 'v6', color: '11 銀鼠色（ぎんねずいろ）', colorCode: '#91989F', images: [] },
+      { id: 'v7', color: '12 墨染色（くりいろ）', colorCode: '#6C3524', images: [] },
+      { id: 'v8', color: '14 灰桜色（はいざくらいろ）', colorCode: '#E8D3D1', images: [] },
+      { id: 'v9', color: '15 白茶色（しらちゃいろ）', colorCode: '#C5A882', images: [] },
+      { id: 'v10', color: '16 若草色（わかくさいろ）', colorCode: '#A4C520', images: [] },
+      { id: 'v11', color: '19 胡桃色（くるみいろ）', colorCode: '#8B6914', images: [] },
+      { id: 'v12', color: '21 小麦色（こむぎいろ）', colorCode: '#D4A76A', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 20000 },
@@ -3162,14 +3058,18 @@ export const interiorProducts: Product[] = [
     categoryId: 'storage',
     categoryName: '収納',
     subcategory: '小上がり下収納',
-    name: '小上がり下引出収納 W910',
+    name: '小上がり下引出収納 H350',
     manufacturer: 'Gハウス',
-    modelNumber: 'KOAGARI-STR-910',
+    modelNumber: 'KOAGARI-STR-H350',
     unit: 'piece',
     isOption: true,
-    description: '小上がり下収納 引出タイプ W910',
+    description: '小上がり下収納 引出タイプ H350（収納高さH200程度）',
     variants: [
-      { id: 'v1', color: '標準', images: [] }
+      { id: 'v1', color: 'JC-516K（オーク）', images: [] },
+      { id: 'v2', color: 'TJ-2062K（ウォルナット）', images: [] },
+      { id: 'v3', color: 'K-6000KN（艶消しホワイト）', images: [] },
+      { id: 'v4', color: 'K-6302KN（艶消しグレー）', images: [] },
+      { id: 'v5', color: 'K-6306KN（艶消しブラック）', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 87000 },
@@ -3183,14 +3083,18 @@ export const interiorProducts: Product[] = [
     categoryId: 'storage',
     categoryName: '収納',
     subcategory: '小上がり下収納',
-    name: '小上がり下引出収納 W1365',
+    name: '小上がり下引出収納 H400',
     manufacturer: 'Gハウス',
-    modelNumber: 'KOAGARI-STR-1365',
+    modelNumber: 'KOAGARI-STR-H400',
     unit: 'piece',
     isOption: true,
-    description: '小上がり下収納 引出タイプ W1365',
+    description: '小上がり下収納 引出タイプ H400（収納高さH250程度）',
     variants: [
-      { id: 'v1', color: '標準', images: [] }
+      { id: 'v1', color: 'JC-516K（オーク）', images: [] },
+      { id: 'v2', color: 'TJ-2062K（ウォルナット）', images: [] },
+      { id: 'v3', color: 'K-6000KN（艶消しホワイト）', images: [] },
+      { id: 'v4', color: 'K-6302KN（艶消しグレー）', images: [] },
+      { id: 'v5', color: 'K-6306KN（艶消しブラック）', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 92000 },
@@ -3199,8 +3103,79 @@ export const interiorProducts: Product[] = [
       { plan: 'LIFE', price: 92000 }
     ]
   },
+  {
+    id: 'int-bath-doorframe-001',
+    categoryId: 'bathroom',
+    categoryName: '水回り設備',
+    subcategory: 'お風呂ドア枠',
+    name: 'お風呂ドア枠',
+    manufacturer: 'Gハウス',
+    modelNumber: 'BATH-DOORFRAME',
+    unit: 'piece',
+    isOption: true,
+    description: 'お風呂ドア枠',
+    variants: [
+      { id: 'v1', color: 'しっくいホワイト', images: [] },
+      { id: 'v2', color: 'オフブラック', images: [] },
+      { id: 'v3', color: 'パールグレー', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
 
   // ========== 点検口・床下収納（PDF23追加）==========
+  {
+    id: 'int-hatch-floor-001',
+    categoryId: 'hatch',
+    categoryName: '点検口',
+    subcategory: '床下点検口',
+    name: '床下点検口 600×600',
+    manufacturer: '城東テクノ',
+    modelNumber: 'SPF-R60',
+    unit: 'piece',
+    isOption: false,
+    description: '床下点検口 600×600',
+    variants: [
+      { id: 'v1', color: 'IV アイボリー', images: [] },
+      { id: 'v2', color: 'NL ナチュラル', images: [] },
+      { id: 'v3', color: 'MB ミディアムブラウン', images: [] },
+      { id: 'v4', color: 'DB ダークブラウン', images: [] },
+      { id: 'v5', color: 'BB ブラックブラウン', images: [] },
+      { id: 'v6', color: 'LG ライトグレー', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+  {
+    id: 'int-hatch-ceiling-001',
+    categoryId: 'hatch',
+    categoryName: '点検口',
+    subcategory: '天井点検口',
+    name: '天井点検口 454×454',
+    manufacturer: '城東テクノ',
+    modelNumber: 'CDE-45',
+    unit: 'piece',
+    isOption: false,
+    description: '天井点検口 454×454',
+    variants: [
+      { id: 'v1', color: 'W ホワイト', images: [] },
+      { id: 'v2', color: 'SL マットシルバー（マット調アルミ色）', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
   {
     id: 'int-storage-floor-001',
     categoryId: 'storage',
@@ -3208,10 +3183,10 @@ export const interiorProducts: Product[] = [
     subcategory: '床下収納',
     name: '床下収納庫',
     manufacturer: '城東テクノ',
-    modelNumber: 'SPF-R60F',
+    modelNumber: 'SPF-60S2',
     unit: 'piece',
     isOption: true,
-    description: '床下収納庫 600型',
+    description: '床下収納庫 600×600（深さ約270mm）',
     variants: [
       { id: 'v1', color: '標準', images: [] }
     ],
@@ -3257,11 +3232,19 @@ export const interiorProducts: Product[] = [
     modelNumber: 'STAIR-PNS',
     unit: 'set',
     isOption: false,
-    description: '階段踏板・蹴込板（標準）',
+    description: '階段踏板・蹴込板（標準）床材とのコーディネイトができる11柄をラインアップ ※蹴込のみホワイト・ブラックを標準選択可',
     variants: [
-      { id: 'v1', color: 'ホワイトオーク', colorCode: '#E8DCC8', images: [] },
-      { id: 'v2', color: 'チェリー', colorCode: '#B5651D', images: [] },
-      { id: 'v3', color: 'ウォールナット', colorCode: '#5C4033', images: [] }
+      { id: 'v1', color: 'ウォールナット柄', images: [] },
+      { id: 'v2', color: 'チェリー柄', images: [] },
+      { id: 'v3', color: 'オーク柄', images: [] },
+      { id: 'v4', color: 'メープル柄', images: [] },
+      { id: 'v5', color: 'ホワイトオーク柄', images: [] },
+      { id: 'v6', color: 'エイジドチーク柄', images: [] },
+      { id: 'v7', color: 'エイジドチェスナット柄', images: [] },
+      { id: 'v8', color: 'カームチェリー柄', images: [] },
+      { id: 'v9', color: 'グレージュヒッコリー柄', images: [] },
+      { id: 'v10', color: 'ウォッシュドオーク柄', images: [] },
+      { id: 'v11', color: 'アイボリーアッシュ柄', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 0 },
@@ -3275,22 +3258,33 @@ export const interiorProducts: Product[] = [
     categoryId: 'stairs',
     categoryName: '階段',
     subcategory: '階段踏板',
-    name: '階段踏板/蹴込板 WOODTEC仕様',
+    name: '階段踏板/蹴込板 WOODTEC Live Natural仕様',
     manufacturer: 'WOODTEC',
-    modelNumber: 'STAIR-WT',
+    modelNumber: 'STAIR-WT-LN',
     unit: 'set',
-    isOption: true,
-    description: '階段踏板・蹴込板（WOODTEC）',
+    isOption: false,
+    description: '階段踏板・蹴込板（WOODTEC Live Natural 乱尺柄）※シュガーホワイト(アッシュ)は蹴込板がありません。ホワイト・ブラックよりご選択いただけます。',
     variants: [
-      { id: 'v1', color: 'オーク', colorCode: '#D4B896', images: [] },
-      { id: 'v2', color: 'アッシュ', colorCode: '#C4B7A6', images: [] },
-      { id: 'v3', color: 'ウォールナット', colorCode: '#5C4033', images: [] }
+      { id: 'v1', color: 'ブラックチェリー 乱尺柄', images: [] },
+      { id: 'v2', color: 'シカモア 乱尺柄', images: [] },
+      { id: 'v3', color: 'ハードメープル 乱尺柄', images: [] },
+      { id: 'v4', color: 'ナラ樫 乱尺柄', images: [] },
+      { id: 'v5', color: 'ブラックウォルナット 乱尺柄', images: [] },
+      { id: 'v6', color: 'バーチ 乱尺柄', images: [] },
+      { id: 'v7', color: 'オーク 乱尺柄', images: [] },
+      { id: 'v8', color: 'アカシア 乱尺柄', images: [] },
+      { id: 'v9', color: 'ドライメイプル 乱尺柄', images: [] },
+      { id: 'v10', color: 'ドライウォルナット 乱尺柄', images: [] },
+      { id: 'v11', color: 'ドライオーク 乱尺柄', images: [] },
+      { id: 'v12', color: 'シュガーホワイト（アッシュ）乱尺柄', images: [] },
+      { id: 'v13', color: 'ライトグレー（オーク）乱尺柄', images: [] },
+      { id: 'v14', color: 'ミドルグレー（オーク）乱尺柄', images: [] }
     ],
     pricing: [
-      { plan: 'LACIE', price: 200000 },
-      { plan: 'HOURS', price: 200000 },
-      { plan: 'LIFE+', price: 200000 },
-      { plan: 'LIFE', price: 200000 }
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
     ]
   },
   {
@@ -3303,16 +3297,67 @@ export const interiorProducts: Product[] = [
     modelNumber: 'STAIR-IKT',
     unit: 'set',
     isOption: true,
-    description: '階段踏板・蹴込板（ikuta）',
+    description: '階段踏板・蹴込板（ikuta）※塗装品のため近似色塗装になります。',
     variants: [
-      { id: 'v1', color: 'オーク', colorCode: '#D4B896', images: [] },
-      { id: 'v2', color: 'ウォールナット', colorCode: '#5C4033', images: [] }
+      { id: 'v1', color: 'ブラックチェリー', images: [] },
+      { id: 'v2', color: 'ハードメープル', images: [] },
+      { id: 'v3', color: 'ナラ樫', images: [] },
+      { id: 'v4', color: 'チーク', images: [] },
+      { id: 'v5', color: 'イタヤカエデ', images: [] },
+      { id: 'v6', color: 'アカシア', images: [] },
+      { id: 'v7', color: 'ウォルナット', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 240000 },
+      { plan: 'HOURS', price: 240000 },
+      { plan: 'LIFE+', price: 240000 },
+      { plan: 'LIFE', price: 240000 }
+    ]
+  },
+  {
+    id: 'int-stair-003b',
+    categoryId: 'stairs',
+    categoryName: '階段',
+    subcategory: '階段踏板',
+    name: '階段踏板/蹴込板 ikutaエイジング仕様',
+    manufacturer: 'ikuta',
+    modelNumber: 'STAIR-IKT-AGING',
+    unit: 'set',
+    isOption: true,
+    description: '階段踏板・蹴込板（ikutaエイジング）※塗装品のため近似色塗装になります。',
+    variants: [
+      { id: 'v1', color: 'エイジングナチュラル', images: [] },
+      { id: 'v2', color: 'エイジングホワイト', images: [] },
+      { id: 'v3', color: 'エイジングタイガ', images: [] },
+      { id: 'v4', color: 'エイジングカフェ', images: [] },
+      { id: 'v5', color: 'エイジングビター', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 350000 },
       { plan: 'HOURS', price: 350000 },
       { plan: 'LIFE+', price: 350000 },
       { plan: 'LIFE', price: 350000 }
+    ]
+  },
+  {
+    id: 'int-stair-landing',
+    categoryId: 'stairs',
+    categoryName: '階段',
+    subcategory: '階段オプション',
+    name: '階段 踊り場形状',
+    manufacturer: 'Gハウス',
+    modelNumber: 'STAIR-LANDING',
+    unit: 'piece',
+    isOption: true,
+    description: '階段踊り場形状変更',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 80000 },
+      { plan: 'HOURS', price: 80000 },
+      { plan: 'LIFE+', price: 80000 },
+      { plan: 'LIFE', price: 80000 }
     ]
   },
   {
@@ -3325,16 +3370,80 @@ export const interiorProducts: Product[] = [
     modelNumber: 'IRON-STAIR-SLATE',
     unit: 'set',
     isOption: true,
-    description: 'アイアン階段（スレートタイプ）',
+    description: 'アイアン階段（スレートタイプ）手摺形状：フラットバー（中桟1本・2本）・片側手摺のみ ※踏板は集成材塗装品',
     variants: [
-      { id: 'v1', color: 'ブラック', colorCode: '#1A1A1A', images: [] },
-      { id: 'v2', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
+      { id: 'v1', color: '日塗工/N-95 つや消ホワイト', images: [] },
+      { id: 'v2', color: '日塗工/N-60 つや消グレー', images: [] },
+      { id: 'v3', color: '日塗工/N-10 つや消ブラック', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 950000 },
       { plan: 'HOURS', price: 950000 },
       { plan: 'LIFE+', price: 950000 },
       { plan: 'LIFE', price: 950000 }
+    ]
+  },
+  {
+    id: 'int-stair-004b',
+    categoryId: 'stairs',
+    categoryName: '階段',
+    subcategory: 'アイアン階段',
+    name: 'アイアンまわり階段（一曲がり追加）',
+    manufacturer: 'Gハウス',
+    modelNumber: 'IRON-STAIR-TURN',
+    unit: 'piece',
+    isOption: true,
+    description: 'アイアン階段 一曲がり追加オプション',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 100000 },
+      { plan: 'HOURS', price: 100000 },
+      { plan: 'LIFE+', price: 100000 },
+      { plan: 'LIFE', price: 100000 }
+    ]
+  },
+  {
+    id: 'int-stair-004c',
+    categoryId: 'stairs',
+    categoryName: '階段',
+    subcategory: 'アイアン階段',
+    name: 'アイアン階段 転落防止型へ変更',
+    manufacturer: 'Gハウス',
+    modelNumber: 'IRON-STAIR-SAFE',
+    unit: 'set',
+    isOption: true,
+    description: 'アイアン階段 手すり形状 転落防止型へ変更',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 150000 },
+      { plan: 'HOURS', price: 150000 },
+      { plan: 'LIFE+', price: 150000 },
+      { plan: 'LIFE', price: 150000 }
+    ]
+  },
+  {
+    id: 'int-stair-004d',
+    categoryId: 'stairs',
+    categoryName: '階段',
+    subcategory: 'アイアン階段',
+    name: 'アイアン階段 両側手摺',
+    manufacturer: 'Gハウス',
+    modelNumber: 'IRON-STAIR-BOTH',
+    unit: 'set',
+    isOption: true,
+    description: 'アイアン階段 両側手摺へ変更',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 250000 },
+      { plan: 'HOURS', price: 250000 },
+      { plan: 'LIFE+', price: 250000 },
+      { plan: 'LIFE', price: 250000 }
     ]
   },
   {
@@ -3347,16 +3456,61 @@ export const interiorProducts: Product[] = [
     modelNumber: 'IRON-HANDRAIL',
     unit: 'set',
     isOption: true,
-    description: 'ホール用アイアン手すり',
+    description: 'ホール用アイアン手すり 手摺形状：フラットバー 上桟+中桟2本',
     variants: [
-      { id: 'v1', color: 'ブラック', colorCode: '#1A1A1A', images: [] },
-      { id: 'v2', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
+      { id: 'v1', color: '日塗工/N-95 つや消ホワイト', images: [] },
+      { id: 'v2', color: '日塗工/N-60 つや消グレー', images: [] },
+      { id: 'v3', color: '日塗工/N-10 つや消ブラック', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 240000 },
       { plan: 'HOURS', price: 240000 },
       { plan: 'LIFE+', price: 240000 },
       { plan: 'LIFE', price: 240000 }
+    ]
+  },
+  {
+    id: 'int-stair-handrail-lixil',
+    categoryId: 'stairs',
+    categoryName: '階段',
+    subcategory: '階段手すり',
+    name: '手すり LIXIL スクエアタイプ',
+    manufacturer: 'LIXIL',
+    modelNumber: 'HANDRAIL-LIXIL',
+    unit: 'set',
+    isOption: false,
+    description: '階段手すり LIXIL スクエアタイプ',
+    variants: [
+      { id: 'v1', color: 'ホワイト（手すり棒W/プレシャスホワイト、ブラケットYY/プレシャスホワイト）', images: [] },
+      { id: 'v2', color: 'ブラック（手すり棒AB/ブラック、ブラケットBE/アイアンブラック）', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+  {
+    id: 'int-stair-handrail-add',
+    categoryId: 'stairs',
+    categoryName: '階段',
+    subcategory: '階段手すり',
+    name: '壁付I型手摺追加 H600',
+    manufacturer: 'LIXIL',
+    modelNumber: 'HANDRAIL-I-H600',
+    unit: 'piece',
+    isOption: true,
+    description: '壁付I型手摺追加 H600',
+    variants: [
+      { id: 'v1', color: 'ホワイト', images: [] },
+      { id: 'v2', color: 'ブラック', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 15000 },
+      { plan: 'LIFE+', price: 15000 },
+      { plan: 'LIFE', price: 15000 }
     ]
   },
   {
@@ -3367,18 +3521,26 @@ export const interiorProducts: Product[] = [
     name: 'カーペット階段',
     manufacturer: 'Gハウス',
     modelNumber: 'CARPET-STAIR',
-    unit: 'set',
+    unit: 'piece',
     isOption: true,
-    description: 'カーペット仕上げ階段',
+    description: 'カーペット仕上げ階段 ※ひな壇階段では使用不可 ※アイアン階段では使用不可 ※1〜2階分ごとにオプション',
     variants: [
-      { id: 'v1', color: 'グレー', colorCode: '#808080', images: [] },
-      { id: 'v2', color: 'ベージュ', colorCode: '#D4C4A8', images: [] },
-      { id: 'v3', color: 'ブラウン', colorCode: '#8B4513', images: [] },
-      { id: 'v4', color: 'ネイビー', colorCode: '#000080', images: [] },
-      { id: 'v5', color: 'グリーン', colorCode: '#2E8B57', images: [] }
+      { id: 'v1', color: 'CIR5002', images: [] },
+      { id: 'v2', color: 'CIR-5006', images: [] },
+      { id: 'v3', color: 'CIR-5007', images: [] },
+      { id: 'v4', color: 'CIR-5008', images: [] },
+      { id: 'v5', color: 'LIR-5032', images: [] },
+      { id: 'v6', color: 'LIR-5033', images: [] },
+      { id: 'v7', color: 'LIR-5036', images: [] },
+      { id: 'v8', color: 'LIR-5044', images: [] },
+      { id: 'v9', color: 'MDR-5014', images: [] },
+      { id: 'v10', color: 'MDR-5017', images: [] },
+      { id: 'v11', color: 'HDR-1052', images: [] },
+      { id: 'v12', color: 'HDR-1053', images: [] },
+      { id: 'v13', color: 'HDR-1054', images: [] }
     ],
     pricing: [
-      { plan: 'LACIE', price: 210000 },
+      { plan: 'LACIE', price: 350000 },
       { plan: 'HOURS', price: 210000 },
       { plan: 'LIFE+', price: 210000 },
       { plan: 'LIFE', price: 210000 }
@@ -3386,6 +3548,74 @@ export const interiorProducts: Product[] = [
   },
 
   // ========== 壁・腰壁（PDF26追加）==========
+  {
+    id: 'int-wall-kasagi',
+    categoryId: 'wall',
+    categoryName: '壁材',
+    subcategory: '腰壁笠木',
+    name: '階段回り 腰壁笠木',
+    manufacturer: 'Panasonic',
+    modelNumber: 'KASAGI-STAIR',
+    unit: 'set',
+    isOption: false,
+    description: '階段回り腰壁笠木 標準高さFL+1100 階段部分斜め仕上がりとする',
+    variants: [
+      { id: 'v1', color: 'しっくいホワイト', images: [] },
+      { id: 'v2', color: 'ソイルブラック', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+  {
+    id: 'int-wall-madowaku',
+    categoryId: 'wall',
+    categoryName: '壁材',
+    subcategory: '造作部材',
+    name: '薄見付窓枠TS型',
+    manufacturer: 'Panasonic',
+    modelNumber: 'TS-MADOWAKU',
+    unit: 'set',
+    isOption: false,
+    description: '見付6mmのスマートな窓台 ※1色のみ採用可（2色以上採用不可）',
+    variants: [
+      { id: 'v1', color: 'しっくいホワイト', images: [] },
+      { id: 'v2', color: 'ソイルブラック', images: [] },
+      { id: 'v3', color: 'パールグレー', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+  {
+    id: 'int-wall-habaki',
+    categoryId: 'wall',
+    categoryName: '壁材',
+    subcategory: '造作部材',
+    name: 'クッション巾木スマート/H30',
+    manufacturer: 'Panasonic',
+    modelNumber: 'HABAKI-H30',
+    unit: 'set',
+    isOption: false,
+    description: '高さ3cm控え目な巾木 ※1色のみ採用可（2色以上採用不可）',
+    variants: [
+      { id: 'v1', color: 'しっくいホワイト', images: [] },
+      { id: 'v2', color: 'ソイルブラック', images: [] },
+      { id: 'v3', color: 'パールグレー', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
   {
     id: 'int-wall-001',
     categoryId: 'wall',
@@ -3396,10 +3626,12 @@ export const interiorProducts: Product[] = [
     modelNumber: 'KOSHIKABE-001',
     unit: 'meter',
     isOption: true,
-    description: '腰壁造作',
+    description: '腰壁造作 FL+1000 ※1m以下は¥15,000',
     variants: [
-      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] },
-      { id: 'v2', color: 'オーク', colorCode: '#D4B896', images: [] }
+      { id: 'v1', color: 'しっくいホワイト', images: [] },
+      { id: 'v2', color: 'ソイルブラック', images: [] },
+      { id: 'v3', color: 'パールグレー', images: [] },
+      { id: 'v4', color: 'ゴム集成クリア塗装', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 15000 },
@@ -3420,7 +3652,8 @@ export const interiorProducts: Product[] = [
     isOption: true,
     description: '垂壁造作',
     variants: [
-      { id: 'v1', color: '標準', images: [] }
+      { id: 'v1', color: 'H200', images: [] },
+      { id: 'v2', color: 'H400', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 24000 },
@@ -3611,20 +3844,20 @@ export const interiorProducts: Product[] = [
   },
 
   // ========== アクセントパネル（PDF29追加）==========
+  // THE WALL 朝日ウッドテック パネルサイズ 2,730mm×600mm
   {
     id: 'int-panel-001',
     categoryId: 'wall',
     categoryName: '壁材',
     subcategory: 'アクセントパネル',
-    name: 'THE WALL オーク',
+    name: 'THE WALL ¥15,000/㎡',
     manufacturer: '朝日ウッドテック',
-    modelNumber: 'THEWALL-OAK',
+    modelNumber: 'THEWALL-15000',
     unit: 'sqm',
     isOption: true,
-    description: '無垢ウッドパネル オーク',
+    description: 'ウッドパネル パネルサイズ2,730mm×600mm',
     variants: [
-      { id: 'v1', color: 'ナチュラル', colorCode: '#D4B896', images: [] },
-      { id: 'v2', color: 'ホワイト', colorCode: '#F5F5DC', images: [] }
+      { id: 'v1', color: 'オーク（ツキ板）75mmピッチ', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 15000 },
@@ -3638,20 +3871,44 @@ export const interiorProducts: Product[] = [
     categoryId: 'wall',
     categoryName: '壁材',
     subcategory: 'アクセントパネル',
-    name: 'THE WALL レッドシダー',
+    name: 'THE WALL ¥20,000/㎡',
     manufacturer: '朝日ウッドテック',
-    modelNumber: 'THEWALL-REDCEDAR',
+    modelNumber: 'THEWALL-20000',
     unit: 'sqm',
     isOption: true,
-    description: '無垢ウッドパネル レッドシダー',
+    description: 'ウッドパネル パネルサイズ2,730mm×600mm',
     variants: [
-      { id: 'v1', color: 'ナチュラル', colorCode: '#B5651D', images: [] }
+      { id: 'v1', color: 'レッドシダー（ツキ板）ランダムピッチ', images: [] },
+      { id: 'v2', color: 'ヘムロック（ツキ板）ランダムピッチ', images: [] },
+      { id: 'v3', color: 'ブラックチェリー（ツキ板）75mmピッチ', images: [] },
+      { id: 'v4', color: 'オーク（ツキ板）ランダムピッチ', images: [] }
     ],
     pricing: [
-      { plan: 'LACIE', price: 45000 },
-      { plan: 'HOURS', price: 45000 },
-      { plan: 'LIFE+', price: 45000 },
-      { plan: 'LIFE', price: 45000 }
+      { plan: 'LACIE', price: 20000 },
+      { plan: 'HOURS', price: 20000 },
+      { plan: 'LIFE+', price: 20000 },
+      { plan: 'LIFE', price: 20000 }
+    ]
+  },
+  {
+    id: 'int-panel-002b',
+    categoryId: 'wall',
+    categoryName: '壁材',
+    subcategory: 'アクセントパネル',
+    name: 'THE WALL ¥21,000/㎡',
+    manufacturer: '朝日ウッドテック',
+    modelNumber: 'THEWALL-21000',
+    unit: 'sqm',
+    isOption: true,
+    description: 'ウッドパネル パネルサイズ2,730mm×600mm',
+    variants: [
+      { id: 'v1', color: 'アカシア（ツキ板）ランダムピッチ', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 21000 },
+      { plan: 'HOURS', price: 21000 },
+      { plan: 'LIFE+', price: 21000 },
+      { plan: 'LIFE', price: 21000 }
     ]
   },
   {
@@ -3659,36 +3916,88 @@ export const interiorProducts: Product[] = [
     categoryId: 'wall',
     categoryName: '壁材',
     subcategory: 'アクセントパネル',
-    name: 'THE WALL ヘムロック',
+    name: 'THE WALL ¥48,000/㎡',
     manufacturer: '朝日ウッドテック',
-    modelNumber: 'THEWALL-HEMLOCK',
+    modelNumber: 'THEWALL-48000',
     unit: 'sqm',
     isOption: true,
-    description: '無垢ウッドパネル ヘムロック',
+    description: 'ウッドパネル パネルサイズ2,730mm×600mm',
     variants: [
-      { id: 'v1', color: 'ナチュラル', colorCode: '#E8DCC8', images: [] }
+      { id: 'v1', color: 'オーク（挽き板）レリーフ', images: [] }
     ],
     pricing: [
-      { plan: 'LACIE', price: 30000 },
-      { plan: 'HOURS', price: 30000 },
-      { plan: 'LIFE+', price: 30000 },
-      { plan: 'LIFE', price: 30000 }
+      { plan: 'LACIE', price: 48000 },
+      { plan: 'HOURS', price: 48000 },
+      { plan: 'LIFE+', price: 48000 },
+      { plan: 'LIFE', price: 48000 }
     ]
   },
+  {
+    id: 'int-panel-003b',
+    categoryId: 'wall',
+    categoryName: '壁材',
+    subcategory: 'アクセントパネル',
+    name: 'THE WALL ¥55,000/㎡',
+    manufacturer: '朝日ウッドテック',
+    modelNumber: 'THEWALL-55000',
+    unit: 'sqm',
+    isOption: true,
+    description: 'ウッドパネル パネルサイズ2,730mm×600mm',
+    variants: [
+      { id: 'v1', color: 'ブラックチェリー（挽き板）レリーフ', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 55000 },
+      { plan: 'HOURS', price: 55000 },
+      { plan: 'LIFE+', price: 55000 },
+      { plan: 'LIFE', price: 55000 }
+    ]
+  },
+  {
+    id: 'int-panel-003c',
+    categoryId: 'wall',
+    categoryName: '壁材',
+    subcategory: 'アクセントパネル',
+    name: 'THE WALL ¥60,000/㎡',
+    manufacturer: '朝日ウッドテック',
+    modelNumber: 'THEWALL-60000',
+    unit: 'sqm',
+    isOption: true,
+    description: 'ウッドパネル パネルサイズ2,730mm×600mm',
+    variants: [
+      { id: 'v1', color: 'ヘムロック（挽き板）Fフラット', images: [] },
+      { id: 'v2', color: 'ヘムロック（挽き板）Tラウンド', images: [] },
+      { id: 'v3', color: 'ヘムロック（挽き板）Mマウント', images: [] },
+      { id: 'v4', color: 'ヘムロック（挽き板）Mマウント（ウェーブ加工）', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 60000 },
+      { plan: 'HOURS', price: 60000 },
+      { plan: 'LIFE+', price: 60000 },
+      { plan: 'LIFE', price: 60000 }
+    ]
+  },
+  // セラールパネル AICA パネルサイズ 900mm×2,400mm
   {
     id: 'int-panel-004',
     categoryId: 'wall',
     categoryName: '壁材',
     subcategory: 'アクセントパネル',
-    name: 'セラールパネル ヘアライン',
+    name: 'セラール',
     manufacturer: 'AICA',
-    modelNumber: 'CERARL-HAIRLINE',
+    modelNumber: 'CERARL',
     unit: 'piece',
     isOption: true,
-    description: 'セラールパネル ヘアライン仕上げ 3×8',
+    description: 'セラールパネル 900mm×2,400mm ※キッチン・メーカーカップボード吊戸〜カウンター間は施工不可 見切り材（2本）+¥8,000 UP',
     variants: [
-      { id: 'v1', color: 'シルバー', colorCode: '#C0C0C0', images: [] },
-      { id: 'v2', color: 'ブラック', colorCode: '#1A1A1A', images: [] }
+      { id: 'v1', color: 'ヘアライン仕上げ FKJ 6000ZYN24（見切り スノーホワイト）', images: [] },
+      { id: 'v2', color: 'ヘアライン仕上げ FKJ 6300ZYN24（見切り アイボリー）', images: [] },
+      { id: 'v3', color: 'ヘアライン仕上げ FKJ 6115ZYN24（見切り シルバー）', images: [] },
+      { id: 'v4', color: 'ヘアライン仕上げ FKJ 6117ZYD24（見切り シルバー）', images: [] },
+      { id: 'v5', color: '艶有り FKM 6000ZMN（見切り スノーホワイト）', images: [] },
+      { id: 'v6', color: '艶有り FKM 6005ZMN（見切り アイボリー）', images: [] },
+      { id: 'v7', color: '艶有り FKM 6110ZMN（見切り シルバー）', images: [] },
+      { id: 'v8', color: '艶なし FJ-936ZD（見切り シルバー）', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 33000 },
@@ -3702,14 +4011,19 @@ export const interiorProducts: Product[] = [
     categoryId: 'wall',
     categoryName: '壁材',
     subcategory: 'アクセントパネル',
-    name: 'セラールパネル コンクリート調',
+    name: 'セラール セレント',
     manufacturer: 'AICA',
-    modelNumber: 'CERARL-CONCRETE',
+    modelNumber: 'CERARL-SELENT',
     unit: 'piece',
     isOption: true,
-    description: 'セラールパネル コンクリート調 3×8',
+    description: 'セラール セレント 900mm×2,400mm 見切り材（2本）+¥14,000 UP',
     variants: [
-      { id: 'v1', color: 'グレー', colorCode: '#808080', images: [] }
+      { id: 'v1', color: 'Crunch Concrete Snow White 10301（見切り 胡粉 GOFUN）', images: [] },
+      { id: 'v2', color: 'Crunch Concrete Beige 10302（見切り 白土 HAKUDO）', images: [] },
+      { id: 'v3', color: 'Crunch Concrete Gray 10303（見切り シルバー）', images: [] },
+      { id: 'v4', color: 'Crunch Concrete Dark Gray 10304（見切り 薄墨 USUZUMI）', images: [] },
+      { id: 'v5', color: 'Spread Metal 10300（見切り 灰ねず HAINEZU）', images: [] },
+      { id: 'v6', color: 'Grace Marble 10242（見切り 胡粉 GOFUN）', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 44000 },
@@ -4149,8 +4463,8 @@ export const interiorProducts: Product[] = [
     isOption: true,
     description: 'エコカラット 606×303mm',
     variants: [
-      { id: 'v1', color: 'ホワイト', colorCode: '#F5F5F5', images: [] },
-      { id: 'v2', color: 'グレー', colorCode: '#808080', images: [] }
+      { id: 'v1', color: 'ECP-630/GRQ1（ライトグレー）', images: [] },
+      { id: 'v2', color: 'EPC-630/GRQ3（ダークグレー）', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 32000 },
@@ -4169,9 +4483,11 @@ export const interiorProducts: Product[] = [
     modelNumber: 'ECOCARAT-ROUGHCEMENT',
     unit: 'sqm',
     isOption: true,
-    description: 'エコカラット 606×151mm',
+    description: 'エコカラット 606×151×7mm',
     variants: [
-      { id: 'v1', color: 'グレー', colorCode: '#808080', images: [] }
+      { id: 'v1', color: 'ECP-615/RGC1（グレー）', images: [] },
+      { id: 'v2', color: 'ECP-615/RGC2（グレージュ）', images: [] },
+      { id: 'v3', color: 'ECP-615/RGC3（ダークグレー）', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 32000 },
@@ -4192,8 +4508,9 @@ export const interiorProducts: Product[] = [
     isOption: true,
     description: 'エコカラット 303×151mm',
     variants: [
-      { id: 'v1', color: 'グレー', colorCode: '#808080', images: [] },
-      { id: 'v2', color: 'ベージュ', colorCode: '#D4C4A8', images: [] }
+      { id: 'v1', color: 'ECP-315/VSR1N（ホワイト）', images: [] },
+      { id: 'v2', color: 'ECP-315/VSR2N（グレー）', images: [] },
+      { id: 'v3', color: 'ECP-315/VSR3N（アッシュブラウン）', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 32000 },
@@ -4214,8 +4531,10 @@ export const interiorProducts: Product[] = [
     isOption: true,
     description: 'エコカラット 606×303mm',
     variants: [
-      { id: 'v1', color: 'ホワイト', colorCode: '#F5F5F5', images: [] },
-      { id: 'v2', color: 'グレー', colorCode: '#808080', images: [] }
+      { id: 'v1', color: 'ECP-630/STG1N（グレー）', images: [] },
+      { id: 'v2', color: 'ECP-630/STG2N（ベージュ）', images: [] },
+      { id: 'v3', color: 'ECP-630/STG3N（ダークグレー）', images: [] },
+      { id: 'v4', color: 'ECP-630/STG4N（チャコール）', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 32000 },
@@ -4236,108 +4555,15 @@ export const interiorProducts: Product[] = [
     isOption: true,
     description: 'エコカラット 303×75mm',
     variants: [
-      { id: 'v1', color: 'ホワイト', colorCode: '#F5F5F5', images: [] },
-      { id: 'v2', color: 'グレー', colorCode: '#808080', images: [] }
+      { id: 'v1', color: 'ECP-375/RTZ1N（ライトグレー）', images: [] },
+      { id: 'v2', color: 'ECP-375/RTZ2N（ベージュ）', images: [] },
+      { id: 'v3', color: 'ECP-375/RTZ3N（ダークグレー）', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 32000 },
       { plan: 'HOURS', price: 32000 },
       { plan: 'LIFE+', price: 32000 },
       { plan: 'LIFE', price: 32000 }
-    ]
-  },
-
-  // ========== インテリアカウンター（PDF35追加）==========
-  {
-    id: 'int-counter-001',
-    categoryId: 'furniture',
-    categoryName: '造作家具',
-    subcategory: 'カウンター',
-    name: 'インテリアカウンター1（トイレ用）',
-    manufacturer: 'Panasonic',
-    modelNumber: 'INT-COUNTER-1',
-    unit: 'piece',
-    isOption: true,
-    description: 'トイレ用ちょい置きカウンター',
-    variants: [
-      { id: 'v1', color: 'ホワイトオーク', colorCode: '#E8DCC8', images: [] },
-      { id: 'v2', color: 'チェリー', colorCode: '#B5651D', images: [] },
-      { id: 'v3', color: 'ウォールナット', colorCode: '#5C4033', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 20000 },
-      { plan: 'HOURS', price: 20000 },
-      { plan: 'LIFE+', price: 20000 },
-      { plan: 'LIFE', price: 20000 }
-    ]
-  },
-  {
-    id: 'int-counter-002',
-    categoryId: 'furniture',
-    categoryName: '造作家具',
-    subcategory: 'カウンター',
-    name: 'インテリアカウンター2 D150',
-    manufacturer: 'Panasonic',
-    modelNumber: 'INT-COUNTER-2-D150',
-    unit: 'piece',
-    isOption: true,
-    description: 'インテリアカウンター 奥行150mm',
-    variants: [
-      { id: 'v1', color: 'ホワイトオーク', colorCode: '#E8DCC8', images: [] },
-      { id: 'v2', color: 'チェリー', colorCode: '#B5651D', images: [] },
-      { id: 'v3', color: 'ウォールナット', colorCode: '#5C4033', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 41000 },
-      { plan: 'HOURS', price: 41000 },
-      { plan: 'LIFE+', price: 41000 },
-      { plan: 'LIFE', price: 41000 }
-    ]
-  },
-  {
-    id: 'int-counter-003',
-    categoryId: 'furniture',
-    categoryName: '造作家具',
-    subcategory: 'カウンター',
-    name: 'インテリアカウンター2 D300',
-    manufacturer: 'Panasonic',
-    modelNumber: 'INT-COUNTER-2-D300',
-    unit: 'piece',
-    isOption: true,
-    description: 'インテリアカウンター 奥行300mm',
-    variants: [
-      { id: 'v1', color: 'ホワイトオーク', colorCode: '#E8DCC8', images: [] },
-      { id: 'v2', color: 'チェリー', colorCode: '#B5651D', images: [] },
-      { id: 'v3', color: 'ウォールナット', colorCode: '#5C4033', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 82000 },
-      { plan: 'HOURS', price: 82000 },
-      { plan: 'LIFE+', price: 82000 },
-      { plan: 'LIFE', price: 82000 }
-    ]
-  },
-  {
-    id: 'int-counter-004',
-    categoryId: 'furniture',
-    categoryName: '造作家具',
-    subcategory: 'カウンター',
-    name: 'インテリアカウンター2 D450',
-    manufacturer: 'Panasonic',
-    modelNumber: 'INT-COUNTER-2-D450',
-    unit: 'piece',
-    isOption: true,
-    description: 'インテリアカウンター 奥行450mm（デスク用）',
-    variants: [
-      { id: 'v1', color: 'ホワイトオーク', colorCode: '#E8DCC8', images: [] },
-      { id: 'v2', color: 'チェリー', colorCode: '#B5651D', images: [] },
-      { id: 'v3', color: 'ウォールナット', colorCode: '#5C4033', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 192000 },
-      { plan: 'HOURS', price: 192000 },
-      { plan: 'LIFE+', price: 192000 },
-      { plan: 'LIFE', price: 192000 }
     ]
   },
 
@@ -5376,197 +5602,6 @@ export const interiorProducts: Product[] = [
       { plan: 'HOURS', price: 27000 },
       { plan: 'LIFE+', price: 27000 },
       { plan: 'LIFE', price: 27000 }
-    ]
-  },
-
-  // ========== エアコン（PDF45追加）==========
-  {
-    id: 'int-aircon-daikin-e6',
-    categoryId: 'aircon',
-    categoryName: 'エアコン',
-    subcategory: 'ダイキン',
-    name: 'ダイキン Eシリーズ 6畳用',
-    manufacturer: 'ダイキン',
-    modelNumber: 'S225ATES-W',
-    unit: 'piece',
-    isOption: true,
-    description: 'ダイキン Eシリーズ 6畳用 100V 施工費込',
-    variants: [
-      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 110000 },
-      { plan: 'HOURS', price: 110000 },
-      { plan: 'LIFE+', price: 110000 },
-      { plan: 'LIFE', price: 110000 }
-    ]
-  },
-  {
-    id: 'int-aircon-daikin-e10',
-    categoryId: 'aircon',
-    categoryName: 'エアコン',
-    subcategory: 'ダイキン',
-    name: 'ダイキン Eシリーズ 10畳用',
-    manufacturer: 'ダイキン',
-    modelNumber: 'S285ATES-W',
-    unit: 'piece',
-    isOption: true,
-    description: 'ダイキン Eシリーズ 10畳用 100V 施工費込',
-    variants: [
-      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 150000 },
-      { plan: 'HOURS', price: 150000 },
-      { plan: 'LIFE+', price: 150000 },
-      { plan: 'LIFE', price: 150000 }
-    ]
-  },
-  {
-    id: 'int-aircon-daikin-e14',
-    categoryId: 'aircon',
-    categoryName: 'エアコン',
-    subcategory: 'ダイキン',
-    name: 'ダイキン Eシリーズ 14畳用',
-    manufacturer: 'ダイキン',
-    modelNumber: 'S405ATEP-W',
-    unit: 'piece',
-    isOption: true,
-    description: 'ダイキン Eシリーズ 14畳用 200V 施工費込',
-    variants: [
-      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 192000 },
-      { plan: 'HOURS', price: 192000 },
-      { plan: 'LIFE+', price: 192000 },
-      { plan: 'LIFE', price: 192000 }
-    ]
-  },
-  {
-    id: 'int-aircon-daikin-gx6',
-    categoryId: 'aircon',
-    categoryName: 'エアコン',
-    subcategory: 'ダイキン',
-    name: 'ダイキン GXシリーズ 6畳用',
-    manufacturer: 'ダイキン',
-    modelNumber: 'S224ATGS-W',
-    unit: 'piece',
-    isOption: true,
-    description: 'ダイキン GXシリーズ 6畳用 100V 施工費込（さらら除湿）',
-    variants: [
-      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 165000 },
-      { plan: 'HOURS', price: 165000 },
-      { plan: 'LIFE+', price: 165000 },
-      { plan: 'LIFE', price: 165000 }
-    ]
-  },
-  {
-    id: 'int-aircon-daikin-gx10',
-    categoryId: 'aircon',
-    categoryName: 'エアコン',
-    subcategory: 'ダイキン',
-    name: 'ダイキン GXシリーズ 10畳用',
-    manufacturer: 'ダイキン',
-    modelNumber: 'S284ATGS-W',
-    unit: 'piece',
-    isOption: true,
-    description: 'ダイキン GXシリーズ 10畳用 100V 施工費込（さらら除湿）',
-    variants: [
-      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 188000 },
-      { plan: 'HOURS', price: 188000 },
-      { plan: 'LIFE+', price: 188000 },
-      { plan: 'LIFE', price: 188000 }
-    ]
-  },
-  {
-    id: 'int-aircon-daikin-gx14',
-    categoryId: 'aircon',
-    categoryName: 'エアコン',
-    subcategory: 'ダイキン',
-    name: 'ダイキン GXシリーズ 14畳用',
-    manufacturer: 'ダイキン',
-    modelNumber: 'S404ATGP-W',
-    unit: 'piece',
-    isOption: true,
-    description: 'ダイキン GXシリーズ 14畳用 200V 施工費込（さらら除湿）',
-    variants: [
-      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 218000 },
-      { plan: 'HOURS', price: 218000 },
-      { plan: 'LIFE+', price: 218000 },
-      { plan: 'LIFE', price: 218000 }
-    ]
-  },
-  {
-    id: 'int-aircon-mitsubishi-z6',
-    categoryId: 'aircon',
-    categoryName: 'エアコン',
-    subcategory: '三菱電機',
-    name: '三菱電機 霧ヶ峰 Zシリーズ 6畳用',
-    manufacturer: '三菱電機',
-    modelNumber: 'MSZ-ZXV2225',
-    unit: 'piece',
-    isOption: true,
-    description: '霧ヶ峰 Zシリーズ 6畳用 100V 施工費込（さらっと除湿冷房）',
-    variants: [
-      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 235000 },
-      { plan: 'HOURS', price: 235000 },
-      { plan: 'LIFE+', price: 235000 },
-      { plan: 'LIFE', price: 235000 }
-    ]
-  },
-  {
-    id: 'int-aircon-mitsubishi-z10',
-    categoryId: 'aircon',
-    categoryName: 'エアコン',
-    subcategory: '三菱電機',
-    name: '三菱電機 霧ヶ峰 Zシリーズ 10畳用',
-    manufacturer: '三菱電機',
-    modelNumber: 'MSZ-ZXV2825S',
-    unit: 'piece',
-    isOption: true,
-    description: '霧ヶ峰 Zシリーズ 10畳用 200V 施工費込（さらっと除湿冷房）',
-    variants: [
-      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 274000 },
-      { plan: 'HOURS', price: 274000 },
-      { plan: 'LIFE+', price: 274000 },
-      { plan: 'LIFE', price: 274000 }
-    ]
-  },
-  {
-    id: 'int-aircon-mitsubishi-z14',
-    categoryId: 'aircon',
-    categoryName: 'エアコン',
-    subcategory: '三菱電機',
-    name: '三菱電機 霧ヶ峰 Zシリーズ 14畳用',
-    manufacturer: '三菱電機',
-    modelNumber: 'MSZ-ZXV4025S',
-    unit: 'piece',
-    isOption: true,
-    description: '霧ヶ峰 Zシリーズ 14畳用 200V 施工費込（さらっと除湿冷房）',
-    variants: [
-      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 300000 },
-      { plan: 'HOURS', price: 300000 },
-      { plan: 'LIFE+', price: 300000 },
-      { plan: 'LIFE', price: 300000 }
     ]
   },
 

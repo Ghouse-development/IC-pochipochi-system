@@ -838,29 +838,6 @@ export const exteriorProducts: Product[] = [
     ]
   },
 
-  // ===== 外壁 - ニチハ モエンエクセラード16 Fuge =====
-  {
-    id: 'ext-wall-moene-fuge',
-    categoryId: 'exterior-wall',
-    categoryName: '外壁',
-    subcategory: 'モエンエクセラード16 Fuge',
-    name: 'モエンエクセラード16 Fuge',
-    manufacturer: 'ニチハ',
-    materialType: '窯業系サイディング',
-    modelNumber: 'EQS6xxD',
-    unit: 'sqm',
-    isOption: true,
-    description: 'モエンエクセラード16 Fuge',
-    variants: [
-      { id: 'v1', color: 'モベルクレージュⅡ', colorCode: 'ベージュ', images: [] },
-      { id: 'v2', color: 'シュマールベージュⅡ', colorCode: 'サンドベージュ', images: [] },
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 4500 },
-      { plan: 'HOURS', price: 4500 }
-    ]
-  },
-
   // ===== 外壁 - ニチハ COOL イルミオ =====
   {
     id: 'ext-wall-cool-illuminio',
@@ -1115,28 +1092,6 @@ export const exteriorProducts: Product[] = [
       { id: 'v4', color: 'QFミッド チタン グレー', colorCode: 'NH5924A', images: [] },
       { id: 'v5', color: 'QFダスキー チタン グレー', colorCode: 'NH5925A', images: [] },
       { id: 'v6', color: 'QFプリント チタン ブラック', colorCode: 'NH5926A', images: [] },
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 4500 },
-      { plan: 'HOURS', price: 4500 }
-    ]
-  },
-
-  // ===== 外壁 - KMEW カンターピレ =====
-  {
-    id: 'ext-wall-canterpile',
-    categoryId: 'exterior-wall',
-    categoryName: '外壁',
-    subcategory: 'カンターピレ',
-    name: 'カンターピレ',
-    manufacturer: 'KMEW',
-    materialType: '窯業系サイディング',
-    modelNumber: 'NH5921A',
-    unit: 'sqm',
-    isOption: true,
-    description: 'タイルデザイン外壁（16mm厚）',
-    variants: [
-      { id: 'v1', color: 'シルクチタンホワイト', colorCode: 'ホワイト', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 4500 },
