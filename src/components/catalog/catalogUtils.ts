@@ -39,6 +39,7 @@ export const convertStaticToItemWithDetails = (product: CatalogProduct, category
     id: product.id,
     name: product.name,
     manufacturer: product.manufacturer,
+    series: product.series || null, // シリーズ名
     model_number: product.modelNumber,
     category_id: product.categoryId,
     category_name: product.subcategory,

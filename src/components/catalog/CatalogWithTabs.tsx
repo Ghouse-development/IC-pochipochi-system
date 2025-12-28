@@ -22,6 +22,8 @@ import { RoomInteriorSelector } from '../interior/RoomInteriorSelector';
 import { useCustomerMode, CustomerWelcomeBanner } from '../customer/CustomerModeWrapper';
 import * as Dialog from '@radix-ui/react-dialog';
 import type { Product as CatalogProduct } from '../../types/product';
+import { ManufacturerSelector, SelectionBar } from './ManufacturerSelector';
+import { getManufacturersForCategory, hasSeriesSelection, type ManufacturerConfig, type ManufacturerSeries } from '../../config/waterEquipmentConfig';
 
 // 抽出したコンポーネント・ユーティリティ
 import { ItemCard } from './ItemCard';
@@ -197,6 +199,10 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     variantId?: string;
     variantName?: string;
   } | null>(null);
+
+  // 水回り設備のメーカー/シリーズ選択
+  const [selectedManufacturer, setSelectedManufacturer] = useState<ManufacturerConfig | null>(null);
+  const [selectedSeries, setSelectedSeries] = useState<ManufacturerSeries | null>(null);
 
   // ページネーション
   const [currentPage, setCurrentPage] = useState(1);
@@ -494,16 +500,19 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
           logger.error('Supabase fetch error:', fetchError);
         }
 
-        // Supabaseにデータがあり、バリアント情報も含まれている場合はそれを使用
+        // 静的データを取得（完全なデータセット）
+        const staticItems = getStaticItems(activeTab);
+
+        // Supabaseにデータがあり、静的データより多い場合のみSupabaseを使用
+        // 現時点では静的データの方が完全なため、静的データを優先
         if (supabaseItems && supabaseItems.length > 0) {
-          // バリアント情報があるかチェック
           const hasVariants = supabaseItems.some(item => item.variants && item.variants.length > 0);
 
-          if (hasVariants) {
+          // Supabaseデータが静的データより多い場合のみSupabaseを使用
+          if (hasVariants && supabaseItems.length > staticItems.length) {
             // カテゴリタイプでフィルタ（JOINの条件が効かない場合の補完）
             let filteredItems = supabaseItems;
             if (activeTab === 'design') {
-              // 設計タブ：DESIGN_CATEGORIESに該当するものをフィルタ
               filteredItems = supabaseItems.filter(item =>
                 DESIGN_CATEGORIES.some(dc => item.category?.name?.includes(dc) || dc.includes(item.category?.name || ''))
               );
@@ -512,20 +521,20 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 item.category?.category_type === activeTab
               );
             } else {
-              // 外装・設備タブ：DESIGN_CATEGORIESを除外
               filteredItems = supabaseItems.filter(item =>
                 item.category?.category_type === activeTab &&
                 !DESIGN_CATEGORIES.some(dc => item.category?.name?.includes(dc) || dc.includes(item.category?.name || ''))
               );
             }
-            setItems(filteredItems.length > 0 ? filteredItems : supabaseItems);
-            setIsLoading(false);
-            return;
+            if (filteredItems.length > staticItems.length) {
+              setItems(filteredItems);
+              setIsLoading(false);
+              return;
+            }
           }
         }
 
-        // Supabaseにデータがない、またはバリアント情報がない場合は静的データを使用
-        const staticItems = getStaticItems(activeTab);
+        // 静的データを使用（完全なデータセットを保証）
 
         // カテゴリでフィルタリング
         let filteredStaticItems = staticItems;
@@ -553,6 +562,36 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
     fetchItems();
   }, [activeTab, selectedCategoryId, getStaticItems, categories]);
+
+  // 現在のカテゴリ名を取得
+  const currentCategoryName = useMemo(() => {
+    if (!selectedCategoryId) return null;
+    return categories.find(c => c.id === selectedCategoryId)?.name || null;
+  }, [selectedCategoryId, categories]);
+
+  // 水回り設備のメーカーリストを取得
+  const waterEquipmentManufacturers = useMemo(() => {
+    if (activeTab !== 'equipment' || !currentCategoryName) return [];
+    return getManufacturersForCategory(currentCategoryName);
+  }, [activeTab, currentCategoryName]);
+
+  // カテゴリ変更時にメーカー/シリーズをリセット
+  useEffect(() => {
+    setSelectedManufacturer(null);
+    setSelectedSeries(null);
+  }, [selectedCategoryId]);
+
+  // メーカー選択が必要かどうか
+  const needsManufacturerSelection = waterEquipmentManufacturers.length > 0;
+
+  // メーカー/シリーズ選択が完了しているか
+  const isManufacturerSelectionComplete = useMemo(() => {
+    if (!needsManufacturerSelection) return true;
+    if (!selectedManufacturer) return false;
+    // シリーズ選択が必要な場合
+    if (hasSeriesSelection(selectedManufacturer) && !selectedSeries) return false;
+    return true;
+  }, [needsManufacturerSelection, selectedManufacturer, selectedSeries]);
 
   // 利用可能な素材タイプを抽出
   const availableMaterialTypes = useMemo(() => {
@@ -645,6 +684,13 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
       // 廃番フィルター
       if (hideDiscontinued && item.is_discontinued) {
         return false;
+      }
+      // 水回り設備のメーカー/シリーズフィルター
+      if (needsManufacturerSelection && selectedManufacturer) {
+        // メーカー名でフィルタ
+        if (item.manufacturer !== selectedManufacturer.name) return false;
+        // シリーズでフィルタ（シリーズ選択がある場合）
+        if (selectedSeries && item.series !== selectedSeries.name) return false;
       }
       return true;
     });
@@ -1468,10 +1514,40 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                     </button>
                   </div>
                 </div>
+              ) : needsManufacturerSelection && !isManufacturerSelectionComplete ? (
+                /* メーカー/シリーズ選択（水回り設備用） */
+                <div className="max-w-4xl mx-auto">
+                  <ManufacturerSelector
+                    manufacturers={waterEquipmentManufacturers}
+                    selectedManufacturer={selectedManufacturer}
+                    selectedSeries={selectedSeries}
+                    onSelectManufacturer={setSelectedManufacturer}
+                    onSelectSeries={setSelectedSeries}
+                    onBack={() => {
+                      setSelectedManufacturer(null);
+                      setSelectedSeries(null);
+                    }}
+                  />
+                </div>
               ) : filteredItems.length === 0 ? (
                 <EmptyState searchTerm={searchTerm} onClear={() => setSearchTerm('')} />
               ) : (
                 <>
+                  {/* メーカー選択状態バー（水回り設備用） */}
+                  {needsManufacturerSelection && selectedManufacturer && currentCategoryName && (
+                    <div className="mb-4">
+                      <SelectionBar
+                        categoryName={currentCategoryName}
+                        selectedManufacturer={selectedManufacturer}
+                        selectedSeries={selectedSeries}
+                        onClear={() => {
+                          setSelectedManufacturer(null);
+                          setSelectedSeries(null);
+                        }}
+                      />
+                    </div>
+                  )}
+
                   {/* 商品グリッド - 最大6列表示 */}
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
                     {(() => {

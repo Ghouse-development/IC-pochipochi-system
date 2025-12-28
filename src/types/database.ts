@@ -149,6 +149,7 @@ export interface Item {
   category_name: string | null;
   model_number: string | null;
   manufacturer: string | null;
+  series: string | null; // シリーズ名（水回り設備用）
   note: string | null;
   unit_id: string | null;
   formula: string | null;

@@ -58,6 +58,7 @@ export interface Product {
   subcategory: string;
   name: string;
   manufacturer: string;
+  series?: string; // シリーズ名（水回り設備用: LIXIL リシェル/ノクト等）
   modelNumber: string;
   unit: UnitType;
   isOption: boolean;

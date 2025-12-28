@@ -13,21 +13,63 @@ export const EXTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
     name: '外壁',
     icon: '🏠',
     subcategoryOrder: [
+      // 標準品（Vシリーズ）
       'モナビストーンV',
-      'リーガストーン調V',
-      'ボルブストーン調V',
       'シャルムロックV',
+      'リーガストーン調V',
+      'ディスタシェイドV',
+      'ボルブストーン調V',
+      'スプリットストーン調V',
+      'コルモストーン調V',
+      'コンクリート打ちっ放し16V',
+      'グレインウッドV',
+      'マイスターウッド調V',
+      'しぶきV',
+      'アフェットV',
+      'ロックラインV',
+      'ナチュラルラインV',
+      // プレミアム
       'ルボン プレミアム',
+      'スティルランバー プレミアム',
+      'ミルシュタイン プレミアム',
+      'シャルムロック プレミアム',
+      'リーガストーン調 プレミアム',
+      'コルモストーン調 プレミアム',
+      'コンクリート打ちっ放し16 プレミアム',
+      'リントロック調 プレミアム',
+      'フィーノ調 プレミアム',
+      'キャスティングウッド プレミアム',
+      'ヴィンテージウッド プレミアム',
+      'シントア プレミアム',
+      'スプーモ プレミアム',
+      'フラーグ プレミアム',
+      'マグート プレミアム',
+      'プリレート プレミアム',
+      // その他
       'モエンエクセラード16 Fuge',
       'COOL イルミオ',
       '新フラット16',
       'カンターピレ',
+      'カンタービレ',
       'アルテミュール',
-      'ジョリパットネオ∞',
+      'ジョリパットネオ∞ ミーティア',
+      'ジョリパットネオ∞ エンシェントブリック',
       'SOLIDO',
       'SPビレクト',
       'ガルスパン',
-      '窯業系サイディング',
+      // 18mm厚
+      '木枠コンクリート調18',
+      'モダンスリット18',
+      'ニューインプレース18',
+      // その他
+      'レスティ',
+      'ルビドフラット',
+      'フラットウォール',
+      'フィエルテ',
+      'ハーモレイド',
+      'トリル',
+      'シンプルストライプ',
+      'シックイフラット',
     ]
   },
   {
@@ -40,22 +82,15 @@ export const EXTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
     icon: '🪟',
     subcategoryOrder: [
       'APW430',
+      'APW430窓オプション',
       'APW330',
       '窓オプション',
-      '窓追加',
     ]
   },
   {
     name: '玄関ドア',
     icon: '🚪',
-    subcategoryOrder: [
-      'ヴェナートD30 N08',
-      'ヴェナートD30 N18',
-      'ヴェナートD30 N15',
-      'ヴェナートD30 C10',
-      'ヴェナートD30',
-      '玄関ドアオプション',
-    ]
+    subcategoryOrder: ['ヴェナートD30', '玄関ドアオプション']
   },
   {
     name: '樋',
@@ -77,11 +112,12 @@ export const EXTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
     icon: '🚶',
     subcategoryOrder: [
       'メンフィス',
-      'モルタル',
-      'ネイチャーⅡ',
+      'モルタル金鏝抑え',
+      'ネイチャーII',
       'ベスパ',
       'ランドストン',
       'ピエトラソーニ',
+      'ポーチサイズ拡張',
     ]
   },
   {
@@ -123,16 +159,17 @@ export const EXTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
     subcategoryOrder: [
       '外部コンセント',
       '外部水栓',
-      '外部配管',
-      '防犯カメラ',
+      '換気フード',
+      '土台水切',
       'アンテナ',
+      '防犯設備',
       '外部設備',
     ]
   },
   {
     name: '換気システム',
     icon: '🌀',
-    subcategoryOrder: ['換気ガラリ', 'DSDD給気口']
+    subcategoryOrder: ['換気ガラリ', 'DSDD給気口', 'サイクロン給気フード']
   },
   {
     name: 'エコキュート',
@@ -141,6 +178,8 @@ export const EXTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
       'エコキュート',
       'おひさまエコキュート',
       'ナイアガラ出湯',
+      'エコキュートオプション',
+      'エコキュート設置オプション',
     ]
   },
   {
@@ -156,19 +195,30 @@ export const INTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
     name: '床材',
     icon: '🪵',
     subcategoryOrder: [
-      'ライブナチュラルMSX',
-      'ライブナチュラルプラス',
-      'エクオスピュアシルク',
       'フローリング',
+      '無垢床',
       'フロアタイル',
+      'CFシート',
       'カーペットタイル',
+      'タイル',
       '畳',
+      '小上がり',
+      '玄関框',
+      '床見切り',
     ]
   },
   {
     name: '壁材',
     icon: '🧱',
-    subcategoryOrder: ['クロス', 'アクセントクロス', 'タイル', 'エコカラット']
+    subcategoryOrder: [
+      'ベースクロス',
+      'アクセントクロス',
+      'アクセントタイル',
+      'アクセントパネル',
+      'エコカラット',
+      '腰壁',
+      '垂壁',
+    ]
   },
   {
     name: '天井',
@@ -179,11 +229,13 @@ export const INTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
     name: '建具',
     icon: '🚪',
     subcategoryOrder: [
-      '室内ドア',
-      'クローゼットドア',
-      '引き戸',
-      'ドアノブ',
-      'ハイドア',
+      '室内ドア標準',
+      '室内ドア ソリッドカラー',
+      '室内ドア ペイントカラー',
+      '収納用建具',
+      '取手・ストッパー',
+      '建具デザイン変更',
+      '建具追加オプション',
     ]
   },
   {
@@ -191,11 +243,14 @@ export const INTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
     icon: '🗄️',
     subcategoryOrder: [
       'クローゼット',
-      'シューズボックス',
-      '収納棚',
+      'システム収納',
+      '玄関靴箱',
       '可動棚',
       '樹脂製可動棚',
+      '枕棚',
       'ハンガーパイプ',
+      '床下収納',
+      '小上がり下収納',
     ]
   },
   {
@@ -206,7 +261,14 @@ export const INTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
   {
     name: '階段',
     icon: '🪜',
-    subcategoryOrder: ['階段', '手すり', 'アイアン階段', 'ささら桁階段']
+    subcategoryOrder: [
+      '階段踏板',
+      '階段踏板/蹴込板',
+      '階段手摺',
+      'アイアン階段',
+      'アイアン手すり',
+      'カーペット階段',
+    ]
   },
   {
     name: '手摺',
@@ -216,12 +278,12 @@ export const INTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
   {
     name: '室内窓',
     icon: '🪟',
-    subcategoryOrder: ['室内窓', 'FIX窓']
+    subcategoryOrder: ['室内窓', '室内窓オプション']
   },
   {
     name: '格子',
     icon: '📐',
-    subcategoryOrder: ['格子', 'ルーバー']
+    subcategoryOrder: ['インテリア格子', 'ルーバー']
   },
   {
     name: '間仕切り',
@@ -231,7 +293,7 @@ export const INTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
   {
     name: '造作',
     icon: '🔨',
-    subcategoryOrder: ['ニッチ', 'カウンター', '飾り棚']
+    subcategoryOrder: ['造作ニッチ', 'カウンター', '飾り棚']
   },
   {
     name: 'カウンター',
@@ -276,7 +338,14 @@ export const INTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
   {
     name: '電気設備',
     icon: '🔌',
-    subcategoryOrder: ['コンセント', 'スイッチ', 'インターホン', 'マルチメディア']
+    subcategoryOrder: [
+      'コンセント',
+      'USB付コンセント',
+      'スイッチ',
+      'スイッチ/コンセント',
+      'インターホン',
+      '配管',
+    ]
   },
   {
     name: 'エアコン',
@@ -301,7 +370,15 @@ export const INTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
   {
     name: '設備',
     icon: '⚙️',
-    subcategoryOrder: ['物干し', '乾燥機', 'スロップシンク', '洗濯パン']
+    subcategoryOrder: [
+      'スロップシンク',
+      '玄関手洗い',
+      '水栓',
+      '洗濯パン',
+      'ガス乾燥機',
+      'ガス工事',
+      'ナノバブル',
+    ]
   },
   {
     name: '物干し',
@@ -311,7 +388,12 @@ export const INTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
   {
     name: '補強・下地',
     icon: '🏗️',
-    subcategoryOrder: ['壁補強', '下地補強', 'エアコン下地']
+    subcategoryOrder: [
+      '壁下地補強',
+      '床補強',
+      'マグネットクロス',
+      'ロールカーテン用天井下地',
+    ]
   },
 ];
 
@@ -320,62 +402,37 @@ export const WATER_CATEGORY_ORDER: CategoryOrderConfig[] = [
   {
     name: 'キッチン',
     icon: '🍳',
-    subcategoryOrder: [
-      'システムキッチン',
-      'レンジフード',
-      'IHコンロ',
-      '食洗機',
-      '水栓',
-    ]
+    subcategoryOrder: ['システムキッチン']
   },
   {
     name: 'バスルーム',
     icon: '🛁',
-    subcategoryOrder: [
-      'ユニットバス',
-      '浴槽',
-      'シャワー',
-      '浴室乾燥機',
-    ]
+    subcategoryOrder: ['システムバス']
   },
   {
     name: 'バスルーム設備',
     icon: '🚿',
-    subcategoryOrder: ['浴室乾燥機', 'シャワー', 'バスアクセサリー']
+    subcategoryOrder: ['浴室暖房乾燥機']
   },
   {
     name: '洗面化粧台',
     icon: '🪥',
-    subcategoryOrder: [
-      '洗面台',
-      '洗面ボウル',
-      '洗面水栓',
-      '洗面ミラー',
-    ]
+    subcategoryOrder: ['洗面化粧台', '2階洗面']
   },
   {
     name: 'トイレ',
     icon: '🚽',
-    subcategoryOrder: [
-      'トイレ',
-      '手洗い器',
-      'トイレアクセサリー',
-    ]
+    subcategoryOrder: ['タンクレストイレ', 'タンク式トイレ']
   },
   {
     name: '給湯器',
     icon: '♨️',
-    subcategoryOrder: ['給湯器', 'エコキュート']
+    subcategoryOrder: ['エコキュート']
   },
   {
     name: 'ランドリー',
     icon: '🧺',
-    subcategoryOrder: ['洗濯機', '乾燥機', '洗濯パン']
-  },
-  {
-    name: '水処理設備',
-    icon: '💧',
-    subcategoryOrder: ['浄水器', 'ナノバブル']
+    subcategoryOrder: ['洗濯流し']
   },
 ];
 
