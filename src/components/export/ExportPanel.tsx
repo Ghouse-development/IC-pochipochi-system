@@ -239,11 +239,11 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({ compact = false }) => 
             </div>
             <div>
               <h3 className="font-bold text-gray-900">仕様書</h3>
-              <p className="text-sm text-gray-500">PDF形式</p>
+              <p className="text-sm text-gray-500">HTML形式（印刷でPDF化可）</p>
             </div>
           </div>
           <p className="text-sm text-gray-600 mb-4">
-            カテゴリごとの選択内容・部屋適用情報を含む仕様書をPDF形式で出力します。
+            カテゴリごとの選択内容・部屋適用情報を含む仕様書を表示します。
           </p>
           <button
             onClick={handleExportSpecification}
@@ -264,11 +264,11 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({ compact = false }) => 
             </div>
             <div>
               <h3 className="font-bold text-gray-900">プレゼン資料</h3>
-              <p className="text-sm text-gray-500">PowerPoint形式</p>
+              <p className="text-sm text-gray-500">HTML形式（印刷でPDF化可）</p>
             </div>
           </div>
           <p className="text-sm text-gray-600 mb-4">
-            お客様への提案用プレゼンテーション資料をPowerPoint形式で出力します。
+            お客様への提案用プレゼンテーション資料を表示します。
           </p>
           <button
             onClick={handleExportPresentation}

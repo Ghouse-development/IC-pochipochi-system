@@ -1,31 +1,8 @@
-// 見積書PDF/Excel出力ユーティリティ
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
-import * as XLSX from 'xlsx';
+// 見積書Excel出力ユーティリティ（ExcelJS版）
+import ExcelJS from 'exceljs';
 import type { CartItem, PlanType } from '../types/product';
 import type { CategorySelection } from '../stores/useSelectionStore';
 import { getRoomNames } from '../stores/useSelectionStore';
-
-// jspdf-autotable の型定義
-declare module 'jspdf' {
-  interface jsPDF {
-    autoTable: (options: AutoTableOptions) => jsPDF;
-    lastAutoTable: { finalY: number };
-  }
-}
-
-interface AutoTableOptions {
-  head?: (string | { content: string; colSpan?: number; styles?: Record<string, unknown> })[][];
-  body?: (string | number | { content: string; colSpan?: number; styles?: Record<string, unknown> })[][];
-  startY?: number;
-  theme?: 'striped' | 'grid' | 'plain';
-  headStyles?: Record<string, unknown>;
-  bodyStyles?: Record<string, unknown>;
-  columnStyles?: Record<number, Record<string, unknown>>;
-  margin?: { top?: number; right?: number; bottom?: number; left?: number };
-  styles?: Record<string, unknown>;
-  didDrawPage?: (data: { pageNumber: number }) => void;
-}
 
 export interface EstimateData {
   // 顧客情報
@@ -69,10 +46,9 @@ interface EstimateItem {
   unitPrice: number;
   totalPrice: number;
   isOption: boolean;
-  appliedRooms?: string[]; // 適用部屋
+  appliedRooms?: string[];
 }
 
-// 「不要」選択のカテゴリ情報
 interface NotNeededCategory {
   categoryName: string;
   note?: string;
@@ -90,8 +66,6 @@ const convertToEstimateItems = (
     );
     const unitPrice = pricing?.price || 0;
     const categoryName = item.product.categoryName || '未分類';
-
-    // 選択状態から部屋情報を取得
     const categorySelection = selections?.[categoryName];
     const appliedRooms = categorySelection?.appliedRooms;
 
@@ -124,24 +98,13 @@ const extractNotNeededCategories = (
 // カテゴリ別にグループ化
 const groupByCategory = (items: EstimateItem[]): Map<string, EstimateItem[]> => {
   const grouped = new Map<string, EstimateItem[]>();
-
   items.forEach(item => {
     const category = item.category;
     const arr = grouped.get(category) ?? [];
     arr.push(item);
     grouped.set(category, arr);
   });
-
   return grouped;
-};
-
-// 数値を日本円形式にフォーマット
-const formatCurrency = (value: number): string => {
-  return new Intl.NumberFormat('ja-JP', {
-    style: 'currency',
-    currency: 'JPY',
-    minimumFractionDigits: 0,
-  }).format(value);
 };
 
 // 日付をフォーマット
@@ -154,28 +117,17 @@ const formatDate = (date: Date): string => {
 };
 
 // ========================================
-// PDF出力
+// Excel出力（ExcelJS版）
 // ========================================
-export const generateEstimatePDF = async (data: EstimateData): Promise<Blob> => {
-  const doc = new jsPDF({
-    orientation: 'portrait',
-    unit: 'mm',
-    format: 'a4',
-  });
-
-  // 日本語フォントの設定（Base64エンコード済みフォントが必要）
-  // ここでは標準フォントを使用（日本語は文字化けの可能性あり）
-  // 本番環境ではNotoSansJPなどのフォントを埋め込む必要がある
-
-  const pageWidth = doc.internal.pageSize.getWidth();
-  const margin = 15;
-  const contentWidth = pageWidth - margin * 2;
+export const generateEstimateExcel = async (data: EstimateData): Promise<Blob> => {
+  const workbook = new ExcelJS.Workbook();
+  workbook.creator = 'Gハウス IC Pochipochi System';
+  workbook.created = new Date();
 
   const createdAt = data.createdAt || new Date();
   const validUntil = new Date(createdAt);
   validUntil.setDate(validUntil.getDate() + (data.validDays || 30));
 
-  // 見積書アイテムの準備
   const estimateItems = convertToEstimateItems(data.items, data.planType, data.selections);
   const groupedItems = groupByCategory(estimateItems);
   const notNeededCategories = extractNotNeededCategories(data.selections);
@@ -192,355 +144,323 @@ export const generateEstimatePDF = async (data: EstimateData): Promise<Blob> => 
   const taxAmount = Math.floor(grandTotal * taxRate);
   const totalWithTax = grandTotal + taxAmount;
 
-  // ========== ヘッダー ==========
-  let yPos = 20;
-
-  // タイトル
-  doc.setFontSize(24);
-  doc.setFont('helvetica', 'bold');
-  doc.text('ESTIMATE', pageWidth / 2, yPos, { align: 'center' });
-  yPos += 5;
-  doc.setFontSize(12);
-  doc.setFont('helvetica', 'normal');
-  doc.text('Mitsumori', pageWidth / 2, yPos, { align: 'center' });
-  yPos += 15;
-
-  // 日付
-  doc.setFontSize(10);
-  doc.text(`Date: ${formatDate(createdAt)}`, pageWidth - margin, yPos, { align: 'right' });
-  doc.text(`Valid: ${formatDate(validUntil)}`, pageWidth - margin, yPos + 5, { align: 'right' });
-
-  // 顧客情報
-  doc.setFontSize(12);
-  doc.setFont('helvetica', 'bold');
-  doc.text('Customer:', margin, yPos);
-  yPos += 6;
-  doc.setFont('helvetica', 'normal');
-  doc.text(data.customerName || 'Guest', margin + 5, yPos);
-  yPos += 5;
-  if (data.projectName) {
-    doc.text(`Project: ${data.projectName}`, margin + 5, yPos);
-    yPos += 5;
-  }
-  if (data.projectCode) {
-    doc.text(`Code: ${data.projectCode}`, margin + 5, yPos);
-    yPos += 5;
-  }
-  if (data.constructionAddress) {
-    doc.text(`Address: ${data.constructionAddress}`, margin + 5, yPos);
-    yPos += 5;
-  }
-  yPos += 10;
-
-  // プラン情報
-  doc.setFillColor(240, 240, 240);
-  doc.rect(margin, yPos, contentWidth, 15, 'F');
-  doc.setFontSize(14);
-  doc.setFont('helvetica', 'bold');
-  doc.text(`Plan: ${data.planName || data.planType}`, margin + 5, yPos + 10);
-  yPos += 20;
-
-  // 合計金額（サマリー）
-  doc.setFillColor(59, 130, 246);
-  doc.rect(margin, yPos, contentWidth, 25, 'F');
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(12);
-  doc.text('Total Amount (Tax Included)', margin + 5, yPos + 8);
-  doc.setFontSize(20);
-  doc.setFont('helvetica', 'bold');
-  doc.text(formatCurrency(totalWithTax), pageWidth - margin - 5, yPos + 18, { align: 'right' });
-  doc.setTextColor(0, 0, 0);
-  yPos += 30;
-
-  // 内訳
-  doc.setFontSize(10);
-  doc.setFont('helvetica', 'normal');
-  doc.text(`Standard: ${formatCurrency(standardTotal)}`, margin + 5, yPos);
-  doc.text(`Options: ${formatCurrency(optionTotal)}`, margin + 60, yPos);
-  doc.text(`Tax (10%): ${formatCurrency(taxAmount)}`, margin + 115, yPos);
-  yPos += 10;
-
-  // ========== 明細テーブル ==========
-  doc.setFontSize(14);
-  doc.setFont('helvetica', 'bold');
-  doc.text('Item Details', margin, yPos);
-  yPos += 5;
-
-  // カテゴリ別にテーブルを作成
-  groupedItems.forEach((items, category) => {
-    // カテゴリヘッダー
-    const categoryTotal = items.reduce((sum, item) => sum + item.totalPrice, 0);
-
-    doc.autoTable({
-      startY: yPos,
-      head: [[
-        { content: `${category}`, colSpan: 4, styles: { fillColor: [100, 100, 100] } },
-        { content: formatCurrency(categoryTotal), colSpan: 1, styles: { fillColor: [100, 100, 100], halign: 'right' as const } },
-      ]],
-      body: items.map(item => {
-        // 部屋情報がある場合は商品名に付加
-        const roomInfo = item.appliedRooms && item.appliedRooms.length > 0
-          ? ` [${getRoomNames(item.appliedRooms).join(', ')}]`
-          : '';
-        return [
-          item.name + roomInfo,
-          item.variant,
-          item.unit,
-          item.quantity.toString(),
-          formatCurrency(item.totalPrice),
-        ];
-      }),
-      theme: 'grid',
-      headStyles: {
-        fillColor: [100, 100, 100],
-        textColor: [255, 255, 255],
-        fontSize: 10,
-        fontStyle: 'bold',
-      },
-      bodyStyles: {
-        fontSize: 9,
-      },
-      columnStyles: {
-        0: { cellWidth: 60 },
-        1: { cellWidth: 40 },
-        2: { cellWidth: 15 },
-        3: { cellWidth: 15, halign: 'center' },
-        4: { cellWidth: 35, halign: 'right' },
-      },
-      margin: { left: margin, right: margin },
-    });
-
-    yPos = doc.lastAutoTable.finalY + 5;
+  // ========== 見積書シート ==========
+  const sheet = workbook.addWorksheet('見積書', {
+    pageSetup: {
+      paperSize: 9, // A4
+      orientation: 'portrait',
+      fitToPage: true,
+      fitToWidth: 1,
+      margins: { left: 0.5, right: 0.5, top: 0.75, bottom: 0.75, header: 0.3, footer: 0.3 }
+    }
   });
-
-  // ========== 不要選択セクション ==========
-  if (notNeededCategories.length > 0) {
-    yPos += 5;
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Not Selected Items', margin, yPos);
-    yPos += 5;
-
-    doc.autoTable({
-      startY: yPos,
-      head: [['Category', 'Status']],
-      body: notNeededCategories.map(({ categoryName, note }) => [
-        categoryName,
-        note || 'Not installed',
-      ]),
-      theme: 'grid',
-      headStyles: {
-        fillColor: [158, 158, 158],
-        textColor: [255, 255, 255],
-        fontSize: 10,
-      },
-      bodyStyles: {
-        fontSize: 9,
-      },
-      columnStyles: {
-        0: { cellWidth: 80 },
-        1: { cellWidth: 85 },
-      },
-      margin: { left: margin, right: margin },
-    });
-
-    yPos = doc.lastAutoTable.finalY + 5;
-  }
-
-  // ========== 備考 ==========
-  if (data.notes) {
-    yPos += 5;
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Notes:', margin, yPos);
-    yPos += 5;
-    doc.setFont('helvetica', 'normal');
-    const noteLines = doc.splitTextToSize(data.notes, contentWidth);
-    doc.text(noteLines, margin, yPos);
-    yPos += noteLines.length * 5;
-  }
-
-  // ========== フッター ==========
-  const pageCount = doc.internal.pages.length - 1;
-  for (let i = 1; i <= pageCount; i++) {
-    doc.setPage(i);
-    doc.setFontSize(8);
-    doc.setTextColor(128, 128, 128);
-    doc.text(
-      `Page ${i} of ${pageCount}`,
-      pageWidth / 2,
-      doc.internal.pageSize.getHeight() - 10,
-      { align: 'center' }
-    );
-    doc.text(
-      'G House | IC Pochipochi System',
-      margin,
-      doc.internal.pageSize.getHeight() - 10
-    );
-  }
-
-  return doc.output('blob');
-};
-
-// ========================================
-// Excel出力
-// ========================================
-export const generateEstimateExcel = (data: EstimateData): Blob => {
-  const wb = XLSX.utils.book_new();
-
-  const createdAt = data.createdAt || new Date();
-  const validUntil = new Date(createdAt);
-  validUntil.setDate(validUntil.getDate() + (data.validDays || 30));
-
-  // 見積書アイテムの準備
-  const estimateItems = convertToEstimateItems(data.items, data.planType, data.selections);
-  const notNeededCategories = extractNotNeededCategories(data.selections);
-
-  // 合計計算
-  const standardTotal = estimateItems
-    .filter(item => !item.isOption)
-    .reduce((sum, item) => sum + item.totalPrice, 0);
-  const optionTotal = estimateItems
-    .filter(item => item.isOption)
-    .reduce((sum, item) => sum + item.totalPrice, 0);
-  const grandTotal = standardTotal + optionTotal;
-  const taxRate = 0.1;
-  const taxAmount = Math.floor(grandTotal * taxRate);
-  const totalWithTax = grandTotal + taxAmount;
-
-  // ヘッダー行
-  const headerRows: (string | number | null)[][] = [
-    ['御見積書'],
-    [],
-    ['作成日', formatDate(createdAt)],
-    ['有効期限', formatDate(validUntil)],
-    [],
-    ['お客様名', data.customerName || 'ゲスト様'],
-    ['物件名', data.projectName || ''],
-    ['物件コード', data.projectCode || ''],
-    ['建築地', data.constructionAddress || ''],
-    [],
-    ['プラン', data.planName || data.planType],
-    ['延床面積', data.floorArea ? `${data.floorArea}㎡` : ''],
-    ['階数', data.floors ? `${data.floors}階建て` : ''],
-    [],
-    ['【合計金額（税込）】', totalWithTax],
-    ['標準仕様', standardTotal],
-    ['オプション', optionTotal],
-    ['消費税（10%）', taxAmount],
-    [],
-    ['【明細】'],
-    ['カテゴリ', '商品名', 'メーカー', '型番', 'バリアント', '適用部屋', '単位', '数量', '単価', '金額', '区分'],
-  ];
-
-  // 明細行（部屋情報付き）
-  const detailRows = estimateItems.map(item => {
-    const roomInfo = item.appliedRooms && item.appliedRooms.length > 0
-      ? getRoomNames(item.appliedRooms).join('、')
-      : '';
-    return [
-      item.category,
-      item.name,
-      item.manufacturer,
-      item.modelNumber,
-      item.variant,
-      roomInfo, // 適用部屋列を追加
-      item.unit,
-      item.quantity,
-      item.unitPrice,
-      item.totalPrice,
-      item.isOption ? 'オプション' : '標準',
-    ];
-  });
-
-  // 不要選択行
-  const notNeededRows: (string | number | null)[][] = notNeededCategories.length > 0
-    ? [
-        [],
-        ['【設置しない項目】'],
-        ['カテゴリ', '状態'],
-        ...notNeededCategories.map(({ categoryName, note }) => [categoryName, note || '設置しない']),
-      ]
-    : [];
-
-  // 備考行
-  const footerRows: (string | number | null)[][] = [
-    [],
-    ['【備考】'],
-    [data.notes || ''],
-    [],
-    ['※本見積書の有効期限は発行日より30日間です。'],
-    ['※価格は予告なく変更される場合があります。'],
-  ];
-
-  // シート作成
-  const allRows = [...headerRows, ...detailRows, ...notNeededRows, ...footerRows];
-  const ws = XLSX.utils.aoa_to_sheet(allRows);
 
   // カラム幅設定
-  ws['!cols'] = [
-    { wch: 15 }, // カテゴリ
-    { wch: 30 }, // 商品名
-    { wch: 15 }, // メーカー
-    { wch: 20 }, // 型番
-    { wch: 15 }, // バリアント
-    { wch: 20 }, // 適用部屋
-    { wch: 8 },  // 単位
-    { wch: 8 },  // 数量
-    { wch: 12 }, // 単価
-    { wch: 12 }, // 金額
-    { wch: 10 }, // 区分
+  sheet.columns = [
+    { width: 15 },  // A: カテゴリ
+    { width: 28 },  // B: 商品名
+    { width: 12 },  // C: メーカー
+    { width: 15 },  // D: 型番
+    { width: 12 },  // E: バリアント
+    { width: 15 },  // F: 適用部屋
+    { width: 6 },   // G: 単位
+    { width: 6 },   // H: 数量
+    { width: 12 },  // I: 単価
+    { width: 12 },  // J: 金額
+    { width: 8 },   // K: 区分
   ];
 
-  // ブックに追加
-  XLSX.utils.book_append_sheet(wb, ws, '見積書');
+  let rowNum = 1;
 
-  // カテゴリ別サマリーシート
-  const groupedItems = groupByCategory(estimateItems);
-  const summaryRows: (string | number)[][] = [
-    ['カテゴリ別集計'],
-    [],
-    ['カテゴリ', 'アイテム数', '合計金額'],
-  ];
+  // ----- タイトル -----
+  sheet.mergeCells(`A${rowNum}:K${rowNum}`);
+  const titleCell = sheet.getCell(`A${rowNum}`);
+  titleCell.value = '御 見 積 書';
+  titleCell.font = { size: 24, bold: true };
+  titleCell.alignment = { horizontal: 'center', vertical: 'middle' };
+  sheet.getRow(rowNum).height = 40;
+  rowNum += 2;
 
+  // ----- 顧客情報 -----
+  sheet.mergeCells(`A${rowNum}:D${rowNum}`);
+  const customerCell = sheet.getCell(`A${rowNum}`);
+  customerCell.value = `${data.customerName || 'お客様'} 様`;
+  customerCell.font = { size: 16, bold: true };
+  customerCell.border = { bottom: { style: 'double', color: { argb: '000000' } } };
+
+  sheet.getCell(`J${rowNum}`).value = '作成日:';
+  sheet.getCell(`K${rowNum}`).value = formatDate(createdAt);
+  sheet.getCell(`K${rowNum}`).alignment = { horizontal: 'right' };
+  rowNum++;
+
+  sheet.getCell(`A${rowNum}`).value = `物件名: ${data.projectName || ''}`;
+  sheet.getCell(`J${rowNum}`).value = '有効期限:';
+  sheet.getCell(`K${rowNum}`).value = formatDate(validUntil);
+  sheet.getCell(`K${rowNum}`).alignment = { horizontal: 'right' };
+  rowNum++;
+
+  if (data.projectCode) {
+    sheet.getCell(`A${rowNum}`).value = `物件コード: ${data.projectCode}`;
+    rowNum++;
+  }
+  if (data.constructionAddress) {
+    sheet.getCell(`A${rowNum}`).value = `建築地: ${data.constructionAddress}`;
+    rowNum++;
+  }
+  rowNum++;
+
+  // ----- プラン情報 -----
+  sheet.mergeCells(`A${rowNum}:K${rowNum}`);
+  const planCell = sheet.getCell(`A${rowNum}`);
+  planCell.value = `プラン: ${data.planName || data.planType}`;
+  planCell.font = { size: 12, bold: true, color: { argb: 'FFFFFF' } };
+  planCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '14B8A6' } };
+  planCell.alignment = { horizontal: 'center', vertical: 'middle' };
+  sheet.getRow(rowNum).height = 28;
+  rowNum += 2;
+
+  // ----- 合計金額ボックス -----
+  sheet.mergeCells(`A${rowNum}:K${rowNum + 1}`);
+  const totalBox = sheet.getCell(`A${rowNum}`);
+  totalBox.value = `合計金額（税込）: ¥${totalWithTax.toLocaleString()}`;
+  totalBox.font = { size: 20, bold: true, color: { argb: 'FFFFFF' } };
+  totalBox.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '1E3A8A' } };
+  totalBox.alignment = { horizontal: 'center', vertical: 'middle' };
+  sheet.getRow(rowNum).height = 25;
+  sheet.getRow(rowNum + 1).height = 25;
+  rowNum += 2;
+
+  // 内訳
+  sheet.getCell(`A${rowNum}`).value = '標準仕様:';
+  sheet.getCell(`B${rowNum}`).value = `¥${standardTotal.toLocaleString()}`;
+  sheet.getCell(`C${rowNum}`).value = 'オプション:';
+  sheet.getCell(`D${rowNum}`).value = `¥${optionTotal.toLocaleString()}`;
+  sheet.getCell(`E${rowNum}`).value = '消費税(10%):';
+  sheet.getCell(`F${rowNum}`).value = `¥${taxAmount.toLocaleString()}`;
+  sheet.getRow(rowNum).font = { size: 10 };
+  rowNum += 2;
+
+  // ----- 明細ヘッダー -----
+  const headerRow = sheet.getRow(rowNum);
+  const headers = ['カテゴリ', '商品名', 'メーカー', '型番', 'カラー', '適用部屋', '単位', '数量', '単価', '金額', '区分'];
+  headers.forEach((header, i) => {
+    const cell = headerRow.getCell(i + 1);
+    cell.value = header;
+    cell.font = { bold: true, color: { argb: 'FFFFFF' }, size: 10 };
+    cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '374151' } };
+    cell.alignment = { horizontal: 'center', vertical: 'middle' };
+    cell.border = {
+      top: { style: 'thin' },
+      bottom: { style: 'thin' },
+      left: { style: 'thin' },
+      right: { style: 'thin' }
+    };
+  });
+  headerRow.height = 22;
+  rowNum++;
+
+  // ----- 明細データ -----
   groupedItems.forEach((items, category) => {
     const categoryTotal = items.reduce((sum, item) => sum + item.totalPrice, 0);
-    summaryRows.push([category, items.length, categoryTotal]);
+
+    // カテゴリヘッダー行
+    sheet.mergeCells(`A${rowNum}:J${rowNum}`);
+    const catCell = sheet.getCell(`A${rowNum}`);
+    catCell.value = `■ ${category}`;
+    catCell.font = { bold: true, size: 11 };
+    catCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'E5F3F1' } };
+    sheet.getCell(`K${rowNum}`).value = `¥${categoryTotal.toLocaleString()}`;
+    sheet.getCell(`K${rowNum}`).font = { bold: true };
+    sheet.getCell(`K${rowNum}`).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'E5F3F1' } };
+    sheet.getCell(`K${rowNum}`).alignment = { horizontal: 'right' };
+    rowNum++;
+
+    // アイテム行
+    items.forEach(item => {
+      const row = sheet.getRow(rowNum);
+      const roomInfo = item.appliedRooms && item.appliedRooms.length > 0
+        ? getRoomNames(item.appliedRooms).join('、')
+        : '';
+
+      const rowData = [
+        '',
+        item.name,
+        item.manufacturer,
+        item.modelNumber,
+        item.variant,
+        roomInfo,
+        item.unit,
+        item.quantity,
+        item.unitPrice,
+        item.totalPrice,
+        item.isOption ? 'OP' : '標準'
+      ];
+
+      rowData.forEach((value, i) => {
+        const cell = row.getCell(i + 1);
+        cell.value = value;
+        cell.font = { size: 9 };
+        cell.border = {
+          top: { style: 'thin', color: { argb: 'E5E7EB' } },
+          bottom: { style: 'thin', color: { argb: 'E5E7EB' } },
+          left: { style: 'thin', color: { argb: 'E5E7EB' } },
+          right: { style: 'thin', color: { argb: 'E5E7EB' } }
+        };
+
+        // 数値列の書式
+        if (i === 8 || i === 9) {
+          cell.numFmt = '¥#,##0';
+          cell.alignment = { horizontal: 'right' };
+        }
+        if (i === 7) {
+          cell.alignment = { horizontal: 'center' };
+        }
+        if (i === 10) {
+          cell.alignment = { horizontal: 'center' };
+          if (item.isOption) {
+            cell.font = { size: 9, color: { argb: 'F97316' }, bold: true };
+          } else {
+            cell.font = { size: 9, color: { argb: '059669' } };
+          }
+        }
+      });
+
+      // オプション行の背景色
+      if (item.isOption) {
+        row.eachCell((cell) => {
+          cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF7ED' } };
+        });
+      }
+
+      rowNum++;
+    });
   });
 
-  summaryRows.push([]);
-  summaryRows.push(['合計', estimateItems.length, grandTotal]);
+  rowNum++;
 
-  const summarySheet = XLSX.utils.aoa_to_sheet(summaryRows);
-  summarySheet['!cols'] = [
-    { wch: 20 },
-    { wch: 12 },
-    { wch: 15 },
+  // ----- 不要選択セクション -----
+  if (notNeededCategories.length > 0) {
+    sheet.mergeCells(`A${rowNum}:K${rowNum}`);
+    const notNeededTitle = sheet.getCell(`A${rowNum}`);
+    notNeededTitle.value = '【設置しない項目】';
+    notNeededTitle.font = { bold: true, size: 11 };
+    notNeededTitle.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'F5F5F5' } };
+    rowNum++;
+
+    notNeededCategories.forEach(({ categoryName, note }) => {
+      sheet.getCell(`A${rowNum}`).value = categoryName;
+      sheet.getCell(`B${rowNum}`).value = note || '設置しない';
+      sheet.getCell(`B${rowNum}`).font = { color: { argb: '888888' } };
+      rowNum++;
+    });
+    rowNum++;
+  }
+
+  // ----- 備考 -----
+  sheet.mergeCells(`A${rowNum}:K${rowNum}`);
+  sheet.getCell(`A${rowNum}`).value = '【備考】';
+  sheet.getCell(`A${rowNum}`).font = { bold: true };
+  rowNum++;
+  sheet.mergeCells(`A${rowNum}:K${rowNum}`);
+  sheet.getCell(`A${rowNum}`).value = data.notes || '';
+  rowNum += 2;
+
+  // ----- 注意事項 -----
+  sheet.getCell(`A${rowNum}`).value = '※本見積書の有効期限は発行日より30日間です。';
+  sheet.getCell(`A${rowNum}`).font = { size: 9, color: { argb: '666666' } };
+  rowNum++;
+  sheet.getCell(`A${rowNum}`).value = '※価格は予告なく変更される場合があります。';
+  sheet.getCell(`A${rowNum}`).font = { size: 9, color: { argb: '666666' } };
+
+  // ========== カテゴリ別集計シート ==========
+  const summarySheet = workbook.addWorksheet('カテゴリ別集計');
+
+  summarySheet.columns = [
+    { width: 25 },
+    { width: 12 },
+    { width: 18 },
   ];
-  XLSX.utils.book_append_sheet(wb, summarySheet, 'カテゴリ別集計');
+
+  let sRowNum = 1;
+
+  // タイトル
+  summarySheet.mergeCells(`A${sRowNum}:C${sRowNum}`);
+  const sTitleCell = summarySheet.getCell(`A${sRowNum}`);
+  sTitleCell.value = 'カテゴリ別集計';
+  sTitleCell.font = { size: 16, bold: true };
+  sTitleCell.alignment = { horizontal: 'center' };
+  sRowNum += 2;
+
+  // ヘッダー
+  const sHeaderRow = summarySheet.getRow(sRowNum);
+  ['カテゴリ', 'アイテム数', '合計金額'].forEach((header, i) => {
+    const cell = sHeaderRow.getCell(i + 1);
+    cell.value = header;
+    cell.font = { bold: true, color: { argb: 'FFFFFF' } };
+    cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '374151' } };
+    cell.alignment = { horizontal: 'center' };
+    cell.border = {
+      top: { style: 'thin' },
+      bottom: { style: 'thin' },
+      left: { style: 'thin' },
+      right: { style: 'thin' }
+    };
+  });
+  sRowNum++;
+
+  // データ
+  groupedItems.forEach((items, category) => {
+    const categoryTotal = items.reduce((sum, item) => sum + item.totalPrice, 0);
+    const row = summarySheet.getRow(sRowNum);
+    row.getCell(1).value = category;
+    row.getCell(2).value = items.length;
+    row.getCell(2).alignment = { horizontal: 'center' };
+    row.getCell(3).value = categoryTotal;
+    row.getCell(3).numFmt = '¥#,##0';
+    row.getCell(3).alignment = { horizontal: 'right' };
+    row.eachCell((cell) => {
+      cell.border = {
+        top: { style: 'thin', color: { argb: 'E5E7EB' } },
+        bottom: { style: 'thin', color: { argb: 'E5E7EB' } },
+        left: { style: 'thin', color: { argb: 'E5E7EB' } },
+        right: { style: 'thin', color: { argb: 'E5E7EB' } }
+      };
+    });
+    sRowNum++;
+  });
+
+  // 合計行
+  sRowNum++;
+  const totalRow = summarySheet.getRow(sRowNum);
+  totalRow.getCell(1).value = '合計';
+  totalRow.getCell(1).font = { bold: true };
+  totalRow.getCell(2).value = estimateItems.length;
+  totalRow.getCell(2).alignment = { horizontal: 'center' };
+  totalRow.getCell(2).font = { bold: true };
+  totalRow.getCell(3).value = grandTotal;
+  totalRow.getCell(3).numFmt = '¥#,##0';
+  totalRow.getCell(3).alignment = { horizontal: 'right' };
+  totalRow.getCell(3).font = { bold: true, color: { argb: '1E3A8A' } };
+  totalRow.eachCell((cell) => {
+    cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'F3F4F6' } };
+    cell.border = {
+      top: { style: 'medium' },
+      bottom: { style: 'medium' },
+      left: { style: 'thin' },
+      right: { style: 'thin' }
+    };
+  });
 
   // Blobとして出力
-  const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-  return new Blob([wbout], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  const buffer = await workbook.xlsx.writeBuffer();
+  return new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
 };
 
 // ========================================
 // ダウンロードヘルパー
 // ========================================
-export const downloadEstimatePDF = async (data: EstimateData, filename?: string): Promise<void> => {
-  const blob = await generateEstimatePDF(data);
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename || `estimate_${data.projectCode || Date.now()}.pdf`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-};
-
-export const downloadEstimateExcel = (data: EstimateData, filename?: string): void => {
-  const blob = generateEstimateExcel(data);
+export const downloadEstimateExcel = async (data: EstimateData, filename?: string): Promise<void> => {
+  const blob = await generateEstimateExcel(data);
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
@@ -583,5 +503,5 @@ export const exportToExcel = async (
     createdAt: new Date(),
   };
 
-  downloadEstimateExcel(data, `見積書_${options.customerName}_${new Date().toLocaleDateString('ja-JP').replace(/\//g, '')}.xlsx`);
+  await downloadEstimateExcel(data, `見積書_${options.customerName}_${new Date().toLocaleDateString('ja-JP').replace(/\//g, '')}.xlsx`);
 };
