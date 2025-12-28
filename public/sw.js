@@ -47,6 +47,11 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // GETリクエスト以外はキャッシュしない（Cache APIはGETのみサポート）
+  if (request.method !== 'GET') {
+    return;
+  }
+
   const url = new URL(request.url);
 
   // API リクエストはネットワーク優先
