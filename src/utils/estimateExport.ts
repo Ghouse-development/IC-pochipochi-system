@@ -505,3 +505,21 @@ export const exportToExcel = async (
 
   await downloadEstimateExcel(data, `見積書_${options.customerName}_${new Date().toLocaleDateString('ja-JP').replace(/\//g, '')}.xlsx`);
 };
+
+// ========================================
+// PDF出力（仕様書ウィンドウを開く形式）
+// ========================================
+export const downloadEstimatePDF = async (data: EstimateData): Promise<void> => {
+  // 仕様書生成機能を再利用してPDFとして出力
+  const { openSpecificationWindow } = await import('./specificationPDF');
+
+  openSpecificationWindow({
+    customerName: data.customerName,
+    projectName: data.projectName,
+    planName: data.planName || data.planType,
+    date: formatDate(data.createdAt || new Date()),
+    items: data.items,
+    selections: data.selections,
+    companyName: 'Gハウス',
+  });
+};
