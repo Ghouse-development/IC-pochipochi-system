@@ -350,10 +350,10 @@ export function SystemSettings() {
           <label className="block text-sm font-medium text-gray-700 mb-1">ウォーターマーク文字</label>
           <input
             type="text"
-            value={(editedSettings.watermark_text?.text as string) || '仮'}
+            value={(editedSettings.watermark_text?.text as string) || 'DRAFT'}
             onChange={(e) => updateSetting('watermark_text', 'text', e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
-            placeholder="仮"
+            placeholder="例: DRAFT, 検討中"
           />
         </div>
         <div className="mt-4 flex justify-end">

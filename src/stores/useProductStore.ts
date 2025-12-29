@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { Product } from '../types/product';
+import type { Product, ProductVariant, PricingInfo } from '../types/product';
 import { supabase } from '../lib/supabase';
 import { createLogger } from '../lib/logger';
 
@@ -10,6 +10,101 @@ import { interiorProducts as staticInteriorProducts } from '../data/interiorProd
 import { waterEquipmentProducts as staticWaterProducts } from '../data/waterEquipmentProducts';
 
 const logger = createLogger('ProductStore');
+
+// 単位コードからIDを取得するためのキャッシュ
+let unitCache: Map<string, string> | null = null;
+let categoryCache: Map<string, { id: string; type: string }> | null = null;
+let productCodeCache: Map<string, string> | null = null;
+
+// キャッシュ初期化
+const initializeCaches = async () => {
+  if (unitCache && categoryCache && productCodeCache) return;
+
+  try {
+    // 単位マスタを取得
+    const { data: units } = await supabase.from('units').select('id, code');
+    unitCache = new Map((units || []).map(u => [u.code, u.id]));
+
+    // カテゴリマスタを取得
+    const { data: categories } = await supabase.from('categories').select('id, slug, category_type');
+    categoryCache = new Map((categories || []).map(c => [c.slug, { id: c.id, type: c.category_type }]));
+
+    // 商品（プラン）マスタを取得
+    const { data: products } = await supabase.from('products').select('id, code');
+    productCodeCache = new Map((products || []).map(p => [p.code, p.id]));
+  } catch (err) {
+    logger.error('Failed to initialize caches:', err);
+  }
+};
+
+// ProductをDB形式に変換
+const convertProductToDBItem = async (product: Product, _categoryType: string) => {
+  await initializeCaches();
+
+  // カテゴリIDを取得
+  const categoryInfo = categoryCache?.get(product.categoryId);
+  const categoryId = categoryInfo?.id || null;
+
+  // 単位IDを取得（日本語→コードの変換も対応）
+  const unitCodeMap: Record<string, string> = {
+    '㎡': 'sqm', '個': 'piece', '箇所': 'location', '一式': 'set',
+    '梱': 'package', '枚': 'sheet', 'm': 'meter', '台': 'unit', '組': 'pair', '式': 'set'
+  };
+  const unitCode = unitCodeMap[product.unit] || product.unit;
+  const unitId = unitCache?.get(unitCode) || null;
+
+  // noteフィールド（説明 + [subcategory]）
+  const note = product.subcategory
+    ? `${product.description || ''} [${product.subcategory}]`.trim()
+    : product.description || null;
+
+  return {
+    item_code: product.id,
+    name: product.name,
+    category_id: categoryId,
+    category_name: product.categoryName,
+    manufacturer: product.manufacturer || null,
+    series: product.series || null,
+    model_number: product.modelNumber || null,
+    note,
+    unit_id: unitId,
+    material_type: product.materialType || null,
+    is_active: true,
+    is_hit: false,
+    display_order: 0,
+  };
+};
+
+// バリアントをDB形式に変換
+const convertVariantToDBFormat = (variant: ProductVariant, itemId: string) => ({
+  item_id: itemId,
+  variant_code: variant.id,
+  color_name: variant.color,
+  color_code: variant.colorCode || null,
+  description: null,
+  is_active: true,
+  display_order: 0,
+});
+
+// 価格情報をDB形式に変換
+const convertPricingToDBFormat = async (pricing: PricingInfo, itemId: string) => {
+  await initializeCaches();
+
+  const planCode = pricing.plan || pricing.planId || 'LACIE';
+  // LIFE+はDB上ではLIFE_PLUSとして保存
+  const dbPlanCode = planCode === 'LIFE+' ? 'LIFE_PLUS' : planCode;
+  const productId = productCodeCache?.get(dbPlanCode) || null;
+
+  return {
+    item_id: itemId,
+    product_id: productId,
+    price: pricing.price,
+    is_standard: true,
+    is_available: true,
+    installation_cost: 0,
+    effective_date: new Date().toISOString().split('T')[0],
+  };
+};
 
 // DBのitem_pricingからプランコードをProduct.PricingInfo.planに変換
 const PLAN_CODE_MAP: Record<string, 'LACIE' | 'HOURS' | 'LIFE+' | 'LIFE'> = {
@@ -248,7 +343,63 @@ export const useProductStore = create<ProductStore>()(
         set((state) => ({
           exteriorProducts: [...state.exteriorProducts, product]
         }));
-        // TODO: DB同期（Supabase insert）
+
+        // DB同期
+        try {
+          const dbItem = await convertProductToDBItem(product, 'exterior');
+          const { data: insertedItem, error: itemError } = await supabase
+            .from('items')
+            .insert(dbItem)
+            .select('id')
+            .single();
+
+          if (itemError) throw itemError;
+
+          const itemId = insertedItem.id;
+
+          // バリアントを挿入
+          if (product.variants.length > 0) {
+            const variants = product.variants.map(v => convertVariantToDBFormat(v, itemId));
+            const { data: insertedVariants, error: variantError } = await supabase
+              .from('item_variants')
+              .insert(variants)
+              .select('id, variant_code');
+
+            if (variantError) {
+              logger.error('Failed to insert variants:', variantError);
+            } else if (insertedVariants) {
+              // バリアント画像を挿入
+              const variantImages = product.variants.flatMap((v) => {
+                const dbVariant = insertedVariants.find(dv => dv.variant_code === v.id);
+                if (!dbVariant || !v.imageUrl) return [];
+                return [{
+                  variant_id: dbVariant.id,
+                  image_url: v.imageUrl,
+                  thumbnail_url: v.thumbnailUrl || null,
+                  is_primary: true,
+                  display_order: 0,
+                }];
+              });
+              if (variantImages.length > 0) {
+                await supabase.from('item_variant_images').insert(variantImages);
+              }
+            }
+          }
+
+          // 価格情報を挿入
+          if (product.pricing.length > 0) {
+            const pricingPromises = product.pricing.map(p => convertPricingToDBFormat(p, itemId));
+            const pricingData = await Promise.all(pricingPromises);
+            const validPricing = pricingData.filter(p => p.product_id !== null);
+            if (validPricing.length > 0) {
+              await supabase.from('item_pricing').insert(validPricing);
+            }
+          }
+
+          logger.info(`Product ${product.id} synced to database`);
+        } catch (err) {
+          logger.error('Failed to sync product to database:', err);
+        }
       },
 
       updateExteriorProduct: async (id, updatedData) => {
@@ -257,14 +408,48 @@ export const useProductStore = create<ProductStore>()(
             p.id === id ? { ...p, ...updatedData } : p
           )
         }));
-        // TODO: DB同期（Supabase update）
+
+        // DB同期
+        try {
+          const updateFields: Record<string, unknown> = {};
+          if (updatedData.name) updateFields.name = updatedData.name;
+          if (updatedData.manufacturer !== undefined) updateFields.manufacturer = updatedData.manufacturer;
+          if (updatedData.modelNumber !== undefined) updateFields.model_number = updatedData.modelNumber;
+          if (updatedData.description !== undefined) updateFields.note = updatedData.description;
+          if (updatedData.materialType !== undefined) updateFields.material_type = updatedData.materialType;
+          if (updatedData.series !== undefined) updateFields.series = updatedData.series;
+
+          if (Object.keys(updateFields).length > 0) {
+            const { error } = await supabase
+              .from('items')
+              .update(updateFields)
+              .eq('item_code', id);
+
+            if (error) throw error;
+            logger.info(`Product ${id} updated in database`);
+          }
+        } catch (err) {
+          logger.error('Failed to update product in database:', err);
+        }
       },
 
       deleteExteriorProduct: async (id) => {
         set((state) => ({
           exteriorProducts: state.exteriorProducts.filter(p => p.id !== id)
         }));
-        // TODO: DB同期（Supabase delete）
+
+        // DB同期（論理削除）
+        try {
+          const { error } = await supabase
+            .from('items')
+            .update({ is_active: false })
+            .eq('item_code', id);
+
+          if (error) throw error;
+          logger.info(`Product ${id} deactivated in database`);
+        } catch (err) {
+          logger.error('Failed to deactivate product in database:', err);
+        }
       },
 
       // インテリア商品管理（DB同期）
@@ -272,6 +457,62 @@ export const useProductStore = create<ProductStore>()(
         set((state) => ({
           interiorProducts: [...state.interiorProducts, product]
         }));
+
+        // DB同期（エクステリアと同じロジック）
+        try {
+          const dbItem = await convertProductToDBItem(product, 'interior');
+          const { data: insertedItem, error: itemError } = await supabase
+            .from('items')
+            .insert(dbItem)
+            .select('id')
+            .single();
+
+          if (itemError) throw itemError;
+
+          const itemId = insertedItem.id;
+
+          // バリアントを挿入
+          if (product.variants.length > 0) {
+            const variants = product.variants.map(v => convertVariantToDBFormat(v, itemId));
+            const { data: insertedVariants, error: variantError } = await supabase
+              .from('item_variants')
+              .insert(variants)
+              .select('id, variant_code');
+
+            if (variantError) {
+              logger.error('Failed to insert variants:', variantError);
+            } else if (insertedVariants) {
+              const variantImages = product.variants.flatMap(v => {
+                const dbVariant = insertedVariants.find(dv => dv.variant_code === v.id);
+                if (!dbVariant || !v.imageUrl) return [];
+                return [{
+                  variant_id: dbVariant.id,
+                  image_url: v.imageUrl,
+                  thumbnail_url: v.thumbnailUrl || null,
+                  is_primary: true,
+                  display_order: 0,
+                }];
+              });
+              if (variantImages.length > 0) {
+                await supabase.from('item_variant_images').insert(variantImages);
+              }
+            }
+          }
+
+          // 価格情報を挿入
+          if (product.pricing.length > 0) {
+            const pricingPromises = product.pricing.map(p => convertPricingToDBFormat(p, itemId));
+            const pricingData = await Promise.all(pricingPromises);
+            const validPricing = pricingData.filter(p => p.product_id !== null);
+            if (validPricing.length > 0) {
+              await supabase.from('item_pricing').insert(validPricing);
+            }
+          }
+
+          logger.info(`Interior product ${product.id} synced to database`);
+        } catch (err) {
+          logger.error('Failed to sync interior product to database:', err);
+        }
       },
 
       updateInteriorProduct: async (id, updatedData) => {
@@ -280,12 +521,47 @@ export const useProductStore = create<ProductStore>()(
             p.id === id ? { ...p, ...updatedData } : p
           )
         }));
+
+        // DB同期
+        try {
+          const updateFields: Record<string, unknown> = {};
+          if (updatedData.name) updateFields.name = updatedData.name;
+          if (updatedData.manufacturer !== undefined) updateFields.manufacturer = updatedData.manufacturer;
+          if (updatedData.modelNumber !== undefined) updateFields.model_number = updatedData.modelNumber;
+          if (updatedData.description !== undefined) updateFields.note = updatedData.description;
+          if (updatedData.materialType !== undefined) updateFields.material_type = updatedData.materialType;
+
+          if (Object.keys(updateFields).length > 0) {
+            const { error } = await supabase
+              .from('items')
+              .update(updateFields)
+              .eq('item_code', id);
+
+            if (error) throw error;
+            logger.info(`Interior product ${id} updated in database`);
+          }
+        } catch (err) {
+          logger.error('Failed to update interior product in database:', err);
+        }
       },
 
       deleteInteriorProduct: async (id) => {
         set((state) => ({
           interiorProducts: state.interiorProducts.filter(p => p.id !== id)
         }));
+
+        // DB同期（論理削除）
+        try {
+          const { error } = await supabase
+            .from('items')
+            .update({ is_active: false })
+            .eq('item_code', id);
+
+          if (error) throw error;
+          logger.info(`Interior product ${id} deactivated in database`);
+        } catch (err) {
+          logger.error('Failed to deactivate interior product in database:', err);
+        }
       },
 
       // 水廻り商品管理（DB同期）
@@ -293,6 +569,62 @@ export const useProductStore = create<ProductStore>()(
         set((state) => ({
           waterProducts: [...state.waterProducts, product]
         }));
+
+        // DB同期
+        try {
+          const dbItem = await convertProductToDBItem(product, 'equipment');
+          const { data: insertedItem, error: itemError } = await supabase
+            .from('items')
+            .insert(dbItem)
+            .select('id')
+            .single();
+
+          if (itemError) throw itemError;
+
+          const itemId = insertedItem.id;
+
+          // バリアントを挿入
+          if (product.variants.length > 0) {
+            const variants = product.variants.map(v => convertVariantToDBFormat(v, itemId));
+            const { data: insertedVariants, error: variantError } = await supabase
+              .from('item_variants')
+              .insert(variants)
+              .select('id, variant_code');
+
+            if (variantError) {
+              logger.error('Failed to insert variants:', variantError);
+            } else if (insertedVariants) {
+              const variantImages = product.variants.flatMap(v => {
+                const dbVariant = insertedVariants.find(dv => dv.variant_code === v.id);
+                if (!dbVariant || !v.imageUrl) return [];
+                return [{
+                  variant_id: dbVariant.id,
+                  image_url: v.imageUrl,
+                  thumbnail_url: v.thumbnailUrl || null,
+                  is_primary: true,
+                  display_order: 0,
+                }];
+              });
+              if (variantImages.length > 0) {
+                await supabase.from('item_variant_images').insert(variantImages);
+              }
+            }
+          }
+
+          // 価格情報を挿入
+          if (product.pricing.length > 0) {
+            const pricingPromises = product.pricing.map(p => convertPricingToDBFormat(p, itemId));
+            const pricingData = await Promise.all(pricingPromises);
+            const validPricing = pricingData.filter(p => p.product_id !== null);
+            if (validPricing.length > 0) {
+              await supabase.from('item_pricing').insert(validPricing);
+            }
+          }
+
+          logger.info(`Water product ${product.id} synced to database`);
+        } catch (err) {
+          logger.error('Failed to sync water product to database:', err);
+        }
       },
 
       updateWaterProduct: async (id, updatedData) => {
@@ -301,12 +633,47 @@ export const useProductStore = create<ProductStore>()(
             p.id === id ? { ...p, ...updatedData } : p
           )
         }));
+
+        // DB同期
+        try {
+          const updateFields: Record<string, unknown> = {};
+          if (updatedData.name) updateFields.name = updatedData.name;
+          if (updatedData.manufacturer !== undefined) updateFields.manufacturer = updatedData.manufacturer;
+          if (updatedData.modelNumber !== undefined) updateFields.model_number = updatedData.modelNumber;
+          if (updatedData.description !== undefined) updateFields.note = updatedData.description;
+          if (updatedData.series !== undefined) updateFields.series = updatedData.series;
+
+          if (Object.keys(updateFields).length > 0) {
+            const { error } = await supabase
+              .from('items')
+              .update(updateFields)
+              .eq('item_code', id);
+
+            if (error) throw error;
+            logger.info(`Water product ${id} updated in database`);
+          }
+        } catch (err) {
+          logger.error('Failed to update water product in database:', err);
+        }
       },
 
       deleteWaterProduct: async (id) => {
         set((state) => ({
           waterProducts: state.waterProducts.filter(p => p.id !== id)
         }));
+
+        // DB同期（論理削除）
+        try {
+          const { error } = await supabase
+            .from('items')
+            .update({ is_active: false })
+            .eq('item_code', id);
+
+          if (error) throw error;
+          logger.info(`Water product ${id} deactivated in database`);
+        } catch (err) {
+          logger.error('Failed to deactivate water product in database:', err);
+        }
       },
 
       // 全商品取得
