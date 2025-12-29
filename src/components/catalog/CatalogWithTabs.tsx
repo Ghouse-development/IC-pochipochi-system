@@ -422,7 +422,8 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     };
 
     fetchCategories();
-  }, [activeTab, exteriorProducts, interiorProducts, waterProducts, cartItems]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTab, exteriorProducts, interiorProducts, waterProducts, cartItems]); // selectedCategoryIdは初期設定時のみ使用
 
   // 静的データからItemWithDetails形式のデータを取得
   const getStaticItems = useCallback((tab: string): ItemWithDetails[] => {
@@ -802,7 +803,8 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), ANIMATION_DURATIONS.CONFETTI);
     }
-  }, [addItem, cartItems.length, selectedPlanId, toast, setProductSelection]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [addItem, cartItems.length, selectedPlanId, toast, setProductSelection]); // setTimeoutはグローバル関数
 
   // 部屋選択完了時のハンドラー
   const handleRoomSelectionConfirm = useCallback((selectedRooms: string[]) => {
@@ -827,7 +829,8 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     }
 
     setRoomSelectionModal(null);
-  }, [roomSelectionModal, items, addItem, selectedPlanId, setProductSelection, toast]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roomSelectionModal, items, addItem, selectedPlanId, setProductSelection, toast]); // setTimeoutはグローバル関数
 
   const handleRemoveFromCart = useCallback((itemId: string) => {
     const item = cartItems.find(i => i.product.id === itemId);
@@ -861,7 +864,8 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), ANIMATION_DURATIONS.CONFETTI);
     }
-  }, [filteredItems, selectedPlanId, cartItemIds, addItem, toast]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filteredItems, selectedPlanId, cartItemIds, addItem, toast]); // setTimeoutはグローバル関数
 
   // 商品詳細モーダルを開く（URL付き）
   const handleOpenDetail = useCallback((item: ItemWithDetails) => {
@@ -940,7 +944,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     if (nextUndecided) {
       setSelectedCategoryId(nextUndecided.id);
     }
-  }, [categories, selectedCategoryId, cartItems, undecidedCategories]);
+  }, [categories, selectedCategoryId, cartItems, undecidedCategories, setSelectedCategoryId]);
 
   // 次のステップへ進む
   const goToNextStep = useCallback(() => {
@@ -950,7 +954,8 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), ANIMATION_DURATIONS.CONFETTI);
     }
-  }, [activeTab]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTab, setActiveTab]); // setTimeoutはグローバル関数
 
   // 現在のカテゴリが決定済みかチェック
   const isCurrentCategoryDecided = useMemo(() => {

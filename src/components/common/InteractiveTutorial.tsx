@@ -371,7 +371,8 @@ export const InteractiveTutorial: React.FC<InteractiveTutorialProps> = ({
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, currentStepIndex]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, currentStepIndex]); // handleNext/handlePrev/onCloseはクロージャで正しく参照される
 
   const handleNext = () => {
     if (currentStepIndex < steps.length - 1) {

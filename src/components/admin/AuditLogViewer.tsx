@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   History,
   User,
@@ -29,12 +29,7 @@ export function AuditLogViewer() {
   const [expandedLogIds, setExpandedLogIds] = useState<Set<string>>(new Set());
   const [activeTab, setActiveTab] = useState<'logs' | 'summary'>('logs');
 
-  useEffect(() => {
-    loadLogs();
-    loadDailySummary();
-  }, [selectedTable, selectedUser]);
-
-  const loadLogs = async () => {
+  const loadLogs = useCallback(async () => {
     setLoading(true);
     try {
       let data: AuditLogSummary[];
@@ -53,16 +48,21 @@ export function AuditLogViewer() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedTable, selectedUser]);
 
-  const loadDailySummary = async () => {
+  const loadDailySummary = useCallback(async () => {
     try {
       const data = await AuditService.getDailyChangeSummary(30);
       setDailySummary(data);
     } catch (error) {
       logger.error('Error loading daily summary:', error);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    loadLogs();
+    loadDailySummary();
+  }, [loadLogs, loadDailySummary]);
 
   const toggleLogExpansion = (logId: string) => {
     const newExpanded = new Set(expandedLogIds);

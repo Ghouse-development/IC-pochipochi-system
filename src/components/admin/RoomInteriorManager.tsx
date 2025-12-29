@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Home,
   Plus,
@@ -68,11 +68,7 @@ export function RoomInteriorManager({ projectId, onUpdate }: RoomInteriorManager
   const toast = useToast();
   const [deleteRoomId, setDeleteRoomId] = useState<string | null>(null);
 
-  useEffect(() => {
-    loadRoomsAndSelections();
-  }, [projectId]);
-
-  const loadRoomsAndSelections = async () => {
+  const loadRoomsAndSelections = useCallback(async () => {
     setIsLoading(true);
     try {
       // 部屋一覧を取得
@@ -114,7 +110,11 @@ export function RoomInteriorManager({ projectId, onUpdate }: RoomInteriorManager
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [projectId]);
+
+  useEffect(() => {
+    loadRoomsAndSelections();
+  }, [loadRoomsAndSelections]);
 
   const handleAddRoom = async () => {
     if (!newRoomName.trim()) return;

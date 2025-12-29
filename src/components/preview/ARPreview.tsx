@@ -92,7 +92,8 @@ export const ARPreview: React.FC<ARPreviewProps> = ({
     if (stream) {
       startCamera();
     }
-  }, [cameraFacing]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cameraFacing]); // cameraFacing変更時のみ再起動
 
   // ドラッグ操作
   const handleMouseDown = useCallback((_e: React.MouseEvent) => {

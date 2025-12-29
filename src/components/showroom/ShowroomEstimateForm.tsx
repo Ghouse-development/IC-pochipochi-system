@@ -80,7 +80,7 @@ export const ShowroomEstimateForm: React.FC = () => {
       setFormData(initialFormData);
       setIsFormOpen(false);
     },
-    [formData, addItem]
+    [formData, addItem, toast]
   );
 
   const formatPrice = (price: number) => {

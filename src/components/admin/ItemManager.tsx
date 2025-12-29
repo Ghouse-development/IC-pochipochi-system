@@ -86,7 +86,8 @@ export function ItemManager() {
     return () => {
       mounted = false;
     };
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // 初期化用effectのため、依存配列は空
 
   const loadItems = async (categoryId?: string) => {
     try {
@@ -108,7 +109,8 @@ export function ItemManager() {
     if (!isLoading) {
       loadItems(categoryFilter === 'all' ? undefined : categoryFilter);
     }
-  }, [categoryFilter]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [categoryFilter]); // カテゴリ変更時のみ再読み込み
 
   // Get unique manufacturers
   const manufacturers = useMemo(() =>

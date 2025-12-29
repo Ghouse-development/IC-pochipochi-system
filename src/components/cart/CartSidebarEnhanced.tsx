@@ -7,8 +7,9 @@ import { UNIT_SYMBOLS } from '../../types/product';
 import { Badge } from '../common/Badge';
 import { useToast } from '../common/Toast';
 import { ConfirmDialog } from '../common/ConfirmDialog';
-import { exportToExcel, exportToPDF, exportSpecificationSheet, exportPresentationData, exportAllFormats } from '../../utils/exportEstimate';
+import { exportToExcel } from '../../utils/estimateExport';
 import { openSpecificationWindow } from '../../utils/specificationPDF';
+import { generatePresentation } from '../../utils/presentationGenerator';
 import { supabase } from '../../lib/supabase';
 import { createLogger } from '../../lib/logger';
 import { STORAGE_KEYS } from '../../lib/constants';
@@ -161,13 +162,13 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
     toast.success('クリア完了', '選択をクリアしました');
   };
 
-  const handleExportExcel = () => {
+  const handleExportExcel = async () => {
     if (!customerName || !projectName) {
       toast.warning('入力エラー', 'お客様名と工事名を入力してください');
       return;
     }
     addLog('excel_export', 'export', { action: 'Excel見積書を出力', customerName, projectName });
-    exportToExcel(items, customerName, projectName);
+    await exportToExcel(items, { customerName, projectName });
     toast.success('Excel出力完了', '見積書をダウンロードしました');
   };
 
@@ -177,8 +178,16 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
       return;
     }
     addLog('pdf_export', 'export', { action: 'PDF見積書を出力', customerName, projectName });
-    exportToPDF(items, customerName, projectName);
-    toast.success('PDF出力完了', '見積書をダウンロードしました');
+    openSpecificationWindow({
+      customerName,
+      projectName,
+      planName: planName || 'LACIE',
+      date: new Date().toLocaleDateString('ja-JP'),
+      items,
+      staffName: '',
+      companyName: 'Gハウス'
+    });
+    toast.success('PDF出力完了', '仕様書を表示しました（印刷でPDF化できます）');
   };
 
   // ワンクリックPDF出力（名前未入力でもデフォルト値で出力）
@@ -186,8 +195,16 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
     const name = customerName || 'お客様';
     const project = projectName || `見積_${new Date().toLocaleDateString('ja-JP').replace(/\//g, '')}`;
     addLog('pdf_export', 'export', { action: 'クイックPDF出力', customerName: name, projectName: project, itemCount: items.length });
-    exportToPDF(items, name, project);
-    toast.success('PDF出力完了', '見積書をダウンロードしました');
+    openSpecificationWindow({
+      customerName: name,
+      projectName: project,
+      planName: planName || 'LACIE',
+      date: new Date().toLocaleDateString('ja-JP'),
+      items,
+      staffName: '',
+      companyName: 'Gハウス'
+    });
+    toast.success('PDF出力完了', '仕様書を表示しました（印刷でPDF化できます）');
   };
 
   const handleExportSpec = () => {
@@ -196,8 +213,16 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
       return;
     }
     addLog('spec_export', 'export', { action: '仕様書を出力', customerName, projectName, itemCount: items.length });
-    exportSpecificationSheet(items, customerName, projectName);
-    toast.success('仕様書出力完了', '仕様書をダウンロードしました');
+    openSpecificationWindow({
+      customerName,
+      projectName,
+      planName: planName || 'LACIE',
+      date: new Date().toLocaleDateString('ja-JP'),
+      items,
+      staffName: '',
+      companyName: 'Gハウス'
+    });
+    toast.success('仕様書出力完了', '仕様書を表示しました');
   };
 
   const handleExportPresentation = async () => {
@@ -206,8 +231,8 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
       return;
     }
     addLog('presentation_export', 'export', { action: '提案資料を出力', customerName, projectName, itemCount: items.length });
-    await exportPresentationData(items, customerName, projectName);
-    toast.success('提案資料出力完了', '提案資料をダウンロードしました');
+    await generatePresentation(items, { customerName, projectName });
+    toast.success('提案資料出力完了', '提案資料を表示しました');
   };
 
   const handleExportAll = async () => {
@@ -218,8 +243,21 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
     setIsExporting(true);
     addLog('bulk_export', 'export', { action: '一括出力を実行', customerName, projectName, itemCount: items.length });
     try {
-      await exportAllFormats(items, customerName, projectName);
-      toast.success('一括出力完了', '全形式のダウンロードが完了しました');
+      // Excel見積書
+      await exportToExcel(items, { customerName, projectName });
+      // 仕様書（HTML）
+      openSpecificationWindow({
+        customerName,
+        projectName,
+        planName: planName || 'LACIE',
+        date: new Date().toLocaleDateString('ja-JP'),
+        items,
+        staffName: '',
+        companyName: 'Gハウス'
+      });
+      // プレゼン資料（HTML）
+      await generatePresentation(items, { customerName, projectName });
+      toast.success('一括出力完了', '全形式のダウンロード・表示が完了しました');
     } catch (error) {
       logger.error('Export error:', error);
       toast.error('エラー', 'エクスポート中にエラーが発生しました');

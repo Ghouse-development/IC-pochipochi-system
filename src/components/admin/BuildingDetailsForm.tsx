@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Building,
   MapPin,
@@ -95,11 +95,7 @@ export function BuildingDetailsForm({ projectId, onUpdate }: BuildingDetailsForm
     building_standard: 'standard',
   });
 
-  useEffect(() => {
-    loadProjectData();
-  }, [projectId]);
-
-  const loadProjectData = async () => {
+  const loadProjectData = useCallback(async () => {
     setIsLoading(true);
     try {
       const { data, error } = await supabase
@@ -130,7 +126,11 @@ export function BuildingDetailsForm({ projectId, onUpdate }: BuildingDetailsForm
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [projectId]);
+
+  useEffect(() => {
+    loadProjectData();
+  }, [loadProjectData]);
 
   const handleSave = async () => {
     setIsSaving(true);

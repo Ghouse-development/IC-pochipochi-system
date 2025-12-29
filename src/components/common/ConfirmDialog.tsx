@@ -161,14 +161,16 @@ export const useConfirmDialog = (): UseConfirmDialogReturn => {
   );
 
   const handleClose = React.useCallback(() => {
-    state.resolve?.(false);
+    const { resolve } = state;
+    resolve?.(false);
     setState({ isOpen: false, options: null, resolve: null });
-  }, [state.resolve]);
+  }, [state]);
 
   const handleConfirm = React.useCallback(() => {
-    state.resolve?.(true);
+    const { resolve } = state;
+    resolve?.(true);
     setState({ isOpen: false, options: null, resolve: null });
-  }, [state.resolve]);
+  }, [state]);
 
   const ConfirmDialogComponent: React.FC = React.useCallback(() => {
     if (!state.options) return null;
