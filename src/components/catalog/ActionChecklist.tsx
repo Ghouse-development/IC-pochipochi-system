@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Check, ChevronRight, FileText, AlertCircle, TrendingUp, Circle, HelpCircle, Lightbulb, X } from 'lucide-react';
+import { Check, ChevronRight, FileText, AlertCircle, Circle, HelpCircle, Lightbulb, X } from 'lucide-react';
 import { formatPrice } from '../../lib/utils';
 import type { Category } from '../../types/database';
 import type { CartItem } from '../../types/product';
@@ -121,57 +121,14 @@ export const ActionChecklist: React.FC<ActionChecklistProps> = ({
 
   return (
     <div className="flex flex-col h-full">
-      {/* ヘッダー - 進捗表示 (G HOUSE風) */}
-      <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-800 border-b border-blue-100 dark:border-gray-700">
-        <h2 className="text-sm font-bold text-gray-800 dark:text-white mb-3 flex items-center gap-2">
-          <TrendingUp className="w-4 h-4 text-blue-600" />
-          選ぶもの一覧
+      {/* ヘッダー - シンプルモダン */}
+      <div className="p-3 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+        <h2 className="text-sm font-bold text-gray-800 dark:text-white flex items-center justify-between">
+          <span>カテゴリ</span>
+          <span className="text-xs font-normal text-gray-500 dark:text-gray-400">
+            {progress.completed}/{progress.total}
+          </span>
         </h2>
-
-        {/* 進捗バー - メイン */}
-        <div className="space-y-3">
-          <div>
-            <div className="flex items-center justify-between text-xs mb-1.5">
-              <span className="text-gray-600 dark:text-gray-400 font-medium">合計</span>
-              <span className="font-bold text-blue-600 dark:text-blue-400 text-sm">
-                {progress.completed}/{progress.total}
-              </span>
-            </div>
-            <div className="h-3 bg-white dark:bg-gray-700 rounded-full overflow-hidden shadow-inner">
-              <div
-                className="h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full transition-all duration-500 relative"
-                style={{ width: `${progress.percent}%` }}
-              >
-                {progress.percent > 20 && (
-                  <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] font-bold text-white">
-                    {progress.percent}%
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* 必須項目の進捗 */}
-          {progress.requiredTotal > 0 && (
-            <div>
-              <div className="flex items-center justify-between text-xs mb-1">
-                <span className="text-orange-600 dark:text-orange-400 font-medium flex items-center gap-1">
-                  <AlertCircle className="w-3 h-3" />
-                  必須
-                </span>
-                <span className="font-bold text-orange-600 dark:text-orange-400">
-                  {progress.requiredCompleted}/{progress.requiredTotal}
-                </span>
-              </div>
-              <div className="h-2 bg-white dark:bg-gray-700 rounded-full overflow-hidden shadow-inner">
-                <div
-                  className="h-full bg-gradient-to-r from-orange-400 to-orange-500 rounded-full transition-all duration-500"
-                  style={{ width: `${progress.requiredTotal > 0 ? (progress.requiredCompleted / progress.requiredTotal) * 100 : 0}%` }}
-                />
-              </div>
-            </div>
-          )}
-        </div>
       </div>
 
       {/* カテゴリリスト */}
@@ -210,16 +167,24 @@ export const ActionChecklist: React.FC<ActionChecklistProps> = ({
                             {cat.name}
                           </span>
                           {hasExplanation && (
-                            <button
+                            <span
+                              role="button"
+                              tabIndex={0}
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setHelpOpenCategoryId(helpOpenCategoryId === cat.id ? null : cat.id);
                               }}
-                              className="p-0.5 hover:bg-red-200 dark:hover:bg-red-800 rounded-full"
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                  e.stopPropagation();
+                                  setHelpOpenCategoryId(helpOpenCategoryId === cat.id ? null : cat.id);
+                                }
+                              }}
+                              className="p-0.5 hover:bg-red-200 dark:hover:bg-red-800 rounded-full cursor-pointer"
                               title="用語説明を見る"
                             >
                               <HelpCircle className="w-3.5 h-3.5 text-red-400" />
-                            </button>
+                            </span>
                           )}
                         </div>
                         <span className="text-[10px] text-red-500 font-medium">必須 - 選択してください</span>
@@ -275,16 +240,24 @@ export const ActionChecklist: React.FC<ActionChecklistProps> = ({
                             {cat.name}
                           </span>
                           {hasExplanation && (
-                            <button
+                            <span
+                              role="button"
+                              tabIndex={0}
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setHelpOpenCategoryId(helpOpenCategoryId === cat.id ? null : cat.id);
                               }}
-                              className="p-0.5 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full"
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                  e.stopPropagation();
+                                  setHelpOpenCategoryId(helpOpenCategoryId === cat.id ? null : cat.id);
+                                }
+                              }}
+                              className="p-0.5 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full cursor-pointer"
                               title="用語説明を見る"
                             >
                               <HelpCircle className="w-3.5 h-3.5 text-gray-400" />
-                            </button>
+                            </span>
                           )}
                         </div>
                         <span className="text-[10px] text-gray-400 font-medium">任意</span>

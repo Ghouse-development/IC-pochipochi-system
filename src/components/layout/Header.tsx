@@ -54,7 +54,7 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <>
       <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-40">
-        <div className="px-4 sm:px-6 py-3 sm:py-4">
+        <div className="px-4 sm:px-6 py-2">
           <div className="flex items-center justify-between">
             {/* ロゴとメニューボタン */}
             <div className="flex items-center gap-3">
@@ -98,7 +98,7 @@ export const Header: React.FC<HeaderProps> = ({
               {onShareClick && itemCount > 0 && (
                 <button
                   onClick={onShareClick}
-                  className="hidden sm:flex items-center gap-1 px-3 py-2 text-teal-600 hover:bg-teal-50 rounded-lg transition-colors"
+                  className="hidden sm:flex items-center gap-1 px-3 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                   title="シェア"
                 >
                   <Share2 className="w-4 h-4" />
@@ -235,7 +235,7 @@ export const Header: React.FC<HeaderProps> = ({
         
         {/* 管理者ボタン */}
         {isAdmin && (
-          <div className="px-4 sm:px-6 py-2 bg-gray-50 border-t border-gray-100">
+          <div className="px-4 sm:px-6 py-1 bg-gray-50 border-t border-gray-100">
             <div className="flex justify-end gap-2">
               <button
                 onClick={onStaffDashboardClick}

@@ -8,6 +8,7 @@ import { createLogger } from '../lib/logger';
 import { exteriorProducts as staticExteriorProducts } from '../data/exteriorProducts';
 import { interiorProducts as staticInteriorProducts } from '../data/interiorProducts';
 import { waterEquipmentProducts as staticWaterProducts } from '../data/waterEquipmentProducts';
+import { furnitureProducts as staticFurnitureProducts } from '../data/furnitureProducts';
 
 const logger = createLogger('ProductStore');
 
@@ -197,6 +198,7 @@ interface ProductStore {
   exteriorProducts: Product[];
   interiorProducts: Product[];
   waterProducts: Product[];
+  furnitureProducts: Product[];
 
   // データ読み込み状態
   isLoading: boolean;
@@ -280,6 +282,7 @@ export const useProductStore = create<ProductStore>()(
       exteriorProducts: staticExteriorProducts,
       interiorProducts: staticInteriorProducts,
       waterProducts: staticWaterProducts,
+      furnitureProducts: staticFurnitureProducts,
       isLoading: false,
       isDBConnected: false,
       lastFetchedAt: null,
@@ -682,13 +685,14 @@ export const useProductStore = create<ProductStore>()(
         return [
           ...state.exteriorProducts,
           ...state.interiorProducts,
-          ...state.waterProducts
+          ...state.waterProducts,
+          ...state.furnitureProducts
         ];
       }
     }),
     {
       name: 'lifex-products-storage',
-      version: 2, // バージョンアップで古いキャッシュを無効化
+      version: 3, // バージョンアップで古いキャッシュを無効化
       partialize: (state) => ({
         // 永続化するのは最小限（読み込み状態は保存しない）
         lastFetchedAt: state.lastFetchedAt,

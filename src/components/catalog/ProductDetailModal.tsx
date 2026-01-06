@@ -210,6 +210,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/60 z-50 backdrop-blur-sm" />
         <Dialog.Content className="fixed inset-4 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl md:max-w-2xl md:w-full md:max-h-[85vh] z-50 flex flex-col overflow-hidden">
+          <Dialog.Title className="sr-only">{product.name} - 商品詳細</Dialog.Title>
           {/* ヘッダー（固定） */}
           <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800">
             <div className="flex-1 min-w-0">

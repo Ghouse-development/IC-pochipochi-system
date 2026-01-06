@@ -4,6 +4,15 @@ import { createLogger } from '../../lib/logger';
 
 const logger = createLogger('Toast');
 
+// crypto.randomUUID のフォールバック
+const generateId = (): string => {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  // フォールバック: シンプルなユニークID生成
+  return `${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
+};
+
 type ToastType = 'success' | 'error' | 'warning' | 'info';
 
 interface Toast {
@@ -38,7 +47,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
 
   const addToast = useCallback((toast: Omit<Toast, 'id'>) => {
-    const id = crypto.randomUUID();
+    const id = generateId();
     setToasts((prev) => [...prev, { ...toast, id }]);
   }, []);
 

@@ -12,8 +12,8 @@ import type { Category } from '../../types/database';
 import type { CartItem } from '../../types/product';
 
 interface CatalogHeaderProps {
-  activeTab: 'design' | 'exterior' | 'interior' | 'equipment' | 'furniture';
-  setActiveTab: (tab: 'design' | 'exterior' | 'interior' | 'equipment' | 'furniture') => void;
+  activeTab: 'design' | 'exterior' | 'interior' | 'equipment' | 'electrical' | 'furniture';
+  setActiveTab: (tab: 'design' | 'exterior' | 'interior' | 'equipment' | 'electrical' | 'furniture') => void;
   isCustomerMode: boolean;
   totalPrice: number;
   cartItems: CartItem[];

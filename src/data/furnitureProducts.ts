@@ -6,7 +6,7 @@ export const furnitureProducts: Product[] = [
   {
     id: 'furn-dt-001',
     categoryId: 'dining-table',
-    categoryName: 'ダイニングテーブル',
+    categoryName: 'オリジナルダイニングテーブル',
     subcategory: 'ダイニングテーブル',
     name: 'Gハウスオリジナル ダイニングテーブル スクエア',
     manufacturer: 'Gハウス',
@@ -43,7 +43,7 @@ export const furnitureProducts: Product[] = [
   {
     id: 'furn-dt-002',
     categoryId: 'dining-table',
-    categoryName: 'ダイニングテーブル',
+    categoryName: 'オリジナルダイニングテーブル',
     subcategory: 'ダイニングテーブル',
     name: 'Gハウスオリジナル ダイニングテーブル ラウンド',
     manufacturer: 'Gハウス',
@@ -264,6 +264,199 @@ export const furnitureProducts: Product[] = [
       { plan: 'HOURS', price: 300000 },
       { plan: 'LIFE+', price: 300000 },
       { plan: 'LIFE', price: 300000 }
+    ]
+  },
+
+  // ========== カーテン ==========
+  {
+    id: 'furn-curtain-ic',
+    categoryId: 'curtain',
+    categoryName: 'カーテン',
+    subcategory: 'IC提案',
+    name: 'カーテン（IC提案）',
+    manufacturer: 'IC提案',
+    modelNumber: 'CURTAIN-IC',
+    unit: 'set',
+    isOption: true,
+    description: 'インテリアコーディネーターがお部屋に合わせたカーテンをご提案いたします',
+    variants: [
+      { id: 'v1', color: 'IC提案', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+
+  // ========== 家具 ==========
+  {
+    id: 'furn-sofa-ic',
+    categoryId: 'furniture',
+    categoryName: '家具',
+    subcategory: 'ソファ',
+    name: 'ソファ（IC提案）',
+    manufacturer: 'IC提案',
+    modelNumber: 'SOFA-IC',
+    unit: 'set',
+    isOption: true,
+    description: 'インテリアコーディネーターがお部屋に合わせたソファをご提案いたします',
+    variants: [
+      { id: 'v1', color: 'IC提案', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+  {
+    id: 'furn-tvboard-ic',
+    categoryId: 'furniture',
+    categoryName: '家具',
+    subcategory: 'TVボード',
+    name: 'TVボード（IC提案）',
+    manufacturer: 'IC提案',
+    modelNumber: 'TVBOARD-IC',
+    unit: 'set',
+    isOption: true,
+    description: 'インテリアコーディネーターがお部屋に合わせたTVボードをご提案いたします',
+    variants: [
+      { id: 'v1', color: 'IC提案', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+  {
+    id: 'furn-centertable-ic',
+    categoryId: 'furniture',
+    categoryName: '家具',
+    subcategory: 'センターテーブル',
+    name: 'センターテーブル（IC提案）',
+    manufacturer: 'IC提案',
+    modelNumber: 'CENTERTABLE-IC',
+    unit: 'set',
+    isOption: true,
+    description: 'インテリアコーディネーターがお部屋に合わせたセンターテーブルをご提案いたします',
+    variants: [
+      { id: 'v1', color: 'IC提案', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+  {
+    id: 'furn-rug-ic',
+    categoryId: 'furniture',
+    categoryName: '家具',
+    subcategory: 'ラグ',
+    name: 'ラグ（IC提案）',
+    manufacturer: 'IC提案',
+    modelNumber: 'RUG-IC',
+    unit: 'set',
+    isOption: true,
+    description: 'インテリアコーディネーターがお部屋に合わせたラグをご提案いたします',
+    variants: [
+      { id: 'v1', color: 'IC提案', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+  {
+    id: 'furn-diningtable-ic',
+    categoryId: 'furniture',
+    categoryName: '家具',
+    subcategory: 'ダイニングテーブル',
+    name: 'ダイニングテーブル（IC提案）',
+    manufacturer: 'IC提案',
+    modelNumber: 'DININGTABLE-IC',
+    unit: 'set',
+    isOption: true,
+    description: 'インテリアコーディネーターがお部屋に合わせたダイニングテーブルをご提案いたします',
+    variants: [
+      { id: 'v1', color: 'IC提案', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+  {
+    id: 'furn-diningchair-ic',
+    categoryId: 'furniture',
+    categoryName: '家具',
+    subcategory: 'ダイニングチェア',
+    name: 'ダイニングチェア（IC提案）',
+    manufacturer: 'IC提案',
+    modelNumber: 'DININGCHAIR-IC',
+    unit: 'set',
+    isOption: true,
+    description: 'インテリアコーディネーターがお部屋に合わせたダイニングチェアをご提案いたします',
+    variants: [
+      { id: 'v1', color: 'IC提案', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+  {
+    id: 'furn-bed-ic',
+    categoryId: 'furniture',
+    categoryName: '家具',
+    subcategory: 'ベッド',
+    name: 'ベッド（IC提案）',
+    manufacturer: 'IC提案',
+    modelNumber: 'BED-IC',
+    unit: 'set',
+    isOption: true,
+    description: 'インテリアコーディネーターがお部屋に合わせたベッドをご提案いたします',
+    variants: [
+      { id: 'v1', color: 'IC提案', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+  {
+    id: 'furn-other-ic',
+    categoryId: 'furniture',
+    categoryName: '家具',
+    subcategory: 'その他',
+    name: 'その他家具（IC提案）',
+    manufacturer: 'IC提案',
+    modelNumber: 'OTHER-IC',
+    unit: 'set',
+    isOption: true,
+    description: 'その他ご希望の家具があればインテリアコーディネーターにご相談ください（自由入力可）',
+    variants: [
+      { id: 'v1', color: 'IC提案', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
     ]
   },
 ];

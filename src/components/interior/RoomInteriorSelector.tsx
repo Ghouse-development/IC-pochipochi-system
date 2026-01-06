@@ -12,11 +12,11 @@ import { useDebounce } from '../../hooks/useDebounce';
 // 部屋タイプの定義（適用可能パーツを明確化）
 const ROOM_TYPES = [
   { id: 'living', name: 'リビング', icon: '🛋️', floor: 1, group: 'main',
-    applicableParts: ['flooring', 'wall', 'accent', 'door', 'electrical', 'lighting', 'aircon', 'curtain', 'blind', 'furniture'] },
+    applicableParts: ['flooring', 'wall', 'accent', 'door', 'electrical', 'lighting'] },
   { id: 'dining', name: 'ダイニング', icon: '🍽️', floor: 1, group: 'main',
-    applicableParts: ['flooring', 'wall', 'accent', 'electrical', 'lighting', 'furniture'] },
+    applicableParts: ['flooring', 'wall', 'accent', 'electrical', 'lighting'] },
   { id: 'kitchen', name: 'キッチン', icon: '🍳', floor: 1, group: 'main',
-    applicableParts: ['flooring', 'wall', 'accent', 'electrical', 'lighting', 'ventilation', 'blind'] },
+    applicableParts: ['flooring', 'wall', 'accent', 'electrical', 'lighting', 'ventilation'] },
   { id: 'entrance', name: '玄関', icon: '🚪', floor: 1, group: 'common',
     applicableParts: ['flooring', 'wall', 'accent', 'door', 'electrical', 'lighting', 'niche'] },
   { id: 'toilet1', name: 'トイレ（1階）', icon: '🚽', floor: 1, group: 'water',
@@ -26,11 +26,11 @@ const ROOM_TYPES = [
   { id: 'bathroom', name: '浴室', icon: '🛁', floor: 1, group: 'water',
     applicableParts: ['ventilation', 'handrail'] },
   { id: 'master', name: '主寝室', icon: '🛏️', floor: 2, group: 'bedroom',
-    applicableParts: ['flooring', 'wall', 'accent', 'door', 'storage', 'electrical', 'lighting', 'aircon', 'curtain', 'blind'] },
+    applicableParts: ['flooring', 'wall', 'accent', 'door', 'storage', 'electrical', 'lighting'] },
   { id: 'child1', name: '子供部屋1', icon: '👶', floor: 2, group: 'bedroom',
-    applicableParts: ['flooring', 'wall', 'accent', 'door', 'storage', 'electrical', 'lighting', 'aircon', 'curtain', 'blind'] },
+    applicableParts: ['flooring', 'wall', 'accent', 'door', 'storage', 'electrical', 'lighting'] },
   { id: 'child2', name: '子供部屋2', icon: '👶', floor: 2, group: 'bedroom',
-    applicableParts: ['flooring', 'wall', 'accent', 'door', 'storage', 'electrical', 'lighting', 'aircon', 'curtain', 'blind'] },
+    applicableParts: ['flooring', 'wall', 'accent', 'door', 'storage', 'electrical', 'lighting'] },
   { id: 'toilet2', name: 'トイレ（2階）', icon: '🚽', floor: 2, group: 'water',
     applicableParts: ['flooring', 'wall', 'accent', 'door', 'electrical', 'lighting', 'ventilation', 'handrail'] },
   { id: 'corridor', name: '廊下・階段', icon: '🚶', floor: 0, group: 'common',
@@ -53,15 +53,10 @@ const INTERIOR_PARTS = [
   // === 電気・照明 ===
   { id: 'electrical', name: 'スイッチ/コンセント', icon: '🔌', required: true, bulkApply: true, group: 'electric', order: 8 },
   { id: 'lighting', name: '照明', icon: '💡', required: true, bulkApply: false, group: 'electric', order: 9 },
-  // === 空調・換気 ===
-  { id: 'aircon', name: 'エアコン', icon: '❄️', required: false, bulkApply: false, group: 'hvac', order: 10 },
-  { id: 'ventilation', name: '換気', icon: '💨', required: false, bulkApply: false, group: 'hvac', order: 11 },
-  // === 窓装飾 ===
-  { id: 'curtain', name: 'カーテン', icon: '🪟', required: false, bulkApply: false, group: 'window', order: 12 },
-  { id: 'blind', name: 'ブラインド', icon: '🪟', required: false, bulkApply: false, group: 'window', order: 13 },
-  // === 家具・その他 ===
-  { id: 'furniture', name: '家具/造作家具', icon: '🛋️', required: false, bulkApply: false, group: 'furniture', order: 14 },
-  { id: 'handrail', name: '手摺', icon: '🛡️', required: false, bulkApply: false, group: 'other', order: 15 },
+  // === 換気 ===
+  { id: 'ventilation', name: '換気', icon: '💨', required: false, bulkApply: false, group: 'hvac', order: 10 },
+  // === その他 ===
+  { id: 'handrail', name: '手摺', icon: '🛡️', required: false, bulkApply: false, group: 'other', order: 11 },
   { id: 'hanger', name: '室内物干し', icon: '👕', required: false, bulkApply: false, group: 'other', order: 16 },
 ];
 
@@ -70,9 +65,7 @@ const PART_GROUPS = [
   { id: 'basic', name: '基本内装', icon: '🏠' },
   { id: 'structure', name: '建具・収納', icon: '🚪' },
   { id: 'electric', name: '電気・照明', icon: '💡' },
-  { id: 'hvac', name: '空調・換気', icon: '❄️' },
-  { id: 'window', name: '窓装飾', icon: '🪟' },
-  { id: 'furniture', name: '家具', icon: '🛋️' },
+  { id: 'hvac', name: '換気', icon: '💨' },
   { id: 'other', name: 'その他', icon: '📦' },
 ];
 
@@ -188,7 +181,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
       },
       electrical: {
         categoryNames: ['電気設備'],
-        subcategories: ['スイッチ', 'コンセント', 'USB'],
+        subcategories: ['スイッチ', 'コンセント'],
         categoryIds: ['electrical']
       },
       lighting: {
@@ -196,30 +189,10 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
         subcategories: ['ダウンライト', 'ペンダントライト', 'シーリング'],
         categoryIds: ['lighting']
       },
-      aircon: {
-        categoryNames: ['空調'],
-        subcategories: ['エアコン'],
-        categoryIds: ['aircon']
-      },
       ventilation: {
         categoryNames: ['換気'],
         subcategories: ['換気システム', '換気扇', '暖房乾燥機'],
         categoryIds: ['ventilation']
-      },
-      curtain: {
-        categoryNames: ['カーテン'],
-        subcategories: ['ドレープカーテン', 'レースカーテン'],
-        categoryIds: ['curtain']
-      },
-      blind: {
-        categoryNames: ['ブラインド'],
-        subcategories: ['アルミブラインド', 'ウッドブラインド'],
-        categoryIds: ['blind']
-      },
-      furniture: {
-        categoryNames: ['家具', '造作家具'],
-        subcategories: ['ダイニングテーブル', 'TVボード', 'カウンター'],
-        categoryIds: ['furniture', 'dining-table']
       },
       handrail: {
         categoryNames: ['手摺'],

@@ -32,6 +32,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose }) => {
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/50 z-50" />
         <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-xl w-[95vw] max-w-md p-6 z-50">
+          <Dialog.Title className="sr-only">選択内容をシェア</Dialog.Title>
           <Dialog.Close className="absolute top-4 right-4 p-1 hover:bg-gray-100 rounded-full">
             <X className="w-5 h-5" />
           </Dialog.Close>

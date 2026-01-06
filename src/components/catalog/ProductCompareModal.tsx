@@ -148,6 +148,7 @@ export const ProductCompareModal: React.FC<ProductCompareModalProps> = ({
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/50 z-50" />
         <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-xl w-[95vw] max-w-5xl max-h-[90vh] overflow-hidden z-50">
+          <Dialog.Title className="sr-only">商品比較 ({products.length}件)</Dialog.Title>
           {/* ヘッダー */}
           <div className="sticky top-0 z-20">
             <div className="bg-gradient-to-r from-teal-600 to-teal-500 text-white p-4 flex items-center justify-between">

@@ -1134,7 +1134,7 @@ export const exteriorProducts: Product[] = [
     subcategory: 'SPビレクト',
     name: 'SPビレクト',
     manufacturer: 'IG工業',
-    materialType: '金属サイディング',
+    materialType: 'ガルバリウム鋼板',
     modelNumber: 'SPI1-xxx',
     unit: 'sqm',
     isOption: true,
@@ -1168,7 +1168,7 @@ export const exteriorProducts: Product[] = [
     subcategory: 'ガルスパン',
     name: 'ガルスパン',
     manufacturer: 'IG工業',
-    materialType: '金属サイディング',
+    materialType: 'ガルバリウム鋼板',
     modelNumber: 'SPJ1-xxx',
     unit: 'sqm',
     isOption: true,
@@ -1511,7 +1511,7 @@ export const exteriorProducts: Product[] = [
     name: 'ニスクカラーSGL',
     manufacturer: '日鉄鋼板',
     modelNumber: 'NM-8697',
-    unit: 'sqm',
+    unit: 'set',
     isOption: false,
     description: '材料標準保証規格10年 国土交通大臣認定不燃材料 海岸500m以遠原板の穴あき25年保証',
     variants: [
@@ -1523,11 +1523,11 @@ export const exteriorProducts: Product[] = [
     ]
   },
 
-  // ===== 外部配管 =====
+  // ===== 外部設備 - 外部配管 =====
   {
     id: 'ext-pipe',
-    categoryId: 'exterior-pipe',
-    categoryName: '外部配管',
+    categoryId: 'exterior-facility',
+    categoryName: '外部設備',
     subcategory: '外部配管',
     name: '外部配管',
     manufacturer: '標準',
@@ -1566,18 +1566,18 @@ export const exteriorProducts: Product[] = [
     ]
   },
 
-  // ===== 樋 - 横樋 =====
+  // ===== 樋・水切 - 軒樋 =====
   {
     id: 'ext-gutter-horizontal',
     categoryId: 'gutter',
-    categoryName: '樋',
-    subcategory: '横樋',
+    categoryName: '樋・水切',
+    subcategory: '軒樋',
     name: 'ファインスケアNF-I型',
     manufacturer: 'Panasonic',
     modelNumber: 'MQFxxxx',
     unit: 'set',
     isOption: false,
-    description: '横樋',
+    description: '軒樋（横樋）',
     variants: [
       { id: 'v1', color: 'ミルクホワイト', colorCode: 'MQF0180J', images: [] },
       { id: 'v2', color: 'パールグレー（しろ）', colorCode: 'MQF1180J', images: [] },
@@ -1592,18 +1592,18 @@ export const exteriorProducts: Product[] = [
     ]
   },
 
-  // ===== 樋 - 縦樋 =====
+  // ===== 樋・水切 - 竪樋 =====
   {
     id: 'ext-gutter-vertical',
     categoryId: 'gutter',
-    categoryName: '樋',
-    subcategory: '縦樋',
+    categoryName: '樋・水切',
+    subcategory: '竪樋',
     name: 'S30',
     manufacturer: 'Panasonic',
     modelNumber: 'KBPxxxx',
     unit: 'set',
     isOption: false,
-    description: '縦樋',
+    description: '竪樋（縦樋）',
     variants: [
       { id: 'v1', color: 'ミルクホワイト', colorCode: 'KBP0261K', images: [] },
       { id: 'v2', color: 'パールグレー（しろ）', colorCode: 'KBP1261K', images: [] },
@@ -1820,6 +1820,48 @@ export const exteriorProducts: Product[] = [
       { plan: 'HOURS', price: 1290000 },
       { plan: 'LIFE+', price: 1290000 },
       { plan: 'LIFE', price: 1290000 }
+    ]
+  },
+
+  // ===== 窓タイプ - APW330（設計カテゴリ） =====
+  {
+    id: 'ext-window-type-apw330',
+    categoryId: 'window-type',
+    categoryName: '窓タイプ',
+    subcategory: '窓タイプ',
+    name: 'APW330（樹脂サッシ・ペアガラス）',
+    manufacturer: 'YKKAP',
+    modelNumber: 'APW330',
+    unit: 'set',
+    isOption: false,
+    description: '樹脂サッシ アルゴンガス ペアガラス 熱貫流率1.31W/(㎡・K)',
+    variants: [
+      { id: 'v1', color: '標準', colorCode: '標準', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 }
+    ]
+  },
+
+  // ===== 窓タイプ - APW430（設計カテゴリ） =====
+  {
+    id: 'ext-window-type-apw430',
+    categoryId: 'window-type',
+    categoryName: '窓タイプ',
+    subcategory: '窓タイプ',
+    name: 'APW430（樹脂サッシ・トリプルガラス）',
+    manufacturer: 'YKKAP',
+    modelNumber: 'APW430',
+    unit: 'set',
+    isOption: true,
+    description: '樹脂サッシ トリプルガラス 熱貫流率0.90W/(㎡・K) より高い断熱性能',
+    variants: [
+      { id: 'v1', color: '標準', colorCode: '標準', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 300000 },
+      { plan: 'HOURS', price: 300000 }
     ]
   },
 
@@ -3160,8 +3202,8 @@ export const exteriorProducts: Product[] = [
   // ===== スリムダクト =====
   {
     id: 'ext-slim-duct',
-    categoryId: 'solar',
-    categoryName: '太陽光・蓄電池',
+    categoryId: 'exterior-facility',
+    categoryName: '外部設備',
     subcategory: 'スリムダクト',
     name: 'スリムダクト',
     manufacturer: '標準',
@@ -3185,8 +3227,8 @@ export const exteriorProducts: Product[] = [
   // ===== パラペット笠木 =====
   {
     id: 'ext-parapet-coping',
-    categoryId: 'coping',
-    categoryName: '笠木',
+    categoryId: 'gutter',
+    categoryName: '樋・水切',
     subcategory: 'パラペット笠木',
     name: 'パラペット笠木',
     manufacturer: '標準',
@@ -3209,8 +3251,8 @@ export const exteriorProducts: Product[] = [
   // ===== バルコニー笠木 =====
   {
     id: 'ext-balcony-coping',
-    categoryId: 'coping',
-    categoryName: '笠木',
+    categoryId: 'gutter',
+    categoryName: '樋・水切',
     subcategory: 'バルコニー笠木',
     name: 'バルコニー笠木',
     manufacturer: '標準',
@@ -3233,8 +3275,8 @@ export const exteriorProducts: Product[] = [
   // ===== 土台水切 =====
   {
     id: 'ext-foundation-flashing',
-    categoryId: 'exterior-facility',
-    categoryName: '外部設備',
+    categoryId: 'gutter',
+    categoryName: '樋・水切',
     subcategory: '土台水切',
     name: '土台水切',
     manufacturer: '城東テクノ',
@@ -3323,7 +3365,7 @@ export const exteriorProducts: Product[] = [
   {
     id: 'ext-sukkiri-pole-standard',
     categoryId: 'sukkiri-pole',
-    categoryName: 'スッキリポール',
+    categoryName: '外部設備',
     subcategory: 'スッキリポール',
     name: '中継ポール（スッキリポール スタンダードタイプ）電気メーター一体型',
     manufacturer: 'Panasonic',
@@ -3345,7 +3387,7 @@ export const exteriorProducts: Product[] = [
   {
     id: 'ext-sukkiri-pole-smart',
     categoryId: 'sukkiri-pole',
-    categoryName: 'スッキリポール',
+    categoryName: '外部設備',
     subcategory: 'スッキリポール',
     name: '中継ポール（スッキリポール スマートタイプ）電気メーター一体型',
     manufacturer: 'Panasonic',
@@ -3360,6 +3402,111 @@ export const exteriorProducts: Product[] = [
     pricing: [
       { plan: 'LACIE', price: 580000 },
       { plan: 'HOURS', price: 580000 }
+    ]
+  },
+
+  // ===== TV視聴 - 地上波TVアンテナのみ =====
+  {
+    id: 'ext-tv-antenna-only',
+    categoryId: 'tv-viewing',
+    categoryName: 'TV視聴',
+    subcategory: 'TV視聴',
+    name: '地上波TVアンテナのみ',
+    manufacturer: '標準',
+    modelNumber: 'TV-ANTENNA-ONLY',
+    unit: 'set',
+    isOption: true,
+    description: '地上波TVアンテナ設置工事一式',
+    variants: [
+      { id: 'v1', color: '標準', colorCode: '標準', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 80000 },
+      { plan: 'HOURS', price: 80000 }
+    ]
+  },
+
+  // ===== TV視聴 - 地上波TVアンテナ＋BSアンテナ =====
+  {
+    id: 'ext-tv-antenna-bs',
+    categoryId: 'tv-viewing',
+    categoryName: 'TV視聴',
+    subcategory: 'TV視聴',
+    name: '地上波TVアンテナ＋BSアンテナ',
+    manufacturer: '標準',
+    modelNumber: 'TV-ANTENNA-BS',
+    unit: 'set',
+    isOption: true,
+    description: '地上波TVアンテナ＋BSアンテナ設置工事一式',
+    variants: [
+      { id: 'v1', color: '標準', colorCode: '標準', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 95000 },
+      { plan: 'HOURS', price: 95000 }
+    ]
+  },
+
+  // ===== TV視聴 - 光ケーブル（Gハウス提携会社紹介） =====
+  {
+    id: 'ext-tv-fiber-ghouse',
+    categoryId: 'tv-viewing',
+    categoryName: 'TV視聴',
+    subcategory: 'TV視聴',
+    name: '光ケーブル（Gハウス提携会社紹介）',
+    manufacturer: 'Gハウス提携',
+    modelNumber: 'TV-FIBER-GHOUSE',
+    unit: 'set',
+    isOption: false,
+    description: 'Gハウス提携会社をご紹介いたします',
+    variants: [
+      { id: 'v1', color: '標準', colorCode: '標準', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 }
+    ]
+  },
+
+  // ===== TV視聴 - 光ケーブル（自分で業者を探す） =====
+  {
+    id: 'ext-tv-fiber-self',
+    categoryId: 'tv-viewing',
+    categoryName: 'TV視聴',
+    subcategory: 'TV視聴',
+    name: '光ケーブル（自分で業者を探す）',
+    manufacturer: 'お客様手配',
+    modelNumber: 'TV-FIBER-SELF',
+    unit: 'set',
+    isOption: false,
+    description: 'お客様ご自身で業者を手配されます',
+    variants: [
+      { id: 'v1', color: '標準', colorCode: '標準', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 }
+    ]
+  },
+
+  // ===== TV視聴 - TV視聴不要 =====
+  {
+    id: 'ext-tv-not-needed',
+    categoryId: 'tv-viewing',
+    categoryName: 'TV視聴',
+    subcategory: 'TV視聴',
+    name: 'TV視聴不要',
+    manufacturer: '不要',
+    modelNumber: 'TV-NOT-NEEDED',
+    unit: 'set',
+    isOption: false,
+    description: 'TV視聴の設備は不要です',
+    variants: [
+      { id: 'v1', color: '不要', colorCode: '不要', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 }
     ]
   },
 ];

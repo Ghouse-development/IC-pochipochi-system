@@ -26,7 +26,6 @@ import { ShortcutHelpModal } from './components/common/ShortcutHelpModal';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { useVersionStore } from './stores/useVersionStore';
 import { useCartStore } from './stores/useCartStore';
-import { WorkflowGuide } from './components/common/WorkflowGuide';
 import { CompletionCelebration } from './components/common/CompletionCelebration';
 import type { Product } from './types/product';
 
@@ -99,9 +98,6 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
     if (path.includes('/catalog/furniture')) return 'furniture';
     return null;
   })();
-
-  // カタログページかどうか
-  const isCatalogPage = location.pathname.includes('/catalog');
 
   // キーボードショートカットの設定
   useKeyboardShortcuts({
@@ -279,10 +275,6 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
       {/* ネットワーク状態バナー */}
       <NetworkStatusBanner />
 
-      {/* ワークフローガイド（カタログページのみ表示） */}
-      {isCatalogPage && (
-        <WorkflowGuide onCartClick={() => setIsCartOpen(true)} />
-      )}
 
       {/* カテゴリ完了時の祝福 */}
       {currentCatalogStep && (

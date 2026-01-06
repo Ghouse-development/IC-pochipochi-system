@@ -73,6 +73,11 @@ export const EXTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
     ]
   },
   {
+    name: '窓タイプ',
+    icon: '🪟',
+    subcategoryOrder: ['窓タイプ']
+  },
+  {
     name: '屋根',
     icon: '🏛️',
     subcategoryOrder: ['屋根材']
@@ -93,9 +98,9 @@ export const EXTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
     subcategoryOrder: ['ヴェナートD30', '玄関ドアオプション']
   },
   {
-    name: '樋',
+    name: '樋・水切',
     icon: '💧',
-    subcategoryOrder: ['横樋', '縦樋']
+    subcategoryOrder: ['軒樋', '竪樋', '土台水切', 'パラペット笠木', 'バルコニー笠木']
   },
   {
     name: '軒天',
@@ -141,30 +146,29 @@ export const EXTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
     subcategoryOrder: ['破風']
   },
   {
-    name: '外部配管',
-    icon: '🔧',
-    subcategoryOrder: ['外部配管']
-  },
-  {
-    name: '笠木',
-    icon: '🏗️',
-    subcategoryOrder: [
-      'パラペット笠木',
-      'バルコニー笠木',
-    ]
-  },
-  {
     name: '外部設備',
     icon: '🔌',
     subcategoryOrder: [
+      '電気メーターボックス',
       '外部コンセント',
-      '外部水栓',
+      'EV用コンセント',
+      'ジョイントボックス',
+      'エアコンスリーブキャップ',
       '換気フード',
-      '土台水切',
+      '外部LAN用空配管',
+      '外部配管',
+      'スリムダクト',
+      '外部水栓',
+      'スッキリポール',
       'アンテナ',
       '防犯設備',
       '外部設備',
     ]
+  },
+  {
+    name: 'TV視聴',
+    icon: '📺',
+    subcategoryOrder: ['TV視聴']
   },
   {
     name: '換気システム',
@@ -301,61 +305,9 @@ export const INTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
     subcategoryOrder: ['カウンター', 'ダイニングカウンター']
   },
   {
-    name: '造作家具',
-    icon: '🪑',
-    subcategoryOrder: ['ダイニングテーブル', 'カウンター', 'デスク']
-  },
-  {
-    name: '家具',
-    icon: '🪑',
-    subcategoryOrder: ['ダイニングテーブル', 'カウンター']
-  },
-  {
-    name: 'カーテン',
-    icon: '🪞',
-    subcategoryOrder: ['カーテンレール', 'カーテン']
-  },
-  {
     name: 'カーテンBOX',
     icon: '📦',
     subcategoryOrder: ['カーテンBOX']
-  },
-  {
-    name: 'ブラインド',
-    icon: '🪟',
-    subcategoryOrder: ['ブラインド', 'ロールスクリーン']
-  },
-  {
-    name: '照明',
-    icon: '💡',
-    subcategoryOrder: ['ダウンライト', 'シーリングライト', 'ペンダントライト']
-  },
-  {
-    name: '間接照明',
-    icon: '✨',
-    subcategoryOrder: ['間接照明', 'ライン照明']
-  },
-  {
-    name: '電気設備',
-    icon: '🔌',
-    subcategoryOrder: [
-      'コンセント',
-      'USB付コンセント',
-      'スイッチ',
-      'スイッチ/コンセント',
-      'インターホン',
-      '配管',
-    ]
-  },
-  {
-    name: 'エアコン',
-    icon: '❄️',
-    subcategoryOrder: ['ダイキン', '三菱電機', 'エアコン']
-  },
-  {
-    name: '空調',
-    icon: '🌀',
-    subcategoryOrder: ['エアコン', '換気扇']
   },
   {
     name: '換気',
@@ -397,12 +349,52 @@ export const INTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
   },
 ];
 
-// 水回りカテゴリ順序
+// 水廻り設備カテゴリ順序
 export const WATER_CATEGORY_ORDER: CategoryOrderConfig[] = [
   {
     name: 'キッチン',
     icon: '🍳',
-    subcategoryOrder: ['システムキッチン']
+    subcategoryOrder: ['システムキッチン', 'キッチンオプション']
+  },
+  {
+    name: '1階洗面化粧台',
+    icon: '🪥',
+    subcategoryOrder: ['洗面化粧台', '洗面台']
+  },
+  {
+    name: '2階洗面化粧台',
+    icon: '🪥',
+    subcategoryOrder: ['2階洗面', '洗面化粧台']
+  },
+  {
+    name: '洗面化粧台',
+    icon: '🪥',
+    subcategoryOrder: ['洗面化粧台', '2階洗面', '洗面台']
+  },
+  {
+    name: '玄関手洗い',
+    icon: '🚰',
+    subcategoryOrder: ['玄関手洗い', '手洗器']
+  },
+  {
+    name: '1階トイレ',
+    icon: '🚽',
+    subcategoryOrder: ['タンクレストイレ', 'タンク式トイレ', 'トイレ']
+  },
+  {
+    name: '2階トイレ',
+    icon: '🚽',
+    subcategoryOrder: ['タンクレストイレ', 'タンク式トイレ', 'トイレ']
+  },
+  {
+    name: 'トイレ',
+    icon: '🚽',
+    subcategoryOrder: ['タンクレストイレ', 'タンク式トイレ']
+  },
+  {
+    name: '風呂',
+    icon: '🛁',
+    subcategoryOrder: ['システムバス', 'バスオプション']
   },
   {
     name: 'バスルーム',
@@ -413,16 +405,6 @@ export const WATER_CATEGORY_ORDER: CategoryOrderConfig[] = [
     name: 'バスルーム設備',
     icon: '🚿',
     subcategoryOrder: ['浴室暖房乾燥機']
-  },
-  {
-    name: '洗面化粧台',
-    icon: '🪥',
-    subcategoryOrder: ['洗面化粧台', '2階洗面']
-  },
-  {
-    name: 'トイレ',
-    icon: '🚽',
-    subcategoryOrder: ['タンクレストイレ', 'タンク式トイレ']
   },
   {
     name: '給湯器',
@@ -475,6 +457,40 @@ function sortSubcategories(subcategories: string[], order?: string[]): string[] 
   });
 }
 
+// 電気設備カテゴリ順序
+export const ELECTRICAL_CATEGORY_ORDER: CategoryOrderConfig[] = [
+  {
+    name: '照明',
+    icon: '💡',
+    subcategoryOrder: ['ダウンライト', 'シーリングライト', 'ペンダントライト', 'ブラケットライト']
+  },
+  {
+    name: '間接照明',
+    icon: '✨',
+    subcategoryOrder: ['間接照明', 'ライン照明']
+  },
+  {
+    name: 'スイッチ・コンセント',
+    icon: '🔌',
+    subcategoryOrder: ['スイッチ', 'コンセント', 'スイッチ・コンセント']
+  },
+  {
+    name: '電気設備',
+    icon: '⚡',
+    subcategoryOrder: ['スイッチ', 'コンセント', '配管']
+  },
+  {
+    name: 'インターホン',
+    icon: '🔔',
+    subcategoryOrder: ['インターホン', 'ドアホン']
+  },
+  {
+    name: 'その他電気設備',
+    icon: '🔧',
+    subcategoryOrder: ['配線', '分電盤', 'アース']
+  },
+];
+
 // 家具・家電カテゴリ順序
 export const FURNITURE_CATEGORY_ORDER: CategoryOrderConfig[] = [
   {
@@ -522,7 +538,7 @@ export const FURNITURE_CATEGORY_ORDER: CategoryOrderConfig[] = [
 /**
  * カタログタイプに応じたカテゴリ順序設定を取得
  */
-export function getCategoryOrderConfig(catalogType: 'exterior' | 'interior' | 'water' | 'furniture'): CategoryOrderConfig[] {
+export function getCategoryOrderConfig(catalogType: 'exterior' | 'interior' | 'water' | 'electrical' | 'furniture'): CategoryOrderConfig[] {
   switch (catalogType) {
     case 'exterior':
       return EXTERIOR_CATEGORY_ORDER;
@@ -530,6 +546,8 @@ export function getCategoryOrderConfig(catalogType: 'exterior' | 'interior' | 'w
       return INTERIOR_CATEGORY_ORDER;
     case 'water':
       return WATER_CATEGORY_ORDER;
+    case 'electrical':
+      return ELECTRICAL_CATEGORY_ORDER;
     case 'furniture':
       return FURNITURE_CATEGORY_ORDER;
     default:

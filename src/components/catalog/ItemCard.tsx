@@ -15,7 +15,7 @@ const CATEGORY_PLACEHOLDERS: Record<string, { emoji: string; bgColor: string }> 
   '天井クロス': { emoji: '☁️', bgColor: 'from-white to-gray-100' },
   'キッチン': { emoji: '🍳', bgColor: 'from-red-100 to-orange-100' },
   'バス': { emoji: '🛁', bgColor: 'from-blue-100 to-cyan-100' },
-  '洗面台': { emoji: '🪥', bgColor: 'from-cyan-100 to-teal-100' },
+  '洗面台': { emoji: '🪥', bgColor: 'from-cyan-100 to-blue-100' },
   'トイレ': { emoji: '🚽', bgColor: 'from-violet-100 to-purple-100' },
   'カーテン': { emoji: '🪟', bgColor: 'from-pink-100 to-rose-100' },
   '照明': { emoji: '💡', bgColor: 'from-yellow-100 to-amber-100' },
@@ -115,9 +115,9 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
 
   return (
     <article
-      className={`group bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden border-2 transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 ${
+      className={`group bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden border-2 transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${
         inCart
-          ? 'border-teal-400 shadow-md shadow-teal-100 dark:shadow-teal-900/30 ring-2 ring-teal-50 dark:ring-teal-900/50'
+          ? 'border-blue-400 shadow-md shadow-blue-100 dark:shadow-blue-900/30 ring-2 ring-blue-50 dark:ring-blue-900/50'
           : inCompare
           ? 'border-purple-400 shadow-md shadow-purple-100 dark:shadow-purple-900/30'
           : 'border-transparent hover:border-gray-200 dark:hover:border-gray-600 hover:shadow-lg'
@@ -240,13 +240,13 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
 
         {/* 選択済みオーバーレイ - G HOUSE風の大きなチェックマーク */}
         {inCart && (
-          <div className="absolute inset-0 bg-teal-500/30 flex items-center justify-center">
-            <div className="bg-white rounded-full p-3 shadow-xl ring-4 ring-teal-400/50">
-              <Check className="w-8 h-8 text-teal-600" strokeWidth={3} />
+          <div className="absolute inset-0 bg-blue-500/30 flex items-center justify-center">
+            <div className="bg-white rounded-full p-3 shadow-xl ring-4 ring-blue-400/50">
+              <Check className="w-8 h-8 text-blue-600" strokeWidth={3} />
             </div>
             {/* 選択中ラベル */}
             <div className="absolute bottom-2 left-1/2 -translate-x-1/2">
-              <span className="px-3 py-1 bg-teal-600 text-white text-xs font-bold rounded-full shadow-lg">
+              <span className="px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full shadow-lg">
                 選択中
               </span>
             </div>
@@ -313,7 +313,7 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
               e.stopPropagation();
               handleAddToCart(item);
             }}
-            className="w-full py-3 rounded-xl text-sm font-bold bg-gradient-to-r from-teal-500 to-emerald-500 text-white flex items-center justify-center gap-2 shadow-lg shadow-teal-500/25 transition-all active:scale-95"
+            className="w-full py-3 rounded-xl text-sm font-bold bg-gradient-to-r from-blue-500 to-emerald-500 text-white flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25 transition-all active:scale-95"
             aria-label={`${item.name}を選択`}
           >
             <ShoppingCart className="w-4 h-4" aria-hidden="true" />

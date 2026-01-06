@@ -35,6 +35,7 @@ import {
   STEPS,
   DESIGN_CATEGORIES,
   FURNITURE_CATEGORIES,
+  ELECTRICAL_CATEGORIES,
   getRecommendBadge,
   getNotNeededOption,
   isHiddenCategory,
@@ -46,6 +47,7 @@ import { ActionChecklist } from './ActionChecklist';
 import { BeginnerGuide } from './BeginnerGuide';
 import { EstimateExportDialog } from '../estimate/EstimateExportDialog';
 import { useSelectionStore } from '../../stores/useSelectionStore';
+import { ICProposalSelector, type ICProposalSelection } from './ICProposalSelector';
 
 // ユーティリティ関数とコンポーネント (ItemCard, SkeletonCard, EmptyState, Confetti) はインポート済み
 
@@ -68,7 +70,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
   // URLからactiveTabを設定
   // お客様モードでは設計タブにアクセスできない
-  const activeTab = (['design', 'exterior', 'interior', 'equipment', 'furniture'].includes(step) ? step : 'exterior') as 'design' | 'exterior' | 'interior' | 'equipment' | 'furniture';
+  const activeTab = (['design', 'exterior', 'interior', 'equipment', 'electrical', 'furniture'].includes(step) ? step : 'exterior') as 'design' | 'exterior' | 'interior' | 'equipment' | 'electrical' | 'furniture';
   const selectedCategoryId = urlCategoryId || null;
 
   // お客様モードで設計タブにアクセスした場合は外装タブにリダイレクト
@@ -226,7 +228,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   const { setTimeout } = useTimeout();
 
   // 静的データ（フォールバック用）
-  const { exteriorProducts, interiorProducts, waterProducts } = useProductStore();
+  const { exteriorProducts, interiorProducts, waterProducts, furnitureProducts } = useProductStore();
 
   // お気に入り・履歴
   const { favorites, toggleFavorite, isFavorite } = useFavoritesStore();
@@ -244,7 +246,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   const [quickSelectMode, setQuickSelectMode] = useState(false);
 
   // タブ切替（URL遷移）
-  const setActiveTab = useCallback((newTab: 'design' | 'exterior' | 'interior' | 'equipment' | 'furniture') => {
+  const setActiveTab = useCallback((newTab: 'design' | 'exterior' | 'interior' | 'equipment' | 'electrical' | 'furniture') => {
     navigate(`/catalog/${newTab}`);
   }, [navigate]);
 
@@ -269,9 +271,6 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     };
     fetchPlans();
   }, []);
-
-  // モバイル進捗パネル
-  const [showMobileProgress, setShowMobileProgress] = useState(false);
 
   // カテゴリ取得 - Supabaseから取得、フォールバックとして静的データを使用
   useEffect(() => {
@@ -380,25 +379,36 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
         if (activeTab === 'exterior') {
           products = exteriorProducts;
         } else if (activeTab === 'interior') {
-          products = interiorProducts;
+          // 内装タブ：ELECTRICAL_CATEGORIESとFURNITURE_CATEGORIESを除外
+          products = interiorProducts.filter(p =>
+            !ELECTRICAL_CATEGORIES.some(ec => p.categoryName.includes(ec) || ec.includes(p.categoryName)) &&
+            !FURNITURE_CATEGORIES.some(fc => p.categoryName.includes(fc) || fc.includes(p.categoryName))
+          );
         } else if (activeTab === 'equipment') {
           products = waterProducts;
+        } else if (activeTab === 'electrical') {
+          // 電気設備タブ：interiorProductsからELECTRICAL_CATEGORIESを抽出
+          products = interiorProducts.filter(p =>
+            ELECTRICAL_CATEGORIES.some(ec => p.categoryName.includes(ec) || ec.includes(p.categoryName))
+          );
+        } else if (activeTab === 'furniture') {
+          products = furnitureProducts;
         }
 
         const categoryMap = new Map<string, Category>();
         products.forEach((p, idx) => {
-          // DESIGN_CATEGORIESを除外（内装以外）
+          // DESIGN_CATEGORIESを除外（内装以外、furnitureは除外しない）
           const isDesignCategory = DESIGN_CATEGORIES.some(dc => p.categoryName.includes(dc) || dc.includes(p.categoryName));
           // 非表示カテゴリを除外（天井クロスなど）
           const isHidden = isHiddenCategory(p.categoryName);
-          if (p.categoryName && !categoryMap.has(p.categoryName) && !isHidden && (activeTab === 'interior' || !isDesignCategory)) {
+          if (p.categoryName && !categoryMap.has(p.categoryName) && !isHidden && (activeTab === 'interior' || activeTab === 'furniture' || !isDesignCategory)) {
             categoryMap.set(p.categoryName, {
               id: `cat-${activeTab}-${idx}`,
               parent_id: null,
               name: p.categoryName,
               slug: p.categoryName.toLowerCase().replace(/\s+/g, '-'),
               description: null,
-              category_type: activeTab as 'exterior' | 'interior' | 'equipment',
+              category_type: activeTab === 'furniture' ? 'interior' : activeTab as 'exterior' | 'interior' | 'equipment',
               is_active: true,
               is_required: false,
               display_order: idx,
@@ -423,7 +433,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
     fetchCategories();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeTab, exteriorProducts, interiorProducts, waterProducts, cartItems]); // selectedCategoryIdは初期設定時のみ使用
+  }, [activeTab, exteriorProducts, interiorProducts, waterProducts, furnitureProducts, cartItems]); // selectedCategoryIdは初期設定時のみ使用
 
   // 静的データからItemWithDetails形式のデータを取得
   const getStaticItems = useCallback((tab: string): ItemWithDetails[] => {
@@ -440,23 +450,27 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
         !DESIGN_CATEGORIES.some(dc => p.categoryName.includes(dc) || dc.includes(p.categoryName))
       );
     } else if (tab === 'interior') {
-      // 内装タブ：FURNITURE_CATEGORIESを除外
+      // 内装タブ：FURNITURE_CATEGORIESとELECTRICAL_CATEGORIESを除外
       products = interiorProducts.filter(p =>
-        !FURNITURE_CATEGORIES.some(fc => p.categoryName.includes(fc) || fc.includes(p.categoryName))
+        !FURNITURE_CATEGORIES.some(fc => p.categoryName.includes(fc) || fc.includes(p.categoryName)) &&
+        !ELECTRICAL_CATEGORIES.some(ec => p.categoryName.includes(ec) || ec.includes(p.categoryName))
+      );
+    } else if (tab === 'electrical') {
+      // 電気設備タブ：interiorProductsからELECTRICAL_CATEGORIESを抽出
+      products = interiorProducts.filter(p =>
+        ELECTRICAL_CATEGORIES.some(ec => p.categoryName.includes(ec) || ec.includes(p.categoryName))
       );
     } else if (tab === 'furniture') {
-      // 家具・家電タブ：内装からFURNITURE_CATEGORIESに該当するものを抽出
-      products = interiorProducts.filter(p =>
-        FURNITURE_CATEGORIES.some(fc => p.categoryName.includes(fc) || fc.includes(p.categoryName))
-      );
+      // 家具・家電タブ：furnitureProductsを直接使用
+      products = furnitureProducts;
     } else if (tab === 'equipment') {
-      // 設備タブ：DESIGN_CATEGORIESを除外
+      // 水廻り設備タブ：DESIGN_CATEGORIESを除外
       products = waterProducts.filter(p =>
         !DESIGN_CATEGORIES.some(dc => p.categoryName.includes(dc) || dc.includes(p.categoryName))
       );
     }
-    return products.map(p => convertStaticToItemWithDetails(p, tab === 'design' ? 'exterior' : (tab === 'furniture' ? 'interior' : tab)));
-  }, [exteriorProducts, interiorProducts, waterProducts]);
+    return products.map(p => convertStaticToItemWithDetails(p, tab === 'design' ? 'exterior' : (tab === 'furniture' || tab === 'electrical' ? 'interior' : tab)));
+  }, [exteriorProducts, interiorProducts, waterProducts, furnitureProducts]);
 
   // アイテム取得 - Supabaseから取得、データがない場合は静的データにフォールバック
   useEffect(() => {
@@ -594,13 +608,22 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     return true;
   }, [needsManufacturerSelection, selectedManufacturer, selectedSeries]);
 
-  // 利用可能な素材タイプを抽出
+  // 利用可能な素材タイプを抽出（固定順序: 窯業系サイディング → ガルバリウム鋼板 → 塗り壁）
   const availableMaterialTypes = useMemo(() => {
+    const materialOrder = ['窯業系サイディング', 'ガルバリウム鋼板', '塗り壁'];
     const materials = new Set<string>();
     items.forEach(item => {
       if (item.material_type) materials.add(item.material_type);
     });
-    return Array.from(materials).sort((a, b) => a.localeCompare(b, 'ja'));
+    return Array.from(materials).sort((a, b) => {
+      const indexA = materialOrder.indexOf(a);
+      const indexB = materialOrder.indexOf(b);
+      // 定義順にソート、未定義のものは末尾
+      if (indexA === -1 && indexB === -1) return a.localeCompare(b, 'ja');
+      if (indexA === -1) return 1;
+      if (indexB === -1) return -1;
+      return indexA - indexB;
+    });
   }, [items]);
 
   // 利用可能なサブカテゴリを抽出（素材タイプでフィルタ）
@@ -696,7 +719,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
       return true;
     });
 
-    // ソート: サブカテゴリ → 標準品優先 → メーカー名
+    // ソート: サブカテゴリ → 標準品優先 → 価格順
     return filtered.sort((a, b) => {
       // 1. サブカテゴリでグループ化
       const subA = a.category_name || '';
@@ -710,10 +733,10 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
       const isStandardB = pricingB?.is_standard ?? false;
       if (isStandardA !== isStandardB) return isStandardA ? -1 : 1;
 
-      // 3. メーカー名順
-      const manuA = a.manufacturer || '';
-      const manuB = b.manufacturer || '';
-      if (manuA !== manuB) return manuA.localeCompare(manuB, 'ja');
+      // 3. 価格順（安い順）
+      const priceA = pricingA?.price ?? 0;
+      const priceB = pricingB?.price ?? 0;
+      if (priceA !== priceB) return priceA - priceB;
 
       // 4. 商品名順
       return (a.name || '').localeCompare(b.name || '', 'ja');
@@ -929,9 +952,6 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     categories.filter(cat => !cartItems.some(item => item.product.categoryName === cat.name)),
     [categories, cartItems]
   );
-  const currentCategoryProgress = categories.length > 0
-    ? Math.round((decidedCategories.length / categories.length) * 100)
-    : 0;
   const isCurrentStepComplete = undecidedCategories.length === 0 && categories.length > 0;
 
   // 次のカテゴリへ進む
@@ -1061,7 +1081,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
       <div className="flex flex-col h-full bg-gray-50 dark:bg-gray-900">
         {/* ヘッダー - コンパクト */}
-        <div className="bg-teal-600 text-white shadow-lg">
+        <div className="bg-blue-600 text-white shadow-lg">
           {/* ステップナビゲーション */}
           <div className="px-4 py-2">
             <div className="flex items-center justify-between">
@@ -1079,16 +1099,16 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                         title={step.description}
                         className={`group relative flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all duration-200 ${
                           isActive
-                            ? 'bg-white text-teal-600 shadow-md'
+                            ? 'bg-white text-blue-600 shadow-md'
                             : 'bg-white/20 hover:bg-white/30'
                         }`}
                       >
-                        <Icon className={`w-4 h-4 ${isActive ? 'text-teal-500' : ''}`} />
+                        <Icon className={`w-4 h-4 ${isActive ? 'text-blue-500' : ''}`} />
                         <span className="hidden sm:inline text-sm font-medium">{step.label}</span>
                         <span className="sm:hidden text-sm">{step.emoji}</span>
                         {stepCount > 0 && (
                           <span className={`absolute -top-1 -right-1 w-4 h-4 flex items-center justify-center rounded-full text-[10px] font-bold ${
-                            isActive ? 'bg-teal-500 text-white' : 'bg-white text-teal-600'
+                            isActive ? 'bg-blue-500 text-white' : 'bg-white text-blue-600'
                           }`}>
                             {stepCount}
                           </span>
@@ -1162,7 +1182,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                     <select
                       value={selectedPlanId}
                       onChange={(e) => setSelectedPlanId(e.target.value)}
-                      className="flex-1 px-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm font-medium focus:ring-2 focus:ring-teal-500"
+                      className="flex-1 px-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm font-medium focus:ring-2 focus:ring-blue-500"
                     >
                       {plans.map(plan => (
                         <option key={plan.id} value={plan.code}>{plan.name}</option>
@@ -1216,7 +1236,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                     <button
                       onClick={goToNextCategory}
                       aria-label="次のカテゴリへ進む"
-                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-teal-500 hover:bg-teal-600 text-white rounded-xl font-medium transition-colors"
+                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-xl font-medium transition-colors"
                     >
                       次のカテゴリへ
                       <ChevronRight className="w-5 h-5" />
@@ -1237,7 +1257,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 <div className="writing-mode-vertical text-xs text-gray-500 font-medium">
                   選ぶもの
                 </div>
-                <div className="text-xs font-bold text-teal-600">
+                <div className="text-xs font-bold text-blue-600">
                   {decidedCategories.length}/{categories.length}
                 </div>
               </div>
@@ -1260,7 +1280,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                     placeholder="検索..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-8 pr-2 py-1.5 bg-gray-50 dark:bg-gray-700 dark:text-gray-100 border-0 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 focus:bg-white dark:focus:bg-gray-600 transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
+                    className="w-full pl-8 pr-2 py-1.5 bg-gray-50 dark:bg-gray-700 dark:text-gray-100 border-0 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-gray-600 transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
                   />
                   {searchTerm && (
                     <button
@@ -1302,7 +1322,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 <div className="hidden sm:flex items-center gap-1">
                   <button
                     onClick={handleSelectAllStandard}
-                    className="p-2.5 rounded-lg bg-teal-500 text-white hover:bg-teal-600 transition-colors"
+                    className="p-2.5 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-colors"
                     title="標準品を一括選択"
                     aria-label="標準品を一括選択"
                   >
@@ -1321,7 +1341,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   id="mobile-plan-select"
                   value={selectedPlanId}
                   onChange={(e) => setSelectedPlanId(e.target.value)}
-                  className="flex-1 px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-teal-500"
+                  className="flex-1 px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500"
                   aria-label="プランを選択"
                 >
                   {plans.map(plan => (
@@ -1333,7 +1353,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 <div className="flex bg-gray-100 dark:bg-gray-700 p-1 rounded-xl">
                   {[
                     { value: 'all', label: '全部', color: 'gray' },
-                    { value: 'standard', label: '¥0', color: 'teal' },
+                    { value: 'standard', label: '¥0', color: 'blue' },
                     { value: 'option', label: '+¥', color: 'orange' },
                   ].map(opt => (
                     <button
@@ -1342,7 +1362,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                       className={`px-3 py-2 rounded-lg text-xs font-bold transition-all ${
                         filterType === opt.value
                           ? opt.value === 'standard'
-                            ? 'bg-teal-500 text-white shadow-sm'
+                            ? 'bg-blue-500 text-white shadow-sm'
                             : opt.value === 'option'
                             ? 'bg-orange-500 text-white shadow-sm'
                             : 'bg-white dark:bg-gray-600 text-gray-700 dark:text-gray-200 shadow-sm'
@@ -1397,7 +1417,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                         id="material-filter"
                         value={selectedMaterialType}
                         onChange={(e) => setSelectedMaterialType(e.target.value)}
-                        className="px-2 py-1.5 bg-teal-50 dark:bg-teal-900/30 border border-teal-200 dark:border-teal-700 rounded-lg text-xs font-medium text-teal-700 dark:text-teal-200 focus:ring-2 focus:ring-teal-500"
+                        className="px-2 py-1.5 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-lg text-xs font-medium text-blue-700 dark:text-blue-200 focus:ring-2 focus:ring-blue-500"
                       >
                         <option value="">すべての素材 ({availableMaterialTypes.length}種)</option>
                         {availableMaterialTypes.map(mat => (
@@ -1414,7 +1434,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                         id="subcategory-filter"
                         value={selectedSubcategory}
                         onChange={(e) => setSelectedSubcategory(e.target.value)}
-                        className="px-2 py-1.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-xs font-medium text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-teal-500"
+                        className="px-2 py-1.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-xs font-medium text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500"
                       >
                         <option value="">すべて ({availableSubcategories.length}種)</option>
                         {availableSubcategories.map(sub => (
@@ -1431,7 +1451,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                         id="color-filter"
                         value={selectedColor}
                         onChange={(e) => setSelectedColor(e.target.value)}
-                        className="px-2 py-1.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-xs font-medium text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-teal-500"
+                        className="px-2 py-1.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-xs font-medium text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500"
                       >
                         <option value="">すべての色 ({availableColors.length}色)</option>
                         {availableColors.map(color => (
@@ -1447,7 +1467,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                       id="price-filter"
                       value={priceMax}
                       onChange={(e) => setPriceMax(parseInt(e.target.value, 10))}
-                      className="px-2 py-1.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-xs font-medium text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-teal-500"
+                      className="px-2 py-1.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-xs font-medium text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500"
                     >
                       <option value="0">上限なし</option>
                       <option value="10000">1万円以下</option>
@@ -1463,7 +1483,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                       type="checkbox"
                       checked={!hideDiscontinued}
                       onChange={(e) => setHideDiscontinued(!e.target.checked)}
-                      className="w-3.5 h-3.5 rounded border-gray-300 text-teal-500 focus:ring-teal-500"
+                      className="w-3.5 h-3.5 rounded border-gray-300 text-blue-500 focus:ring-blue-500"
                     />
                     <span className="text-xs text-gray-500 dark:text-gray-400">廃番も表示</span>
                   </label>
@@ -1513,10 +1533,62 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                     </button>
                     <button
                       onClick={() => window.location.reload()}
-                      className="px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 text-sm"
+                      className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm"
                     >
                       再読み込み
                     </button>
+                  </div>
+                </div>
+              ) : (currentCategoryName === 'カーテン' || currentCategoryName === '家具') ? (
+                /* IC提案選択UI（カーテン・家具用） */
+                <div className="max-w-2xl mx-auto">
+                  <ICProposalSelector
+                    categoryName={currentCategoryName as 'カーテン' | '家具'}
+                    onSelect={(selection: ICProposalSelection) => {
+                      if (selection.wantsProposal) {
+                        // IC提案を希望する場合
+                        const details = currentCategoryName === 'カーテン'
+                          ? `部屋: ${selection.selectedRooms?.join(', ') || '未選択'}`
+                          : `家具: ${selection.selectedFurnitureTypes?.join(', ') || '未選択'}${selection.otherText ? ` (その他: ${selection.otherText})` : ''}`;
+                        toast.success(`${currentCategoryName}: IC提案を希望 - ${details}`);
+                        // カートに追加するか、選択状態を保存
+                        // TODO: IC提案の選択状態をストアに保存
+                      } else {
+                        // IC提案を希望しない場合
+                        toast.info(`${currentCategoryName}: 提案不要`);
+                      }
+                      // 次のカテゴリへ移動
+                      goToNextCategory();
+                    }}
+                    onCancel={() => {
+                      // 前のカテゴリに戻るか、サイドバーで別のカテゴリを選択可能
+                    }}
+                  />
+                </div>
+              ) : currentCategoryName === '外壁' && availableMaterialTypes.length > 1 && !selectedMaterialType ? (
+                /* 素材タイプ選択カード（外壁用）- シンプルモダン */
+                <div className="max-w-3xl mx-auto px-4">
+                  <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-6">
+                    素材を選択
+                  </h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    {availableMaterialTypes.map((material) => (
+                      <button
+                        key={material}
+                        onClick={() => setSelectedMaterialType(material)}
+                        className="group flex items-center justify-between bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:border-gray-400 dark:hover:border-gray-500 transition-colors"
+                      >
+                        <div>
+                          <h3 className="font-medium text-gray-900 dark:text-gray-100 text-left">
+                            {material}
+                          </h3>
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                            {items.filter(i => i.material_type === material).length}種類
+                          </p>
+                        </div>
+                        <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors" />
+                      </button>
+                    ))}
                   </div>
                 </div>
               ) : needsManufacturerSelection && !isManufacturerSelectionComplete ? (
@@ -1538,6 +1610,27 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 <EmptyState searchTerm={searchTerm} onClear={() => setSearchTerm('')} />
               ) : (
                 <>
+                  {/* 素材タイプ選択状態バー（外壁用）- シンプルモダン */}
+                  {currentCategoryName === '外壁' && selectedMaterialType && (
+                    <div className="mb-4 flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="text-gray-900 dark:text-gray-100 font-medium">
+                          {selectedMaterialType}
+                        </span>
+                        <span className="text-sm text-gray-500 dark:text-gray-400">
+                          {filteredItems.length}件
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => setSelectedMaterialType('')}
+                        className="flex items-center gap-1 px-2 py-1 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
+                      >
+                        <ChevronLeft className="w-4 h-4" />
+                        戻る
+                      </button>
+                    </div>
+                  )}
+
                   {/* メーカー選択状態バー（水回り設備用） */}
                   {needsManufacturerSelection && selectedManufacturer && currentCategoryName && (
                     <div className="mb-4">
@@ -1748,32 +1841,6 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
         {/* モバイル用 - 下部ナビゲーションバー */}
         <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 shadow-lg safe-area-pb">
           <div className="flex items-center justify-between p-3 gap-3">
-            {/* 進捗表示 */}
-            <button
-              onClick={() => setShowMobileProgress(true)}
-              className="flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-700 rounded-xl"
-            >
-              <div className="relative w-10 h-10">
-                <svg className="w-10 h-10 -rotate-90">
-                  <circle cx="20" cy="20" r="16" fill="none" className="stroke-gray-200 dark:stroke-gray-600" strokeWidth="4" />
-                  <circle
-                    cx="20" cy="20" r="16" fill="none" stroke="#14b8a6" strokeWidth="4"
-                    strokeDasharray={`${currentCategoryProgress} 100`}
-                    strokeLinecap="round"
-                  />
-                </svg>
-                <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-gray-700 dark:text-gray-200">
-                  {decidedCategories.length}/{categories.length}
-                </span>
-              </div>
-              <div className="text-left">
-                <p className="text-xs text-gray-500 dark:text-gray-400">進捗</p>
-                <p className="text-sm font-bold text-gray-700 dark:text-gray-200">
-                  {undecidedCategories.length > 0 ? `残り${undecidedCategories.length}` : '完了!'}
-                </p>
-              </div>
-            </button>
-
             {/* メインアクション */}
             {isCurrentStepComplete ? (
               <button
@@ -1786,7 +1853,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
             ) : isCurrentCategoryDecided ? (
               <button
                 onClick={goToNextCategory}
-                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-teal-500 to-emerald-500 text-white rounded-xl font-bold shadow-lg"
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-blue-500 to-emerald-500 text-white rounded-xl font-bold shadow-lg"
               >
                 次のカテゴリへ
                 <ChevronRight className="w-5 h-5" />
@@ -1811,7 +1878,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
             {/* 選択リスト */}
             <button
               onClick={onCartClick}
-              className="relative p-3 bg-teal-500 text-white rounded-xl active:scale-95 transition-transform"
+              className="relative p-3 bg-blue-500 text-white rounded-xl active:scale-95 transition-transform"
               aria-label={`選択した仕様を確認（${cartItems.length}件）`}
             >
               <ClipboardCheck className="w-5 h-5" />
@@ -1823,101 +1890,6 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
             </button>
           </div>
         </div>
-
-        {/* モバイル進捗パネル（ボトムシート） */}
-        {showMobileProgress && (
-          <>
-            <div
-              className="lg:hidden fixed inset-0 bg-black/50 z-50"
-              onClick={() => setShowMobileProgress(false)}
-            />
-            <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-gray-800 rounded-t-3xl shadow-2xl max-h-[70vh] overflow-y-auto animate-slide-up">
-              <div className="sticky top-0 bg-white dark:bg-gray-800 p-4 border-b border-gray-100 dark:border-gray-700">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-bold text-lg text-gray-900 dark:text-gray-100">選択状況</h3>
-                  <button
-                    onClick={() => setShowMobileProgress(false)}
-                    className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full"
-                  >
-                    <X className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-                  </button>
-                </div>
-                {/* 進捗バー */}
-                <div className="mt-3 bg-gray-100 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
-                  <div
-                    className="h-full bg-gradient-to-r from-teal-500 to-emerald-500 transition-all duration-500"
-                    style={{ width: `${currentCategoryProgress}%` }}
-                  />
-                </div>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                  {decidedCategories.length}/{categories.length} カテゴリ完了
-                </p>
-              </div>
-
-              <div className="p-4 space-y-4">
-                {/* 未決項目 */}
-                {undecidedCategories.length > 0 && (
-                  <div>
-                    <h4 className="font-bold text-sm text-orange-600 dark:text-orange-400 mb-2 flex items-center gap-2">
-                      <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse" />
-                      未選択 ({undecidedCategories.length})
-                    </h4>
-                    <div className="space-y-2">
-                      {undecidedCategories.map(cat => (
-                        <button
-                          key={cat.id}
-                          onClick={() => {
-                            setSelectedCategoryId(cat.id);
-                            setShowMobileProgress(false);
-                          }}
-                          className="w-full flex items-center justify-between p-3 bg-orange-50 dark:bg-orange-900/20 rounded-xl border border-orange-200 dark:border-orange-800"
-                        >
-                          <span className="font-medium text-gray-700 dark:text-gray-200">{cat.name}</span>
-                          <ChevronRight className="w-5 h-5 text-orange-400" />
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* 決定項目 */}
-                {decidedCategories.length > 0 && (
-                  <div>
-                    <h4 className="font-bold text-sm text-teal-600 dark:text-teal-400 mb-2 flex items-center gap-2">
-                      <Check className="w-4 h-4" />
-                      選択済み ({decidedCategories.length})
-                    </h4>
-                    <div className="space-y-2">
-                      {decidedCategories.map(cat => {
-                        const selectedItems = cartItems.filter(item => item.product.categoryName === cat.name);
-                        return (
-                          <button
-                            key={cat.id}
-                            onClick={() => {
-                              setSelectedCategoryId(cat.id);
-                              setShowMobileProgress(false);
-                            }}
-                            className="w-full p-3 bg-teal-50 dark:bg-teal-900/20 rounded-xl border border-teal-200 dark:border-teal-800 text-left"
-                          >
-                            <div className="flex items-center justify-between">
-                              <span className="font-medium text-teal-700 dark:text-teal-300">{cat.name}</span>
-                              <span className="text-xs bg-teal-500 text-white px-2 py-0.5 rounded-full">
-                                {selectedItems.length}件
-                              </span>
-                            </div>
-                            <div className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                              {selectedItems.map(i => i.product.name).join(', ')}
-                            </div>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </>
-        )}
 
         {/* 比較バー（PC用） */}
         {compareProducts.length > 0 && (

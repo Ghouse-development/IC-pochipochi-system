@@ -1,4 +1,4 @@
-import { Home, Sofa, Wrench, Ruler, Armchair } from 'lucide-react';
+import { Home, Sofa, Wrench, Ruler, Armchair, Zap } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import type { ItemWithDetails } from '../../types/database';
 import type { Product as CatalogProduct } from '../../types/product';
@@ -111,7 +111,7 @@ export const convertToCatalogProduct = (item: ItemWithDetails): CatalogProduct =
 };
 
 // ステップ定義
-export type StepId = 'design' | 'exterior' | 'interior' | 'equipment' | 'furniture';
+export type StepId = 'design' | 'exterior' | 'interior' | 'equipment' | 'electrical' | 'furniture';
 export type FilterTypeValue = 'all' | 'standard' | 'option';
 
 export interface StepDefinition {
@@ -126,8 +126,9 @@ export interface StepDefinition {
 export const STEPS: StepDefinition[] = [
   { id: 'design', label: '設計', description: '間取りで決まる項目', icon: Ruler, emoji: '📐', gradient: 'from-purple-500 to-violet-500' },
   { id: 'exterior', label: '外装', description: '外壁・屋根・玄関', icon: Home, emoji: '🏠', gradient: 'from-emerald-500 to-teal-500' },
-  { id: 'interior', label: '内装', description: '床・壁・ドア', icon: Sofa, emoji: '🛋️', gradient: 'from-blue-500 to-indigo-500' },
-  { id: 'equipment', label: '設備', description: 'キッチン・バス・トイレ', icon: Wrench, emoji: '🚿', gradient: 'from-cyan-500 to-blue-500' },
+  { id: 'interior', label: '内装', description: '床・壁・建具', icon: Sofa, emoji: '🛋️', gradient: 'from-blue-500 to-indigo-500' },
+  { id: 'equipment', label: '水廻り設備', description: 'キッチン・バス・トイレ', icon: Wrench, emoji: '🚿', gradient: 'from-cyan-500 to-blue-500' },
+  { id: 'electrical', label: '電気設備', description: '照明・スイッチ・コンセント', icon: Zap, emoji: '⚡', gradient: 'from-yellow-500 to-orange-500' },
   { id: 'furniture', label: '家具・家電', description: 'カーテン・エアコン', icon: Armchair, emoji: '🪑', gradient: 'from-amber-500 to-orange-500' },
 ];
 
@@ -147,6 +148,7 @@ export const isHiddenCategory = (categoryName: string): boolean => {
 
 // 「設計」に属するカテゴリ名（間取りによって決まる項目）
 export const DESIGN_CATEGORIES = [
+  '窓タイプ',    // APW330/APW430の選択
   '天井高',
   '小上がり',
   '建具追加',
@@ -161,19 +163,31 @@ export const DESIGN_CATEGORIES = [
   '太陽光・蓄電池',
   '蓄電池',
   '太陽光',
-  'スッキリポール',
+  '太陽光パネル',
 ];
 
 // 「家具・家電」に属するカテゴリ名
 export const FURNITURE_CATEGORIES = [
-  'ダイニングテーブル',
-  '造作家具',
-  'カーテン',
-  'カーテンBOX',
-  'ブラインド',
+  'オリジナルダイニングテーブル',
   'エアコン',
-  '空調',
+  'カーテン',
+  'ブラインド',
   '家具',
+];
+
+// 「電気設備」に属するカテゴリ名
+export const ELECTRICAL_CATEGORIES = [
+  '照明',
+  'ダウンライト',
+  'シーリングライト',
+  'ペンダントライト',
+  '間接照明',
+  'スイッチ',
+  'コンセント',
+  'スイッチ・コンセント',
+  '電気設備',
+  'インターホン',
+  '配線',
 ];
 
 // IC提案依頼が有効なカテゴリ
@@ -224,35 +238,39 @@ export const getICConsultationOption = (categoryName: string): ICConsultationOpt
 };
 
 // 必須カテゴリ（選ばないと家が建たない項目）
+// ※【必須項目】.txtの指示に基づく
 export const REQUIRED_CATEGORIES = [
   // 外装
-  '外壁',
-  '屋根',
-  '玄関ドア',
-  'サッシ',
-  '軒天',
-  '破風',
-  '雨樋',
-  'ポスト',
-  '表札',
-  // 内装
-  '床材',
-  '壁クロス',
-  '天井クロス',
-  '巾木',
-  '建具',
-  '階段',
-  // 設備
-  '給気口',
-  '床下点検口',
-  '天井点検口',
-  'タオルリング',
-  'タオルバー',
-  'ペーパーホルダー',
+  '外壁',        // ①
+  'ポーチ',      // ②
+  '屋根',        // ③
+  '樋・水切',    // A: 軒樋・竪樋・土台水切・笠木
+  '軒天',        // ④
+  'ガレージシャッター', // ⑤
+  '窓',          // ⑥
+  '玄関ドア',    // ⑦
+  '外部設備',    // B: 電気メーター・コンセント・外部配管等
+  'TV視聴',      // ⑧ TV視聴方法の選択
+  // 内装必須項目（【内装必須項目】.txt準拠）
+  '玄関床',      // ⓪
+  '床材',        // ① ベース床（居室）
+  '壁クロス',    // ② ベースクロス（壁）
+  '天井クロス',  // ③ ベースクロス（天井）
+  '建具',        // ④ ベース室内ドア
+  '巾木',        // ⑤
+  '窓台',        // ⑥
+  '笠木',        // ⑦ 腰壁がある場合のみ
+  '階段',        // ⑧ 木製階段・アイアン階段の選択
+  '畳',          // ⑨ 畳がある場合のみ
+  '物干し',      // ⑩
+  '収納',        // ⑪
+  // 水廻り設備
   'キッチン',
-  'バス',
+  '洗面化粧台',
   '洗面台',
   'トイレ',
+  'バス',
+  '風呂',
 ];
 
 // カテゴリ名が必須かどうかをチェック（部分一致）
@@ -289,17 +307,21 @@ export const CATEGORY_EXPLANATIONS: Record<string, { description: string; tip: s
     description: '屋根の側面を覆う板です。雨から屋根を守ります。',
     tip: '屋根と同じ色にするのが一般的',
   },
-  '雨樋': {
-    description: '屋根に降った雨水を地面に流すパイプです。',
-    tip: '目立たない色を選ぶ方が多いです',
+  '樋・水切': {
+    description: '屋根に降った雨水を地面に流す設備です。軒樋・竪樋・土台水切・笠木などを含みます。',
+    tip: '外壁と同系色を選ぶと目立ちません',
   },
-  'ポスト': {
-    description: '郵便物を受け取る箱です。',
-    tip: '宅配ボックス付きが便利',
+  'ポーチ': {
+    description: '玄関前のタイル張りの部分です。',
+    tip: '滑りにくい素材がおすすめ',
   },
-  '表札': {
-    description: '家の名前を示すプレートです。',
-    tip: 'デザインは家の雰囲気に合わせて',
+  '外部配管': {
+    description: '屋外の配管設備です。',
+    tip: '色は外壁に合わせると統一感が出ます',
+  },
+  '外部設備': {
+    description: '電気メーターボックス、外部コンセント、換気フードなど屋外に設置する設備です。',
+    tip: '使いやすい位置に配置しましょう',
   },
   '庇': {
     description: '窓や玄関の上に付ける小さな屋根です。雨よけになります。',
