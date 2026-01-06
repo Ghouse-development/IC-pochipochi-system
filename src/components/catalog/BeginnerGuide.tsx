@@ -51,24 +51,21 @@ const STORAGE_KEY = 'pochipochi_guide_completed';
 
 interface BeginnerGuideProps {
   onComplete: () => void;
-  forceShow?: boolean;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
-export const BeginnerGuide: React.FC<BeginnerGuideProps> = ({ onComplete, forceShow = false }) => {
+export const BeginnerGuide: React.FC<BeginnerGuideProps> = ({ onComplete, isOpen = false, onClose }) => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
 
+  // isOpenが変わったらステップをリセット
   useEffect(() => {
-    if (forceShow) {
-      setIsVisible(true);
-      return;
+    if (isOpen) {
+      setCurrentStep(0);
     }
-    // 初回訪問かチェック
-    const completed = localStorage.getItem(STORAGE_KEY);
-    if (!completed) {
-      setIsVisible(true);
-    }
-  }, [forceShow]);
+  }, [isOpen]);
+
+  if (!isOpen) return null;
 
   const handleNext = () => {
     if (currentStep < GUIDE_STEPS.length - 1) {
@@ -86,17 +83,15 @@ export const BeginnerGuide: React.FC<BeginnerGuideProps> = ({ onComplete, forceS
 
   const handleComplete = () => {
     localStorage.setItem(STORAGE_KEY, 'true');
-    setIsVisible(false);
+    onClose?.();
     onComplete();
   };
 
   const handleSkip = () => {
     localStorage.setItem(STORAGE_KEY, 'true');
-    setIsVisible(false);
+    onClose?.();
     onComplete();
   };
-
-  if (!isVisible) return null;
 
   const step = GUIDE_STEPS[currentStep];
   const progress = ((currentStep + 1) / GUIDE_STEPS.length) * 100;

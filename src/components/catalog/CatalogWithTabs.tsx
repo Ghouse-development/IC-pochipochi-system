@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { Search, ClipboardCheck, Check, Star, ChevronRight, ChevronLeft, Home, Zap, Heart, X, Scale, FileDown } from 'lucide-react';
+import { Search, ClipboardCheck, Check, Star, ChevronRight, ChevronLeft, Home, Zap, Heart, X, Scale, FileDown, HelpCircle } from 'lucide-react';
 import { useToast } from '../common/Toast';
 import { useTimeout } from '../../hooks/useTimeout';
 import { useDebounce } from '../../hooks/useDebounce';
@@ -162,6 +162,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   const [selectedPlanId, setSelectedPlanId] = useState<string>('LACIE');
   const [addedItemId, setAddedItemId] = useState<string | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [showGuide, setShowGuide] = useState(false);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   // 商品詳細モーダル用
@@ -1073,8 +1074,12 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
       <style>{catalogAnimations}</style>
       <Confetti show={showConfetti} />
 
-      {/* 初心者向けガイド（初回のみ表示） */}
-      <BeginnerGuide onComplete={() => {}} />
+      {/* 初心者向けガイド（ボタンで表示） */}
+      <BeginnerGuide
+        isOpen={showGuide}
+        onClose={() => setShowGuide(false)}
+        onComplete={() => setShowGuide(false)}
+      />
 
       {/* 顧客モード時のウェルカムバナー */}
       {isCustomerMode && <CustomerWelcomeBanner />}
@@ -1242,6 +1247,17 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                       <ChevronRight className="w-5 h-5" />
                     </button>
                   ) : null}
+                </div>
+
+                {/* ヘルプボタン */}
+                <div className="mt-auto p-3 border-t border-gray-200 dark:border-gray-700">
+                  <button
+                    onClick={() => setShowGuide(true)}
+                    className="w-full flex items-center justify-center gap-2 px-3 py-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg text-sm transition-colors"
+                  >
+                    <HelpCircle className="w-4 h-4" />
+                    使い方ガイド
+                  </button>
                 </div>
               </>
             ) : (
