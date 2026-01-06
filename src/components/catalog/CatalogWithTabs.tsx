@@ -15,7 +15,7 @@ import { formatPrice } from '../../lib/utils';
 import { sanitizeSearchQuery } from '../../lib/sanitize';
 import { ANIMATION_DURATIONS, CART_MILESTONES, CATEGORY_GROUPS } from '../../lib/constants';
 import type { ItemWithDetails, Category, Product } from '../../types/database';
-import { RecommendationPanel } from './RecommendationPanel';
+// RecommendationPanel removed - 不要
 import { ProductDetailModal } from './ProductDetailModal';
 import { ProductCompareModal } from './ProductCompareModal';
 import { RoomInteriorSelector } from '../interior/RoomInteriorSelector';
@@ -761,28 +761,6 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   const catalogProducts = useMemo(() => {
     return items.map(convertToCatalogProduct);
   }, [items]);
-
-  // カートに入っている商品をCatalogProduct形式で取得
-  const selectedProducts = useMemo(() => {
-    return cartItems.map(item => ({
-      id: item.product.id,
-      categoryId: '',
-      categoryName: item.product.categoryName,
-      subcategory: '',
-      name: item.product.name,
-      manufacturer: item.product.manufacturer,
-      modelNumber: item.product.modelNumber,
-      unit: (item.product.unit || '式') as CatalogProduct['unit'],
-      isOption: item.product.isOption,
-      description: '',
-      pricing: item.product.pricing.map(p => ({
-        plan: (p.planId || 'LACIE') as 'LACIE' | 'HOURS' | 'LIFE',
-        planId: p.planId as 'LACIE' | 'HOURS' | 'LIFE' | undefined,
-        price: p.price,
-      })),
-      variants: item.product.variants,
-    })) as CatalogProduct[];
-  }, [cartItems]);
 
   // カートに追加（部屋選択が必要な場合はモーダルを表示）
   const handleAddToCart = useCallback((item: ItemWithDetails, skipRoomSelection?: boolean) => {
@@ -1834,22 +1812,6 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 </>
               )}
 
-              {/* レコメンドパネル */}
-              {catalogProducts.length > 0 && (
-                <div className="mt-8 pb-8">
-                  <RecommendationPanel
-                    selectedProducts={selectedProducts}
-                    allProducts={catalogProducts}
-                    onSelectProduct={(product) => {
-                      // 該当するDBアイテムを探してカートに追加
-                      const dbItem = items.find(item => item.id === product.id);
-                      if (dbItem) {
-                        handleAddToCart(dbItem);
-                      }
-                    }}
-                  />
-                </div>
-              )}
             </div>
           </div>
         </div>

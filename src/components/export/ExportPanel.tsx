@@ -15,6 +15,7 @@ import {
   AlertCircle,
   Loader2,
   Package,
+  ClipboardList,
 } from 'lucide-react';
 import { useCartStore } from '../../stores/useCartStore';
 import { useSelectionStore } from '../../stores/useSelectionStore';
@@ -23,6 +24,7 @@ import { useProjectStore } from '../../stores/useProjectStore';
 import { exportToExcel } from '../../utils/estimateExport';
 import { generateSpecificationPDF } from '../../utils/specificationPDF';
 import { generatePresentation } from '../../utils/presentationGenerator';
+import { generateSimplifiedReport } from '../../utils/simplifiedReportPDF';
 
 interface ExportPanelProps {
   compact?: boolean;
@@ -34,6 +36,7 @@ interface ExportState {
   estimate: ExportStatus;
   specification: ExportStatus;
   presentation: ExportStatus;
+  simplified: ExportStatus;
 }
 
 export const ExportPanel: React.FC<ExportPanelProps> = ({ compact = false }) => {
@@ -46,6 +49,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({ compact = false }) => 
     estimate: 'idle',
     specification: 'idle',
     presentation: 'idle',
+    simplified: 'idle',
   });
   const [lastExported, setLastExported] = useState<string | null>(null);
 
@@ -112,6 +116,26 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({ compact = false }) => 
     }
   };
 
+  // 確認レポート出力
+  const handleExportSimplified = async () => {
+    setExportState((prev) => ({ ...prev, simplified: 'loading' }));
+    try {
+      await generateSimplifiedReport(items, {
+        customerName: customerName || currentProject?.customer.name || 'お客様',
+        projectName: projectName || currentProject?.name || 'プロジェクト',
+        planName: currentProject?.building.planType || 'LACIE',
+        selections,
+      });
+      setExportState((prev) => ({ ...prev, simplified: 'success' }));
+      setLastExported('確認レポート');
+      setTimeout(() => setExportState((prev) => ({ ...prev, simplified: 'idle' })), 3000);
+    } catch (error) {
+      console.error('Export error:', error);
+      setExportState((prev) => ({ ...prev, simplified: 'error' }));
+      setTimeout(() => setExportState((prev) => ({ ...prev, simplified: 'idle' })), 3000);
+    }
+  };
+
   // 一括出力
   const handleExportAll = async () => {
     await handleExportEstimate();
@@ -136,6 +160,14 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({ compact = false }) => 
     return (
       <div className="flex flex-wrap gap-2">
         <button
+          onClick={handleExportSimplified}
+          disabled={!canExport || exportState.simplified === 'loading'}
+          className="flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+        >
+          {getStatusIcon(exportState.simplified)}
+          確認レポート
+        </button>
+        <button
           onClick={handleExportEstimate}
           disabled={!canExport || exportState.estimate === 'loading'}
           className="flex items-center gap-2 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
@@ -146,7 +178,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({ compact = false }) => 
         <button
           onClick={handleExportSpecification}
           disabled={!canExport || exportState.specification === 'loading'}
-          className="flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+          className="flex items-center gap-2 px-3 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
         >
           {getStatusIcon(exportState.specification)}
           仕様書
@@ -201,6 +233,32 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({ compact = false }) => 
             </p>
             <p className="text-sm text-gray-500">ショールーム合計</p>
           </div>
+        </div>
+      </div>
+
+      {/* 確認レポート（メイン） */}
+      <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border border-blue-200 p-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-blue-600 rounded-lg shadow-sm">
+              <ClipboardList className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h3 className="font-bold text-gray-900">確認レポート</h3>
+              <p className="text-sm text-gray-600">
+                オプション費用と未決定項目を抽出したシンプルなレポート（A4 PDF対応）
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={handleExportSimplified}
+            disabled={!canExport || exportState.simplified === 'loading'}
+            className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-md"
+          >
+            {getStatusIcon(exportState.simplified)}
+            {exportState.simplified === 'loading' ? '出力中...' :
+             exportState.simplified === 'success' ? '完了' : '確認レポートを出力'}
+          </button>
         </div>
       </div>
 

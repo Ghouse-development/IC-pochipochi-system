@@ -1548,7 +1548,7 @@ export const exteriorProducts: Product[] = [
   {
     id: 'ext-fascia',
     categoryId: 'fascia',
-    categoryName: '破風',
+    categoryName: '外部建材',
     subcategory: '破風',
     name: '破風 EP塗装',
     manufacturer: '標準',
@@ -1570,7 +1570,7 @@ export const exteriorProducts: Product[] = [
   {
     id: 'ext-gutter-horizontal',
     categoryId: 'gutter',
-    categoryName: '樋・水切',
+    categoryName: '外部建材',
     subcategory: '軒樋',
     name: 'ファインスケアNF-I型',
     manufacturer: 'Panasonic',
@@ -1596,7 +1596,7 @@ export const exteriorProducts: Product[] = [
   {
     id: 'ext-gutter-vertical',
     categoryId: 'gutter',
-    categoryName: '樋・水切',
+    categoryName: '外部建材',
     subcategory: '竪樋',
     name: 'S30',
     manufacturer: 'Panasonic',
@@ -3228,7 +3228,7 @@ export const exteriorProducts: Product[] = [
   {
     id: 'ext-parapet-coping',
     categoryId: 'gutter',
-    categoryName: '樋・水切',
+    categoryName: '外部建材',
     subcategory: 'パラペット笠木',
     name: 'パラペット笠木',
     manufacturer: '標準',
@@ -3252,7 +3252,7 @@ export const exteriorProducts: Product[] = [
   {
     id: 'ext-balcony-coping',
     categoryId: 'gutter',
-    categoryName: '樋・水切',
+    categoryName: '外部建材',
     subcategory: 'バルコニー笠木',
     name: 'バルコニー笠木',
     manufacturer: '標準',
@@ -3276,7 +3276,7 @@ export const exteriorProducts: Product[] = [
   {
     id: 'ext-foundation-flashing',
     categoryId: 'gutter',
-    categoryName: '樋・水切',
+    categoryName: '外部建材',
     subcategory: '土台水切',
     name: '土台水切',
     manufacturer: '城東テクノ',

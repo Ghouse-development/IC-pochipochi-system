@@ -8,6 +8,7 @@ export interface CategoryOrderConfig {
 }
 
 // 外装カテゴリ順序
+// 順序: 外壁 → ポーチ → 屋根 → 軒天 → 外部建材 → 窓 → 玄関ドア → 外部設備 → TV視聴 → ガレージシャッター → 庇 → 換気システム → エコキュート → 太陽光・蓄電池
 export const EXTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
   {
     name: '外壁',
@@ -73,14 +74,52 @@ export const EXTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
     ]
   },
   {
-    name: '窓タイプ',
-    icon: '🪟',
-    subcategoryOrder: ['窓タイプ']
+    name: 'ポーチ',
+    icon: '🚶',
+    subcategoryOrder: [
+      'メンフィス',
+      'モルタル金鏝抑え',
+      'ネイチャーII',
+      'ベスパ',
+      'ランドストン',
+      'ピエトラソーニ',
+      'ポーチサイズ拡張',
+    ]
   },
   {
     name: '屋根',
     icon: '🏛️',
     subcategoryOrder: ['屋根材']
+  },
+  {
+    name: '軒天',
+    icon: '📐',
+    subcategoryOrder: [
+      'エンボス',
+      'アルテザート',
+      'ラフォーレソレイユ',
+      'ラフォーレティンバー',
+    ]
+  },
+  {
+    name: '外部建材',
+    icon: '🔧',
+    subcategoryOrder: [
+      // 樋関連
+      '軒樋', '竪樋', '土台水切', 'パラペット笠木', 'バルコニー笠木',
+      // 破風
+      '破風',
+    ]
+  },
+  {
+    name: '樋・水切',
+    icon: '💧',
+    subcategoryOrder: ['軒樋', '竪樋', '土台水切', 'パラペット笠木', 'バルコニー笠木']
+  },
+  {
+    name: '破風',
+    icon: '🏠',
+    subcategoryOrder: ['破風']
   },
   {
     name: '窓',
@@ -96,54 +135,6 @@ export const EXTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
     name: '玄関ドア',
     icon: '🚪',
     subcategoryOrder: ['ヴェナートD30', '玄関ドアオプション']
-  },
-  {
-    name: '樋・水切',
-    icon: '💧',
-    subcategoryOrder: ['軒樋', '竪樋', '土台水切', 'パラペット笠木', 'バルコニー笠木']
-  },
-  {
-    name: '軒天',
-    icon: '📐',
-    subcategoryOrder: [
-      'エンボス',
-      'アルテザート',
-      'ラフォーレソレイユ',
-      'ラフォーレティンバー',
-    ]
-  },
-  {
-    name: 'ポーチ',
-    icon: '🚶',
-    subcategoryOrder: [
-      'メンフィス',
-      'モルタル金鏝抑え',
-      'ネイチャーII',
-      'ベスパ',
-      'ランドストン',
-      'ピエトラソーニ',
-      'ポーチサイズ拡張',
-    ]
-  },
-  {
-    name: '庇',
-    icon: '🏗️',
-    subcategoryOrder: ['アルミ庇']
-  },
-  {
-    name: 'ガレージシャッター',
-    icon: '🚗',
-    subcategoryOrder: ['ガレージシャッター', 'ガレージシャッターオプション']
-  },
-  {
-    name: '電動ガレージシャッター',
-    icon: '🚗',
-    subcategoryOrder: ['電動ガレージシャッター']
-  },
-  {
-    name: '破風',
-    icon: '🏠',
-    subcategoryOrder: ['破風']
   },
   {
     name: '外部設備',
@@ -171,6 +162,21 @@ export const EXTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
     subcategoryOrder: ['TV視聴']
   },
   {
+    name: 'ガレージシャッター',
+    icon: '🚗',
+    subcategoryOrder: ['ガレージシャッター', 'ガレージシャッターオプション']
+  },
+  {
+    name: '電動ガレージシャッター',
+    icon: '🚗',
+    subcategoryOrder: ['電動ガレージシャッター']
+  },
+  {
+    name: '庇',
+    icon: '🏗️',
+    subcategoryOrder: ['アルミ庇']
+  },
+  {
     name: '換気システム',
     icon: '🌀',
     subcategoryOrder: ['換気ガラリ', 'DSDD給気口', 'サイクロン給気フード']
@@ -190,6 +196,11 @@ export const EXTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
     name: '太陽光・蓄電池',
     icon: '☀️',
     subcategoryOrder: ['太陽光パネル', '蓄電池', '中継ポール']
+  },
+  {
+    name: '窓タイプ',
+    icon: '🪟',
+    subcategoryOrder: ['窓タイプ']
   },
 ];
 
