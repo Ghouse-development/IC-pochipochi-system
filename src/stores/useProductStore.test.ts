@@ -29,6 +29,7 @@ describe('useProductStore', () => {
       exteriorProducts: [],
       interiorProducts: [],
       waterProducts: [],
+      furnitureProducts: [],
     });
   });
 

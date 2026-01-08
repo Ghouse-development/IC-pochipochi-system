@@ -25,7 +25,7 @@ export const CART_MILESTONES = {
 // カテゴリ分類
 export const CATEGORY_GROUPS = {
   /** 外装カテゴリ */
-  EXTERIOR: ['外壁', 'ポーチ', '屋根', '樋', '軒天', '破風', '雨戸'] as readonly string[],
+  EXTERIOR: ['外壁', 'ポーチ', '屋根', '樋', '軒天', '破風', '窓', '玄関ドア'] as readonly string[],
   /** 内装カテゴリ */
   INTERIOR: ['床材', '壁クロス', '天井クロス', '巾木', '建具', '収納'] as readonly string[],
   /** 設備カテゴリ */

@@ -51,7 +51,7 @@ const CATEGORY_GROUPS = {
 
 // カテゴリからグループを判定
 const getCategoryGroup = (categoryName: string): keyof typeof CATEGORY_GROUPS => {
-  const exteriorKeywords = ['外壁', '屋根', '玄関', 'サッシ', '軒天', '破風', '雨樋', 'ポスト', '表札', 'バルコニー', '庇'];
+  const exteriorKeywords = ['外壁', '屋根', '玄関', '窓', '軒天', '破風', '樋', 'ポーチ', '庇'];
   const interiorKeywords = ['床', 'クロス', '巾木', '建具', '階段', '収納', 'カーテン', 'ブラインド'];
 
   if (exteriorKeywords.some((kw) => categoryName.includes(kw))) {

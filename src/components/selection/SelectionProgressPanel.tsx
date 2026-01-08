@@ -30,7 +30,7 @@ const CATEGORY_GROUPS = {
     label: '外装',
     icon: Home,
     color: 'blue',
-    categories: ['外壁', '屋根', '玄関ドア', 'サッシ', '軒天', '破風', '雨樋', 'ポスト', '表札'],
+    categories: ['外壁', '屋根', '玄関ドア', '窓', '軒天', '破風', '樋', 'ポーチ'],
   },
   interior: {
     label: '内装',

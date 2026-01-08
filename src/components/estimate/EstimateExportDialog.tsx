@@ -10,6 +10,9 @@ import {
   type EstimateData,
 } from '../../utils/estimateExport';
 import type { PlanType } from '../../types/product';
+import { createLogger } from '../../lib/logger';
+
+const logger = createLogger('EstimateExport');
 
 interface EstimateExportDialogProps {
   isOpen: boolean;
@@ -80,7 +83,7 @@ export const EstimateExportDialog = ({ isOpen, onClose }: EstimateExportDialogPr
       setExportSuccess('pdf');
       setTimeout(() => setExportSuccess(null), 3000);
     } catch (error) {
-      console.error('PDF export error:', error);
+      logger.error('PDF出力エラー:', error);
       toast.error('エラー', 'PDFの出力に失敗しました。再度お試しください。');
     } finally {
       setIsExporting(null);
@@ -96,7 +99,7 @@ export const EstimateExportDialog = ({ isOpen, onClose }: EstimateExportDialogPr
       setExportSuccess('excel');
       setTimeout(() => setExportSuccess(null), 3000);
     } catch (error) {
-      console.error('Excel export error:', error);
+      logger.error('Excel出力エラー:', error);
       toast.error('エラー', 'Excelの出力に失敗しました。再度お試しください。');
     } finally {
       setIsExporting(null);

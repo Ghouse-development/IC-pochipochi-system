@@ -25,6 +25,9 @@ import { exportToExcel } from '../../utils/estimateExport';
 import { generateSpecificationPDF } from '../../utils/specificationPDF';
 import { generatePresentation } from '../../utils/presentationGenerator';
 import { generateSimplifiedReport } from '../../utils/simplifiedReportPDF';
+import { createLogger } from '../../lib/logger';
+
+const logger = createLogger('ExportPanel');
 
 interface ExportPanelProps {
   compact?: boolean;
@@ -71,7 +74,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({ compact = false }) => 
       setLastExported('見積書');
       setTimeout(() => setExportState((prev) => ({ ...prev, estimate: 'idle' })), 3000);
     } catch (error) {
-      console.error('Export error:', error);
+      logger.error('見積書出力エラー:', error);
       setExportState((prev) => ({ ...prev, estimate: 'error' }));
       setTimeout(() => setExportState((prev) => ({ ...prev, estimate: 'idle' })), 3000);
     }
@@ -91,7 +94,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({ compact = false }) => 
       setLastExported('仕様書');
       setTimeout(() => setExportState((prev) => ({ ...prev, specification: 'idle' })), 3000);
     } catch (error) {
-      console.error('Export error:', error);
+      logger.error('仕様書出力エラー:', error);
       setExportState((prev) => ({ ...prev, specification: 'error' }));
       setTimeout(() => setExportState((prev) => ({ ...prev, specification: 'idle' })), 3000);
     }
@@ -110,7 +113,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({ compact = false }) => 
       setLastExported('プレゼン資料');
       setTimeout(() => setExportState((prev) => ({ ...prev, presentation: 'idle' })), 3000);
     } catch (error) {
-      console.error('Export error:', error);
+      logger.error('プレゼン出力エラー:', error);
       setExportState((prev) => ({ ...prev, presentation: 'error' }));
       setTimeout(() => setExportState((prev) => ({ ...prev, presentation: 'idle' })), 3000);
     }
@@ -130,7 +133,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({ compact = false }) => 
       setLastExported('確認レポート');
       setTimeout(() => setExportState((prev) => ({ ...prev, simplified: 'idle' })), 3000);
     } catch (error) {
-      console.error('Export error:', error);
+      logger.error('確認レポート出力エラー:', error);
       setExportState((prev) => ({ ...prev, simplified: 'error' }));
       setTimeout(() => setExportState((prev) => ({ ...prev, simplified: 'idle' })), 3000);
     }
