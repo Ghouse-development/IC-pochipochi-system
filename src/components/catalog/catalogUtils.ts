@@ -124,12 +124,12 @@ export interface StepDefinition {
 }
 
 export const STEPS: StepDefinition[] = [
-  { id: 'design', label: '設計', description: '間取りで決まる項目', icon: Ruler, emoji: '📐', gradient: 'from-purple-500 to-violet-500' },
-  { id: 'exterior', label: '外装', description: '外壁・屋根・玄関', icon: Home, emoji: '🏠', gradient: 'from-emerald-500 to-teal-500' },
+  { id: 'design', label: '設計', description: '間取りで決まる項目', icon: Ruler, emoji: '📐', gradient: 'from-blue-500 to-indigo-500' },
+  { id: 'exterior', label: '外装', description: '外壁・屋根・玄関', icon: Home, emoji: '🏠', gradient: 'from-blue-500 to-indigo-500' },
   { id: 'interior', label: '内装', description: '床・壁・建具', icon: Sofa, emoji: '🛋️', gradient: 'from-blue-500 to-indigo-500' },
-  { id: 'equipment', label: '水廻り設備', description: 'キッチン・バス・トイレ', icon: Wrench, emoji: '🚿', gradient: 'from-cyan-500 to-blue-500' },
-  { id: 'electrical', label: '電気設備', description: '照明・スイッチ・コンセント', icon: Zap, emoji: '⚡', gradient: 'from-yellow-500 to-orange-500' },
-  { id: 'furniture', label: '家具・家電', description: 'カーテン・エアコン', icon: Armchair, emoji: '🪑', gradient: 'from-amber-500 to-orange-500' },
+  { id: 'equipment', label: '水廻り設備', description: 'キッチン・バス・トイレ', icon: Wrench, emoji: '🚿', gradient: 'from-blue-500 to-indigo-500' },
+  { id: 'electrical', label: '電気設備', description: '照明・スイッチ・コンセント', icon: Zap, emoji: '⚡', gradient: 'from-blue-500 to-indigo-500' },
+  { id: 'furniture', label: '家具・家電', description: 'カーテン・エアコン', icon: Armchair, emoji: '🪑', gradient: 'from-blue-500 to-indigo-500' },
 ];
 
 // お客様には非表示にするカテゴリ名（自動連動または設計者のみ選択）
