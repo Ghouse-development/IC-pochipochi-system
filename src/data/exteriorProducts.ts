@@ -2293,29 +2293,236 @@ export const exteriorProducts: Product[] = [
     ]
   },
 
-  // ===== 玄関ドア - ヴェナートD30 =====
+  // ===== 玄関ドア - ヴェナートD30 N08 =====
   {
-    id: 'ext-door-venato-d30',
+    id: 'ext-door-venato-d30-n08',
     categoryId: 'entrance-door',
     categoryName: '玄関ドア',
     subcategory: 'ヴェナートD30',
-    name: 'ヴェナートD30',
+    name: 'ヴェナートD30 N08',
     manufacturer: 'YKKAP',
-    modelNumber: 'D30',
+    modelNumber: 'D30-N08',
     unit: 'piece',
     isOption: false,
-    description: '100V電気錠 ポケットキー付き 防火・非防火対応 機密性能・断熱性能の観点から窓無しの扉を標準設定・推奨 LIFE+/LACIE/HOURS標準、LIFEはオプション(¥75,000/カ所)',
+    description: '木目の水平線が印象的なドアデザイン 100V電気錠 ポケットキー付き 防火・非防火対応',
     variants: [
-      { id: 'v1', color: 'N08（木調スタイル）', colorCode: 'N08', images: [] },
-      { id: 'v2', color: 'N18（ルバーモダンスタイル）', colorCode: 'N18', images: [] },
-      { id: 'v3', color: 'N15（マリンプライベートスタイル）', colorCode: 'N15', images: [] },
-      { id: 'v4', color: 'C10（フレーンデザイン）', colorCode: 'C10', images: [] },
+      { id: 'v1', color: 'キャラメルチーク', colorCode: 'N08-CT', images: [] },
+      { id: 'v2', color: 'ショコラウォールナット', colorCode: 'N08-SW', images: [] },
+      { id: 'v3', color: 'ハニーチェリー', colorCode: 'N08-HC', images: [] },
+      { id: 'v4', color: '桑炭', colorCode: 'N08-KS', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 0 },
       { plan: 'HOURS', price: 0 },
       { plan: 'LIFE+', price: 0 },
       { plan: 'LIFE', price: 75000 }
+    ]
+  },
+
+  // ===== 玄関ドア - ヴェナートD30 N18 =====
+  {
+    id: 'ext-door-venato-d30-n18',
+    categoryId: 'entrance-door',
+    categoryName: '玄関ドア',
+    subcategory: 'ヴェナートD30',
+    name: 'ヴェナートD30 N18',
+    manufacturer: 'YKKAP',
+    modelNumber: 'D30-N18',
+    unit: 'piece',
+    isOption: false,
+    description: '框とくふなバランスが印象的なコンテンポラリーデザイン 100V電気錠 ポケットキー付き 防火・非防火対応',
+    variants: [
+      { id: 'v1', color: 'キャラメルチーク', colorCode: 'N18-CT', images: [] },
+      { id: 'v2', color: 'ショコラウォールナット', colorCode: 'N18-SW', images: [] },
+      { id: 'v3', color: 'ハニーチェリー', colorCode: 'N18-HC', images: [] },
+      { id: 'v4', color: 'マキアートパイン', colorCode: 'N18-MP', images: [] },
+      { id: 'v5', color: 'ティーブラウン', colorCode: 'N18-TB', images: [] },
+      { id: 'v6', color: '桑炭', colorCode: 'N18-KS', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 75000 }
+    ]
+  },
+
+  // ===== 玄関ドア - ヴェナートD30 N15 =====
+  {
+    id: 'ext-door-venato-d30-n15',
+    categoryId: 'entrance-door',
+    categoryName: '玄関ドア',
+    subcategory: 'ヴェナートD30',
+    name: 'ヴェナートD30 N15',
+    manufacturer: 'YKKAP',
+    modelNumber: 'D30-N15',
+    unit: 'piece',
+    isOption: false,
+    description: '木目の水平線が印象的なドアデザイン 100V電気錠 ポケットキー付き 防火・非防火対応',
+    variants: [
+      { id: 'v1', color: 'キャラメルチーク', colorCode: 'N15-CT', images: [] },
+      { id: 'v2', color: 'ショコラウォールナット', colorCode: 'N15-SW', images: [] },
+      { id: 'v3', color: 'ハニーチェリー', colorCode: 'N15-HC', images: [] },
+      { id: 'v4', color: 'マキアートパイン', colorCode: 'N15-MP', images: [] },
+      { id: 'v5', color: '桑炭', colorCode: 'N15-KS', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 75000 }
+    ]
+  },
+
+  // ===== 玄関ドア - ヴェナートD30 C10 =====
+  {
+    id: 'ext-door-venato-d30-c10',
+    categoryId: 'entrance-door',
+    categoryName: '玄関ドア',
+    subcategory: 'ヴェナートD30',
+    name: 'ヴェナートD30 C10',
+    manufacturer: 'YKKAP',
+    modelNumber: 'D30-C10',
+    unit: 'piece',
+    isOption: false,
+    description: 'カラーの組合わせや形状でエントランス意匠を演出するプレーンデザイン 100V電気錠 ポケットキー付き 防火・非防火対応',
+    variants: [
+      { id: 'v1', color: 'プラチナステン', colorCode: 'C10-PS', images: [] },
+      { id: 'v2', color: 'カームブラック', colorCode: 'C10-CB', images: [] },
+      { id: 'v3', color: 'ピュアシルバー', colorCode: 'C10-PV', images: [] },
+      { id: 'v4', color: 'ホワイト', colorCode: 'C10-WH', images: [] },
+      { id: 'v5', color: 'マットブラウン', colorCode: 'C10-MB', images: [] },
+      { id: 'v6', color: 'マットダークグレー', colorCode: 'C10-MDG', images: [] },
+      { id: 'v7', color: 'マットネイビー', colorCode: 'C10-MN', images: [] },
+      { id: 'v8', color: 'マットワインレッド', colorCode: 'C10-MWR', images: [] },
+      { id: 'v9', color: 'マットモスグリーン', colorCode: 'C10-MMG', images: [] },
+      { id: 'v10', color: 'マットオリーブ', colorCode: 'C10-MO', images: [] },
+      { id: 'v11', color: 'マットベージュ', colorCode: 'C10-MBE', images: [] },
+      { id: 'v12', color: 'マットアイボリー', colorCode: 'C10-MI', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 75000 }
+    ]
+  },
+
+  // ===== 玄関ドアオプション - ハンドル形状（電子錠）ストレートハンドル =====
+  {
+    id: 'ext-door-handle-straight',
+    categoryId: 'entrance-door',
+    categoryName: '玄関ドア',
+    subcategory: '玄関ドアオプション',
+    name: 'ストレートハンドル（電子錠）',
+    manufacturer: 'YKKAP',
+    modelNumber: 'HANDLE-STRAIGHT',
+    unit: 'piece',
+    isOption: false,
+    description: '電子錠用ストレートハンドル 人気商品（HIT!）',
+    variants: [
+      { id: 'v1', color: 'ブラック', colorCode: 'BK', images: [] },
+      { id: 'v2', color: 'シルバー', colorCode: 'SV', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+
+  // ===== 玄関ドアオプション - ハンドル形状（電子錠）洋風カーブハンドル =====
+  {
+    id: 'ext-door-handle-curve',
+    categoryId: 'entrance-door',
+    categoryName: '玄関ドア',
+    subcategory: '玄関ドアオプション',
+    name: '洋風カーブハンドル（電子錠）',
+    manufacturer: 'YKKAP',
+    modelNumber: 'HANDLE-CURVE',
+    unit: 'piece',
+    isOption: true,
+    description: '電子錠用洋風カーブハンドル',
+    variants: [
+      { id: 'v1', color: '標準', colorCode: 'STD', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+
+  // ===== 玄関ドアオプション - ハンドル形状（手動錠）丸型ストレートハンドル =====
+  {
+    id: 'ext-door-handle-round-straight',
+    categoryId: 'entrance-door',
+    categoryName: '玄関ドア',
+    subcategory: '玄関ドアオプション',
+    name: '丸型ストレートハンドル（手動錠）',
+    manufacturer: 'YKKAP',
+    modelNumber: 'HANDLE-ROUND-STRAIGHT',
+    unit: 'piece',
+    isOption: true,
+    description: '手動錠用丸型ストレートハンドル',
+    variants: [
+      { id: 'v1', color: 'シルバー', colorCode: 'SV', images: [] },
+      { id: 'v2', color: 'ブラック', colorCode: 'BK', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+
+  // ===== 玄関ドアオプション - ハンドル形状（手動錠）角型ストレートハンドル =====
+  {
+    id: 'ext-door-handle-square-straight',
+    categoryId: 'entrance-door',
+    categoryName: '玄関ドア',
+    subcategory: '玄関ドアオプション',
+    name: '角型ストレートハンドル（手動錠）',
+    manufacturer: 'YKKAP',
+    modelNumber: 'HANDLE-SQUARE-STRAIGHT',
+    unit: 'piece',
+    isOption: true,
+    description: '手動錠用角型ストレートハンドル',
+    variants: [
+      { id: 'v1', color: 'シルバー', colorCode: 'SV', images: [] },
+      { id: 'v2', color: 'ブラック', colorCode: 'BK', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+
+  // ===== 玄関ドアオプション - ハンドル形状（手動錠）ロートアイアン調ハンドル =====
+  {
+    id: 'ext-door-handle-iron',
+    categoryId: 'entrance-door',
+    categoryName: '玄関ドア',
+    subcategory: '玄関ドアオプション',
+    name: 'ロートアイアン調ハンドル（手動錠）',
+    manufacturer: 'YKKAP',
+    modelNumber: 'HANDLE-IRON',
+    unit: 'piece',
+    isOption: true,
+    description: '手動錠用ロートアイアン調ハンドル',
+    variants: [
+      { id: 'v1', color: 'ブラック', colorCode: 'BK', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
     ]
   },
 
@@ -2330,7 +2537,7 @@ export const exteriorProducts: Product[] = [
     modelNumber: 'FACE-AUTH',
     unit: 'piece',
     isOption: true,
-    description: '顔認証キー 非防火地域のみ使用可能 音声ガイド付き',
+    description: '顔認証キー 非防火地域のみ使用可能 音声ガイド付き 顔データの登録も簡単',
     variants: [
       { id: 'v1', color: '標準', colorCode: '標準', images: [] },
     ],
@@ -2339,6 +2546,29 @@ export const exteriorProducts: Product[] = [
       { plan: 'HOURS', price: 200000 },
       { plan: 'LIFE+', price: 200000 },
       { plan: 'LIFE', price: 200000 }
+    ]
+  },
+
+  // ===== 玄関ドアオプション - 操作盤付インターフェースユニット =====
+  {
+    id: 'ext-door-interface-unit',
+    categoryId: 'entrance-door',
+    categoryName: '玄関ドア',
+    subcategory: '玄関ドアオプション',
+    name: '操作盤付インターフェースユニット',
+    manufacturer: 'YKKAP',
+    modelNumber: 'INTERFACE-UNIT',
+    unit: 'piece',
+    isOption: true,
+    description: '玄関ドア付近に設置する操作盤付インターフェースユニット',
+    variants: [
+      { id: 'v1', color: '標準', colorCode: '標準', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
     ]
   },
 
