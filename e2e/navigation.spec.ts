@@ -9,7 +9,7 @@ test.describe('ナビゲーション', () => {
   });
 
   test('各ルートにアクセス可能', async ({ page }) => {
-    // 外装
+    // 外装（自動カテゴリ選択でURLにカテゴリIDが追加される）
     await page.goto('/catalog/exterior');
     await expect(page).toHaveURL(/\/catalog\/exterior/);
 
@@ -17,9 +17,9 @@ test.describe('ナビゲーション', () => {
     await page.goto('/catalog/interior');
     await expect(page).toHaveURL(/\/catalog\/interior/);
 
-    // 設備
-    await page.goto('/catalog/water');
-    await expect(page).toHaveURL(/\/catalog\/water/);
+    // 水廻り設備（旧: water → 新: equipment）
+    await page.goto('/catalog/equipment');
+    await expect(page).toHaveURL(/\/catalog\/equipment/);
   });
 
   test('管理画面へのアクセス', async ({ page }) => {
