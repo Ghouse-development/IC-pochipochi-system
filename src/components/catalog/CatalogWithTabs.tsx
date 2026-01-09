@@ -436,6 +436,16 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab, exteriorProducts, interiorProducts, waterProducts, furnitureProducts, cartItems]); // selectedCategoryIdは初期設定時のみ使用
 
+  // タブ変更時にカテゴリが未選択の場合、最初のカテゴリを自動選択
+  useEffect(() => {
+    if (categories.length > 0 && !selectedCategoryId) {
+      const firstCategory = categories[0];
+      if (firstCategory) {
+        navigate(`/catalog/${activeTab}/${firstCategory.id}`, { replace: true });
+      }
+    }
+  }, [categories, selectedCategoryId, activeTab, navigate]);
+
   // 静的データからItemWithDetails形式のデータを取得
   const getStaticItems = useCallback((tab: string): ItemWithDetails[] => {
     let products: CatalogProduct[] = [];
@@ -608,6 +618,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     if (hasSeriesSelection(selectedManufacturer) && !selectedSeries) return false;
     return true;
   }, [needsManufacturerSelection, selectedManufacturer, selectedSeries]);
+
+  // 外壁の固定素材タイプリスト（常に3つ表示）
+  const EXTERIOR_WALL_MATERIAL_TYPES = ['窯業系サイディング', 'ガルバリウム鋼板', '塗り壁'];
 
   // 利用可能な素材タイプを抽出（固定順序: 窯業系サイディング → ガルバリウム鋼板 → 塗り壁）
   const availableMaterialTypes = useMemo(() => {
@@ -1559,30 +1572,33 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                     }}
                   />
                 </div>
-              ) : currentCategoryName === '外壁' && availableMaterialTypes.length > 1 && !selectedMaterialType ? (
-                /* 素材タイプ選択カード（外壁用）- シンプルモダン */
+              ) : currentCategoryName === '外壁' && !selectedMaterialType ? (
+                /* 素材タイプ選択カード（外壁用）- 常に3つ表示 */
                 <div className="max-w-3xl mx-auto px-4">
                   <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-6">
                     素材を選択
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    {availableMaterialTypes.map((material) => (
-                      <button
-                        key={material}
-                        onClick={() => setSelectedMaterialType(material)}
-                        className="group flex items-center justify-between bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:border-gray-400 dark:hover:border-gray-500 transition-colors"
-                      >
-                        <div>
-                          <h3 className="font-medium text-gray-900 dark:text-gray-100 text-left">
-                            {material}
-                          </h3>
-                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                            {items.filter(i => i.material_type === material).length}種類
-                          </p>
-                        </div>
-                        <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors" />
-                      </button>
-                    ))}
+                    {EXTERIOR_WALL_MATERIAL_TYPES.map((material) => {
+                      const itemCount = items.filter(i => i.material_type === material).length;
+                      return (
+                        <button
+                          key={material}
+                          onClick={() => setSelectedMaterialType(material)}
+                          className="group flex items-center justify-between bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:border-gray-400 dark:hover:border-gray-500 transition-colors"
+                        >
+                          <div>
+                            <h3 className="font-medium text-gray-900 dark:text-gray-100 text-left">
+                              {material}
+                            </h3>
+                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                              {itemCount > 0 ? `${itemCount}種類` : '準備中'}
+                            </p>
+                          </div>
+                          <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors" />
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               ) : needsManufacturerSelection && !isManufacturerSelectionComplete ? (

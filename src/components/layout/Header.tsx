@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { ClipboardCheck, User, Settings, Menu, X, FileText, Upload, Share2, Scale, Moon, Sun, LogOut, BarChart3, Briefcase } from 'lucide-react';
+import { ClipboardCheck, User, Settings, Menu, X, FileText, Upload, Share2, Scale, Moon, Sun, LogOut, Briefcase } from 'lucide-react';
 import { useCartStore } from '../../stores/useCartStore';
 import { useThemeStore } from '../../stores/useThemeStore';
 import { formatPrice } from '../../lib/utils';
@@ -194,23 +194,34 @@ export const Header: React.FC<HeaderProps> = ({
                             role="menuitem"
                             onClick={() => {
                               setIsUserMenuOpen(false);
-                              onAdminClick?.();
+                              onHierarchyClick?.();
                             }}
                             className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                           >
-                            <Settings className="w-4 h-4" />
-                            管理画面
+                            <FileText className="w-4 h-4" />
+                            階層表示
                           </button>
                           <button
                             role="menuitem"
                             onClick={() => {
                               setIsUserMenuOpen(false);
-                              onHierarchyClick?.();
+                              onImageTestClick?.();
                             }}
                             className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                           >
-                            <BarChart3 className="w-4 h-4" />
-                            進捗ダッシュボード
+                            <Upload className="w-4 h-4" />
+                            画像テスト
+                          </button>
+                          <button
+                            role="menuitem"
+                            onClick={() => {
+                              setIsUserMenuOpen(false);
+                              onAdminClick?.();
+                            }}
+                            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                          >
+                            <Settings className="w-4 h-4" />
+                            アイテムのメンテナンス
                           </button>
                         </>
                       )}
@@ -233,45 +244,7 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
         
-        {/* 管理者ボタン */}
-        {isAdmin && (
-          <div className="px-4 sm:px-6 py-1 bg-gray-50 border-t border-gray-100">
-            <div className="flex justify-end gap-2">
-              <button
-                onClick={onStaffDashboardClick}
-                className="flex items-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 text-xs text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded transition-colors font-medium"
-              >
-                <Briefcase className="w-3 h-3" />
-                <span className="hidden sm:inline">スタッフダッシュボード</span>
-                <span className="sm:hidden">スタッフ</span>
-              </button>
-              <button
-                onClick={onHierarchyClick}
-                className="flex items-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 text-xs text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded transition-colors"
-              >
-                <FileText className="w-3 h-3" />
-                <span className="hidden sm:inline">階層表示</span>
-                <span className="sm:hidden">階層</span>
-              </button>
-              <button
-                onClick={onImageTestClick}
-                className="flex items-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 text-xs text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded transition-colors"
-              >
-                <Upload className="w-3 h-3" />
-                <span className="hidden sm:inline">画像テスト</span>
-                <span className="sm:hidden">画像</span>
-              </button>
-              <button
-                onClick={onAdminClick}
-                className="flex items-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 text-xs text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded transition-colors"
-              >
-                <Settings className="w-3 h-3" />
-                <span className="hidden sm:inline">アイテムのメンテナンス</span>
-                <span className="sm:hidden">管理</span>
-              </button>
-            </div>
-          </div>
-        )}
+        {/* 管理者ボタンはユーザーメニュー内に統合済み */}
         
       </header>
       
