@@ -49,6 +49,7 @@ import { EstimateExportDialog } from '../estimate/EstimateExportDialog';
 import { useSelectionStore } from '../../stores/useSelectionStore';
 import { ICProposalSelector, type ICProposalSelection } from './ICProposalSelector';
 import { AirconSelector } from './AirconSelector';
+import { EntranceDoorSelector } from './EntranceDoorSelector';
 
 // ユーティリティ関数とコンポーネント (ItemCard, SkeletonCard, EmptyState, Confetti) はインポート済み
 
@@ -618,14 +619,6 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
   // 外壁の固定素材タイプリスト（常に3つ表示）
   const EXTERIOR_WALL_MATERIAL_TYPES = ['窯業系サイディング', 'ガルバリウム鋼板', '塗り壁'];
-
-  // 玄関ドアのデザインタイプリスト（ドア本体 + ハンドル + オプション）
-  const ENTRANCE_DOOR_DESIGN_TYPES = [
-    { id: 'N08', name: 'N08', description: '木目の水平線が印象的' },
-    { id: 'N18', name: 'N18', description: '框とくふなバランスが印象的' },
-    { id: 'N15', name: 'N15', description: '木目の水平線が印象的' },
-    { id: 'C10', name: 'C10', description: 'プレーンデザイン' },
-  ];
 
   // 外部設備の必須カテゴリ（8項目）+ その他オプション
   const EXTERIOR_FACILITY_TYPES = [
@@ -1723,76 +1716,18 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                     })}
                   </div>
                 </div>
-              ) : currentCategoryName === '玄関ドア' && !selectedMaterialType ? (
-                /* ドアデザイン選択カード（玄関ドア用）- 4つのデザイン + ハンドル・オプション */
-                <div className="max-w-4xl mx-auto px-4">
-                  <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-6">
-                    ドアデザインを選択
-                  </h2>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-                    {ENTRANCE_DOOR_DESIGN_TYPES.map((design) => {
-                      const colorCount = items
-                        .filter(i => i.material_type === design.id)
-                        .reduce((sum, i) => sum + (i.variants?.length || 0), 0);
-                      return (
-                        <button
-                          key={design.id}
-                          onClick={() => setSelectedMaterialType(design.id)}
-                          className="group flex flex-col items-start bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:border-blue-400 dark:hover:border-blue-500 transition-colors"
-                        >
-                          <div className="w-full flex items-center justify-between mb-2">
-                            <h3 className="font-bold text-lg text-gray-900 dark:text-gray-100">
-                              {design.name}
-                            </h3>
-                            <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-blue-500 transition-colors" />
-                          </div>
-                          <p className="text-xs text-gray-500 dark:text-gray-400 text-left">
-                            {design.description}
-                          </p>
-                          <p className="text-xs text-blue-600 dark:text-blue-400 mt-2">
-                            {colorCount > 0 ? `${colorCount}色` : '準備中'}
-                          </p>
-                        </button>
-                      );
-                    })}
-                  </div>
-                  {/* ハンドル・オプションセクション */}
-                  <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-                    <h3 className="text-md font-medium text-gray-900 dark:text-gray-100 mb-4">
-                      ハンドル・オプション
-                    </h3>
-                    <div className="grid grid-cols-2 gap-3">
-                      <button
-                        onClick={() => setSelectedMaterialType('ハンドル')}
-                        className="group flex items-center justify-between bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:border-blue-400 dark:hover:border-blue-500 transition-colors"
-                      >
-                        <div>
-                          <h4 className="font-medium text-gray-900 dark:text-gray-100 text-left">
-                            ハンドル形状
-                          </h4>
-                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                            {items.filter(i => i.material_type === 'ハンドル').length}種類
-                          </p>
-                        </div>
-                        <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-blue-500 transition-colors" />
-                      </button>
-                      <button
-                        onClick={() => setSelectedMaterialType('オプション')}
-                        className="group flex items-center justify-between bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:border-blue-400 dark:hover:border-blue-500 transition-colors"
-                      >
-                        <div>
-                          <h4 className="font-medium text-gray-900 dark:text-gray-100 text-left">
-                            追加オプション
-                          </h4>
-                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                            {items.filter(i => i.material_type === 'オプション').length}種類
-                          </p>
-                        </div>
-                        <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-blue-500 transition-colors" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
+              ) : currentCategoryName === '玄関ドア' ? (
+                /* 玄関ドア選択UI（5ステップ） */
+                <EntranceDoorSelector
+                  selectedPlan={selectedPlanId}
+                  onComplete={() => {
+                    toast.success('玄関ドアをカートに追加しました');
+                    goToNextCategory();
+                  }}
+                  onCancel={() => {
+                    // 前のカテゴリに戻るか、サイドバーで別のカテゴリを選択可能
+                  }}
+                />
               ) : currentCategoryName === '外部設備' && !selectedMaterialType ? (
                 /* 外部設備カテゴリ選択カード */
                 <div className="max-w-4xl mx-auto px-4">
