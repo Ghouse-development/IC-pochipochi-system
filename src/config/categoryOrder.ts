@@ -77,13 +77,19 @@ export const EXTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
     name: 'ポーチ',
     icon: '🚶',
     subcategoryOrder: [
+      'モルタル金鏝抑え',  // 標準（目地不要）
       'メンフィス',
-      'モルタル金鏝抑え',
       'ネイチャーII',
       'ベスパ',
       'ランドストン',
       'ピエトラソーニ',
-      'ポーチサイズ拡張',
+    ]
+  },
+  {
+    name: 'ポーチ目地',
+    icon: '🧱',
+    subcategoryOrder: [
+      '目地',
     ]
   },
   {
@@ -205,7 +211,53 @@ export const EXTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
 ];
 
 // 内装カテゴリ順序
+// ※ベース床・ベースクロス（壁）・ベースクロス（天井）・ベース建具・周辺部材は必須項目のため先頭に配置
 export const INTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
+  // ===== 必須項目（先頭に表示） =====
+  {
+    name: 'ベース床',
+    icon: '🪵',
+    subcategoryOrder: [
+      'フローリング',
+      '無垢床',
+      'フロアタイル',
+    ]
+  },
+  {
+    name: 'ベースクロス（壁）',
+    icon: '🧱',
+    subcategoryOrder: [
+      'ベースクロス',
+      '壁クロス',
+    ]
+  },
+  {
+    name: 'ベースクロス（天井）',
+    icon: '⬆️',
+    subcategoryOrder: [
+      '天井クロス',
+    ]
+  },
+  {
+    name: 'ベース建具',
+    icon: '🚪',
+    subcategoryOrder: [
+      '室内ドア標準',
+      '室内ドア ソリッドカラー',
+      '室内ドア ペイントカラー',
+    ]
+  },
+  {
+    name: '周辺部材',
+    icon: '📐',
+    subcategoryOrder: [
+      '巾木',
+      '窓台',
+      '玄関框',
+      '床見切り',
+    ]
+  },
+  // ===== オプション項目 =====
   {
     name: '床材',
     icon: '🪵',

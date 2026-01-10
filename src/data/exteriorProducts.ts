@@ -1502,6 +1502,92 @@ export const exteriorProducts: Product[] = [
     ]
   },
 
+  // ===== ポーチ目地（モルタル金鏝抑え以外のタイル用） =====
+  {
+    id: 'ext-porch-grout-white',
+    categoryId: 'porch-grout',
+    categoryName: 'ポーチ目地',
+    subcategory: '目地',
+    name: 'ホワイト目地',
+    manufacturer: 'LIXIL',
+    modelNumber: 'GROUT-WH',
+    unit: 'set',
+    isOption: false,
+    description: 'タイル用目地材（標準）ポーチタイル選択時に必要',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: 'WH', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+  {
+    id: 'ext-porch-grout-gray',
+    categoryId: 'porch-grout',
+    categoryName: 'ポーチ目地',
+    subcategory: '目地',
+    name: 'グレー目地',
+    manufacturer: 'LIXIL',
+    modelNumber: 'GROUT-GY',
+    unit: 'set',
+    isOption: false,
+    description: 'タイル用目地材（標準）ポーチタイル選択時に必要',
+    variants: [
+      { id: 'v1', color: 'グレー', colorCode: 'GY', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+  {
+    id: 'ext-porch-grout-charcoal',
+    categoryId: 'porch-grout',
+    categoryName: 'ポーチ目地',
+    subcategory: '目地',
+    name: 'チャコール目地',
+    manufacturer: 'LIXIL',
+    modelNumber: 'GROUT-CH',
+    unit: 'set',
+    isOption: false,
+    description: 'タイル用目地材（標準）ポーチタイル選択時に必要',
+    variants: [
+      { id: 'v1', color: 'チャコール', colorCode: 'CH', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+  {
+    id: 'ext-porch-grout-beige',
+    categoryId: 'porch-grout',
+    categoryName: 'ポーチ目地',
+    subcategory: '目地',
+    name: 'ベージュ目地',
+    manufacturer: 'LIXIL',
+    modelNumber: 'GROUT-BE',
+    unit: 'set',
+    isOption: false,
+    description: 'タイル用目地材（標準）ポーチタイル選択時に必要',
+    variants: [
+      { id: 'v1', color: 'ベージュ', colorCode: 'BE', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+
   // ===== 屋根材 =====
   {
     id: 'ext-roof-nisc',
