@@ -1,8 +1,138 @@
 import React, { useState } from 'react';
-import { Check, ChevronLeft, DoorOpen, Key, Grip, Monitor } from 'lucide-react';
+import { Check, ChevronLeft, DoorOpen, Key, Grip, Monitor, Image as ImageIcon } from 'lucide-react';
 import { useCartStore } from '../../stores/useCartStore';
 import { exteriorProducts } from '../../data/exteriorProducts';
 import type { Product } from '../../types/product';
+
+// ====================
+// 選択カードコンポーネント（ItemCard風）
+// ====================
+interface SelectionCardProps {
+  id: string;
+  name: string;
+  description?: string;
+  imageUrl?: string;
+  placeholderEmoji?: string;
+  placeholderBgColor?: string;
+  isStandard?: boolean;
+  isOption?: boolean;
+  price?: number;
+  isSelected: boolean;
+  onClick: () => void;
+  colorCode?: string;
+}
+
+const SelectionCard: React.FC<SelectionCardProps> = ({
+  name,
+  description,
+  imageUrl,
+  placeholderEmoji = '📦',
+  placeholderBgColor = 'from-gray-100 to-gray-200',
+  isStandard,
+  isOption,
+  price,
+  isSelected,
+  onClick,
+  colorCode,
+}) => {
+  const [imageError, setImageError] = React.useState(false);
+
+  return (
+    <article
+      className={`group bg-white dark:bg-gray-800 rounded-2xl overflow-hidden transition-all duration-200 cursor-pointer ${
+        isSelected
+          ? 'border-4 border-blue-500 shadow-xl shadow-blue-200 dark:shadow-blue-900/50 ring-4 ring-blue-100 dark:ring-blue-900/50 scale-[1.02]'
+          : 'border-2 border-gray-200 dark:border-gray-700 shadow-md hover:shadow-xl hover:border-blue-300 dark:hover:border-blue-600 hover:scale-[1.02]'
+      }`}
+      onClick={onClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick();
+        }
+      }}
+      aria-label={`${name}${isSelected ? ' - 選択中' : ''}`}
+      aria-pressed={isSelected}
+    >
+      {/* 画像エリア */}
+      <div className="aspect-[4/3] bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
+        {imageUrl && !imageError ? (
+          <img
+            src={imageUrl}
+            alt={name}
+            loading="lazy"
+            decoding="async"
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            onError={() => setImageError(true)}
+          />
+        ) : (
+          <div className={`w-full h-full flex flex-col items-center justify-center p-4 bg-gradient-to-br ${placeholderBgColor}`}>
+            {colorCode ? (
+              <div
+                className="w-16 h-16 rounded-full border-4 border-white shadow-lg mb-2"
+                style={{ backgroundColor: colorCode }}
+              />
+            ) : (
+              <span className="text-5xl mb-2 transition-transform duration-200 group-hover:scale-110">
+                {placeholderEmoji}
+              </span>
+            )}
+            <div className="mt-2 flex items-center gap-1 text-gray-400">
+              <ImageIcon className="w-3 h-3" />
+              <span className="text-[10px]">画像準備中</span>
+            </div>
+          </div>
+        )}
+
+        {/* 標準/オプションバッジ */}
+        {(isStandard || isOption) && (
+          <div className="absolute top-2 left-2">
+            <span className={`px-2 py-1 rounded-md text-xs font-bold shadow-md ${
+              isStandard
+                ? 'bg-emerald-500 text-white'
+                : 'bg-orange-500 text-white'
+            }`}>
+              {isStandard ? '標準' : 'オプション'}
+            </span>
+          </div>
+        )}
+
+        {/* 選択済みオーバーレイ */}
+        {isSelected && (
+          <div className="absolute inset-0 bg-blue-500/30 flex items-center justify-center">
+            <div className="bg-white rounded-full p-3 shadow-xl ring-4 ring-blue-400/50">
+              <Check className="w-8 h-8 text-blue-600" strokeWidth={3} />
+            </div>
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2">
+              <span className="px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full shadow-lg">
+                選択中
+              </span>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* 情報エリア */}
+      <div className="p-4">
+        <h3 className="font-semibold text-sm text-gray-800 dark:text-gray-200 line-clamp-2 mb-1 leading-snug">
+          {name}
+        </h3>
+        {description && (
+          <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 mb-2">
+            {description}
+          </p>
+        )}
+        {price !== undefined && price > 0 && (
+          <p className="text-sm font-bold text-blue-600 dark:text-blue-400">
+            +{price.toLocaleString()}円
+          </p>
+        )}
+      </div>
+    </article>
+  );
+};
 
 // ====================
 // 画像パス定義（写真ベース）
@@ -40,73 +170,6 @@ export const KEY_IMAGES: Record<string, string> = {
   'face': `${DOOR_IMAGE_BASE}/keys/face.jpg`,
 };
 
-// ドアデザイン画像プレースホルダー生成（デザイン別の特徴的なパターン - 画像がない場合のフォールバック）
-const generateDoorPlaceholder = (designName: string): string => {
-  // デザイン別のパターンを定義
-  const designPatterns: Record<string, string> = {
-    // N08: 木目の水平線が印象的
-    'N08': `
-      <rect x="40" y="50" width="120" height="8" fill="#A67C52" rx="1"/>
-      <rect x="40" y="80" width="120" height="8" fill="#8B6914" rx="1"/>
-      <rect x="40" y="110" width="120" height="8" fill="#A67C52" rx="1"/>
-      <rect x="40" y="140" width="120" height="8" fill="#8B6914" rx="1"/>
-      <rect x="40" y="170" width="120" height="8" fill="#A67C52" rx="1"/>
-      <rect x="40" y="200" width="120" height="8" fill="#8B6914" rx="1"/>
-    `,
-    // N18: 框とバランスが印象的なコンテンポラリーデザイン
-    'N18': `
-      <rect x="40" y="40" width="120" height="4" fill="#6B5B4F"/>
-      <rect x="40" y="40" width="4" height="200" fill="#6B5B4F"/>
-      <rect x="156" y="40" width="4" height="200" fill="#6B5B4F"/>
-      <rect x="40" y="236" width="120" height="4" fill="#6B5B4F"/>
-      <rect x="40" y="135" width="120" height="4" fill="#6B5B4F"/>
-      <rect x="95" y="40" width="4" height="200" fill="#6B5B4F"/>
-    `,
-    // N15: 木目の水平線が印象的（N08と似ているが異なる配置）
-    'N15': `
-      <rect x="45" y="60" width="110" height="6" fill="#B8956B"/>
-      <rect x="45" y="90" width="110" height="6" fill="#B8956B"/>
-      <rect x="45" y="120" width="110" height="6" fill="#B8956B"/>
-      <rect x="45" y="150" width="110" height="6" fill="#B8956B"/>
-      <rect x="45" y="180" width="110" height="6" fill="#B8956B"/>
-      <rect x="45" y="210" width="110" height="6" fill="#B8956B"/>
-    `,
-    // C10: プレーンデザイン
-    'C10': `
-      <rect x="50" y="50" width="100" height="180" fill="#9B8B7A" rx="2"/>
-    `,
-  };
-
-  const pattern = designPatterns[designName] || '';
-
-  const svgContent = `
-    <svg width="200" height="300" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="door-bg-${designName}" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style="stop-color:#8B7355;stop-opacity:1" />
-          <stop offset="100%" style="stop-color:#6B5344;stop-opacity:1" />
-        </linearGradient>
-        <filter id="shadow-${designName}" x="-20%" y="-20%" width="140%" height="140%">
-          <feDropShadow dx="2" dy="4" stdDeviation="4" flood-color="#000" flood-opacity="0.2"/>
-        </filter>
-      </defs>
-      <!-- 背景 -->
-      <rect width="200" height="300" fill="#e7e5e4" rx="12"/>
-      <!-- ドア本体 -->
-      <rect x="30" y="20" width="140" height="260" fill="url(#door-bg-${designName})" rx="6" filter="url(#shadow-${designName})"/>
-      <!-- デザインパターン -->
-      ${pattern}
-      <!-- ドアハンドル -->
-      <rect x="145" y="130" width="8" height="40" fill="#D4AF37" rx="3"/>
-      <circle cx="149" cy="145" r="4" fill="#B8860B"/>
-      <!-- デザイン名 -->
-      <text x="50%" y="95%" text-anchor="middle" fill="#57534e" font-family="system-ui" font-size="18" font-weight="700">
-        ${designName}
-      </text>
-    </svg>
-  `;
-  return `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svgContent)))}`;
-};
 
 // ドアデザイン定義（4種類）
 const DOOR_DESIGNS = [
@@ -337,30 +400,22 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
           <h4 className="font-medium text-gray-800 dark:text-white mb-4">
             ドアデザインを選んでください
           </h4>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {DOOR_DESIGNS.map((design) => (
-              <button
+              <SelectionCard
                 key={design.id}
+                id={design.id}
+                name={design.name}
+                description={design.description}
+                imageUrl={DOOR_DESIGN_IMAGES[design.id]}
+                placeholderEmoji="🚪"
+                placeholderBgColor="from-amber-100 to-yellow-100"
+                isSelected={selectedDesign === design.id}
                 onClick={() => {
                   setSelectedDesign(design.id);
                   goToStep('color');
                 }}
-                className="flex flex-col items-center p-3 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500 transition-all bg-white dark:bg-gray-800"
-              >
-                <div className="w-full aspect-[2/3] rounded-lg overflow-hidden mb-2 bg-gray-100 dark:bg-gray-700">
-                  <img
-                    src={generateDoorPlaceholder(design.name)}
-                    alt={design.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <span className="text-lg font-bold text-gray-800 dark:text-white">
-                  {design.name}
-                </span>
-                <span className="text-xs text-gray-500 dark:text-gray-400 text-center mt-1">
-                  {design.description}
-                </span>
-              </button>
+              />
             ))}
           </div>
         </div>
@@ -381,26 +436,22 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
           <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
             選択中: {DOOR_DESIGNS.find(d => d.id === selectedDesign)?.name}
           </p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
             {getDoorColors().map((variant) => (
-              <button
+              <SelectionCard
                 key={variant.id}
+                id={variant.id}
+                name={variant.color}
+                imageUrl={selectedDesign ? getDoorColorImagePath(selectedDesign, variant.color) : undefined}
+                colorCode={variant.colorCode?.startsWith('#') ? variant.colorCode : undefined}
+                placeholderEmoji="🎨"
+                placeholderBgColor="from-gray-100 to-slate-100"
+                isSelected={selectedColor === variant.id}
                 onClick={() => {
                   setSelectedColor(variant.id);
                   goToStep('key');
                 }}
-                className="flex items-center gap-3 p-4 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500 transition-all"
-              >
-                {variant.colorCode && (
-                  <div
-                    className="w-8 h-8 rounded-full border border-gray-300"
-                    style={{ backgroundColor: variant.colorCode.startsWith('#') ? variant.colorCode : undefined }}
-                  />
-                )}
-                <span className="font-medium text-gray-800 dark:text-white">
-                  {variant.color}
-                </span>
-              </button>
+              />
             ))}
           </div>
         </div>
@@ -419,42 +470,28 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
             <Key className="w-5 h-5 text-blue-500" />
             鍵の種類を選んでください
           </h4>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
             {KEY_TYPES.map((keyType) => {
               const isStandard = keyType.standardFor.includes(selectedPlan);
               return (
-                <button
+                <SelectionCard
                   key={keyType.id}
+                  id={keyType.id}
+                  name={keyType.name}
+                  description={keyType.description}
+                  imageUrl={KEY_IMAGES[keyType.id]}
+                  placeholderEmoji="🔑"
+                  placeholderBgColor="from-yellow-100 to-amber-100"
+                  isStandard={isStandard}
+                  isOption={!isStandard}
+                  price={keyType.price}
+                  isSelected={selectedKeyType === keyType.id}
                   onClick={() => {
                     setSelectedKeyType(keyType.id);
-                    setSelectedHandle(null); // ハンドル選択をリセット
+                    setSelectedHandle(null);
                     goToStep('handle');
                   }}
-                  className="flex flex-col items-start p-4 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500 transition-all text-left"
-                >
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="font-bold text-gray-800 dark:text-white">
-                      {keyType.name}
-                    </span>
-                    {isStandard ? (
-                      <span className="px-2 py-0.5 text-xs bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-full">
-                        標準
-                      </span>
-                    ) : (
-                      <span className="px-2 py-0.5 text-xs bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 rounded-full">
-                        オプション
-                      </span>
-                    )}
-                  </div>
-                  <span className="text-xs text-gray-500 dark:text-gray-400">
-                    {keyType.description}
-                  </span>
-                  {keyType.price && (
-                    <span className="text-xs text-blue-600 dark:text-blue-400 mt-2">
-                      +{keyType.price.toLocaleString()}円
-                    </span>
-                  )}
-                </button>
+                />
               );
             })}
           </div>
@@ -477,25 +514,23 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
           <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
             {isElectronicKey ? '電子錠用ハンドル' : '手動錠用ハンドル'}
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
             {getAvailableHandles().map((handle) => (
-              <button
+              <SelectionCard
                 key={handle.id}
+                id={handle.id}
+                name={handle.name}
+                imageUrl={HANDLE_IMAGES[handle.id]}
+                placeholderEmoji="🖐️"
+                placeholderBgColor="from-slate-100 to-gray-200"
+                isStandard={handle.isStandard}
+                isOption={!handle.isStandard}
+                isSelected={selectedHandle === handle.id}
                 onClick={() => {
                   setSelectedHandle(handle.id);
                   goToStep('interface');
                 }}
-                className="flex items-center justify-between p-4 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500 transition-all"
-              >
-                <span className="font-medium text-gray-800 dark:text-white">
-                  {handle.name}
-                </span>
-                {handle.isStandard && (
-                  <span className="px-2 py-0.5 text-xs bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-full">
-                    標準
-                  </span>
-                )}
-              </button>
+              />
             ))}
           </div>
         </div>
@@ -517,31 +552,31 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
           <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
             玄関ドア付近に設置する操作盤です
           </p>
-          <div className="grid grid-cols-2 gap-3">
-            <button
+          <div className="grid grid-cols-2 gap-4">
+            <SelectionCard
+              id="interface-yes"
+              name="あり"
+              description="操作盤を設置する"
+              placeholderEmoji="📟"
+              placeholderBgColor="from-blue-100 to-cyan-100"
+              isSelected={wantsInterfaceUnit === true}
               onClick={() => {
                 setWantsInterfaceUnit(true);
                 handleComplete();
               }}
-              className="flex flex-col items-center p-6 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500 transition-all"
-            >
-              <Check className="w-8 h-8 text-green-500 mb-2" />
-              <span className="font-bold text-gray-800 dark:text-white">
-                あり
-              </span>
-            </button>
-            <button
+            />
+            <SelectionCard
+              id="interface-no"
+              name="なし"
+              description="操作盤を設置しない"
+              placeholderEmoji="✕"
+              placeholderBgColor="from-gray-100 to-gray-200"
+              isSelected={wantsInterfaceUnit === false}
               onClick={() => {
                 setWantsInterfaceUnit(false);
                 handleComplete();
               }}
-              className="flex flex-col items-center p-6 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500 transition-all"
-            >
-              <span className="w-8 h-8 text-gray-400 mb-2 flex items-center justify-center text-2xl">−</span>
-              <span className="font-bold text-gray-800 dark:text-white">
-                なし
-              </span>
-            </button>
+            />
           </div>
         </div>
       )}
