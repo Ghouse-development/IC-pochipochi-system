@@ -11,7 +11,6 @@ const logger = createLogger('CatalogWithTabs');
 import { useCartStore } from '../../stores/useCartStore';
 import { useProductStore } from '../../stores/useProductStore';
 import { useFavoritesStore } from '../../stores/useFavoritesStore';
-import { formatPrice } from '../../lib/utils';
 import { sanitizeSearchQuery } from '../../lib/sanitize';
 import { ANIMATION_DURATIONS, CART_MILESTONES, CATEGORY_GROUPS } from '../../lib/constants';
 import type { ItemWithDetails, Category, Product } from '../../types/database';
@@ -1290,16 +1289,10 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 })}
               </div>
 
-              {/* 合計表示 - コンパクト */}
-              <div className="flex items-center gap-2">
-                <div className="text-right hidden sm:block">
-                  <p className="text-[10px] text-white/70">合計</p>
-                  <p className="text-sm font-bold">{formatPrice(totalPrice)}</p>
-                </div>
-                <div className="bg-white/20 rounded-lg px-2 py-1 flex items-center gap-1" data-tutorial="cart-button">
-                  <ClipboardCheck className="w-4 h-4" />
-                  <span className="font-bold text-sm">{cartItems.length}</span>
-                </div>
+              {/* 選択数表示 */}
+              <div className="bg-white/20 rounded-lg px-2 py-1 flex items-center gap-1" data-tutorial="cart-button">
+                <ClipboardCheck className="w-4 h-4" />
+                <span className="font-bold text-sm">{cartItems.length}</span>
               </div>
             </div>
           </div>

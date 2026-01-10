@@ -3433,16 +3433,16 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'DSDD',
     modelNumber: 'DSDD-VENT',
     unit: 'セット',
-    isOption: false,
-    description: 'DSDD換気システムを採用',
+    isOption: true,
+    description: 'DSDD第一種全熱交換換気システムへ変更',
     variants: [
       { id: 'v1', color: '標準', colorCode: '標準', images: [] },
     ],
     pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 },
-      { plan: 'LIFE+', price: 0 },
-      { plan: 'LIFE', price: 0 }
+      { plan: 'LACIE', price: 1500000 },
+      { plan: 'HOURS', price: 1500000 },
+      { plan: 'LIFE+', price: 1500000 },
+      { plan: 'LIFE', price: 1500000 }
     ]
   },
 

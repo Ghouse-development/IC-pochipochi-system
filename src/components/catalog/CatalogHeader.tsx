@@ -1,12 +1,10 @@
 /**
  * カタログヘッダーコンポーネント
  * - ステップナビゲーション
- * - カート合計表示
  * - プログレスバー
  */
 import React from 'react';
 import { ClipboardCheck, ChevronRight } from 'lucide-react';
-import { formatPrice } from '../../lib/utils';
 import { STEPS } from './catalogUtils';
 import type { Category } from '../../types/database';
 import type { CartItem } from '../../types/product';
@@ -15,7 +13,6 @@ interface CatalogHeaderProps {
   activeTab: 'design' | 'exterior' | 'interior' | 'equipment' | 'electrical' | 'furniture';
   setActiveTab: (tab: 'design' | 'exterior' | 'interior' | 'equipment' | 'electrical' | 'furniture') => void;
   isCustomerMode: boolean;
-  totalPrice: number;
   cartItems: CartItem[];
   categories: Category[];
   getStepCount: (stepId: string) => number;
@@ -25,7 +22,6 @@ export const CatalogHeader: React.FC<CatalogHeaderProps> = ({
   activeTab,
   setActiveTab,
   isCustomerMode,
-  totalPrice,
   cartItems,
   categories,
   getStepCount,
@@ -80,16 +76,10 @@ export const CatalogHeader: React.FC<CatalogHeaderProps> = ({
             })}
           </div>
 
-          {/* 合計表示 - コンパクト */}
-          <div className="flex items-center gap-2">
-            <div className="text-right hidden sm:block">
-              <p className="text-[10px] text-white/70">合計</p>
-              <p className="text-sm font-bold">{formatPrice(totalPrice)}</p>
-            </div>
-            <div className="bg-white/20 rounded-lg px-2 py-1 flex items-center gap-1" data-tutorial="cart-button">
-              <ClipboardCheck className="w-4 h-4" />
-              <span className="font-bold text-sm">{cartItems.length}</span>
-            </div>
+          {/* 選択数表示 */}
+          <div className="bg-white/20 rounded-lg px-2 py-1 flex items-center gap-1" data-tutorial="cart-button">
+            <ClipboardCheck className="w-4 h-4" />
+            <span className="font-bold text-sm">{cartItems.length}</span>
           </div>
         </div>
       </div>
