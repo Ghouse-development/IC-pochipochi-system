@@ -1,147 +1,9 @@
 import React, { useState } from 'react';
-import { Check, ChevronLeft, Layers, Image as ImageIcon } from 'lucide-react';
+import { Check, ChevronLeft, Layers } from 'lucide-react';
 import { useCartStore } from '../../stores/useCartStore';
 import { interiorProducts } from '../../data/interiorProducts';
+import { SelectionCard } from './SelectionCard';
 import type { Product } from '../../types/product';
-
-// ====================
-// 選択カードコンポーネント（ItemCard風）
-// ====================
-interface SelectionCardProps {
-  id: string;
-  name: string;
-  description?: string;
-  imageUrl?: string;
-  placeholderEmoji?: string;
-  placeholderBgColor?: string;
-  isStandard?: boolean;
-  isOption?: boolean;
-  price?: number;
-  priceRange?: string;
-  isSelected: boolean;
-  onClick: () => void;
-  manufacturer?: string;
-}
-
-const SelectionCard: React.FC<SelectionCardProps> = ({
-  name,
-  description,
-  imageUrl,
-  placeholderEmoji = '📦',
-  placeholderBgColor = 'from-gray-100 to-gray-200',
-  isStandard,
-  isOption,
-  price,
-  priceRange,
-  isSelected,
-  onClick,
-  manufacturer,
-}) => {
-  const [imageError, setImageError] = React.useState(false);
-
-  return (
-    <article
-      className={`group bg-white dark:bg-gray-800 rounded-2xl overflow-hidden transition-all duration-200 cursor-pointer ${
-        isSelected
-          ? 'border-4 border-blue-500 shadow-xl shadow-blue-200 dark:shadow-blue-900/50 ring-4 ring-blue-100 dark:ring-blue-900/50 scale-[1.02]'
-          : 'border-2 border-gray-200 dark:border-gray-700 shadow-md hover:shadow-xl hover:border-blue-300 dark:hover:border-blue-600 hover:scale-[1.02]'
-      }`}
-      onClick={onClick}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          onClick();
-        }
-      }}
-      aria-label={`${name}${isSelected ? ' - 選択中' : ''}`}
-      aria-pressed={isSelected}
-    >
-      {/* 画像エリア */}
-      <div className="aspect-[4/3] bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
-        {imageUrl && !imageError ? (
-          <img
-            src={imageUrl}
-            alt={name}
-            loading="lazy"
-            decoding="async"
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-            onError={() => setImageError(true)}
-          />
-        ) : (
-          <div className={`w-full h-full flex flex-col items-center justify-center p-4 bg-gradient-to-br ${placeholderBgColor}`}>
-            <span className="text-5xl mb-2 transition-transform duration-200 group-hover:scale-110">
-              {placeholderEmoji}
-            </span>
-            <div className="mt-2 flex items-center gap-1 text-gray-400">
-              <ImageIcon className="w-3 h-3" />
-              <span className="text-[10px]">画像準備中</span>
-            </div>
-          </div>
-        )}
-
-        {/* 標準/オプションバッジ */}
-        {(isStandard || isOption) && (
-          <div className="absolute top-2 left-2">
-            <span className={`px-2 py-1 rounded-md text-xs font-bold shadow-md ${
-              isStandard
-                ? 'bg-emerald-500 text-white'
-                : 'bg-orange-500 text-white'
-            }`}>
-              {isStandard ? '標準' : 'オプション'}
-            </span>
-          </div>
-        )}
-
-        {/* メーカーバッジ */}
-        {manufacturer && (
-          <div className="absolute top-2 right-2">
-            <span className="px-2 py-1 rounded-md text-xs font-medium bg-white/90 text-gray-700 shadow-md">
-              {manufacturer}
-            </span>
-          </div>
-        )}
-
-        {/* 選択済みオーバーレイ */}
-        {isSelected && (
-          <div className="absolute inset-0 bg-blue-500/30 flex items-center justify-center">
-            <div className="bg-white rounded-full p-3 shadow-xl ring-4 ring-blue-400/50">
-              <Check className="w-8 h-8 text-blue-600" strokeWidth={3} />
-            </div>
-            <div className="absolute bottom-2 left-1/2 -translate-x-1/2">
-              <span className="px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full shadow-lg">
-                選択中
-              </span>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* 情報エリア */}
-      <div className="p-4">
-        <h3 className="font-semibold text-sm text-gray-800 dark:text-gray-200 line-clamp-2 mb-1 leading-snug">
-          {name}
-        </h3>
-        {description && (
-          <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 mb-2">
-            {description}
-          </p>
-        )}
-        {priceRange && (
-          <p className="text-sm font-bold text-blue-600 dark:text-blue-400">
-            {priceRange}
-          </p>
-        )}
-        {price !== undefined && price > 0 && (
-          <p className="text-sm font-bold text-blue-600 dark:text-blue-400">
-            +{price.toLocaleString()}円
-          </p>
-        )}
-      </div>
-    </article>
-  );
-};
 
 // ====================
 // 階段タイプ定義
@@ -184,7 +46,7 @@ const WOOD_MANUFACTURERS = [
 const HANDRAIL_TYPES = [
   { id: 'lixil-white', name: 'LIXIL ホワイト', productId: 'int-stairs-002', description: '壁付I型手摺', isStandard: true },
   { id: 'lixil-black', name: 'LIXIL ブラック', productId: 'int-stairs-002', description: '壁付I型手摺', isStandard: false },
-  { id: 'iron-handrail', name: 'アイアン手すり', productId: 'int-stair-hall-handrail', description: 'フラットバー上桟+中桟2本', isStandard: false, price: 240000 },
+  { id: 'iron-handrail', name: 'アイアン手すり', productId: 'int-stair-005', description: 'フラットバー上桟+中桟2本', isStandard: false, price: 240000 },
   { id: 'none', name: '手摺なし', description: '手摺を設置しない', isStandard: false },
 ];
 
@@ -192,8 +54,8 @@ const HANDRAIL_TYPES = [
 const STAIR_OPTIONS = [
   { id: 'landing', name: '踊り場形状変更', productId: 'int-stair-landing', description: '踊り場を追加', price: 80000 },
   { id: 'turn', name: '一曲がり追加', productId: 'int-stair-004b', description: 'アイアン階段用', price: 100000 },
-  { id: 'double-handrail', name: '両側手摺', productId: 'int-stair-double-handrail', description: 'アイアン階段用', price: 250000 },
-  { id: 'fall-prevention', name: '転落防止型', productId: 'int-stair-fall-prevention', description: 'アイアン階段用', price: 150000 },
+  { id: 'double-handrail', name: '両側手摺', productId: 'int-stair-004d', description: 'アイアン階段用', price: 250000 },
+  { id: 'fall-prevention', name: '転落防止型', productId: 'int-stair-004c', description: 'アイアン階段用', price: 150000 },
 ];
 
 type Step = 'type' | 'manufacturer' | 'color' | 'handrail' | 'options' | 'complete';
