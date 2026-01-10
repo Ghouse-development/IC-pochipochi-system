@@ -5528,7 +5528,15 @@ const staticInteriorProducts: Product[] = [
       { id: 'v3', color: 'チェリー柄', colorCode: '#B5651D', images: [] },
       { id: 'v4', color: 'ホワイトオーク柄', colorCode: '#E8DCC8', images: [] },
       { id: 'v5', color: 'ホワイトアッシュ柄', colorCode: '#F5F5DC', images: [] },
-      { id: 'v6', color: 'しっくいホワイト柄', colorCode: '#FFFFFF', images: [] }
+      { id: 'v6', color: 'しっくいホワイト柄', colorCode: '#FFFFFF', images: [] },
+      { id: 'v7', color: 'オーク柄', colorCode: '#C4A35A', images: [] },
+      { id: 'v8', color: 'メープル柄', colorCode: '#E3B778', images: [] },
+      { id: 'v9', color: 'ビターエルム柄', colorCode: '#3D2B1F', images: [] },
+      { id: 'v10', color: 'エイジングオーク柄', colorCode: '#8B7355', images: [] },
+      { id: 'v11', color: 'グレーウォールナット柄', colorCode: '#696969', images: [] },
+      { id: 'v12', color: 'クリアベージュ柄', colorCode: '#D4C4A8', images: [] },
+      { id: 'v13', color: 'スモークオーク柄', colorCode: '#6B5B4F', images: [] },
+      { id: 'v14', color: 'ミディアムオーク柄', colorCode: '#9C7A3C', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 100000 },
@@ -5554,7 +5562,15 @@ const staticInteriorProducts: Product[] = [
       { id: 'v3', color: 'チェリー柄', colorCode: '#B5651D', images: [] },
       { id: 'v4', color: 'ホワイトオーク柄', colorCode: '#E8DCC8', images: [] },
       { id: 'v5', color: 'ホワイトアッシュ柄', colorCode: '#F5F5DC', images: [] },
-      { id: 'v6', color: 'しっくいホワイト柄', colorCode: '#FFFFFF', images: [] }
+      { id: 'v6', color: 'しっくいホワイト柄', colorCode: '#FFFFFF', images: [] },
+      { id: 'v7', color: 'オーク柄', colorCode: '#C4A35A', images: [] },
+      { id: 'v8', color: 'メープル柄', colorCode: '#E3B778', images: [] },
+      { id: 'v9', color: 'ビターエルム柄', colorCode: '#3D2B1F', images: [] },
+      { id: 'v10', color: 'エイジングオーク柄', colorCode: '#8B7355', images: [] },
+      { id: 'v11', color: 'グレーウォールナット柄', colorCode: '#696969', images: [] },
+      { id: 'v12', color: 'クリアベージュ柄', colorCode: '#D4C4A8', images: [] },
+      { id: 'v13', color: 'スモークオーク柄', colorCode: '#6B5B4F', images: [] },
+      { id: 'v14', color: 'ミディアムオーク柄', colorCode: '#9C7A3C', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 150000 },
@@ -5580,7 +5596,15 @@ const staticInteriorProducts: Product[] = [
       { id: 'v3', color: 'チェリー柄', colorCode: '#B5651D', images: [] },
       { id: 'v4', color: 'ホワイトオーク柄', colorCode: '#E8DCC8', images: [] },
       { id: 'v5', color: 'ホワイトアッシュ柄', colorCode: '#F5F5DC', images: [] },
-      { id: 'v6', color: 'しっくいホワイト柄', colorCode: '#FFFFFF', images: [] }
+      { id: 'v6', color: 'しっくいホワイト柄', colorCode: '#FFFFFF', images: [] },
+      { id: 'v7', color: 'オーク柄', colorCode: '#C4A35A', images: [] },
+      { id: 'v8', color: 'メープル柄', colorCode: '#E3B778', images: [] },
+      { id: 'v9', color: 'ビターエルム柄', colorCode: '#3D2B1F', images: [] },
+      { id: 'v10', color: 'エイジングオーク柄', colorCode: '#8B7355', images: [] },
+      { id: 'v11', color: 'グレーウォールナット柄', colorCode: '#696969', images: [] },
+      { id: 'v12', color: 'クリアベージュ柄', colorCode: '#D4C4A8', images: [] },
+      { id: 'v13', color: 'スモークオーク柄', colorCode: '#6B5B4F', images: [] },
+      { id: 'v14', color: 'ミディアムオーク柄', colorCode: '#9C7A3C', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 200000 },
@@ -5811,118 +5835,8 @@ const staticInteriorProducts: Product[] = [
     ]
   },
 
-  // ========== 乾太くん（PDF43追加）==========
-  // ※ガス引込みが必要（設計で「ガス引込みあり」選択時のみ表示）
-  {
-    id: 'int-dryer-001',
-    categoryId: 'appliance',
-    categoryName: '設備',
-    subcategory: 'ガス乾燥機',
-    name: '乾太くん スタンダード 5kg',
-    manufacturer: 'リンナイ',
-    modelNumber: 'RDT-54S',
-    unit: 'piece',
-    isOption: true,
-    requiresGas: true,
-    description: 'ガス衣類乾燥機 スタンダードタイプ 5kg ※ガス引込み必須',
-    variants: [
-      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 272000 },
-      { plan: 'HOURS', price: 272000 },
-      { plan: 'LIFE+', price: 272000 },
-      { plan: 'LIFE', price: 272000 }
-    ]
-  },
-  {
-    id: 'int-dryer-002',
-    categoryId: 'appliance',
-    categoryName: '設備',
-    subcategory: 'ガス乾燥機',
-    name: '乾太くん デラックス 6kg',
-    manufacturer: 'リンナイ',
-    modelNumber: 'RDT-63',
-    unit: 'piece',
-    isOption: true,
-    requiresGas: true,
-    description: 'ガス衣類乾燥機 デラックスタイプ 6kg ※ガス引込み必須',
-    variants: [
-      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 297000 },
-      { plan: 'HOURS', price: 297000 },
-      { plan: 'LIFE+', price: 297000 },
-      { plan: 'LIFE', price: 297000 }
-    ]
-  },
-  {
-    id: 'int-dryer-003',
-    categoryId: 'appliance',
-    categoryName: '設備',
-    subcategory: 'ガス乾燥機',
-    name: '乾太くん デラックス 9kg',
-    manufacturer: 'リンナイ',
-    modelNumber: 'RDT-93',
-    unit: 'piece',
-    isOption: true,
-    requiresGas: true,
-    description: 'ガス衣類乾燥機 デラックスタイプ 9kg ※ガス引込み必須',
-    variants: [
-      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 330000 },
-      { plan: 'HOURS', price: 330000 },
-      { plan: 'LIFE+', price: 330000 },
-      { plan: 'LIFE', price: 330000 }
-    ]
-  },
-  {
-    id: 'int-dryer-004',
-    categoryId: 'appliance',
-    categoryName: '設備',
-    subcategory: 'ガス乾燥機',
-    name: '乾太くん専用架台',
-    manufacturer: 'リンナイ',
-    modelNumber: 'DS-KADAI',
-    unit: 'piece',
-    isOption: true,
-    requiresGas: true,
-    description: '乾太くん専用架台 ※乾太くん選択時のみ',
-    variants: [
-      { id: 'v1', color: '標準', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 30000 },
-      { plan: 'HOURS', price: 30000 },
-      { plan: 'LIFE+', price: 30000 },
-      { plan: 'LIFE', price: 30000 }
-    ]
-  },
-  {
-    id: 'int-dryer-005',
-    categoryId: 'appliance',
-    categoryName: '設備',
-    subcategory: 'ガス乾燥機',
-    name: '乾太くん専用収納ユニット',
-    manufacturer: 'リンナイ',
-    modelNumber: 'DS-UNIT',
-    unit: 'piece',
-    isOption: true,
-    requiresGas: true,
-    description: '乾太くん専用収納ユニット ※乾太くん選択時のみ',
-    variants: [
-      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 140000 },
-      { plan: 'HOURS', price: 140000 },
-      { plan: 'LIFE+', price: 140000 },
-      { plan: 'LIFE', price: 140000 }
-    ]
-  },
+  // 乾太くんは家具・家電タブ（furnitureProducts.ts）に移動済み
+
   {
     id: 'int-gas-001',
     categoryId: 'appliance',
