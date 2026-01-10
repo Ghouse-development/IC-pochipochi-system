@@ -667,6 +667,12 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     { id: 'apw430', name: 'APW430', description: '樹脂サッシ・トリプルガラス', isOption: true },
   ];
 
+  // 設計タブ用: ガス引込み選択
+  const GAS_SUPPLY_OPTIONS = [
+    { id: 'gas-supply-yes', name: 'あり', description: 'ガスを引き込む（乾太くん等）' },
+    { id: 'gas-supply-no', name: 'なし', description: 'オール電化' },
+  ];
+
   // カートから設計選択状態を取得
   const hasGarageShutter = cartItems.some(item =>
     item.product.categoryName?.includes('ガレージシャッター') ||
@@ -2093,6 +2099,87 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                             </span>
                           )}
                           <span className="text-2xl mb-2">🪟</span>
+                          <span className="font-medium text-gray-900 dark:text-gray-100">{option.name}</span>
+                          <span className="text-xs text-gray-500 dark:text-gray-400 mt-1">{option.description}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {!isDesignReadOnly && (
+                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-4 text-center">
+                      ※この設定は設計担当が管理者画面で設定します
+                    </p>
+                  )}
+                </div>
+              ) : activeTab === 'design' && currentCategoryName === 'ガス引込み' ? (
+                /* 設計タブ: ガス引込み選択カード */
+                <div className="max-w-3xl mx-auto px-4">
+                  {isDesignReadOnly && (
+                    <div className="mb-4 px-3 py-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+                      <p className="text-sm text-amber-700 dark:text-amber-400 flex items-center gap-2">
+                        <Eye className="w-4 h-4" />
+                        閲覧専用：設計担当が設定した内容を表示しています
+                      </p>
+                    </div>
+                  )}
+                  <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                    ガス引込み
+                  </h2>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+                    {isDesignReadOnly ? '設計担当が設定した内容です。' : 'ガスの引き込み有無を選択してください。'}
+                    {!isDesignReadOnly && (
+                      <>
+                        <br />
+                        <span className="text-xs">※「あり」を選択した場合、家具・家電タブで乾太くんを選択できます</span>
+                      </>
+                    )}
+                  </p>
+                  <div className="grid grid-cols-2 gap-4">
+                    {GAS_SUPPLY_OPTIONS.map((option) => {
+                      const isSelected = option.id === 'gas-supply-yes' ? hasGasSupply : hasNoGas;
+                      return (
+                        <button
+                          key={option.id}
+                          disabled={isDesignReadOnly}
+                          onClick={() => {
+                            if (isDesignReadOnly) return;
+                            // 既存のガス引込み選択をカートから削除
+                            const existingGasItems = cartItems.filter(item =>
+                              item.product.categoryId === 'gas-supply' ||
+                              item.product.categoryName === 'ガス引込み'
+                            );
+                            existingGasItems.forEach(item => removeItem(item.product.id));
+
+                            // 対応する商品をカートに追加
+                            const targetProductId = option.id === 'gas-supply-yes' ? 'ext-gas-supply-yes' : 'ext-gas-supply-no';
+                            const targetProduct = items.find(item => item.id === targetProductId);
+                            if (targetProduct) {
+                              addItem(convertToCartItem(targetProduct));
+                            }
+
+                            // 「なし」を選択した場合、乾太くん等のガス必須商品をカートから削除
+                            if (option.id === 'gas-supply-no') {
+                              const gasRequiredItems = cartItems.filter(item =>
+                                (item.product as unknown as { requiresGas?: boolean }).requiresGas
+                              );
+                              gasRequiredItems.forEach(item => removeItem(item.product.id));
+                            }
+
+                            // 次のカテゴリへ移動
+                            goToNextCategory();
+                          }}
+                          className={`relative flex flex-col items-center justify-center p-6 rounded-xl border-2 transition-all ${
+                            isSelected
+                              ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                              : 'border-gray-200 dark:border-gray-700'
+                          } ${isDesignReadOnly ? 'cursor-default opacity-75' : 'hover:border-blue-300 dark:hover:border-blue-600'}`}
+                        >
+                          {isSelected && (
+                            <div className="absolute top-2 right-2">
+                              <Check className="w-5 h-5 text-blue-500" />
+                            </div>
+                          )}
+                          <span className="text-2xl mb-2">{option.id === 'gas-supply-yes' ? '🔥' : '⚡'}</span>
                           <span className="font-medium text-gray-900 dark:text-gray-100">{option.name}</span>
                           <span className="text-xs text-gray-500 dark:text-gray-400 mt-1">{option.description}</span>
                         </button>
