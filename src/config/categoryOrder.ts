@@ -577,6 +577,16 @@ export const FURNITURE_CATEGORY_ORDER: CategoryOrderConfig[] = [
     subcategoryOrder: ['スクエアテーブル', 'ラウンドテーブル']
   },
   {
+    name: 'エアコン',
+    icon: '❄️',
+    subcategoryOrder: ['ダイキン', '三菱電機', 'エアコン']
+  },
+  {
+    name: '空調',
+    icon: '🌀',
+    subcategoryOrder: ['エアコン', '換気扇']
+  },
+  {
     name: 'カーテン',
     icon: '🪞',
     subcategoryOrder: ['カーテンレール', 'カーテン', 'IC提案']
@@ -590,16 +600,6 @@ export const FURNITURE_CATEGORY_ORDER: CategoryOrderConfig[] = [
     name: 'ブラインド',
     icon: '🪟',
     subcategoryOrder: ['ブラインド', 'ロールスクリーン']
-  },
-  {
-    name: 'エアコン',
-    icon: '❄️',
-    subcategoryOrder: ['ダイキン', '三菱電機', 'エアコン']
-  },
-  {
-    name: '空調',
-    icon: '🌀',
-    subcategoryOrder: ['エアコン', '換気扇']
   },
   {
     name: 'ダイニングテーブル',
