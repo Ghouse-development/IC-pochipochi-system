@@ -1,5 +1,5 @@
 // IC-ぽちぽちシステム Service Worker
-const CACHE_NAME = 'ic-pochipochi-v3';
+const CACHE_NAME = 'ic-pochipochi-v4';
 const STATIC_ASSETS = [
   '/',
   '/manifest.json',
@@ -56,6 +56,10 @@ self.addEventListener('fetch', (event) => {
 
   // API リクエストはネットワーク優先
   if (url.pathname.startsWith('/api') || url.hostname.includes('supabase')) {
+    // placeholder.supabase.coへのリクエストは無視（環境変数未設定時）
+    if (url.hostname === 'placeholder.supabase.co') {
+      return;
+    }
     event.respondWith(
       fetch(request)
         .then((response) => {
@@ -68,9 +72,17 @@ self.addEventListener('fetch', (event) => {
           }
           return response;
         })
-        .catch(() => {
+        .catch(async () => {
           // オフライン時はキャッシュから返す
-          return caches.match(request);
+          const cached = await caches.match(request);
+          // キャッシュがない場合は空のレスポンスを返す
+          if (!cached) {
+            return new Response(JSON.stringify({ error: 'Offline' }), {
+              status: 503,
+              headers: { 'Content-Type': 'application/json' }
+            });
+          }
+          return cached;
         })
     );
     return;

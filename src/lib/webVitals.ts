@@ -38,39 +38,8 @@ function logMetric(metric: Metric) {
   );
 }
 
-// メトリクスをサーバーに送信
-async function sendMetric(metric: Metric) {
-  const body = {
-    name: metric.name,
-    value: metric.value,
-    rating: getRating(metric),
-    delta: metric.delta,
-    id: metric.id,
-    navigationType: metric.navigationType,
-    timestamp: Date.now(),
-    url: window.location.href,
-    userAgent: navigator.userAgent,
-  };
-
-  // 本番環境でのみ送信
-  if (import.meta.env.PROD) {
-    try {
-      // Beacon APIを使用（ページ離脱時も確実に送信）
-      const blob = new Blob([JSON.stringify(body)], { type: 'application/json' });
-      navigator.sendBeacon('/api/analytics/web-vitals', blob);
-    } catch {
-      // フォールバック: fetch API
-      fetch('/api/analytics/web-vitals', {
-        method: 'POST',
-        body: JSON.stringify(body),
-        headers: { 'Content-Type': 'application/json' },
-        keepalive: true,
-      }).catch(() => {
-        // 送信失敗は無視（UXに影響させない）
-      });
-    }
-  }
-
+// メトリクスをGoogle Analytics 4に送信（設定されている場合のみ）
+function sendMetric(metric: Metric) {
   // Google Analytics 4に送信（設定されている場合）
   if (typeof gtag !== 'undefined') {
     gtag('event', metric.name, {
