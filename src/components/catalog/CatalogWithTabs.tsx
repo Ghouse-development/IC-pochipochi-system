@@ -50,6 +50,7 @@ import { useSelectionStore } from '../../stores/useSelectionStore';
 import { ICProposalSelector, type ICProposalSelection } from './ICProposalSelector';
 import { AirconSelector } from './AirconSelector';
 import { EntranceDoorSelector } from './EntranceDoorSelector';
+import { StairSelector } from './StairSelector';
 
 // ユーティリティ関数とコンポーネント (ItemCard, SkeletonCard, EmptyState, Confetti) はインポート済み
 
@@ -1737,6 +1738,18 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   }}
                   onCancel={() => {
                     // 前のカテゴリに戻るか、サイドバーで別のカテゴリを選択可能
+                  }}
+                />
+              ) : currentCategoryName === '階段' ? (
+                /* 階段選択UI（カード型ステップ選択） */
+                <StairSelector
+                  selectedPlan={selectedPlanId}
+                  onComplete={() => {
+                    toast.success('階段をカートに追加しました');
+                    goToNextCategory();
+                  }}
+                  onCancel={() => {
+                    // キャンセル処理
                   }}
                 />
               ) : currentCategoryName === '外部設備' && !selectedMaterialType ? (
