@@ -630,6 +630,19 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     { id: 'C10', name: 'C10', description: 'プレーンデザイン' },
   ];
 
+  // 外部設備の必須カテゴリ（8項目）+ その他オプション
+  const EXTERIOR_FACILITY_TYPES = [
+    { id: '電気メーター', name: '電気メーター', required: true },
+    { id: 'TV視聴', name: 'TV視聴', required: true },
+    { id: 'エアコンスリーブキャップ', name: 'エアコンスリーブキャップ', required: true },
+    { id: '外部配管', name: '外部配管', required: true },
+    { id: '外部LAN用空配管', name: '外部LAN用空配管', required: true },
+    { id: '換気フード', name: '換気フード', required: true },
+    { id: '換気ガラリ', name: '換気ガラリ', required: true },
+    { id: '外部水栓', name: '外部水栓', required: true },
+    { id: 'その他オプション', name: 'その他オプション', required: false },
+  ];
+
   // 利用可能な素材タイプを抽出（固定順序: 窯業系サイディング → ガルバリウム鋼板 → 塗り壁）
   const availableMaterialTypes = useMemo(() => {
     const materialOrder = ['窯業系サイディング', 'ガルバリウム鋼板', '塗り壁'];
@@ -1084,8 +1097,8 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
       {isCustomerMode && <CustomerWelcomeBanner />}
 
       <div className="flex flex-col h-full bg-gray-50 dark:bg-gray-900">
-        {/* ヘッダー - コンパクト */}
-        <div className="bg-blue-600 text-white shadow-lg">
+        {/* ヘッダー - コンパクト・固定 */}
+        <div className="bg-blue-600 text-white shadow-lg sticky top-0 z-50">
           {/* ステップナビゲーション */}
           <div className="px-4 py-2">
             <div className="flex items-center justify-between">
@@ -1679,6 +1692,62 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                     </div>
                   </div>
                 </div>
+              ) : currentCategoryName === '外部設備' && !selectedMaterialType ? (
+                /* 外部設備カテゴリ選択カード */
+                <div className="max-w-4xl mx-auto px-4">
+                  <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                    外部設備を選択
+                  </h2>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+                    以下の項目は必須です。各カテゴリから選択してください。
+                  </p>
+                  {/* 必須カテゴリ（8項目） */}
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+                    {EXTERIOR_FACILITY_TYPES.filter(t => t.required).map((type) => {
+                      const itemCount = items.filter(i => i.material_type === type.id).length;
+                      return (
+                        <button
+                          key={type.id}
+                          onClick={() => setSelectedMaterialType(type.id)}
+                          className="group flex flex-col items-start bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:border-blue-400 dark:hover:border-blue-500 transition-colors"
+                        >
+                          <div className="w-full flex items-center justify-between mb-1">
+                            <h3 className="font-medium text-sm text-gray-900 dark:text-gray-100 text-left">
+                              {type.name}
+                            </h3>
+                            <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors" />
+                          </div>
+                          <p className="text-xs text-blue-600 dark:text-blue-400">
+                            {itemCount > 0 ? `${itemCount}種類` : '準備中'}
+                          </p>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {/* その他オプション */}
+                  <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+                    {EXTERIOR_FACILITY_TYPES.filter(t => !t.required).map((type) => {
+                      const itemCount = items.filter(i => i.material_type === type.id).length;
+                      return (
+                        <button
+                          key={type.id}
+                          onClick={() => setSelectedMaterialType(type.id)}
+                          className="w-full group flex items-center justify-between bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:border-blue-400 dark:hover:border-blue-500 transition-colors"
+                        >
+                          <div>
+                            <h4 className="font-medium text-gray-900 dark:text-gray-100 text-left">
+                              {type.name}
+                            </h4>
+                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                              {itemCount > 0 ? `${itemCount}種類` : '準備中'}
+                            </p>
+                          </div>
+                          <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-blue-500 transition-colors" />
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
               ) : needsManufacturerSelection && !isManufacturerSelectionComplete ? (
                 /* メーカー/シリーズ選択（水回り設備用） */
                 <div className="max-w-4xl mx-auto">
@@ -1727,6 +1796,27 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                           {selectedMaterialType === 'ハンドル' ? 'ハンドル形状' :
                            selectedMaterialType === 'オプション' ? '追加オプション' :
                            `デザイン: ${selectedMaterialType}`}
+                        </span>
+                        <span className="text-sm text-gray-500 dark:text-gray-400">
+                          {filteredItems.length}件
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => setSelectedMaterialType('')}
+                        className="flex items-center gap-1 px-2 py-1 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
+                      >
+                        <ChevronLeft className="w-4 h-4" />
+                        戻る
+                      </button>
+                    </div>
+                  )}
+
+                  {/* 外部設備選択状態バー */}
+                  {currentCategoryName === '外部設備' && selectedMaterialType && (
+                    <div className="mb-4 flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="text-gray-900 dark:text-gray-100 font-medium">
+                          {selectedMaterialType}
                         </span>
                         <span className="text-sm text-gray-500 dark:text-gray-400">
                           {filteredItems.length}件

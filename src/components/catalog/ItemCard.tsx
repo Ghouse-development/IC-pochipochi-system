@@ -238,9 +238,28 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
           </button>
         </div>
 
-        {/* 選択済みオーバーレイ - G HOUSE風の大きなチェックマーク */}
+        {/* 選択済みオーバーレイ - クリックで解除可能 */}
         {inCart && (
-          <div className="absolute inset-0 bg-blue-500/30 flex items-center justify-center">
+          <div
+            className="absolute inset-0 bg-blue-500/30 flex items-center justify-center cursor-pointer hover:bg-blue-500/40 transition-colors"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleRemoveFromCart(item.id);
+            }}
+            title="クリックで選択解除"
+          >
+            {/* 解除ボタン（右上） */}
+            <button
+              className="absolute top-2 right-2 p-1.5 bg-white rounded-full shadow-lg hover:bg-red-50 transition-colors group"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleRemoveFromCart(item.id);
+              }}
+              aria-label="選択解除"
+            >
+              <X className="w-4 h-4 text-gray-400 group-hover:text-red-500" />
+            </button>
+            {/* チェックマーク */}
             <div className="bg-white rounded-full p-3 shadow-xl ring-4 ring-blue-400/50">
               <Check className="w-8 h-8 text-blue-600" strokeWidth={3} />
             </div>

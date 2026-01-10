@@ -70,7 +70,7 @@ export const convertStaticToItemWithDetails = (product: CatalogProduct, category
     pricing: product.pricing?.map(p => ({
       id: `pricing-${p.plan || p.planId}`,
       price: p.price,
-      is_standard: p.price === 0,
+      is_standard: !product.isOption, // isOptionフィールドを使用（標準品 = !isOption）
       product: {
         id: `plan-${p.plan || p.planId}`,
         code: (p.plan || p.planId) as string,
