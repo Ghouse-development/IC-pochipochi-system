@@ -1428,11 +1428,11 @@ export const exteriorProducts: Product[] = [
     ]
   },
 
-  // ===== ポーチサイズ拡張 =====
+  // ===== ポーチサイズ拡張（設計カテゴリ） =====
   {
     id: 'ext-porch-expansion',
-    categoryId: 'porch',
-    categoryName: 'ポーチ',
+    categoryId: 'porch-size',
+    categoryName: 'ポーチサイズ拡張',
     subcategory: 'ポーチサイズ拡張',
     name: 'ポーチサイズ拡張',
     manufacturer: '標準',

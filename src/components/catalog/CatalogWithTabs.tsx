@@ -48,6 +48,7 @@ import { BeginnerGuide } from './BeginnerGuide';
 import { EstimateExportDialog } from '../estimate/EstimateExportDialog';
 import { useSelectionStore } from '../../stores/useSelectionStore';
 import { ICProposalSelector, type ICProposalSelection } from './ICProposalSelector';
+import { AirconSelector } from './AirconSelector';
 
 // ユーティリティ関数とコンポーネント (ItemCard, SkeletonCard, EmptyState, Confetti) はインポート済み
 
@@ -1618,6 +1619,17 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                     </button>
                   </div>
                 </div>
+              ) : currentCategoryName === 'エアコン' ? (
+                /* エアコン選択UI */
+                <AirconSelector
+                  onComplete={() => {
+                    toast.success('エアコンをカートに追加しました');
+                    goToNextCategory();
+                  }}
+                  onCancel={() => {
+                    // 前のカテゴリに戻るか、サイドバーで別のカテゴリを選択可能
+                  }}
+                />
               ) : (currentCategoryName === 'カーテン' || currentCategoryName === '家具') ? (
                 /* IC提案選択UI（カーテン・家具用） */
                 <div className="max-w-2xl mx-auto">
