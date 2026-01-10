@@ -3039,53 +3039,6 @@ export const exteriorProducts: Product[] = [
     ]
   },
 
-  // ===== 外部設備 - 地上波TVアンテナ =====
-  {
-    id: 'ext-facility-tv-antenna',
-    categoryId: 'exterior-facility',
-    categoryName: '外部設備',
-    subcategory: 'アンテナ',
-    materialType: 'TV視聴',
-    name: '地上波TVアンテナ',
-    manufacturer: '標準',
-    modelNumber: 'TV-ANTENNA',
-    unit: 'セット',
-    isOption: true,
-    description: '地上波TVアンテナ ※ブースター含む',
-    variants: [
-      { id: 'v1', color: 'オフホワイト', colorCode: 'オフホワイト', images: [] },
-      { id: 'v2', color: 'ライトブラウン', colorCode: 'ライトブラウン', images: [] },
-      { id: 'v3', color: 'ブラックブラウン', colorCode: 'ブラックブラウン', images: [] },
-      { id: 'v4', color: 'ブラック', colorCode: 'ブラック', images: [] },
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 95000 },
-      { plan: 'HOURS', price: 95000 }
-    ]
-  },
-
-  // ===== 外部設備 - BSアンテナ =====
-  {
-    id: 'ext-facility-bs-antenna',
-    categoryId: 'exterior-facility',
-    categoryName: '外部設備',
-    subcategory: 'アンテナ',
-    materialType: 'TV視聴',
-    name: 'BSアンテナ',
-    manufacturer: '標準',
-    modelNumber: 'BS-ANTENNA',
-    unit: 'セット',
-    isOption: true,
-    description: 'BSアンテナ TVアンテナと併用',
-    variants: [
-      { id: 'v1', color: 'ホワイト', colorCode: 'ホワイト', images: [] },
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 80000 },
-      { plan: 'HOURS', price: 80000 }
-    ]
-  },
-
   // ===== 外部設備 - 電気メーターボックス =====
   {
     id: 'ext-facility-meter-box',
