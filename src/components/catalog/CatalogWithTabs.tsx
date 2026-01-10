@@ -2217,7 +2217,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                     </h2>
                     <p className="text-gray-600 dark:text-gray-400 mb-6">
                       ガス衣類乾燥機「乾太くん」を設置するには、<br />
-                      <span className="font-semibold text-orange-600 dark:text-orange-400">ガス引込み工事（税込 約35万円）</span>が必要です。
+                      <span className="font-semibold text-orange-600 dark:text-orange-400">ガス引込み工事（税別 35万円）</span>が必要です。
                     </p>
                     <div className="bg-white dark:bg-gray-800 rounded-xl p-4 mb-6 text-left">
                       <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">乾太くんのメリット</h3>
