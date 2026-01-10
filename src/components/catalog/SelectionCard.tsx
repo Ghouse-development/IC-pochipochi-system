@@ -1,5 +1,5 @@
 import React from 'react';
-import { Check, Image as ImageIcon } from 'lucide-react';
+import { Check, Image as ImageIcon, X } from 'lucide-react';
 
 /**
  * 選択カードコンポーネント（ItemCard風）
@@ -19,6 +19,7 @@ export interface SelectionCardProps {
   priceRange?: string;
   isSelected: boolean;
   onClick: () => void;
+  onDeselect?: () => void;
   manufacturer?: string;
   colorCode?: string;
 }
@@ -35,6 +36,7 @@ export const SelectionCard: React.FC<SelectionCardProps> = ({
   priceRange,
   isSelected,
   onClick,
+  onDeselect,
   manufacturer,
   colorCode,
 }) => {
@@ -111,15 +113,35 @@ export const SelectionCard: React.FC<SelectionCardProps> = ({
           </div>
         )}
 
-        {/* 選択済みオーバーレイ */}
+        {/* 選択済みオーバーレイ - クリックで解除可能 */}
         {isSelected && (
-          <div className="absolute inset-0 bg-blue-500/30 flex items-center justify-center">
+          <div
+            className="absolute inset-0 bg-blue-500/30 flex items-center justify-center cursor-pointer hover:bg-blue-500/40 transition-colors"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (onDeselect) onDeselect();
+              else onClick();
+            }}
+            title="クリックで選択解除"
+          >
+            {/* 解除ボタン（右上） */}
+            <button
+              className="absolute top-2 right-2 p-1.5 bg-white rounded-full shadow-lg hover:bg-red-50 transition-colors group"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (onDeselect) onDeselect();
+                else onClick();
+              }}
+              aria-label="選択解除"
+            >
+              <X className="w-4 h-4 text-gray-400 group-hover:text-red-500" />
+            </button>
             <div className="bg-white rounded-full p-3 shadow-xl ring-4 ring-blue-400/50">
               <Check className="w-8 h-8 text-blue-600" strokeWidth={3} />
             </div>
             <div className="absolute bottom-2 left-1/2 -translate-x-1/2">
               <span className="px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full shadow-lg">
-                選択中
+                選択中（タップで解除）
               </span>
             </div>
           </div>

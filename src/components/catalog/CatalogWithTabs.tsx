@@ -1290,6 +1290,31 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 })}
               </div>
 
+              {/* 検索バー（青いバー内） */}
+              <div className="hidden sm:flex items-center flex-1 max-w-xs mx-4">
+                <div className="relative w-full">
+                  <label htmlFor="catalog-search-header" className="sr-only">商品を検索</label>
+                  <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/60" aria-hidden="true" />
+                  <input
+                    id="catalog-search-header"
+                    type="text"
+                    placeholder="検索..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-8 pr-8 py-1.5 bg-white/20 border border-white/30 rounded-lg text-sm text-white placeholder:text-white/60 focus:ring-2 focus:ring-white/50 focus:bg-white/30 transition-all"
+                  />
+                  {searchTerm && (
+                    <button
+                      onClick={() => setSearchTerm('')}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 p-0.5 hover:bg-white/20 rounded-full"
+                      aria-label="検索をクリア"
+                    >
+                      <X className="w-3.5 h-3.5 text-white/80" />
+                    </button>
+                  )}
+                </div>
+              </div>
+
               {/* 選択数表示 */}
               <div className="bg-white/20 rounded-lg px-2 py-1 flex items-center gap-1" data-tutorial="cart-button">
                 <ClipboardCheck className="w-4 h-4" />
@@ -1440,13 +1465,14 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
           {/* メインエリア */}
           <div className="flex-1 flex flex-col overflow-hidden">
-            {/* 検索バー（簡素化） */}
-            <div className="sticky top-0 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md border-b border-gray-100 dark:border-gray-700 z-10 px-3 py-2">
-              <div className="relative max-w-md">
-                <label htmlFor="catalog-search" className="sr-only">商品を検索</label>
+            {/* モバイル用：検索バー＋プラン選択 */}
+            <div className="sm:hidden bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 px-3 py-2 space-y-2">
+              {/* モバイル検索バー */}
+              <div className="relative">
+                <label htmlFor="catalog-search-mobile" className="sr-only">商品を検索</label>
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" aria-hidden="true" />
                 <input
-                  id="catalog-search"
+                  id="catalog-search-mobile"
                   type="text"
                   placeholder="商品を検索..."
                   value={searchTerm}
@@ -1463,12 +1489,8 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   </button>
                 )}
               </div>
-            </div>
-
-            {/* モバイル用プラン選択（簡素化） */}
-            <div className="lg:hidden bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 px-3 py-2">
+              {/* モバイルプラン選択 */}
               <div className="flex items-center gap-2">
-                {/* プラン選択 */}
                 <label htmlFor="mobile-plan-select" className="sr-only">プランを選択</label>
                 <select
                   id="mobile-plan-select"
