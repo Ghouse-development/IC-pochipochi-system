@@ -22,7 +22,7 @@ const STAIR_TYPES = [
     description: 'スチール製のモダンなデザイン',
     icon: '🔩',
     isStandard: false,
-    priceRange: '¥950,000～',
+    productId: 'int-stair-004',
   },
   {
     id: 'carpet',
@@ -30,7 +30,7 @@ const STAIR_TYPES = [
     description: '踏面にカーペットを敷いた仕様',
     icon: '🧶',
     isStandard: false,
-    priceRange: '¥210,000～350,000',
+    productId: 'int-stairs-carpet',
   },
 ];
 
@@ -44,8 +44,8 @@ const WOOD_MANUFACTURERS = [
 
 // 手摺タイプ
 const HANDRAIL_TYPES = [
-  { id: 'lixil-white', name: 'LIXIL ホワイト', productId: 'int-stairs-002', description: '壁付I型手摺', isStandard: true },
-  { id: 'lixil-black', name: 'LIXIL ブラック', productId: 'int-stairs-002', description: '壁付I型手摺', isStandard: false },
+  { id: 'lixil-white', name: 'LIXIL ホワイト', productId: 'int-stair-handrail-lixil', variantId: 'v1', description: 'スクエアタイプ壁付手摺', isStandard: true },
+  { id: 'lixil-black', name: 'LIXIL ブラック', productId: 'int-stair-handrail-lixil', variantId: 'v2', description: 'スクエアタイプ壁付手摺', isStandard: false },
   { id: 'iron-handrail', name: 'アイアン手すり', productId: 'int-stair-005', description: 'フラットバー上桟+中桟2本', isStandard: false, price: 240000 },
   { id: 'none', name: '手摺なし', description: '手摺を設置しない', isStandard: false },
 ];
@@ -67,12 +67,19 @@ interface StairSelectorProps {
 }
 
 export const StairSelector: React.FC<StairSelectorProps> = ({
-  selectedPlan: _selectedPlan,
+  selectedPlan,
   onComplete,
   onCancel,
 }) => {
   const addItem = useCartStore((state) => state.addItem);
-  // Note: selectedPlan will be used for plan-specific pricing in future
+
+  // プラン別価格を取得
+  const getPlanPrice = (productId: string): number => {
+    const product = interiorProducts.find(p => p.id === productId);
+    if (!product?.pricing) return 0;
+    const planPrice = product.pricing.find(p => p.plan === selectedPlan);
+    return planPrice?.price ?? 0;
+  };
 
   // 選択状態
   const [currentStep, setCurrentStep] = useState<Step>('type');
@@ -198,7 +205,11 @@ export const StairSelector: React.FC<StairSelectorProps> = ({
       if (handrail?.productId) {
         const product = getProduct(handrail.productId);
         if (product) {
-          addItem(product, 1, product.variants?.[0]);
+          // variantIdがある場合はそれを使用、なければ最初のバリアント
+          const variant = handrail.variantId
+            ? product.variants?.find(v => v.id === handrail.variantId)
+            : product.variants?.[0];
+          addItem(product, 1, variant);
         }
       }
     }
@@ -274,28 +285,31 @@ export const StairSelector: React.FC<StairSelectorProps> = ({
             階段タイプを選んでください
           </h4>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-            {STAIR_TYPES.map((type) => (
-              <SelectionCard
-                key={type.id}
-                id={type.id}
-                name={type.name}
-                description={type.description}
-                placeholderEmoji={type.icon}
-                placeholderBgColor={type.id === 'wood' ? 'from-amber-100 to-yellow-100' : type.id === 'iron' ? 'from-slate-200 to-gray-300' : 'from-pink-100 to-rose-100'}
-                isStandard={type.isStandard}
-                isOption={!type.isStandard}
-                priceRange={type.priceRange}
-                isSelected={selectedType === type.id}
-                onClick={() => {
-                  setSelectedType(type.id);
-                  if (type.id === 'wood') {
-                    setCurrentStep('manufacturer');
-                  } else {
-                    setCurrentStep('color');
-                  }
-                }}
-              />
-            ))}
+            {STAIR_TYPES.map((type) => {
+              const price = type.productId ? getPlanPrice(type.productId) : 0;
+              return (
+                <SelectionCard
+                  key={type.id}
+                  id={type.id}
+                  name={type.name}
+                  description={type.description}
+                  placeholderEmoji={type.icon}
+                  placeholderBgColor={type.id === 'wood' ? 'from-amber-100 to-yellow-100' : type.id === 'iron' ? 'from-slate-200 to-gray-300' : 'from-pink-100 to-rose-100'}
+                  isStandard={price === 0}
+                  isOption={price > 0}
+                  price={price}
+                  isSelected={selectedType === type.id}
+                  onClick={() => {
+                    setSelectedType(type.id);
+                    if (type.id === 'wood') {
+                      setCurrentStep('manufacturer');
+                    } else {
+                      setCurrentStep('color');
+                    }
+                  }}
+                />
+              );
+            })}
           </div>
         </div>
       )}
@@ -313,25 +327,28 @@ export const StairSelector: React.FC<StairSelectorProps> = ({
             メーカーを選んでください
           </h4>
           <div className="grid grid-cols-2 gap-4">
-            {WOOD_MANUFACTURERS.map((mfr) => (
-              <SelectionCard
-                key={mfr.id}
-                id={mfr.id}
-                name={mfr.name}
-                description={mfr.description}
-                manufacturer={mfr.name.split(' ')[0]}
-                placeholderEmoji="🪵"
-                placeholderBgColor="from-amber-100 to-orange-100"
-                isStandard={mfr.isStandard}
-                isOption={!mfr.isStandard}
-                price={mfr.price}
-                isSelected={selectedManufacturer === mfr.id}
-                onClick={() => {
-                  setSelectedManufacturer(mfr.id);
-                  setCurrentStep('color');
-                }}
-              />
-            ))}
+            {WOOD_MANUFACTURERS.map((mfr) => {
+              const price = getPlanPrice(mfr.productId);
+              return (
+                <SelectionCard
+                  key={mfr.id}
+                  id={mfr.id}
+                  name={mfr.name}
+                  description={mfr.description}
+                  manufacturer={mfr.name.split(' ')[0]}
+                  placeholderEmoji="🪵"
+                  placeholderBgColor="from-amber-100 to-orange-100"
+                  isStandard={price === 0}
+                  isOption={price > 0}
+                  price={price}
+                  isSelected={selectedManufacturer === mfr.id}
+                  onClick={() => {
+                    setSelectedManufacturer(mfr.id);
+                    setCurrentStep('color');
+                  }}
+                />
+              );
+            })}
           </div>
         </div>
       )}
@@ -386,24 +403,27 @@ export const StairSelector: React.FC<StairSelectorProps> = ({
             手摺を選んでください
           </h4>
           <div className="grid grid-cols-2 gap-4">
-            {HANDRAIL_TYPES.map((handrail) => (
-              <SelectionCard
-                key={handrail.id}
-                id={handrail.id}
-                name={handrail.name}
-                description={handrail.description}
-                placeholderEmoji={handrail.id === 'none' ? '✕' : '🛡️'}
-                placeholderBgColor={handrail.id === 'none' ? 'from-gray-100 to-gray-200' : 'from-slate-100 to-gray-200'}
-                isStandard={handrail.isStandard}
-                isOption={!handrail.isStandard && handrail.id !== 'none'}
-                price={handrail.price}
-                isSelected={selectedHandrail === handrail.id}
-                onClick={() => {
-                  setSelectedHandrail(handrail.id);
-                  setCurrentStep('options');
-                }}
-              />
-            ))}
+            {HANDRAIL_TYPES.map((handrail) => {
+              const price = handrail.productId ? getPlanPrice(handrail.productId) : 0;
+              return (
+                <SelectionCard
+                  key={handrail.id}
+                  id={handrail.id}
+                  name={handrail.name}
+                  description={handrail.description}
+                  placeholderEmoji={handrail.id === 'none' ? '✕' : '🛡️'}
+                  placeholderBgColor={handrail.id === 'none' ? 'from-gray-100 to-gray-200' : 'from-slate-100 to-gray-200'}
+                  isStandard={price === 0 && handrail.id !== 'none'}
+                  isOption={price > 0}
+                  price={price}
+                  isSelected={selectedHandrail === handrail.id}
+                  onClick={() => {
+                    setSelectedHandrail(handrail.id);
+                    setCurrentStep('options');
+                  }}
+                />
+              );
+            })}
           </div>
         </div>
       )}
@@ -421,20 +441,23 @@ export const StairSelector: React.FC<StairSelectorProps> = ({
             オプションを選択（複数選択可）
           </h4>
           <div className="grid grid-cols-2 gap-4 mb-6">
-            {getAvailableOptions().map((option) => (
-              <SelectionCard
-                key={option.id}
-                id={option.id}
-                name={option.name}
-                description={option.description}
-                placeholderEmoji="➕"
-                placeholderBgColor="from-blue-100 to-cyan-100"
-                isOption={true}
-                price={option.price}
-                isSelected={selectedOptions.includes(option.id)}
-                onClick={() => toggleOption(option.id)}
-              />
-            ))}
+            {getAvailableOptions().map((option) => {
+              const price = getPlanPrice(option.productId);
+              return (
+                <SelectionCard
+                  key={option.id}
+                  id={option.id}
+                  name={option.name}
+                  description={option.description}
+                  placeholderEmoji="➕"
+                  placeholderBgColor="from-blue-100 to-cyan-100"
+                  isOption={price > 0}
+                  price={price}
+                  isSelected={selectedOptions.includes(option.id)}
+                  onClick={() => toggleOption(option.id)}
+                />
+              );
+            })}
           </div>
           <button
             onClick={handleComplete}
