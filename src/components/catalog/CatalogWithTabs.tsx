@@ -49,6 +49,7 @@ import { useSelectionStore } from '../../stores/useSelectionStore';
 import { ICProposalSelector, type ICProposalSelection } from './ICProposalSelector';
 import { AirconSelector } from './AirconSelector';
 import { EntranceDoorSelector } from './EntranceDoorSelector';
+import { DiningTableSelector } from './DiningTableSelector';
 import { StairSelector } from './StairSelector';
 
 // ユーティリティ関数とコンポーネント (ItemCard, SkeletonCard, EmptyState, Confetti) はインポート済み
@@ -1732,6 +1733,18 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   }}
                   onCancel={() => {
                     // 前のカテゴリに戻るか、サイドバーで別のカテゴリを選択可能
+                  }}
+                />
+              ) : currentCategoryName === 'オリジナルダイニングテーブル' ? (
+                /* オリジナルダイニングテーブル選択UI（段階選択） */
+                <DiningTableSelector
+                  selectedPlan={selectedPlanId}
+                  onComplete={() => {
+                    toast.success('ダイニングテーブルをカートに追加しました');
+                    goToNextCategory();
+                  }}
+                  onCancel={() => {
+                    // キャンセル処理
                   }}
                 />
               ) : currentCategoryName === '階段' ? (
