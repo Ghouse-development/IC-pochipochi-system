@@ -106,7 +106,7 @@ const INTERFACE_UNIT = {
   description: '玄関ドア付近に設置する操作盤',
 };
 
-type Step = 'design' | 'color' | 'key' | 'handle' | 'interface' | 'complete';
+type Step = 'design' | 'color' | 'key' | 'handle' | 'handleColor' | 'interface' | 'complete';
 
 interface EntranceDoorSelectorProps {
   selectedPlan: string;
@@ -127,6 +127,7 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [selectedKeyType, setSelectedKeyType] = useState<string | null>(null);
   const [selectedHandle, setSelectedHandle] = useState<string | null>(null);
+  const [selectedHandleColor, setSelectedHandleColor] = useState<string | null>(null);
   const [wantsInterfaceUnit, setWantsInterfaceUnit] = useState<boolean | null>(null);
 
   // 製品を取得
@@ -154,6 +155,15 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
     return isElectronicKey ? HANDLE_TYPES.electronic : HANDLE_TYPES.manual;
   };
 
+  // 選択したハンドルの色バリアントを取得
+  const getHandleColors = () => {
+    const handles = getAvailableHandles();
+    const handleConfig = handles.find(h => h.id === selectedHandle);
+    if (!handleConfig) return [];
+    const handleProduct = getProduct(handleConfig.productId);
+    return handleProduct?.variants || [];
+  };
+
   // ステップを進める
   const goToStep = (step: Step) => {
     setCurrentStep(step);
@@ -173,9 +183,14 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
       case 'handle':
         setCurrentStep('key');
         setSelectedHandle(null);
+        setSelectedHandleColor(null);
+        break;
+      case 'handleColor':
+        setCurrentStep('handle');
+        setSelectedHandleColor(null);
         break;
       case 'interface':
-        setCurrentStep('handle');
+        setCurrentStep('handleColor');
         setWantsInterfaceUnit(null);
         break;
       default:
@@ -200,13 +215,14 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
       }
     }
 
-    // 3. ハンドルをカートに追加
+    // 3. ハンドルをカートに追加（選択した色のバリアント）
     const handles = getAvailableHandles();
     const handleConfig = handles.find(h => h.id === selectedHandle);
     if (handleConfig) {
       const handleProduct = getProduct(handleConfig.productId);
       if (handleProduct) {
-        addItem(handleProduct, 1, handleProduct.variants?.[0]);
+        const handleVariant = handleProduct.variants?.find(v => v.id === selectedHandleColor) || handleProduct.variants?.[0];
+        addItem(handleProduct, 1, handleVariant);
       }
     }
 
@@ -222,8 +238,8 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
   };
 
   // ステップ進行表示
-  const steps = ['①デザイン', '②色', '③鍵', '④ハンドル', '⑤操作盤'];
-  const stepOrder: Step[] = ['design', 'color', 'key', 'handle', 'interface'];
+  const steps = ['①デザイン', '②色', '③鍵', '④ハンドル', '⑤ハンドル色', '⑥操作盤'];
+  const stepOrder: Step[] = ['design', 'color', 'key', 'handle', 'handleColor', 'interface'];
   const currentStepIndex = stepOrder.indexOf(currentStep);
 
   return (
@@ -235,7 +251,7 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
           玄関ドアを選択
         </h3>
         <p className="text-sm text-gray-600 dark:text-gray-400">
-          5つのステップで選んでください
+          6つのステップで選んでください
         </p>
       </div>
 
@@ -258,7 +274,7 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
                   {isCompleted && <Check className="w-3 h-3 inline mr-1" />}
                   {step}
                 </span>
-                {index < 4 && <span className="text-gray-300">→</span>}
+                {index < 5 && <span className="text-gray-300">→</span>}
               </React.Fragment>
             );
           })}
@@ -399,6 +415,51 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
                 isSelected={selectedHandle === handle.id}
                 onClick={() => {
                   setSelectedHandle(handle.id);
+                  // ハンドルの色バリアントを確認
+                  const handleProduct = getProduct(handle.productId);
+                  const colors = handleProduct?.variants || [];
+                  if (colors.length === 1) {
+                    // 1色しかない場合は自動選択してスキップ
+                    setSelectedHandleColor(colors[0].id);
+                    goToStep('interface');
+                  } else {
+                    goToStep('handleColor');
+                  }
+                }}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ステップ5: ハンドル色選択 */}
+      {currentStep === 'handleColor' && (
+        <div>
+          <button
+            onClick={goBack}
+            className="mb-4 text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1"
+          >
+            <ChevronLeft className="w-4 h-4" /> ハンドル形状選択に戻る
+          </button>
+          <h4 className="font-medium text-gray-800 dark:text-white mb-2 flex items-center gap-2">
+            <Grip className="w-5 h-5 text-blue-500" />
+            ハンドルの色を選んでください
+          </h4>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+            選択中: {getAvailableHandles().find(h => h.id === selectedHandle)?.name}
+          </p>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            {getHandleColors().map((variant) => (
+              <SelectionCard
+                key={variant.id}
+                id={variant.id}
+                name={variant.color}
+                colorCode={variant.colorCode?.startsWith('#') ? variant.colorCode : undefined}
+                placeholderEmoji={variant.color === 'ブラック' ? '⬛' : '⬜'}
+                placeholderBgColor={variant.color === 'ブラック' ? 'from-gray-800 to-gray-900' : 'from-gray-200 to-gray-300'}
+                isSelected={selectedHandleColor === variant.id}
+                onClick={() => {
+                  setSelectedHandleColor(variant.id);
                   goToStep('interface');
                 }}
               />
@@ -407,14 +468,14 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
         </div>
       )}
 
-      {/* ステップ5: 操作盤付インターフェースユニット */}
+      {/* ステップ6: 操作盤付インターフェースユニット */}
       {currentStep === 'interface' && (
         <div>
           <button
             onClick={goBack}
             className="mb-4 text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1"
           >
-            <ChevronLeft className="w-4 h-4" /> ハンドル選択に戻る
+            <ChevronLeft className="w-4 h-4" /> ハンドル色選択に戻る
           </button>
           <h4 className="font-medium text-gray-800 dark:text-white mb-4 flex items-center gap-2">
             <Monitor className="w-5 h-5 text-blue-500" />
@@ -463,7 +524,7 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
             <p>デザイン: {DOOR_DESIGNS.find(d => d.id === selectedDesign)?.name}</p>
             <p>色: {getDoorColors().find(v => v.id === selectedColor)?.color}</p>
             <p>鍵: {KEY_TYPES.find(k => k.id === selectedKeyType)?.name}</p>
-            <p>ハンドル: {getAvailableHandles().find(h => h.id === selectedHandle)?.name}</p>
+            <p>ハンドル: {getAvailableHandles().find(h => h.id === selectedHandle)?.name}（{getHandleColors().find(v => v.id === selectedHandleColor)?.color}）</p>
             <p>操作盤: {wantsInterfaceUnit ? 'あり' : 'なし'}</p>
           </div>
           <button
