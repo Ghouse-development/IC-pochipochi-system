@@ -3902,39 +3902,6 @@ const staticInteriorProducts: Product[] = [
       { plan: 'LIFE', price: 15000 }
     ]
   },
-  {
-    id: 'int-stair-006',
-    categoryId: 'stairs',
-    categoryName: '階段',
-    subcategory: 'カーペット階段',
-    name: 'カーペット階段',
-    manufacturer: 'Gハウス',
-    modelNumber: 'CARPET-STAIR',
-    unit: '個',
-    isOption: true,
-    description: 'カーペット仕上げ階段 ※ひな壇階段では使用不可 ※アイアン階段では使用不可 ※1〜2階分ごとにオプション',
-    variants: [
-      { id: 'v1', color: 'CIR5002', images: [] },
-      { id: 'v2', color: 'CIR-5006', images: [] },
-      { id: 'v3', color: 'CIR-5007', images: [] },
-      { id: 'v4', color: 'CIR-5008', images: [] },
-      { id: 'v5', color: 'LIR-5032', images: [] },
-      { id: 'v6', color: 'LIR-5033', images: [] },
-      { id: 'v7', color: 'LIR-5036', images: [] },
-      { id: 'v8', color: 'LIR-5044', images: [] },
-      { id: 'v9', color: 'MDR-5014', images: [] },
-      { id: 'v10', color: 'MDR-5017', images: [] },
-      { id: 'v11', color: 'HDR-1052', images: [] },
-      { id: 'v12', color: 'HDR-1053', images: [] },
-      { id: 'v13', color: 'HDR-1054', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 350000 },
-      { plan: 'HOURS', price: 210000 },
-      { plan: 'LIFE+', price: 210000 },
-      { plan: 'LIFE', price: 210000 }
-    ]
-  },
 
   // ========== 周辺部材（腰壁笠木）==========
   {
