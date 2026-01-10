@@ -4,11 +4,29 @@ import { useCartStore } from '../../stores/useCartStore';
 import { furnitureProducts } from '../../data/furnitureProducts';
 import type { Product } from '../../types/product';
 
+// エアコン画像プレースホルダー生成
+const generateAirconPlaceholder = (seriesName: string, manufacturer: string): string => {
+  const primaryColor = manufacturer === 'ダイキン' ? '#0072CE' : '#E60012'; // ダイキンはブルー、三菱は赤
+  const svgContent = `
+    <svg width="200" height="80" xmlns="http://www.w3.org/2000/svg">
+      <rect width="200" height="80" fill="#f5f5f4" rx="8"/>
+      <rect x="10" y="15" width="180" height="50" fill="white" rx="6" stroke="${primaryColor}" stroke-width="2"/>
+      <rect x="20" y="45" width="160" height="8" fill="#e5e7eb" rx="2"/>
+      <rect x="20" y="45" width="60" height="8" fill="${primaryColor}" rx="2"/>
+      <circle cx="170" cy="32" r="6" fill="${primaryColor}" opacity="0.3"/>
+      <text x="30" y="35" fill="${primaryColor}" font-family="system-ui" font-size="10" font-weight="600">
+        ${seriesName.slice(0, 8)}
+      </text>
+    </svg>
+  `;
+  return `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svgContent)))}`;
+};
+
 // エアコンシリーズ定義
 const AIRCON_SERIES = [
-  { id: 'e', name: 'Eシリーズ', manufacturer: 'ダイキン', description: 'スタンダードモデル', priceRange: '11万〜19.2万円' },
-  { id: 'gx', name: 'GXシリーズ', manufacturer: 'ダイキン', description: 'さらら除湿搭載', priceRange: '16.5万〜21.8万円' },
-  { id: 'z', name: '霧ヶ峰 Zシリーズ', manufacturer: '三菱電機', description: 'さらっと除湿冷房', priceRange: '23.5万〜30万円' },
+  { id: 'e', name: 'Eシリーズ', manufacturer: 'ダイキン', description: 'スタンダードモデル', priceRange: '11万〜19.2万円', icon: '❄️' },
+  { id: 'gx', name: 'GXシリーズ', manufacturer: 'ダイキン', description: 'さらら除湿搭載', priceRange: '16.5万〜21.8万円', icon: '💧' },
+  { id: 'z', name: '霧ヶ峰 Zシリーズ', manufacturer: '三菱電機', description: 'さらっと除湿冷房', priceRange: '23.5万〜30万円', icon: '🌀' },
 ];
 
 // 畳数定義
@@ -293,18 +311,28 @@ export const AirconSelector: React.FC<AirconSelectorProps> = ({
               <button
                 key={series.id}
                 onClick={() => updateUnit('series', series.id)}
-                className="flex flex-col items-start p-4 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500 transition-all text-left"
+                className="flex flex-col items-start p-4 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500 transition-all text-left bg-white dark:bg-gray-800"
               >
-                <span className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                  {series.manufacturer}
-                </span>
+                <div className="w-full mb-3 rounded-lg overflow-hidden">
+                  <img
+                    src={generateAirconPlaceholder(series.name, series.manufacturer)}
+                    alt={series.name}
+                    className="w-full h-auto"
+                  />
+                </div>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-lg">{series.icon}</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                    {series.manufacturer}
+                  </span>
+                </div>
                 <span className="font-bold text-gray-800 dark:text-white mb-1">
                   {series.name}
                 </span>
                 <span className="text-xs text-gray-600 dark:text-gray-400 mb-2">
                   {series.description}
                 </span>
-                <span className="text-xs text-blue-600 dark:text-blue-400">
+                <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
                   {series.priceRange}
                 </span>
               </button>

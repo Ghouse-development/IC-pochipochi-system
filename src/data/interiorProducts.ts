@@ -17,7 +17,7 @@ const staticInteriorProducts: Product[] = [
     materialType: 'シート',
     manufacturer: 'Panasonic',
     modelNumber: 'VERITIS-BC',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: false,
     description: '豊富な色柄を揃えたシートフロアー ワックス不要 抗菌効果 汚れ・すり傷・凹み・キャスターに強い',
     variants: [
@@ -51,7 +51,7 @@ const staticInteriorProducts: Product[] = [
     materialType: '突板',
     manufacturer: '朝日ウッドテック',
     modelNumber: 'MRX-2P',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: false,
     description: '突き板仕様 床厚12mm マット塗装 フリーワックス ホットカーペット対応 ヒビワレ防止 耐凹み傷 抗ウイルス 耐摩擦',
     variants: [
@@ -78,7 +78,7 @@ const staticInteriorProducts: Product[] = [
     materialType: '突板',
     manufacturer: '朝日ウッドテック',
     modelNumber: 'MSX/MSX-L',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '突き板フローリング 12mm厚 マット塗装 フリーワックス ホットカーペット対応 抗ウイルス',
     variants: [
@@ -114,7 +114,7 @@ const staticInteriorProducts: Product[] = [
     name: 'マイスターズウッドフロアー ハードコートクリア',
     manufacturer: 'Panasonic',
     modelNumber: 'MEISTERS-HC',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '天然木突き板 ワックス不要 抗菌効果 汚れ・すり傷・凹み・キャスターに強い',
     variants: [
@@ -144,7 +144,7 @@ const staticInteriorProducts: Product[] = [
     name: '銘木フロアーラスティック 2P',
     manufacturer: 'イクタ',
     modelNumber: 'MEIBOKU-RUSTIC',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '突き板12mm厚 オイル風合いラスティック塗装 「空気を洗う」健康フローリング 消臭・ウイルス低減・VOC低減効果',
     variants: [
@@ -174,7 +174,7 @@ const staticInteriorProducts: Product[] = [
     name: 'クルードフローリング303',
     manufacturer: 'イクタ',
     modelNumber: 'CRUDE-303',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '水廻り専用フローリング 素材の美しさを打ち出したマットな風合い 抗ウイルス・抗菌 消臭効果 ※水廻り以外でご使用される場合は追加費用',
     variants: [
@@ -203,7 +203,7 @@ const staticInteriorProducts: Product[] = [
     name: '銘木フロアーラスティック エイジング 2P',
     manufacturer: 'イクタ',
     modelNumber: 'MEIBOKU-AGING',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '突き板12mm厚 木目を強く打ち出したエイジング仕上げ ※塗装品のため近似色塗装になります',
     variants: [
@@ -231,7 +231,7 @@ const staticInteriorProducts: Product[] = [
     name: 'ビンテージフロアーラスティック 2P',
     manufacturer: 'イクタ',
     modelNumber: 'VINTAGE-RUSTIC',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '挽き板12mm厚 天然木ならではの色味や節、自然の趣を感じられるフロア 「空気を洗う」健康フローリング',
     variants: [
@@ -259,7 +259,7 @@ const staticInteriorProducts: Product[] = [
     name: 'ライブナチュラルプレミアム ラスティック 2P',
     manufacturer: '朝日ウッドテック',
     modelNumber: 'LIVNATURAL-PREMIUM',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '挽き板12mm厚 天然木が持つ、木それぞれの個性を美しく表現したフロア GOOD DESIGN賞受賞',
     variants: [
@@ -286,7 +286,7 @@ const staticInteriorProducts: Product[] = [
     name: '玄関框（フローリング色合わせ）',
     manufacturer: 'Panasonic/朝日ウッドテック',
     modelNumber: 'ENTRANCE-FRAME-STD',
-    unit: 'piece',
+    unit: '個',
     isOption: false,
     description: 'ご選択いただいたフローリング色合わせとなります ※付け框30×150となります',
     variants: [
@@ -309,7 +309,7 @@ const staticInteriorProducts: Product[] = [
     name: '床見切り（フラットバー）',
     manufacturer: 'Gハウス',
     modelNumber: 'FLATBAR',
-    unit: 'piece',
+    unit: '個',
     isOption: false,
     description: 'フローリングと異素材の床材との間に納まる部材です ※シルバーのみ',
     variants: [
@@ -332,7 +332,7 @@ const staticInteriorProducts: Product[] = [
     name: '玄関框（プレイリーホームズ）〜1.8m迄',
     manufacturer: 'プレイリーホームズ',
     modelNumber: 'PRAIRIE-FRAME-18',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '6mmという美薄、シンプルスマートの新しい提案',
     variants: [
@@ -354,7 +354,7 @@ const staticInteriorProducts: Product[] = [
     name: '玄関框（プレイリーホームズ）〜2.8m迄',
     manufacturer: 'プレイリーホームズ',
     modelNumber: 'PRAIRIE-FRAME-28',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '6mmという美薄、シンプルスマートの新しい提案',
     variants: [
@@ -379,7 +379,7 @@ const staticInteriorProducts: Product[] = [
     name: 'チャネルオリジナル ユニシリーズ（オーク・バーチ・ウォールナット）',
     manufacturer: 'チャネルオリジナル',
     modelNumber: 'CHANNEL-UNI-A',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '無垢床 ウレタン塗装 色の濃淡・小さな節・かすりなど自然な風合いや美しさを感じられる ※別途配送料¥30,000',
     variants: [
@@ -405,7 +405,7 @@ const staticInteriorProducts: Product[] = [
     name: 'チャネルオリジナル ユニシリーズ（ブラックチェリー・チーク）',
     manufacturer: 'チャネルオリジナル',
     modelNumber: 'CHANNEL-UNI-B',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '無垢床 ウレタン塗装 色の濃淡・小さな節・かすりなど自然な風合いや美しさを感じられる ※別途配送料¥30,000',
     variants: [
@@ -430,7 +430,7 @@ const staticInteriorProducts: Product[] = [
     name: 'チャネルオリジナル ヘリンボーン',
     manufacturer: 'チャネルオリジナル',
     modelNumber: 'CHANNEL-HERRINGBONE',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '無垢床 ウレタン塗装 北海道産ナラ節無（上小節含む）赤味、入り皮など木の特徴が随所にみられバラエティーな表情を楽しめる 国産木材 接着剤不使用 ※別途配送料¥30,000',
     variants: [
@@ -454,7 +454,7 @@ const staticInteriorProducts: Product[] = [
     name: 'マティル',
     manufacturer: '田島ルーフィング',
     modelNumber: 'MATIL',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '水廻り対応フロアタイル（水廻りでは追加費用なし）',
     variants: [
@@ -485,7 +485,7 @@ const staticInteriorProducts: Product[] = [
     name: 'CFシート',
     manufacturer: '東リ',
     modelNumber: 'CF-SHEET',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '防水性、クッション性に優れたビニール系のシート床材 手入れも手軽で汚れも落としやすい ※水廻り専用のため、水廻り以外でご使用される場合は追加費用',
     variants: [
@@ -533,7 +533,7 @@ const staticInteriorProducts: Product[] = [
     name: 'カーペットタイル',
     manufacturer: 'sangetsu',
     modelNumber: 'NTP/NTH/NT',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '耐久性・クッション性を兼ねそろえた素材 床に座って過ごすことが多いお部屋におすすめ',
     variants: [
@@ -575,7 +575,7 @@ const staticInteriorProducts: Product[] = [
     name: 'カーペットタイル NTシリーズ',
     manufacturer: 'sangetsu',
     modelNumber: 'NT-311-382',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '耐久性・クッション性を兼ねそろえた素材 床に座って過ごすことが多いお部屋におすすめ',
     variants: [
@@ -610,7 +610,7 @@ const staticInteriorProducts: Product[] = [
     name: 'カーペットタイル DTシリーズ（プレミアム）',
     manufacturer: 'sangetsu',
     modelNumber: 'DT-2201-2207',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '耐久性・クッション性を兼ねそろえた素材 床に座って過ごすことが多いお部屋におすすめ（プレミアム）',
     variants: [
@@ -637,7 +637,7 @@ const staticInteriorProducts: Product[] = [
     name: '磁器タイル（玄関・土間）',
     manufacturer: 'LIXIL',
     modelNumber: 'CERAMIC-TILE-001',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: false,
     description: '玄関・土間に最適な磁器タイル 滑りにくく耐久性に優れる',
     variants: [
@@ -663,7 +663,7 @@ const staticInteriorProducts: Product[] = [
     name: '勾配天井工事',
     manufacturer: 'Gハウス',
     modelNumber: 'CEILING-SLOPE',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '天井変更する範囲の床坪数にて算出 ※梁や火打ち梁が露出する場合がございます',
     variants: [
@@ -684,7 +684,7 @@ const staticInteriorProducts: Product[] = [
     name: '天井高UP（H2600迄）100mm毎',
     manufacturer: 'Gハウス',
     modelNumber: 'CEILING-UP-100',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '部屋別での変更不可 フロアごとの変更',
     variants: [
@@ -705,7 +705,7 @@ const staticInteriorProducts: Product[] = [
     name: '天井高UP（H2600迄）200mm毎',
     manufacturer: 'Gハウス',
     modelNumber: 'CEILING-UP-200',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '部屋別での変更不可 フロアごとの変更',
     variants: [
@@ -726,7 +726,7 @@ const staticInteriorProducts: Product[] = [
     name: '下がり天井',
     manufacturer: 'Gハウス',
     modelNumber: 'CEILING-DOWN',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '100mm毎',
     variants: [
@@ -814,7 +814,7 @@ const staticInteriorProducts: Product[] = [
     name: 'カーペット階段',
     manufacturer: 'Gハウス',
     modelNumber: 'CARPET-STAIRS',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '※ひな壇階段では使用不可 ※アイアン階段では使用不可 ※1〜2階分ごとにオプション',
     variants: [
@@ -849,7 +849,7 @@ const staticInteriorProducts: Product[] = [
     name: 'インテリア格子 W045（W276〜465mm）',
     manufacturer: 'LIXIL',
     modelNumber: 'LATTICE-W045',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '高さH895〜2,495mm選択可 ※腰壁設置は別途費用',
     variants: [
@@ -873,7 +873,7 @@ const staticInteriorProducts: Product[] = [
     name: 'インテリア格子 W085（W466〜843mm）',
     manufacturer: 'LIXIL',
     modelNumber: 'LATTICE-W085',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '高さH895〜2,495mm選択可 ※腰壁設置は別途費用',
     variants: [
@@ -897,7 +897,7 @@ const staticInteriorProducts: Product[] = [
     name: 'インテリア格子 W12（W843〜1,221mm）',
     manufacturer: 'LIXIL',
     modelNumber: 'LATTICE-W12',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '高さH895〜2,495mm選択可 ※腰壁設置は別途費用',
     variants: [
@@ -921,7 +921,7 @@ const staticInteriorProducts: Product[] = [
     name: 'インテリア格子 W16（W1,221〜2,495mm）',
     manufacturer: 'LIXIL',
     modelNumber: 'LATTICE-W16',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '高さH895〜2,495mm選択可 ※腰壁設置は別途費用',
     variants: [
@@ -948,7 +948,7 @@ const staticInteriorProducts: Product[] = [
     name: '選択しない',
     manufacturer: '-',
     modelNumber: 'NONE',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'インテリアカウンターを設置しない場合はこちらを選択',
     variants: [
@@ -970,7 +970,7 @@ const staticInteriorProducts: Product[] = [
     name: 'インテリアカウンター（トイレ用）',
     manufacturer: 'Panasonic',
     modelNumber: 'COUNTER-TOILET',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '耐水集成タイプ 厚み24mm トイレなどちょい置きスペースに 長さ1400mm以下 奥行300mm以下',
     variants: [
@@ -1000,7 +1000,7 @@ const staticInteriorProducts: Product[] = [
     name: '奥行100〜200mm W〜1000mm',
     manufacturer: 'Panasonic',
     modelNumber: 'COUNTER-D200-W1000',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '飾り棚用 耐水集成タイプ 厚み24mm アングル3個',
     variants: [
@@ -1029,7 +1029,7 @@ const staticInteriorProducts: Product[] = [
     name: '奥行100〜200mm W1001〜1800mm',
     manufacturer: 'Panasonic',
     modelNumber: 'COUNTER-D200-W1800',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '飾り棚用 耐水集成タイプ 厚み24mm アングル4個',
     variants: [
@@ -1058,7 +1058,7 @@ const staticInteriorProducts: Product[] = [
     name: '奥行100〜200mm W1801〜2800mm',
     manufacturer: 'Panasonic',
     modelNumber: 'COUNTER-D200-W2800',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '飾り棚用 耐水集成タイプ 厚み24mm アングル6個',
     variants: [
@@ -1087,7 +1087,7 @@ const staticInteriorProducts: Product[] = [
     name: '奥行100〜200mm W2801〜4000mm',
     manufacturer: 'Panasonic',
     modelNumber: 'COUNTER-D200-W4000',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '飾り棚用 耐水集成タイプ 厚み24mm アングル9個',
     variants: [
@@ -1117,7 +1117,7 @@ const staticInteriorProducts: Product[] = [
     name: '奥行201〜450mm W〜1000mm',
     manufacturer: 'Panasonic',
     modelNumber: 'COUNTER-D450-W1000',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'スタディスペース用 耐水集成タイプ 厚み24mm ブラケット3個',
     variants: [
@@ -1146,7 +1146,7 @@ const staticInteriorProducts: Product[] = [
     name: '奥行201〜450mm W1001〜1800mm',
     manufacturer: 'Panasonic',
     modelNumber: 'COUNTER-D450-W1800',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'スタディスペース用 耐水集成タイプ 厚み24mm ブラケット4個',
     variants: [
@@ -1175,7 +1175,7 @@ const staticInteriorProducts: Product[] = [
     name: '奥行201〜450mm W1801〜2800mm',
     manufacturer: 'Panasonic',
     modelNumber: 'COUNTER-D450-W2800',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'スタディスペース用 耐水集成タイプ 厚み24mm ブラケット6個',
     variants: [
@@ -1204,7 +1204,7 @@ const staticInteriorProducts: Product[] = [
     name: '奥行201〜450mm W2801〜4000mm',
     manufacturer: 'Panasonic',
     modelNumber: 'COUNTER-D450-W4000',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'スタディスペース用 耐水集成タイプ 厚み24mm ブラケット9個',
     variants: [
@@ -1234,7 +1234,7 @@ const staticInteriorProducts: Product[] = [
     name: '奥行451〜600mm W〜1000mm',
     manufacturer: 'Panasonic',
     modelNumber: 'COUNTER-D600-W1000',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'ワークスペース用 耐水集成タイプ 厚み24mm ブラケット3個',
     variants: [
@@ -1263,7 +1263,7 @@ const staticInteriorProducts: Product[] = [
     name: '奥行451〜600mm W1001〜1800mm',
     manufacturer: 'Panasonic',
     modelNumber: 'COUNTER-D600-W1800',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'ワークスペース用 耐水集成タイプ 厚み24mm ブラケット4個',
     variants: [
@@ -1292,7 +1292,7 @@ const staticInteriorProducts: Product[] = [
     name: '奥行451〜600mm W1801〜2800mm',
     manufacturer: 'Panasonic',
     modelNumber: 'COUNTER-D600-W2800',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'ワークスペース用 耐水集成タイプ 厚み24mm ブラケット6個',
     variants: [
@@ -1321,7 +1321,7 @@ const staticInteriorProducts: Product[] = [
     name: '奥行451〜600mm W2801〜4000mm',
     manufacturer: 'Panasonic',
     modelNumber: 'COUNTER-D600-W4000',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'ワークスペース用 耐水集成タイプ 厚み24mm ブラケット9個',
     variants: [
@@ -1351,7 +1351,7 @@ const staticInteriorProducts: Product[] = [
     name: '配線用キャップ穴加工',
     manufacturer: 'Panasonic',
     modelNumber: 'COUNTER-CABLE-CAP',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'カウンターに配線用キャップ穴を加工',
     variants: [
@@ -1376,7 +1376,7 @@ const staticInteriorProducts: Product[] = [
     name: '造作トイレ 背面収納スペース',
     manufacturer: 'Gハウス',
     modelNumber: 'TOILET-BACK-SPACE',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '※スペースのみ 棚板含まず ※下地施工は別途費用 ※開口部有効寸法260mm以上必要',
     variants: [
@@ -1397,7 +1397,7 @@ const staticInteriorProducts: Product[] = [
     name: '造作トイレ 収納',
     manufacturer: 'Gハウス',
     modelNumber: 'TOILET-SIDE-STORAGE',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'W150×H床〜天井×D130(有効) 棚板3枚（固定棚）ふかし壁費用含む',
     variants: [
@@ -1422,7 +1422,7 @@ const staticInteriorProducts: Product[] = [
     name: 'サニタトイレ収納ボックス Sタイプ',
     manufacturer: 'Gハウス',
     modelNumber: 'SANITA-TOILET-S',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'W300×H740×D117.4(有効) ※クリアホワイトのみ 扉開き方向選択可',
     variants: [
@@ -1443,7 +1443,7 @@ const staticInteriorProducts: Product[] = [
     name: 'トイレ上部収納',
     manufacturer: 'Gハウス',
     modelNumber: 'TOILET-UPPER-STORAGE',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '〜W905×H470×D300(有効) ※クリアホワイトのみ 両壁納まり/片壁納まり選択可',
     variants: [
@@ -1511,7 +1511,7 @@ const staticInteriorProducts: Product[] = [
     name: 'VERITIS PAデザイン ハイドアH2400',
     manufacturer: 'Panasonic',
     modelNumber: 'VERITIS-PA-H2400',
-    unit: 'piece',
+    unit: '個',
     isOption: false,
     description: 'ハイドア標準（H2400）開き戸・各居室・トイレ・脱衣室・ランドリーのみ標準装備',
     variants: [
@@ -1541,7 +1541,7 @@ const staticInteriorProducts: Product[] = [
     name: 'VERITIS TAデザイン トイレ用ハイドアH2400',
     manufacturer: 'Panasonic',
     modelNumber: 'VERITIS-TA-H2400',
-    unit: 'piece',
+    unit: '個',
     isOption: false,
     description: 'トイレ用扉（上部にスコープ有）ハイドア標準（H2400）',
     variants: [
@@ -1571,7 +1571,7 @@ const staticInteriorProducts: Product[] = [
     name: 'VERITIS ペイントカラー ブラックオーク柄',
     manufacturer: 'Panasonic',
     modelNumber: 'VERITIS-PAINT-BLACKOAK',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'ペイントカラー変更（扉1枚W900まで）',
     variants: [
@@ -1592,7 +1592,7 @@ const staticInteriorProducts: Product[] = [
     name: 'VERITIS ペイントカラー ネイビーオーク柄',
     manufacturer: 'Panasonic',
     modelNumber: 'VERITIS-PAINT-NAVYOAK',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'ペイントカラー変更（扉1枚W900まで）',
     variants: [
@@ -1613,7 +1613,7 @@ const staticInteriorProducts: Product[] = [
     name: 'VERITIS ペイントカラー ブルーグレーオーク柄',
     manufacturer: 'Panasonic',
     modelNumber: 'VERITIS-PAINT-BLUEGRAYOAK',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'ペイントカラー変更（扉1枚W900まで）',
     variants: [
@@ -1634,7 +1634,7 @@ const staticInteriorProducts: Product[] = [
     name: 'VERITIS ペイントカラー ビターウォルドオーク柄',
     manufacturer: 'Panasonic',
     modelNumber: 'VERITIS-PAINT-BITTERWALD',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'ペイントカラー変更（扉1枚W900まで）',
     variants: [
@@ -1656,7 +1656,7 @@ const staticInteriorProducts: Product[] = [
     name: 'VERITIS ソリッドカラー ソイルブラック柄',
     manufacturer: 'Panasonic',
     modelNumber: 'VERITIS-SOLID-SOILBLACK',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'ソリッドカラー変更（扉1枚W900まで）',
     variants: [
@@ -1677,7 +1677,7 @@ const staticInteriorProducts: Product[] = [
     name: 'VERITIS ソリッドカラー パールグレー柄',
     manufacturer: 'Panasonic',
     modelNumber: 'VERITIS-SOLID-PEARLGRAY',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'ソリッドカラー変更（扉1枚W900まで）',
     variants: [
@@ -1699,7 +1699,7 @@ const staticInteriorProducts: Product[] = [
     name: 'ハンドル(A1型) サテンシルバー色',
     manufacturer: 'Panasonic',
     modelNumber: 'MJE1851ST',
-    unit: 'piece',
+    unit: '個',
     isOption: false,
     description: '開き戸用ハンドル サテンシルバー色（塗装）',
     variants: [
@@ -1720,7 +1720,7 @@ const staticInteriorProducts: Product[] = [
     name: 'ハンドル(A1型) オフブラック色',
     manufacturer: 'Panasonic',
     modelNumber: 'MJE1852ST',
-    unit: 'piece',
+    unit: '個',
     isOption: false,
     description: '開き戸用ハンドル オフブラック色（塗装）',
     variants: [
@@ -1741,7 +1741,7 @@ const staticInteriorProducts: Product[] = [
     name: '角型引手(C1型) サテンシルバー色',
     manufacturer: 'Panasonic',
     modelNumber: 'MJE1851BN',
-    unit: 'piece',
+    unit: '個',
     isOption: false,
     description: '引戸用引手 サテンシルバー色（塗装）',
     variants: [
@@ -1762,7 +1762,7 @@ const staticInteriorProducts: Product[] = [
     name: '角型引手(C1型) オフブラック色',
     manufacturer: 'Panasonic',
     modelNumber: 'MJE1852BN',
-    unit: 'piece',
+    unit: '個',
     isOption: false,
     description: '引戸用引手 オフブラック色（塗装）',
     variants: [
@@ -1784,7 +1784,7 @@ const staticInteriorProducts: Product[] = [
     name: 'VERITIS 収納用折戸 PHデザイン',
     manufacturer: 'Panasonic',
     modelNumber: 'VERITIS-CL-FOLD-PH',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '折れ戸/壁芯々W910まで（H2400）取手レス',
     variants: [
@@ -1813,7 +1813,7 @@ const staticInteriorProducts: Product[] = [
     name: 'VERITIS 収納用折戸 PAデザイン',
     manufacturer: 'Panasonic',
     modelNumber: 'VERITIS-CL-FOLD-PA',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '折れ戸/壁芯々W910まで（H2400）',
     variants: [
@@ -1843,7 +1843,7 @@ const staticInteriorProducts: Product[] = [
     name: 'VERITIS 収納用折戸 鏡追加',
     manufacturer: 'Panasonic',
     modelNumber: 'VERITIS-CL-FOLD-MIRROR',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '折れ戸に鏡追加（折れ戸のみ対応可）',
     variants: [
@@ -1865,7 +1865,7 @@ const staticInteriorProducts: Product[] = [
     name: 'VERITIS 収納用2枚引き違い戸',
     manufacturer: 'Panasonic',
     modelNumber: 'VERITIS-CL-SLIDE2',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '2枚引き違い戸/壁芯々W1820まで（H2400）',
     variants: [
@@ -1895,7 +1895,7 @@ const staticInteriorProducts: Product[] = [
     name: 'VERITIS WBデザイン 半透明アクリル板',
     manufacturer: 'Panasonic',
     modelNumber: 'VERITIS-WB',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '建具デザイン変更 WBデザイン 開戸/引戸（半透明アクリル板）',
     variants: [
@@ -1916,7 +1916,7 @@ const staticInteriorProducts: Product[] = [
     name: 'VERITIS WCデザイン 半透明あわせガラス',
     manufacturer: 'Panasonic',
     modelNumber: 'VERITIS-WC',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '建具デザイン変更 WCデザイン 開戸/引戸（半透明あわせガラス）',
     variants: [
@@ -1937,7 +1937,7 @@ const staticInteriorProducts: Product[] = [
     name: 'VERITIS LDデザイン 半透明アクリル板',
     manufacturer: 'Panasonic',
     modelNumber: 'VERITIS-LD',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '建具デザイン変更 LDデザイン 開戸/引戸（半透明アクリル板）',
     variants: [
@@ -1958,7 +1958,7 @@ const staticInteriorProducts: Product[] = [
     name: 'VERITIS MCデザイン 半透明あわせガラス',
     manufacturer: 'Panasonic',
     modelNumber: 'VERITIS-MC',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '建具デザイン変更 MCデザイン 開戸/引戸（半透明あわせガラス）',
     variants: [
@@ -1979,7 +1979,7 @@ const staticInteriorProducts: Product[] = [
     name: 'VERITIS LBデザイン 半透明アクリル板',
     manufacturer: 'Panasonic',
     modelNumber: 'VERITIS-LB',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '建具デザイン変更 LBデザイン 開戸/引戸（半透明アクリル板）',
     variants: [
@@ -2001,7 +2001,7 @@ const staticInteriorProducts: Product[] = [
     name: 'VERITIS PAデザイン+ペットドア',
     manufacturer: 'Panasonic',
     modelNumber: 'VERITIS-PA-PET',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'PAデザイン+ペットドア 開戸（開口 H280×W180）',
     variants: [
@@ -2023,7 +2023,7 @@ const staticInteriorProducts: Product[] = [
     name: 'VERITIS HCデザイン ガラス引戸 変更',
     manufacturer: 'Panasonic',
     modelNumber: 'VERITIS-HC-CHANGE',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'HCデザイン（透明orフロスト長熱処理ガラス）引戸のみ対応・引戸変更費用含む',
     variants: [
@@ -2045,7 +2045,7 @@ const staticInteriorProducts: Product[] = [
     name: 'VERITIS HCデザイン ガラス引戸 追加',
     manufacturer: 'Panasonic',
     modelNumber: 'VERITIS-HC-ADD',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'HCデザイン（透明orフロスト長熱処理ガラス）引戸追加',
     variants: [
@@ -2068,7 +2068,7 @@ const staticInteriorProducts: Product[] = [
     name: 'VERITIS HBデザイン ガラス引戸 変更',
     manufacturer: 'Panasonic',
     modelNumber: 'VERITIS-HB-CHANGE',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'HBデザイン（透明orフロスト長熱処理ガラス）引戸のみ対応・引戸変更費用含む',
     variants: [
@@ -2090,7 +2090,7 @@ const staticInteriorProducts: Product[] = [
     name: 'VERITIS HBデザイン ガラス引戸 追加',
     manufacturer: 'Panasonic',
     modelNumber: 'VERITIS-HB-ADD',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'HBデザイン（透明orフロスト長熱処理ガラス）引戸追加',
     variants: [
@@ -2113,7 +2113,7 @@ const staticInteriorProducts: Product[] = [
     name: 'VERITIS 開き戸追加',
     manufacturer: 'Panasonic',
     modelNumber: 'VERITIS-ADD-SWING',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '開き戸追加（リビングドア・書斎・洗面室・収納等）',
     variants: [
@@ -2135,7 +2135,7 @@ const staticInteriorProducts: Product[] = [
     name: 'VERITIS 標準開戸から片引戸へ変更',
     manufacturer: 'Panasonic',
     modelNumber: 'VERITIS-CHANGE-SLIDE',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '標準開戸から片引戸へ変更差額（上吊りタイプ、下方レール無）※2枚まで標準で変更可能、3枚目からオプション',
     variants: [
@@ -2157,7 +2157,7 @@ const staticInteriorProducts: Product[] = [
     name: 'VERITIS 表示錠追加',
     manufacturer: 'Panasonic',
     modelNumber: 'VERITIS-ADD-LOCK',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '表示錠付きに変更差額（※トイレ・脱衣室は標準で表示錠付属）',
     variants: [
@@ -2179,7 +2179,7 @@ const staticInteriorProducts: Product[] = [
     name: 'VERITIS 引戸追加',
     manufacturer: 'Panasonic',
     modelNumber: 'VERITIS-ADD-SLIDE',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '引戸追加（リビングドア・書斎・洗面室・収納等）',
     variants: [
@@ -2202,7 +2202,7 @@ const staticInteriorProducts: Product[] = [
     name: '階段セット',
     manufacturer: 'LIXIL',
     modelNumber: 'STAIRS-SET',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: '踏板・蹴込板セット',
     variants: [
@@ -2224,7 +2224,7 @@ const staticInteriorProducts: Product[] = [
     name: '階段手摺セット',
     manufacturer: 'LIXIL',
     modelNumber: 'HANDRAIL-SET',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: '階段手摺（壁付け）',
     variants: [
@@ -2253,7 +2253,7 @@ const staticInteriorProducts: Product[] = [
     name: '枕棚+PH',
     manufacturer: 'Panasonic',
     modelNumber: 'STORAGE-A',
-    unit: 'piece',
+    unit: '個',
     isOption: false,
     description: '標準：枕棚+パイプハンガー（各寝室1カ所、横幅2730迄）',
     variants: [
@@ -2272,7 +2272,7 @@ const staticInteriorProducts: Product[] = [
     name: '枕棚+PH（追加）',
     manufacturer: 'Panasonic',
     modelNumber: 'STORAGE-B',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'オプション：枕棚+パイプハンガー（追加分）',
     variants: [
@@ -2291,7 +2291,7 @@ const staticInteriorProducts: Product[] = [
     name: 'インテグレート可動棚',
     manufacturer: 'Panasonic',
     modelNumber: 'INTEGRATE-01',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: '可動棚システム（W900×H2400）',
     variants: [
@@ -2314,7 +2314,7 @@ const staticInteriorProducts: Product[] = [
     name: '造作ニッチ パターンA（H320×W320）',
     manufacturer: 'Gハウス',
     modelNumber: 'NICHE-A',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '棚奥行は約100mm ※外壁側の壁へのニッチの施工はお断りしています（断熱材の欠損の原因となる為）',
     variants: [
@@ -2340,7 +2340,7 @@ const staticInteriorProducts: Product[] = [
     name: '造作ニッチ パターンB（H650×W500）※リモコンニッチ可能',
     manufacturer: 'Gハウス',
     modelNumber: 'NICHE-B',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '棚奥行は約100mm ※外壁側の壁へのニッチの施工はお断りしています',
     variants: [
@@ -2366,7 +2366,7 @@ const staticInteriorProducts: Product[] = [
     name: '造作ニッチ パターンC（H250×W750）',
     manufacturer: 'Gハウス',
     modelNumber: 'NICHE-C',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '棚奥行は約100mm ※外壁側の壁へのニッチの施工はお断りしています',
     variants: [
@@ -2392,7 +2392,7 @@ const staticInteriorProducts: Product[] = [
     name: '造作ニッチ パターンD（H1050×W500）',
     manufacturer: 'Gハウス',
     modelNumber: 'NICHE-D',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'H650・H200・H200 台有に限る 棚奥行は約100mm ※外壁側の壁へのニッチの施工はお断りしています',
     variants: [
@@ -2418,7 +2418,7 @@ const staticInteriorProducts: Product[] = [
     name: '造作ニッチ パターンE（H250×W1600）※リモコンニッチ可能',
     manufacturer: 'Gハウス',
     modelNumber: 'NICHE-E',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '棚奥行は約100mm ※外壁側の壁へのニッチの施工はお断りしています',
     variants: [
@@ -2444,7 +2444,7 @@ const staticInteriorProducts: Product[] = [
     name: '造作ニッチ パターンF（H150×W780）',
     manufacturer: 'Gハウス',
     modelNumber: 'NICHE-F',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '棚奥行は約100mm ※外壁側の壁へのニッチの施工はお断りしています',
     variants: [
@@ -2470,7 +2470,7 @@ const staticInteriorProducts: Product[] = [
     name: '造作ニッチ パターンG（H150×W1050）',
     manufacturer: 'Gハウス',
     modelNumber: 'NICHE-G',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '棚奥行は約100mm ※外壁側の壁へのニッチの施工はお断りしています',
     variants: [
@@ -2496,7 +2496,7 @@ const staticInteriorProducts: Product[] = [
     name: '造作ニッチ パターンH（H320×W320）',
     manufacturer: 'Gハウス',
     modelNumber: 'NICHE-H',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '棚奥行は約100mm ※外壁側の壁へのニッチの施工はお断りしています',
     variants: [
@@ -2522,7 +2522,7 @@ const staticInteriorProducts: Product[] = [
     name: '造作ニッチ パターンI（H250×W750）',
     manufacturer: 'Gハウス',
     modelNumber: 'NICHE-I',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '棚奥行は約100mm ※外壁側の壁へのニッチの施工はお断りしています',
     variants: [
@@ -2548,7 +2548,7 @@ const staticInteriorProducts: Product[] = [
     name: '造作ニッチ パターンJ（H550×W400）洗面室におすすめ',
     manufacturer: 'Gハウス',
     modelNumber: 'NICHE-J',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '棚奥行は約100mm ※外壁側の壁へのニッチの施工はお断りしています',
     variants: [
@@ -2574,7 +2574,7 @@ const staticInteriorProducts: Product[] = [
     name: '造作ニッチ パターンK（H700×W400）洗面室におすすめ',
     manufacturer: 'Gハウス',
     modelNumber: 'NICHE-K',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '棚奥行は約100mm ※外壁側の壁へのニッチの施工はお断りしています',
     variants: [
@@ -2600,7 +2600,7 @@ const staticInteriorProducts: Product[] = [
     name: '造作ニッチ パターンL（H750×W400）洗面室におすすめ',
     manufacturer: 'Gハウス',
     modelNumber: 'NICHE-L',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '棚奥行は約100mm ※外壁側の壁へのニッチの施工はお断りしています',
     variants: [
@@ -2628,7 +2628,7 @@ const staticInteriorProducts: Product[] = [
     name: 'リモコンニッチ パターンB（H650×W500）',
     manufacturer: 'Gハウス',
     modelNumber: 'REMOTE-NICHE-B',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '配線スペース確保のため背面にふかし壁が必要な場合あり。ふかし壁を設けない場合は棚板奥行約30〜40mm',
     variants: [
@@ -2654,7 +2654,7 @@ const staticInteriorProducts: Product[] = [
     name: 'リモコンニッチ パターンE（H250×W1600）',
     manufacturer: 'Gハウス',
     modelNumber: 'REMOTE-NICHE-E',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '配線スペース確保のため背面にふかし壁が必要な場合あり。ふかし壁を設けない場合は棚板奥行約30〜40mm',
     variants: [
@@ -2682,7 +2682,7 @@ const staticInteriorProducts: Product[] = [
     name: '壁下地補強',
     manufacturer: 'Gハウス',
     modelNumber: 'REINFORCE-WALL',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '1カ所（1,800mm×900mm）',
     variants: [
@@ -2703,7 +2703,7 @@ const staticInteriorProducts: Product[] = [
     name: '床補強',
     manufacturer: 'Gハウス',
     modelNumber: 'REINFORCE-FLOOR',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '床補強工事',
     variants: [
@@ -2724,7 +2724,7 @@ const staticInteriorProducts: Product[] = [
     name: 'ロールカーテン用天井下地（1m未満）',
     manufacturer: 'Gハウス',
     modelNumber: 'REINFORCE-CEILING-1M',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '下地材の厚み12mm・幅は300mm 長さ1m未満',
     variants: [
@@ -2745,7 +2745,7 @@ const staticInteriorProducts: Product[] = [
     name: 'ロールカーテン用天井下地（2m未満）',
     manufacturer: 'Gハウス',
     modelNumber: 'REINFORCE-CEILING-2M',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '下地材の厚み12mm・幅は300mm 長さ2m未満',
     variants: [
@@ -2766,7 +2766,7 @@ const staticInteriorProducts: Product[] = [
     name: 'ロールカーテン用天井下地（3m未満）',
     manufacturer: 'Gハウス',
     modelNumber: 'REINFORCE-CEILING-3M',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '下地材の厚み12mm・幅は300mm 長さ3m未満',
     variants: [
@@ -2787,7 +2787,7 @@ const staticInteriorProducts: Product[] = [
     name: 'ロールカーテン用天井下地（4m未満）',
     manufacturer: 'Gハウス',
     modelNumber: 'REINFORCE-CEILING-4M',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '下地材の厚み12mm・幅は300mm 長さ4m未満',
     variants: [
@@ -2808,7 +2808,7 @@ const staticInteriorProducts: Product[] = [
     name: 'マグネットクロス（マグマジック）',
     manufacturer: 'シンコール',
     modelNumber: 'MAGMAGIC',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '600×750のクロス下地材 表面仕上がりはクロス ※カット、くりぬき施工は不可 コンセント、スイッチ等の干渉にご注意',
     variants: [
@@ -2831,7 +2831,7 @@ const staticInteriorProducts: Product[] = [
     name: 'サンゲツ ベースクロス',
     manufacturer: 'サンゲツ',
     modelNumber: 'SP-2801',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: false,
     description: '標準ベースクロス（全室標準）',
     variants: [
@@ -2852,7 +2852,7 @@ const staticInteriorProducts: Product[] = [
     name: 'サンゲツ ベースクロス（天井）',
     manufacturer: 'サンゲツ',
     modelNumber: 'SP-2801-C',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: false,
     description: '標準天井クロス（全室標準）壁と同色',
     variants: [
@@ -2871,7 +2871,7 @@ const staticInteriorProducts: Product[] = [
     name: 'サンゲツ厳選カタログ 標準面積内',
     manufacturer: 'サンゲツ',
     modelNumber: 'SANGETSU-SELECT',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: false,
     description: '標準アクセントクロス 坪×2㎡＝標準面積まで無料',
     variants: [
@@ -2892,7 +2892,7 @@ const staticInteriorProducts: Product[] = [
     name: 'アクセントクロス追加（標準面積超過分）',
     manufacturer: 'サンゲツ',
     modelNumber: 'SANGETSU-SELECT-EXTRA',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '標準面積（坪×2㎡）を超える場合のオプション',
     variants: [
@@ -2915,7 +2915,7 @@ const staticInteriorProducts: Product[] = [
     name: 'ストーンベニア',
     manufacturer: 'ADVAN',
     modelNumber: 'SV-001',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '天然石薄板タイル',
     variants: [
@@ -2938,7 +2938,7 @@ const staticInteriorProducts: Product[] = [
     name: 'コスモワイド21',
     manufacturer: 'Panasonic',
     modelNumber: 'COSMO-WIDE21',
-    unit: 'piece',
+    unit: '個',
     isOption: false,
     description: 'スクエアタイプ/ホワイト（標準）',
     variants: [
@@ -2959,7 +2959,7 @@ const staticInteriorProducts: Product[] = [
     name: 'LEDダウンライト 60W相当',
     manufacturer: 'Panasonic',
     modelNumber: 'NNN61510W',
-    unit: 'piece',
+    unit: '個',
     isOption: false,
     description: '標準ダウンライト（昼白色）',
     variants: [
@@ -2978,7 +2978,7 @@ const staticInteriorProducts: Product[] = [
     name: 'LEDダウンライト 調光タイプ',
     manufacturer: 'Panasonic',
     modelNumber: 'NNN61511W',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '調光機能付きダウンライト',
     variants: [
@@ -2997,7 +2997,7 @@ const staticInteriorProducts: Product[] = [
     name: 'ペンダントライト',
     manufacturer: 'Panasonic',
     modelNumber: 'LGB15141BK',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'ダイニング用ペンダントライト',
     variants: [
@@ -3020,7 +3020,7 @@ const staticInteriorProducts: Product[] = [
     name: '第一種換気システム 熱交換ユニット本体',
     manufacturer: 'Panasonic',
     modelNumber: 'FY-VENT-UNIT',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: '熱交換ユニット本体（リモコンは本体と同色）',
     variants: [
@@ -3042,7 +3042,7 @@ const staticInteriorProducts: Product[] = [
     name: '給気グリル（天井付）',
     manufacturer: 'Panasonic',
     modelNumber: 'FY-GPP024',
-    unit: 'piece',
+    unit: '個',
     isOption: false,
     description: '第一種換気 給気グリル',
     variants: [
@@ -3066,7 +3066,7 @@ const staticInteriorProducts: Product[] = [
     name: '排気グリル（トイレ用天井付）',
     manufacturer: 'Panasonic',
     modelNumber: 'VB-GMR50PFC',
-    unit: 'piece',
+    unit: '個',
     isOption: false,
     description: '第一種換気 排気グリル',
     variants: [
@@ -3088,7 +3088,7 @@ const staticInteriorProducts: Product[] = [
     name: '浴室換気暖房乾燥機',
     manufacturer: 'Panasonic',
     modelNumber: 'FY-13UGPS4D',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '1室換気・暖房・乾燥・涼風',
     variants: [
@@ -3109,7 +3109,7 @@ const staticInteriorProducts: Product[] = [
     name: '室内用手摺',
     manufacturer: 'TOTO',
     modelNumber: 'YHB601',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'I型手摺 L600mm',
     variants: [
@@ -3132,7 +3132,7 @@ const staticInteriorProducts: Product[] = [
     name: 'ホスクリーン（1カ所標準）',
     manufacturer: '川口技研',
     modelNumber: 'SPC-W',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: '天井付け室内物干し（2本1組）※1カ所標準',
     variants: [
@@ -3153,7 +3153,7 @@ const staticInteriorProducts: Product[] = [
     name: 'ホスクリーン追加',
     manufacturer: '川口技研',
     modelNumber: 'SPC-W',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: '天井付け室内物干し 追加（2カ所目以降）',
     variants: [
@@ -3174,7 +3174,7 @@ const staticInteriorProducts: Product[] = [
     name: 'ホシ姫サマ',
     manufacturer: 'Panasonic',
     modelNumber: 'CWFE12CM',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '電動式室内物干しユニット',
     variants: [
@@ -3196,7 +3196,7 @@ const staticInteriorProducts: Product[] = [
     name: 'フロアタイル コンクリート調',
     manufacturer: '東リ',
     modelNumber: 'PST4019-4035',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'コンクリート調フロアタイル ※水廻りにご使用可能 ※水廻り以外でご使用の場合は追加費用',
     variants: [
@@ -3230,7 +3230,7 @@ const staticInteriorProducts: Product[] = [
     name: 'フロアタイル 石目調',
     manufacturer: '東リ',
     modelNumber: 'PST4077-4123',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '石目調フロアタイル ※水廻りにご使用可能',
     variants: [
@@ -3263,7 +3263,7 @@ const staticInteriorProducts: Product[] = [
     name: 'フロアタイル 木目調',
     manufacturer: '東リ',
     modelNumber: 'PWT4228-4309',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '木目調フロアタイル ※水廻りにご使用可能',
     variants: [
@@ -3290,7 +3290,7 @@ const staticInteriorProducts: Product[] = [
     name: 'タイル目地色',
     manufacturer: '共通',
     modelNumber: 'SS-GROUT',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'タイル床材選択時に目地色を選択（タイル施工費に含む）',
     variants: [
@@ -3314,7 +3314,7 @@ const staticInteriorProducts: Product[] = [
     name: 'ランドストン',
     manufacturer: 'Nagoya mozaic',
     modelNumber: 'CRD-X/PAN-X',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '内装壁、内装床で使用可能 600×600/300×600 工事費用一式¥30,000 6㎡以下の場合追加¥50,000',
     variants: [
@@ -3344,7 +3344,7 @@ const staticInteriorProducts: Product[] = [
     name: 'ピエトラソーニ',
     manufacturer: 'Nagoya mozaic',
     modelNumber: 'IPF-600/MMP',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '内装壁、内装床で使用可能 600×600/300×600 工事費用一式¥30,000 6㎡以下の場合追加¥50,000',
     variants: [
@@ -3370,7 +3370,7 @@ const staticInteriorProducts: Product[] = [
     name: 'メンフィス',
     manufacturer: 'LIXIL',
     modelNumber: 'IPF-600/MNP',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '内装壁、内装床で使用可能 600×600/300×600 工事費用一式¥30,000 6㎡以下の場合追加¥50,000',
     variants: [
@@ -3397,7 +3397,7 @@ const staticInteriorProducts: Product[] = [
     name: '健やかたたみおもて 清流',
     manufacturer: '大建工業',
     modelNumber: 'SUKOYAKA-SEIRYU',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '機能畳 半畳タイプ',
     variants: [
@@ -3429,7 +3429,7 @@ const staticInteriorProducts: Product[] = [
     name: '小上がりスペース',
     manufacturer: 'Gハウス',
     modelNumber: 'KOAGARI-001',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '小上がり造作工事',
     variants: [
@@ -3450,7 +3450,7 @@ const staticInteriorProducts: Product[] = [
     name: '小上がり下引出収納 H350',
     manufacturer: 'Gハウス',
     modelNumber: 'KOAGARI-STR-H350',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '小上がり下収納 引出タイプ H350（収納高さH200程度）',
     variants: [
@@ -3475,7 +3475,7 @@ const staticInteriorProducts: Product[] = [
     name: '小上がり下引出収納 H400',
     manufacturer: 'Gハウス',
     modelNumber: 'KOAGARI-STR-H400',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '小上がり下収納 引出タイプ H400（収納高さH250程度）',
     variants: [
@@ -3500,7 +3500,7 @@ const staticInteriorProducts: Product[] = [
     name: 'お風呂ドア枠',
     manufacturer: 'Gハウス',
     modelNumber: 'BATH-DOORFRAME',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'お風呂ドア枠',
     variants: [
@@ -3525,7 +3525,7 @@ const staticInteriorProducts: Product[] = [
     name: '床下点検口 600×600',
     manufacturer: '城東テクノ',
     modelNumber: 'SPF-R60',
-    unit: 'piece',
+    unit: '個',
     isOption: false,
     description: '床下点検口 600×600',
     variants: [
@@ -3551,7 +3551,7 @@ const staticInteriorProducts: Product[] = [
     name: '天井点検口 454×454',
     manufacturer: '城東テクノ',
     modelNumber: 'CDE-45',
-    unit: 'piece',
+    unit: '個',
     isOption: false,
     description: '天井点検口 454×454',
     variants: [
@@ -3573,7 +3573,7 @@ const staticInteriorProducts: Product[] = [
     name: '床下収納庫',
     manufacturer: '城東テクノ',
     modelNumber: 'SPF-60S2',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '床下収納庫 600×600（深さ約270mm）',
     variants: [
@@ -3596,7 +3596,7 @@ const staticInteriorProducts: Product[] = [
     name: 'DSDD換気システム',
     manufacturer: 'DSDD',
     modelNumber: 'DSDD-SYSTEM',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'DSDD第一種全熱交換換気システムへ変更',
     variants: [
@@ -3619,7 +3619,7 @@ const staticInteriorProducts: Product[] = [
     name: '階段踏板/蹴込板 パナソニック仕様',
     manufacturer: 'Panasonic',
     modelNumber: 'STAIR-PNS',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: '階段踏板・蹴込板（標準）床材とのコーディネイトができる11柄をラインアップ ※蹴込のみホワイト・ブラックを標準選択可',
     variants: [
@@ -3650,7 +3650,7 @@ const staticInteriorProducts: Product[] = [
     name: '階段踏板/蹴込板 WOODTEC Live Natural仕様',
     manufacturer: 'WOODTEC',
     modelNumber: 'STAIR-WT-LN',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: '階段踏板・蹴込板（WOODTEC Live Natural 乱尺柄）※シュガーホワイト(アッシュ)は蹴込板がありません。ホワイト・ブラックよりご選択いただけます。',
     variants: [
@@ -3684,7 +3684,7 @@ const staticInteriorProducts: Product[] = [
     name: '階段踏板/蹴込板 ikuta仕様',
     manufacturer: 'ikuta',
     modelNumber: 'STAIR-IKT',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: '階段踏板・蹴込板（ikuta）※塗装品のため近似色塗装になります。',
     variants: [
@@ -3711,7 +3711,7 @@ const staticInteriorProducts: Product[] = [
     name: '階段踏板/蹴込板 ikutaエイジング仕様',
     manufacturer: 'ikuta',
     modelNumber: 'STAIR-IKT-AGING',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: '階段踏板・蹴込板（ikutaエイジング）※塗装品のため近似色塗装になります。',
     variants: [
@@ -3736,7 +3736,7 @@ const staticInteriorProducts: Product[] = [
     name: '階段 踊り場形状',
     manufacturer: 'Gハウス',
     modelNumber: 'STAIR-LANDING',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '階段踊り場形状変更',
     variants: [
@@ -3757,7 +3757,7 @@ const staticInteriorProducts: Product[] = [
     name: 'アイアン階段 スレート',
     manufacturer: 'Gハウス',
     modelNumber: 'IRON-STAIR-SLATE',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'アイアン階段（スレートタイプ）手摺形状：フラットバー（中桟1本・2本）・片側手摺のみ ※踏板は集成材塗装品',
     variants: [
@@ -3780,7 +3780,7 @@ const staticInteriorProducts: Product[] = [
     name: 'アイアンまわり階段（一曲がり追加）',
     manufacturer: 'Gハウス',
     modelNumber: 'IRON-STAIR-TURN',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'アイアン階段 一曲がり追加オプション',
     variants: [
@@ -3801,7 +3801,7 @@ const staticInteriorProducts: Product[] = [
     name: 'アイアン階段 転落防止型へ変更',
     manufacturer: 'Gハウス',
     modelNumber: 'IRON-STAIR-SAFE',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'アイアン階段 手すり形状 転落防止型へ変更',
     variants: [
@@ -3822,7 +3822,7 @@ const staticInteriorProducts: Product[] = [
     name: 'アイアン階段 両側手摺',
     manufacturer: 'Gハウス',
     modelNumber: 'IRON-STAIR-BOTH',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'アイアン階段 両側手摺へ変更',
     variants: [
@@ -3843,7 +3843,7 @@ const staticInteriorProducts: Product[] = [
     name: 'ホール アイアン手すり',
     manufacturer: 'Gハウス',
     modelNumber: 'IRON-HANDRAIL',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'ホール用アイアン手すり 手摺形状：フラットバー 上桟+中桟2本',
     variants: [
@@ -3866,7 +3866,7 @@ const staticInteriorProducts: Product[] = [
     name: '手すり LIXIL スクエアタイプ',
     manufacturer: 'LIXIL',
     modelNumber: 'HANDRAIL-LIXIL',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: '階段手すり LIXIL スクエアタイプ',
     variants: [
@@ -3888,7 +3888,7 @@ const staticInteriorProducts: Product[] = [
     name: '壁付I型手摺追加 H600',
     manufacturer: 'LIXIL',
     modelNumber: 'HANDRAIL-I-H600',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '壁付I型手摺追加 H600',
     variants: [
@@ -3910,7 +3910,7 @@ const staticInteriorProducts: Product[] = [
     name: 'カーペット階段',
     manufacturer: 'Gハウス',
     modelNumber: 'CARPET-STAIR',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'カーペット仕上げ階段 ※ひな壇階段では使用不可 ※アイアン階段では使用不可 ※1〜2階分ごとにオプション',
     variants: [
@@ -3946,7 +3946,7 @@ const staticInteriorProducts: Product[] = [
     name: '階段回り 腰壁笠木',
     manufacturer: 'Panasonic',
     modelNumber: 'KASAGI-STAIR',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: '階段回り腰壁笠木 標準高さFL+1100 階段部分斜め仕上がりとする ※腰壁がある場合のみ',
     variants: [
@@ -3969,7 +3969,7 @@ const staticInteriorProducts: Product[] = [
     name: '腰壁笠木不要',
     manufacturer: '不要',
     modelNumber: 'KASAGI-NONE',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: '腰壁がない場合は不要',
     variants: [
@@ -3991,7 +3991,7 @@ const staticInteriorProducts: Product[] = [
     name: '薄見付窓枠TS型',
     manufacturer: 'Panasonic',
     modelNumber: 'TS-MADOWAKU',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: '見付6mmのスマートな窓台 ※1色のみ採用可（2色以上採用不可）',
     variants: [
@@ -4015,7 +4015,7 @@ const staticInteriorProducts: Product[] = [
     name: 'クッション巾木スマート/H30',
     manufacturer: 'Panasonic',
     modelNumber: 'HABAKI-H30',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: '高さ3cm控え目な巾木 ※1色のみ採用可（2色以上採用不可）',
     variants: [
@@ -4084,7 +4084,7 @@ const staticInteriorProducts: Product[] = [
     name: 'アーチ垂壁',
     manufacturer: 'Gハウス',
     modelNumber: 'ARCH-TAREKABE',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'アーチ型垂壁造作',
     variants: [
@@ -4108,7 +4108,7 @@ const staticInteriorProducts: Product[] = [
     name: '選択しない',
     manufacturer: '-',
     modelNumber: 'NONE',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: '室内窓を設置しない場合はこちらを選択',
     variants: [
@@ -4130,7 +4130,7 @@ const staticInteriorProducts: Product[] = [
     name: '室内窓 Aパターン 標準ガラス',
     manufacturer: 'Panasonic',
     modelNumber: 'INT-WINDOW-A-STD',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: '室内窓 Aパターン（A-1〜A-4形状）FIX窓・透明熱処理ガラス',
     variants: [
@@ -4152,7 +4152,7 @@ const staticInteriorProducts: Product[] = [
     name: '室内窓 Aパターン オプションガラス',
     manufacturer: 'Panasonic',
     modelNumber: 'INT-WINDOW-A-OPT',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: '室内窓 Aパターン オプションガラス（カスミ/チェッカーアクリル/チェッカー/レイン/モール熱処理ガラス）',
     variants: [
@@ -4175,7 +4175,7 @@ const staticInteriorProducts: Product[] = [
     name: '室内窓 Bパターン 標準ガラス',
     manufacturer: 'Panasonic',
     modelNumber: 'INT-WINDOW-B-STD',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: '室内窓 Bパターン（B-1〜B-5形状）FIX窓・透明熱処理ガラス',
     variants: [
@@ -4197,7 +4197,7 @@ const staticInteriorProducts: Product[] = [
     name: '室内窓 Bパターン オプションガラス',
     manufacturer: 'Panasonic',
     modelNumber: 'INT-WINDOW-B-OPT',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: '室内窓 Bパターン オプションガラス（カスミ/チェッカーアクリル/チェッカー/レイン/モール熱処理ガラス）',
     variants: [
@@ -4220,7 +4220,7 @@ const staticInteriorProducts: Product[] = [
     name: '室内窓 Cパターン 標準ガラス',
     manufacturer: 'Panasonic',
     modelNumber: 'INT-WINDOW-C-STD',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: '室内窓 Cパターン（C-1〜C-3形状）FIX窓・透明熱処理ガラス',
     variants: [
@@ -4242,7 +4242,7 @@ const staticInteriorProducts: Product[] = [
     name: '室内窓 Cパターン オプションガラス',
     manufacturer: 'Panasonic',
     modelNumber: 'INT-WINDOW-C-OPT',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: '室内窓 Cパターン オプションガラス（カスミ/チェッカーアクリル/チェッカー/レイン/モール熱処理ガラス）',
     variants: [
@@ -4265,7 +4265,7 @@ const staticInteriorProducts: Product[] = [
     name: '室内窓 突き出し窓変更',
     manufacturer: 'Panasonic',
     modelNumber: 'INT-WINDOW-AWNING',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'FIX窓から突き出し窓への変更（上部のみ開閉可能な形状に適用可）',
     variants: [
@@ -4289,7 +4289,7 @@ const staticInteriorProducts: Product[] = [
     name: '選択しない',
     manufacturer: '-',
     modelNumber: 'NONE',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'アクセントパネルを設置しない場合はこちらを選択',
     variants: [
@@ -4311,7 +4311,7 @@ const staticInteriorProducts: Product[] = [
     name: 'THE WALL ¥15,000/㎡',
     manufacturer: '朝日ウッドテック',
     modelNumber: 'THEWALL-15000',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'ウッドパネル パネルサイズ2,730mm×600mm',
     variants: [
@@ -4332,7 +4332,7 @@ const staticInteriorProducts: Product[] = [
     name: 'THE WALL ¥20,000/㎡',
     manufacturer: '朝日ウッドテック',
     modelNumber: 'THEWALL-20000',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'ウッドパネル パネルサイズ2,730mm×600mm',
     variants: [
@@ -4356,7 +4356,7 @@ const staticInteriorProducts: Product[] = [
     name: 'THE WALL ¥21,000/㎡',
     manufacturer: '朝日ウッドテック',
     modelNumber: 'THEWALL-21000',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'ウッドパネル パネルサイズ2,730mm×600mm',
     variants: [
@@ -4377,7 +4377,7 @@ const staticInteriorProducts: Product[] = [
     name: 'THE WALL ¥48,000/㎡',
     manufacturer: '朝日ウッドテック',
     modelNumber: 'THEWALL-48000',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'ウッドパネル パネルサイズ2,730mm×600mm',
     variants: [
@@ -4398,7 +4398,7 @@ const staticInteriorProducts: Product[] = [
     name: 'THE WALL ¥55,000/㎡',
     manufacturer: '朝日ウッドテック',
     modelNumber: 'THEWALL-55000',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'ウッドパネル パネルサイズ2,730mm×600mm',
     variants: [
@@ -4419,7 +4419,7 @@ const staticInteriorProducts: Product[] = [
     name: 'THE WALL ¥60,000/㎡',
     manufacturer: '朝日ウッドテック',
     modelNumber: 'THEWALL-60000',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'ウッドパネル パネルサイズ2,730mm×600mm',
     variants: [
@@ -4444,7 +4444,7 @@ const staticInteriorProducts: Product[] = [
     name: 'セラール',
     manufacturer: 'AICA',
     modelNumber: 'CERARL',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'セラールパネル 900mm×2,400mm ※キッチン・メーカーカップボード吊戸〜カウンター間は施工不可 見切り材（2本）+¥8,000 UP',
     variants: [
@@ -4472,7 +4472,7 @@ const staticInteriorProducts: Product[] = [
     name: 'セラール セレント',
     manufacturer: 'AICA',
     modelNumber: 'CERARL-SELENT',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'セラール セレント 900mm×2,400mm 見切り材（2本）+¥14,000 UP',
     variants: [
@@ -4501,7 +4501,7 @@ const staticInteriorProducts: Product[] = [
     name: '選択しない',
     manufacturer: '-',
     modelNumber: 'NONE',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: '格子を設置しない場合はこちらを選択',
     variants: [
@@ -4522,7 +4522,7 @@ const staticInteriorProducts: Product[] = [
     name: 'インテリア格子',
     manufacturer: 'LIXIL',
     modelNumber: 'INT-LATTICE',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'インテリア格子（室内用）',
     variants: [
@@ -4549,7 +4549,7 @@ const staticInteriorProducts: Product[] = [
     name: '選択しない',
     manufacturer: '-',
     modelNumber: 'NONE',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'アクセントタイルを設置しない場合はこちらを選択',
     variants: [
@@ -4571,7 +4571,7 @@ const staticInteriorProducts: Product[] = [
     name: '壁タイル目地色',
     manufacturer: '共通',
     modelNumber: 'SS-WALL-GROUT',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: '壁アクセントタイル選択時に目地色を選択（タイル施工費に含む）※エコカラットは目地無しのみ',
     variants: [
@@ -4597,7 +4597,7 @@ const staticInteriorProducts: Product[] = [
     name: 'スカンジナビアストン',
     manufacturer: '名古屋モザイク',
     modelNumber: 'SCANDINAVIA-STONE',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'アクセントタイル',
     variants: [
@@ -4619,7 +4619,7 @@ const staticInteriorProducts: Product[] = [
     name: 'バイオフィリック',
     manufacturer: '名古屋モザイク',
     modelNumber: 'BIOPHILIC',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'アクセントタイル',
     variants: [
@@ -4641,7 +4641,7 @@ const staticInteriorProducts: Product[] = [
     name: 'セメンティング',
     manufacturer: '名古屋モザイク',
     modelNumber: 'CEMENTING',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'アクセントタイル コンクリート調',
     variants: [
@@ -4662,7 +4662,7 @@ const staticInteriorProducts: Product[] = [
     name: 'モデネーゼ',
     manufacturer: '名古屋モザイク',
     modelNumber: 'MODENESE',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'アクセントタイル',
     variants: [
@@ -4684,7 +4684,7 @@ const staticInteriorProducts: Product[] = [
     name: 'ラヴィータ',
     manufacturer: '名古屋モザイク',
     modelNumber: 'LAVITA',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'アクセントタイル',
     variants: [
@@ -4706,7 +4706,7 @@ const staticInteriorProducts: Product[] = [
     name: 'ファータ',
     manufacturer: '名古屋モザイク',
     modelNumber: 'FATA',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'アクセントタイル',
     variants: [
@@ -4727,7 +4727,7 @@ const staticInteriorProducts: Product[] = [
     name: 'エキピズム',
     manufacturer: '名古屋モザイク',
     modelNumber: 'EKIPISM',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'アクセントタイル',
     variants: [
@@ -4749,7 +4749,7 @@ const staticInteriorProducts: Product[] = [
     name: 'マットアンドモア',
     manufacturer: '名古屋モザイク',
     modelNumber: 'MAT-AND-MORE',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'アクセントタイル',
     variants: [
@@ -4771,7 +4771,7 @@ const staticInteriorProducts: Product[] = [
     name: 'WIG-WAG',
     manufacturer: '平田タイル',
     modelNumber: 'WIG-WAG',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'アクセントタイル',
     variants: [
@@ -4793,7 +4793,7 @@ const staticInteriorProducts: Product[] = [
     name: 'パレッタ',
     manufacturer: '平田タイル',
     modelNumber: 'PALETTA',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'アクセントタイル',
     variants: [
@@ -4815,7 +4815,7 @@ const staticInteriorProducts: Product[] = [
     name: 'マーブルモザイク',
     manufacturer: '平田タイル',
     modelNumber: 'MARBLE-MOSAIC',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'アクセントタイル 大理石調',
     variants: [
@@ -4837,7 +4837,7 @@ const staticInteriorProducts: Product[] = [
     name: 'Britz',
     manufacturer: '平田タイル',
     modelNumber: 'BRITZ',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'アクセントタイル',
     variants: [
@@ -4858,7 +4858,7 @@ const staticInteriorProducts: Product[] = [
     name: '10Thirty',
     manufacturer: '平田タイル',
     modelNumber: '10THIRTY',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'アクセントタイル',
     variants: [
@@ -4880,7 +4880,7 @@ const staticInteriorProducts: Product[] = [
     name: 'レシピ',
     manufacturer: '平田タイル',
     modelNumber: 'RECIPE',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'アクセントタイル',
     variants: [
@@ -4901,7 +4901,7 @@ const staticInteriorProducts: Product[] = [
     name: '釉かげ',
     manufacturer: 'LIXIL',
     modelNumber: 'YUKAGE',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'アクセントタイル',
     variants: [
@@ -4923,7 +4923,7 @@ const staticInteriorProducts: Product[] = [
     name: 'シャインリーフ',
     manufacturer: 'LIXIL',
     modelNumber: 'SHINE-LEAF',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'アクセントタイル',
     variants: [
@@ -4944,7 +4944,7 @@ const staticInteriorProducts: Product[] = [
     name: 'イノセントマーブル',
     manufacturer: 'LIXIL',
     modelNumber: 'INNOCENT-MARBLE',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'アクセントタイル 大理石調',
     variants: [
@@ -4965,7 +4965,7 @@ const staticInteriorProducts: Product[] = [
     name: 'グラベルガラス',
     manufacturer: 'LIXIL',
     modelNumber: 'GRAVEL-GLASS',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'アクセントタイル ガラス',
     variants: [
@@ -4989,7 +4989,7 @@ const staticInteriorProducts: Product[] = [
     name: '選択しない',
     manufacturer: '-',
     modelNumber: 'NONE',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'エコカラットを設置しない場合はこちらを選択',
     variants: [
@@ -5010,7 +5010,7 @@ const staticInteriorProducts: Product[] = [
     name: 'エコカラット グランクォーツ',
     manufacturer: 'LIXIL',
     modelNumber: 'ECOCARAT-GRANQUARTZ',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'エコカラット 606×303mm',
     variants: [
@@ -5032,7 +5032,7 @@ const staticInteriorProducts: Product[] = [
     name: 'エコカラット ラフセメント',
     manufacturer: 'LIXIL',
     modelNumber: 'ECOCARAT-ROUGHCEMENT',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'エコカラット 606×151×7mm',
     variants: [
@@ -5055,7 +5055,7 @@ const staticInteriorProducts: Product[] = [
     name: 'エコカラット ヴァルスロック',
     manufacturer: 'LIXIL',
     modelNumber: 'ECOCARAT-VALSROCK',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'エコカラット 303×151mm',
     variants: [
@@ -5078,7 +5078,7 @@ const staticInteriorProducts: Product[] = [
     name: 'エコカラット ストーングレース',
     manufacturer: 'LIXIL',
     modelNumber: 'ECOCARAT-STONEGRACE',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'エコカラット 606×303mm',
     variants: [
@@ -5102,7 +5102,7 @@ const staticInteriorProducts: Product[] = [
     name: 'エコカラット ラフクォーツ',
     manufacturer: 'LIXIL',
     modelNumber: 'ECOCARAT-ROUGHQUARTZ',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'エコカラット 303×75mm',
     variants: [
@@ -5127,7 +5127,7 @@ const staticInteriorProducts: Product[] = [
     name: '枕棚+PH（2カ所目以降）W910',
     manufacturer: 'Panasonic',
     modelNumber: 'SHELF-PH-910',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '枕棚+パイプハンガー W910',
     variants: [
@@ -5148,7 +5148,7 @@ const staticInteriorProducts: Product[] = [
     name: '枕棚+PH（2カ所目以降）W1820',
     manufacturer: 'Panasonic',
     modelNumber: 'SHELF-PH-1820',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '枕棚+パイプハンガー W1820',
     variants: [
@@ -5169,7 +5169,7 @@ const staticInteriorProducts: Product[] = [
     name: '枕棚+PH（2カ所目以降）W2730',
     manufacturer: 'Panasonic',
     modelNumber: 'SHELF-PH-2730',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '枕棚+パイプハンガー W2730',
     variants: [
@@ -5190,7 +5190,7 @@ const staticInteriorProducts: Product[] = [
     name: '枕棚のみ W910',
     manufacturer: 'Panasonic',
     modelNumber: 'SHELF-ONLY-910',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '枕棚のみ W910',
     variants: [
@@ -5211,7 +5211,7 @@ const staticInteriorProducts: Product[] = [
     name: '枕棚+中段 W910',
     manufacturer: 'Panasonic',
     modelNumber: 'SHELF-MID-910',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '枕棚+中段 W910',
     variants: [
@@ -5234,7 +5234,7 @@ const staticInteriorProducts: Product[] = [
     name: '可動棚 両壁収まり C300-2',
     manufacturer: 'Gハウス',
     modelNumber: 'C300-2',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '可動棚 D300×2枚 W〜900mm',
     variants: [
@@ -5256,7 +5256,7 @@ const staticInteriorProducts: Product[] = [
     name: '可動棚 両壁収まり C300-4',
     manufacturer: 'Gハウス',
     modelNumber: 'C300-4',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '可動棚 D300×4枚 W〜900mm',
     variants: [
@@ -5278,7 +5278,7 @@ const staticInteriorProducts: Product[] = [
     name: '可動棚 両壁収まり C300-6',
     manufacturer: 'Gハウス',
     modelNumber: 'C300-6',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '可動棚 D300×6枚 W〜900mm',
     variants: [
@@ -5300,7 +5300,7 @@ const staticInteriorProducts: Product[] = [
     name: '可動棚 両壁収まり C450-4',
     manufacturer: 'Gハウス',
     modelNumber: 'C450-4',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '可動棚 D450×4枚 W〜900mm',
     variants: [
@@ -5322,7 +5322,7 @@ const staticInteriorProducts: Product[] = [
     name: '可動棚 両壁収まり C450-6',
     manufacturer: 'Gハウス',
     modelNumber: 'C450-6',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '可動棚 D450×6枚 W〜900mm',
     variants: [
@@ -5344,7 +5344,7 @@ const staticInteriorProducts: Product[] = [
     name: 'ランドリー可動棚 W600',
     manufacturer: 'Gハウス',
     modelNumber: 'LAUNDRY-SHELF-600',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'ランドリー可動棚 D300棚板+パイプ付棚板',
     variants: [
@@ -5367,7 +5367,7 @@ const staticInteriorProducts: Product[] = [
     name: '樹脂製可動棚 S1',
     manufacturer: 'Gハウス',
     modelNumber: 'RESIN-S1',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '樹脂製可動棚 D300×8枚 W756',
     variants: [
@@ -5389,7 +5389,7 @@ const staticInteriorProducts: Product[] = [
     name: '樹脂製可動棚 S2',
     manufacturer: 'Gハウス',
     modelNumber: 'RESIN-S2',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '樹脂製可動棚 D300×8枚 W1132',
     variants: [
@@ -5411,7 +5411,7 @@ const staticInteriorProducts: Product[] = [
     name: '樹脂製可動棚 S3',
     manufacturer: 'Gハウス',
     modelNumber: 'RESIN-S3',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '樹脂製可動棚 D300×8枚 W1682',
     variants: [
@@ -5433,7 +5433,7 @@ const staticInteriorProducts: Product[] = [
     name: 'ハンガーパイプセット P1',
     manufacturer: 'Gハウス',
     modelNumber: 'HANGER-P1',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'ハンガーパイプセット① W〜2900mm',
     variants: [
@@ -5454,7 +5454,7 @@ const staticInteriorProducts: Product[] = [
     name: 'ハンガーパイプセット P2',
     manufacturer: 'Gハウス',
     modelNumber: 'HANGER-P2',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'ハンガーパイプセット② 2段タイプ',
     variants: [
@@ -5475,7 +5475,7 @@ const staticInteriorProducts: Product[] = [
     name: 'ハンガーパイプセット P3',
     manufacturer: 'Gハウス',
     modelNumber: 'HANGER-P3',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'ハンガーパイプセット③ W〜2900mm 2段',
     variants: [
@@ -5496,7 +5496,7 @@ const staticInteriorProducts: Product[] = [
     name: 'ハンガーパイプセット P4',
     manufacturer: 'Gハウス',
     modelNumber: 'HANGER-P4',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'ハンガーパイプセット④ 大型2段',
     variants: [
@@ -5519,7 +5519,7 @@ const staticInteriorProducts: Product[] = [
     name: 'コンポリア W800',
     manufacturer: 'Panasonic',
     modelNumber: 'COMPOLIA-W800',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '玄関靴箱 フロートタイプ W800 H2070',
     variants: [
@@ -5553,7 +5553,7 @@ const staticInteriorProducts: Product[] = [
     name: 'コンポリア W1200',
     manufacturer: 'Panasonic',
     modelNumber: 'COMPOLIA-W1200',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '玄関靴箱 フロートタイプ W1200 H2070',
     variants: [
@@ -5587,7 +5587,7 @@ const staticInteriorProducts: Product[] = [
     name: 'コンポリア W1600',
     manufacturer: 'Panasonic',
     modelNumber: 'COMPOLIA-W1600',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '玄関靴箱 フロートタイプ W1600 H2070',
     variants: [
@@ -5621,7 +5621,7 @@ const staticInteriorProducts: Product[] = [
     name: 'コンポリア ミラー追加',
     manufacturer: 'Panasonic',
     modelNumber: 'COMPOLIA-MIRROR',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '玄関靴箱用ミラー追加',
     variants: [
@@ -5644,7 +5644,7 @@ const staticInteriorProducts: Product[] = [
     name: 'スロップシンク',
     manufacturer: 'TOTO',
     modelNumber: 'SK507-SLOP',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'スロップシンク ボウル/水栓/排水Pトラップセット',
     variants: [
@@ -5665,7 +5665,7 @@ const staticInteriorProducts: Product[] = [
     name: '洗濯パン',
     manufacturer: 'Panasonic',
     modelNumber: 'GB745-881',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '洗濯パン GB745+排水トラップGB881セット',
     variants: [
@@ -5688,7 +5688,7 @@ const staticInteriorProducts: Product[] = [
     name: '玄関手洗い ボウルA',
     manufacturer: 'KAKUDAI',
     modelNumber: 'LY-493231',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '玄関手洗いボウル 角型',
     variants: [
@@ -5711,7 +5711,7 @@ const staticInteriorProducts: Product[] = [
     name: '玄関手洗い ボウルB',
     manufacturer: 'KAKUDAI',
     modelNumber: 'LY-493232',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '玄関手洗いボウル 丸型深',
     variants: [
@@ -5734,7 +5734,7 @@ const staticInteriorProducts: Product[] = [
     name: '玄関手洗い ステンレスコーナーカウンター',
     manufacturer: 'KAKUDAI',
     modelNumber: 'STAINLESS-CORNER',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'ステンレスボウル一体型コーナーカウンター（ボウル+排水+水栓）',
     variants: [
@@ -5757,7 +5757,7 @@ const staticInteriorProducts: Product[] = [
     name: 'Kacu',
     manufacturer: '森田アルミ工業',
     modelNumber: 'KACU',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '室内物干し金物 2カ所目から',
     variants: [
@@ -5779,7 +5779,7 @@ const staticInteriorProducts: Product[] = [
     name: 'Pid4M',
     manufacturer: '森田アルミ工業',
     modelNumber: 'PID4M',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'ワイヤー式室内物干し 2カ所目から',
     variants: [
@@ -5800,7 +5800,7 @@ const staticInteriorProducts: Product[] = [
     name: 'ホスクリーン昇降タイプ UTM',
     manufacturer: '川口技研',
     modelNumber: 'UTM-S-W',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'ホスクリーン昇降タイプ（ヒモ操作）2カ所目から',
     variants: [
@@ -5821,7 +5821,7 @@ const staticInteriorProducts: Product[] = [
     name: 'ホスクリーン昇降タイプ URM',
     manufacturer: '川口技研',
     modelNumber: 'URM-S-W',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'ホスクリーン昇降タイプ（操作棒）2カ所目から',
     variants: [
@@ -5845,7 +5845,7 @@ const staticInteriorProducts: Product[] = [
     name: 'ガス引込工事',
     manufacturer: 'Gハウス',
     modelNumber: 'GAS-INSTALL',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'ガス引込工事（最低ガス栓3カ所取付必要）',
     variants: [
@@ -5868,7 +5868,7 @@ const staticInteriorProducts: Product[] = [
     name: 'スイッチ追加',
     manufacturer: 'Panasonic',
     modelNumber: 'SWITCH-ADD',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'スイッチ追加（コスモワイド21）',
     variants: [
@@ -5889,7 +5889,7 @@ const staticInteriorProducts: Product[] = [
     name: 'コンセント追加',
     manufacturer: 'Panasonic',
     modelNumber: 'OUTLET-ADD',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'コンセント追加（2口）',
     variants: [
@@ -5910,7 +5910,7 @@ const staticInteriorProducts: Product[] = [
     name: '4口コンセント',
     manufacturer: 'Panasonic',
     modelNumber: 'OUTLET-4',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '4口コンセント追加',
     variants: [
@@ -5931,7 +5931,7 @@ const staticInteriorProducts: Product[] = [
     name: '床用コンセント F型アップコン',
     manufacturer: 'Panasonic',
     modelNumber: 'FLOOR-OUTLET',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '床用コンセント F型アップコン',
     variants: [
@@ -5954,7 +5954,7 @@ const staticInteriorProducts: Product[] = [
     name: 'アドバンスシリーズ一式',
     manufacturer: 'Panasonic',
     modelNumber: 'ADVANCE-SERIES',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'アドバンスシリーズ全箇所変更',
     variants: [
@@ -5976,7 +5976,7 @@ const staticInteriorProducts: Product[] = [
     name: 'LAN用空配管追加',
     manufacturer: 'Panasonic',
     modelNumber: 'LAN-CONDUIT',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'LAN用空配管追加',
     variants: [
@@ -5997,7 +5997,7 @@ const staticInteriorProducts: Product[] = [
     name: '壁掛けテレビ用空配管',
     manufacturer: 'Panasonic',
     modelNumber: 'TV-CONDUIT',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '壁掛けテレビ用空配管',
     variants: [
@@ -6020,7 +6020,7 @@ const staticInteriorProducts: Product[] = [
     name: '外でもドアホン VL-SVD505KF変更',
     manufacturer: 'Panasonic',
     modelNumber: 'VL-SVD505KF',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: '外でもドアホン（スマホ対応）への変更',
     variants: [
@@ -6041,7 +6041,7 @@ const staticInteriorProducts: Product[] = [
     name: '外でもドアホン VL-SVD710KF変更',
     manufacturer: 'Panasonic',
     modelNumber: 'VL-SVD710KF',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: '外でもドアホン上位機種（スマホ対応）への変更',
     variants: [
@@ -6062,7 +6062,7 @@ const staticInteriorProducts: Product[] = [
     name: 'テレビドアホン VL-SE50KPA変更',
     manufacturer: 'Panasonic',
     modelNumber: 'VL-SE50KPA',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'テレビドアホンへの変更',
     variants: [
@@ -6085,7 +6085,7 @@ const staticInteriorProducts: Product[] = [
     name: 'ダウンライト施工費（10個まで）',
     manufacturer: 'Gハウス',
     modelNumber: 'DOWNLIGHT-10',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'ダウンライト施工費（10個まで）※照明器具別途',
     variants: [
@@ -6106,7 +6106,7 @@ const staticInteriorProducts: Product[] = [
     name: 'ダウンライト施工費（11個目以降）',
     manufacturer: 'Gハウス',
     modelNumber: 'DOWNLIGHT-ADD',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'ダウンライト施工費（11個目から1個あたり）',
     variants: [
@@ -6127,7 +6127,7 @@ const staticInteriorProducts: Product[] = [
     name: '洗濯機混合水栓へ変更',
     manufacturer: 'Gハウス',
     modelNumber: 'WASH-FAUCET-MIX',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '洗濯機用水栓を混合水栓へ変更',
     variants: [
@@ -6148,7 +6148,7 @@ const staticInteriorProducts: Product[] = [
     name: 'ナノバブル発生装置 BeautyAqua',
     manufacturer: 'BeautyAqua',
     modelNumber: 'BEAUTYAQUA-20A',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'ナノバブル発生装置 20A',
     variants: [

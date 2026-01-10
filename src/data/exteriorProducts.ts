@@ -13,7 +13,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'ニチハ',
     materialType: '窯業系サイディング',
     modelNumber: 'EFA52xxFK/GK/TK',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: false,
     description: '横張のみの採用となります',
     variants: [
@@ -40,7 +40,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'ニチハ',
     materialType: '窯業系サイディング',
     modelNumber: 'EFA28xxFK/CK',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: false,
     description: '窯業系サイディング 16mm厚 モエンエクセラード16 Vシリーズ',
     variants: [
@@ -67,7 +67,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'ニチハ',
     materialType: '窯業系サイディング',
     modelNumber: 'EFX34xxCK/NK',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: false,
     description: '窯業系サイディング 16mm厚 モエンエクセラード16 Vシリーズ',
     variants: [
@@ -93,7 +93,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'ニチハ',
     materialType: '窯業系サイディング',
     modelNumber: 'EFA54xxYK/LK',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: false,
     description: '窯業系サイディング 16mm厚 モエンエクセラード16 Vシリーズ',
     variants: [
@@ -119,7 +119,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'ニチハ',
     materialType: '窯業系サイディング',
     modelNumber: 'EFX31xxFK/NK/LK/RK',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: false,
     description: '窯業系サイディング 16mm厚 モエンエクセラード16 Vシリーズ',
     variants: [
@@ -143,7 +143,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'ニチハ',
     materialType: '窯業系サイディング',
     modelNumber: 'EFX16xxNK/GK',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: false,
     description: '窯業系サイディング 16mm厚 モエンエクセラード16 Vシリーズ',
     variants: [
@@ -167,7 +167,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'ニチハ',
     materialType: '窯業系サイディング',
     modelNumber: 'EFX33xxNK/CK/FK/RK/AK',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: false,
     description: '窯業系サイディング 16mm厚 モエンエクセラード16 Vシリーズ',
     variants: [
@@ -192,7 +192,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'ニチハ',
     materialType: '窯業系サイディング',
     modelNumber: 'EFA4351NK',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: false,
     description: '窯業系サイディング 16mm厚 モエンエクセラード16 Vシリーズ',
     variants: [
@@ -214,7 +214,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'ニチハ',
     materialType: '窯業系サイディング',
     modelNumber: 'EFA22xxYK/FK/LK',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: false,
     description: '窯業系サイディング 16mm厚 モエンエクセラード16 Vシリーズ',
     variants: [
@@ -239,7 +239,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'ニチハ',
     materialType: '窯業系サイディング',
     modelNumber: 'EF93xxFK/GK/YK',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: false,
     description: '窯業系サイディング 16mm厚 モエンエクセラード16 Vシリーズ',
     variants: [
@@ -265,7 +265,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'ニチハ',
     materialType: '窯業系サイディング',
     modelNumber: 'EF53xxC2K/JK/GK',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: false,
     description: '窯業系サイディング 16mm厚 モエンエクセラード16 Vシリーズ',
     variants: [
@@ -293,7 +293,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'ニチハ',
     materialType: '窯業系サイディング',
     modelNumber: 'EFA53xxFK',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: false,
     description: '窯業系サイディング 16mm厚 モエンエクセラード16 Vシリーズ',
     variants: [
@@ -318,7 +318,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'ニチハ',
     materialType: '窯業系サイディング',
     modelNumber: 'EF90xxGK',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: false,
     description: '窯業系サイディング 16mm厚 モエンエクセラード16 Vシリーズ',
     variants: [
@@ -342,7 +342,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'ニチハ',
     materialType: '窯業系サイディング',
     modelNumber: 'EFX37xxGK/TK',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: false,
     description: '窯業系サイディング 16mm厚 モエンエクセラード16 Vシリーズ',
     variants: [
@@ -367,7 +367,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'KMEW',
     materialType: '窯業系サイディング',
     modelNumber: 'ELS4xxP',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'プレミアム外壁 シーリング目地に比べて継ぎ目が目立たない',
     variants: [
@@ -392,7 +392,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'ニチハ',
     materialType: '窯業系サイディング',
     modelNumber: 'ELS61xY',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'Fu-ge PREMIUM シーリング目地に比べて継ぎ目が目立たない 四方合いじゃくり',
     variants: [
@@ -417,7 +417,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'ニチハ',
     materialType: '窯業系サイディング',
     modelNumber: 'ELS49xP',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'Fu-ge PREMIUM シーリング目地に比べて継ぎ目が目立たない 四方合いじゃくり',
     variants: [
@@ -441,7 +441,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'ニチハ',
     materialType: '窯業系サイディング',
     modelNumber: 'ELS42xP',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'Fu-ge PREMIUM シーリング目地に比べて継ぎ目が目立たない 四方合いじゃくり',
     variants: [
@@ -467,7 +467,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'ニチハ',
     materialType: '窯業系サイディング',
     modelNumber: 'ELS46xF',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'Fu-ge PREMIUM シーリング目地に比べて継ぎ目が目立たない 四方合いじゃくり',
     variants: [
@@ -493,7 +493,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'ニチハ',
     materialType: '窯業系サイディング',
     modelNumber: 'ELS44xE/P',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'Fu-ge PREMIUM シーリング目地に比べて継ぎ目が目立たない 四方合いじゃくり',
     variants: [
@@ -517,7 +517,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'ニチハ',
     materialType: '窯業系サイディング',
     modelNumber: 'ELG24xxNK',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'Fu-ge PREMIUM 横張のみの採用となります',
     variants: [
@@ -547,7 +547,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'ニチハ',
     materialType: '窯業系サイディング',
     modelNumber: 'ELG76xFK',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'Fu-ge PREMIUM 横張のみの採用となります',
     variants: [
@@ -571,7 +571,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'ニチハ',
     materialType: '窯業系サイディング',
     modelNumber: 'ELG432NK',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'Fu-ge PREMIUM 横張のみの採用となります',
     variants: [
@@ -593,7 +593,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'ニチハ',
     materialType: '窯業系サイディング',
     modelNumber: 'ELG28xFK',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'Fu-ge PREMIUM シーリング目地に比べて継ぎ目が目立たない',
     variants: [
@@ -617,7 +617,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'ニチハ',
     materialType: '窯業系サイディング',
     modelNumber: 'ELG33xNK',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'Fu-ge PREMIUM シーリング目地に比べて継ぎ目が目立たない',
     variants: [
@@ -645,7 +645,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'ニチハ',
     materialType: '窯業系サイディング',
     modelNumber: 'ELG34xNK',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'Fu-ge PREMIUM シーリング目地に比べて継ぎ目が目立たない',
     variants: [
@@ -670,7 +670,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'ニチハ',
     materialType: '窯業系サイディング',
     modelNumber: 'ELG18xNK',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'Fu-ge PREMIUM シーリング目地に比べて継ぎ目が目立たない',
     variants: [
@@ -694,7 +694,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'ニチハ',
     materialType: '窯業系サイディング',
     modelNumber: 'ELG72xNK',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'Fu-ge PREMIUM 横張のみの採用となります',
     variants: [
@@ -718,7 +718,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'ニチハ',
     materialType: '窯業系サイディング',
     modelNumber: 'ELG94xYK/FK',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'Fu-ge PREMIUM 横張のみの採用となります',
     variants: [
@@ -744,7 +744,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'ニチハ',
     materialType: '窯業系サイディング',
     modelNumber: 'ELG38xFK',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'Fu-ge PREMIUM 横張のみの採用となります',
     variants: [
@@ -768,7 +768,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'ニチハ',
     materialType: '窯業系サイディング',
     modelNumber: 'EPS24xNK',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'Fu-ge PREMIUM 横張のみの採用となります',
     variants: [
@@ -792,7 +792,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'ニチハ',
     materialType: '窯業系サイディング',
     modelNumber: 'EQG4xxEK/NK',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'Fu-ge PREMIUM 横張のみの採用となります',
     variants: [
@@ -821,7 +821,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'ニチハ',
     materialType: '窯業系サイディング',
     modelNumber: 'EPA32xGK/TK',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'Fu-ge PREMIUM 横張のみの採用となります',
     variants: [
@@ -848,7 +848,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'ニチハ',
     materialType: '窯業系サイディング',
     modelNumber: 'EFM5xxP/E・EJM5xxE',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'COOL 遮熱性能付き外壁 芋目地・馬目地を選択可',
     variants: [
@@ -878,7 +878,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'KMEW',
     materialType: '窯業系サイディング',
     modelNumber: 'NH520x',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'ネオロック・光セラ18 18mm厚 横張のみ',
     variants: [
@@ -903,7 +903,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'KMEW',
     materialType: '窯業系サイディング',
     modelNumber: 'NH544x',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'ネオロック・光セラ18 18mm厚 横張のみ',
     variants: [
@@ -929,7 +929,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'KMEW',
     materialType: '窯業系サイディング',
     modelNumber: 'NH523xU',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'ネオロック・光セラ18 18mm厚 横張のみ',
     variants: [
@@ -954,7 +954,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'KMEW',
     materialType: '窯業系サイディング',
     modelNumber: 'NH564xA',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'ネオロック・光セラ18 セラトピア 18mm厚',
     variants: [
@@ -978,7 +978,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'KMEW',
     materialType: '窯業系サイディング',
     modelNumber: 'NH576xA',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'ネオロック・光セラ18 セラトピア 18mm厚 横張のみ',
     variants: [
@@ -1002,7 +1002,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'KMEW',
     materialType: '窯業系サイディング',
     modelNumber: 'NH497xA',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'FLAT DESIGN PANEL 横張のみ',
     variants: [
@@ -1028,7 +1028,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'KMEW',
     materialType: '窯業系サイディング',
     modelNumber: 'NH588xU',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'ネオロック・光セラ18 18mm厚 横張のみ',
     variants: [
@@ -1055,7 +1055,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'KMEW',
     materialType: '窯業系サイディング',
     modelNumber: 'EH753xH',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'エクセレージ・光セラ15 横張のみ',
     variants: [
@@ -1082,7 +1082,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'KMEW',
     materialType: '窯業系サイディング',
     modelNumber: 'NH592xA',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'ネオロック・光セラ18 18mm厚',
     variants: [
@@ -1109,7 +1109,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'KONOSHIMA',
     materialType: '窯業系サイディング',
     modelNumber: 'ARTE-RCx-GC',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'アルテミュール 木目調外壁',
     variants: [
@@ -1136,7 +1136,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'IG工業',
     materialType: 'ガルバリウム鋼板',
     modelNumber: 'SPI1-xxx',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '金属サイディング 変褪色・穴あき・赤さび10年保証 横張のみ採用可能 HOURS:アクセント面のみ標準（1色のみ）/LACIE:全面標準',
     variants: [
@@ -1170,7 +1170,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'IG工業',
     materialType: 'ガルバリウム鋼板',
     modelNumber: 'SPJ1-xxx',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '金属サイディング 変褪色・穴あき・赤さび10年保証 横張のみ採用可能 HOURS:アクセント面のみ標準（1色のみ）/LACIE:全面標準',
     variants: [
@@ -1205,7 +1205,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'KMEW',
     materialType: '窯業系サイディング',
     modelNumber: 'EH74xxK',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'エクセレージ・光セラ16 16mm厚',
     variants: [
@@ -1239,7 +1239,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'AICA',
     materialType: '塗り壁',
     modelNumber: 'JQ-620',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'ジョリパットネオ∞ 塗装仕上げ 筋が出やすく目立つことがあります HOURS:アクセント面のみ標準（1色のみ）/LACIE:全面標準',
     variants: [
@@ -1274,7 +1274,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'AICA',
     materialType: '塗り壁',
     modelNumber: 'JQ-620',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'ジョリパットネオ∞ 塗装仕上げ 筋が出やすく目立つことがあります HOURS:アクセント面のみ標準（1色のみ）/LACIE:全面標準',
     variants: [
@@ -1309,7 +1309,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'KMEW',
     materialType: '窯業系サイディング',
     modelNumber: 'SMGxxG',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: 'SOLIDO 高級外壁材 HOURS/LACIE:5㎡以下は80,000円/式 LIFE+/LIFE:5㎡以下は110,000円/式',
     variants: [
@@ -1335,7 +1335,7 @@ export const exteriorProducts: Product[] = [
     name: 'モルタル金鏝抑え',
     manufacturer: '標準',
     modelNumber: 'MORTAR',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: false,
     description: '標準内外部ポーチサイズ：1.8m×1.8m 将来的に乾燥収縮により構造上支障のないヘアークラック（ひび割れ）がおこる可能性があります',
     variants: [
@@ -1356,7 +1356,7 @@ export const exteriorProducts: Product[] = [
     name: 'ネイチャーII',
     manufacturer: 'Nagoya mozaic',
     modelNumber: 'MSY-R30xx',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '300×300 標準内外部ポーチサイズ：1.8m×1.8m',
     variants: [
@@ -1384,7 +1384,7 @@ export const exteriorProducts: Product[] = [
     name: 'ベスパ',
     manufacturer: 'LIXIL',
     modelNumber: 'IPF-300/VSP-xxx',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '300×300 標準内外部ポーチサイズ：1.8m×1.8m',
     variants: [
@@ -1412,7 +1412,7 @@ export const exteriorProducts: Product[] = [
     name: 'メンフィス',
     manufacturer: 'LIXIL',
     modelNumber: 'IPF-600/MMP-xx',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '600×600 / 600×300 標準内外部ポーチサイズ：1.8m×1.8m',
     variants: [
@@ -1437,7 +1437,7 @@ export const exteriorProducts: Product[] = [
     name: 'ポーチサイズ拡張',
     manufacturer: '標準',
     modelNumber: 'PORCH-EXP',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '1.8m×1.8m以上の場合（1㎡未満拡張の場合も同額）',
     variants: [
@@ -1458,7 +1458,7 @@ export const exteriorProducts: Product[] = [
     name: 'ランドストン',
     manufacturer: 'Nagoya mozaic',
     modelNumber: 'CRD-X39xxG',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '600×600 / 300×600 岩面 外装標準品からの変更差額',
     variants: [
@@ -1484,7 +1484,7 @@ export const exteriorProducts: Product[] = [
     name: 'ピエトラソーニ',
     manufacturer: 'Nagoya mozaic',
     modelNumber: 'PAN-X81xxG',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '600×600 / 300×600 粗目 外装標準品からの変更差額',
     variants: [
@@ -1511,7 +1511,7 @@ export const exteriorProducts: Product[] = [
     name: 'ニスクカラーSGL',
     manufacturer: '日鉄鋼板',
     modelNumber: 'NM-8697',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: '材料標準保証規格10年 国土交通大臣認定不燃材料 海岸500m以遠原板の穴あき25年保証',
     variants: [
@@ -1533,7 +1533,7 @@ export const exteriorProducts: Product[] = [
     name: '外部配管',
     manufacturer: '標準',
     modelNumber: 'EXT-PIPE',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: '外部配管カラーは単色グレーのみ',
     variants: [
@@ -1554,7 +1554,7 @@ export const exteriorProducts: Product[] = [
     name: '破風 EP塗装',
     manufacturer: '標準',
     modelNumber: 'FASCIA-EP',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: '軒を延長する場合、取り付けが必要になります',
     variants: [
@@ -1576,7 +1576,7 @@ export const exteriorProducts: Product[] = [
     name: 'ファインスケアNF-I型',
     manufacturer: 'Panasonic',
     modelNumber: 'MQFxxxx',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: '軒樋（横樋）',
     variants: [
@@ -1602,7 +1602,7 @@ export const exteriorProducts: Product[] = [
     name: 'S30',
     manufacturer: 'Panasonic',
     modelNumber: 'KBPxxxx',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: '竪樋（縦樋）',
     variants: [
@@ -1628,7 +1628,7 @@ export const exteriorProducts: Product[] = [
     name: 'エンボス',
     manufacturer: '神島化学',
     modelNumber: 'EMBOSS',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: false,
     description: '軒天材',
     variants: [
@@ -1644,7 +1644,54 @@ export const exteriorProducts: Product[] = [
     ]
   },
 
-  // ===== 軒天 - アルテザート =====
+  // ===== 軒天 - ラフォーレソレイユ（12,000円/㎡） =====
+  {
+    id: 'ext-soffit-laforet-soleil',
+    categoryId: 'soffit',
+    categoryName: '軒天',
+    subcategory: 'ラフォーレソレイユ',
+    name: 'ラフォーレソレイユ',
+    manufacturer: '神島化学',
+    modelNumber: 'LAFORET-SOLEIL',
+    unit: '㎡',
+    isOption: true,
+    description: '準耐火仕様の場合、上階に居室が乗っている箇所は採用不可',
+    variants: [
+      { id: 'v1', color: 'グレイッシュシダー', colorCode: 'グレイッシュシダー', images: [] },
+      { id: 'v2', color: 'ナチュラルダーク', colorCode: 'ナチュラルダーク', images: [] },
+      { id: 'v3', color: 'ウォルナット', colorCode: 'ウォルナット', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 12000 },
+      { plan: 'HOURS', price: 12000 }
+    ]
+  },
+
+  // ===== 軒天 - ラフォーレティンバー（12,000円/㎡） =====
+  {
+    id: 'ext-soffit-laforet-timber',
+    categoryId: 'soffit',
+    categoryName: '軒天',
+    subcategory: 'ラフォーレティンバー',
+    name: 'ラフォーレティンバー',
+    manufacturer: '神島化学',
+    modelNumber: 'LAFORET-TIMBER',
+    unit: '㎡',
+    isOption: true,
+    description: '準耐火仕様の場合、上階に居室が乗っている箇所は採用不可',
+    variants: [
+      { id: 'v1', color: 'スモーキイエロー', colorCode: 'スモーキイエロー', images: [] },
+      { id: 'v2', color: 'キャラメルブラウン', colorCode: 'キャラメルブラウン', images: [] },
+      { id: 'v3', color: 'レッドブラウン', colorCode: 'レッドブラウン', images: [] },
+      { id: 'v4', color: 'チャコール', colorCode: 'チャコール', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 12000 },
+      { plan: 'HOURS', price: 12000 }
+    ]
+  },
+
+  // ===== 軒天 - アルテザート（18,000円/㎡） =====
   {
     id: 'ext-soffit-artezart',
     categoryId: 'soffit',
@@ -1654,7 +1701,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'KONOSHIMA',
     materialType: '窯業系サイディング',
     modelNumber: 'ARTE-RCN',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '準耐火仕様の場合、上階に居室が乗っている箇所は採用不可。5㎡までは80,000円/式',
     variants: [
@@ -1671,53 +1718,6 @@ export const exteriorProducts: Product[] = [
     ]
   },
 
-  // ===== 軒天 - ラフォーレソレイユ =====
-  {
-    id: 'ext-soffit-laforet-soleil',
-    categoryId: 'soffit',
-    categoryName: '軒天',
-    subcategory: 'ラフォーレソレイユ',
-    name: 'ラフォーレソレイユ',
-    manufacturer: '神島化学',
-    modelNumber: 'LAFORET-SOLEIL',
-    unit: 'sqm',
-    isOption: true,
-    description: '準耐火仕様の場合、上階に居室が乗っている箇所は採用不可',
-    variants: [
-      { id: 'v1', color: 'グレイッシュシダー', colorCode: 'グレイッシュシダー', images: [] },
-      { id: 'v2', color: 'ナチュラルダーク', colorCode: 'ナチュラルダーク', images: [] },
-      { id: 'v3', color: 'ウォルナット', colorCode: 'ウォルナット', images: [] },
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 12000 },
-      { plan: 'HOURS', price: 12000 }
-    ]
-  },
-
-  // ===== 軒天 - ラフォーレティンバー =====
-  {
-    id: 'ext-soffit-laforet-timber',
-    categoryId: 'soffit',
-    categoryName: '軒天',
-    subcategory: 'ラフォーレティンバー',
-    name: 'ラフォーレティンバー',
-    manufacturer: '神島化学',
-    modelNumber: 'LAFORET-TIMBER',
-    unit: 'sqm',
-    isOption: true,
-    description: '準耐火仕様の場合、上階に居室が乗っている箇所は採用不可',
-    variants: [
-      { id: 'v1', color: 'スモーキイエロー', colorCode: 'スモーキイエロー', images: [] },
-      { id: 'v2', color: 'キャラメルブラウン', colorCode: 'キャラメルブラウン', images: [] },
-      { id: 'v3', color: 'レッドブラウン', colorCode: 'レッドブラウン', images: [] },
-      { id: 'v4', color: 'チャコール', colorCode: 'チャコール', images: [] },
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 12000 },
-      { plan: 'HOURS', price: 12000 }
-    ]
-  },
-
   // ===== 庇 - アルフィン庇 AD2S =====
   {
     id: 'ext-awning-alfin-ad2s',
@@ -1727,7 +1727,7 @@ export const exteriorProducts: Product[] = [
     name: 'アルフィン庇 AD2S',
     manufacturer: 'アルフィン',
     modelNumber: 'AD2S',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'W1800×D900',
     variants: [
@@ -1753,7 +1753,7 @@ export const exteriorProducts: Product[] = [
     name: 'アルフィン庇 AF95シリーズ 木目調仕上げ',
     manufacturer: 'アルフィン',
     modelNumber: 'AF95',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'W1800×D950 屋根部カラー×軒天面カラーの組み合わせ（16パターン）',
     variants: [
@@ -1795,7 +1795,7 @@ export const exteriorProducts: Product[] = [
     name: '庇不要',
     manufacturer: '不要',
     modelNumber: 'AWNING-NONE',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: '庇を設置しない場合',
     variants: [
@@ -1818,7 +1818,7 @@ export const exteriorProducts: Product[] = [
     name: 'サンオートハイスピード',
     manufacturer: '三和シャッター',
     modelNumber: 'SUNAUTO-HS',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '非防火/施工費込み W2550×H2200 巻き取り式 開放約13秒 障害物検知装置付き 防火仕様+60,000円 ブラック塗装+60,000円',
     variants: [
@@ -1845,7 +1845,7 @@ export const exteriorProducts: Product[] = [
     name: '威風堂々',
     manufacturer: '三和シャッター',
     modelNumber: 'IFUDO',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '非防火/施工費込み W2550×H2200 オーバースライダー 開放約10秒 障害物検知装置付き ピンチレスパネル採用 防火仕様+60,000円 木目調カラー+660,000円',
     variants: [
@@ -1873,7 +1873,7 @@ export const exteriorProducts: Product[] = [
     name: 'ガレージシャッター不要',
     manufacturer: '不要',
     modelNumber: 'GARAGE-NONE',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: 'ガレージシャッターを設置しない場合',
     variants: [
@@ -1896,7 +1896,7 @@ export const exteriorProducts: Product[] = [
     name: 'APW330（樹脂サッシ・ペアガラス）',
     manufacturer: 'YKKAP',
     modelNumber: 'APW330',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: '樹脂サッシ アルゴンガス ペアガラス 熱貫流率1.31W/(㎡・K)',
     variants: [
@@ -1917,7 +1917,7 @@ export const exteriorProducts: Product[] = [
     name: 'APW430（樹脂サッシ・トリプルガラス）',
     manufacturer: 'YKKAP',
     modelNumber: 'APW430',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: '樹脂サッシ トリプルガラス 熱貫流率0.90W/(㎡・K) より高い断熱性能',
     variants: [
@@ -1938,7 +1938,7 @@ export const exteriorProducts: Product[] = [
     name: 'APW330',
     manufacturer: 'YKKAP',
     modelNumber: 'APW330',
-    unit: 'piece',
+    unit: '個',
     isOption: false,
     description: '樹脂サッシ アルゴンガス ペアガラス 熱貫流率1.31W/(㎡・K) 防火仕様1.55W/(㎡・K) 外観色4色×内観色5色の組み合わせ',
     variants: [
@@ -1962,7 +1962,7 @@ export const exteriorProducts: Product[] = [
     name: '電動シャッター W1650まで',
     manufacturer: 'YKKAP',
     modelNumber: 'SHUTTER-E-W1650',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '電動シャッターへ変更 W1650まで',
     variants: [
@@ -1983,7 +1983,7 @@ export const exteriorProducts: Product[] = [
     name: '電動シャッター W2560まで',
     manufacturer: 'YKKAP',
     modelNumber: 'SHUTTER-E-W2560',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '電動シャッターへ変更 W2560まで',
     variants: [
@@ -2004,7 +2004,7 @@ export const exteriorProducts: Product[] = [
     name: '耐熱強化複層ガラス（網なし） W1650まで',
     manufacturer: 'YKKAP',
     modelNumber: 'HEAT-PROOF-W1650',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '防火地域用：耐熱強化複層ガラス（網なし） W1650まで',
     variants: [
@@ -2025,7 +2025,7 @@ export const exteriorProducts: Product[] = [
     name: '耐熱強化複層ガラス（網なし） W2560まで',
     manufacturer: 'YKKAP',
     modelNumber: 'HEAT-PROOF-W2560',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '防火地域用：耐熱強化複層ガラス（網なし） W2560まで',
     variants: [
@@ -2046,7 +2046,7 @@ export const exteriorProducts: Product[] = [
     name: '安全合わせガラス（30mil）',
     manufacturer: 'YKKAP',
     modelNumber: 'SAFETY-GLASS-30',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '安全合わせガラス（30mil）',
     variants: [
@@ -2067,7 +2067,7 @@ export const exteriorProducts: Product[] = [
     name: '窓追加（22条地域）',
     manufacturer: 'YKKAP',
     modelNumber: 'WINDOW-ADD-22',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '窓追加（22条地域）',
     variants: [
@@ -2088,7 +2088,7 @@ export const exteriorProducts: Product[] = [
     name: '窓追加（準防火・防火地域）',
     manufacturer: 'YKKAP',
     modelNumber: 'WINDOW-ADD-FIRE',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '窓追加（準防火・防火地域）',
     variants: [
@@ -2109,7 +2109,7 @@ export const exteriorProducts: Product[] = [
     name: '掃出し窓追加（22条地域）W1650まで',
     manufacturer: 'YKKAP',
     modelNumber: 'SLIDING-ADD-22-W1650',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '掃出し窓追加（22条地域）W1650まで',
     variants: [
@@ -2130,7 +2130,7 @@ export const exteriorProducts: Product[] = [
     name: '掃出し窓追加（22条地域）W2560まで',
     manufacturer: 'YKKAP',
     modelNumber: 'SLIDING-ADD-22-W2560',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '掃出し窓追加（22条地域）W2560まで',
     variants: [
@@ -2151,7 +2151,7 @@ export const exteriorProducts: Product[] = [
     name: '掃出し窓追加（準防火・防火地域）W1650まで',
     manufacturer: 'YKKAP',
     modelNumber: 'SLIDING-ADD-FIRE-W1650',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '掃出し窓追加（準防火・防火地域）W1650まで',
     variants: [
@@ -2172,7 +2172,7 @@ export const exteriorProducts: Product[] = [
     name: '掃出し窓追加（準防火・防火地域）W2560まで',
     manufacturer: 'YKKAP',
     modelNumber: 'SLIDING-ADD-FIRE-W2560',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '掃出し窓追加（準防火・防火地域）W2560まで',
     variants: [
@@ -2193,7 +2193,7 @@ export const exteriorProducts: Product[] = [
     name: 'APW430',
     manufacturer: 'YKKAP',
     modelNumber: 'APW430',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '樹脂サッシ アルゴンガス トリプルガラス 熱貫流率0.90W/(㎡・K) 防火仕様1.03W/(㎡・K) LACIE/HOURS標準 LIFE+/LIFEはオプション（¥20,000×施工坪数/式）',
     variants: [
@@ -2219,7 +2219,7 @@ export const exteriorProducts: Product[] = [
     name: 'APW430 安全合わせガラス（30mil）',
     manufacturer: 'YKKAP',
     modelNumber: 'APW430-SAFETY-GLASS',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'APW430用 安全合わせガラス（30mil） W2560引き違い窓は非対応',
     variants: [
@@ -2240,7 +2240,7 @@ export const exteriorProducts: Product[] = [
     name: 'APW430 窓追加（22条地域）',
     manufacturer: 'YKKAP',
     modelNumber: 'APW430-ADD-22',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'APW430 窓追加（22条地域）',
     variants: [
@@ -2261,7 +2261,7 @@ export const exteriorProducts: Product[] = [
     name: 'APW430 窓追加（準防火・防火地域）',
     manufacturer: 'YKKAP',
     modelNumber: 'APW430-ADD-FIRE',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'APW430 窓追加（準防火・防火地域）',
     variants: [
@@ -2282,7 +2282,7 @@ export const exteriorProducts: Product[] = [
     name: 'APW430 掃出し窓追加（22条地域）W1650まで',
     manufacturer: 'YKKAP',
     modelNumber: 'APW430-SLIDING-22-W1650',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'APW430 掃出し窓追加（22条地域）W1650まで',
     variants: [
@@ -2303,7 +2303,7 @@ export const exteriorProducts: Product[] = [
     name: 'APW430 掃出し窓追加（22条地域）W2560まで',
     manufacturer: 'YKKAP',
     modelNumber: 'APW430-SLIDING-22-W2560',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'APW430 掃出し窓追加（22条地域）W2560まで',
     variants: [
@@ -2324,7 +2324,7 @@ export const exteriorProducts: Product[] = [
     name: 'APW430 掃出し窓追加（準防火・防火地域）W1650まで',
     manufacturer: 'YKKAP',
     modelNumber: 'APW430-SLIDING-FIRE-W1650',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'APW430 掃出し窓追加（準防火・防火地域）W1650まで',
     variants: [
@@ -2345,7 +2345,7 @@ export const exteriorProducts: Product[] = [
     name: 'APW430 掃出し窓追加（準防火・防火地域）W2560まで',
     manufacturer: 'YKKAP',
     modelNumber: 'APW430-SLIDING-FIRE-W2560',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'APW430 掃出し窓追加（準防火・防火地域）W2560まで',
     variants: [
@@ -2367,7 +2367,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'YKKAP',
     materialType: 'N08',
     modelNumber: 'D30-N08',
-    unit: 'piece',
+    unit: '個',
     isOption: false,
     description: '木目の水平線が印象的なドアデザイン 100V電気錠 ポケットキー付き 防火・非防火対応',
     variants: [
@@ -2394,7 +2394,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'YKKAP',
     materialType: 'N18',
     modelNumber: 'D30-N18',
-    unit: 'piece',
+    unit: '個',
     isOption: false,
     description: '框とくふなバランスが印象的なコンテンポラリーデザイン 100V電気錠 ポケットキー付き 防火・非防火対応',
     variants: [
@@ -2423,7 +2423,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'YKKAP',
     materialType: 'N15',
     modelNumber: 'D30-N15',
-    unit: 'piece',
+    unit: '個',
     isOption: false,
     description: '木目の水平線が印象的なドアデザイン 100V電気錠 ポケットキー付き 防火・非防火対応',
     variants: [
@@ -2451,7 +2451,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'YKKAP',
     materialType: 'C10',
     modelNumber: 'D30-C10',
-    unit: 'piece',
+    unit: '個',
     isOption: false,
     description: 'カラーの組合わせや形状でエントランス意匠を演出するプレーンデザイン 100V電気錠 ポケットキー付き 防火・非防火対応',
     variants: [
@@ -2486,7 +2486,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'YKKAP',
     materialType: 'ハンドル',
     modelNumber: 'HANDLE-STRAIGHT',
-    unit: 'piece',
+    unit: '個',
     isOption: false,
     description: '電子錠用ストレートハンドル 人気商品（HIT!）',
     variants: [
@@ -2511,7 +2511,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'YKKAP',
     materialType: 'ハンドル',
     modelNumber: 'HANDLE-CURVE',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '電子錠用洋風カーブハンドル',
     variants: [
@@ -2535,7 +2535,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'YKKAP',
     materialType: 'ハンドル',
     modelNumber: 'HANDLE-ROUND-STRAIGHT',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '手動錠用丸型ストレートハンドル',
     variants: [
@@ -2560,7 +2560,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'YKKAP',
     materialType: 'ハンドル',
     modelNumber: 'HANDLE-SQUARE-STRAIGHT',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '手動錠用角型ストレートハンドル',
     variants: [
@@ -2585,7 +2585,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'YKKAP',
     materialType: 'ハンドル',
     modelNumber: 'HANDLE-IRON',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '手動錠用ロートアイアン調ハンドル',
     variants: [
@@ -2609,7 +2609,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'YKKAP',
     materialType: 'オプション',
     modelNumber: 'FACE-AUTH',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '顔認証キー 非防火地域のみ使用可能 音声ガイド付き 顔データの登録も簡単',
     variants: [
@@ -2633,7 +2633,7 @@ export const exteriorProducts: Product[] = [
     manufacturer: 'YKKAP',
     materialType: 'オプション',
     modelNumber: 'INTERFACE-UNIT',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '玄関ドア付近に設置する操作盤付インターフェースユニット',
     variants: [
@@ -2648,6 +2648,7 @@ export const exteriorProducts: Product[] = [
   },
 
   // ===== 外部設備 - 外部コンセント（標準） =====
+  // ※外壁色に合わせて色を選ぶと統一感が出ます
   {
     id: 'ext-facility-outlet-std',
     categoryId: 'exterior-facility',
@@ -2657,11 +2658,14 @@ export const exteriorProducts: Product[] = [
     name: '外部コンセント（1カ所標準）',
     manufacturer: 'Panasonic',
     modelNumber: 'EXT-OUTLET',
-    unit: 'piece',
+    unit: '個',
     isOption: false,
-    description: '外部コンセント（1カ所標準）',
+    description: '外部コンセント（1カ所標準）。外壁色に合わせた色を選択できます。',
     variants: [
-      { id: 'v1', color: '標準', colorCode: '標準', images: [] },
+      { id: 'v1', color: 'ホワイト', colorCode: 'W', images: [] },
+      { id: 'v2', color: 'アイボリー', colorCode: 'I', images: [] },
+      { id: 'v3', color: 'ブラウン', colorCode: 'BR', images: [] },
+      { id: 'v4', color: 'ブラック', colorCode: 'BK', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 0 },
@@ -2679,11 +2683,14 @@ export const exteriorProducts: Product[] = [
     name: '外部コンセント追加',
     manufacturer: 'Panasonic',
     modelNumber: 'EXT-OUTLET-ADD',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
-    description: '外部コンセント追加',
+    description: '外部コンセント追加。外壁色に合わせた色を選択できます。',
     variants: [
-      { id: 'v1', color: '標準', colorCode: '標準', images: [] },
+      { id: 'v1', color: 'ホワイト', colorCode: 'W', images: [] },
+      { id: 'v2', color: 'アイボリー', colorCode: 'I', images: [] },
+      { id: 'v3', color: 'ブラウン', colorCode: 'BR', images: [] },
+      { id: 'v4', color: 'ブラック', colorCode: 'BK', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 12000 },
@@ -2701,7 +2708,7 @@ export const exteriorProducts: Product[] = [
     name: 'EV用コンセント',
     manufacturer: 'Panasonic',
     modelNumber: 'EV-OUTLET',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'EV用コンセント（1ヶ所）',
     variants: [
@@ -2723,7 +2730,7 @@ export const exteriorProducts: Product[] = [
     name: '散水栓',
     manufacturer: 'オンリーワン',
     modelNumber: 'GM3-ALKCF',
-    unit: 'piece',
+    unit: '個',
     isOption: false,
     description: '散水栓（排水なし） 標準で1カ所取付可能',
     variants: [
@@ -2745,7 +2752,7 @@ export const exteriorProducts: Product[] = [
     name: '立水栓',
     manufacturer: 'オンリーワン',
     modelNumber: 'GM3-ALSCF',
-    unit: 'piece',
+    unit: '個',
     isOption: false,
     description: '立水栓（排水なし） 標準で1カ所取付可能',
     variants: [
@@ -2767,7 +2774,7 @@ export const exteriorProducts: Product[] = [
     name: 'アルミ立水栓追加',
     manufacturer: 'オンリーワン',
     modelNumber: 'ALU-FAUCET-ADD',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'アルミ立水栓追加',
     variants: [
@@ -2789,7 +2796,7 @@ export const exteriorProducts: Product[] = [
     name: '玄関用マルチフック',
     manufacturer: '森田アルミ',
     modelNumber: 'VIK',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '玄関用マルチフック（下地込み）',
     variants: [
@@ -2811,7 +2818,7 @@ export const exteriorProducts: Product[] = [
     name: 'タープフック',
     manufacturer: 'フジワラ',
     modelNumber: 'IP-12',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'アイプレートIP-12（2個セット・下地込み）',
     variants: [
@@ -2824,6 +2831,7 @@ export const exteriorProducts: Product[] = [
   },
 
   // ===== 外部設備 - エアコンスリーブキャップ（標準） =====
+  // ⑦ エアコンスリーブは色が選べる
   {
     id: 'ext-facility-ac-sleeve-std',
     categoryId: 'exterior-facility',
@@ -2833,11 +2841,14 @@ export const exteriorProducts: Product[] = [
     name: 'エアコンスリーブキャップ（5カ所標準）',
     manufacturer: '標準',
     modelNumber: 'AC-SLEEVE',
-    unit: 'piece',
+    unit: '個',
     isOption: false,
     description: 'エアコンスリーブキャップ（5カ所標準）',
     variants: [
       { id: 'v1', color: 'ホワイト', colorCode: 'ホワイト', images: [] },
+      { id: 'v2', color: 'アイボリー', colorCode: 'アイボリー', images: [] },
+      { id: 'v3', color: 'ブラウン', colorCode: 'ブラウン', images: [] },
+      { id: 'v4', color: 'ブラック', colorCode: 'ブラック', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 0 },
@@ -2855,11 +2866,14 @@ export const exteriorProducts: Product[] = [
     name: 'エアコンスリーブキャップ追加',
     manufacturer: '標準',
     modelNumber: 'AC-SLEEVE-ADD',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'エアコンスリーブキャップ追加',
     variants: [
       { id: 'v1', color: 'ホワイト', colorCode: 'ホワイト', images: [] },
+      { id: 'v2', color: 'アイボリー', colorCode: 'アイボリー', images: [] },
+      { id: 'v3', color: 'ブラウン', colorCode: 'ブラウン', images: [] },
+      { id: 'v4', color: 'ブラック', colorCode: 'ブラック', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 12000 },
@@ -2877,7 +2891,7 @@ export const exteriorProducts: Product[] = [
     name: '外部LAN用空配管',
     manufacturer: '標準',
     modelNumber: 'LAN-PIPE',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '外部LAN用空配管',
     variants: [
@@ -2899,7 +2913,7 @@ export const exteriorProducts: Product[] = [
     name: 'センサーライト付屋外ワイヤレスカメラ',
     manufacturer: 'Panasonic',
     modelNumber: 'VL-WD813K',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'センサーライト付屋外ワイヤレスカメラ インターホンに最大4台まで接続可',
     variants: [
@@ -2921,7 +2935,7 @@ export const exteriorProducts: Product[] = [
     name: '屋外ワイヤレスカメラ VL-CX500',
     manufacturer: 'Panasonic',
     modelNumber: 'VL-CX500X',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'SVD505（外でもドアホン）採用時のみ選択可能 最大2台まで接続可',
     variants: [
@@ -2944,7 +2958,7 @@ export const exteriorProducts: Product[] = [
     name: '露出用四角ボックス（将来防犯カメラ用）',
     manufacturer: '未来工業',
     modelNumber: 'PV4B-ANF',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'LAN空配管+電源仕込み含む',
     variants: [
@@ -2969,7 +2983,7 @@ export const exteriorProducts: Product[] = [
     name: '散水栓/立水栓追加',
     manufacturer: 'オンリーワン',
     modelNumber: 'GM3-ALxxx',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '散水栓または立水栓（排水なし）追加',
     variants: [
@@ -2991,7 +3005,7 @@ export const exteriorProducts: Product[] = [
     name: '散水栓/立水栓（排水仕込み追加）',
     manufacturer: 'オンリーワン',
     modelNumber: 'FAUCET-DRAIN',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '散水栓/立水栓に排水仕込みを追加',
     variants: [
@@ -3013,7 +3027,7 @@ export const exteriorProducts: Product[] = [
     name: 'ステンレス混合立水栓',
     manufacturer: 'カクダイ',
     modelNumber: '624-202',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'ステンレス混合立水栓 標準形状変更差額 別途給湯工事費用必要',
     variants: [
@@ -3035,7 +3049,7 @@ export const exteriorProducts: Product[] = [
     name: '地上波TVアンテナ',
     manufacturer: '標準',
     modelNumber: 'TV-ANTENNA',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: '地上波TVアンテナ ※ブースター含む',
     variants: [
@@ -3060,7 +3074,7 @@ export const exteriorProducts: Product[] = [
     name: 'BSアンテナ',
     manufacturer: '標準',
     modelNumber: 'BS-ANTENNA',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'BSアンテナ TVアンテナと併用',
     variants: [
@@ -3082,7 +3096,7 @@ export const exteriorProducts: Product[] = [
     name: '電気メーターボックス',
     manufacturer: '標準',
     modelNumber: 'METER-BOX',
-    unit: 'piece',
+    unit: '個',
     isOption: false,
     description: '電気メーターボックス',
     variants: [
@@ -3106,7 +3120,7 @@ export const exteriorProducts: Product[] = [
     name: 'エコキュート370L（標準）',
     manufacturer: 'Panasonic',
     modelNumber: 'HE-S37LQS',
-    unit: 'piece',
+    unit: '個',
     isOption: false,
     description: 'Sシリーズ 370L 標準（外部設置）',
     variants: [
@@ -3127,7 +3141,7 @@ export const exteriorProducts: Product[] = [
     name: 'エコキュート460L',
     manufacturer: 'Panasonic',
     modelNumber: 'HE-S46LQS',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'Sシリーズ 460Lに変更',
     variants: [
@@ -3148,7 +3162,7 @@ export const exteriorProducts: Product[] = [
     name: 'ウルトラ高圧エコキュート370L',
     manufacturer: 'Panasonic',
     modelNumber: 'HE-SU37LQS',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'Sシリーズ ウルトラ高圧370Lに変更',
     variants: [
@@ -3169,7 +3183,7 @@ export const exteriorProducts: Product[] = [
     name: 'ウルトラ高圧エコキュート460L',
     manufacturer: 'Panasonic',
     modelNumber: 'HE-SU46LQS',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'Sシリーズ ウルトラ高圧460Lに変更',
     variants: [
@@ -3190,7 +3204,7 @@ export const exteriorProducts: Product[] = [
     name: 'エコキュート370L（標準）追加',
     manufacturer: 'Panasonic',
     modelNumber: 'HE-S37LQS-ADD',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'エコキュート370L（標準）を追加',
     variants: [
@@ -3211,7 +3225,7 @@ export const exteriorProducts: Product[] = [
     name: 'エコキュート室内設置に変更',
     manufacturer: 'Panasonic',
     modelNumber: 'ECOCUTE-INDOOR',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '室内設置に変更',
     variants: [
@@ -3232,7 +3246,7 @@ export const exteriorProducts: Product[] = [
     name: 'エコキュート インナーガレージ設置に変更',
     manufacturer: 'Panasonic',
     modelNumber: 'ECOCUTE-GARAGE',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'インナーガレージ設置に変更',
     variants: [
@@ -3253,7 +3267,7 @@ export const exteriorProducts: Product[] = [
     name: '塩害用エコキュートに変更',
     manufacturer: 'Panasonic',
     modelNumber: 'ECOCUTE-SALT',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '塩害用エコキュートに変更 パワフル高圧薄型は非対応',
     variants: [
@@ -3274,7 +3288,7 @@ export const exteriorProducts: Product[] = [
     name: 'エコキュート370L薄型タイプ',
     manufacturer: 'Panasonic',
     modelNumber: 'HE-H37LQS',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'Hシリーズ 370L薄型タイプに変更',
     variants: [
@@ -3295,7 +3309,7 @@ export const exteriorProducts: Product[] = [
     name: 'エコキュート460L薄型タイプ',
     manufacturer: 'Panasonic',
     modelNumber: 'HE-H46LQS',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'Hシリーズ 460L薄型タイプに変更',
     variants: [
@@ -3316,7 +3330,7 @@ export const exteriorProducts: Product[] = [
     name: 'エコキュート370Lパワフル高圧薄型タイプ',
     manufacturer: 'Panasonic',
     modelNumber: 'HE-WU37LQS',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'Wシリーズ 370Lパワフル高圧薄型タイプに変更',
     variants: [
@@ -3337,7 +3351,7 @@ export const exteriorProducts: Product[] = [
     name: 'エコキュート460Lパワフル高圧薄型タイプ',
     manufacturer: 'Panasonic',
     modelNumber: 'HE-WU46LQS',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'Wシリーズ 460Lパワフル高圧薄型タイプに変更',
     variants: [
@@ -3358,7 +3372,7 @@ export const exteriorProducts: Product[] = [
     name: 'おひさまエコキュート パワフル高圧370L',
     manufacturer: 'DAIKIN',
     modelNumber: 'EQA37YFPV',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'おひさまエコキュート パワフル高圧370L お掃除浴槽を採用する場合必須',
     variants: [
@@ -3379,7 +3393,7 @@ export const exteriorProducts: Product[] = [
     name: 'おひさまエコキュート パワフル高圧460L',
     manufacturer: 'DAIKIN',
     modelNumber: 'EQA46YFPV',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'おひさまエコキュート パワフル高圧460L お掃除浴槽を採用する場合必須',
     variants: [
@@ -3400,7 +3414,7 @@ export const exteriorProducts: Product[] = [
     name: 'ナイアガラ出湯 エコキュート370L（1・2階設置）',
     manufacturer: '日立',
     modelNumber: 'BHP-FV37WD',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'ナイアガラ出湯 エコキュート370L 浴槽1・2階設置',
     variants: [
@@ -3421,7 +3435,7 @@ export const exteriorProducts: Product[] = [
     name: 'ナイアガラ出湯 エコキュート370L（3階設置）',
     manufacturer: '日立',
     modelNumber: 'BHP-FV37WD-3F',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'ナイアガラ出湯 エコキュート370L 浴槽3階設置',
     variants: [
@@ -3442,7 +3456,7 @@ export const exteriorProducts: Product[] = [
     name: 'Panasonic第一種換気システム',
     manufacturer: 'Panasonic',
     modelNumber: 'PANA-VENT-1',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: 'Panasonic第一種換気システムを採用',
     variants: [
@@ -3465,7 +3479,7 @@ export const exteriorProducts: Product[] = [
     name: 'DSDD換気システム',
     manufacturer: 'DSDD',
     modelNumber: 'DSDD-VENT',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: 'DSDD換気システムを採用',
     variants: [
@@ -3488,7 +3502,7 @@ export const exteriorProducts: Product[] = [
     name: 'インターホン1台',
     manufacturer: '標準',
     modelNumber: 'INTERCOM-1',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: 'インターホン親機1台（標準）',
     variants: [
@@ -3509,7 +3523,7 @@ export const exteriorProducts: Product[] = [
     name: 'インターホン2台',
     manufacturer: '標準',
     modelNumber: 'INTERCOM-2',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'インターホン親機2台（追加）',
     variants: [
@@ -3530,7 +3544,7 @@ export const exteriorProducts: Product[] = [
     name: 'インターホン3台',
     manufacturer: '標準',
     modelNumber: 'INTERCOM-3',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'インターホン親機3台（追加2台）',
     variants: [
@@ -3553,7 +3567,7 @@ export const exteriorProducts: Product[] = [
     name: '換気ガラリ',
     manufacturer: '標準',
     modelNumber: 'TRD-100xx-T',
-    unit: 'piece',
+    unit: '個',
     isOption: false,
     description: '換気ガラリ',
     variants: [
@@ -3579,7 +3593,7 @@ export const exteriorProducts: Product[] = [
     name: 'Panasonic換気システム用 サイクロン給気フード',
     manufacturer: 'Panasonic',
     modelNumber: 'CYCLONE-HOOD',
-    unit: 'piece',
+    unit: '個',
     isOption: false,
     description: '計算値・地域により適正のものを採用',
     variants: [
@@ -3602,7 +3616,7 @@ export const exteriorProducts: Product[] = [
     name: 'DSDD給気口 カラー変更',
     manufacturer: '標準',
     modelNumber: 'DSDD-COLOR',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'DSDD換気システム採用時 焼付塗装にて黒に変更可',
     variants: [
@@ -3623,7 +3637,7 @@ export const exteriorProducts: Product[] = [
     name: '太陽光なし',
     manufacturer: '不要',
     modelNumber: 'SOLAR-NONE',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: '太陽光パネルを設置しない場合',
     variants: [
@@ -3646,7 +3660,7 @@ export const exteriorProducts: Product[] = [
     name: '太陽光あり',
     manufacturer: '別途',
     modelNumber: 'SOLAR-YES',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: '太陽光パネルを設置する（金額は資金計画書に記載）',
     variants: [
@@ -3660,18 +3674,19 @@ export const exteriorProducts: Product[] = [
     ]
   },
 
-  // ===== 太陽光 中継ポール =====
+  // ===== 中継ポール（外部設備カテゴリに移動）=====
+  // ⑲ 中継ポールは太陽光カテゴリではない
   {
     id: 'ext-solar-relay-pole',
-    categoryId: 'solar',
-    categoryName: '太陽光',
-    subcategory: '太陽光オプション',
+    categoryId: 'exterior-equipment',
+    categoryName: '外部設備',
+    subcategory: 'スッキリポール',
     name: '中継ポール',
     manufacturer: '標準',
     modelNumber: 'RELAY-POLE',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
-    description: '太陽光用中継ポール',
+    description: '中継ポール',
     variants: [
       { id: 'v1', color: '標準', colorCode: '標準', images: [] },
     ],
@@ -3681,16 +3696,17 @@ export const exteriorProducts: Product[] = [
     ]
   },
 
-  // ===== 蓄電池 - なし =====
+  // ===== 蓄電池 - 設置しない =====
+  // ⑱ 蓄電池は標準ではない（オプション扱い）
   {
     id: 'ext-battery-none',
     categoryId: 'battery',
     categoryName: '蓄電池',
     subcategory: '蓄電池なし',
-    name: '蓄電池なし',
+    name: '設置しない',
     manufacturer: '不要',
     modelNumber: 'BATTERY-NONE',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: '蓄電池を設置しない場合',
     variants: [
@@ -3704,18 +3720,18 @@ export const exteriorProducts: Product[] = [
     ]
   },
 
-  // ===== 蓄電池 - あり =====
+  // ===== 蓄電池 - 設置する =====
   {
     id: 'ext-battery-yes',
     categoryId: 'battery',
     categoryName: '蓄電池',
     subcategory: '蓄電池あり',
-    name: '蓄電池あり',
+    name: '設置する',
     manufacturer: '別途',
     modelNumber: 'BATTERY-YES',
-    unit: 'set',
-    isOption: false,
-    description: '蓄電池を設置する',
+    unit: 'セット',
+    isOption: true,  // 蓄電池は標準ではない
+    description: '蓄電池を設置する（オプション）',
     variants: [
       { id: 'v1', color: '設置あり', colorCode: '設置あり', images: [] },
     ],
@@ -3736,7 +3752,7 @@ export const exteriorProducts: Product[] = [
     name: 'V2Hなし',
     manufacturer: '不要',
     modelNumber: 'V2H-NONE',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: 'V2Hを設置しない場合',
     variants: [
@@ -3759,7 +3775,7 @@ export const exteriorProducts: Product[] = [
     name: 'V2Hあり',
     manufacturer: '別途',
     modelNumber: 'V2H-YES',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: 'V2Hを設置する',
     variants: [
@@ -3783,7 +3799,7 @@ export const exteriorProducts: Product[] = [
     name: 'スリムダクト',
     manufacturer: '標準',
     modelNumber: 'SLIM-DUCT',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: '太陽光設置の場合に使用',
     variants: [
@@ -3808,7 +3824,7 @@ export const exteriorProducts: Product[] = [
     name: 'パラペット笠木',
     manufacturer: '標準',
     modelNumber: 'PARAPET-COPING',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: 'パラペット笠木',
     variants: [
@@ -3832,7 +3848,7 @@ export const exteriorProducts: Product[] = [
     name: 'バルコニー笠木',
     manufacturer: '標準',
     modelNumber: 'BALCONY-COPING',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: 'バルコニー笠木',
     variants: [
@@ -3856,7 +3872,7 @@ export const exteriorProducts: Product[] = [
     name: '土台水切',
     manufacturer: '城東テクノ',
     modelNumber: 'WKF-N18',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: '土台水切',
     variants: [
@@ -3881,7 +3897,7 @@ export const exteriorProducts: Product[] = [
     name: 'スマート防雨型ジョイントボックス',
     manufacturer: 'Panasonic',
     modelNumber: 'WK4201S',
-    unit: 'piece',
+    unit: '個',
     isOption: false,
     description: 'スマート防雨型ジョイントボックス（ノックアウトG22〈φ27〉×3）',
     variants: [
@@ -3903,7 +3919,7 @@ export const exteriorProducts: Product[] = [
     name: '換気フード（キッチン・浴室）TRDシリーズ',
     manufacturer: 'Panasonic',
     modelNumber: 'TRD',
-    unit: 'piece',
+    unit: '個',
     isOption: false,
     description: '換気フード（キッチン・浴室）TRDシリーズ',
     variants: [
@@ -3927,7 +3943,7 @@ export const exteriorProducts: Product[] = [
     name: '換気ガラリ（換気システム）',
     manufacturer: '標準',
     modelNumber: 'VENT-GRILLE',
-    unit: 'piece',
+    unit: '個',
     isOption: false,
     description: '換気システム用換気ガラリ',
     variants: [
@@ -3951,7 +3967,7 @@ export const exteriorProducts: Product[] = [
     name: 'ナノバブル発生装置 Beauty Aqua（20A）',
     manufacturer: '創建エース',
     modelNumber: 'BA-20A',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'ナノバブル発生装置 Beauty Aqua（20A）',
     variants: [
@@ -3972,7 +3988,7 @@ export const exteriorProducts: Product[] = [
     name: '中継ポール（スッキリポール スタンダードタイプ）電気メーター一体型',
     manufacturer: 'Panasonic',
     modelNumber: 'DDP8-STD',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '中継ポール（スッキリポール スタンダードタイプ）電気メーター一体型',
     variants: [
@@ -3994,7 +4010,7 @@ export const exteriorProducts: Product[] = [
     name: '中継ポール（スッキリポール スマートタイプ）電気メーター一体型',
     manufacturer: 'Panasonic',
     modelNumber: 'DDP8-SMART',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '中継ポール（スッキリポール スマートタイプ）電気メーター一体型',
     variants: [
@@ -4007,16 +4023,16 @@ export const exteriorProducts: Product[] = [
     ]
   },
 
-  // ===== TV視聴 - 地上波TVアンテナのみ =====
+  // ===== TV視聴（外部設備カテゴリに統合） - 地上波TVアンテナのみ =====
   {
     id: 'ext-tv-antenna-only',
-    categoryId: 'tv-viewing',
-    categoryName: 'TV視聴',
+    categoryId: 'exterior-equipment',
+    categoryName: '外部設備',
     subcategory: 'TV視聴',
     name: '地上波TVアンテナのみ',
     manufacturer: '標準',
     modelNumber: 'TV-ANTENNA-ONLY',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: '地上波TVアンテナ設置工事一式',
     variants: [
@@ -4031,13 +4047,13 @@ export const exteriorProducts: Product[] = [
   // ===== TV視聴 - 地上波TVアンテナ＋BSアンテナ =====
   {
     id: 'ext-tv-antenna-bs',
-    categoryId: 'tv-viewing',
-    categoryName: 'TV視聴',
+    categoryId: 'exterior-equipment',
+    categoryName: '外部設備',
     subcategory: 'TV視聴',
     name: '地上波TVアンテナ＋BSアンテナ',
     manufacturer: '標準',
     modelNumber: 'TV-ANTENNA-BS',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: '地上波TVアンテナ＋BSアンテナ設置工事一式',
     variants: [
@@ -4052,13 +4068,13 @@ export const exteriorProducts: Product[] = [
   // ===== TV視聴 - 光ケーブル（Gハウス提携会社紹介） =====
   {
     id: 'ext-tv-fiber-ghouse',
-    categoryId: 'tv-viewing',
-    categoryName: 'TV視聴',
+    categoryId: 'exterior-equipment',
+    categoryName: '外部設備',
     subcategory: 'TV視聴',
     name: '光ケーブル（Gハウス提携会社紹介）',
     manufacturer: 'Gハウス提携',
     modelNumber: 'TV-FIBER-GHOUSE',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: 'Gハウス提携会社をご紹介いたします',
     variants: [
@@ -4073,13 +4089,13 @@ export const exteriorProducts: Product[] = [
   // ===== TV視聴 - 光ケーブル（自分で業者を探す） =====
   {
     id: 'ext-tv-fiber-self',
-    categoryId: 'tv-viewing',
-    categoryName: 'TV視聴',
+    categoryId: 'exterior-equipment',
+    categoryName: '外部設備',
     subcategory: 'TV視聴',
     name: '光ケーブル（自分で業者を探す）',
     manufacturer: 'お客様手配',
     modelNumber: 'TV-FIBER-SELF',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: 'お客様ご自身で業者を手配されます',
     variants: [
@@ -4094,13 +4110,13 @@ export const exteriorProducts: Product[] = [
   // ===== TV視聴 - TV視聴不要 =====
   {
     id: 'ext-tv-not-needed',
-    categoryId: 'tv-viewing',
-    categoryName: 'TV視聴',
+    categoryId: 'exterior-equipment',
+    categoryName: '外部設備',
     subcategory: 'TV視聴',
     name: 'TV視聴不要',
     manufacturer: '不要',
     modelNumber: 'TV-NOT-NEEDED',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: 'TV視聴の設備は不要です',
     variants: [
@@ -4121,7 +4137,7 @@ export const exteriorProducts: Product[] = [
     name: '勾配天井工事',
     manufacturer: 'Gハウス',
     modelNumber: 'CEILING-SLOPE',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '天井変更する範囲の床坪数にて算出 ※梁や火打ち梁が露出する場合がございます',
     variants: [
@@ -4142,7 +4158,7 @@ export const exteriorProducts: Product[] = [
     name: '天井高UP（H2600迄）100mm毎',
     manufacturer: 'Gハウス',
     modelNumber: 'CEILING-UP-100',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '部屋別での変更不可 フロアごとの変更',
     variants: [
@@ -4163,7 +4179,7 @@ export const exteriorProducts: Product[] = [
     name: '天井高UP（H2600迄）200mm毎',
     manufacturer: 'Gハウス',
     modelNumber: 'CEILING-UP-200',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '部屋別での変更不可 フロアごとの変更',
     variants: [
@@ -4184,7 +4200,7 @@ export const exteriorProducts: Product[] = [
     name: '下がり天井',
     manufacturer: 'Gハウス',
     modelNumber: 'CEILING-DOWN',
-    unit: 'sqm',
+    unit: '㎡',
     isOption: true,
     description: '100mm毎',
     variants: [
@@ -4229,7 +4245,7 @@ export const exteriorProducts: Product[] = [
     name: 'ガス引込みあり',
     manufacturer: 'Gハウス',
     modelNumber: 'GAS-YES',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: 'ガス引込みを行う（乾太くん等のガス機器が選択可能になります）',
     variants: [
@@ -4250,7 +4266,7 @@ export const exteriorProducts: Product[] = [
     name: 'ガス引込みなし（オール電化）',
     manufacturer: 'Gハウス',
     modelNumber: 'GAS-NO',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: 'ガス引込みを行わない（オール電化住宅）※乾太くん等のガス機器は選択できません',
     variants: [
@@ -4274,7 +4290,7 @@ export const exteriorProducts: Product[] = [
     name: '室内窓あり',
     manufacturer: 'Gハウス',
     modelNumber: 'IWIN-YES',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: '室内窓を設置する※内装タブで種類・ガラスを選択',
     variants: [
@@ -4295,7 +4311,7 @@ export const exteriorProducts: Product[] = [
     name: '室内窓なし',
     manufacturer: 'Gハウス',
     modelNumber: 'IWIN-NO',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: '室内窓を設置しない',
     variants: [

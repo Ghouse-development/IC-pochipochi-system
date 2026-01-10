@@ -94,10 +94,10 @@ export const EXTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
     name: '軒天',
     icon: '📐',
     subcategoryOrder: [
-      'エンボス',
-      'アルテザート',
-      'ラフォーレソレイユ',
-      'ラフォーレティンバー',
+      'エンボス',           // 0円（標準）
+      'ラフォーレソレイユ',  // 12,000円/㎡
+      'ラフォーレティンバー', // 12,000円/㎡
+      'アルテザート',        // 18,000円/㎡
     ]
   },
   {
@@ -139,6 +139,7 @@ export const EXTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
     name: '外部設備',
     icon: '🔌',
     subcategoryOrder: [
+      'TV視聴',              // ③ TV視聴を外部設備内に統合
       '電気メーターボックス',
       '外部コンセント',
       'EV用コンセント',
@@ -157,11 +158,7 @@ export const EXTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
       '外部設備',
     ]
   },
-  {
-    name: 'TV視聴',
-    icon: '📺',
-    subcategoryOrder: ['TV視聴']
-  },
+  // TV視聴カテゴリは削除（外部設備に統合）
   {
     name: 'ガレージシャッター',
     icon: '🚗',
@@ -217,7 +214,7 @@ export const EXTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
   {
     name: '太陽光・蓄電池',
     icon: '☀️',
-    subcategoryOrder: ['太陽光パネル', '蓄電池', '中継ポール']
+    subcategoryOrder: ['太陽光パネル', '蓄電池']
   },
   {
     name: '窓タイプ',
@@ -629,10 +626,64 @@ export const FURNITURE_CATEGORY_ORDER: CategoryOrderConfig[] = [
   },
 ];
 
+// 設計カテゴリ順序（間取りで決まる項目）
+export const DESIGN_CATEGORY_ORDER: CategoryOrderConfig[] = [
+  {
+    name: '窓タイプ',
+    icon: '🪟',
+    subcategoryOrder: ['APW430', 'APW330']
+  },
+  {
+    name: '室内窓',
+    icon: '🪟',
+    subcategoryOrder: ['室内窓あり', '室内窓なし']
+  },
+  {
+    name: '電動ガレージシャッター',
+    icon: '🚗',
+    subcategoryOrder: ['ガレージシャッター不要', 'サンオートハイスピード', '威風堂々']
+  },
+  {
+    name: '庇',
+    icon: '🏗️',
+    subcategoryOrder: ['庇不要', 'アルフィン庇 AD2S', 'アルフィン庇 AF95シリーズ']
+  },
+  {
+    name: '換気システム',
+    icon: '🌀',
+    subcategoryOrder: ['Panasonic第一種換気', 'DSDD']
+  },
+  {
+    name: '給湯器',
+    icon: '♨️',
+    subcategoryOrder: ['エコキュート', 'おひさまエコキュート', 'ナイアガラ出湯', 'エコジョーズ']
+  },
+  {
+    name: '太陽光',
+    icon: '☀️',
+    subcategoryOrder: ['太陽光なし', '太陽光あり']
+  },
+  {
+    name: '蓄電池',
+    icon: '🔋',
+    subcategoryOrder: ['蓄電池なし', '蓄電池あり']
+  },
+  {
+    name: 'V2H',
+    icon: '🚗',
+    subcategoryOrder: ['V2Hなし', 'V2Hあり']
+  },
+  {
+    name: 'ガス引込み',
+    icon: '🔥',
+    subcategoryOrder: ['ガス引込みなし', 'ガス引込みあり']
+  },
+];
+
 /**
  * カタログタイプに応じたカテゴリ順序設定を取得
  */
-export function getCategoryOrderConfig(catalogType: 'exterior' | 'interior' | 'water' | 'electrical' | 'furniture'): CategoryOrderConfig[] {
+export function getCategoryOrderConfig(catalogType: 'exterior' | 'interior' | 'water' | 'electrical' | 'furniture' | 'design'): CategoryOrderConfig[] {
   switch (catalogType) {
     case 'exterior':
       return EXTERIOR_CATEGORY_ORDER;
@@ -644,6 +695,8 @@ export function getCategoryOrderConfig(catalogType: 'exterior' | 'interior' | 'w
       return ELECTRICAL_CATEGORY_ORDER;
     case 'furniture':
       return FURNITURE_CATEGORY_ORDER;
+    case 'design':
+      return DESIGN_CATEGORY_ORDER;
     default:
       return [];
   }

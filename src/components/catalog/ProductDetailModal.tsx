@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
-import { X, Plus, Minus, CheckCircle, Check, AlertCircle, Info, FileText, QrCode } from 'lucide-react';
+import { X, Plus, Minus, CheckCircle, Check, AlertCircle, Info, QrCode } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import type { Product, ProductVariant } from '../../types/product';
 import { UNIT_SYMBOLS } from '../../types/product';
@@ -458,34 +458,6 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                     </p>
                   </div>
                 )}
-              </div>
-
-              {/* 仕様情報 */}
-              <div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4">
-                <div className="flex items-center gap-2 mb-3">
-                  <FileText className="w-4 h-4 text-gray-600 dark:text-gray-400" />
-                  <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200">仕様情報</h3>
-                </div>
-                <div className="grid grid-cols-2 gap-3 text-sm">
-                  <div>
-                    <span className="text-gray-500 dark:text-gray-400">カテゴリ</span>
-                    <p className="font-medium text-gray-800 dark:text-gray-200">{product.categoryName}</p>
-                  </div>
-                  {product.subcategory && (
-                    <div>
-                      <span className="text-gray-500 dark:text-gray-400">サブカテゴリ</span>
-                      <p className="font-medium text-gray-800 dark:text-gray-200">{product.subcategory}</p>
-                    </div>
-                  )}
-                  <div>
-                    <span className="text-gray-500 dark:text-gray-400">単位</span>
-                    <p className="font-medium text-gray-800 dark:text-gray-200">{UNIT_SYMBOLS[product.unit] || product.unit}</p>
-                  </div>
-                  <div>
-                    <span className="text-gray-500 dark:text-gray-400">カラー数</span>
-                    <p className="font-medium text-gray-800 dark:text-gray-200">{product.variants.length}色</p>
-                  </div>
-                </div>
               </div>
 
               {/* カテゴリルール表示 */}

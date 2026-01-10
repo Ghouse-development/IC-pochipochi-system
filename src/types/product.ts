@@ -2,7 +2,7 @@ export type PlanType = 'LIFE' | 'LIFE+' | 'HOURS' | 'LACIE' | 'LIFE_X';
 
 // UnitType: DBコード + 日本語表示両方サポート（後方互換性維持）
 export type UnitTypeCode = 'sqm' | 'piece' | 'location' | 'set' | 'package' | 'sheet' | 'meter' | 'unit' | 'pair';
-export type UnitTypeJapanese = '㎡' | '個' | '箇所' | '一式' | '梱' | '枚' | 'm' | '台' | '組' | '式';
+export type UnitTypeJapanese = '㎡' | '個' | '箇所' | '一式' | 'セット' | '梱' | '枚' | 'm' | '台' | '組' | '式';
 export type UnitType = UnitTypeCode | UnitTypeJapanese;
 
 // 単位コードから日本語表示への変換マップ

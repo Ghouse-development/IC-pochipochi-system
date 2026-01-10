@@ -13,7 +13,7 @@ export const waterEquipmentProductsLifePlus: Product[] = [
     manufacturer: 'Panasonic',
     series: 'S-Class',
     modelNumber: 'S-Class-Island-2550',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: 'アイランド型システムキッチン、IHコンロ、食器洗い乾燥機付き',
     variants: [
@@ -48,7 +48,7 @@ export const waterEquipmentProductsLifePlus: Product[] = [
     manufacturer: 'Panasonic',
     series: 'S-Class',
     modelNumber: 'S-Class-Peninsula-2585',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: 'ペニンシュラ型システムキッチン、IHコンロ、食器洗い乾燥機付き',
     variants: [
@@ -83,7 +83,7 @@ export const waterEquipmentProductsLifePlus: Product[] = [
     manufacturer: 'タカラスタンダード',
     series: 'オフェリア',
     modelNumber: 'OFELIA-2550',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'ホーローシステムキッチン、高品位ホーロー仕様',
     variants: [
@@ -118,7 +118,7 @@ export const waterEquipmentProductsLifePlus: Product[] = [
     manufacturer: 'タカラスタンダード',
     series: 'グランディア',
     modelNumber: 'GRANDIA-2700',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: '最高級ホーローシステムキッチン、フルフラット対面式',
     variants: [
@@ -153,7 +153,7 @@ export const waterEquipmentProductsLifePlus: Product[] = [
     manufacturer: 'LIXIL',
     series: 'リシェル',
     modelNumber: 'RICHELLE-2550',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'セラミックトップ仕様、高機能システムキッチン',
     variants: [
@@ -188,7 +188,7 @@ export const waterEquipmentProductsLifePlus: Product[] = [
     manufacturer: 'グラフテクト',
     series: 'グラフテクト',
     modelNumber: 'GRAFTEKT-KITCHEN',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'デザイン性と機能性を兼ね備えたキッチン。29色×11レイアウトから選択可能',
     variants: [
@@ -240,7 +240,7 @@ export const waterEquipmentProductsLifePlus: Product[] = [
     manufacturer: 'LIXIL',
     series: 'ノクト',
     modelNumber: 'NOCT-2400',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'スタンダードシステムキッチン、機能性重視',
     variants: [
@@ -276,7 +276,7 @@ export const waterEquipmentProductsLifePlus: Product[] = [
     manufacturer: 'Panasonic',
     series: 'オフローラ',
     modelNumber: 'OFLORA-1616',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: 'スミピカフロア、保温浴槽II、LEDライン照明付き',
     variants: [
@@ -310,7 +310,7 @@ export const waterEquipmentProductsLifePlus: Product[] = [
     manufacturer: 'Panasonic',
     series: 'オフローラ',
     modelNumber: 'OFLORA-1618',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: 'ワイドサイズ、スミピカフロア、保温浴槽II、LEDライン照明付き',
     variants: [
@@ -344,7 +344,7 @@ export const waterEquipmentProductsLifePlus: Product[] = [
     manufacturer: 'Panasonic',
     series: 'オフローラ',
     modelNumber: 'OFLORA-1620',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: '特大サイズ、スミピカフロア、保温浴槽II、LEDライン照明付き',
     variants: [
@@ -379,7 +379,7 @@ export const waterEquipmentProductsLifePlus: Product[] = [
     manufacturer: 'LIXIL',
     series: 'AX',
     modelNumber: 'AX-1616',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'キレイサーモフロア、サーモバスS、エコフルシャワー付き',
     variants: [
@@ -413,7 +413,7 @@ export const waterEquipmentProductsLifePlus: Product[] = [
     manufacturer: 'LIXIL',
     series: 'AX',
     modelNumber: 'AX-1618',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'ワイドサイズ、キレイサーモフロア、サーモバスS、エコフルシャワー付き',
     variants: [
@@ -449,7 +449,7 @@ export const waterEquipmentProductsLifePlus: Product[] = [
     manufacturer: 'Panasonic',
     series: 'アラウーノ',
     modelNumber: 'ARAUNO-Z160',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: 'タンクレス、泡コート、自動洗浄機能付き',
     variants: [
@@ -478,7 +478,7 @@ export const waterEquipmentProductsLifePlus: Product[] = [
     manufacturer: 'TOTO',
     series: 'GG',
     modelNumber: 'GG-J1',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'タンク式、セフィオンテクト、トルネード洗浄',
     variants: [
@@ -513,7 +513,7 @@ export const waterEquipmentProductsLifePlus: Product[] = [
     manufacturer: 'TOTO',
     series: 'ZJ',
     modelNumber: 'ZJ1',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'コンパクトタンク式、セフィオンテクト、節水型',
     variants: [
@@ -549,7 +549,7 @@ export const waterEquipmentProductsLifePlus: Product[] = [
     manufacturer: 'TOTO',
     series: 'オクターブ',
     modelNumber: 'OCTAVE-750',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: '3面鏡、LED照明、引き出し収納タイプ',
     variants: [
@@ -583,7 +583,7 @@ export const waterEquipmentProductsLifePlus: Product[] = [
     manufacturer: 'TOTO',
     series: 'オクターブ',
     modelNumber: 'OCTAVE-900',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: '3面鏡ワイド、LED照明、大容量引き出し収納タイプ',
     variants: [
@@ -618,7 +618,7 @@ export const waterEquipmentProductsLifePlus: Product[] = [
     manufacturer: 'LIXIL',
     series: 'ピアラ',
     modelNumber: 'PIARA-750',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: '3面鏡、LED照明、扉タイプ収納',
     variants: [
@@ -652,7 +652,7 @@ export const waterEquipmentProductsLifePlus: Product[] = [
     manufacturer: 'LIXIL',
     series: 'ピアラ',
     modelNumber: 'PIARA-900',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: '3面鏡ワイド、LED照明、大容量扉タイプ収納',
     variants: [
@@ -687,7 +687,7 @@ export const waterEquipmentProductsLifePlus: Product[] = [
     name: 'パナソニック エコキュート 370L フルオート',
     manufacturer: 'Panasonic',
     modelNumber: 'HE-NS37KQS',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: '省エネ給湯器、フルオート、高圧力型',
     variants: [
@@ -714,7 +714,7 @@ export const waterEquipmentProductsLifePlus: Product[] = [
     name: 'パナソニック エコキュート 460L フルオート',
     manufacturer: 'Panasonic',
     modelNumber: 'HE-NS46KQS',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: '大容量省エネ給湯器、フルオート、高圧力型',
     variants: [
@@ -744,7 +744,7 @@ export const waterEquipmentProductsLifePlus: Product[] = [
     manufacturer: 'TOTO',
     series: 'コンパクト',
     modelNumber: 'COMPACT-600',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: '2階用コンパクト洗面台、1面鏡付き',
     variants: [
@@ -772,7 +772,7 @@ export const waterEquipmentProductsLifePlus: Product[] = [
     name: 'マルチシンク 600mm',
     manufacturer: 'TOTO',
     modelNumber: 'MULTI-SINK-600',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: '深型洗濯流し、水栓付き',
     variants: [
@@ -800,7 +800,7 @@ export const waterEquipmentProductsLifePlus: Product[] = [
     name: '浴室暖房乾燥機 1室換気',
     manufacturer: 'Panasonic',
     modelNumber: 'FY-13UG7E',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: '浴室暖房・乾燥・涼風・換気機能',
     variants: [
@@ -827,7 +827,7 @@ export const waterEquipmentProductsLifePlus: Product[] = [
     name: '浴室暖房乾燥機 3室換気',
     manufacturer: 'Panasonic',
     modelNumber: 'FY-13UG7E-3',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: '浴室・洗面・トイレ3室換気対応',
     variants: [

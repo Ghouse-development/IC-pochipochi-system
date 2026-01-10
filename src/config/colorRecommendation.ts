@@ -139,3 +139,135 @@ export function getColorRecommendationLabel(floorColor: string): string {
       return 'グレー系の床色に合わせてグレー系がおすすめ';
   }
 }
+
+// ========================================
+// 外壁色に基づく外部設備の色おすすめ
+// ========================================
+
+// 外壁色のカテゴリ分類
+export type WallColorTone = 'light' | 'medium' | 'dark' | 'gray';
+
+// 外壁色のパターン（部分一致で判定）
+const WALL_COLOR_PATTERNS: Record<WallColorTone, string[]> = {
+  light: [
+    'ホワイト', 'アイボリー', 'ベージュ', 'クリーム',
+    'シルキーホワイト', 'ミルキーホワイト', 'ライト', 'ペール'
+  ],
+  medium: [
+    'サンド', 'テラコッタ', 'オレンジ', 'ブラウン',
+    'カーム', 'ナチュラル', 'オーク', 'トープ'
+  ],
+  dark: [
+    'ブラック', 'ダーク', 'チャコール', 'ネイビー',
+    'グレー', 'ガンメタ', 'アンスラサイト'
+  ],
+  gray: [
+    'グレー', 'グレージュ', 'シルバー', 'プラチナ',
+    'ステン', 'アルミ', 'モルタル'
+  ]
+};
+
+// 外部設備の色おすすめ（外壁色トーン別）
+const EXTERIOR_EQUIPMENT_COLOR_RECOMMENDATIONS: Record<WallColorTone, {
+  primary: string[];    // 最もおすすめ
+  secondary: string[];  // 次点
+}> = {
+  light: {
+    primary: ['ホワイト', 'アイボリー'],
+    secondary: ['ブラウン']
+  },
+  medium: {
+    primary: ['ブラウン', 'アイボリー'],
+    secondary: ['ホワイト']
+  },
+  dark: {
+    primary: ['ブラック'],
+    secondary: ['ブラウン']
+  },
+  gray: {
+    primary: ['ブラック', 'ホワイト'],
+    secondary: ['アイボリー']
+  }
+};
+
+/**
+ * 外壁色からトーンを判定
+ */
+export function getWallColorTone(wallColor: string): WallColorTone {
+  for (const [tone, patterns] of Object.entries(WALL_COLOR_PATTERNS) as [WallColorTone, string[]][]) {
+    for (const pattern of patterns) {
+      if (wallColor.includes(pattern)) {
+        return tone;
+      }
+    }
+  }
+  // デフォルトはlight（白系外壁が多い）
+  return 'light';
+}
+
+/**
+ * 外壁色に基づいて外部設備の色をおすすめ順でソート
+ */
+export function sortExteriorEquipmentColorsByRecommendation(
+  variants: { id: string; color: string }[],
+  wallColor: string
+): { id: string; color: string; isRecommended: boolean; isPrimary: boolean }[] {
+  const tone = getWallColorTone(wallColor);
+  const recommendations = EXTERIOR_EQUIPMENT_COLOR_RECOMMENDATIONS[tone];
+
+  return variants.map(variant => {
+    const isPrimary = recommendations.primary.some(rec =>
+      variant.color.includes(rec) || rec.includes(variant.color)
+    );
+    const isSecondary = recommendations.secondary.some(rec =>
+      variant.color.includes(rec) || rec.includes(variant.color)
+    );
+
+    return {
+      ...variant,
+      isRecommended: isPrimary || isSecondary,
+      isPrimary
+    };
+  }).sort((a, b) => {
+    // Primary > Secondary > その他
+    if (a.isPrimary && !b.isPrimary) return -1;
+    if (!a.isPrimary && b.isPrimary) return 1;
+    if (a.isRecommended && !b.isRecommended) return -1;
+    if (!a.isRecommended && b.isRecommended) return 1;
+    return 0;
+  });
+}
+
+/**
+ * 外部設備カテゴリかどうかを判定（色おすすめ対象）
+ */
+export function isExteriorEquipmentCategory(_categoryName: string, subcategory?: string): boolean {
+  const exteriorEquipmentSubcategories = [
+    '外部コンセント', 'EV用コンセント', 'エアコンスリーブキャップ',
+    '換気フード', '換気ガラリ'
+  ];
+
+  if (subcategory && exteriorEquipmentSubcategories.some(sub => subcategory.includes(sub))) {
+    return true;
+  }
+
+  return false;
+}
+
+/**
+ * 外壁色に基づくおすすめ色のラベルを取得
+ */
+export function getWallColorRecommendationLabel(wallColor: string): string {
+  const tone = getWallColorTone(wallColor);
+
+  switch (tone) {
+    case 'light':
+      return '白系の外壁に合わせてホワイト・アイボリーがおすすめ';
+    case 'medium':
+      return 'ナチュラルな外壁に合わせてブラウン・アイボリーがおすすめ';
+    case 'dark':
+      return 'ダークな外壁に合わせてブラックがおすすめ';
+    case 'gray':
+      return 'グレー系の外壁に合わせてブラック・ホワイトがおすすめ';
+  }
+}

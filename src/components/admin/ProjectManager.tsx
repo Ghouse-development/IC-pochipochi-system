@@ -10,12 +10,14 @@ import {
   Calendar,
   User as UserIcon,
   FileText,
+  Settings,
 } from 'lucide-react';
 import { projectsApi, productsApi, usersApi } from '../../services/api';
 import type { Project, Product, User as UserType } from '../../types/database';
 import { ConfirmDialog } from '../common/ConfirmDialog';
 import { createLogger } from '../../lib/logger';
 import { useDebounce } from '../../hooks/useDebounce';
+import { ProjectEditModal } from './ProjectEditModal';
 
 const logger = createLogger('ProjectManager');
 
@@ -34,6 +36,7 @@ export function ProjectManager({ onSelectProject }: ProjectManagerProps) {
   const [productFilter, setProductFilter] = useState<string>('all');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [detailedEditProject, setDetailedEditProject] = useState<Project | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [lockReleaseProjectId, setLockReleaseProjectId] = useState<string | null>(null);
 
@@ -276,9 +279,16 @@ export function ProjectManager({ onSelectProject }: ProjectManagerProps) {
                         <button
                           onClick={() => setSelectedProject(project)}
                           className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg"
-                          title="編集"
+                          title="基本編集"
                         >
                           <Edit className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => setDetailedEditProject(project)}
+                          className="p-2 text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-lg"
+                          title="詳細編集（物件情報）"
+                        >
+                          <Settings className="w-4 h-4" />
                         </button>
                         {project.edit_locked_by && (
                           <button
@@ -350,6 +360,19 @@ export function ProjectManager({ onSelectProject }: ProjectManagerProps) {
           onClose={() => setSelectedProject(null)}
           onUpdated={() => {
             setSelectedProject(null);
+            loadData();
+          }}
+        />
+      )}
+
+      {/* Detailed Edit Modal (物件詳細編集) */}
+      {detailedEditProject && (
+        <ProjectEditModal
+          projectId={detailedEditProject.id}
+          isOpen={true}
+          onClose={() => setDetailedEditProject(null)}
+          onSave={() => {
+            setDetailedEditProject(null);
             loadData();
           }}
         />

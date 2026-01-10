@@ -162,6 +162,7 @@ export const DESIGN_CATEGORIES = [
   '給湯器',
   '太陽光',      // 太陽光パネルの有無
   '蓄電池',      // 蓄電池の有無
+  'V2H',         // V2H（電気自動車充放電設備）の有無
   'ポーチサイズ拡張', // 設計者のみが管理者画面で選択
   'ガス引込み', // ガス引込みの有無（乾太くん等に影響）
 ];
@@ -250,8 +251,7 @@ export const REQUIRED_CATEGORIES = [
   'ガレージシャッター', // ⑤
   '窓',          // ⑥
   '玄関ドア',    // ⑦
-  '外部設備',    // B: 電気メーター・コンセント・外部配管等
-  'TV視聴',      // ⑧ TV視聴方法の選択
+  '外部設備',    // B: 電気メーター・コンセント・外部配管等・TV視聴
   // 内装必須項目（サイドバー先頭に表示）
   'ベース床',           // ① 居室のベースフローリング
   'ベースクロス（壁）', // ② 壁のベースクロス
@@ -500,17 +500,20 @@ export const RECOMMEND_BADGES: Record<Exclude<RecommendBadgeType, null>, Recomme
 };
 
 // 商品のおすすめバッジを判定（標準品の最初の商品 = 迷ったらコレ）
+// ※1種類しかない場合は「迷ったらコレ」は表示しない（迷いようがないため）
 export const getRecommendBadge = (
   item: { id: string; name: string; is_hit?: boolean },
   isStandard: boolean,
-  isFirstStandardInCategory: boolean
+  isFirstStandardInCategory: boolean,
+  standardCountInCategory: number = 1
 ): RecommendBadgeInfo | null => {
   // HITフラグが立っている = 人気No.1
   if (item.is_hit) {
     return RECOMMEND_BADGES.popular;
   }
   // カテゴリ内の最初の標準品 = 迷ったらコレ
-  if (isStandard && isFirstStandardInCategory) {
+  // ただし、標準品が1つしかない場合は表示しない（迷いようがないため）
+  if (isStandard && isFirstStandardInCategory && standardCountInCategory > 1) {
     return RECOMMEND_BADGES.recommended;
   }
   return null;

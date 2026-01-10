@@ -4,12 +4,33 @@ import { useCartStore } from '../../stores/useCartStore';
 import { exteriorProducts } from '../../data/exteriorProducts';
 import type { Product } from '../../types/product';
 
+// ドアデザイン画像プレースホルダー生成
+const generateDoorPlaceholder = (designName: string): string => {
+  const svgContent = `
+    <svg width="200" height="300" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="door-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#8B7355;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#6B5344;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+      <rect width="200" height="300" fill="#f5f5f4" rx="8"/>
+      <rect x="30" y="20" width="140" height="260" fill="url(#door-bg)" rx="4"/>
+      <rect x="50" y="120" width="10" height="60" fill="#B8860B" rx="2"/>
+      <text x="50%" y="85%" text-anchor="middle" fill="#78716c" font-family="system-ui" font-size="16" font-weight="600">
+        ${designName}
+      </text>
+    </svg>
+  `;
+  return `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svgContent)))}`;
+};
+
 // ドアデザイン定義（4種類）
 const DOOR_DESIGNS = [
-  { id: 'N08', name: 'N08', description: '木目の水平線が印象的', productId: 'ext-door-venato-d30-n08' },
-  { id: 'N18', name: 'N18', description: '框とくふなバランスが印象的', productId: 'ext-door-venato-d30-n18' },
-  { id: 'N15', name: 'N15', description: '木目の水平線が印象的', productId: 'ext-door-venato-d30-n15' },
-  { id: 'C10', name: 'C10', description: 'プレーンデザイン', productId: 'ext-door-venato-d30-c10' },
+  { id: 'N08', name: 'N08', description: '木目の水平線が印象的', productId: 'ext-door-venato-d30-n08', icon: '═' },
+  { id: 'N18', name: 'N18', description: '框とくふなバランスが印象的', productId: 'ext-door-venato-d30-n18', icon: '╬' },
+  { id: 'N15', name: 'N15', description: '木目の水平線が印象的', productId: 'ext-door-venato-d30-n15', icon: '≡' },
+  { id: 'C10', name: 'C10', description: 'プレーンデザイン', productId: 'ext-door-venato-d30-c10', icon: '▢' },
 ];
 
 // 鍵の種類定義（3パターン）
@@ -241,12 +262,19 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
                   setSelectedDesign(design.id);
                   goToStep('color');
                 }}
-                className="flex flex-col items-center p-4 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500 transition-all"
+                className="flex flex-col items-center p-3 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500 transition-all bg-white dark:bg-gray-800"
               >
-                <span className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
+                <div className="w-full aspect-[2/3] rounded-lg overflow-hidden mb-2 bg-gray-100 dark:bg-gray-700">
+                  <img
+                    src={generateDoorPlaceholder(design.name)}
+                    alt={design.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <span className="text-lg font-bold text-gray-800 dark:text-white">
                   {design.name}
                 </span>
-                <span className="text-xs text-gray-500 dark:text-gray-400 text-center">
+                <span className="text-xs text-gray-500 dark:text-gray-400 text-center mt-1">
                   {design.description}
                 </span>
               </button>

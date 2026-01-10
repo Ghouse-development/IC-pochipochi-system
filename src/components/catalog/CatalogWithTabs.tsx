@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { Search, ClipboardCheck, Check, Star, ChevronRight, ChevronLeft, Home, Zap, Heart, X, Scale, FileDown, HelpCircle, Eye, Flame } from 'lucide-react';
+import { Search, ClipboardCheck, Check, Star, ChevronRight, ChevronLeft, Home, X, Scale, FileDown, HelpCircle, Eye, Flame } from 'lucide-react';
 import { useToast } from '../common/Toast';
 import { useTimeout } from '../../hooks/useTimeout';
 import { useDebounce } from '../../hooks/useDebounce';
-import { supabase } from '../../lib/supabase';
+import { supabase, isSupabaseConfigured } from '../../lib/supabase';
 import { createLogger } from '../../lib/logger';
 
 const logger = createLogger('CatalogWithTabs');
@@ -40,7 +40,6 @@ import {
   getRecommendBadge,
   getNotNeededOption,
   isHiddenCategory,
-  type FilterTypeValue,
 } from './catalogUtils';
 import { NotNeededCard } from './NotNeededCard';
 import { RoomSelectionModal } from './RoomSelectionModal';
@@ -96,17 +95,6 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
         prev.set('q', sanitized);
       } else {
         prev.delete('q');
-      }
-      return prev;
-    });
-  }, [setSearchParams]);
-
-  const setFilterType = useCallback((type: 'all' | 'standard' | 'option') => {
-    setSearchParams(prev => {
-      if (type !== 'all') {
-        prev.set('filter', type);
-      } else {
-        prev.delete('filter');
       }
       return prev;
     });
@@ -179,7 +167,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   const [isRoomPlannerOpen, setIsRoomPlannerOpen] = useState(false);
 
   // お気に入りフィルター
-  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const [showFavoritesOnly] = useState(false);
 
   // 廃番商品を非表示（デフォルトで非表示）
   const [hideDiscontinued, setHideDiscontinued] = useState(true);
@@ -243,7 +231,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   }, [toggleFavorite, favorites, toast]);
 
   // クイック選択モード
-  const [quickSelectMode, setQuickSelectMode] = useState(false);
+  const [_quickSelectMode, setQuickSelectMode] = useState(false);
 
   // タブ切替（URL遷移）
   const setActiveTab = useCallback((newTab: 'design' | 'exterior' | 'interior' | 'equipment' | 'electrical' | 'furniture') => {
@@ -262,6 +250,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   // プラン取得
   useEffect(() => {
     const fetchPlans = async () => {
+      if (!isSupabaseConfigured) return; // オフラインモード時はスキップ
       const { data } = await supabase
         .from('products')
         .select('*')
@@ -277,30 +266,35 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     const fetchCategories = async () => {
       // 「設計」タブの場合は、外装と設備からDESIGN_CATEGORIESを抽出
       if (activeTab === 'design') {
-        // 外装と設備の両方からカテゴリを取得
-        const { data: extCategories } = await supabase
-          .from('categories')
-          .select('*')
-          .eq('category_type', 'exterior')
-          .eq('is_active', true)
-          .order('display_order');
+        let uniqueDesignCategories: Category[] = [];
 
-        const { data: eqCategories } = await supabase
-          .from('categories')
-          .select('*')
-          .eq('category_type', 'equipment')
-          .eq('is_active', true)
-          .order('display_order');
+        // Supabaseが設定されている場合のみAPIを呼び出す
+        if (isSupabaseConfigured) {
+          // 外装と設備の両方からカテゴリを取得
+          const { data: extCategories } = await supabase
+            .from('categories')
+            .select('*')
+            .eq('category_type', 'exterior')
+            .eq('is_active', true)
+            .order('display_order');
 
-        const allCategories = [...(extCategories || []), ...(eqCategories || [])];
-        // DESIGN_CATEGORIESに含まれるもののみをフィルタ（完全一致のみ）
-        const designCategories = allCategories.filter(cat =>
-          DESIGN_CATEGORIES.some(dc => cat.name === dc)
-        );
-        // 重複除去（同名カテゴリがある場合は最初のものを使用）
-        const uniqueDesignCategories = designCategories.filter((cat, index, self) =>
-          index === self.findIndex(c => c.name === cat.name)
-        );
+          const { data: eqCategories } = await supabase
+            .from('categories')
+            .select('*')
+            .eq('category_type', 'equipment')
+            .eq('is_active', true)
+            .order('display_order');
+
+          const allCategories = [...(extCategories || []), ...(eqCategories || [])];
+          // DESIGN_CATEGORIESに含まれるもののみをフィルタ（完全一致のみ）
+          const designCategories = allCategories.filter(cat =>
+            DESIGN_CATEGORIES.some(dc => cat.name === dc)
+          );
+          // 重複除去（同名カテゴリがある場合は最初のものを使用）
+          uniqueDesignCategories = designCategories.filter((cat, index, self) =>
+            index === self.findIndex(c => c.name === cat.name)
+          );
+        }
 
         if (uniqueDesignCategories.length > 0) {
           setCategories(uniqueDesignCategories);
@@ -343,12 +337,16 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
       }
 
       // 通常のタブ（外装・内装・設備）の場合
-      const { data: supabaseCategories } = await supabase
-        .from('categories')
-        .select('*')
-        .eq('category_type', activeTab)
-        .eq('is_active', true)
-        .order('display_order');
+      let supabaseCategories: Category[] | null = null;
+      if (isSupabaseConfigured) {
+        const { data } = await supabase
+          .from('categories')
+          .select('*')
+          .eq('category_type', activeTab)
+          .eq('is_active', true)
+          .order('display_order');
+        supabaseCategories = data;
+      }
 
       if (supabaseCategories && supabaseCategories.length > 0) {
         // DESIGN_CATEGORIESを除外（設計タブに移動したため）
@@ -489,40 +487,46 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
       setError(null);
 
       try {
-        // Supabaseからアイテムを取得（カテゴリでフィルタ）
-        let query = supabase
-          .from('items')
-          .select(`
-            *,
-            category:categories(*),
-            unit:units(*),
-            variants:item_variants(
+        let supabaseItems: ItemWithDetails[] | null = null;
+
+        // Supabaseが設定されている場合のみAPIを呼び出す
+        if (isSupabaseConfigured) {
+          // Supabaseからアイテムを取得（カテゴリでフィルタ）
+          let query = supabase
+            .from('items')
+            .select(`
               *,
-              images:item_variant_images(*)
-            ),
-            pricing:item_pricing(
-              *,
-              product:products(*)
-            )
-          `)
-          .eq('is_active', true)
-          .order('display_order');
+              category:categories(*),
+              unit:units(*),
+              variants:item_variants(
+                *,
+                images:item_variant_images(*)
+              ),
+              pricing:item_pricing(
+                *,
+                product:products(*)
+              )
+            `)
+            .eq('is_active', true)
+            .order('display_order');
 
-        // カテゴリでフィルタ
-        if (selectedCategoryId) {
-          query = query.eq('category_id', selectedCategoryId);
-        } else if (activeTab === 'design') {
-          // 設計タブ：外装と設備両方からフィルタ
-          query = query.in('category.category_type', ['exterior', 'equipment']);
-        } else {
-          // カテゴリタイプでフィルタ（カテゴリ未選択時）
-          query = query.eq('category.category_type', activeTab);
-        }
+          // カテゴリでフィルタ
+          if (selectedCategoryId) {
+            query = query.eq('category_id', selectedCategoryId);
+          } else if (activeTab === 'design') {
+            // 設計タブ：外装と設備両方からフィルタ
+            query = query.in('category.category_type', ['exterior', 'equipment']);
+          } else {
+            // カテゴリタイプでフィルタ（カテゴリ未選択時）
+            query = query.eq('category.category_type', activeTab);
+          }
 
-        const { data: supabaseItems, error: fetchError } = await query;
+          const { data, error: fetchError } = await query;
+          supabaseItems = data;
 
-        if (fetchError) {
-          logger.error('Supabase fetch error:', fetchError);
+          if (fetchError) {
+            logger.error('Supabase fetch error:', fetchError);
+          }
         }
 
         // 静的データを取得（完全なデータセット）
@@ -649,16 +653,28 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     { id: '腰壁笠木', name: '腰壁笠木', description: '腰壁がある場合のみ', optional: true },
   ];
 
-  // 設計タブ用: ガレージシャッター有無選択
-  const GARAGE_SHUTTER_OPTIONS = [
-    { id: 'garage-shutter-yes', name: 'あり', description: '電動ガレージシャッターを設置' },
-    { id: 'garage-shutter-no', name: 'なし', description: 'ガレージシャッターなし' },
+  // 外部建材の種類（外装用）
+  const EXTERIOR_MATERIAL_TYPES = [
+    { id: '軒樋', name: '軒樋', description: '横に走る樋（雨どい）' },
+    { id: '竪樋', name: '竪樋', description: '縦に走る樋（雨どい）' },
+    { id: '土台水切', name: '土台水切', description: '基礎と外壁の境目' },
+    { id: 'パラペット笠木', name: 'パラペット笠木', description: '陸屋根の立ち上がり部分' },
+    { id: 'バルコニー笠木', name: 'バルコニー笠木', description: 'バルコニー手すり上部' },
+    { id: '破風', name: '破風', description: '屋根の妻側部分' },
   ];
 
-  // 設計タブ用: 庇有無選択
+  // 設計タブ用: ガレージシャッター種類選択
+  const GARAGE_SHUTTER_OPTIONS = [
+    { id: 'garage-shutter-no', name: 'なし', description: 'ガレージシャッター不要', productId: 'ext-garage-shutter-none' },
+    { id: 'garage-shutter-sunauto', name: 'サンオートハイスピード', description: '静かでスピーディ（開閉約12秒）', productId: 'ext-garage-shutter-sunauto' },
+    { id: 'garage-shutter-ifudo', name: '威風堂々', description: '重厚感のある木目調デザイン', productId: 'ext-garage-shutter-ifudo' },
+  ];
+
+  // 設計タブ用: 庇種類選択
   const AWNING_OPTIONS = [
-    { id: 'awning-yes', name: 'あり', description: '玄関・窓上に庇を設置' },
-    { id: 'awning-no', name: 'なし', description: '庇なし' },
+    { id: 'awning-no', name: 'なし', description: '庇不要', productId: 'ext-awning-none' },
+    { id: 'awning-ad2s', name: 'アルフィン庇 AD2S', description: 'シンプルなアルミ庇', productId: 'ext-awning-alfin-ad2s' },
+    { id: 'awning-af95', name: 'アルフィン庇 AF95', description: '木目調仕上げ', productId: 'ext-awning-alfin-af95' },
   ];
 
   // 設計タブ用: 窓タイプ選択
@@ -677,6 +693,28 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   const INTERIOR_WINDOW_OPTIONS = [
     { id: 'interior-window-yes', name: 'あり', description: '室内窓を設置する' },
     { id: 'interior-window-no', name: 'なし', description: '室内窓なし' },
+  ];
+
+  // 設計タブ用: 給湯器種類選択
+  const WATER_HEATER_OPTIONS = [
+    { id: 'ecocute', name: 'エコキュート', description: '電気給湯器（標準）', subcategory: 'エコキュート' },
+    { id: 'ohisama', name: 'おひさまエコキュート', description: '太陽光連携型給湯器', subcategory: 'おひさまエコキュート' },
+    { id: 'niagara', name: 'ナイアガラ出湯', description: '高圧給湯エコキュート', subcategory: 'ナイアガラ出湯' },
+    { id: 'ecojozu', name: 'エコジョーズ', description: 'ガス給湯器（ガス引込み必要）', subcategory: 'エコジョーズ' },
+  ];
+
+  // 家具・家電タブ用: 乾太くん選択オプション
+  const GAS_DRYER_OPTIONS = [
+    { id: 'dryer-none', name: '選択しない', description: 'ガス乾燥機を設置しない', productId: 'furn-dryer-none', icon: '❌', price: 0 },
+    { id: 'dryer-standard-5kg', name: 'スタンダード 5kg', description: '一般家庭向け（約52分で乾燥）', productId: 'furn-dryer-001', icon: '👕', price: 272000 },
+    { id: 'dryer-deluxe-6kg', name: 'デラックス 6kg', description: '容量たっぷり・静音設計', productId: 'furn-dryer-002', icon: '👔', price: 297000 },
+    { id: 'dryer-deluxe-9kg', name: 'デラックス 9kg', description: '大容量・大家族向け', productId: 'furn-dryer-003', icon: '🧥', price: 330000 },
+  ];
+
+  // 乾太くん関連オプション（架台・収納）
+  const GAS_DRYER_ACCESSORIES = [
+    { id: 'kadai', name: '専用架台', description: '乾太くん専用架台 ※乾太くん選択時のみ', productId: 'furn-dryer-004', price: 30000 },
+    { id: 'unit', name: '専用収納ユニット', description: '乾太くん専用収納ユニット ※乾太くん選択時のみ', productId: 'furn-dryer-005', price: 140000 },
   ];
 
   // カートから設計選択状態を取得
@@ -973,33 +1011,6 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
       toast.info('解除しました', item.product.name);
     }
   }, [removeItem, cartItems, toast]);
-
-  // 標準品一括選択
-  const handleSelectAllStandard = useCallback(() => {
-    const standardItems = filteredItems.filter(item => {
-      const pricing = item.pricing?.find(p => p.product?.code === selectedPlanId);
-      return pricing?.is_standard && !cartItemIds.has(item.id);
-    });
-
-    if (standardItems.length === 0) {
-      toast.info('選択可能な標準品がありません');
-      return;
-    }
-
-    standardItems.forEach(item => {
-      const cartProduct = convertToCartItem(item);
-      addItem(cartProduct, 1);
-    });
-
-    toast.success(`${standardItems.length}件の標準品を選択しました`);
-
-    // 紙吹雪
-    if (standardItems.length >= 3) {
-      setShowConfetti(true);
-      setTimeout(() => setShowConfetti(false), ANIMATION_DURATIONS.CONFETTI);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filteredItems, selectedPlanId, cartItemIds, addItem, toast]); // setTimeoutはグローバル関数
 
   // 商品詳細モーダルを開く（URL付き）
   const handleOpenDetail = useCallback((item: ItemWithDetails) => {
@@ -1402,72 +1413,32 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
           {/* メインエリア */}
           <div className="flex-1 flex flex-col overflow-hidden">
-            {/* 検索バー＋フィルター - コンパクト */}
+            {/* 検索バー（簡素化） */}
             <div className="sticky top-0 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md border-b border-gray-100 dark:border-gray-700 z-10 px-3 py-2">
-              <div className="flex items-center gap-2">
-                {/* 検索 */}
-                <div className="relative flex-1 max-w-xs">
-                  <label htmlFor="catalog-search" className="sr-only">商品を検索</label>
-                  <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 dark:text-gray-500" aria-hidden="true" />
-                  <input
-                    id="catalog-search"
-                    type="text"
-                    placeholder="検索..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-8 pr-2 py-1.5 bg-gray-50 dark:bg-gray-700 dark:text-gray-100 border-0 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-gray-600 transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
-                  />
-                  {searchTerm && (
-                    <button
-                      onClick={() => setSearchTerm('')}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full"
-                    >
-                      <X className="w-3 h-3 text-gray-400 dark:text-gray-500" />
-                    </button>
-                  )}
-                </div>
-
-                {/* フィルターボタン - コンパクト */}
-                <div className="hidden sm:flex bg-gray-100 dark:bg-gray-700 p-0.5 rounded-lg">
-                  {[
-                    { value: 'all', label: '全', title: 'すべて' },
-                    { value: 'standard', label: '¥0', title: '標準品（追加なし）' },
-                    { value: 'option', label: '+¥', title: 'オプション' },
-                  ].map(opt => (
-                    <button
-                      key={opt.value}
-                      onClick={() => setFilterType(opt.value as FilterTypeValue)}
-                      title={opt.title}
-                      className={`px-2.5 py-1 rounded text-xs font-bold transition-all ${
-                        filterType === opt.value
-                          ? opt.value === 'standard'
-                            ? 'bg-emerald-500 text-white'
-                            : opt.value === 'option'
-                            ? 'bg-orange-500 text-white'
-                            : 'bg-white dark:bg-gray-600 text-gray-700 dark:text-gray-200'
-                          : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
-                      }`}
-                    >
-                      {opt.label}
-                    </button>
-                  ))}
-                </div>
-
-                {/* アクションボタン群 */}
-                <div className="hidden sm:flex items-center gap-1">
+              <div className="relative max-w-md">
+                <label htmlFor="catalog-search" className="sr-only">商品を検索</label>
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" aria-hidden="true" />
+                <input
+                  id="catalog-search"
+                  type="text"
+                  placeholder="商品を検索..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-10 py-2 bg-gray-50 dark:bg-gray-700 dark:text-gray-100 border border-gray-200 dark:border-gray-600 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-gray-600 transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
+                />
+                {searchTerm && (
                   <button
-                    onClick={handleSelectAllStandard}
-                    className="p-2.5 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-colors"
-                    title="標準品を一括選択"
-                    aria-label="標準品を一括選択"
+                    onClick={() => setSearchTerm('')}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full"
+                    aria-label="検索をクリア"
                   >
-                    <Check className="w-4 h-4" />
+                    <X className="w-4 h-4 text-gray-400 dark:text-gray-500" />
                   </button>
-                </div>
+                )}
               </div>
             </div>
 
-            {/* モバイル用フィルターバー */}
+            {/* モバイル用プラン選択（簡素化） */}
             <div className="lg:hidden bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 px-3 py-2">
               <div className="flex items-center gap-2">
                 {/* プラン選択 */}
@@ -1476,67 +1447,13 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   id="mobile-plan-select"
                   value={selectedPlanId}
                   onChange={(e) => setSelectedPlanId(e.target.value)}
-                  className="flex-1 px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500"
+                  className="flex-1 px-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500"
                   aria-label="プランを選択"
                 >
                   {plans.map(plan => (
                     <option key={plan.id} value={plan.code}>{plan.name}</option>
                   ))}
                 </select>
-
-                {/* タイプフィルター */}
-                <div className="flex bg-gray-100 dark:bg-gray-700 p-1 rounded-xl">
-                  {[
-                    { value: 'all', label: '全部', color: 'gray' },
-                    { value: 'standard', label: '¥0', color: 'blue' },
-                    { value: 'option', label: '+¥', color: 'orange' },
-                  ].map(opt => (
-                    <button
-                      key={opt.value}
-                      onClick={() => setFilterType(opt.value as FilterTypeValue)}
-                      className={`px-3 py-2 rounded-lg text-xs font-bold transition-all ${
-                        filterType === opt.value
-                          ? opt.value === 'standard'
-                            ? 'bg-blue-500 text-white shadow-sm'
-                            : opt.value === 'option'
-                            ? 'bg-orange-500 text-white shadow-sm'
-                            : 'bg-white dark:bg-gray-600 text-gray-700 dark:text-gray-200 shadow-sm'
-                          : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
-                      }`}
-                    >
-                      {opt.label}
-                    </button>
-                  ))}
-                </div>
-
-                {/* お気に入りフィルター */}
-                {favorites.length > 0 && (
-                  <button
-                    onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
-                    className={`p-2.5 rounded-xl transition-all flex items-center gap-1.5 ${
-                      showFavoritesOnly
-                        ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-lg'
-                        : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 hover:text-pink-500'
-                    }`}
-                    title={showFavoritesOnly ? 'すべて表示' : `お気に入りのみ (${favorites.length})`}
-                  >
-                    <Heart className={`w-4 h-4 ${showFavoritesOnly ? 'fill-current' : ''}`} />
-                    {showFavoritesOnly && <span className="text-xs font-bold">{favorites.length}</span>}
-                  </button>
-                )}
-
-                {/* クイック選択モード */}
-                <button
-                  onClick={() => setQuickSelectMode(!quickSelectMode)}
-                  className={`p-2.5 rounded-xl transition-all ${
-                    quickSelectMode
-                      ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-white shadow-lg'
-                      : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
-                  }`}
-                  title="クイック選択モード"
-                >
-                  <Zap className="w-4 h-4" />
-                </button>
               </div>
             </div>
 
@@ -1762,7 +1679,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                         <button
                           key={material}
                           onClick={() => setSelectedMaterialType(material)}
-                          className="group flex items-center justify-between bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:border-gray-400 dark:hover:border-gray-500 transition-colors"
+                          className="group flex items-center justify-between bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:border-blue-400 dark:hover:border-blue-500 transition-all"
                         >
                           <div>
                             <h3 className="font-medium text-gray-900 dark:text-gray-100 text-left">
@@ -1807,7 +1724,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                         <button
                           key={type.id}
                           onClick={() => setSelectedMaterialType(type.id)}
-                          className="group flex flex-col items-start bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:border-blue-400 dark:hover:border-blue-500 transition-colors"
+                          className="group flex flex-col items-start bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:border-blue-400 dark:hover:border-blue-500 transition-all"
                         >
                           <div className="w-full flex items-center justify-between mb-1">
                             <h3 className="font-medium text-sm text-gray-900 dark:text-gray-100 text-left">
@@ -1830,7 +1747,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                         <button
                           key={type.id}
                           onClick={() => setSelectedMaterialType(type.id)}
-                          className="w-full group flex items-center justify-between bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:border-blue-400 dark:hover:border-blue-500 transition-colors"
+                          className="w-full group flex items-center justify-between bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:border-blue-400 dark:hover:border-blue-500 transition-all"
                         >
                           <div>
                             <h4 className="font-medium text-gray-900 dark:text-gray-100 text-left">
@@ -1862,7 +1779,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                         <button
                           key={type.id}
                           onClick={() => setSelectedMaterialType(type.id)}
-                          className="group flex flex-col items-start bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:border-blue-400 dark:hover:border-blue-500 transition-colors"
+                          className="group flex flex-col items-start bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:border-blue-400 dark:hover:border-blue-500 transition-all"
                         >
                           <h3 className="font-medium text-sm text-gray-900 dark:text-gray-100 text-left mb-1">
                             {type.name}
@@ -1894,7 +1811,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                         <button
                           key={type.id}
                           onClick={() => setSelectedMaterialType(type.id)}
-                          className="group flex flex-col items-start bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:border-blue-400 dark:hover:border-blue-500 transition-colors"
+                          className="group flex flex-col items-start bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:border-blue-400 dark:hover:border-blue-500 transition-all"
                         >
                           <div className="w-full flex items-center justify-between mb-1">
                             <h3 className="font-medium text-sm text-gray-900 dark:text-gray-100 text-left">
@@ -1917,6 +1834,41 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                     })}
                   </div>
                 </div>
+              ) : currentCategoryName === '外部建材' && !selectedMaterialType ? (
+                /* 外部建材カテゴリ選択カード */
+                <div className="max-w-4xl mx-auto px-4">
+                  <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                    外部建材を選択
+                  </h2>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+                    各部材の色を選んでください。統一感のある外観に仕上がります。
+                  </p>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    {EXTERIOR_MATERIAL_TYPES.map((type) => {
+                      const itemCount = items.filter(i => i.category_name === type.id || i.material_type === type.id).length;
+                      return (
+                        <button
+                          key={type.id}
+                          onClick={() => setSelectedMaterialType(type.id)}
+                          className="group flex flex-col items-start bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:border-blue-400 dark:hover:border-blue-500 transition-all"
+                        >
+                          <div className="w-full flex items-center justify-between mb-1">
+                            <h3 className="font-medium text-sm text-gray-900 dark:text-gray-100 text-left">
+                              {type.name}
+                            </h3>
+                            <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors" />
+                          </div>
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                            {type.description}
+                          </p>
+                          <p className="text-xs text-blue-600 dark:text-blue-400">
+                            {itemCount > 0 ? `${itemCount}種類` : '1種類'}
+                          </p>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
               ) : activeTab === 'design' && (currentCategoryName?.includes('ガレージシャッター') || currentCategoryName?.includes('電動ガレージシャッター')) ? (
                 /* 設計タブ: ガレージシャッター有無選択カード */
                 <div className="max-w-3xl mx-auto px-4">
@@ -1932,34 +1884,52 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                     ガレージシャッター
                   </h2>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
-                    {isDesignReadOnly ? '設計担当が設定した内容です。' : '電動ガレージシャッターの設置有無を選択してください。'}
-                    {!isDesignReadOnly && (
-                      <>
-                        <br />
-                        <span className="text-xs">※「あり」を選択した場合、外装タブで色を選択できます</span>
-                      </>
-                    )}
+                    {isDesignReadOnly ? '設計担当が設定した内容です。' : '電動ガレージシャッターの種類を選択してください。'}
                   </p>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-3 gap-4">
                     {GARAGE_SHUTTER_OPTIONS.map((option) => {
-                      const isSelected = option.id === 'garage-shutter-yes' ? hasGarageShutter : !hasGarageShutter;
+                      const isSelected = cartItems.some(item => item.product.id === option.productId);
+                      const emoji = option.id === 'garage-shutter-no' ? '🏠' : option.id === 'garage-shutter-sunauto' ? '🚗' : '🚙';
                       return (
                         <button
                           key={option.id}
                           disabled={isDesignReadOnly}
                           onClick={() => {
                             if (isDesignReadOnly) return;
-                            if (option.id === 'garage-shutter-no') {
-                              // 「なし」を選択した場合、ガレージシャッター関連をカートから削除
-                              const garageItems = cartItems.filter(item =>
-                                item.product.categoryName?.includes('ガレージシャッター')
-                              );
-                              garageItems.forEach(item => removeItem(item.product.id));
+                            // 既存のガレージシャッター選択をクリア
+                            const garageItems = cartItems.filter(item =>
+                              item.product.categoryName?.includes('ガレージシャッター')
+                            );
+                            garageItems.forEach(item => removeItem(item.product.id));
+                            // 対応する商品をカートに追加（なし以外の場合も追加してOK）
+                            const product = items.find(i => i.id === option.productId);
+                            if (product) {
+                              const catalogProduct = {
+                                id: product.id,
+                                categoryId: product.category_id || '',
+                                categoryName: product.category?.name || '電動ガレージシャッター',
+                                subcategory: product.category_name || '',
+                                name: product.name,
+                                manufacturer: product.manufacturer || '',
+                                modelNumber: product.model_number || '',
+                                unit: product.unit?.symbol || 'セット',
+                                isOption: !product.pricing?.some(p => p.is_standard),
+                                variants: product.variants?.map(v => ({
+                                  id: v.id,
+                                  color: v.color_name || '',
+                                  colorCode: v.color_code || '',
+                                })) || [],
+                                pricing: product.pricing?.map(p => ({
+                                  plan: p.product?.code,
+                                  price: p.price,
+                                })) || [],
+                              };
+                              addItem(catalogProduct as any, 1, catalogProduct.variants[0] as any);
                             }
                             // 次のカテゴリへ移動
                             goToNextCategory();
                           }}
-                          className={`relative flex flex-col items-center justify-center p-6 rounded-xl border-2 transition-all ${
+                          className={`relative flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all ${
                             isSelected
                               ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
                               : 'border-gray-200 dark:border-gray-700'
@@ -1970,9 +1940,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                               <Check className="w-5 h-5 text-blue-500" />
                             </div>
                           )}
-                          <span className="text-2xl mb-2">{option.name === 'あり' ? '🚗' : '🏠'}</span>
-                          <span className="font-medium text-gray-900 dark:text-gray-100">{option.name}</span>
-                          <span className="text-xs text-gray-500 dark:text-gray-400 mt-1">{option.description}</span>
+                          <span className="text-2xl mb-2">{emoji}</span>
+                          <span className="font-medium text-gray-900 dark:text-gray-100 text-sm text-center">{option.name}</span>
+                          <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 text-center">{option.description}</span>
                         </button>
                       );
                     })}
@@ -1984,7 +1954,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   )}
                 </div>
               ) : activeTab === 'design' && currentCategoryName === '庇' ? (
-                /* 設計タブ: 庇有無選択カード */
+                /* 設計タブ: 庇種類選択カード */
                 <div className="max-w-3xl mx-auto px-4">
                   {isDesignReadOnly && (
                     <div className="mb-4 px-3 py-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
@@ -1998,34 +1968,52 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                     庇（ひさし）
                   </h2>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
-                    {isDesignReadOnly ? '設計担当が設定した内容です。' : '玄関・窓上への庇の設置有無を選択してください。'}
-                    {!isDesignReadOnly && (
-                      <>
-                        <br />
-                        <span className="text-xs">※「あり」を選択した場合、外装タブで色を選択できます</span>
-                      </>
-                    )}
+                    {isDesignReadOnly ? '設計担当が設定した内容です。' : '玄関・窓上に設置する庇の種類を選択してください。'}
                   </p>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-3 gap-4">
                     {AWNING_OPTIONS.map((option) => {
-                      const isSelected = option.id === 'awning-yes' ? hasAwning : !hasAwning;
+                      const isSelected = cartItems.some(item => item.product.id === option.productId);
+                      const emoji = option.id === 'awning-no' ? '🚪' : option.id === 'awning-ad2s' ? '🏠' : '🏡';
                       return (
                         <button
                           key={option.id}
                           disabled={isDesignReadOnly}
                           onClick={() => {
                             if (isDesignReadOnly) return;
-                            if (option.id === 'awning-no') {
-                              // 「なし」を選択した場合、庇関連をカートから削除
-                              const awningItems = cartItems.filter(item =>
-                                item.product.categoryName === '庇'
-                              );
-                              awningItems.forEach(item => removeItem(item.product.id));
+                            // 既存の庇選択をクリア
+                            const awningItems = cartItems.filter(item =>
+                              item.product.categoryName === '庇'
+                            );
+                            awningItems.forEach(item => removeItem(item.product.id));
+                            // 対応する商品をカートに追加
+                            const product = items.find(i => i.id === option.productId);
+                            if (product) {
+                              const catalogProduct = {
+                                id: product.id,
+                                categoryId: product.category_id || '',
+                                categoryName: product.category?.name || '庇',
+                                subcategory: product.category_name || '',
+                                name: product.name,
+                                manufacturer: product.manufacturer || '',
+                                modelNumber: product.model_number || '',
+                                unit: product.unit?.symbol || 'セット',
+                                isOption: !product.pricing?.some(p => p.is_standard),
+                                variants: product.variants?.map(v => ({
+                                  id: v.id,
+                                  color: v.color_name || '',
+                                  colorCode: v.color_code || '',
+                                })) || [],
+                                pricing: product.pricing?.map(p => ({
+                                  plan: p.product?.code,
+                                  price: p.price,
+                                })) || [],
+                              };
+                              addItem(catalogProduct as any, 1, catalogProduct.variants[0] as any);
                             }
                             // 次のカテゴリへ移動
                             goToNextCategory();
                           }}
-                          className={`relative flex flex-col items-center justify-center p-6 rounded-xl border-2 transition-all ${
+                          className={`relative flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all ${
                             isSelected
                               ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
                               : 'border-gray-200 dark:border-gray-700'
@@ -2036,9 +2024,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                               <Check className="w-5 h-5 text-blue-500" />
                             </div>
                           )}
-                          <span className="text-2xl mb-2">{option.name === 'あり' ? '🏠' : '🚪'}</span>
-                          <span className="font-medium text-gray-900 dark:text-gray-100">{option.name}</span>
-                          <span className="text-xs text-gray-500 dark:text-gray-400 mt-1">{option.description}</span>
+                          <span className="text-2xl mb-2">{emoji}</span>
+                          <span className="font-medium text-gray-900 dark:text-gray-100 text-sm text-center">{option.name}</span>
+                          <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 text-center">{option.description}</span>
                         </button>
                       );
                     })}
@@ -2280,6 +2268,96 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                     </p>
                   )}
                 </div>
+              ) : activeTab === 'design' && currentCategoryName === '給湯器' ? (
+                /* 設計タブ: 給湯器種類選択カード */
+                <div className="max-w-4xl mx-auto px-4">
+                  {isDesignReadOnly && (
+                    <div className="mb-4 px-3 py-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+                      <p className="text-sm text-amber-700 dark:text-amber-400 flex items-center gap-2">
+                        <Eye className="w-4 h-4" />
+                        閲覧専用：設計担当が設定した内容を表示しています
+                      </p>
+                    </div>
+                  )}
+                  <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                    給湯器の種類
+                  </h2>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+                    {isDesignReadOnly ? '設計担当が設定した内容です。' : '給湯器の種類を選択してください。外装タブで容量などの詳細を選べます。'}
+                  </p>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    {WATER_HEATER_OPTIONS.map((option) => {
+                      const isSelected = cartItems.some(item =>
+                        item.product.categoryName === '給湯器' &&
+                        (item.product.subcategory === option.subcategory || item.product.name?.includes(option.name.split('エコ')[0]))
+                      );
+                      const emoji = option.id === 'ecocute' ? '♨️' : option.id === 'ohisama' ? '☀️' : option.id === 'niagara' ? '💧' : '🔥';
+                      return (
+                        <button
+                          key={option.id}
+                          disabled={isDesignReadOnly}
+                          onClick={() => {
+                            if (isDesignReadOnly) return;
+                            // 既存の給湯器選択をクリア
+                            const heaterItems = cartItems.filter(item =>
+                              item.product.categoryName === '給湯器'
+                            );
+                            heaterItems.forEach(item => removeItem(item.product.id));
+                            // 対応するカテゴリの最初の商品をカートに追加
+                            const targetProduct = items.find(i =>
+                              i.category?.name === '給湯器' &&
+                              i.category_name === option.subcategory
+                            );
+                            if (targetProduct) {
+                              const catalogProduct = {
+                                id: targetProduct.id,
+                                categoryId: targetProduct.category_id || '',
+                                categoryName: targetProduct.category?.name || '給湯器',
+                                subcategory: targetProduct.category_name || '',
+                                name: targetProduct.name,
+                                manufacturer: targetProduct.manufacturer || '',
+                                modelNumber: targetProduct.model_number || '',
+                                unit: targetProduct.unit?.symbol || '個',
+                                isOption: !targetProduct.pricing?.some(p => p.is_standard),
+                                variants: targetProduct.variants?.map(v => ({
+                                  id: v.id,
+                                  color: v.color_name || '',
+                                  colorCode: v.color_code || '',
+                                })) || [],
+                                pricing: targetProduct.pricing?.map(p => ({
+                                  plan: p.product?.code,
+                                  price: p.price,
+                                })) || [],
+                              };
+                              addItem(catalogProduct as any, 1, catalogProduct.variants[0] as any);
+                            }
+                            // 次のカテゴリへ移動
+                            goToNextCategory();
+                          }}
+                          className={`relative flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all ${
+                            isSelected
+                              ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                              : 'border-gray-200 dark:border-gray-700'
+                          } ${isDesignReadOnly ? 'cursor-default opacity-75' : 'hover:border-blue-300 dark:hover:border-blue-600'}`}
+                        >
+                          {isSelected && (
+                            <div className="absolute top-2 right-2">
+                              <Check className="w-5 h-5 text-blue-500" />
+                            </div>
+                          )}
+                          <span className="text-2xl mb-2">{emoji}</span>
+                          <span className="font-medium text-gray-900 dark:text-gray-100 text-sm text-center">{option.name}</span>
+                          <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 text-center">{option.description}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {!isDesignReadOnly && (
+                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-4 text-center">
+                      ※この設定は設計担当が管理者画面で設定します
+                    </p>
+                  )}
+                </div>
               ) : needsManufacturerSelection && !isManufacturerSelectionComplete ? (
                 /* メーカー/シリーズ選択（水回り設備用） */
                 <div className="max-w-4xl mx-auto">
@@ -2336,6 +2414,131 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                       ※設計タブでガス引込みの有無を選択できます
                     </p>
                   </div>
+                </div>
+              ) : activeTab === 'furniture' && currentCategoryName === 'ガス乾燥機' && hasGasSupply ? (
+                /* 家具・家電タブ: ガス乾燥機カテゴリでガス引込み済みの場合、カード選択UI */
+                <div className="max-w-4xl mx-auto px-4 py-6">
+                  {/* 乾太くんのメリットバナー */}
+                  <div className="bg-gradient-to-r from-orange-100 to-amber-100 dark:from-orange-900/30 dark:to-amber-900/30 border border-orange-200 dark:border-orange-700 rounded-xl p-4 mb-6">
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className="text-2xl">🔥</span>
+                      <h3 className="font-bold text-gray-900 dark:text-gray-100">乾太くん（ガス衣類乾燥機）</h3>
+                    </div>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      電気式の約1/3の時間でふっくら乾燥。ガス引込み済みのため選択可能です。
+                    </p>
+                  </div>
+
+                  {/* 乾太くん本体選択 */}
+                  <div className="mb-8">
+                    <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">本体を選択</h4>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                      {GAS_DRYER_OPTIONS.map((option) => {
+                        const isSelected = cartItems.some(i => i.product.id === option.productId);
+                        return (
+                          <button
+                            key={option.id}
+                            onClick={() => {
+                              // 既存の乾太くん本体を削除
+                              GAS_DRYER_OPTIONS.forEach(opt => {
+                                const item = cartItems.find(i => i.product.id === opt.productId);
+                                if (item) removeItem(item.product.id);
+                              });
+                              // 選択しない以外の場合、商品を追加
+                              if (option.productId !== 'furn-dryer-none') {
+                                const product = items.find(i => i.id === option.productId);
+                                if (product) {
+                                  addItem(convertToCartItem(product), 1);
+                                  toast.success('選択しました', option.name);
+                                }
+                              } else {
+                                // 選択しない場合、アクセサリも削除
+                                GAS_DRYER_ACCESSORIES.forEach(acc => {
+                                  const item = cartItems.find(i => i.product.id === acc.productId);
+                                  if (item) removeItem(item.product.id);
+                                });
+                                toast.info('乾太くんを選択解除しました');
+                              }
+                            }}
+                            className={`relative p-4 rounded-xl border-2 transition-all text-left ${
+                              isSelected
+                                ? 'border-orange-500 bg-orange-50 dark:bg-orange-900/20'
+                                : 'border-gray-200 dark:border-gray-700 hover:border-orange-300 dark:hover:border-orange-600'
+                            }`}
+                          >
+                            {isSelected && (
+                              <div className="absolute top-2 right-2">
+                                <Check className="w-5 h-5 text-orange-500" />
+                              </div>
+                            )}
+                            <div className="text-2xl mb-2">{option.icon}</div>
+                            <div className="font-medium text-gray-900 dark:text-gray-100 text-sm">
+                              {option.name}
+                            </div>
+                            <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                              {option.description}
+                            </div>
+                            <div className="text-sm font-semibold text-orange-600 dark:text-orange-400 mt-2">
+                              {option.price === 0 ? '¥0' : `+¥${option.price.toLocaleString()}`}
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* 乾太くんアクセサリ選択（本体選択時のみ表示） */}
+                  {cartItems.some(i =>
+                    i.product.id === 'furn-dryer-001' ||
+                    i.product.id === 'furn-dryer-002' ||
+                    i.product.id === 'furn-dryer-003'
+                  ) && (
+                    <div>
+                      <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">オプション（任意）</h4>
+                      <div className="grid grid-cols-2 gap-3">
+                        {GAS_DRYER_ACCESSORIES.map((option) => {
+                          const isSelected = cartItems.some(i => i.product.id === option.productId);
+                          return (
+                            <button
+                              key={option.id}
+                              onClick={() => {
+                                if (isSelected) {
+                                  removeItem(option.productId);
+                                  toast.info('解除しました', option.name);
+                                } else {
+                                  const product = items.find(i => i.id === option.productId);
+                                  if (product) {
+                                    addItem(convertToCartItem(product), 1);
+                                    toast.success('追加しました', option.name);
+                                  }
+                                }
+                              }}
+                              className={`relative p-4 rounded-xl border-2 transition-all text-left ${
+                                isSelected
+                                  ? 'border-orange-500 bg-orange-50 dark:bg-orange-900/20'
+                                  : 'border-gray-200 dark:border-gray-700 hover:border-orange-300 dark:hover:border-orange-600'
+                              }`}
+                            >
+                              {isSelected && (
+                                <div className="absolute top-2 right-2">
+                                  <Check className="w-5 h-5 text-orange-500" />
+                                </div>
+                              )}
+                              <div className="font-medium text-gray-900 dark:text-gray-100">
+                                {option.name}
+                              </div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                {option.description}
+                              </div>
+                              <div className="text-sm font-semibold text-orange-600 dark:text-orange-400 mt-2">
+                                +¥{option.price.toLocaleString()}
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
                 </div>
               ) : filteredItems.length === 0 ? (
                 <EmptyState searchTerm={searchTerm} onClear={() => setSearchTerm('')} />
@@ -2477,12 +2680,16 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                         ? getSelectionStatus(currentCategoryName) === 'not_needed'
                         : false;
 
-                      // カテゴリごとの最初の標準品IDを計算
+                      // カテゴリごとの最初の標準品IDと標準品数を計算
                       const firstStandardByCategory = new Map<string, string>();
+                      const standardCountByCategory = new Map<string, number>();
                       filteredItems.forEach(item => {
                         const catName = item.category?.name || '';
-                        if (!firstStandardByCategory.has(catName) && isStandard(item)) {
-                          firstStandardByCategory.set(catName, item.id);
+                        if (isStandard(item)) {
+                          if (!firstStandardByCategory.has(catName)) {
+                            firstStandardByCategory.set(catName, item.id);
+                          }
+                          standardCountByCategory.set(catName, (standardCountByCategory.get(catName) || 0) + 1);
                         }
                       });
 
@@ -2513,7 +2720,8 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                           {paginatedItems.map((item, index) => {
                         const catName = item.category?.name || '';
                         const isFirstStandard = firstStandardByCategory.get(catName) === item.id;
-                        const badge = getRecommendBadge(item, isStandard(item), isFirstStandard);
+                        const standardCount = standardCountByCategory.get(catName) || 0;
+                        const badge = getRecommendBadge(item, isStandard(item), isFirstStandard, standardCount);
 
                         return (
                           <ItemCard

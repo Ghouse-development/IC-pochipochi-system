@@ -13,7 +13,7 @@ const staticProducts: Product[] = [
     name: 'ダイキン Eシリーズ 6畳用',
     manufacturer: 'ダイキン',
     modelNumber: 'S225ATES-W',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'ダイキン Eシリーズ 6畳用 100V 施工費込',
     variants: [
@@ -34,7 +34,7 @@ const staticProducts: Product[] = [
     name: 'ダイキン Eシリーズ 10畳用',
     manufacturer: 'ダイキン',
     modelNumber: 'S285ATES-W',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'ダイキン Eシリーズ 10畳用 100V 施工費込',
     variants: [
@@ -55,7 +55,7 @@ const staticProducts: Product[] = [
     name: 'ダイキン Eシリーズ 14畳用',
     manufacturer: 'ダイキン',
     modelNumber: 'S405ATEP-W',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'ダイキン Eシリーズ 14畳用 200V 施工費込',
     variants: [
@@ -76,7 +76,7 @@ const staticProducts: Product[] = [
     name: 'ダイキン GXシリーズ 6畳用',
     manufacturer: 'ダイキン',
     modelNumber: 'S224ATGS-W',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'ダイキン GXシリーズ 6畳用 100V 施工費込（さらら除湿）',
     variants: [
@@ -97,7 +97,7 @@ const staticProducts: Product[] = [
     name: 'ダイキン GXシリーズ 10畳用',
     manufacturer: 'ダイキン',
     modelNumber: 'S284ATGS-W',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'ダイキン GXシリーズ 10畳用 100V 施工費込（さらら除湿）',
     variants: [
@@ -118,7 +118,7 @@ const staticProducts: Product[] = [
     name: 'ダイキン GXシリーズ 14畳用',
     manufacturer: 'ダイキン',
     modelNumber: 'S404ATGP-W',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: 'ダイキン GXシリーズ 14畳用 200V 施工費込（さらら除湿）',
     variants: [
@@ -139,7 +139,7 @@ const staticProducts: Product[] = [
     name: '三菱電機 霧ヶ峰 Zシリーズ 6畳用',
     manufacturer: '三菱電機',
     modelNumber: 'MSZ-ZXV2225',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '霧ヶ峰 Zシリーズ 6畳用 100V 施工費込（さらっと除湿冷房）',
     variants: [
@@ -160,7 +160,7 @@ const staticProducts: Product[] = [
     name: '三菱電機 霧ヶ峰 Zシリーズ 10畳用',
     manufacturer: '三菱電機',
     modelNumber: 'MSZ-ZXV2825S',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '霧ヶ峰 Zシリーズ 10畳用 200V 施工費込（さらっと除湿冷房）',
     variants: [
@@ -181,7 +181,7 @@ const staticProducts: Product[] = [
     name: '三菱電機 霧ヶ峰 Zシリーズ 14畳用',
     manufacturer: '三菱電機',
     modelNumber: 'MSZ-ZXV4025S',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     description: '霧ヶ峰 Zシリーズ 14畳用 200V 施工費込（さらっと除湿冷房）',
     variants: [
@@ -204,7 +204,7 @@ const staticProducts: Product[] = [
     name: 'カーテン（IC提案）',
     manufacturer: 'IC提案',
     modelNumber: 'CURTAIN-IC',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'インテリアコーディネーターがお部屋に合わせたカーテンをご提案いたします',
     variants: [
@@ -227,7 +227,7 @@ const staticProducts: Product[] = [
     name: 'ソファ（IC提案）',
     manufacturer: 'IC提案',
     modelNumber: 'SOFA-IC',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'インテリアコーディネーターがお部屋に合わせたソファをご提案いたします',
     variants: [
@@ -248,7 +248,7 @@ const staticProducts: Product[] = [
     name: 'TVボード（IC提案）',
     manufacturer: 'IC提案',
     modelNumber: 'TVBOARD-IC',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'インテリアコーディネーターがお部屋に合わせたTVボードをご提案いたします',
     variants: [
@@ -269,7 +269,7 @@ const staticProducts: Product[] = [
     name: 'センターテーブル（IC提案）',
     manufacturer: 'IC提案',
     modelNumber: 'CENTERTABLE-IC',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'インテリアコーディネーターがお部屋に合わせたセンターテーブルをご提案いたします',
     variants: [
@@ -290,7 +290,7 @@ const staticProducts: Product[] = [
     name: 'ラグ（IC提案）',
     manufacturer: 'IC提案',
     modelNumber: 'RUG-IC',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'インテリアコーディネーターがお部屋に合わせたラグをご提案いたします',
     variants: [
@@ -311,7 +311,7 @@ const staticProducts: Product[] = [
     name: 'ダイニングテーブル（IC提案）',
     manufacturer: 'IC提案',
     modelNumber: 'DININGTABLE-IC',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'インテリアコーディネーターがお部屋に合わせたダイニングテーブルをご提案いたします',
     variants: [
@@ -332,7 +332,7 @@ const staticProducts: Product[] = [
     name: 'ダイニングチェア（IC提案）',
     manufacturer: 'IC提案',
     modelNumber: 'DININGCHAIR-IC',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'インテリアコーディネーターがお部屋に合わせたダイニングチェアをご提案いたします',
     variants: [
@@ -353,7 +353,7 @@ const staticProducts: Product[] = [
     name: 'ベッド（IC提案）',
     manufacturer: 'IC提案',
     modelNumber: 'BED-IC',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'インテリアコーディネーターがお部屋に合わせたベッドをご提案いたします',
     variants: [
@@ -374,7 +374,7 @@ const staticProducts: Product[] = [
     name: 'その他家具（IC提案）',
     manufacturer: 'IC提案',
     modelNumber: 'OTHER-IC',
-    unit: 'set',
+    unit: 'セット',
     isOption: true,
     description: 'その他ご希望の家具があればインテリアコーディネーターにご相談ください（自由入力可）',
     variants: [
@@ -398,7 +398,7 @@ const staticProducts: Product[] = [
     name: '乾太くん スタンダード 5kg',
     manufacturer: 'リンナイ',
     modelNumber: 'RDT-54S',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     requiresGas: true,
     description: 'ガス衣類乾燥機 スタンダードタイプ 5kg ※ガス引込み必須',
@@ -420,7 +420,7 @@ const staticProducts: Product[] = [
     name: '乾太くん デラックス 6kg',
     manufacturer: 'リンナイ',
     modelNumber: 'RDT-63',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     requiresGas: true,
     description: 'ガス衣類乾燥機 デラックスタイプ 6kg ※ガス引込み必須',
@@ -442,7 +442,7 @@ const staticProducts: Product[] = [
     name: '乾太くん デラックス 9kg',
     manufacturer: 'リンナイ',
     modelNumber: 'RDT-93',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     requiresGas: true,
     description: 'ガス衣類乾燥機 デラックスタイプ 9kg ※ガス引込み必須',
@@ -464,7 +464,7 @@ const staticProducts: Product[] = [
     name: '乾太くん専用架台',
     manufacturer: 'リンナイ',
     modelNumber: 'DS-KADAI',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     requiresGas: true,
     description: '乾太くん専用架台 ※乾太くん選択時のみ',
@@ -486,7 +486,7 @@ const staticProducts: Product[] = [
     name: '乾太くん専用収納ユニット',
     manufacturer: 'リンナイ',
     modelNumber: 'DS-UNIT',
-    unit: 'piece',
+    unit: '個',
     isOption: true,
     requiresGas: true,
     description: '乾太くん専用収納ユニット ※乾太くん選択時のみ',
@@ -508,7 +508,7 @@ const staticProducts: Product[] = [
     name: '選択しない',
     manufacturer: 'なし',
     modelNumber: 'DRYER-NONE',
-    unit: 'set',
+    unit: 'セット',
     isOption: false,
     description: 'ガス乾燥機を設置しない',
     variants: [
