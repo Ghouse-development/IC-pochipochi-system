@@ -85,12 +85,12 @@
 
 ## Git/デプロイルール
 
-### ブランチ同期（重要）
-Vercelは`extrior_image`ブランチからデプロイされるため、**変更をプッシュする際は必ず両ブランチに同時プッシュすること**。
+### シンプルなワークフロー
+Vercelは`main`ブランチから直接デプロイされる。
 
 ```bash
-# コミット後、必ず両方にプッシュ
-git push origin main && git push origin main:extrior_image
+# コミット後、mainにプッシュするだけでデプロイされる
+git push origin main
 ```
 
-これにより、ローカル（main）とデプロイ（extrior_image）の不一致を防ぐ。
+※ 2026-01-10以前は`extrior_image`ブランチを使用していたが、運用簡素化のため`main`に統一した。
