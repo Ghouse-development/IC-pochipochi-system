@@ -128,7 +128,7 @@ export const SelectionCard: React.FC<SelectionCardProps> = ({
 
       {/* 情報エリア */}
       <div className="p-4">
-        <h3 className="font-semibold text-sm text-gray-800 dark:text-gray-200 line-clamp-2 mb-1 leading-snug">
+        <h3 className="font-bold text-base text-gray-800 line-clamp-2 mb-1 leading-snug">
           {name}
         </h3>
         {description && (

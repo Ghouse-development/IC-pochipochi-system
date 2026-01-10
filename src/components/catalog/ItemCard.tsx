@@ -285,9 +285,9 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
       {/* 情報エリア - G HOUSE風に大きく */}
       <div className="p-4">
         {showManufacturer && (
-          <p className="text-xs text-gray-500 dark:text-gray-400 font-medium mb-1 truncate">{item.manufacturer}</p>
+          <p className="text-sm text-gray-500 font-medium mb-1 truncate">{item.manufacturer}</p>
         )}
-        <h3 className="font-semibold text-sm text-gray-800 dark:text-gray-200 line-clamp-2 min-h-[2.5rem] mb-2 leading-snug">
+        <h3 className="font-bold text-base text-gray-800 line-clamp-2 min-h-[3rem] mb-2 leading-snug">
           <HighlightText text={item.name} searchTerm={searchTerm} />
         </h3>
 
