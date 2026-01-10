@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { Search, ClipboardCheck, Check, Star, ChevronRight, ChevronLeft, Home, Zap, Heart, X, Scale, FileDown, HelpCircle } from 'lucide-react';
+import { Search, ClipboardCheck, Check, Star, ChevronRight, ChevronLeft, Home, Zap, Heart, X, Scale, FileDown, HelpCircle, Eye } from 'lucide-react';
 import { useToast } from '../common/Toast';
 import { useTimeout } from '../../hooks/useTimeout';
 import { useDebounce } from '../../hooks/useDebounce';
@@ -73,12 +73,8 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   const activeTab = (['design', 'exterior', 'interior', 'equipment', 'electrical', 'furniture'].includes(step) ? step : 'exterior') as 'design' | 'exterior' | 'interior' | 'equipment' | 'electrical' | 'furniture';
   const selectedCategoryId = urlCategoryId || null;
 
-  // お客様モードで設計タブにアクセスした場合は外装タブにリダイレクト
-  useEffect(() => {
-    if (isCustomerMode && activeTab === 'design') {
-      navigate('/catalog/exterior', { replace: true });
-    }
-  }, [isCustomerMode, activeTab, navigate]);
+  // お客様モードで設計タブの閲覧専用フラグ
+  const isDesignReadOnly = isCustomerMode && activeTab === 'design';
 
   // URLクエリパラメータから検索・フィルターを取得
   const searchTerm = searchParams.get('q') || '';
@@ -658,6 +654,37 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     { id: '腰壁笠木', name: '腰壁笠木', description: '腰壁がある場合のみ', optional: true },
   ];
 
+  // 設計タブ用: ガレージシャッター有無選択
+  const GARAGE_SHUTTER_OPTIONS = [
+    { id: 'garage-shutter-yes', name: 'あり', description: '電動ガレージシャッターを設置' },
+    { id: 'garage-shutter-no', name: 'なし', description: 'ガレージシャッターなし' },
+  ];
+
+  // 設計タブ用: 庇有無選択
+  const AWNING_OPTIONS = [
+    { id: 'awning-yes', name: 'あり', description: '玄関・窓上に庇を設置' },
+    { id: 'awning-no', name: 'なし', description: '庇なし' },
+  ];
+
+  // 設計タブ用: 窓タイプ選択
+  const WINDOW_TYPE_OPTIONS = [
+    { id: 'apw330', name: 'APW330', description: '樹脂サッシ・ペアガラス（標準）' },
+    { id: 'apw430', name: 'APW430', description: '樹脂サッシ・トリプルガラス', isOption: true },
+  ];
+
+  // カートから設計選択状態を取得
+  const hasGarageShutter = cartItems.some(item =>
+    item.product.categoryName?.includes('ガレージシャッター') ||
+    item.product.name?.includes('ガレージシャッター')
+  );
+  const hasAwning = cartItems.some(item =>
+    item.product.categoryName === '庇' ||
+    item.product.name?.includes('庇')
+  );
+  const hasAPW430 = cartItems.some(item =>
+    item.product.name?.includes('APW430')
+  );
+
   // 利用可能な素材タイプを抽出（固定順序: 窯業系サイディング → ガルバリウム鋼板 → 塗り壁）
   const availableMaterialTypes = useMemo(() => {
     const materialOrder = ['窯業系サイディング', 'ガルバリウム鋼板', '塗り壁'];
@@ -1118,26 +1145,35 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
           <div className="px-4 py-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 sm:gap-4" data-tutorial="main-tabs">
-                {/* お客様モードでは設計タブを非表示 */}
-                {STEPS.filter(step => !isCustomerMode || step.id !== 'design').map((step, index, filteredSteps) => {
+                {/* お客様モードでは設計タブに閲覧のみマーカーを表示 */}
+                {STEPS.map((step, index) => {
                   const isActive = step.id === activeTab;
                   const stepCount = getStepCount(step.id);
                   const Icon = step.icon;
+                  const isDesignTab = step.id === 'design';
+                  const isReadOnlyTab = isCustomerMode && isDesignTab;
 
                   return (
                     <React.Fragment key={step.id}>
                       <button
                         onClick={() => setActiveTab(step.id)}
-                        title={step.description}
+                        title={isReadOnlyTab ? `${step.description}（閲覧のみ）` : step.description}
                         className={`group relative flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all duration-200 ${
                           isActive
                             ? 'bg-white text-blue-600 shadow-md'
+                            : isReadOnlyTab
+                            ? 'bg-white/10 hover:bg-white/20 opacity-75'
                             : 'bg-white/20 hover:bg-white/30'
                         }`}
                       >
                         <Icon className={`w-4 h-4 ${isActive ? 'text-blue-500' : ''}`} />
                         <span className="hidden sm:inline text-sm font-medium">{step.label}</span>
                         <span className="sm:hidden text-sm">{step.emoji}</span>
+                        {isReadOnlyTab && (
+                          <span className="hidden sm:inline text-[10px] px-1 py-0.5 bg-gray-200 text-gray-600 rounded ml-1">
+                            閲覧
+                          </span>
+                        )}
                         {stepCount > 0 && (
                           <span className={`absolute -top-1 -right-1 w-4 h-4 flex items-center justify-center rounded-full text-[10px] font-bold ${
                             isActive ? 'bg-blue-500 text-white' : 'bg-white text-blue-600'
@@ -1146,7 +1182,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                           </span>
                         )}
                       </button>
-                      {index < filteredSteps.length - 1 && (
+                      {index < STEPS.length - 1 && (
                         <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-white/40" />
                       )}
                     </React.Fragment>
@@ -1608,6 +1644,44 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                     }}
                   />
                 </div>
+              ) : activeTab === 'exterior' && currentCategoryName?.includes('ガレージシャッター') && !hasGarageShutter ? (
+                /* 外装タブ: ガレージシャッター未設定メッセージ */
+                <div className="max-w-3xl mx-auto px-4">
+                  <div className="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl p-8 text-center">
+                    <span className="text-4xl mb-4 block">🚗</span>
+                    <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                      ガレージシャッターは設定されていません
+                    </h2>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                      設計タブで「あり」を選択すると、ここで色を選択できます。
+                    </p>
+                    <button
+                      onClick={() => navigate('/catalog/design')}
+                      className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm"
+                    >
+                      設計タブで設定する
+                    </button>
+                  </div>
+                </div>
+              ) : activeTab === 'exterior' && currentCategoryName === '庇' && !hasAwning ? (
+                /* 外装タブ: 庇未設定メッセージ */
+                <div className="max-w-3xl mx-auto px-4">
+                  <div className="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl p-8 text-center">
+                    <span className="text-4xl mb-4 block">🏠</span>
+                    <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                      庇は設定されていません
+                    </h2>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                      設計タブで「あり」を選択すると、ここで色を選択できます。
+                    </p>
+                    <button
+                      onClick={() => navigate('/catalog/design')}
+                      className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm"
+                    >
+                      設計タブで設定する
+                    </button>
+                  </div>
+                </div>
               ) : currentCategoryName === '外壁' && !selectedMaterialType ? (
                 /* 素材タイプ選択カード（外壁用）- 常に3つ表示 */
                 <div className="max-w-3xl mx-auto px-4">
@@ -1833,6 +1907,215 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                       );
                     })}
                   </div>
+                </div>
+              ) : activeTab === 'design' && (currentCategoryName?.includes('ガレージシャッター') || currentCategoryName?.includes('電動ガレージシャッター')) ? (
+                /* 設計タブ: ガレージシャッター有無選択カード */
+                <div className="max-w-3xl mx-auto px-4">
+                  {isDesignReadOnly && (
+                    <div className="mb-4 px-3 py-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+                      <p className="text-sm text-amber-700 dark:text-amber-400 flex items-center gap-2">
+                        <Eye className="w-4 h-4" />
+                        閲覧専用：設計担当が設定した内容を表示しています
+                      </p>
+                    </div>
+                  )}
+                  <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                    ガレージシャッター
+                  </h2>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+                    {isDesignReadOnly ? '設計担当が設定した内容です。' : '電動ガレージシャッターの設置有無を選択してください。'}
+                    {!isDesignReadOnly && (
+                      <>
+                        <br />
+                        <span className="text-xs">※「あり」を選択した場合、外装タブで色を選択できます</span>
+                      </>
+                    )}
+                  </p>
+                  <div className="grid grid-cols-2 gap-4">
+                    {GARAGE_SHUTTER_OPTIONS.map((option) => {
+                      const isSelected = option.id === 'garage-shutter-yes' ? hasGarageShutter : !hasGarageShutter;
+                      return (
+                        <button
+                          key={option.id}
+                          disabled={isDesignReadOnly}
+                          onClick={() => {
+                            if (isDesignReadOnly) return;
+                            if (option.id === 'garage-shutter-no') {
+                              // 「なし」を選択した場合、ガレージシャッター関連をカートから削除
+                              const garageItems = cartItems.filter(item =>
+                                item.product.categoryName?.includes('ガレージシャッター')
+                              );
+                              garageItems.forEach(item => removeItem(item.product.id));
+                            }
+                            // 次のカテゴリへ移動
+                            goToNextCategory();
+                          }}
+                          className={`relative flex flex-col items-center justify-center p-6 rounded-xl border-2 transition-all ${
+                            isSelected
+                              ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                              : 'border-gray-200 dark:border-gray-700'
+                          } ${isDesignReadOnly ? 'cursor-default opacity-75' : 'hover:border-blue-300 dark:hover:border-blue-600'}`}
+                        >
+                          {isSelected && (
+                            <div className="absolute top-2 right-2">
+                              <Check className="w-5 h-5 text-blue-500" />
+                            </div>
+                          )}
+                          <span className="text-2xl mb-2">{option.name === 'あり' ? '🚗' : '🏠'}</span>
+                          <span className="font-medium text-gray-900 dark:text-gray-100">{option.name}</span>
+                          <span className="text-xs text-gray-500 dark:text-gray-400 mt-1">{option.description}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {!isDesignReadOnly && (
+                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-4 text-center">
+                      ※この設定は設計担当が管理者画面で設定します
+                    </p>
+                  )}
+                </div>
+              ) : activeTab === 'design' && currentCategoryName === '庇' ? (
+                /* 設計タブ: 庇有無選択カード */
+                <div className="max-w-3xl mx-auto px-4">
+                  {isDesignReadOnly && (
+                    <div className="mb-4 px-3 py-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+                      <p className="text-sm text-amber-700 dark:text-amber-400 flex items-center gap-2">
+                        <Eye className="w-4 h-4" />
+                        閲覧専用：設計担当が設定した内容を表示しています
+                      </p>
+                    </div>
+                  )}
+                  <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                    庇（ひさし）
+                  </h2>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+                    {isDesignReadOnly ? '設計担当が設定した内容です。' : '玄関・窓上への庇の設置有無を選択してください。'}
+                    {!isDesignReadOnly && (
+                      <>
+                        <br />
+                        <span className="text-xs">※「あり」を選択した場合、外装タブで色を選択できます</span>
+                      </>
+                    )}
+                  </p>
+                  <div className="grid grid-cols-2 gap-4">
+                    {AWNING_OPTIONS.map((option) => {
+                      const isSelected = option.id === 'awning-yes' ? hasAwning : !hasAwning;
+                      return (
+                        <button
+                          key={option.id}
+                          disabled={isDesignReadOnly}
+                          onClick={() => {
+                            if (isDesignReadOnly) return;
+                            if (option.id === 'awning-no') {
+                              // 「なし」を選択した場合、庇関連をカートから削除
+                              const awningItems = cartItems.filter(item =>
+                                item.product.categoryName === '庇'
+                              );
+                              awningItems.forEach(item => removeItem(item.product.id));
+                            }
+                            // 次のカテゴリへ移動
+                            goToNextCategory();
+                          }}
+                          className={`relative flex flex-col items-center justify-center p-6 rounded-xl border-2 transition-all ${
+                            isSelected
+                              ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                              : 'border-gray-200 dark:border-gray-700'
+                          } ${isDesignReadOnly ? 'cursor-default opacity-75' : 'hover:border-blue-300 dark:hover:border-blue-600'}`}
+                        >
+                          {isSelected && (
+                            <div className="absolute top-2 right-2">
+                              <Check className="w-5 h-5 text-blue-500" />
+                            </div>
+                          )}
+                          <span className="text-2xl mb-2">{option.name === 'あり' ? '🏠' : '🚪'}</span>
+                          <span className="font-medium text-gray-900 dark:text-gray-100">{option.name}</span>
+                          <span className="text-xs text-gray-500 dark:text-gray-400 mt-1">{option.description}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {!isDesignReadOnly && (
+                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-4 text-center">
+                      ※この設定は設計担当が管理者画面で設定します
+                    </p>
+                  )}
+                </div>
+              ) : activeTab === 'design' && currentCategoryName === '窓タイプ' ? (
+                /* 設計タブ: 窓タイプ選択カード */
+                <div className="max-w-3xl mx-auto px-4">
+                  {isDesignReadOnly && (
+                    <div className="mb-4 px-3 py-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+                      <p className="text-sm text-amber-700 dark:text-amber-400 flex items-center gap-2">
+                        <Eye className="w-4 h-4" />
+                        閲覧専用：設計担当が設定した内容を表示しています
+                      </p>
+                    </div>
+                  )}
+                  <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                    窓タイプ
+                  </h2>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+                    {isDesignReadOnly ? '設計担当が設定した内容です。' : '樹脂サッシのグレードを選択してください。'}
+                    {!isDesignReadOnly && (
+                      <>
+                        <br />
+                        <span className="text-xs">※色は外装タブで選択できます</span>
+                      </>
+                    )}
+                  </p>
+                  <div className="grid grid-cols-2 gap-4">
+                    {WINDOW_TYPE_OPTIONS.map((option) => {
+                      const isSelected = option.id === 'apw430' ? hasAPW430 : !hasAPW430;
+                      return (
+                        <button
+                          key={option.id}
+                          disabled={isDesignReadOnly}
+                          onClick={() => {
+                            if (isDesignReadOnly) return;
+                            // 窓タイプの選択はカートに追加する処理が必要
+                            // 対象のアイテムを探してカートに追加
+                            const targetItem = items.find(item =>
+                              item.name?.includes(option.id.toUpperCase())
+                            );
+                            if (targetItem) {
+                              // 既存の窓タイプをカートから削除
+                              const existingWindowTypes = cartItems.filter(item =>
+                                item.product.categoryName === '窓タイプ'
+                              );
+                              existingWindowTypes.forEach(item => removeItem(item.product.id));
+                              // 新しい窓タイプを追加
+                              addItem(convertToCartItem(targetItem));
+                            }
+                            goToNextCategory();
+                          }}
+                          className={`relative flex flex-col items-center justify-center p-6 rounded-xl border-2 transition-all ${
+                            isSelected
+                              ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                              : 'border-gray-200 dark:border-gray-700'
+                          } ${isDesignReadOnly ? 'cursor-default opacity-75' : 'hover:border-blue-300 dark:hover:border-blue-600'}`}
+                        >
+                          {isSelected && (
+                            <div className="absolute top-2 right-2">
+                              <Check className="w-5 h-5 text-blue-500" />
+                            </div>
+                          )}
+                          {'isOption' in option && option.isOption && (
+                            <span className="absolute top-2 left-2 text-[10px] px-1.5 py-0.5 bg-orange-100 dark:bg-orange-900/50 text-orange-600 dark:text-orange-400 rounded">
+                              オプション
+                            </span>
+                          )}
+                          <span className="text-2xl mb-2">🪟</span>
+                          <span className="font-medium text-gray-900 dark:text-gray-100">{option.name}</span>
+                          <span className="text-xs text-gray-500 dark:text-gray-400 mt-1">{option.description}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {!isDesignReadOnly && (
+                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-4 text-center">
+                      ※この設定は設計担当が管理者画面で設定します
+                    </p>
+                  )}
                 </div>
               ) : needsManufacturerSelection && !isManufacturerSelectionComplete ? (
                 /* メーカー/シリーズ選択（水回り設備用） */
