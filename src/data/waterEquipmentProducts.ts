@@ -763,6 +763,97 @@ export const waterEquipmentProductsLifePlus: Product[] = [
     ]
   },
 
+  // ========== 玄関手洗い ==========
+  // 選択しない（標準）
+  {
+    id: 'entrance-wash-none',
+    categoryId: 'entrance-wash',
+    categoryName: '玄関手洗い',
+    subcategory: '玄関手洗い',
+    name: '玄関手洗いなし（標準）',
+    manufacturer: '-',
+    modelNumber: 'NONE',
+    unit: 'セット',
+    isOption: false,
+    description: '玄関手洗いを設置しない場合はこちらを選択',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+  {
+    id: 'entrance-wash-001',
+    categoryId: 'entrance-wash',
+    categoryName: '玄関手洗い',
+    subcategory: '玄関手洗い',
+    name: '玄関手洗い ボウルA',
+    manufacturer: 'KAKUDAI',
+    modelNumber: 'LY-493231',
+    unit: '個',
+    isOption: true,
+    description: '玄関手洗いボウル 角型',
+    variants: [
+      { id: 'v1', color: 'マットホワイト', colorCode: '#F5F5F5', images: [] },
+      { id: 'v2', color: 'マットブラック', colorCode: '#1A1A1A', images: [] },
+      { id: 'v3', color: 'マットグレー', colorCode: '#808080', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 99000 },
+      { plan: 'HOURS', price: 99000 },
+      { plan: 'LIFE+', price: 99000 },
+      { plan: 'LIFE', price: 99000 }
+    ]
+  },
+  {
+    id: 'entrance-wash-002',
+    categoryId: 'entrance-wash',
+    categoryName: '玄関手洗い',
+    subcategory: '玄関手洗い',
+    name: '玄関手洗い ボウルB',
+    manufacturer: 'KAKUDAI',
+    modelNumber: 'LY-493232',
+    unit: '個',
+    isOption: true,
+    description: '玄関手洗いボウル 丸型深',
+    variants: [
+      { id: 'v1', color: 'マットホワイト', colorCode: '#F5F5F5', images: [] },
+      { id: 'v2', color: 'マットブラック', colorCode: '#1A1A1A', images: [] },
+      { id: 'v3', color: 'マットグレー', colorCode: '#808080', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 85000 },
+      { plan: 'HOURS', price: 85000 },
+      { plan: 'LIFE+', price: 85000 },
+      { plan: 'LIFE', price: 85000 }
+    ]
+  },
+  {
+    id: 'entrance-wash-003',
+    categoryId: 'entrance-wash',
+    categoryName: '玄関手洗い',
+    subcategory: '玄関手洗い',
+    name: '玄関手洗い ステンレスコーナーカウンター',
+    manufacturer: 'KAKUDAI',
+    modelNumber: 'STAINLESS-CORNER',
+    unit: 'セット',
+    isOption: true,
+    description: 'ステンレスボウル一体型コーナーカウンター（ボウル+排水+水栓）',
+    variants: [
+      { id: 'v1', color: 'ステンレス', colorCode: '#C0C0C0', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 96000 },
+      { plan: 'HOURS', price: 96000 },
+      { plan: 'LIFE+', price: 96000 },
+      { plan: 'LIFE', price: 96000 }
+    ]
+  },
+
   // Laundry Room Equipment
   {
     id: 'laundry-sink-001',

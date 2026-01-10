@@ -2695,12 +2695,79 @@ const staticInteriorProducts: Product[] = [
     ]
   },
 
-  // ========== 補強・下地 ==========
+  // ========== 床補強 ==========
+  // 選択しない（標準）
+  {
+    id: 'int-floor-reinforce-none',
+    categoryId: 'floor-reinforcement',
+    categoryName: '床補強',
+    subcategory: '床補強',
+    name: '床補強なし（標準）',
+    manufacturer: '-',
+    modelNumber: 'NONE',
+    unit: 'セット',
+    isOption: false,
+    description: '床補強を行わない場合はこちらを選択',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+  {
+    id: 'int-reinforce-floor',
+    categoryId: 'floor-reinforcement',
+    categoryName: '床補強',
+    subcategory: '床補強',
+    name: '床補強',
+    manufacturer: 'Gハウス',
+    modelNumber: 'REINFORCE-FLOOR',
+    unit: '㎡',
+    isOption: true,
+    description: '床補強工事（ピアノ、水槽など重量物設置用）',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 12000 },
+      { plan: 'HOURS', price: 12000 },
+      { plan: 'LIFE+', price: 12000 },
+      { plan: 'LIFE', price: 12000 }
+    ]
+  },
+
+  // ========== 壁下地 ==========
+  // 選択しない（標準）
+  {
+    id: 'int-wall-reinforce-none',
+    categoryId: 'wall-reinforcement',
+    categoryName: '壁下地',
+    subcategory: '壁下地',
+    name: '壁下地なし（標準）',
+    manufacturer: '-',
+    modelNumber: 'NONE',
+    unit: 'セット',
+    isOption: false,
+    description: '壁下地補強を行わない場合はこちらを選択',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
   {
     id: 'int-reinforce-wall',
-    categoryId: 'reinforcement',
-    categoryName: '補強・下地',
-    subcategory: '壁下地補強',
+    categoryId: 'wall-reinforcement',
+    categoryName: '壁下地',
+    subcategory: '壁下地',
     name: '壁下地補強',
     manufacturer: 'Gハウス',
     modelNumber: 'REINFORCE-WALL',
@@ -2717,32 +2784,34 @@ const staticInteriorProducts: Product[] = [
       { plan: 'LIFE', price: 6000 }
     ]
   },
+  // ========== 天井下地 ==========
+  // 選択しない（標準）
   {
-    id: 'int-reinforce-floor',
-    categoryId: 'reinforcement',
-    categoryName: '補強・下地',
-    subcategory: '床補強',
-    name: '床補強',
-    manufacturer: 'Gハウス',
-    modelNumber: 'REINFORCE-FLOOR',
-    unit: '㎡',
-    isOption: true,
-    description: '床補強工事',
+    id: 'int-ceiling-reinforce-none',
+    categoryId: 'ceiling-reinforcement',
+    categoryName: '天井下地',
+    subcategory: '天井下地',
+    name: '天井下地なし（標準）',
+    manufacturer: '-',
+    modelNumber: 'NONE',
+    unit: 'セット',
+    isOption: false,
+    description: '天井下地補強を行わない場合はこちらを選択',
     variants: [
       { id: 'v1', color: '標準', images: [] }
     ],
     pricing: [
-      { plan: 'LACIE', price: 12000 },
-      { plan: 'HOURS', price: 12000 },
-      { plan: 'LIFE+', price: 12000 },
-      { plan: 'LIFE', price: 12000 }
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
     ]
   },
   {
     id: 'int-reinforce-ceiling-1m',
-    categoryId: 'reinforcement',
-    categoryName: '補強・下地',
-    subcategory: 'ロールカーテン用天井下地',
+    categoryId: 'ceiling-reinforcement',
+    categoryName: '天井下地',
+    subcategory: '天井下地',
     name: 'ロールカーテン用天井下地（1m未満）',
     manufacturer: 'Gハウス',
     modelNumber: 'REINFORCE-CEILING-1M',
@@ -2761,9 +2830,9 @@ const staticInteriorProducts: Product[] = [
   },
   {
     id: 'int-reinforce-ceiling-2m',
-    categoryId: 'reinforcement',
-    categoryName: '補強・下地',
-    subcategory: 'ロールカーテン用天井下地',
+    categoryId: 'ceiling-reinforcement',
+    categoryName: '天井下地',
+    subcategory: '天井下地',
     name: 'ロールカーテン用天井下地（2m未満）',
     manufacturer: 'Gハウス',
     modelNumber: 'REINFORCE-CEILING-2M',
@@ -2782,9 +2851,9 @@ const staticInteriorProducts: Product[] = [
   },
   {
     id: 'int-reinforce-ceiling-3m',
-    categoryId: 'reinforcement',
-    categoryName: '補強・下地',
-    subcategory: 'ロールカーテン用天井下地',
+    categoryId: 'ceiling-reinforcement',
+    categoryName: '天井下地',
+    subcategory: '天井下地',
     name: 'ロールカーテン用天井下地（3m未満）',
     manufacturer: 'Gハウス',
     modelNumber: 'REINFORCE-CEILING-3M',
@@ -2803,9 +2872,9 @@ const staticInteriorProducts: Product[] = [
   },
   {
     id: 'int-reinforce-ceiling-4m',
-    categoryId: 'reinforcement',
-    categoryName: '補強・下地',
-    subcategory: 'ロールカーテン用天井下地',
+    categoryId: 'ceiling-reinforcement',
+    categoryName: '天井下地',
+    subcategory: '天井下地',
     name: 'ロールカーテン用天井下地（4m未満）',
     manufacturer: 'Gハウス',
     modelNumber: 'REINFORCE-CEILING-4M',
@@ -2824,8 +2893,8 @@ const staticInteriorProducts: Product[] = [
   },
   {
     id: 'int-magnet-cloth',
-    categoryId: 'reinforcement',
-    categoryName: '補強・下地',
+    categoryId: 'wall',
+    categoryName: '壁材',
     subcategory: 'マグネットクロス',
     name: 'マグネットクロス（マグマジック）',
     manufacturer: 'シンコール',
@@ -3102,26 +3171,6 @@ const staticInteriorProducts: Product[] = [
       { plan: 'LIFE', price: 0 }
     ]
   },
-  {
-    id: 'int-vent-002',
-    categoryId: 'ventilation',
-    categoryName: '換気',
-    subcategory: '換気扇',
-    name: '浴室換気暖房乾燥機',
-    manufacturer: 'Panasonic',
-    modelNumber: 'FY-13UGPS4D',
-    unit: '個',
-    isOption: true,
-    description: '1室換気・暖房・乾燥・涼風',
-    variants: [
-      { id: 'v1', color: 'ホワイト', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 85000 },
-      { plan: 'HOURS', price: 90000 }
-    ]
-  },
-
   // ========== 手摺 ==========
   {
     id: 'int-handrail-001',
@@ -5668,75 +5717,6 @@ const staticInteriorProducts: Product[] = [
     ]
   },
 
-  // ========== 玄関手洗い（PDF42追加）==========
-  {
-    id: 'int-entrance-wash-001',
-    categoryId: 'sanitary',
-    categoryName: '設備',
-    subcategory: '玄関手洗い',
-    name: '玄関手洗い ボウルA',
-    manufacturer: 'KAKUDAI',
-    modelNumber: 'LY-493231',
-    unit: '個',
-    isOption: true,
-    description: '玄関手洗いボウル 角型',
-    variants: [
-      { id: 'v1', color: 'マットホワイト', colorCode: '#F5F5F5', images: [] },
-      { id: 'v2', color: 'マットブラック', colorCode: '#1A1A1A', images: [] },
-      { id: 'v3', color: 'マットグレー', colorCode: '#808080', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 99000 },
-      { plan: 'HOURS', price: 99000 },
-      { plan: 'LIFE+', price: 99000 },
-      { plan: 'LIFE', price: 99000 }
-    ]
-  },
-  {
-    id: 'int-entrance-wash-002',
-    categoryId: 'sanitary',
-    categoryName: '設備',
-    subcategory: '玄関手洗い',
-    name: '玄関手洗い ボウルB',
-    manufacturer: 'KAKUDAI',
-    modelNumber: 'LY-493232',
-    unit: '個',
-    isOption: true,
-    description: '玄関手洗いボウル 丸型深',
-    variants: [
-      { id: 'v1', color: 'マットホワイト', colorCode: '#F5F5F5', images: [] },
-      { id: 'v2', color: 'マットブラック', colorCode: '#1A1A1A', images: [] },
-      { id: 'v3', color: 'マットグレー', colorCode: '#808080', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 85000 },
-      { plan: 'HOURS', price: 85000 },
-      { plan: 'LIFE+', price: 85000 },
-      { plan: 'LIFE', price: 85000 }
-    ]
-  },
-  {
-    id: 'int-entrance-wash-003',
-    categoryId: 'sanitary',
-    categoryName: '設備',
-    subcategory: '玄関手洗い',
-    name: '玄関手洗い ステンレスコーナーカウンター',
-    manufacturer: 'KAKUDAI',
-    modelNumber: 'STAINLESS-CORNER',
-    unit: 'セット',
-    isOption: true,
-    description: 'ステンレスボウル一体型コーナーカウンター（ボウル+排水+水栓）',
-    variants: [
-      { id: 'v1', color: 'ステンレス', colorCode: '#C0C0C0', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 96000 },
-      { plan: 'HOURS', price: 96000 },
-      { plan: 'LIFE+', price: 96000 },
-      { plan: 'LIFE', price: 96000 }
-    ]
-  },
-
   // ========== 物干し金物（PDF43追加）==========
   {
     id: 'int-laundry-pole-001',
@@ -5852,7 +5832,7 @@ const staticInteriorProducts: Product[] = [
   {
     id: 'int-switch-001',
     categoryId: 'electrical',
-    categoryName: '電気設備',
+    categoryName: 'スイッチ',
     subcategory: 'スイッチ',
     name: 'スイッチ追加',
     manufacturer: 'Panasonic',
@@ -5873,7 +5853,7 @@ const staticInteriorProducts: Product[] = [
   {
     id: 'int-outlet-001',
     categoryId: 'electrical',
-    categoryName: '電気設備',
+    categoryName: 'コンセント',
     subcategory: 'コンセント',
     name: 'コンセント追加',
     manufacturer: 'Panasonic',
@@ -5894,7 +5874,7 @@ const staticInteriorProducts: Product[] = [
   {
     id: 'int-outlet-002',
     categoryId: 'electrical',
-    categoryName: '電気設備',
+    categoryName: 'コンセント',
     subcategory: 'コンセント',
     name: '4口コンセント',
     manufacturer: 'Panasonic',
@@ -5915,7 +5895,7 @@ const staticInteriorProducts: Product[] = [
   {
     id: 'int-outlet-003',
     categoryId: 'electrical',
-    categoryName: '電気設備',
+    categoryName: 'コンセント',
     subcategory: 'コンセント',
     name: '床用コンセント F型アップコン',
     manufacturer: 'Panasonic',
@@ -5938,7 +5918,7 @@ const staticInteriorProducts: Product[] = [
   {
     id: 'int-outlet-004',
     categoryId: 'electrical',
-    categoryName: '電気設備',
+    categoryName: 'コンセント',
     subcategory: 'コンセント',
     name: 'アドバンスシリーズ一式',
     manufacturer: 'Panasonic',
@@ -6004,7 +5984,7 @@ const staticInteriorProducts: Product[] = [
   {
     id: 'int-intercom-001',
     categoryId: 'electrical',
-    categoryName: '電気設備',
+    categoryName: 'インターホン',
     subcategory: 'インターホン',
     name: '外でもドアホン VL-SVD505KF変更',
     manufacturer: 'Panasonic',
@@ -6025,7 +6005,7 @@ const staticInteriorProducts: Product[] = [
   {
     id: 'int-intercom-002',
     categoryId: 'electrical',
-    categoryName: '電気設備',
+    categoryName: 'インターホン',
     subcategory: 'インターホン',
     name: '外でもドアホン VL-SVD710KF変更',
     manufacturer: 'Panasonic',
@@ -6046,7 +6026,7 @@ const staticInteriorProducts: Product[] = [
   {
     id: 'int-intercom-003',
     categoryId: 'electrical',
-    categoryName: '電気設備',
+    categoryName: 'インターホン',
     subcategory: 'インターホン',
     name: 'テレビドアホン VL-SE50KPA変更',
     manufacturer: 'Panasonic',
