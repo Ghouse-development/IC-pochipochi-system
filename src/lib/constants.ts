@@ -25,9 +25,9 @@ export const CART_MILESTONES = {
 // カテゴリ分類
 export const CATEGORY_GROUPS = {
   /** 外装カテゴリ */
-  EXTERIOR: ['外壁', 'ポーチ', '屋根', '樋', '軒天', '破風', '窓', '玄関ドア', '外部設備', 'TV視聴'] as readonly string[],
+  EXTERIOR: ['外壁', 'ポーチ', '屋根', '樋', '軒天', '破風', '窓', '玄関ドア', '外部設備'] as readonly string[],
   /** 内装カテゴリ */
-  INTERIOR: ['床材', '壁クロス', '天井クロス', '巾木', '建具', '収納'] as readonly string[],
+  INTERIOR: ['ベース床', 'ベースクロス（壁）', 'ベースクロス（天井）', 'ベース建具', '周辺部材'] as readonly string[],
   /** 設備カテゴリ */
   EQUIPMENT: ['キッチン', 'バス', '洗面台', 'トイレ', '給湯器', 'エアコン', '照明'] as readonly string[],
 } as const;

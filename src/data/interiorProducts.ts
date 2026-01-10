@@ -5,8 +5,8 @@ export const interiorProducts: Product[] = [
   // ========== フローリング - ベリティスフロアーベースコート（Panasonic）標準 ==========
   {
     id: 'int-floor-veritis-basecoat',
-    categoryId: 'flooring',
-    categoryName: '床材',
+    categoryId: 'base-floor',
+    categoryName: 'ベース床',
     subcategory: 'フローリング',
     name: 'ベリティスフロアーベースコート',
     materialType: 'シート',
@@ -39,8 +39,8 @@ export const interiorProducts: Product[] = [
   // ========== フローリング - ライブナチュラルMRX 2P（朝日ウッドテック）標準 ==========
   {
     id: 'int-floor-mrx',
-    categoryId: 'flooring',
-    categoryName: '床材',
+    categoryId: 'base-floor',
+    categoryName: 'ベース床',
     subcategory: 'フローリング',
     name: 'ライブナチュラルMRX 2P',
     materialType: '突板',
@@ -66,8 +66,8 @@ export const interiorProducts: Product[] = [
   // ========== フローリング - ライブナチュラルMSX/MSX-L（朝日ウッドテック）==========
   {
     id: 'int-floor-msx',
-    categoryId: 'flooring',
-    categoryName: '床材',
+    categoryId: 'base-floor',
+    categoryName: 'ベース床',
     subcategory: 'フローリング',
     name: 'ライブナチュラルMSX/MSX-L',
     materialType: '突板',
@@ -102,8 +102,8 @@ export const interiorProducts: Product[] = [
   // ========== フローリング - マイスターズウッドフロアー（Panasonic）==========
   {
     id: 'int-floor-meisters',
-    categoryId: 'flooring',
-    categoryName: '床材',
+    categoryId: 'base-floor',
+    categoryName: 'ベース床',
     subcategory: 'フローリング',
     materialType: '突板',
     name: 'マイスターズウッドフロアー ハードコートクリア',
@@ -132,8 +132,8 @@ export const interiorProducts: Product[] = [
   // ========== フローリング - 銘木フロアーラスティック（イクタ）==========
   {
     id: 'int-floor-ikuta',
-    categoryId: 'flooring',
-    categoryName: '床材',
+    categoryId: 'base-floor',
+    categoryName: 'ベース床',
     subcategory: 'フローリング',
     materialType: '突板',
     name: '銘木フロアーラスティック 2P',
@@ -162,8 +162,8 @@ export const interiorProducts: Product[] = [
   // ========== フローリング - クルードフローリング303（イクタ）水廻り専用 ==========
   {
     id: 'int-floor-crude-303',
-    categoryId: 'flooring',
-    categoryName: '床材',
+    categoryId: 'base-floor',
+    categoryName: 'ベース床',
     subcategory: 'フローリング',
     materialType: 'シート',
     name: 'クルードフローリング303',
@@ -191,8 +191,8 @@ export const interiorProducts: Product[] = [
   // ========== フローリング - 銘木フロアーラスティック エイジング（イクタ）==========
   {
     id: 'int-floor-meiboku-aging',
-    categoryId: 'flooring',
-    categoryName: '床材',
+    categoryId: 'base-floor',
+    categoryName: 'ベース床',
     subcategory: 'フローリング',
     materialType: '突板',
     name: '銘木フロアーラスティック エイジング 2P',
@@ -219,8 +219,8 @@ export const interiorProducts: Product[] = [
   // ========== フローリング - ビンテージフロアーラスティック（イクタ）挽き板 ==========
   {
     id: 'int-floor-vintage-rustic',
-    categoryId: 'flooring',
-    categoryName: '床材',
+    categoryId: 'base-floor',
+    categoryName: 'ベース床',
     subcategory: 'フローリング',
     materialType: '挽板',
     name: 'ビンテージフロアーラスティック 2P',
@@ -247,8 +247,8 @@ export const interiorProducts: Product[] = [
   // ========== フローリング - ライブナチュラルプレミアム ラスティック（朝日ウッドテック）挽き板 ==========
   {
     id: 'int-floor-livnatural-premium',
-    categoryId: 'flooring',
-    categoryName: '床材',
+    categoryId: 'base-floor',
+    categoryName: 'ベース床',
     subcategory: 'フローリング',
     materialType: '挽板',
     name: 'ライブナチュラルプレミアム ラスティック 2P',
@@ -275,8 +275,8 @@ export const interiorProducts: Product[] = [
   // ========== 玄関框（標準）==========
   {
     id: 'int-floor-entrance-frame-std',
-    categoryId: 'flooring',
-    categoryName: '床材',
+    categoryId: 'base-floor',
+    categoryName: 'ベース床',
     subcategory: '玄関框',
     name: '玄関框（フローリング色合わせ）',
     manufacturer: 'Panasonic/朝日ウッドテック',
@@ -298,8 +298,8 @@ export const interiorProducts: Product[] = [
   // ========== 床見切り（フラットバー）標準 ==========
   {
     id: 'int-floor-flatbar',
-    categoryId: 'flooring',
-    categoryName: '床材',
+    categoryId: 'base-floor',
+    categoryName: 'ベース床',
     subcategory: '床見切り',
     name: '床見切り（フラットバー）',
     manufacturer: 'Gハウス',
@@ -321,8 +321,8 @@ export const interiorProducts: Product[] = [
   // ========== 玄関框（プレイリーホームズ）オプション ==========
   {
     id: 'int-floor-entrance-frame-prairie-18',
-    categoryId: 'flooring',
-    categoryName: '床材',
+    categoryId: 'base-floor',
+    categoryName: 'ベース床',
     subcategory: '玄関框',
     name: '玄関框（プレイリーホームズ）〜1.8m迄',
     manufacturer: 'プレイリーホームズ',
@@ -343,8 +343,8 @@ export const interiorProducts: Product[] = [
   },
   {
     id: 'int-floor-entrance-frame-prairie-28',
-    categoryId: 'flooring',
-    categoryName: '床材',
+    categoryId: 'base-floor',
+    categoryName: 'ベース床',
     subcategory: '玄関框',
     name: '玄関框（プレイリーホームズ）〜2.8m迄',
     manufacturer: 'プレイリーホームズ',
@@ -367,8 +367,8 @@ export const interiorProducts: Product[] = [
   // ========== 無垢床 - チャネルオリジナル ユニシリーズ（オーク・バーチ・ウォールナット）==========
   {
     id: 'int-floor-channel-uni-a',
-    categoryId: 'flooring',
-    categoryName: '床材',
+    categoryId: 'base-floor',
+    categoryName: 'ベース床',
     subcategory: '無垢床',
     materialType: '無垢',
     name: 'チャネルオリジナル ユニシリーズ（オーク・バーチ・ウォールナット）',
@@ -393,8 +393,8 @@ export const interiorProducts: Product[] = [
   // ========== 無垢床 - チャネルオリジナル ユニシリーズ（ブラックチェリー・チーク）==========
   {
     id: 'int-floor-channel-uni-b',
-    categoryId: 'flooring',
-    categoryName: '床材',
+    categoryId: 'base-floor',
+    categoryName: 'ベース床',
     subcategory: '無垢床',
     materialType: '無垢',
     name: 'チャネルオリジナル ユニシリーズ（ブラックチェリー・チーク）',
@@ -418,8 +418,8 @@ export const interiorProducts: Product[] = [
   // ========== 無垢床 - チャネルオリジナル ヘリンボーン ==========
   {
     id: 'int-floor-channel-herringbone',
-    categoryId: 'flooring',
-    categoryName: '床材',
+    categoryId: 'base-floor',
+    categoryName: 'ベース床',
     subcategory: '無垢床',
     materialType: '無垢',
     name: 'チャネルオリジナル ヘリンボーン',
@@ -442,8 +442,8 @@ export const interiorProducts: Product[] = [
   // ========== フロアタイル - マティル（田島ルーフィング）==========
   {
     id: 'int-floor-matil',
-    categoryId: 'flooring',
-    categoryName: '床材',
+    categoryId: 'base-floor',
+    categoryName: 'ベース床',
     subcategory: 'フロアタイル',
     materialType: 'フロアタイル',
     name: 'マティル',
@@ -473,8 +473,8 @@ export const interiorProducts: Product[] = [
   // ========== CFシート（東リ）水廻り用 ==========
   {
     id: 'int-floor-cf-sheet',
-    categoryId: 'flooring',
-    categoryName: '床材',
+    categoryId: 'base-floor',
+    categoryName: 'ベース床',
     subcategory: 'CFシート',
     materialType: 'CFシート',
     name: 'CFシート',
@@ -521,8 +521,8 @@ export const interiorProducts: Product[] = [
   // ========== カーペットタイル（sangetsu）PDF19追加 ==========
   {
     id: 'int-floor-carpet',
-    categoryId: 'flooring',
-    categoryName: '床材',
+    categoryId: 'base-floor',
+    categoryName: 'ベース床',
     subcategory: 'カーペットタイル',
     materialType: 'カーペットタイル',
     name: 'カーペットタイル',
@@ -563,8 +563,8 @@ export const interiorProducts: Product[] = [
   // ========== カーペットタイル NTシリーズ（PDF20追加）==========
   {
     id: 'int-floor-carpet-nt',
-    categoryId: 'flooring',
-    categoryName: '床材',
+    categoryId: 'base-floor',
+    categoryName: 'ベース床',
     subcategory: 'カーペットタイル',
     materialType: 'カーペットタイル',
     name: 'カーペットタイル NTシリーズ',
@@ -598,8 +598,8 @@ export const interiorProducts: Product[] = [
   // ========== カーペットタイル DTシリーズ（PDF20追加）==========
   {
     id: 'int-floor-carpet-dt',
-    categoryId: 'flooring',
-    categoryName: '床材',
+    categoryId: 'base-floor',
+    categoryName: 'ベース床',
     subcategory: 'カーペットタイル',
     materialType: 'カーペットタイル',
     name: 'カーペットタイル DTシリーズ（プレミアム）',
@@ -619,6 +619,33 @@ export const interiorProducts: Product[] = [
       { plan: 'HOURS', price: 13000 },
       { plan: 'LIFE+', price: 13000 },
       { plan: 'LIFE', price: 13000 }
+    ]
+  },
+
+  // ========== 磁器タイル ==========
+  {
+    id: 'int-floor-ceramic-tile-001',
+    categoryId: 'base-floor',
+    categoryName: 'ベース床',
+    subcategory: '磁器タイル',
+    materialType: '磁器タイル',
+    name: '磁器タイル（玄関・土間）',
+    manufacturer: 'LIXIL',
+    modelNumber: 'CERAMIC-TILE-001',
+    unit: 'sqm',
+    isOption: false,
+    description: '玄関・土間に最適な磁器タイル 滑りにくく耐久性に優れる',
+    variants: [
+      { id: 'v1', color: 'グレー', images: [] },
+      { id: 'v2', color: 'ベージュ', images: [] },
+      { id: 'v3', color: 'ホワイト', images: [] },
+      { id: 'v4', color: 'ブラック', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
     ]
   },
 
@@ -1163,7 +1190,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'door-std-pa',
     categoryId: 'interior-door',
-    categoryName: '建具',
+    categoryName: 'ベース建具',
     subcategory: '室内ドア標準',
     name: 'VERITIS PAデザイン ハイドアH2400',
     manufacturer: 'Panasonic',
@@ -1193,7 +1220,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'door-std-ta',
     categoryId: 'interior-door',
-    categoryName: '建具',
+    categoryName: 'ベース建具',
     subcategory: '室内ドア標準',
     name: 'VERITIS TAデザイン トイレ用ハイドアH2400',
     manufacturer: 'Panasonic',
@@ -1223,7 +1250,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'door-paint-blackoak',
     categoryId: 'interior-door',
-    categoryName: '建具',
+    categoryName: 'ベース建具',
     subcategory: '室内ドア ペイントカラー',
     name: 'VERITIS ペイントカラー ブラックオーク柄',
     manufacturer: 'Panasonic',
@@ -1244,7 +1271,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'door-paint-navyoak',
     categoryId: 'interior-door',
-    categoryName: '建具',
+    categoryName: 'ベース建具',
     subcategory: '室内ドア ペイントカラー',
     name: 'VERITIS ペイントカラー ネイビーオーク柄',
     manufacturer: 'Panasonic',
@@ -1265,7 +1292,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'door-paint-bluegrayoak',
     categoryId: 'interior-door',
-    categoryName: '建具',
+    categoryName: 'ベース建具',
     subcategory: '室内ドア ペイントカラー',
     name: 'VERITIS ペイントカラー ブルーグレーオーク柄',
     manufacturer: 'Panasonic',
@@ -1286,7 +1313,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'door-paint-bitterwald',
     categoryId: 'interior-door',
-    categoryName: '建具',
+    categoryName: 'ベース建具',
     subcategory: '室内ドア ペイントカラー',
     name: 'VERITIS ペイントカラー ビターウォルドオーク柄',
     manufacturer: 'Panasonic',
@@ -1308,7 +1335,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'door-solid-soilblack',
     categoryId: 'interior-door',
-    categoryName: '建具',
+    categoryName: 'ベース建具',
     subcategory: '室内ドア ソリッドカラー',
     name: 'VERITIS ソリッドカラー ソイルブラック柄',
     manufacturer: 'Panasonic',
@@ -1329,7 +1356,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'door-solid-pearlgray',
     categoryId: 'interior-door',
-    categoryName: '建具',
+    categoryName: 'ベース建具',
     subcategory: '室内ドア ソリッドカラー',
     name: 'VERITIS ソリッドカラー パールグレー柄',
     manufacturer: 'Panasonic',
@@ -1351,7 +1378,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'door-handle-silver',
     categoryId: 'interior-door',
-    categoryName: '建具',
+    categoryName: 'ベース建具',
     subcategory: '取手・ストッパー',
     name: 'ハンドル(A1型) サテンシルバー色',
     manufacturer: 'Panasonic',
@@ -1372,7 +1399,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'door-handle-black',
     categoryId: 'interior-door',
-    categoryName: '建具',
+    categoryName: 'ベース建具',
     subcategory: '取手・ストッパー',
     name: 'ハンドル(A1型) オフブラック色',
     manufacturer: 'Panasonic',
@@ -1393,7 +1420,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'door-pull-silver',
     categoryId: 'interior-door',
-    categoryName: '建具',
+    categoryName: 'ベース建具',
     subcategory: '取手・ストッパー',
     name: '角型引手(C1型) サテンシルバー色',
     manufacturer: 'Panasonic',
@@ -1414,7 +1441,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'door-pull-black',
     categoryId: 'interior-door',
-    categoryName: '建具',
+    categoryName: 'ベース建具',
     subcategory: '取手・ストッパー',
     name: '角型引手(C1型) オフブラック色',
     manufacturer: 'Panasonic',
@@ -1436,7 +1463,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'door-storage-fold-ph',
     categoryId: 'interior-door',
-    categoryName: '建具',
+    categoryName: 'ベース建具',
     subcategory: '収納用建具',
     name: 'VERITIS 収納用折戸 PHデザイン',
     manufacturer: 'Panasonic',
@@ -1465,7 +1492,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'door-storage-fold-pa',
     categoryId: 'interior-door',
-    categoryName: '建具',
+    categoryName: 'ベース建具',
     subcategory: '収納用建具',
     name: 'VERITIS 収納用折戸 PAデザイン',
     manufacturer: 'Panasonic',
@@ -1495,7 +1522,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'door-storage-fold-mirror',
     categoryId: 'interior-door',
-    categoryName: '建具',
+    categoryName: 'ベース建具',
     subcategory: '収納用建具',
     name: 'VERITIS 収納用折戸 鏡追加',
     manufacturer: 'Panasonic',
@@ -1517,7 +1544,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'door-storage-slide2',
     categoryId: 'interior-door',
-    categoryName: '建具',
+    categoryName: 'ベース建具',
     subcategory: '収納用建具',
     name: 'VERITIS 収納用2枚引き違い戸',
     manufacturer: 'Panasonic',
@@ -1547,7 +1574,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'door-design-wb',
     categoryId: 'interior-door',
-    categoryName: '建具',
+    categoryName: 'ベース建具',
     subcategory: '建具デザイン変更',
     name: 'VERITIS WBデザイン 半透明アクリル板',
     manufacturer: 'Panasonic',
@@ -1568,7 +1595,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'door-design-wc',
     categoryId: 'interior-door',
-    categoryName: '建具',
+    categoryName: 'ベース建具',
     subcategory: '建具デザイン変更',
     name: 'VERITIS WCデザイン 半透明あわせガラス',
     manufacturer: 'Panasonic',
@@ -1589,7 +1616,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'door-design-ld',
     categoryId: 'interior-door',
-    categoryName: '建具',
+    categoryName: 'ベース建具',
     subcategory: '建具デザイン変更',
     name: 'VERITIS LDデザイン 半透明アクリル板',
     manufacturer: 'Panasonic',
@@ -1610,7 +1637,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'door-design-mc',
     categoryId: 'interior-door',
-    categoryName: '建具',
+    categoryName: 'ベース建具',
     subcategory: '建具デザイン変更',
     name: 'VERITIS MCデザイン 半透明あわせガラス',
     manufacturer: 'Panasonic',
@@ -1631,7 +1658,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'door-design-lb',
     categoryId: 'interior-door',
-    categoryName: '建具',
+    categoryName: 'ベース建具',
     subcategory: '建具デザイン変更',
     name: 'VERITIS LBデザイン 半透明アクリル板',
     manufacturer: 'Panasonic',
@@ -1653,7 +1680,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'door-design-petdoor',
     categoryId: 'interior-door',
-    categoryName: '建具',
+    categoryName: 'ベース建具',
     subcategory: '建具デザイン変更',
     name: 'VERITIS PAデザイン+ペットドア',
     manufacturer: 'Panasonic',
@@ -1675,7 +1702,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'door-design-hc-change',
     categoryId: 'interior-door',
-    categoryName: '建具',
+    categoryName: 'ベース建具',
     subcategory: '建具デザイン変更',
     name: 'VERITIS HCデザイン ガラス引戸 変更',
     manufacturer: 'Panasonic',
@@ -1697,7 +1724,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'door-design-hc-add',
     categoryId: 'interior-door',
-    categoryName: '建具',
+    categoryName: 'ベース建具',
     subcategory: '建具デザイン変更',
     name: 'VERITIS HCデザイン ガラス引戸 追加',
     manufacturer: 'Panasonic',
@@ -1720,7 +1747,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'door-design-hb-change',
     categoryId: 'interior-door',
-    categoryName: '建具',
+    categoryName: 'ベース建具',
     subcategory: '建具デザイン変更',
     name: 'VERITIS HBデザイン ガラス引戸 変更',
     manufacturer: 'Panasonic',
@@ -1742,7 +1769,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'door-design-hb-add',
     categoryId: 'interior-door',
-    categoryName: '建具',
+    categoryName: 'ベース建具',
     subcategory: '建具デザイン変更',
     name: 'VERITIS HBデザイン ガラス引戸 追加',
     manufacturer: 'Panasonic',
@@ -1765,7 +1792,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'door-add-swing',
     categoryId: 'interior-door',
-    categoryName: '建具',
+    categoryName: 'ベース建具',
     subcategory: '建具追加オプション',
     name: 'VERITIS 開き戸追加',
     manufacturer: 'Panasonic',
@@ -1787,7 +1814,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'door-change-sliding',
     categoryId: 'interior-door',
-    categoryName: '建具',
+    categoryName: 'ベース建具',
     subcategory: '建具追加オプション',
     name: 'VERITIS 標準開戸から片引戸へ変更',
     manufacturer: 'Panasonic',
@@ -1809,7 +1836,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'door-add-lock',
     categoryId: 'interior-door',
-    categoryName: '建具',
+    categoryName: 'ベース建具',
     subcategory: '建具追加オプション',
     name: 'VERITIS 表示錠追加',
     manufacturer: 'Panasonic',
@@ -1831,7 +1858,7 @@ export const interiorProducts: Product[] = [
   {
     id: 'door-add-sliding',
     categoryId: 'interior-door',
-    categoryName: '建具',
+    categoryName: 'ベース建具',
     subcategory: '建具追加オプション',
     name: 'VERITIS 引戸追加',
     manufacturer: 'Panasonic',
@@ -2479,11 +2506,11 @@ export const interiorProducts: Product[] = [
     ]
   },
 
-  // ========== 壁材（クロス） ==========
+  // ========== ベースクロス（壁） ==========
   {
     id: 'int-wall-base-001',
-    categoryId: 'wall',
-    categoryName: '壁材',
+    categoryId: 'base-wall-cloth',
+    categoryName: 'ベースクロス（壁）',
     subcategory: 'ベースクロス',
     name: 'サンゲツ ベースクロス',
     manufacturer: 'サンゲツ',
@@ -2491,6 +2518,27 @@ export const interiorProducts: Product[] = [
     unit: 'sqm',
     isOption: false,
     description: '標準ベースクロス（全室標準）',
+    variants: [
+      { id: 'v1', color: 'ホワイト', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 }
+    ]
+  },
+
+  // ========== ベースクロス（天井） ==========
+  {
+    id: 'int-ceiling-base-001',
+    categoryId: 'base-ceiling-cloth',
+    categoryName: 'ベースクロス（天井）',
+    subcategory: 'ベースクロス',
+    name: 'サンゲツ ベースクロス（天井）',
+    manufacturer: 'サンゲツ',
+    modelNumber: 'SP-2801-C',
+    unit: 'sqm',
+    isOption: false,
+    description: '標準天井クロス（全室標準）壁と同色',
     variants: [
       { id: 'v1', color: 'ホワイト', images: [] }
     ],
@@ -2825,8 +2873,8 @@ export const interiorProducts: Product[] = [
   // ========== フロアタイル コンクリート調（PDF16追加）==========
   {
     id: 'int-floortile-001',
-    categoryId: 'flooring',
-    categoryName: '床材',
+    categoryId: 'base-floor',
+    categoryName: 'ベース床',
     subcategory: 'フロアタイル',
     materialType: 'フロアタイル',
     name: 'フロアタイル コンクリート調',
@@ -2859,8 +2907,8 @@ export const interiorProducts: Product[] = [
   // ========== フロアタイル 石目調（PDF17追加）==========
   {
     id: 'int-floortile-002',
-    categoryId: 'flooring',
-    categoryName: '床材',
+    categoryId: 'base-floor',
+    categoryName: 'ベース床',
     subcategory: 'フロアタイル',
     materialType: 'フロアタイル',
     name: 'フロアタイル 石目調',
@@ -2892,8 +2940,8 @@ export const interiorProducts: Product[] = [
   // ========== フロアタイル 木目調（PDF18追加）==========
   {
     id: 'int-floortile-003',
-    categoryId: 'flooring',
-    categoryName: '床材',
+    categoryId: 'base-floor',
+    categoryName: 'ベース床',
     subcategory: 'フロアタイル',
     materialType: 'フロアタイル',
     name: 'フロアタイル 木目調',
@@ -2918,8 +2966,8 @@ export const interiorProducts: Product[] = [
   // ========== 床材タイル（PDF21追加）==========
   {
     id: 'int-tile-floor-001',
-    categoryId: 'flooring',
-    categoryName: '床材',
+    categoryId: 'base-floor',
+    categoryName: 'ベース床',
     subcategory: 'タイル',
     materialType: 'タイル',
     name: 'ランドストン',
@@ -2948,8 +2996,8 @@ export const interiorProducts: Product[] = [
   },
   {
     id: 'int-tile-floor-002',
-    categoryId: 'flooring',
-    categoryName: '床材',
+    categoryId: 'base-floor',
+    categoryName: 'ベース床',
     subcategory: 'タイル',
     materialType: 'タイル',
     name: 'ピエトラソーニ',
@@ -2974,8 +3022,8 @@ export const interiorProducts: Product[] = [
   },
   {
     id: 'int-tile-floor-003',
-    categoryId: 'flooring',
-    categoryName: '床材',
+    categoryId: 'base-floor',
+    categoryName: 'ベース床',
     subcategory: 'タイル',
     materialType: 'タイル',
     name: 'メンフィス',
@@ -3002,8 +3050,8 @@ export const interiorProducts: Product[] = [
   // ========== 畳・小上がり（PDF22追加）==========
   {
     id: 'int-tatami-001',
-    categoryId: 'flooring',
-    categoryName: '床材',
+    categoryId: 'base-floor',
+    categoryName: 'ベース床',
     subcategory: '畳',
     name: '健やかたたみおもて 清流',
     manufacturer: '大建工業',
@@ -3034,8 +3082,8 @@ export const interiorProducts: Product[] = [
   },
   {
     id: 'int-koagari-001',
-    categoryId: 'flooring',
-    categoryName: '床材',
+    categoryId: 'base-floor',
+    categoryName: 'ベース床',
     subcategory: '小上がり',
     name: '小上がりスペース',
     manufacturer: 'Gハウス',
@@ -3547,18 +3595,19 @@ export const interiorProducts: Product[] = [
     ]
   },
 
-  // ========== 壁・腰壁（PDF26追加）==========
+  // ========== 周辺部材（腰壁笠木）==========
   {
     id: 'int-wall-kasagi',
-    categoryId: 'wall',
-    categoryName: '壁材',
+    categoryId: 'peripheral-parts',
+    categoryName: '周辺部材',
     subcategory: '腰壁笠木',
+    materialType: '腰壁笠木',
     name: '階段回り 腰壁笠木',
     manufacturer: 'Panasonic',
     modelNumber: 'KASAGI-STAIR',
     unit: 'set',
     isOption: false,
-    description: '階段回り腰壁笠木 標準高さFL+1100 階段部分斜め仕上がりとする',
+    description: '階段回り腰壁笠木 標準高さFL+1100 階段部分斜め仕上がりとする ※腰壁がある場合のみ',
     variants: [
       { id: 'v1', color: 'しっくいホワイト', images: [] },
       { id: 'v2', color: 'ソイルブラック', images: [] }
@@ -3571,10 +3620,33 @@ export const interiorProducts: Product[] = [
     ]
   },
   {
+    id: 'int-wall-kasagi-none',
+    categoryId: 'peripheral-parts',
+    categoryName: '周辺部材',
+    subcategory: '腰壁笠木',
+    materialType: '腰壁笠木',
+    name: '腰壁笠木不要',
+    manufacturer: '不要',
+    modelNumber: 'KASAGI-NONE',
+    unit: 'set',
+    isOption: false,
+    description: '腰壁がない場合は不要',
+    variants: [
+      { id: 'v1', color: '不要', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+  {
     id: 'int-wall-madowaku',
-    categoryId: 'wall',
-    categoryName: '壁材',
-    subcategory: '造作部材',
+    categoryId: 'peripheral-parts',
+    categoryName: '周辺部材',
+    subcategory: '窓台',
+    materialType: '窓台',
     name: '薄見付窓枠TS型',
     manufacturer: 'Panasonic',
     modelNumber: 'TS-MADOWAKU',
@@ -3595,9 +3667,10 @@ export const interiorProducts: Product[] = [
   },
   {
     id: 'int-wall-habaki',
-    categoryId: 'wall',
-    categoryName: '壁材',
-    subcategory: '造作部材',
+    categoryId: 'peripheral-parts',
+    categoryName: '周辺部材',
+    subcategory: '巾木',
+    materialType: '巾木',
     name: 'クッション巾木スマート/H30',
     manufacturer: 'Panasonic',
     modelNumber: 'HABAKI-H30',

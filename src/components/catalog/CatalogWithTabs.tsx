@@ -643,6 +643,21 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     { id: 'その他オプション', name: 'その他オプション', required: false },
   ];
 
+  // ベース床の種類（内装用）
+  const BASE_FLOOR_TYPES = [
+    { id: 'フローリング', name: 'フローリング', description: '木目調の床材' },
+    { id: 'フロアタイル', name: 'フロアタイル', description: '水回り対応' },
+    { id: 'カーペットタイル', name: 'カーペットタイル', description: 'クッション性あり' },
+    { id: '磁器タイル', name: '磁器タイル', description: '玄関・土間用' },
+  ];
+
+  // 周辺部材の種類（内装用）
+  const PERIPHERAL_PARTS_TYPES = [
+    { id: '窓台', name: '窓台', description: '窓枠部材' },
+    { id: '巾木', name: '巾木', description: '床と壁の境目' },
+    { id: '腰壁笠木', name: '腰壁笠木', description: '腰壁がある場合のみ', optional: true },
+  ];
+
   // 利用可能な素材タイプを抽出（固定順序: 窯業系サイディング → ガルバリウム鋼板 → 塗り壁）
   const availableMaterialTypes = useMemo(() => {
     const materialOrder = ['窯業系サイディング', 'ガルバリウム鋼板', '塗り壁'];
@@ -1748,6 +1763,77 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                     })}
                   </div>
                 </div>
+              ) : currentCategoryName === 'ベース床' && !selectedMaterialType ? (
+                /* ベース床カテゴリ選択カード */
+                <div className="max-w-4xl mx-auto px-4">
+                  <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                    床材を選択
+                  </h2>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+                    お部屋に合った床材タイプを選んでください。
+                  </p>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    {BASE_FLOOR_TYPES.map((type) => {
+                      const itemCount = items.filter(i => i.category_name === type.id).length;
+                      return (
+                        <button
+                          key={type.id}
+                          onClick={() => setSelectedMaterialType(type.id)}
+                          className="group flex flex-col items-start bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:border-blue-400 dark:hover:border-blue-500 transition-colors"
+                        >
+                          <h3 className="font-medium text-sm text-gray-900 dark:text-gray-100 text-left mb-1">
+                            {type.name}
+                          </h3>
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                            {type.description}
+                          </p>
+                          <p className="text-xs text-blue-600 dark:text-blue-400">
+                            {itemCount > 0 ? `${itemCount}種類` : '準備中'}
+                          </p>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : currentCategoryName === '周辺部材' && !selectedMaterialType ? (
+                /* 周辺部材カテゴリ選択カード */
+                <div className="max-w-4xl mx-auto px-4">
+                  <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                    周辺部材を選択
+                  </h2>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+                    各部材を選んでください。
+                  </p>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    {PERIPHERAL_PARTS_TYPES.map((type) => {
+                      const itemCount = items.filter(i => i.material_type === type.id).length;
+                      return (
+                        <button
+                          key={type.id}
+                          onClick={() => setSelectedMaterialType(type.id)}
+                          className="group flex flex-col items-start bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:border-blue-400 dark:hover:border-blue-500 transition-colors"
+                        >
+                          <div className="w-full flex items-center justify-between mb-1">
+                            <h3 className="font-medium text-sm text-gray-900 dark:text-gray-100 text-left">
+                              {type.name}
+                            </h3>
+                            {'optional' in type && type.optional && (
+                              <span className="text-[10px] px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded">
+                                任意
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                            {type.description}
+                          </p>
+                          <p className="text-xs text-blue-600 dark:text-blue-400">
+                            {itemCount > 0 ? `${itemCount}種類` : '準備中'}
+                          </p>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
               ) : needsManufacturerSelection && !isManufacturerSelectionComplete ? (
                 /* メーカー/シリーズ選択（水回り設備用） */
                 <div className="max-w-4xl mx-auto">
@@ -1813,6 +1899,48 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
                   {/* 外部設備選択状態バー */}
                   {currentCategoryName === '外部設備' && selectedMaterialType && (
+                    <div className="mb-4 flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="text-gray-900 dark:text-gray-100 font-medium">
+                          {selectedMaterialType}
+                        </span>
+                        <span className="text-sm text-gray-500 dark:text-gray-400">
+                          {filteredItems.length}件
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => setSelectedMaterialType('')}
+                        className="flex items-center gap-1 px-2 py-1 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
+                      >
+                        <ChevronLeft className="w-4 h-4" />
+                        戻る
+                      </button>
+                    </div>
+                  )}
+
+                  {/* ベース床選択状態バー */}
+                  {currentCategoryName === 'ベース床' && selectedMaterialType && (
+                    <div className="mb-4 flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="text-gray-900 dark:text-gray-100 font-medium">
+                          {selectedMaterialType}
+                        </span>
+                        <span className="text-sm text-gray-500 dark:text-gray-400">
+                          {filteredItems.length}件
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => setSelectedMaterialType('')}
+                        className="flex items-center gap-1 px-2 py-1 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
+                      >
+                        <ChevronLeft className="w-4 h-4" />
+                        戻る
+                      </button>
+                    </div>
+                  )}
+
+                  {/* 周辺部材選択状態バー */}
+                  {currentCategoryName === '周辺部材' && selectedMaterialType && (
                     <div className="mb-4 flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <span className="text-gray-900 dark:text-gray-100 font-medium">
