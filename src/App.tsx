@@ -38,6 +38,23 @@ const StaffDashboard = lazy(() => import('./pages/StaffDashboard').then(m => ({ 
 const CustomerPage = lazy(() => import('./pages/CustomerPage').then(m => ({ default: m.CustomerPage })));
 const CustomerLoginPage = lazy(() => import('./pages/CustomerLoginPage').then(m => ({ default: m.CustomerLoginPage })));
 
+// 管理者専用ルートガード - 管理者以外はアクセス不可（リダイレクトなし、404表示）
+const AdminRouteGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { isAdmin } = useAuth();
+  // 管理者でない場合は404的なページを表示（ルートの存在を隠す）
+  if (!isAdmin) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-6xl font-bold text-gray-300 mb-4">404</h1>
+          <p className="text-gray-500">ページが見つかりません</p>
+        </div>
+      </div>
+    );
+  }
+  return <>{children}</>;
+};
+
 // Loading fallback component
 const PageLoader = () => (
   <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -204,31 +221,55 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
           <Route path="/catalog/:step/:categoryId" element={<CatalogWithTabs onCartClick={() => setIsCartOpen(true)} />} />
           <Route path="/catalog/:step/:categoryId/:productId" element={<CatalogWithTabs onCartClick={() => setIsCartOpen(true)} />} />
 
-          {/* 管理画面 - Lazy loaded */}
+          {/* 管理画面 - Lazy loaded + AdminRouteGuard（管理者以外は404表示） */}
           <Route path="/admin" element={
-            <Suspense fallback={<PageLoader />}>
-              <AdminDashboard onBack={() => window.history.back()} />
-            </Suspense>
+            <AdminRouteGuard>
+              <Suspense fallback={<PageLoader />}>
+                <AdminDashboard onBack={() => window.history.back()} />
+              </Suspense>
+            </AdminRouteGuard>
           } />
           <Route path="/hierarchy" element={
-            <Suspense fallback={<PageLoader />}>
-              <HierarchyPage onBack={() => window.history.back()} />
-            </Suspense>
+            <AdminRouteGuard>
+              <Suspense fallback={<PageLoader />}>
+                <HierarchyPage onBack={() => window.history.back()} />
+              </Suspense>
+            </AdminRouteGuard>
           } />
           <Route path="/image-test" element={
-            <Suspense fallback={<PageLoader />}>
-              <ImageTestPage />
-            </Suspense>
+            <AdminRouteGuard>
+              <Suspense fallback={<PageLoader />}>
+                <ImageTestPage />
+              </Suspense>
+            </AdminRouteGuard>
           } />
           <Route path="/staff" element={
-            <Suspense fallback={<PageLoader />}>
-              <StaffDashboard onBack={() => navigate('/catalog')} />
-            </Suspense>
+            <AdminRouteGuard>
+              <Suspense fallback={<PageLoader />}>
+                <StaffDashboard onBack={() => navigate('/catalog')} />
+              </Suspense>
+            </AdminRouteGuard>
           } />
           <Route path="/customer" element={
             <Suspense fallback={<PageLoader />}>
               <CustomerPage />
             </Suspense>
+          } />
+
+          {/* 404 キャッチオール - 存在しないパスはすべてここに */}
+          <Route path="*" element={
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+              <div className="text-center">
+                <h1 className="text-6xl font-bold text-gray-300 mb-4">404</h1>
+                <p className="text-gray-500 mb-4">ページが見つかりません</p>
+                <button
+                  onClick={() => navigate('/catalog')}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                >
+                  カタログに戻る
+                </button>
+              </div>
+            </div>
           } />
         </Routes>
       </main>
