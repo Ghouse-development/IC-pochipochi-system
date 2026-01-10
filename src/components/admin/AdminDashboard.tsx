@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { BarChart3, Package, Bell, TrendingUp, Upload, Settings, Users, FolderTree, Briefcase, Wrench, Truck, Database, Building2, ShieldAlert, DollarSign, Activity } from 'lucide-react';
+import { BarChart3, Package, Bell, TrendingUp, Upload, Settings, Users, FolderTree, Briefcase, Wrench, Truck, Database, Building2, ShieldAlert, DollarSign, Activity, RefreshCw, CloudOff, Cloud } from 'lucide-react';
 import { Button } from '../common/Button';
 import { Card } from '../common/Card';
 import { SectionErrorBoundary } from '../common/ErrorBoundary';
@@ -14,6 +14,7 @@ import { OrganizationManager } from './OrganizationManager';
 import { useVersionStore } from '../../stores/useVersionStore';
 import { useOrderStore } from '../../stores/useOrderStore';
 import { useStatisticsStore } from '../../stores/useStatisticsStore';
+import { useProductStore } from '../../stores/useProductStore';
 import { formatPrice } from '../../lib/utils';
 import { PdfImport } from './PdfImport';
 import { StaffOptionDashboard } from './StaffOptionDashboard';
@@ -34,10 +35,108 @@ type ProductSubTab = 'items' | 'categories';
 type StatsSubTab = 'dashboard' | 'adoption' | 'staffOption' | 'behavior';
 
 // データ管理のサブタブ
-type DataSubTab = 'backup' | 'pdf' | 'versions';
+type DataSubTab = 'backup' | 'pdf' | 'versions' | 'sync';
 
 // システムのサブタブ
 type SystemSubTab = 'settings' | 'users' | 'organizations';
+
+// DB同期パネルコンポーネント
+const DBSyncPanel: React.FC = () => {
+  const { isDBConnected, isLoading, lastFetchedAt, refreshProducts } = useProductStore();
+  const [isSyncing, setIsSyncing] = React.useState(false);
+
+  const handleRefresh = async () => {
+    setIsSyncing(true);
+    try {
+      await refreshProducts();
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      <h2 className="text-xl font-semibold text-gray-900">データベース同期</h2>
+
+      {/* 接続状態 */}
+      <Card className="p-6">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            {isDBConnected ? (
+              <div className="p-2 bg-green-100 rounded-full">
+                <Cloud className="w-6 h-6 text-green-600" />
+              </div>
+            ) : (
+              <div className="p-2 bg-amber-100 rounded-full">
+                <CloudOff className="w-6 h-6 text-amber-600" />
+              </div>
+            )}
+            <div>
+              <h3 className="font-medium text-gray-900">
+                {isDBConnected ? 'データベース接続中' : 'オフラインモード（静的データ使用中）'}
+              </h3>
+              <p className="text-sm text-gray-500">
+                {lastFetchedAt
+                  ? `最終同期: ${new Date(lastFetchedAt).toLocaleString('ja-JP')}`
+                  : '未同期'}
+              </p>
+            </div>
+          </div>
+          <Button
+            onClick={handleRefresh}
+            disabled={isSyncing || isLoading}
+            variant="outline"
+            className="flex items-center gap-2"
+          >
+            <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
+            {isSyncing ? '同期中...' : 'データを更新'}
+          </Button>
+        </div>
+
+        <div className="border-t pt-4 mt-4">
+          <h4 className="text-sm font-medium text-gray-700 mb-2">データソース</h4>
+          <div className="grid grid-cols-2 gap-4 text-sm">
+            <div className="bg-gray-50 rounded-lg p-3">
+              <p className="text-gray-600">外装商品</p>
+              <p className="font-medium text-gray-900">
+                {isDBConnected ? 'Supabaseから取得' : 'exteriorProducts.ts'}
+              </p>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-3">
+              <p className="text-gray-600">内装商品</p>
+              <p className="font-medium text-gray-900">
+                {isDBConnected ? 'Supabaseから取得' : 'interiorProducts.ts'}
+              </p>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-3">
+              <p className="text-gray-600">水廻り設備</p>
+              <p className="font-medium text-gray-900">
+                {isDBConnected ? 'Supabaseから取得' : 'waterEquipmentProducts.ts'}
+              </p>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-3">
+              <p className="text-gray-600">家具・家電</p>
+              <p className="font-medium text-gray-900">
+                {isDBConnected ? 'Supabaseから取得' : 'furnitureProducts.ts'}
+              </p>
+            </div>
+          </div>
+        </div>
+      </Card>
+
+      {/* 説明 */}
+      <Card className="p-6 bg-blue-50 border-blue-200">
+        <h3 className="font-medium text-blue-900 mb-2">データベース同期について</h3>
+        <ul className="text-sm text-blue-800 space-y-1 list-disc list-inside">
+          <li>システムはSupabaseデータベースに接続されています</li>
+          <li>DBにデータがある場合はDBから、ない場合は静的ファイルから商品データを取得します</li>
+          <li>「データを更新」ボタンで最新のデータを取得できます</li>
+          <li>商品の追加・変更はSupabase管理画面または本システムのアイテム管理から行えます</li>
+        </ul>
+      </Card>
+    </div>
+  );
+};
 
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
   const { isAdmin, isCoordinator, isLoading: authLoading } = useAuth();
@@ -375,6 +474,19 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
               <div className="flex items-center gap-1.5">
                 <Bell className="w-3.5 h-3.5" />
                 バージョン履歴
+              </div>
+            </button>
+            <button
+              onClick={() => setDataSubTab('sync')}
+              className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
+                dataSubTab === 'sync'
+                  ? 'bg-emerald-100 text-emerald-700 font-medium'
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              <div className="flex items-center gap-1.5">
+                <RefreshCw className="w-3.5 h-3.5" />
+                DB同期
               </div>
             </button>
           </div>
@@ -859,6 +971,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
                   ))}
                 </div>
               </div>
+            )}
+            {dataSubTab === 'sync' && (
+              <DBSyncPanel />
             )}
           </div>
         )}
