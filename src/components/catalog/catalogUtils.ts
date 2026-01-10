@@ -243,8 +243,7 @@ export const getICConsultationOption = (categoryName: string): ICConsultationOpt
 export const REQUIRED_CATEGORIES = [
   // 外装
   '外壁',        // ①
-  'ポーチ',      // ②
-  'ポーチ目地',  // ② タイル選択時のみ必要（モルタル金鏝抑え除く）
+  'ポーチ',      // ②（タイル選択時は目地色を自動提案）
   '屋根',        // ③
   '外部建材',    // A: 軒樋・竪樋・土台水切・笠木・破風
   '軒天',        // ④
@@ -321,11 +320,7 @@ export const CATEGORY_EXPLANATIONS: Record<string, { description: string; tip: s
   },
   'ポーチ': {
     description: '玄関前のタイル張りの部分です。',
-    tip: '滑りにくい素材がおすすめ',
-  },
-  'ポーチ目地': {
-    description: 'タイルとタイルの間を埋める目地材です。',
-    tip: 'タイルの色に合わせて選ぶと統一感が出ます（モルタル仕上げの場合は不要）',
+    tip: '滑りにくい素材がおすすめ。タイル選択時は目地色も自動提案されます',
   },
   '外部配管': {
     description: '屋外の配管設備です。',

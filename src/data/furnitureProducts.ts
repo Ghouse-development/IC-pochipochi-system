@@ -1,81 +1,9 @@
 // 家具・家電製品データ
 import type { Product } from '../types/product';
+import { diningTableProducts } from './generators/diningTableGenerator';
 
-export const furnitureProducts: Product[] = [
-  // ========== ダイニングテーブル（スクエア） ==========
-  {
-    id: 'furn-dt-001',
-    categoryId: 'dining-table',
-    categoryName: 'オリジナルダイニングテーブル',
-    subcategory: 'ダイニングテーブル',
-    name: 'Gハウスオリジナル ダイニングテーブル スクエア',
-    manufacturer: 'Gハウス',
-    modelNumber: 'GH-DT-SQUARE',
-    unit: 'piece',
-    isOption: true,
-    description: 'メラミン化粧板天板、スチール脚（スクエア/ラウンド）、コンセント付き W1500〜1800×D900×H720',
-    variants: [
-      { id: 'v1', color: 'OKオーク×スクエア・ブラック', images: [] },
-      { id: 'v2', color: 'CRチェリー×スクエア・ブラック', images: [] },
-      { id: 'v3', color: 'WNウォールナット×スクエア・ブラック', images: [] },
-      { id: 'v4', color: 'DWダークWN×スクエア・ホワイト', images: [] },
-      { id: 'v5', color: 'DUダストグレー×スクエア・ホワイト', images: [] },
-      { id: 'v6', color: 'KRカブリード×ラウンド・ブラック', images: [] },
-      { id: 'v7', color: 'FMファインモルタル×ラウンド・ホワイト', images: [] },
-      { id: 'v8', color: 'APアンジェロプレーン×スクエア・ブラック', images: [] },
-      { id: 'v9', color: 'OWオフホワイト×スクエア・ホワイト', images: [] },
-      { id: 'v10', color: 'LBライトベージュ×スクエア・ホワイト', images: [] },
-      { id: 'v11', color: 'MBミディアムベージュ×スクエア・ブラック', images: [] },
-      { id: 'v12', color: 'DBダークベージュ×スクエア・ブラック', images: [] },
-      { id: 'v13', color: 'MGミディアムグレー×スクエア・ブラック', images: [] },
-      { id: 'v14', color: 'DGダークグレー×スクエア・ブラック', images: [] },
-      { id: 'v15', color: 'BKブラック×スクエア・ブラック', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 130000 },
-      { plan: 'HOURS', price: 130000 },
-      { plan: 'LIFE+', price: 140000 },
-      { plan: 'LIFE', price: 140000 }
-    ]
-  },
-
-  // ========== ダイニングテーブル（ラウンド） ==========
-  {
-    id: 'furn-dt-002',
-    categoryId: 'dining-table',
-    categoryName: 'オリジナルダイニングテーブル',
-    subcategory: 'ダイニングテーブル',
-    name: 'Gハウスオリジナル ダイニングテーブル ラウンド',
-    manufacturer: 'Gハウス',
-    modelNumber: 'GH-DT-ROUND',
-    unit: 'piece',
-    isOption: true,
-    description: 'メラミン化粧板天板（丸形）、スチール脚（クワトロ/オクタ）Φ1100〜1200×H720',
-    variants: [
-      { id: 'v1', color: 'OKオーク×クワトロ・ブラック', images: [] },
-      { id: 'v2', color: 'CRチェリー×クワトロ・ブラック', images: [] },
-      { id: 'v3', color: 'WNウォールナット×クワトロ・ホワイト', images: [] },
-      { id: 'v4', color: 'DWダークWN×オクタ・ブラック', images: [] },
-      { id: 'v5', color: 'DUダストグレー×オクタ・ホワイト', images: [] },
-      { id: 'v6', color: 'KRカブリード×クワトロ・ブラック', images: [] },
-      { id: 'v7', color: 'FMファインモルタル×オクタ・ホワイト', images: [] },
-      { id: 'v8', color: 'APアンジェロプレーン×クワトロ・ブラック', images: [] },
-      { id: 'v9', color: 'OWオフホワイト×クワトロ・ホワイト', images: [] },
-      { id: 'v10', color: 'LBライトベージュ×クワトロ・ホワイト', images: [] },
-      { id: 'v11', color: 'MBミディアムベージュ×クワトロ・ブラック', images: [] },
-      { id: 'v12', color: 'DBダークベージュ×オクタ・ブラック', images: [] },
-      { id: 'v13', color: 'MGミディアムグレー×オクタ・ブラック', images: [] },
-      { id: 'v14', color: 'DGダークグレー×オクタ・ブラック', images: [] },
-      { id: 'v15', color: 'BKブラック×オクタ・ブラック', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 120000 },
-      { plan: 'HOURS', price: 120000 },
-      { plan: 'LIFE+', price: 166000 },
-      { plan: 'LIFE', price: 166000 }
-    ]
-  },
-
+// 静的に定義する製品（エアコン、カーテン、IC提案家具など）
+const staticProducts: Product[] = [
   // ========== エアコン ==========
   {
     id: 'furn-aircon-daikin-e6',
@@ -290,7 +218,7 @@ export const furnitureProducts: Product[] = [
     ]
   },
 
-  // ========== 家具 ==========
+  // ========== 家具（IC提案） ==========
   {
     id: 'furn-sofa-ic',
     categoryId: 'furniture',
@@ -459,4 +387,10 @@ export const furnitureProducts: Product[] = [
       { plan: 'LIFE', price: 0 }
     ]
   },
+];
+
+// ダイニングテーブル（JSON設定から自動生成） + 静的製品を結合
+export const furnitureProducts: Product[] = [
+  ...diningTableProducts,  // JSONから自動生成
+  ...staticProducts,       // 静的定義
 ];

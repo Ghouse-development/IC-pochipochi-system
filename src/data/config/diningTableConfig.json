@@ -1,0 +1,78 @@
+{
+  "version": "1.1",
+  "lastUpdated": "2026-01-10",
+  "note": "Gハウス オリジナルダイニングテーブル設定（ノーコードメンテナンス用）",
+
+  "topColors": [
+    { "id": "OK", "name": "オーク", "code": "TJY18332K", "hexColor": "#C4A77D" },
+    { "id": "CR", "name": "チェリー", "code": "TJY10274K", "hexColor": "#8B4513" },
+    { "id": "WN", "name": "ウォールナット", "code": "JI-703K", "hexColor": "#5D4037" },
+    { "id": "DW", "name": "ダークWN", "code": "TJ-10005K", "hexColor": "#3E2723" },
+    { "id": "DU", "name": "ダストグレー", "code": "LJ-10068K", "hexColor": "#9E9E9E" },
+    { "id": "KR", "name": "カブリード", "code": "JI-800K", "hexColor": "#8D6E63" },
+    { "id": "FM", "name": "ファインモルタル", "code": "LJ-10186K", "hexColor": "#A1887F" },
+    { "id": "AP", "name": "アンジェロプレーン", "code": "TJ-10240K", "hexColor": "#BCAAA4" },
+    { "id": "OW", "name": "オフホワイト", "code": "K-6000KN", "hexColor": "#FAFAFA" },
+    { "id": "LB", "name": "ライトベージュ", "code": "K-6115KN", "hexColor": "#E8DED1" },
+    { "id": "MB", "name": "ミディアムベージュ", "code": "K-6116KN", "hexColor": "#D7CCC8" },
+    { "id": "DB", "name": "ダークベージュ", "code": "K-6117KN", "hexColor": "#BCAAA4" },
+    { "id": "MG", "name": "ミディアムグレー", "code": "K-6303KN", "hexColor": "#9E9E9E" },
+    { "id": "DG", "name": "ダークグレー", "code": "TK-6306K", "hexColor": "#616161" },
+    { "id": "BK", "name": "ブラック", "code": "TK-6400K", "hexColor": "#212121" }
+  ],
+
+  "squareTable": {
+    "name": "スクエアテーブル",
+    "fullName": "ダイニングテーブル スクエア",
+    "description": "Gハウスオリジナル商品。メラミン化粧板天板、スチール脚。テーブルのみの販売です。",
+    "specs": {
+      "height": "720mm",
+      "depth": "900mm",
+      "topMaterial": "パーティクルボード（表面：メラミン化粧板、裏面：メラミン化粧板白色）",
+      "legMaterial": "スチール焼付粉体塗装",
+      "loadCapacity": "100kg"
+    },
+    "sizes": [
+      { "id": "W1500", "name": "幅1500mm", "displayName": "W1500", "price": 0 },
+      { "id": "W1650", "name": "幅1650mm", "displayName": "W1650", "price": 0 },
+      { "id": "W1800", "name": "幅1800mm", "displayName": "W1800", "price": 0 }
+    ],
+    "legOptions": [
+      { "id": "SQ-BK", "shape": "スクエア", "color": "ブラック", "price": 130000 },
+      { "id": "SQ-WH", "shape": "スクエア", "color": "ホワイト", "price": 130000 },
+      { "id": "RD-BK", "shape": "ラウンド", "color": "ブラック", "price": 140000 },
+      { "id": "RD-WH", "shape": "ラウンド", "color": "ホワイト", "price": 140000 }
+    ],
+    "outletOptions": [
+      { "id": "2PORT", "name": "コンセント 2口", "price": 0 },
+      { "id": "1PORT-USB", "name": "コンセント 1口 + USB Type A", "price": 0 }
+    ]
+  },
+
+  "roundTable": {
+    "name": "ラウンドテーブル",
+    "fullName": "ダイニングテーブル ラウンド",
+    "description": "Gハウスオリジナル商品。メラミン化粧板天板（丸形）、スチール脚。テーブルのみの販売です。",
+    "specs": {
+      "height": "720mm",
+      "topMaterial": "パーティクルボード（表面：メラミン化粧板、裏面：メラミン化粧板白色）",
+      "legMaterial": "スチール焼付粉体塗装",
+      "loadCapacity": "100kg",
+      "weight": {
+        "top": "20-22kg",
+        "quattroLeg": "15.2kg（4本合計）",
+        "octaLeg": "50kg"
+      }
+    },
+    "sizes": [
+      { "id": "D1100", "name": "天板幅1100mm", "displayName": "φ1100", "price": 0 },
+      { "id": "D1200", "name": "天板幅1200mm", "displayName": "φ1200", "price": 0 }
+    ],
+    "legOptions": [
+      { "id": "QT-BK", "shape": "クワトロ", "color": "ブラック", "price": 120000 },
+      { "id": "QT-WH", "shape": "クワトロ", "color": "ホワイト", "price": 120000 },
+      { "id": "OC-BK", "shape": "オクタ", "color": "ブラック", "price": 166000 },
+      { "id": "OC-WH", "shape": "オクタ", "color": "ホワイト", "price": 166000 }
+    ]
+  }
+}

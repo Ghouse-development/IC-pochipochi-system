@@ -1,7 +1,12 @@
 // インテリア（内装）製品データ - DETAIL スタイルブックより
 import type { Product } from '../types/product';
+import { floorProducts } from './generators/flooringGenerator';
 
-export const interiorProducts: Product[] = [
+// ジェネレーターで生成される製品ID（重複除外用）
+const generatedFloorProductIds = new Set(floorProducts.map(p => p.id));
+
+// 静的製品データ
+const staticInteriorProducts: Product[] = [
   // ========== フローリング - ベリティスフロアーベースコート（Panasonic）標準 ==========
   {
     id: 'int-floor-veritis-basecoat',
@@ -588,7 +593,7 @@ export const interiorProducts: Product[] = [
       { id: 'v12', color: 'NT-382', images: [] }
     ],
     pricing: [
-      { plan: 'LACIE', price: 10000 },
+      { plan: 'LACIE', price: 13000 },
       { plan: 'HOURS', price: 10000 },
       { plan: 'LIFE+', price: 10000 },
       { plan: 'LIFE', price: 10000 }
@@ -616,9 +621,9 @@ export const interiorProducts: Product[] = [
     ],
     pricing: [
       { plan: 'LACIE', price: 13000 },
-      { plan: 'HOURS', price: 13000 },
-      { plan: 'LIFE+', price: 13000 },
-      { plan: 'LIFE', price: 13000 }
+      { plan: 'HOURS', price: 10000 },
+      { plan: 'LIFE+', price: 10000 },
+      { plan: 'LIFE', price: 10000 }
     ]
   },
 
@@ -1984,8 +1989,8 @@ export const interiorProducts: Product[] = [
       { id: 'v3', color: 'ダークブラウン', images: [] }
     ],
     pricing: [
-      { plan: 'LACIE', price: 85000 },
-      { plan: 'HOURS', price: 90000 }
+      { plan: 'LACIE', price: 90000 },
+      { plan: 'HOURS', price: 85000 }
     ]
   },
 
@@ -2898,7 +2903,7 @@ export const interiorProducts: Product[] = [
     ],
     pricing: [
       { plan: 'LACIE', price: 6500 },
-      { plan: 'HOURS', price: 5000 },
+      { plan: 'HOURS', price: 6500 },
       { plan: 'LIFE+', price: 5000 },
       { plan: 'LIFE', price: 5000 }
     ]
@@ -2931,7 +2936,7 @@ export const interiorProducts: Product[] = [
     ],
     pricing: [
       { plan: 'LACIE', price: 6500 },
-      { plan: 'HOURS', price: 5000 },
+      { plan: 'HOURS', price: 6500 },
       { plan: 'LIFE+', price: 5000 },
       { plan: 'LIFE', price: 5000 }
     ]
@@ -2957,7 +2962,7 @@ export const interiorProducts: Product[] = [
     ],
     pricing: [
       { plan: 'LACIE', price: 6500 },
-      { plan: 'HOURS', price: 5000 },
+      { plan: 'HOURS', price: 6500 },
       { plan: 'LIFE+', price: 5000 },
       { plan: 'LIFE', price: 5000 }
     ]
@@ -5763,4 +5768,11 @@ export const interiorProducts: Product[] = [
       { plan: 'LIFE', price: 200000 }
     ]
   }
+];
+
+// フローリング製品（ジェネレーター生成）と静的製品を結合してエクスポート
+// ジェネレーターで生成される製品と重複するIDは静的配列から除外
+export const interiorProducts: Product[] = [
+  ...floorProducts,
+  ...staticInteriorProducts.filter(p => !generatedFloorProductIds.has(p.id))
 ];

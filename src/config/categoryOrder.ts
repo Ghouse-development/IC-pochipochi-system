@@ -86,13 +86,6 @@ export const EXTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
     ]
   },
   {
-    name: 'ポーチ目地',
-    icon: '🧱',
-    subcategoryOrder: [
-      '目地',
-    ]
-  },
-  {
     name: '屋根',
     icon: '🏛️',
     subcategoryOrder: ['屋根材']
@@ -152,6 +145,8 @@ export const EXTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
       'ジョイントボックス',
       'エアコンスリーブキャップ',
       '換気フード',
+      '換気ガラリ',
+      'DSDD給気口',
       '外部LAN用空配管',
       '外部配管',
       'スリムダクト',
@@ -170,33 +165,54 @@ export const EXTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
   {
     name: 'ガレージシャッター',
     icon: '🚗',
-    subcategoryOrder: ['ガレージシャッター', 'ガレージシャッターオプション']
+    subcategoryOrder: ['ガレージシャッター不要', 'サンオートハイスピード', '威風堂々', 'ガレージシャッターオプション']
   },
   {
     name: '電動ガレージシャッター',
     icon: '🚗',
-    subcategoryOrder: ['電動ガレージシャッター']
+    subcategoryOrder: ['ガレージシャッター不要', 'サンオートハイスピード', '威風堂々']
   },
   {
     name: '庇',
     icon: '🏗️',
-    subcategoryOrder: ['アルミ庇']
+    subcategoryOrder: ['庇不要', 'アルフィン庇 AD2S', 'アルフィン庇 AF95シリーズ']
   },
   {
-    name: '換気システム',
+    name: '換気システム選択',
     icon: '🌀',
-    subcategoryOrder: ['換気ガラリ', 'DSDD給気口', 'サイクロン給気フード']
+    subcategoryOrder: ['Panasonic第一種換気', 'DSDD']
   },
   {
-    name: 'エコキュート',
+    name: 'インターホン個数',
+    icon: '🔔',
+    subcategoryOrder: ['インターホン台数']
+  },
+  {
+    name: '給湯器',
     icon: '♨️',
     subcategoryOrder: [
       'エコキュート',
       'おひさまエコキュート',
       'ナイアガラ出湯',
+      'エコジョーズ',
       'エコキュートオプション',
       'エコキュート設置オプション',
     ]
+  },
+  {
+    name: '太陽光',
+    icon: '☀️',
+    subcategoryOrder: ['太陽光なし', '太陽光あり', '太陽光オプション']
+  },
+  {
+    name: '蓄電池',
+    icon: '🔋',
+    subcategoryOrder: ['蓄電池なし', '蓄電池あり']
+  },
+  {
+    name: 'V2H',
+    icon: '🚗',
+    subcategoryOrder: ['V2Hなし', 'V2Hあり']
   },
   {
     name: '太陽光・蓄電池',
@@ -207,6 +223,11 @@ export const EXTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
     name: '窓タイプ',
     icon: '🪟',
     subcategoryOrder: ['窓タイプ']
+  },
+  {
+    name: '天井変更工事',
+    icon: '📐',
+    subcategoryOrder: ['天井変更工事']
   },
 ];
 
@@ -525,41 +546,51 @@ export const ELECTRICAL_CATEGORY_ORDER: CategoryOrderConfig[] = [
   {
     name: '照明',
     icon: '💡',
-    subcategoryOrder: ['ダウンライト', 'シーリングライト', 'ペンダントライト', 'ブラケットライト']
+    subcategoryOrder: ['ダウンライト', 'シーリングライト', 'ペンダントライト', 'ブラケットライト', 'スポットライト', '屋外照明']
   },
   {
     name: '間接照明',
     icon: '✨',
-    subcategoryOrder: ['間接照明', 'ライン照明']
+    subcategoryOrder: ['間接照明', 'ライン照明', 'LED照明']
   },
   {
     name: 'スイッチ・コンセント',
     icon: '🔌',
-    subcategoryOrder: ['スイッチ', 'コンセント', 'スイッチ・コンセント']
-  },
-  {
-    name: '電気設備',
-    icon: '⚡',
-    subcategoryOrder: ['スイッチ', 'コンセント', '配管']
+    subcategoryOrder: ['スイッチ', 'コンセント', 'スイッチ・コンセント', '床下コンセント', 'USBコンセント']
   },
   {
     name: 'インターホン',
     icon: '🔔',
-    subcategoryOrder: ['インターホン', 'ドアホン']
+    subcategoryOrder: ['インターホン', 'ドアホン', 'ワイヤレスカメラ']
   },
   {
-    name: 'その他電気設備',
-    icon: '🔧',
-    subcategoryOrder: ['配線', '分電盤', 'アース']
+    name: 'IoT・スマートホーム',
+    icon: '📱',
+    subcategoryOrder: ['スマートロック', 'スマートリモコン', 'センサー', 'ホームオートメーション', 'AI対応機器']
+  },
+  {
+    name: 'セキュリティ',
+    icon: '🔒',
+    subcategoryOrder: ['防犯カメラ', 'センサーライト', '防犯システム']
+  },
+  {
+    name: '電気配線',
+    icon: '⚡',
+    subcategoryOrder: ['配線', '分電盤', 'アース', 'LAN配線', '空配管']
   },
 ];
 
 // 家具・家電カテゴリ順序
 export const FURNITURE_CATEGORY_ORDER: CategoryOrderConfig[] = [
   {
+    name: 'オリジナルダイニングテーブル',
+    icon: '🍽️',
+    subcategoryOrder: ['スクエアテーブル', 'ラウンドテーブル']
+  },
+  {
     name: 'カーテン',
     icon: '🪞',
-    subcategoryOrder: ['カーテンレール', 'カーテン']
+    subcategoryOrder: ['カーテンレール', 'カーテン', 'IC提案']
   },
   {
     name: 'カーテンBOX',
@@ -594,7 +625,7 @@ export const FURNITURE_CATEGORY_ORDER: CategoryOrderConfig[] = [
   {
     name: '家具',
     icon: '🪑',
-    subcategoryOrder: ['ダイニングテーブル', 'カウンター']
+    subcategoryOrder: ['ソファ', 'TVボード', 'センターテーブル', 'ラグ', 'ダイニングテーブル', 'ダイニングチェア', 'ベッド', 'その他']
   },
 ];
 

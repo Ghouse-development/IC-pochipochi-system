@@ -1502,92 +1502,6 @@ export const exteriorProducts: Product[] = [
     ]
   },
 
-  // ===== ポーチ目地（モルタル金鏝抑え以外のタイル用） =====
-  {
-    id: 'ext-porch-grout-white',
-    categoryId: 'porch-grout',
-    categoryName: 'ポーチ目地',
-    subcategory: '目地',
-    name: 'ホワイト目地',
-    manufacturer: 'LIXIL',
-    modelNumber: 'GROUT-WH',
-    unit: 'set',
-    isOption: false,
-    description: 'タイル用目地材（標準）ポーチタイル選択時に必要',
-    variants: [
-      { id: 'v1', color: 'ホワイト', colorCode: 'WH', images: [] },
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 },
-      { plan: 'LIFE+', price: 0 },
-      { plan: 'LIFE', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-porch-grout-gray',
-    categoryId: 'porch-grout',
-    categoryName: 'ポーチ目地',
-    subcategory: '目地',
-    name: 'グレー目地',
-    manufacturer: 'LIXIL',
-    modelNumber: 'GROUT-GY',
-    unit: 'set',
-    isOption: false,
-    description: 'タイル用目地材（標準）ポーチタイル選択時に必要',
-    variants: [
-      { id: 'v1', color: 'グレー', colorCode: 'GY', images: [] },
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 },
-      { plan: 'LIFE+', price: 0 },
-      { plan: 'LIFE', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-porch-grout-charcoal',
-    categoryId: 'porch-grout',
-    categoryName: 'ポーチ目地',
-    subcategory: '目地',
-    name: 'チャコール目地',
-    manufacturer: 'LIXIL',
-    modelNumber: 'GROUT-CH',
-    unit: 'set',
-    isOption: false,
-    description: 'タイル用目地材（標準）ポーチタイル選択時に必要',
-    variants: [
-      { id: 'v1', color: 'チャコール', colorCode: 'CH', images: [] },
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 },
-      { plan: 'LIFE+', price: 0 },
-      { plan: 'LIFE', price: 0 }
-    ]
-  },
-  {
-    id: 'ext-porch-grout-beige',
-    categoryId: 'porch-grout',
-    categoryName: 'ポーチ目地',
-    subcategory: '目地',
-    name: 'ベージュ目地',
-    manufacturer: 'LIXIL',
-    modelNumber: 'GROUT-BE',
-    unit: 'set',
-    isOption: false,
-    description: 'タイル用目地材（標準）ポーチタイル選択時に必要',
-    variants: [
-      { id: 'v1', color: 'ベージュ', colorCode: 'BE', images: [] },
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 },
-      { plan: 'LIFE+', price: 0 },
-      { plan: 'LIFE', price: 0 }
-    ]
-  },
-
   // ===== 屋根材 =====
   {
     id: 'ext-roof-nisc',
@@ -1872,6 +1786,29 @@ export const exteriorProducts: Product[] = [
     ]
   },
 
+  // ===== 庇 - 不要 =====
+  {
+    id: 'ext-awning-none',
+    categoryId: 'awning',
+    categoryName: '庇',
+    subcategory: '庇不要',
+    name: '庇不要',
+    manufacturer: '不要',
+    modelNumber: 'AWNING-NONE',
+    unit: 'set',
+    isOption: false,
+    description: '庇を設置しない場合',
+    variants: [
+      { id: 'v1', color: '不要', colorCode: '不要', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+
   // ===== 電動ガレージシャッター - サンオートハイスピード =====
   {
     id: 'ext-garage-shutter-sunauto',
@@ -1924,6 +1861,29 @@ export const exteriorProducts: Product[] = [
       { plan: 'HOURS', price: 1290000 },
       { plan: 'LIFE+', price: 1290000 },
       { plan: 'LIFE', price: 1290000 }
+    ]
+  },
+
+  // ===== 電動ガレージシャッター - 不要 =====
+  {
+    id: 'ext-garage-shutter-none',
+    categoryId: 'garage-shutter',
+    categoryName: '電動ガレージシャッター',
+    subcategory: 'ガレージシャッター不要',
+    name: 'ガレージシャッター不要',
+    manufacturer: '不要',
+    modelNumber: 'GARAGE-NONE',
+    unit: 'set',
+    isOption: false,
+    description: 'ガレージシャッターを設置しない場合',
+    variants: [
+      { id: 'v1', color: '不要', colorCode: '不要', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
     ]
   },
 
@@ -3141,7 +3101,7 @@ export const exteriorProducts: Product[] = [
   {
     id: 'ext-ecocute-standard',
     categoryId: 'ecocute',
-    categoryName: 'エコキュート',
+    categoryName: '給湯器',
     subcategory: 'エコキュート',
     name: 'エコキュート370L（標準）',
     manufacturer: 'Panasonic',
@@ -3162,7 +3122,7 @@ export const exteriorProducts: Product[] = [
   {
     id: 'ext-ecocute-460l',
     categoryId: 'ecocute',
-    categoryName: 'エコキュート',
+    categoryName: '給湯器',
     subcategory: 'エコキュート',
     name: 'エコキュート460L',
     manufacturer: 'Panasonic',
@@ -3183,7 +3143,7 @@ export const exteriorProducts: Product[] = [
   {
     id: 'ext-ecocute-ultra-370l',
     categoryId: 'ecocute',
-    categoryName: 'エコキュート',
+    categoryName: '給湯器',
     subcategory: 'エコキュート',
     name: 'ウルトラ高圧エコキュート370L',
     manufacturer: 'Panasonic',
@@ -3204,7 +3164,7 @@ export const exteriorProducts: Product[] = [
   {
     id: 'ext-ecocute-ultra-460l',
     categoryId: 'ecocute',
-    categoryName: 'エコキュート',
+    categoryName: '給湯器',
     subcategory: 'エコキュート',
     name: 'ウルトラ高圧エコキュート460L',
     manufacturer: 'Panasonic',
@@ -3225,7 +3185,7 @@ export const exteriorProducts: Product[] = [
   {
     id: 'ext-ecocute-370l-add',
     categoryId: 'ecocute',
-    categoryName: 'エコキュート',
+    categoryName: '給湯器',
     subcategory: 'エコキュート',
     name: 'エコキュート370L（標準）追加',
     manufacturer: 'Panasonic',
@@ -3246,7 +3206,7 @@ export const exteriorProducts: Product[] = [
   {
     id: 'ext-ecocute-indoor',
     categoryId: 'ecocute',
-    categoryName: 'エコキュート',
+    categoryName: '給湯器',
     subcategory: 'エコキュート設置オプション',
     name: 'エコキュート室内設置に変更',
     manufacturer: 'Panasonic',
@@ -3267,7 +3227,7 @@ export const exteriorProducts: Product[] = [
   {
     id: 'ext-ecocute-garage',
     categoryId: 'ecocute',
-    categoryName: 'エコキュート',
+    categoryName: '給湯器',
     subcategory: 'エコキュート設置オプション',
     name: 'エコキュート インナーガレージ設置に変更',
     manufacturer: 'Panasonic',
@@ -3288,7 +3248,7 @@ export const exteriorProducts: Product[] = [
   {
     id: 'ext-ecocute-salt',
     categoryId: 'ecocute',
-    categoryName: 'エコキュート',
+    categoryName: '給湯器',
     subcategory: 'エコキュートオプション',
     name: '塩害用エコキュートに変更',
     manufacturer: 'Panasonic',
@@ -3309,7 +3269,7 @@ export const exteriorProducts: Product[] = [
   {
     id: 'ext-ecocute-370l-slim',
     categoryId: 'ecocute',
-    categoryName: 'エコキュート',
+    categoryName: '給湯器',
     subcategory: 'エコキュート',
     name: 'エコキュート370L薄型タイプ',
     manufacturer: 'Panasonic',
@@ -3330,7 +3290,7 @@ export const exteriorProducts: Product[] = [
   {
     id: 'ext-ecocute-460l-slim',
     categoryId: 'ecocute',
-    categoryName: 'エコキュート',
+    categoryName: '給湯器',
     subcategory: 'エコキュート',
     name: 'エコキュート460L薄型タイプ',
     manufacturer: 'Panasonic',
@@ -3351,7 +3311,7 @@ export const exteriorProducts: Product[] = [
   {
     id: 'ext-ecocute-370l-powerful-slim',
     categoryId: 'ecocute',
-    categoryName: 'エコキュート',
+    categoryName: '給湯器',
     subcategory: 'エコキュート',
     name: 'エコキュート370Lパワフル高圧薄型タイプ',
     manufacturer: 'Panasonic',
@@ -3372,7 +3332,7 @@ export const exteriorProducts: Product[] = [
   {
     id: 'ext-ecocute-460l-powerful-slim',
     categoryId: 'ecocute',
-    categoryName: 'エコキュート',
+    categoryName: '給湯器',
     subcategory: 'エコキュート',
     name: 'エコキュート460Lパワフル高圧薄型タイプ',
     manufacturer: 'Panasonic',
@@ -3393,7 +3353,7 @@ export const exteriorProducts: Product[] = [
   {
     id: 'ext-ecocute-daikin-370l',
     categoryId: 'ecocute',
-    categoryName: 'エコキュート',
+    categoryName: '給湯器',
     subcategory: 'おひさまエコキュート',
     name: 'おひさまエコキュート パワフル高圧370L',
     manufacturer: 'DAIKIN',
@@ -3414,7 +3374,7 @@ export const exteriorProducts: Product[] = [
   {
     id: 'ext-ecocute-daikin-460l',
     categoryId: 'ecocute',
-    categoryName: 'エコキュート',
+    categoryName: '給湯器',
     subcategory: 'おひさまエコキュート',
     name: 'おひさまエコキュート パワフル高圧460L',
     manufacturer: 'DAIKIN',
@@ -3435,7 +3395,7 @@ export const exteriorProducts: Product[] = [
   {
     id: 'ext-ecocute-hitachi-370l',
     categoryId: 'ecocute',
-    categoryName: 'エコキュート',
+    categoryName: '給湯器',
     subcategory: 'ナイアガラ出湯',
     name: 'ナイアガラ出湯 エコキュート370L（1・2階設置）',
     manufacturer: '日立',
@@ -3456,7 +3416,7 @@ export const exteriorProducts: Product[] = [
   {
     id: 'ext-ecocute-hitachi-370l-3f',
     categoryId: 'ecocute',
-    categoryName: 'エコキュート',
+    categoryName: '給湯器',
     subcategory: 'ナイアガラ出湯',
     name: 'ナイアガラ出湯 エコキュート370L（3階設置）',
     manufacturer: '日立',
@@ -3473,11 +3433,122 @@ export const exteriorProducts: Product[] = [
     ]
   },
 
-  // ===== 換気ガラリ =====
+  // ===== 換気システム選択 - Panasonic第一種換気 =====
+  {
+    id: 'ext-ventilation-panasonic',
+    categoryId: 'ventilation-system',
+    categoryName: '換気システム選択',
+    subcategory: 'Panasonic第一種換気',
+    name: 'Panasonic第一種換気システム',
+    manufacturer: 'Panasonic',
+    modelNumber: 'PANA-VENT-1',
+    unit: 'set',
+    isOption: false,
+    description: 'Panasonic第一種換気システムを採用',
+    variants: [
+      { id: 'v1', color: '標準', colorCode: '標準', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+
+  // ===== 換気システム選択 - DSDD =====
+  {
+    id: 'ext-ventilation-dsdd',
+    categoryId: 'ventilation-system',
+    categoryName: '換気システム選択',
+    subcategory: 'DSDD',
+    name: 'DSDD換気システム',
+    manufacturer: 'DSDD',
+    modelNumber: 'DSDD-VENT',
+    unit: 'set',
+    isOption: false,
+    description: 'DSDD換気システムを採用',
+    variants: [
+      { id: 'v1', color: '標準', colorCode: '標準', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+
+  // ===== インターホン個数選択（設計用） =====
+  {
+    id: 'ext-intercom-qty-1',
+    categoryId: 'intercom-qty',
+    categoryName: 'インターホン個数',
+    subcategory: 'インターホン台数',
+    name: 'インターホン1台',
+    manufacturer: '標準',
+    modelNumber: 'INTERCOM-1',
+    unit: 'set',
+    isOption: false,
+    description: 'インターホン親機1台（標準）',
+    variants: [
+      { id: 'v1', color: '1台', colorCode: '1台', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+  {
+    id: 'ext-intercom-qty-2',
+    categoryId: 'intercom-qty',
+    categoryName: 'インターホン個数',
+    subcategory: 'インターホン台数',
+    name: 'インターホン2台',
+    manufacturer: '標準',
+    modelNumber: 'INTERCOM-2',
+    unit: 'set',
+    isOption: true,
+    description: 'インターホン親機2台（追加）',
+    variants: [
+      { id: 'v1', color: '2台', colorCode: '2台', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 15000 },
+      { plan: 'HOURS', price: 15000 },
+      { plan: 'LIFE+', price: 15000 },
+      { plan: 'LIFE', price: 15000 }
+    ]
+  },
+  {
+    id: 'ext-intercom-qty-3',
+    categoryId: 'intercom-qty',
+    categoryName: 'インターホン個数',
+    subcategory: 'インターホン台数',
+    name: 'インターホン3台',
+    manufacturer: '標準',
+    modelNumber: 'INTERCOM-3',
+    unit: 'set',
+    isOption: true,
+    description: 'インターホン親機3台（追加2台）',
+    variants: [
+      { id: 'v1', color: '3台', colorCode: '3台', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 30000 },
+      { plan: 'HOURS', price: 30000 },
+      { plan: 'LIFE+', price: 30000 },
+      { plan: 'LIFE', price: 30000 }
+    ]
+  },
+
+  // ===== 換気ガラリ（外部設備） =====
   {
     id: 'ext-ventilation-louver',
-    categoryId: 'ventilation',
-    categoryName: '換気システム',
+    categoryId: 'exterior-facility',
+    categoryName: '外部設備',
     subcategory: '換気ガラリ',
     name: '換気ガラリ',
     manufacturer: '標準',
@@ -3499,12 +3570,12 @@ export const exteriorProducts: Product[] = [
     ]
   },
 
-  // ===== サイクロン給気フード =====
+  // ===== サイクロン給気フード（外部設備） =====
   {
     id: 'ext-cyclone-hood',
-    categoryId: 'ventilation',
-    categoryName: '換気システム',
-    subcategory: 'サイクロン給気フード',
+    categoryId: 'exterior-facility',
+    categoryName: '外部設備',
+    subcategory: '換気フード',
     name: 'Panasonic換気システム用 サイクロン給気フード',
     manufacturer: 'Panasonic',
     modelNumber: 'CYCLONE-HOOD',
@@ -3522,11 +3593,11 @@ export const exteriorProducts: Product[] = [
     ]
   },
 
-  // ===== DSDD給気口 カラー変更 =====
+  // ===== DSDD給気口 カラー変更（外部設備） =====
   {
     id: 'ext-dsdd-color-change',
-    categoryId: 'ventilation',
-    categoryName: '換気システム',
+    categoryId: 'exterior-facility',
+    categoryName: '外部設備',
     subcategory: 'DSDD給気口',
     name: 'DSDD給気口 カラー変更',
     manufacturer: '標準',
@@ -3543,12 +3614,58 @@ export const exteriorProducts: Product[] = [
     ]
   },
 
+  // ===== 太陽光 - なし =====
+  {
+    id: 'ext-solar-none',
+    categoryId: 'solar',
+    categoryName: '太陽光',
+    subcategory: '太陽光なし',
+    name: '太陽光なし',
+    manufacturer: '不要',
+    modelNumber: 'SOLAR-NONE',
+    unit: 'set',
+    isOption: false,
+    description: '太陽光パネルを設置しない場合',
+    variants: [
+      { id: 'v1', color: '不要', colorCode: '不要', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+
+  // ===== 太陽光 - あり =====
+  {
+    id: 'ext-solar-yes',
+    categoryId: 'solar',
+    categoryName: '太陽光',
+    subcategory: '太陽光あり',
+    name: '太陽光あり',
+    manufacturer: '別途',
+    modelNumber: 'SOLAR-YES',
+    unit: 'set',
+    isOption: false,
+    description: '太陽光パネルを設置する（金額は資金計画書に記載）',
+    variants: [
+      { id: 'v1', color: '設置あり', colorCode: '設置あり', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+
   // ===== 太陽光 中継ポール =====
   {
     id: 'ext-solar-relay-pole',
     categoryId: 'solar',
-    categoryName: '太陽光・蓄電池',
-    subcategory: '太陽光設備',
+    categoryName: '太陽光',
+    subcategory: '太陽光オプション',
     name: '中継ポール',
     manufacturer: '標準',
     modelNumber: 'RELAY-POLE',
@@ -3561,6 +3678,98 @@ export const exteriorProducts: Product[] = [
     pricing: [
       { plan: 'LACIE', price: 250000 },
       { plan: 'HOURS', price: 250000 }
+    ]
+  },
+
+  // ===== 蓄電池 - なし =====
+  {
+    id: 'ext-battery-none',
+    categoryId: 'battery',
+    categoryName: '蓄電池',
+    subcategory: '蓄電池なし',
+    name: '蓄電池なし',
+    manufacturer: '不要',
+    modelNumber: 'BATTERY-NONE',
+    unit: 'set',
+    isOption: false,
+    description: '蓄電池を設置しない場合',
+    variants: [
+      { id: 'v1', color: '不要', colorCode: '不要', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+
+  // ===== 蓄電池 - あり =====
+  {
+    id: 'ext-battery-yes',
+    categoryId: 'battery',
+    categoryName: '蓄電池',
+    subcategory: '蓄電池あり',
+    name: '蓄電池あり',
+    manufacturer: '別途',
+    modelNumber: 'BATTERY-YES',
+    unit: 'set',
+    isOption: false,
+    description: '蓄電池を設置する',
+    variants: [
+      { id: 'v1', color: '設置あり', colorCode: '設置あり', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+
+  // ===== V2H - なし =====
+  {
+    id: 'ext-v2h-none',
+    categoryId: 'v2h',
+    categoryName: 'V2H',
+    subcategory: 'V2Hなし',
+    name: 'V2Hなし',
+    manufacturer: '不要',
+    modelNumber: 'V2H-NONE',
+    unit: 'set',
+    isOption: false,
+    description: 'V2Hを設置しない場合',
+    variants: [
+      { id: 'v1', color: '不要', colorCode: '不要', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+
+  // ===== V2H - あり =====
+  {
+    id: 'ext-v2h-yes',
+    categoryId: 'v2h',
+    categoryName: 'V2H',
+    subcategory: 'V2Hあり',
+    name: 'V2Hあり',
+    manufacturer: '別途',
+    modelNumber: 'V2H-YES',
+    unit: 'set',
+    isOption: false,
+    description: 'V2Hを設置する',
+    variants: [
+      { id: 'v1', color: '設置あり', colorCode: '設置あり', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
     ]
   },
 
@@ -3900,6 +4109,113 @@ export const exteriorProducts: Product[] = [
     pricing: [
       { plan: 'LACIE', price: 0 },
       { plan: 'HOURS', price: 0 }
+    ]
+  },
+
+  // ===== 天井変更工事（設計カテゴリ） =====
+  {
+    id: 'ext-ceiling-slope',
+    categoryId: 'ceiling-work',
+    categoryName: '天井変更工事',
+    subcategory: '天井変更工事',
+    name: '勾配天井工事',
+    manufacturer: 'Gハウス',
+    modelNumber: 'CEILING-SLOPE',
+    unit: 'sqm',
+    isOption: true,
+    description: '天井変更する範囲の床坪数にて算出 ※梁や火打ち梁が露出する場合がございます',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 10000 },
+      { plan: 'HOURS', price: 10000 },
+      { plan: 'LIFE+', price: 10000 },
+      { plan: 'LIFE', price: 10000 }
+    ]
+  },
+  {
+    id: 'ext-ceiling-up-100',
+    categoryId: 'ceiling-work',
+    categoryName: '天井変更工事',
+    subcategory: '天井変更工事',
+    name: '天井高UP（H2600迄）100mm毎',
+    manufacturer: 'Gハウス',
+    modelNumber: 'CEILING-UP-100',
+    unit: 'sqm',
+    isOption: true,
+    description: '部屋別での変更不可 フロアごとの変更',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 8500 },
+      { plan: 'HOURS', price: 8500 },
+      { plan: 'LIFE+', price: 8500 },
+      { plan: 'LIFE', price: 8500 }
+    ]
+  },
+  {
+    id: 'ext-ceiling-up-200',
+    categoryId: 'ceiling-work',
+    categoryName: '天井変更工事',
+    subcategory: '天井変更工事',
+    name: '天井高UP（H2600迄）200mm毎',
+    manufacturer: 'Gハウス',
+    modelNumber: 'CEILING-UP-200',
+    unit: 'sqm',
+    isOption: true,
+    description: '部屋別での変更不可 フロアごとの変更',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 12000 },
+      { plan: 'HOURS', price: 12000 },
+      { plan: 'LIFE+', price: 12000 },
+      { plan: 'LIFE', price: 12000 }
+    ]
+  },
+  {
+    id: 'ext-ceiling-down',
+    categoryId: 'ceiling-work',
+    categoryName: '天井変更工事',
+    subcategory: '天井変更工事',
+    name: '下がり天井',
+    manufacturer: 'Gハウス',
+    modelNumber: 'CEILING-DOWN',
+    unit: 'sqm',
+    isOption: true,
+    description: '100mm毎',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 8000 },
+      { plan: 'HOURS', price: 8000 },
+      { plan: 'LIFE+', price: 8000 },
+      { plan: 'LIFE', price: 8000 }
+    ]
+  },
+  {
+    id: 'ext-hiuchi-beam',
+    categoryId: 'ceiling-work',
+    categoryName: '天井変更工事',
+    subcategory: '天井変更工事',
+    name: '火打ち梁',
+    manufacturer: 'Gハウス',
+    modelNumber: 'HIUCHI-BEAM',
+    unit: 'm',
+    isOption: true,
+    description: '勾配天井で露出する火打ち梁の塗装仕上げ',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 15000 },
+      { plan: 'HOURS', price: 15000 },
+      { plan: 'LIFE+', price: 15000 },
+      { plan: 'LIFE', price: 15000 }
     ]
   },
 ];

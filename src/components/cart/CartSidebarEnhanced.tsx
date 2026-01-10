@@ -14,6 +14,7 @@ import { supabase } from '../../lib/supabase';
 import { createLogger } from '../../lib/logger';
 import { STORAGE_KEYS } from '../../lib/constants';
 import { ShowroomEstimateManager } from '../showroom/ShowroomEstimateManager';
+import { ReportExportModal } from '../export/ReportExportModal';
 
 const logger = createLogger('CartSidebarEnhanced');
 
@@ -35,6 +36,7 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [showFinalizeConfirm, setShowFinalizeConfirm] = useState(false);
   const [showShowroomManager, setShowShowroomManager] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
 
   const totalPrice = getTotalPrice();
 
@@ -181,23 +183,6 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
     openSpecificationWindow({
       customerName,
       projectName,
-      planName: planName || 'LACIE',
-      date: new Date().toLocaleDateString('ja-JP'),
-      items,
-      staffName: '',
-      companyName: 'Gハウス'
-    });
-    toast.success('PDF出力完了', '仕様書を表示しました（印刷でPDF化できます）');
-  };
-
-  // ワンクリックPDF出力（名前未入力でもデフォルト値で出力）
-  const handleQuickPDF = () => {
-    const name = customerName || 'お客様';
-    const project = projectName || `見積_${new Date().toLocaleDateString('ja-JP').replace(/\//g, '')}`;
-    addLog('pdf_export', 'export', { action: 'クイックPDF出力', customerName: name, projectName: project, itemCount: items.length });
-    openSpecificationWindow({
-      customerName: name,
-      projectName: project,
       planName: planName || 'LACIE',
       date: new Date().toLocaleDateString('ja-JP'),
       items,
@@ -476,13 +461,13 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
             <div className="space-y-2">
               {!isFinalized ? (
                 <>
-                  {/* ワンクリックPDF出力ボタン */}
+                  {/* レポート出力ボタン */}
                   <button
-                    onClick={handleQuickPDF}
+                    onClick={() => setShowReportModal(true)}
                     className="w-full px-4 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl font-medium hover:from-red-600 hover:to-red-700 transition-colors flex items-center justify-center gap-2 shadow-lg"
                   >
                     <FileText className="w-5 h-5" />
-                    PDF見積書をダウンロード
+                    レポート出力
                   </button>
 
                   <div className="flex gap-2">
@@ -637,6 +622,14 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
       <ShowroomEstimateManager
         isOpen={showShowroomManager}
         onClose={() => setShowShowroomManager(false)}
+      />
+
+      {/* レポート出力モーダル */}
+      <ReportExportModal
+        isOpen={showReportModal}
+        onClose={() => setShowReportModal(false)}
+        customerName={customerName}
+        projectName={projectName}
       />
     </>
   );

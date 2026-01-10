@@ -24,6 +24,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import type { Product as CatalogProduct } from '../../types/product';
 import { ManufacturerSelector, SelectionBar } from './ManufacturerSelector';
 import { getManufacturersForCategory, hasSeriesSelection, type ManufacturerConfig, type ManufacturerSeries } from '../../config/waterEquipmentConfig';
+import { getCategoryOrderConfig } from '../../config/categoryOrder';
 
 // 抽出したコンポーネント・ユーティリティ
 import { ItemCard } from './ItemCard';
@@ -292,9 +293,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
           .order('display_order');
 
         const allCategories = [...(extCategories || []), ...(eqCategories || [])];
-        // DESIGN_CATEGORIESに含まれるもののみをフィルタ
+        // DESIGN_CATEGORIESに含まれるもののみをフィルタ（完全一致のみ）
         const designCategories = allCategories.filter(cat =>
-          DESIGN_CATEGORIES.some(dc => cat.name.includes(dc) || dc.includes(cat.name))
+          DESIGN_CATEGORIES.some(dc => cat.name === dc)
         );
         // 重複除去（同名カテゴリがある場合は最初のものを使用）
         const uniqueDesignCategories = designCategories.filter((cat, index, self) =>
@@ -315,7 +316,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
           const categoryMap = new Map<string, Category>();
           allProducts.forEach((p, idx) => {
             if (p.categoryName && !categoryMap.has(p.categoryName) &&
-                DESIGN_CATEGORIES.some(dc => p.categoryName.includes(dc) || dc.includes(p.categoryName))) {
+                DESIGN_CATEGORIES.some(dc => p.categoryName === dc)) {
               categoryMap.set(p.categoryName, {
                 id: `cat-design-${idx}`,
                 parent_id: null,
@@ -354,7 +355,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
         const filteredCategories = activeTab === 'interior'
           ? supabaseCategories
           : supabaseCategories.filter(cat =>
-              !DESIGN_CATEGORIES.some(dc => cat.name.includes(dc) || dc.includes(cat.name))
+              !DESIGN_CATEGORIES.some(dc => cat.name === dc)
             );
         // 非表示カテゴリを除外（天井クロスなど壁クロスに連動するもの）
         const visibleCategories = filteredCategories.filter(cat =>
@@ -397,7 +398,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
         const categoryMap = new Map<string, Category>();
         products.forEach((p, idx) => {
           // DESIGN_CATEGORIESを除外（内装以外、furnitureは除外しない）
-          const isDesignCategory = DESIGN_CATEGORIES.some(dc => p.categoryName.includes(dc) || dc.includes(p.categoryName));
+          const isDesignCategory = DESIGN_CATEGORIES.some(dc => p.categoryName === dc);
           // 非表示カテゴリを除外（天井クロスなど）
           const isHidden = isHiddenCategory(p.categoryName);
           if (p.categoryName && !categoryMap.has(p.categoryName) && !isHidden && (activeTab === 'interior' || activeTab === 'furniture' || !isDesignCategory)) {
@@ -451,12 +452,12 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
       // 設計タブ：外装と設備からDESIGN_CATEGORIESに該当するものを抽出
       const allProducts = [...exteriorProducts, ...waterProducts];
       products = allProducts.filter(p =>
-        DESIGN_CATEGORIES.some(dc => p.categoryName.includes(dc) || dc.includes(p.categoryName))
+        DESIGN_CATEGORIES.some(dc => p.categoryName === dc)
       );
     } else if (tab === 'exterior') {
       // 外装タブ：DESIGN_CATEGORIESを除外
       products = exteriorProducts.filter(p =>
-        !DESIGN_CATEGORIES.some(dc => p.categoryName.includes(dc) || dc.includes(p.categoryName))
+        !DESIGN_CATEGORIES.some(dc => p.categoryName === dc)
       );
     } else if (tab === 'interior') {
       // 内装タブ：FURNITURE_CATEGORIESとELECTRICAL_CATEGORIESを除外
@@ -475,7 +476,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     } else if (tab === 'equipment') {
       // 水廻り設備タブ：DESIGN_CATEGORIESを除外
       products = waterProducts.filter(p =>
-        !DESIGN_CATEGORIES.some(dc => p.categoryName.includes(dc) || dc.includes(p.categoryName))
+        !DESIGN_CATEGORIES.some(dc => p.categoryName === dc)
       );
     }
     return products.map(p => convertStaticToItemWithDetails(p, tab === 'design' ? 'exterior' : (tab === 'furniture' || tab === 'electrical' ? 'interior' : tab)));
@@ -538,7 +539,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
             let filteredItems = supabaseItems;
             if (activeTab === 'design') {
               filteredItems = supabaseItems.filter(item =>
-                DESIGN_CATEGORIES.some(dc => item.category?.name?.includes(dc) || dc.includes(item.category?.name || ''))
+                DESIGN_CATEGORIES.some(dc => item.category?.name === dc)
               );
             } else if (activeTab === 'interior') {
               filteredItems = supabaseItems.filter(item =>
@@ -547,7 +548,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
             } else {
               filteredItems = supabaseItems.filter(item =>
                 item.category?.category_type === activeTab &&
-                !DESIGN_CATEGORIES.some(dc => item.category?.name?.includes(dc) || dc.includes(item.category?.name || ''))
+                !DESIGN_CATEGORIES.some(dc => item.category?.name === dc)
               );
             }
             if (filteredItems.length > staticItems.length) {
@@ -790,12 +791,36 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
       return true;
     });
 
-    // ソート: サブカテゴリ → 標準品優先 → 価格順
+    // カテゴリの表示順序設定を取得
+    const catalogType = activeTab === 'exterior' || activeTab === 'design' ? 'exterior'
+      : activeTab === 'interior' ? 'interior'
+      : activeTab === 'equipment' ? 'water'
+      : activeTab === 'electrical' ? 'electrical'
+      : 'furniture';
+    const categoryOrderConfig = getCategoryOrderConfig(catalogType);
+
+    // 選択中カテゴリのサブカテゴリ順序を取得
+    const selectedCategoryConfig = categoryOrderConfig.find(c =>
+      filtered[0]?.category?.name === c.name ||
+      (filtered[0]?.category?.name && c.name.includes(filtered[0].category.name))
+    );
+    const subcategoryOrder = selectedCategoryConfig?.subcategoryOrder || [];
+
+    // ソート: サブカテゴリ順序 → 標準品優先 → 価格順
     return filtered.sort((a, b) => {
-      // 1. サブカテゴリでグループ化
-      const subA = a.category_name || '';
-      const subB = b.category_name || '';
-      if (subA !== subB) return subA.localeCompare(subB, 'ja');
+      // 1. サブカテゴリを定義順にソート（定義されていない場合は後ろ）
+      const subA = a.category_name || a.name || '';
+      const subB = b.category_name || b.name || '';
+      if (subA !== subB) {
+        const orderA = subcategoryOrder.findIndex(s => subA.includes(s) || s.includes(subA));
+        const orderB = subcategoryOrder.findIndex(s => subB.includes(s) || s.includes(subB));
+        // 定義されていないものは後ろに
+        const effectiveOrderA = orderA === -1 ? 999 : orderA;
+        const effectiveOrderB = orderB === -1 ? 999 : orderB;
+        if (effectiveOrderA !== effectiveOrderB) return effectiveOrderA - effectiveOrderB;
+        // 同じ順序の場合は日本語順
+        return subA.localeCompare(subB, 'ja');
+      }
 
       // 2. 標準品を先に
       const pricingA = a.pricing?.find(p => p.product?.code === selectedPlanId);
@@ -812,7 +837,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
       // 4. 商品名順
       return (a.name || '').localeCompare(b.name || '', 'ja');
     });
-  }, [items, debouncedSearchTerm, filterType, selectedPlanId, selectedMaterialType, selectedSubcategory, selectedColor, priceMax, showFavoritesOnly, favorites, hideDiscontinued, needsManufacturerSelection, selectedManufacturer, selectedSeries]);
+  }, [items, debouncedSearchTerm, filterType, selectedPlanId, selectedMaterialType, selectedSubcategory, selectedColor, priceMax, showFavoritesOnly, favorites, hideDiscontinued, needsManufacturerSelection, selectedManufacturer, selectedSeries, activeTab]);
 
   // ページネーション計算
   const totalPages = Math.ceil(filteredItems.length / itemsPerPage);

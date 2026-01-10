@@ -6,10 +6,10 @@ import type { Product } from '../../types/product';
 
 // ドアデザイン定義（4種類）
 const DOOR_DESIGNS = [
-  { id: 'N08', name: 'N08', description: '木目の水平線が印象的', productId: 'ext-door-n08' },
-  { id: 'N18', name: 'N18', description: '框とくふなバランスが印象的', productId: 'ext-door-n18' },
-  { id: 'N15', name: 'N15', description: '木目の水平線が印象的', productId: 'ext-door-n15' },
-  { id: 'C10', name: 'C10', description: 'プレーンデザイン', productId: 'ext-door-c10' },
+  { id: 'N08', name: 'N08', description: '木目の水平線が印象的', productId: 'ext-door-venato-d30-n08' },
+  { id: 'N18', name: 'N18', description: '框とくふなバランスが印象的', productId: 'ext-door-venato-d30-n18' },
+  { id: 'N15', name: 'N15', description: '木目の水平線が印象的', productId: 'ext-door-venato-d30-n15' },
+  { id: 'C10', name: 'C10', description: 'プレーンデザイン', productId: 'ext-door-venato-d30-c10' },
 ];
 
 // 鍵の種類定義（3パターン）

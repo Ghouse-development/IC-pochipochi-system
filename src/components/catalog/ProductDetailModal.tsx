@@ -18,6 +18,7 @@ import { useTimeout } from '../../hooks/useTimeout';
 import { RecommendationPanel } from '../customer/RecommendationPanel';
 import { useWarningCheck } from '../common/MaterialWarningSystem';
 import { useActivityLogger } from '../../hooks/useActivityLogger';
+import { isPeripheralCategory, sortColorsByRecommendation, getColorRecommendationLabel } from '../../config/colorRecommendation';
 
 interface ProductDetailModalProps {
   product: Product | null;
@@ -135,6 +136,40 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   const cartProductIds = useMemo(() => {
     return new Set(items.map(item => item.product.id));
   }, [items]);
+
+  // 床色からの色おすすめ情報を取得
+  const floorColorInfo = useMemo(() => {
+    // 周辺部材カテゴリかどうかをチェック
+    if (!product || !isPeripheralCategory(product.categoryName, product.subcategory)) {
+      return null;
+    }
+
+    // カートから床材（ベース床）を取得
+    const floorItem = items.find(
+      item => item.product.categoryName === 'ベース床'
+    );
+
+    if (!floorItem || !floorItem.selectedVariant?.color) {
+      return null;
+    }
+
+    const floorColor = floorItem.selectedVariant.color;
+    const sortedVariants = sortColorsByRecommendation(
+      product.variants.map(v => ({ id: v.id, color: v.color })),
+      floorColor
+    );
+
+    return {
+      floorColor,
+      label: getColorRecommendationLabel(floorColor),
+      recommendedVariantIds: new Set(
+        sortedVariants.filter(v => v.isRecommended).map(v => v.id)
+      ),
+      primaryVariantIds: new Set(
+        sortedVariants.filter(v => v.isPrimary).map(v => v.id)
+      )
+    };
+  }, [product, items]);
 
   // レコメンド商品選択ハンドラ
   const handleRecommendedProductSelect = useCallback((recProduct: Product, recVariant?: ProductVariant) => {
@@ -287,23 +322,46 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                   <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200 mb-3">
                     カラー選択 <span className="text-gray-400 dark:text-gray-500 font-normal">（{product.variants.length}色）</span>
                   </h3>
+                  {/* 床色に合わせたおすすめ表示 */}
+                  {floorColorInfo && (
+                    <div className="mb-3 p-3 bg-amber-50 dark:bg-amber-900/30 rounded-lg border border-amber-200 dark:border-amber-700">
+                      <p className="text-sm text-amber-800 dark:text-amber-200 flex items-center gap-2">
+                        <span className="text-base">💡</span>
+                        <span>床色「{floorColorInfo.floorColor}」に合わせて</span>
+                        <span className="font-bold">おすすめ</span>
+                        <span>を表示中</span>
+                      </p>
+                    </div>
+                  )}
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-48 overflow-y-auto p-1">
                     {product.variants.map((v) => {
                       const hexColor = getHexColor(v.colorCode) !== '#CCCCCC'
                         ? getHexColor(v.colorCode)
                         : getHexColor(v.color);
                       const isSelected = variant?.id === v.id;
+                      const isPrimaryRecommended = floorColorInfo?.primaryVariantIds.has(v.id);
+                      const isRecommended = floorColorInfo?.recommendedVariantIds.has(v.id);
                       return (
                         <button
                           key={v.id}
                           onClick={() => setSelectedVariant(v)}
                           className={cn(
-                            'flex items-center gap-2 p-3 rounded-xl border-2 transition-all text-left',
+                            'flex items-center gap-2 p-3 rounded-xl border-2 transition-all text-left relative',
                             isSelected
                               ? 'border-teal-500 bg-teal-50 dark:bg-teal-900/30 shadow-md'
+                              : isPrimaryRecommended
+                              ? 'border-amber-400 bg-amber-50 dark:bg-amber-900/20 hover:border-amber-500'
+                              : isRecommended
+                              ? 'border-amber-200 hover:border-amber-300 dark:border-amber-700 dark:hover:border-amber-600'
                               : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700'
                           )}
                         >
+                          {/* おすすめバッジ */}
+                          {isPrimaryRecommended && (
+                            <span className="absolute -top-2 -right-2 px-1.5 py-0.5 bg-amber-500 text-white text-[10px] font-bold rounded-full shadow">
+                              おすすめ
+                            </span>
+                          )}
                           <div
                             className="w-8 h-8 rounded-lg border border-gray-300 shadow-inner flex-shrink-0"
                             style={{ backgroundColor: hexColor }}

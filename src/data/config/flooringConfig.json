@@ -1,0 +1,297 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2026-01-10",
+  "note": "フローリング設定（ノーコードメンテナンス用）価格変更・色追加はこのファイルを編集",
+
+  "flooringProducts": [
+    {
+      "id": "veritis-basecoat",
+      "name": "ベリティスフロアーベースコート",
+      "manufacturer": "Panasonic",
+      "modelNumber": "VERITIS-BC",
+      "materialType": "シート",
+      "isOption": false,
+      "description": "豊富な色柄を揃えたシートフロアー ワックス不要 抗菌効果 汚れ・すり傷・凹み・キャスターに強い",
+      "colors": [
+        "ウォールナット柄",
+        "チェリー柄",
+        "オーク柄",
+        "メープル柄",
+        "エイジドチーク柄",
+        "エイジドチェスナット柄",
+        "カームチェリー柄",
+        "グレージュヒッコリー柄",
+        "ウォッシュドオーク柄",
+        "ホワイトオーク柄",
+        "アイボリーアッシュ柄"
+      ],
+      "pricing": {
+        "LACIE": 0,
+        "HOURS": 0,
+        "LIFE+": 0,
+        "LIFE": 0
+      }
+    },
+    {
+      "id": "live-natural-mrx",
+      "name": "ライブナチュラルMRX 2P",
+      "manufacturer": "朝日ウッドテック",
+      "modelNumber": "MRX-2P",
+      "materialType": "突板",
+      "isOption": false,
+      "description": "突き板仕様 床厚12mm マット塗装 フリーワックス ホットカーペット対応 ヒビワレ防止 耐凹み傷 抗ウイルス 耐摩擦",
+      "colors": [
+        "ブラックチェリー",
+        "ハードメイプル",
+        "ブラックウォルナット",
+        "オーク"
+      ],
+      "pricing": {
+        "LACIE": 0,
+        "HOURS": 0,
+        "LIFE+": 0,
+        "LIFE": 0
+      }
+    },
+    {
+      "id": "live-natural-msx",
+      "name": "ライブナチュラルMSX/MSX-L",
+      "manufacturer": "朝日ウッドテック",
+      "modelNumber": "MSX/MSX-L",
+      "materialType": "突板",
+      "isOption": true,
+      "description": "突き板フローリング 12mm厚 マット塗装 フリーワックス ホットカーペット対応 抗ウイルス",
+      "colors": [
+        "ブラックチェリー",
+        "ハードメイプル",
+        "シカモア",
+        "ブラックウォルナット",
+        "バーチ",
+        "オーク",
+        "アカシア（3P）",
+        "ドライメイプル",
+        "ドライウォルナット",
+        "ドライオーク",
+        "シュガーホワイト（アッシュ）",
+        "ライトグレー（オーク）",
+        "ミッドグレー（オーク）"
+      ],
+      "pricing": {
+        "LACIE": 3000,
+        "HOURS": 3000,
+        "LIFE+": 3000,
+        "LIFE": 3000
+      }
+    },
+    {
+      "id": "meisters-wood",
+      "name": "マイスターズウッドフロアー ハードコートクリア",
+      "manufacturer": "Panasonic",
+      "modelNumber": "MEISTERS-HC",
+      "materialType": "突板",
+      "isOption": true,
+      "description": "天然木突き板 ワックス不要 抗菌効果 汚れ・すり傷・凹み・キャスターに強い",
+      "colors": [
+        "ウォールナットクリア",
+        "アカシアクリア",
+        "バーチラスティッククリア",
+        "バーチクリア",
+        "アッシュクリア",
+        "メープルクリア",
+        "ハードメープル"
+      ],
+      "pricing": {
+        "LACIE": 3000,
+        "HOURS": 3000,
+        "LIFE+": 3000,
+        "LIFE": 3000
+      }
+    },
+    {
+      "id": "meiboku-rustic",
+      "name": "銘木フロアーラスティック 2P",
+      "manufacturer": "イクタ",
+      "modelNumber": "MEIBOKU-RUSTIC",
+      "materialType": "突板",
+      "isOption": true,
+      "description": "突き板12mm厚 オイル風合いラスティック塗装 「空気を洗う」健康フローリング 消臭・ウイルス低減・VOC低減効果",
+      "colors": [
+        "ウォルナット",
+        "ブラックチェリー",
+        "イタヤカエデ",
+        "ナラ樫",
+        "チーク",
+        "アカシア",
+        "ハードメープル"
+      ],
+      "pricing": {
+        "LACIE": 3000,
+        "HOURS": 3000,
+        "LIFE+": 3000,
+        "LIFE": 3000
+      }
+    },
+    {
+      "id": "crude-303",
+      "name": "クルードフローリング303",
+      "manufacturer": "イクタ",
+      "modelNumber": "CRUDE-303",
+      "materialType": "シート",
+      "isOption": true,
+      "description": "水廻り専用フローリング 素材の美しさを打ち出したマットな風合い 抗ウイルス・抗菌 消臭効果 ※水廻り以外でご使用される場合は追加費用",
+      "colors": [
+        "ピエトラホワイト",
+        "ピエトラグレー",
+        "ピエトラブラック",
+        "テラゾーホワイト",
+        "テラゾーグレー",
+        "グランモルタル"
+      ],
+      "pricing": {
+        "LACIE": 5000,
+        "HOURS": 5000,
+        "LIFE+": 2000,
+        "LIFE": 2000
+      }
+    },
+    {
+      "id": "meiboku-aging",
+      "name": "銘木フロアーラスティック エイジング 2P",
+      "manufacturer": "イクタ",
+      "modelNumber": "MEIBOKU-AGING",
+      "materialType": "突板",
+      "isOption": true,
+      "description": "突き板12mm厚 木目を強く打ち出したエイジング仕上げ ※塗装品のため近似色塗装になります",
+      "colors": [
+        "エイジングナチュラル",
+        "エイジングホワイト",
+        "エイジングタイガ",
+        "エイジングカフェ",
+        "エイジングビター"
+      ],
+      "pricing": {
+        "LACIE": 6000,
+        "HOURS": 3000,
+        "LIFE+": 3000,
+        "LIFE": 3000
+      }
+    },
+    {
+      "id": "vintage-rustic",
+      "name": "ビンテージフロアーラスティック 2P",
+      "manufacturer": "イクタ",
+      "modelNumber": "VINTAGE-RUSTIC",
+      "materialType": "挽板",
+      "isOption": true,
+      "description": "挽き板12mm厚 天然木ならではの色味や節、自然の趣を感じられるフロア 「空気を洗う」健康フローリング",
+      "colors": [
+        "チーク",
+        "ウォルナット",
+        "ブラックチェリー",
+        "ナラ",
+        "カエデ"
+      ],
+      "pricing": {
+        "LACIE": 13000,
+        "HOURS": 10000,
+        "LIFE+": 10000,
+        "LIFE": 10000
+      }
+    },
+    {
+      "id": "live-natural-premium",
+      "name": "ライブナチュラルプレミアム ラスティック 2P",
+      "manufacturer": "朝日ウッドテック",
+      "modelNumber": "LIVNATURAL-PREMIUM",
+      "materialType": "挽板",
+      "isOption": true,
+      "description": "挽き板12mm厚 天然木が持つ、木それぞれの個性を美しく表現したフロア GOOD DESIGN賞受賞",
+      "colors": [
+        "ブラックチェリー",
+        "ハードメイプル",
+        "ブラックウォルナット",
+        "オークN45°",
+        "バーチ"
+      ],
+      "pricing": {
+        "LACIE": 16000,
+        "HOURS": 13000,
+        "LIFE+": 13000,
+        "LIFE": 13000
+      }
+    }
+  ],
+
+  "entranceFrame": {
+    "standard": {
+      "id": "entrance-frame-std",
+      "name": "玄関框（フローリング色合わせ）",
+      "manufacturer": "Panasonic/朝日ウッドテック",
+      "modelNumber": "ENTRANCE-FRAME-STD",
+      "isOption": false,
+      "description": "ご選択いただいたフローリング色合わせとなります ※付け框30×150となります"
+    },
+    "option": [
+      {
+        "id": "entrance-frame-prairie-18",
+        "name": "玄関框（プレイリーホームズ）〜1.8m迄",
+        "manufacturer": "プレイリーホームズ",
+        "modelNumber": "PRAIRIE-FRAME-18",
+        "description": "6mmという美薄、シンプルスマートの新しい提案",
+        "colors": ["ゴム ウレタンブラック", "ゴム ウレタンホワイト"],
+        "pricing": {
+          "LACIE": 24000,
+          "HOURS": 24000,
+          "LIFE+": 24000,
+          "LIFE": 24000
+        }
+      },
+      {
+        "id": "entrance-frame-prairie-28",
+        "name": "玄関框（プレイリーホームズ）〜2.8m迄",
+        "manufacturer": "プレイリーホームズ",
+        "modelNumber": "PRAIRIE-FRAME-28",
+        "description": "6mmという美薄、シンプルスマートの新しい提案",
+        "colors": ["ゴム ウレタンブラック", "ゴム ウレタンホワイト"],
+        "pricing": {
+          "LACIE": 36000,
+          "HOURS": 36000,
+          "LIFE+": 36000,
+          "LIFE": 36000
+        }
+      }
+    ]
+  },
+
+  "floorTrim": {
+    "id": "flatbar",
+    "name": "床見切り（フラットバー）",
+    "manufacturer": "Gハウス",
+    "modelNumber": "FLATBAR",
+    "isOption": false,
+    "description": "フローリングと異素材の床材との間に納まる部材です ※シルバーのみ",
+    "colors": ["シルバー"]
+  },
+
+  "cfSheet": {
+    "id": "cf-sheet",
+    "name": "CFシート",
+    "manufacturer": "東リ",
+    "modelNumber": "CF-SHEET",
+    "isOption": true,
+    "description": "防水性、クッション性に優れたビニール系のシート床材 手入れも手軽で汚れも落としやすい ※水廻り専用のため、水廻り以外でご使用される場合は追加費用",
+    "colors": [
+      "CF3738", "CF3739", "CF3746", "CF3747",
+      "CF3751", "CF3752", "CF3761", "CF3764", "CF3770",
+      "CF9616", "CF9617", "CF9618", "CF9645", "CF9647",
+      "CF9649", "CF9650", "CF9655", "CF9664", "CF9679",
+      "CF9689", "CF9690", "CF9691", "CF9693", "CF9694", "CF9696"
+    ],
+    "pricing": {
+      "LACIE": 0,
+      "HOURS": 0,
+      "LIFE+": 3000,
+      "LIFE": 3000
+    }
+  }
+}

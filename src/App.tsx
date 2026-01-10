@@ -11,6 +11,7 @@ import { LoginPage } from './pages/LoginPage';
 import { Header } from './components/layout/Header';
 import { CatalogWithTabs } from './components/catalog/CatalogWithTabs';
 import { CartSidebarEnhanced } from './components/cart/CartSidebarEnhanced';
+import { SelectedItemsBar } from './components/catalog/SelectedItemsBar';
 import { ConfirmOrderModal } from './components/catalog/ConfirmOrderModal';
 import { ShareModal } from './components/common/ShareModal';
 import { ProductCompareModal } from './components/catalog/ProductCompareModal';
@@ -226,6 +227,9 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
       <div className="fixed bottom-4 left-4 bg-white px-3 py-1 rounded-lg shadow-md text-xs text-gray-600 z-30">
         Ver. {currentVersion}
       </div>
+
+      {/* 選択済みアイテムバー（クイック解除用） */}
+      <SelectedItemsBar />
 
       <CartSidebarEnhanced isOpen={isCartOpen} onClose={handleCartClose} />
 

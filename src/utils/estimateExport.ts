@@ -1,4 +1,4 @@
-// 見積書Excel出力ユーティリティ（ExcelJS版）
+// 見積書Excel出力ユーティリティ（Gハウスフォーマット版）
 import ExcelJS from 'exceljs';
 import type { CartItem, PlanType } from '../types/product';
 import type { CategorySelection } from '../stores/useSelectionStore';
@@ -37,6 +37,7 @@ export interface EstimateData {
 
 interface EstimateItem {
   category: string;
+  subcategory: string;
   name: string;
   manufacturer: string;
   modelNumber: string;
@@ -47,12 +48,29 @@ interface EstimateItem {
   totalPrice: number;
   isOption: boolean;
   appliedRooms?: string[];
-}
-
-interface NotNeededCategory {
-  categoryName: string;
   note?: string;
 }
+
+// 6つの大カテゴリ定義
+const MAJOR_CATEGORIES = [
+  { id: 'design', name: '設計変更', keywords: ['換気システム', '太陽光', '蓄電池', 'V2H', 'インターホン個数'] },
+  { id: 'design_equipment', name: '設計変更 設備', keywords: ['給湯器', 'エコキュート', 'エコジョーズ'] },
+  { id: 'exterior', name: '外装工事', keywords: ['外壁', '屋根', '軒天', '窓', '玄関ドア', '外部設備', 'ポーチ', '庇', 'ガレージ', '破風', '樋', '水切', '換気ガラリ', '換気フード'] },
+  { id: 'interior', name: '内装工事', keywords: ['床', 'クロス', '建具', '収納', '階段', '手摺', '室内窓', '造作', 'カウンター', '間仕切り'] },
+  { id: 'water', name: '水廻り設備', keywords: ['キッチン', 'バス', '洗面', 'トイレ', 'ランドリー'] },
+  { id: 'electrical', name: '照明・エアコン・カーテン', keywords: ['照明', 'スイッチ', 'コンセント', 'インターホン', '電気', 'IoT', 'セキュリティ', 'カーテン', 'エアコン', 'ブラインド'] },
+  { id: 'furniture', name: '家具', keywords: ['家具', '家電', 'テーブル', 'ソファ', 'ベッド'] },
+];
+
+// カテゴリを大分類に分類
+const categorizeMajor = (categoryName: string): string => {
+  for (const major of MAJOR_CATEGORIES) {
+    if (major.keywords.some(k => categoryName.includes(k))) {
+      return major.id;
+    }
+  }
+  return 'exterior'; // default
+};
 
 // カートアイテムを見積書用に変換
 const convertToEstimateItems = (
@@ -71,43 +89,34 @@ const convertToEstimateItems = (
 
     return {
       category: categoryName,
+      subcategory: item.product.subcategory || '',
       name: item.product.name,
       manufacturer: item.product.manufacturer || '',
       modelNumber: item.product.modelNumber || '',
-      variant: item.selectedVariant?.color || 'デフォルト',
+      variant: item.selectedVariant?.color || '',
       unit: item.product.unit || '式',
       quantity: item.quantity,
       unitPrice,
       totalPrice: unitPrice * item.quantity,
       isOption: item.product.isOption || false,
       appliedRooms,
+      note: '',
     };
   });
 };
 
-// 「不要」選択カテゴリを抽出
-const extractNotNeededCategories = (
-  selections?: Record<string, CategorySelection>
-): NotNeededCategory[] => {
-  if (!selections) return [];
-  return Object.entries(selections)
-    .filter(([, sel]) => sel.status === 'not_needed')
-    .map(([categoryName, sel]) => ({ categoryName, note: sel.note }));
+// 和暦日付フォーマット (R8.1.6 形式)
+const formatJapaneseDate = (date: Date): string => {
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+
+  // 令和計算 (2019年5月1日から)
+  const reiwaYear = year - 2018;
+  return `R${reiwaYear}.${month}.${day}`;
 };
 
-// カテゴリ別にグループ化
-const groupByCategory = (items: EstimateItem[]): Map<string, EstimateItem[]> => {
-  const grouped = new Map<string, EstimateItem[]>();
-  items.forEach(item => {
-    const category = item.category;
-    const arr = grouped.get(category) ?? [];
-    arr.push(item);
-    grouped.set(category, arr);
-  });
-  return grouped;
-};
-
-// 日付をフォーマット
+// 通常の日付フォーマット
 const formatDate = (date: Date): string => {
   return new Intl.DateTimeFormat('ja-JP', {
     year: 'numeric',
@@ -116,8 +125,27 @@ const formatDate = (date: Date): string => {
   }).format(date);
 };
 
+// 大分類別にグループ化
+const groupByMajorCategory = (items: EstimateItem[]): Map<string, EstimateItem[]> => {
+  const grouped = new Map<string, EstimateItem[]>();
+
+  // 初期化
+  MAJOR_CATEGORIES.forEach(cat => {
+    grouped.set(cat.id, []);
+  });
+
+  items.forEach(item => {
+    const majorId = categorizeMajor(item.category);
+    const arr = grouped.get(majorId) ?? [];
+    arr.push(item);
+    grouped.set(majorId, arr);
+  });
+
+  return grouped;
+};
+
 // ========================================
-// Excel出力（ExcelJS版）
+// Gハウス見積書フォーマット Excel出力
 // ========================================
 export const generateEstimateExcel = async (data: EstimateData): Promise<Blob> => {
   const workbook = new ExcelJS.Workbook();
@@ -125,330 +153,377 @@ export const generateEstimateExcel = async (data: EstimateData): Promise<Blob> =
   workbook.created = new Date();
 
   const createdAt = data.createdAt || new Date();
-  const validUntil = new Date(createdAt);
-  validUntil.setDate(validUntil.getDate() + (data.validDays || 30));
-
   const estimateItems = convertToEstimateItems(data.items, data.planType, data.selections);
-  const groupedItems = groupByCategory(estimateItems);
-  const notNeededCategories = extractNotNeededCategories(data.selections);
 
-  // 合計計算
-  const standardTotal = estimateItems
-    .filter(item => !item.isOption)
-    .reduce((sum, item) => sum + item.totalPrice, 0);
-  const optionTotal = estimateItems
-    .filter(item => item.isOption)
-    .reduce((sum, item) => sum + item.totalPrice, 0);
-  const grandTotal = standardTotal + optionTotal;
+  // 0円以外のアイテムのみ
+  const filteredItems = estimateItems.filter(item => item.totalPrice > 0);
+  const groupedItems = groupByMajorCategory(filteredItems);
+
+  // 各カテゴリの合計計算
+  const categoryTotals: Record<string, number> = {};
+  groupedItems.forEach((items, categoryId) => {
+    categoryTotals[categoryId] = items.reduce((sum, item) => sum + item.totalPrice, 0);
+  });
+
+  const grandTotal = Object.values(categoryTotals).reduce((sum, v) => sum + v, 0);
   const taxRate = 0.1;
   const taxAmount = Math.floor(grandTotal * taxRate);
   const totalWithTax = grandTotal + taxAmount;
 
-  // ========== 見積書シート ==========
-  const sheet = workbook.addWorksheet('見積書', {
+  // ========================================
+  // 表紙シート
+  // ========================================
+  const coverSheet = workbook.addWorksheet('表紙', {
     pageSetup: {
       paperSize: 9, // A4
       orientation: 'portrait',
       fitToPage: true,
       fitToWidth: 1,
-      margins: { left: 0.5, right: 0.5, top: 0.75, bottom: 0.75, header: 0.3, footer: 0.3 }
+      margins: { left: 0.7, right: 0.7, top: 0.75, bottom: 0.75, header: 0.3, footer: 0.3 }
     }
   });
 
-  // カラム幅設定
-  sheet.columns = [
-    { width: 15 },  // A: カテゴリ
-    { width: 28 },  // B: 商品名
-    { width: 12 },  // C: メーカー
-    { width: 15 },  // D: 型番
-    { width: 12 },  // E: バリアント
-    { width: 15 },  // F: 適用部屋
-    { width: 6 },   // G: 単位
-    { width: 6 },   // H: 数量
-    { width: 12 },  // I: 単価
-    { width: 12 },  // J: 金額
-    { width: 8 },   // K: 区分
+  // 列幅設定（A4に最適化）
+  coverSheet.columns = [
+    { width: 4 },   // A
+    { width: 8 },   // B
+    { width: 12 },  // C
+    { width: 12 },  // D
+    { width: 12 },  // E
+    { width: 12 },  // F
+    { width: 12 },  // G
+    { width: 12 },  // H
+    { width: 4 },   // I
   ];
 
-  let rowNum = 1;
+  let row = 1;
 
-  // ----- タイトル -----
-  sheet.mergeCells(`A${rowNum}:K${rowNum}`);
-  const titleCell = sheet.getCell(`A${rowNum}`);
-  titleCell.value = '御 見 積 書';
-  titleCell.font = { size: 24, bold: true };
+  // 余白
+  coverSheet.getRow(row).height = 30;
+  row++;
+
+  // タイトル「工事御見積書」
+  coverSheet.mergeCells(`B${row}:H${row}`);
+  const titleCell = coverSheet.getCell(`B${row}`);
+  titleCell.value = '工 事 御 見 積 書';
+  titleCell.font = { name: 'ＭＳ 明朝', size: 28, bold: true };
   titleCell.alignment = { horizontal: 'center', vertical: 'middle' };
-  sheet.getRow(rowNum).height = 40;
-  rowNum += 2;
+  coverSheet.getRow(row).height = 50;
+  row++;
 
-  // ----- 顧客情報 -----
-  sheet.mergeCells(`A${rowNum}:D${rowNum}`);
-  const customerCell = sheet.getCell(`A${rowNum}`);
-  customerCell.value = `${data.customerName || 'お客様'} 様`;
-  customerCell.font = { size: 16, bold: true };
+  // 余白
+  row++;
+
+  // サブタイトル「契約後打合せ変更見積」
+  coverSheet.mergeCells(`B${row}:H${row}`);
+  const subtitleCell = coverSheet.getCell(`B${row}`);
+  subtitleCell.value = '契約後打合せ変更見積';
+  subtitleCell.font = { name: 'ＭＳ ゴシック', size: 14 };
+  subtitleCell.alignment = { horizontal: 'center', vertical: 'middle' };
+  coverSheet.getRow(row).height = 25;
+  row++;
+
+  // 余白
+  row++;
+
+  // 顧客名
+  coverSheet.mergeCells(`B${row}:H${row}`);
+  const customerCell = coverSheet.getCell(`B${row}`);
+  const addressPart = data.constructionAddress ? `${data.constructionAddress} ・ ` : '';
+  customerCell.value = `${addressPart}${data.customerName} 邸`;
+  customerCell.font = { name: 'ＭＳ ゴシック', size: 16, bold: true };
+  customerCell.alignment = { horizontal: 'center', vertical: 'middle' };
   customerCell.border = { bottom: { style: 'double', color: { argb: '000000' } } };
+  coverSheet.getRow(row).height = 35;
+  row += 2;
 
-  sheet.getCell(`J${rowNum}`).value = '作成日:';
-  sheet.getCell(`K${rowNum}`).value = formatDate(createdAt);
-  sheet.getCell(`K${rowNum}`).alignment = { horizontal: 'right' };
-  rowNum++;
+  // 作成日
+  coverSheet.getCell(`G${row}`).value = '見積作成日';
+  coverSheet.getCell(`G${row}`).font = { name: 'ＭＳ ゴシック', size: 10 };
+  coverSheet.getCell(`H${row}`).value = formatDate(createdAt);
+  coverSheet.getCell(`H${row}`).font = { name: 'ＭＳ ゴシック', size: 10 };
+  coverSheet.getCell(`H${row}`).alignment = { horizontal: 'right' };
+  row += 2;
 
-  sheet.getCell(`A${rowNum}`).value = `物件名: ${data.projectName || ''}`;
-  sheet.getCell(`J${rowNum}`).value = '有効期限:';
-  sheet.getCell(`K${rowNum}`).value = formatDate(validUntil);
-  sheet.getCell(`K${rowNum}`).alignment = { horizontal: 'right' };
-  rowNum++;
+  // 合計金額ボックス
+  coverSheet.mergeCells(`C${row}:G${row}`);
+  const totalLabelCell = coverSheet.getCell(`C${row}`);
+  totalLabelCell.value = '合計金額（税込）';
+  totalLabelCell.font = { name: 'ＭＳ ゴシック', size: 12 };
+  totalLabelCell.alignment = { horizontal: 'center', vertical: 'middle' };
+  totalLabelCell.border = {
+    top: { style: 'medium' },
+    left: { style: 'medium' },
+    right: { style: 'medium' },
+  };
+  totalLabelCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'F0F0F0' } };
+  coverSheet.getRow(row).height = 25;
+  row++;
 
-  if (data.projectCode) {
-    sheet.getCell(`A${rowNum}`).value = `物件コード: ${data.projectCode}`;
-    rowNum++;
-  }
-  if (data.constructionAddress) {
-    sheet.getCell(`A${rowNum}`).value = `建築地: ${data.constructionAddress}`;
-    rowNum++;
-  }
-  rowNum++;
+  coverSheet.mergeCells(`C${row}:G${row}`);
+  const totalValueCell = coverSheet.getCell(`C${row}`);
+  totalValueCell.value = `¥ ${totalWithTax.toLocaleString()} -`;
+  totalValueCell.font = { name: 'ＭＳ 明朝', size: 24, bold: true };
+  totalValueCell.alignment = { horizontal: 'center', vertical: 'middle' };
+  totalValueCell.border = {
+    bottom: { style: 'medium' },
+    left: { style: 'medium' },
+    right: { style: 'medium' },
+  };
+  coverSheet.getRow(row).height = 45;
+  row++;
 
-  // ----- プラン情報 -----
-  sheet.mergeCells(`A${rowNum}:K${rowNum}`);
-  const planCell = sheet.getCell(`A${rowNum}`);
-  planCell.value = `プラン: ${data.planName || data.planType}`;
-  planCell.font = { size: 12, bold: true, color: { argb: 'FFFFFF' } };
-  planCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '14B8A6' } };
-  planCell.alignment = { horizontal: 'center', vertical: 'middle' };
-  sheet.getRow(rowNum).height = 28;
-  rowNum += 2;
+  // 消費税注記
+  coverSheet.mergeCells(`C${row}:G${row}`);
+  const taxNoteCell = coverSheet.getCell(`C${row}`);
+  taxNoteCell.value = `上記金額には消費税 10％ ¥ ${taxAmount.toLocaleString()} を含みます。`;
+  taxNoteCell.font = { name: 'ＭＳ ゴシック', size: 10 };
+  taxNoteCell.alignment = { horizontal: 'center', vertical: 'middle' };
+  row += 2;
 
-  // ----- 合計金額ボックス -----
-  sheet.mergeCells(`A${rowNum}:K${rowNum + 1}`);
-  const totalBox = sheet.getCell(`A${rowNum}`);
-  totalBox.value = `合計金額（税込）: ¥${totalWithTax.toLocaleString()}`;
-  totalBox.font = { size: 20, bold: true, color: { argb: 'FFFFFF' } };
-  totalBox.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '1E3A8A' } };
-  totalBox.alignment = { horizontal: 'center', vertical: 'middle' };
-  sheet.getRow(rowNum).height = 25;
-  sheet.getRow(rowNum + 1).height = 25;
-  rowNum += 2;
+  // カテゴリ別サマリーテーブル
+  const summaryHeaders = ['カテゴリ', '金額'];
 
-  // 内訳
-  sheet.getCell(`A${rowNum}`).value = '標準仕様:';
-  sheet.getCell(`B${rowNum}`).value = `¥${standardTotal.toLocaleString()}`;
-  sheet.getCell(`C${rowNum}`).value = 'オプション:';
-  sheet.getCell(`D${rowNum}`).value = `¥${optionTotal.toLocaleString()}`;
-  sheet.getCell(`E${rowNum}`).value = '消費税(10%):';
-  sheet.getCell(`F${rowNum}`).value = `¥${taxAmount.toLocaleString()}`;
-  sheet.getRow(rowNum).font = { size: 10 };
-  rowNum += 2;
+  // ヘッダー
+  coverSheet.getCell(`C${row}`).value = summaryHeaders[0];
+  coverSheet.getCell(`C${row}`).font = { name: 'ＭＳ ゴシック', size: 10, bold: true };
+  coverSheet.getCell(`C${row}`).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'E0E0E0' } };
+  coverSheet.getCell(`C${row}`).alignment = { horizontal: 'center' };
+  coverSheet.getCell(`C${row}`).border = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
 
-  // ----- 明細ヘッダー -----
-  const headerRow = sheet.getRow(rowNum);
-  const headers = ['カテゴリ', '商品名', 'メーカー', '型番', 'カラー', '適用部屋', '単位', '数量', '単価', '金額', '区分'];
-  headers.forEach((header, i) => {
-    const cell = headerRow.getCell(i + 1);
-    cell.value = header;
-    cell.font = { bold: true, color: { argb: 'FFFFFF' }, size: 10 };
-    cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '374151' } };
-    cell.alignment = { horizontal: 'center', vertical: 'middle' };
-    cell.border = {
+  coverSheet.mergeCells(`D${row}:F${row}`);
+  coverSheet.getCell(`D${row}`).value = '';
+  coverSheet.getCell(`D${row}`).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'E0E0E0' } };
+  coverSheet.getCell(`D${row}`).border = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
+
+  coverSheet.getCell(`G${row}`).value = summaryHeaders[1];
+  coverSheet.getCell(`G${row}`).font = { name: 'ＭＳ ゴシック', size: 10, bold: true };
+  coverSheet.getCell(`G${row}`).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'E0E0E0' } };
+  coverSheet.getCell(`G${row}`).alignment = { horizontal: 'center' };
+  coverSheet.getCell(`G${row}`).border = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
+  row++;
+
+  // カテゴリ行
+  MAJOR_CATEGORIES.forEach(cat => {
+    const total = categoryTotals[cat.id] || 0;
+    if (total > 0) {
+      coverSheet.getCell(`C${row}`).value = cat.name;
+      coverSheet.getCell(`C${row}`).font = { name: 'ＭＳ ゴシック', size: 10 };
+      coverSheet.getCell(`C${row}`).border = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
+
+      coverSheet.mergeCells(`D${row}:F${row}`);
+      coverSheet.getCell(`D${row}`).border = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
+
+      coverSheet.getCell(`G${row}`).value = total;
+      coverSheet.getCell(`G${row}`).numFmt = '¥#,##0';
+      coverSheet.getCell(`G${row}`).font = { name: 'ＭＳ ゴシック', size: 10 };
+      coverSheet.getCell(`G${row}`).alignment = { horizontal: 'right' };
+      coverSheet.getCell(`G${row}`).border = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
+      row++;
+    }
+  });
+
+  // 工事金額合計
+  coverSheet.getCell(`C${row}`).value = '工事金額';
+  coverSheet.getCell(`C${row}`).font = { name: 'ＭＳ ゴシック', size: 10, bold: true };
+  coverSheet.getCell(`C${row}`).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFF99' } };
+  coverSheet.getCell(`C${row}`).border = { top: { style: 'medium' }, bottom: { style: 'medium' }, left: { style: 'medium' }, right: { style: 'thin' } };
+
+  coverSheet.mergeCells(`D${row}:F${row}`);
+  coverSheet.getCell(`D${row}`).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFF99' } };
+  coverSheet.getCell(`D${row}`).border = { top: { style: 'medium' }, bottom: { style: 'medium' }, left: { style: 'thin' }, right: { style: 'thin' } };
+
+  coverSheet.getCell(`G${row}`).value = grandTotal;
+  coverSheet.getCell(`G${row}`).numFmt = '¥#,##0';
+  coverSheet.getCell(`G${row}`).font = { name: 'ＭＳ ゴシック', size: 11, bold: true };
+  coverSheet.getCell(`G${row}`).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFF99' } };
+  coverSheet.getCell(`G${row}`).alignment = { horizontal: 'right' };
+  coverSheet.getCell(`G${row}`).border = { top: { style: 'medium' }, bottom: { style: 'medium' }, left: { style: 'thin' }, right: { style: 'medium' } };
+  row += 3;
+
+  // 会社情報
+  coverSheet.mergeCells(`C${row}:G${row}`);
+  coverSheet.getCell(`C${row}`).value = '株式会社 Gハウス';
+  coverSheet.getCell(`C${row}`).font = { name: 'ＭＳ 明朝', size: 14, bold: true };
+  coverSheet.getCell(`C${row}`).alignment = { horizontal: 'center' };
+  row++;
+
+  coverSheet.mergeCells(`C${row}:G${row}`);
+  coverSheet.getCell(`C${row}`).value = '兵庫県知事許可（般-5）第117047号';
+  coverSheet.getCell(`C${row}`).font = { name: 'ＭＳ ゴシック', size: 9 };
+  coverSheet.getCell(`C${row}`).alignment = { horizontal: 'center' };
+
+  // ========================================
+  // 明細シート（カテゴリ別）
+  // ========================================
+  MAJOR_CATEGORIES.forEach(majorCat => {
+    const catItems = groupedItems.get(majorCat.id) || [];
+    if (catItems.length === 0) return;
+
+    const detailSheet = workbook.addWorksheet(majorCat.name, {
+      pageSetup: {
+        paperSize: 9,
+        orientation: 'landscape',
+        fitToPage: true,
+        fitToWidth: 1,
+        margins: { left: 0.5, right: 0.5, top: 0.5, bottom: 0.5, header: 0.2, footer: 0.2 }
+      }
+    });
+
+    // 列幅設定（Gハウスフォーマット準拠）
+    detailSheet.columns = [
+      { width: 8 },   // A: 区分
+      { width: 5 },   // B: No.
+      { width: 40 },  // C: 工事内容
+      { width: 8 },   // D: 数量
+      { width: 6 },   // E: 単位
+      { width: 14 },  // F: 見積単価
+      { width: 14 },  // G: 見積金額
+      { width: 20 },  // H: 備考
+    ];
+
+    let dRow = 1;
+
+    // ヘッダー行（LIFE + カテゴリ名 + 日付 + 顧客名）
+    detailSheet.getCell(`A${dRow}`).value = 'LIFE';
+    detailSheet.getCell(`A${dRow}`).font = { name: 'Arial', size: 10, bold: true, color: { argb: '000000' } };
+    detailSheet.getCell(`A${dRow}`).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFF00' } };
+    detailSheet.getCell(`A${dRow}`).alignment = { horizontal: 'center', vertical: 'middle' };
+    detailSheet.getCell(`A${dRow}`).border = {
       top: { style: 'thin' },
       bottom: { style: 'thin' },
       left: { style: 'thin' },
-      right: { style: 'thin' }
+      right: { style: 'thin' },
     };
-  });
-  headerRow.height = 22;
-  rowNum++;
 
-  // ----- 明細データ -----
-  groupedItems.forEach((items, category) => {
-    const categoryTotal = items.reduce((sum, item) => sum + item.totalPrice, 0);
+    detailSheet.mergeCells(`B${dRow}:C${dRow}`);
+    detailSheet.getCell(`B${dRow}`).value = majorCat.name;
+    detailSheet.getCell(`B${dRow}`).font = { name: 'ＭＳ ゴシック', size: 14, bold: true };
+    detailSheet.getCell(`B${dRow}`).alignment = { horizontal: 'left', vertical: 'middle' };
 
-    // カテゴリヘッダー行
-    sheet.mergeCells(`A${rowNum}:J${rowNum}`);
-    const catCell = sheet.getCell(`A${rowNum}`);
-    catCell.value = `■ ${category}`;
-    catCell.font = { bold: true, size: 11 };
-    catCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'E5F3F1' } };
-    sheet.getCell(`K${rowNum}`).value = `¥${categoryTotal.toLocaleString()}`;
-    sheet.getCell(`K${rowNum}`).font = { bold: true };
-    sheet.getCell(`K${rowNum}`).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'E5F3F1' } };
-    sheet.getCell(`K${rowNum}`).alignment = { horizontal: 'right' };
-    rowNum++;
+    detailSheet.getCell(`F${dRow}`).value = formatJapaneseDate(createdAt);
+    detailSheet.getCell(`F${dRow}`).font = { name: 'ＭＳ ゴシック', size: 10 };
+    detailSheet.getCell(`F${dRow}`).alignment = { horizontal: 'right' };
 
-    // アイテム行
-    items.forEach(item => {
-      const row = sheet.getRow(rowNum);
+    detailSheet.mergeCells(`G${dRow}:H${dRow}`);
+    detailSheet.getCell(`G${dRow}`).value = `${data.customerName} 邸`;
+    detailSheet.getCell(`G${dRow}`).font = { name: 'ＭＳ ゴシック', size: 10 };
+    detailSheet.getCell(`G${dRow}`).alignment = { horizontal: 'right' };
+
+    detailSheet.getRow(dRow).height = 25;
+    dRow++;
+
+    // 列ヘッダー
+    const headers = ['区分', 'No.', '工事内容', '数量', '単位', '見積単価', '見積金額', '備考'];
+    headers.forEach((header, i) => {
+      const cell = detailSheet.getCell(dRow, i + 1);
+      cell.value = header;
+      cell.font = { name: 'ＭＳ ゴシック', size: 10, bold: true };
+      cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'D9D9D9' } };
+      cell.alignment = { horizontal: 'center', vertical: 'middle' };
+      cell.border = {
+        top: { style: 'thin' },
+        bottom: { style: 'thin' },
+        left: { style: 'thin' },
+        right: { style: 'thin' },
+      };
+    });
+    detailSheet.getRow(dRow).height = 20;
+    dRow++;
+
+    // 明細行
+    let itemNo = 1;
+    const categoryTotal = categoryTotals[majorCat.id] || 0;
+
+    catItems.forEach(item => {
+      // 区分（サブカテゴリ）
+      detailSheet.getCell(`A${dRow}`).value = item.subcategory || item.category;
+      detailSheet.getCell(`A${dRow}`).font = { name: 'ＭＳ ゴシック', size: 9 };
+      detailSheet.getCell(`A${dRow}`).alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+      detailSheet.getCell(`A${dRow}`).border = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
+
+      // No.
+      detailSheet.getCell(`B${dRow}`).value = itemNo;
+      detailSheet.getCell(`B${dRow}`).font = { name: 'ＭＳ ゴシック', size: 9 };
+      detailSheet.getCell(`B${dRow}`).alignment = { horizontal: 'center', vertical: 'middle' };
+      detailSheet.getCell(`B${dRow}`).border = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
+
+      // 工事内容（商品名 + メーカー + 型番 + カラー）
+      let workContent = item.name;
+      if (item.manufacturer) workContent += ` / ${item.manufacturer}`;
+      if (item.modelNumber) workContent += ` ${item.modelNumber}`;
+      if (item.variant) workContent += ` (${item.variant})`;
+
+      detailSheet.getCell(`C${dRow}`).value = workContent;
+      detailSheet.getCell(`C${dRow}`).font = { name: 'ＭＳ ゴシック', size: 9 };
+      detailSheet.getCell(`C${dRow}`).alignment = { horizontal: 'left', vertical: 'middle', wrapText: true };
+      detailSheet.getCell(`C${dRow}`).border = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
+
+      // 数量
+      detailSheet.getCell(`D${dRow}`).value = item.quantity;
+      detailSheet.getCell(`D${dRow}`).font = { name: 'ＭＳ ゴシック', size: 9 };
+      detailSheet.getCell(`D${dRow}`).alignment = { horizontal: 'center', vertical: 'middle' };
+      detailSheet.getCell(`D${dRow}`).border = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
+
+      // 単位
+      detailSheet.getCell(`E${dRow}`).value = item.unit;
+      detailSheet.getCell(`E${dRow}`).font = { name: 'ＭＳ ゴシック', size: 9 };
+      detailSheet.getCell(`E${dRow}`).alignment = { horizontal: 'center', vertical: 'middle' };
+      detailSheet.getCell(`E${dRow}`).border = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
+
+      // 見積単価
+      detailSheet.getCell(`F${dRow}`).value = item.unitPrice;
+      detailSheet.getCell(`F${dRow}`).numFmt = '¥#,##0';
+      detailSheet.getCell(`F${dRow}`).font = { name: 'ＭＳ ゴシック', size: 9 };
+      detailSheet.getCell(`F${dRow}`).alignment = { horizontal: 'right', vertical: 'middle' };
+      detailSheet.getCell(`F${dRow}`).border = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
+
+      // 見積金額
+      detailSheet.getCell(`G${dRow}`).value = item.totalPrice;
+      detailSheet.getCell(`G${dRow}`).numFmt = '¥#,##0';
+      detailSheet.getCell(`G${dRow}`).font = { name: 'ＭＳ ゴシック', size: 9 };
+      detailSheet.getCell(`G${dRow}`).alignment = { horizontal: 'right', vertical: 'middle' };
+      detailSheet.getCell(`G${dRow}`).border = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
+
+      // 備考
       const roomInfo = item.appliedRooms && item.appliedRooms.length > 0
         ? getRoomNames(item.appliedRooms).join('、')
         : '';
+      detailSheet.getCell(`H${dRow}`).value = roomInfo || item.note || '';
+      detailSheet.getCell(`H${dRow}`).font = { name: 'ＭＳ ゴシック', size: 9 };
+      detailSheet.getCell(`H${dRow}`).alignment = { horizontal: 'left', vertical: 'middle', wrapText: true };
+      detailSheet.getCell(`H${dRow}`).border = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
 
-      const rowData = [
-        '',
-        item.name,
-        item.manufacturer,
-        item.modelNumber,
-        item.variant,
-        roomInfo,
-        item.unit,
-        item.quantity,
-        item.unitPrice,
-        item.totalPrice,
-        item.isOption ? 'OP' : '標準'
-      ];
-
-      rowData.forEach((value, i) => {
-        const cell = row.getCell(i + 1);
-        cell.value = value;
-        cell.font = { size: 9 };
-        cell.border = {
-          top: { style: 'thin', color: { argb: 'E5E7EB' } },
-          bottom: { style: 'thin', color: { argb: 'E5E7EB' } },
-          left: { style: 'thin', color: { argb: 'E5E7EB' } },
-          right: { style: 'thin', color: { argb: 'E5E7EB' } }
-        };
-
-        // 数値列の書式
-        if (i === 8 || i === 9) {
-          cell.numFmt = '¥#,##0';
-          cell.alignment = { horizontal: 'right' };
-        }
-        if (i === 7) {
-          cell.alignment = { horizontal: 'center' };
-        }
-        if (i === 10) {
-          cell.alignment = { horizontal: 'center' };
-          if (item.isOption) {
-            cell.font = { size: 9, color: { argb: 'F97316' }, bold: true };
-          } else {
-            cell.font = { size: 9, color: { argb: '059669' } };
-          }
-        }
-      });
-
-      // オプション行の背景色
-      if (item.isOption) {
-        row.eachCell((cell) => {
-          cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF7ED' } };
-        });
-      }
-
-      rowNum++;
+      detailSheet.getRow(dRow).height = 22;
+      itemNo++;
+      dRow++;
     });
-  });
 
-  rowNum++;
+    // カテゴリ合計行
+    dRow++;
+    detailSheet.mergeCells(`A${dRow}:E${dRow}`);
+    detailSheet.getCell(`A${dRow}`).value = `${majorCat.name} 合計`;
+    detailSheet.getCell(`A${dRow}`).font = { name: 'ＭＳ ゴシック', size: 11, bold: true };
+    detailSheet.getCell(`A${dRow}`).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFF99' } };
+    detailSheet.getCell(`A${dRow}`).alignment = { horizontal: 'center', vertical: 'middle' };
+    detailSheet.getCell(`A${dRow}`).border = { top: { style: 'medium' }, bottom: { style: 'medium' }, left: { style: 'medium' }, right: { style: 'thin' } };
 
-  // ----- 不要選択セクション -----
-  if (notNeededCategories.length > 0) {
-    sheet.mergeCells(`A${rowNum}:K${rowNum}`);
-    const notNeededTitle = sheet.getCell(`A${rowNum}`);
-    notNeededTitle.value = '【設置しない項目】';
-    notNeededTitle.font = { bold: true, size: 11 };
-    notNeededTitle.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'F5F5F5' } };
-    rowNum++;
+    detailSheet.getCell(`F${dRow}`).value = '';
+    detailSheet.getCell(`F${dRow}`).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFF99' } };
+    detailSheet.getCell(`F${dRow}`).border = { top: { style: 'medium' }, bottom: { style: 'medium' }, left: { style: 'thin' }, right: { style: 'thin' } };
 
-    notNeededCategories.forEach(({ categoryName, note }) => {
-      sheet.getCell(`A${rowNum}`).value = categoryName;
-      sheet.getCell(`B${rowNum}`).value = note || '設置しない';
-      sheet.getCell(`B${rowNum}`).font = { color: { argb: '888888' } };
-      rowNum++;
-    });
-    rowNum++;
-  }
+    detailSheet.getCell(`G${dRow}`).value = categoryTotal;
+    detailSheet.getCell(`G${dRow}`).numFmt = '¥#,##0';
+    detailSheet.getCell(`G${dRow}`).font = { name: 'ＭＳ ゴシック', size: 11, bold: true };
+    detailSheet.getCell(`G${dRow}`).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFF99' } };
+    detailSheet.getCell(`G${dRow}`).alignment = { horizontal: 'right', vertical: 'middle' };
+    detailSheet.getCell(`G${dRow}`).border = { top: { style: 'medium' }, bottom: { style: 'medium' }, left: { style: 'thin' }, right: { style: 'thin' } };
 
-  // ----- 備考 -----
-  sheet.mergeCells(`A${rowNum}:K${rowNum}`);
-  sheet.getCell(`A${rowNum}`).value = '【備考】';
-  sheet.getCell(`A${rowNum}`).font = { bold: true };
-  rowNum++;
-  sheet.mergeCells(`A${rowNum}:K${rowNum}`);
-  sheet.getCell(`A${rowNum}`).value = data.notes || '';
-  rowNum += 2;
+    detailSheet.getCell(`H${dRow}`).value = '';
+    detailSheet.getCell(`H${dRow}`).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFF99' } };
+    detailSheet.getCell(`H${dRow}`).border = { top: { style: 'medium' }, bottom: { style: 'medium' }, left: { style: 'thin' }, right: { style: 'medium' } };
 
-  // ----- 注意事項 -----
-  sheet.getCell(`A${rowNum}`).value = '※本見積書の有効期限は発行日より30日間です。';
-  sheet.getCell(`A${rowNum}`).font = { size: 9, color: { argb: '666666' } };
-  rowNum++;
-  sheet.getCell(`A${rowNum}`).value = '※価格は予告なく変更される場合があります。';
-  sheet.getCell(`A${rowNum}`).font = { size: 9, color: { argb: '666666' } };
-
-  // ========== カテゴリ別集計シート ==========
-  const summarySheet = workbook.addWorksheet('カテゴリ別集計');
-
-  summarySheet.columns = [
-    { width: 25 },
-    { width: 12 },
-    { width: 18 },
-  ];
-
-  let sRowNum = 1;
-
-  // タイトル
-  summarySheet.mergeCells(`A${sRowNum}:C${sRowNum}`);
-  const sTitleCell = summarySheet.getCell(`A${sRowNum}`);
-  sTitleCell.value = 'カテゴリ別集計';
-  sTitleCell.font = { size: 16, bold: true };
-  sTitleCell.alignment = { horizontal: 'center' };
-  sRowNum += 2;
-
-  // ヘッダー
-  const sHeaderRow = summarySheet.getRow(sRowNum);
-  ['カテゴリ', 'アイテム数', '合計金額'].forEach((header, i) => {
-    const cell = sHeaderRow.getCell(i + 1);
-    cell.value = header;
-    cell.font = { bold: true, color: { argb: 'FFFFFF' } };
-    cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '374151' } };
-    cell.alignment = { horizontal: 'center' };
-    cell.border = {
-      top: { style: 'thin' },
-      bottom: { style: 'thin' },
-      left: { style: 'thin' },
-      right: { style: 'thin' }
-    };
-  });
-  sRowNum++;
-
-  // データ
-  groupedItems.forEach((items, category) => {
-    const categoryTotal = items.reduce((sum, item) => sum + item.totalPrice, 0);
-    const row = summarySheet.getRow(sRowNum);
-    row.getCell(1).value = category;
-    row.getCell(2).value = items.length;
-    row.getCell(2).alignment = { horizontal: 'center' };
-    row.getCell(3).value = categoryTotal;
-    row.getCell(3).numFmt = '¥#,##0';
-    row.getCell(3).alignment = { horizontal: 'right' };
-    row.eachCell((cell) => {
-      cell.border = {
-        top: { style: 'thin', color: { argb: 'E5E7EB' } },
-        bottom: { style: 'thin', color: { argb: 'E5E7EB' } },
-        left: { style: 'thin', color: { argb: 'E5E7EB' } },
-        right: { style: 'thin', color: { argb: 'E5E7EB' } }
-      };
-    });
-    sRowNum++;
-  });
-
-  // 合計行
-  sRowNum++;
-  const totalRow = summarySheet.getRow(sRowNum);
-  totalRow.getCell(1).value = '合計';
-  totalRow.getCell(1).font = { bold: true };
-  totalRow.getCell(2).value = estimateItems.length;
-  totalRow.getCell(2).alignment = { horizontal: 'center' };
-  totalRow.getCell(2).font = { bold: true };
-  totalRow.getCell(3).value = grandTotal;
-  totalRow.getCell(3).numFmt = '¥#,##0';
-  totalRow.getCell(3).alignment = { horizontal: 'right' };
-  totalRow.getCell(3).font = { bold: true, color: { argb: '1E3A8A' } };
-  totalRow.eachCell((cell) => {
-    cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'F3F4F6' } };
-    cell.border = {
-      top: { style: 'medium' },
-      bottom: { style: 'medium' },
-      left: { style: 'thin' },
-      right: { style: 'thin' }
-    };
+    detailSheet.getRow(dRow).height = 25;
   });
 
   // Blobとして出力
@@ -464,7 +539,7 @@ export const downloadEstimateExcel = async (data: EstimateData, filename?: strin
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = filename || `estimate_${data.projectCode || Date.now()}.xlsx`;
+  a.download = filename || `見積書_${data.customerName}_${new Date().toLocaleDateString('ja-JP').replace(/\//g, '')}.xlsx`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -477,6 +552,7 @@ export const downloadEstimateExcel = async (data: EstimateData, filename?: strin
 interface ExportToExcelOptions {
   customerName: string;
   projectName: string;
+  constructionAddress?: string;
   selections?: Record<string, import('../stores/useSelectionStore').CategorySelection>;
   showroomEstimates?: Array<{
     id: string;
@@ -495,6 +571,7 @@ export const exportToExcel = async (
   const data: EstimateData = {
     customerName: options.customerName,
     projectName: options.projectName,
+    constructionAddress: options.constructionAddress,
     projectCode: `PRJ-${Date.now()}`,
     planType: 'LACIE',
     planName: 'LACIE',
@@ -503,7 +580,7 @@ export const exportToExcel = async (
     createdAt: new Date(),
   };
 
-  await downloadEstimateExcel(data, `見積書_${options.customerName}_${new Date().toLocaleDateString('ja-JP').replace(/\//g, '')}.xlsx`);
+  await downloadEstimateExcel(data, `【${options.customerName}様】OP見積書.xlsx`);
 };
 
 // ========================================
