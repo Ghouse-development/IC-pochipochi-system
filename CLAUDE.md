@@ -61,3 +61,15 @@
 ### カテゴリ管理
 - 管理者がノーコードでカテゴリの追加・順番変更ができるようにする
 - Supabaseのcategoriesテーブルで管理
+
+## Git/デプロイルール
+
+### ブランチ同期（重要）
+Vercelは`extrior_image`ブランチからデプロイされるため、**変更をプッシュする際は必ず両ブランチに同時プッシュすること**。
+
+```bash
+# コミット後、必ず両方にプッシュ
+git push origin main && git push origin main:extrior_image
+```
+
+これにより、ローカル（main）とデプロイ（extrior_image）の不一致を防ぐ。
