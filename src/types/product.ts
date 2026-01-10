@@ -66,6 +66,7 @@ export interface Product {
   pricing: PricingInfo[];
   description?: string;
   materialType?: MaterialType; // 素材タイプ（外壁: 窯業系/金属/塗り壁、床材: 突板/シート等）
+  requiresGas?: boolean; // ガス引込み必須の商品（乾太くん等）
 }
 
 export interface Category {

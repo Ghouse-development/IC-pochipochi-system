@@ -5812,6 +5812,7 @@ const staticInteriorProducts: Product[] = [
   },
 
   // ========== 乾太くん（PDF43追加）==========
+  // ※ガス引込みが必要（設計で「ガス引込みあり」選択時のみ表示）
   {
     id: 'int-dryer-001',
     categoryId: 'appliance',
@@ -5822,7 +5823,8 @@ const staticInteriorProducts: Product[] = [
     modelNumber: 'RDT-54S',
     unit: 'piece',
     isOption: true,
-    description: 'ガス衣類乾燥機 スタンダードタイプ 5kg',
+    requiresGas: true,
+    description: 'ガス衣類乾燥機 スタンダードタイプ 5kg ※ガス引込み必須',
     variants: [
       { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
     ],
@@ -5843,7 +5845,8 @@ const staticInteriorProducts: Product[] = [
     modelNumber: 'RDT-63',
     unit: 'piece',
     isOption: true,
-    description: 'ガス衣類乾燥機 デラックスタイプ 6kg',
+    requiresGas: true,
+    description: 'ガス衣類乾燥機 デラックスタイプ 6kg ※ガス引込み必須',
     variants: [
       { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
     ],
@@ -5864,7 +5867,8 @@ const staticInteriorProducts: Product[] = [
     modelNumber: 'RDT-93',
     unit: 'piece',
     isOption: true,
-    description: 'ガス衣類乾燥機 デラックスタイプ 9kg',
+    requiresGas: true,
+    description: 'ガス衣類乾燥機 デラックスタイプ 9kg ※ガス引込み必須',
     variants: [
       { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
     ],
@@ -5885,7 +5889,8 @@ const staticInteriorProducts: Product[] = [
     modelNumber: 'DS-KADAI',
     unit: 'piece',
     isOption: true,
-    description: '乾太くん専用架台',
+    requiresGas: true,
+    description: '乾太くん専用架台 ※乾太くん選択時のみ',
     variants: [
       { id: 'v1', color: '標準', images: [] }
     ],
@@ -5906,7 +5911,8 @@ const staticInteriorProducts: Product[] = [
     modelNumber: 'DS-UNIT',
     unit: 'piece',
     isOption: true,
-    description: '乾太くん専用収納ユニット',
+    requiresGas: true,
+    description: '乾太くん専用収納ユニット ※乾太くん選択時のみ',
     variants: [
       { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
     ],

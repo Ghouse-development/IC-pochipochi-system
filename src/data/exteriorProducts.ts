@@ -4218,4 +4218,49 @@ export const exteriorProducts: Product[] = [
       { plan: 'LIFE', price: 15000 }
     ]
   },
+
+  // ===== ガス引込み（設計カテゴリ） =====
+  // 乾太くん等のガス機器使用には必須
+  {
+    id: 'ext-gas-supply-yes',
+    categoryId: 'gas-supply',
+    categoryName: 'ガス引込み',
+    subcategory: 'ガス引込み',
+    name: 'ガス引込みあり',
+    manufacturer: 'Gハウス',
+    modelNumber: 'GAS-YES',
+    unit: 'set',
+    isOption: false,
+    description: 'ガス引込みを行う（乾太くん等のガス機器が選択可能になります）',
+    variants: [
+      { id: 'v1', color: 'ガス有り', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+  {
+    id: 'ext-gas-supply-no',
+    categoryId: 'gas-supply',
+    categoryName: 'ガス引込み',
+    subcategory: 'ガス引込み',
+    name: 'ガス引込みなし（オール電化）',
+    manufacturer: 'Gハウス',
+    modelNumber: 'GAS-NO',
+    unit: 'set',
+    isOption: false,
+    description: 'ガス引込みを行わない（オール電化住宅）※乾太くん等のガス機器は選択できません',
+    variants: [
+      { id: 'v1', color: 'ガス無し', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
 ];

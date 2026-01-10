@@ -679,6 +679,15 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   const hasAPW430 = cartItems.some(item =>
     item.product.name?.includes('APW430')
   );
+  // ガス引込み選択状態をチェック
+  const hasGasSupply = cartItems.some(item =>
+    item.product.id === 'ext-gas-supply-yes' ||
+    item.product.name?.includes('ガス引込みあり')
+  );
+  const hasNoGas = cartItems.some(item =>
+    item.product.id === 'ext-gas-supply-no' ||
+    item.product.name?.includes('ガス引込みなし')
+  );
 
   // 利用可能な素材タイプを抽出（固定順序: 窯業系サイディング → ガルバリウム鋼板 → 塗り壁）
   const availableMaterialTypes = useMemo(() => {
@@ -781,6 +790,13 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
       if (hideDiscontinued && item.is_discontinued) {
         return false;
       }
+      // ガス引込み依存フィルター（ガス無しの場合、乾太くん等を非表示）
+      // @ts-expect-error - requiresGas is an optional field added for gas dependency check
+      if (item.requires_gas || (item as unknown as { requiresGas?: boolean }).requiresGas) {
+        if (hasNoGas || !hasGasSupply) {
+          return false;
+        }
+      }
       // 水回り設備のメーカー/シリーズフィルター
       if (needsManufacturerSelection && selectedManufacturer) {
         // メーカー名でフィルタ
@@ -837,7 +853,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
       // 4. 商品名順
       return (a.name || '').localeCompare(b.name || '', 'ja');
     });
-  }, [items, debouncedSearchTerm, filterType, selectedPlanId, selectedMaterialType, selectedSubcategory, selectedColor, priceMax, showFavoritesOnly, favorites, hideDiscontinued, needsManufacturerSelection, selectedManufacturer, selectedSeries, activeTab]);
+  }, [items, debouncedSearchTerm, filterType, selectedPlanId, selectedMaterialType, selectedSubcategory, selectedColor, priceMax, showFavoritesOnly, favorites, hideDiscontinued, needsManufacturerSelection, selectedManufacturer, selectedSeries, activeTab, hasGasSupply, hasNoGas]);
 
   // ページネーション計算
   const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
