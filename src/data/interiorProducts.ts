@@ -841,6 +841,28 @@ const staticInteriorProducts: Product[] = [
   },
 
   // ========== インテリア格子 ==========
+  // 選択しない（標準）
+  {
+    id: 'int-lattice-none',
+    categoryId: 'lattice',
+    categoryName: '格子',
+    subcategory: 'インテリア格子',
+    name: '格子なし（標準）',
+    manufacturer: '-',
+    modelNumber: 'NONE',
+    unit: 'セット',
+    isOption: false,
+    description: '格子を設置しない場合はこちらを選択',
+    variants: [
+      { id: 'v1', color: '-', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
   {
     id: 'int-lattice-w045',
     categoryId: 'lattice',
@@ -939,17 +961,17 @@ const staticInteriorProducts: Product[] = [
   },
 
   // ========== インテリアカウンター ==========
-  // 選択しない
+  // 選択しない（標準）
   {
     id: 'int-counter-none',
     categoryId: 'counter',
     categoryName: 'カウンター',
     subcategory: 'インテリアカウンター',
-    name: '選択しない',
+    name: 'カウンターなし（標準）',
     manufacturer: '-',
     modelNumber: 'NONE',
     unit: 'セット',
-    isOption: true,
+    isOption: false,
     description: 'インテリアカウンターを設置しない場合はこちらを選択',
     variants: [
       { id: 'v1', color: '-', images: [] }
@@ -4066,17 +4088,17 @@ const staticInteriorProducts: Product[] = [
   },
 
   // ========== 室内窓（PDF28準拠）==========
-  // 選択しない
+  // 選択しない（標準）
   {
     id: 'int-window-none',
     categoryId: 'window-interior',
     categoryName: '室内窓',
     subcategory: '室内窓',
-    name: '選択しない',
+    name: '室内窓なし（標準）',
     manufacturer: '-',
     modelNumber: 'NONE',
     unit: 'セット',
-    isOption: true,
+    isOption: false,
     description: '室内窓を設置しない場合はこちらを選択',
     variants: [
       { id: 'v1', color: '-', images: [] }
@@ -4247,17 +4269,17 @@ const staticInteriorProducts: Product[] = [
   },
 
   // ========== アクセントパネル（PDF29追加）==========
-  // 選択しない
+  // 選択しない（標準）
   {
     id: 'int-panel-none',
     categoryId: 'wall',
     categoryName: '壁材',
     subcategory: 'アクセントパネル',
-    name: '選択しない',
+    name: 'パネルなし（標準）',
     manufacturer: '-',
     modelNumber: 'NONE',
     unit: 'セット',
-    isOption: true,
+    isOption: false,
     description: 'アクセントパネルを設置しない場合はこちらを選択',
     variants: [
       { id: 'v1', color: '-', images: [] }
@@ -4459,17 +4481,17 @@ const staticInteriorProducts: Product[] = [
   },
 
   // ========== 格子（PDF30追加）==========
-  // 選択しない
+  // 選択しない（標準）
   {
-    id: 'int-lattice-none',
+    id: 'int-partition-lattice-none',
     categoryId: 'partition',
     categoryName: '間仕切り',
     subcategory: '格子',
-    name: '選択しない',
+    name: '格子なし（標準）',
     manufacturer: '-',
     modelNumber: 'NONE',
     unit: 'セット',
-    isOption: true,
+    isOption: false,
     description: '格子を設置しない場合はこちらを選択',
     variants: [
       { id: 'v1', color: '-', images: [] }
@@ -4507,17 +4529,17 @@ const staticInteriorProducts: Product[] = [
   },
 
   // ========== アクセントタイル（PDF31-34追加）==========
-  // 選択しない
+  // 選択しない（標準）
   {
     id: 'int-wall-tile-none',
     categoryId: 'wall',
     categoryName: '壁材',
     subcategory: 'アクセントタイル',
-    name: '選択しない',
+    name: 'タイルなし（標準）',
     manufacturer: '-',
     modelNumber: 'NONE',
     unit: 'セット',
-    isOption: true,
+    isOption: false,
     description: 'アクセントタイルを設置しない場合はこちらを選択',
     variants: [
       { id: 'v1', color: '-', images: [] }
@@ -4947,17 +4969,17 @@ const staticInteriorProducts: Product[] = [
   },
 
   // ========== エコカラット（PDF34追加）==========
-  // 選択しない
+  // 選択しない（標準）
   {
     id: 'int-ecocarat-none',
     categoryId: 'wall',
     categoryName: '壁材',
     subcategory: 'エコカラット',
-    name: '選択しない',
+    name: 'エコカラットなし（標準）',
     manufacturer: '-',
     modelNumber: 'NONE',
     unit: 'セット',
-    isOption: true,
+    isOption: false,
     description: 'エコカラットを設置しない場合はこちらを選択',
     variants: [
       { id: 'v1', color: '-', images: [] }

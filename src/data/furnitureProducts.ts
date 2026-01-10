@@ -528,12 +528,12 @@ const staticProducts: Product[] = [
     categoryId: 'gas-dryer',
     categoryName: 'ガス乾燥機',
     subcategory: '乾太くん',
-    name: '選択しない',
-    manufacturer: 'なし',
+    name: 'ガス乾燥機なし（標準）',
+    manufacturer: '-',
     modelNumber: 'DRYER-NONE',
     unit: 'セット',
     isOption: false,
-    description: 'ガス乾燥機を設置しない',
+    description: 'ガス乾燥機を設置しない場合はこちらを選択',
     variants: [
       { id: 'v1', color: '選択なし', images: [] }
     ],
