@@ -1627,6 +1627,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
               ) : currentCategoryName === 'エアコン' ? (
                 /* エアコン選択UI */
                 <AirconSelector
+                  selectedPlan={selectedPlanId}
                   onComplete={() => {
                     toast.success('エアコンをカートに追加しました');
                     goToNextCategory();

@@ -7,9 +7,9 @@ import type { Product } from '../../types/product';
 
 // エアコンシリーズ定義
 const AIRCON_SERIES = [
-  { id: 'e', name: 'Eシリーズ', manufacturer: 'ダイキン', description: 'スタンダードモデル', priceRange: '11万〜19.2万円', icon: '❄️' },
-  { id: 'gx', name: 'GXシリーズ', manufacturer: 'ダイキン', description: 'さらら除湿搭載', priceRange: '16.5万〜21.8万円', icon: '💧' },
-  { id: 'z', name: '霧ヶ峰 Zシリーズ', manufacturer: '三菱電機', description: 'さらっと除湿冷房', priceRange: '23.5万〜30万円', icon: '🌀' },
+  { id: 'e', name: 'Eシリーズ', manufacturer: 'ダイキン', description: 'スタンダードモデル', icon: '❄️', productPrefix: 'furn-aircon-daikin-e' },
+  { id: 'gx', name: 'GXシリーズ', manufacturer: 'ダイキン', description: 'さらら除湿搭載', icon: '💧', productPrefix: 'furn-aircon-daikin-gx' },
+  { id: 'z', name: '霧ヶ峰 Zシリーズ', manufacturer: '三菱電機', description: 'さらっと除湿冷房', icon: '🌀', productPrefix: 'furn-aircon-mitsubishi-z' },
 ];
 
 // 畳数定義
@@ -41,16 +41,35 @@ interface AirconUnit {
 }
 
 interface AirconSelectorProps {
+  selectedPlan: string;
   onComplete: () => void;
   onCancel: () => void;
 }
 
 export const AirconSelector: React.FC<AirconSelectorProps> = ({
+  selectedPlan,
   onComplete,
   onCancel,
 }) => {
   // カート操作
   const addItem = useCartStore((state) => state.addItem);
+
+  // プラン別価格を取得
+  const getPlanPrice = (productId: string): number => {
+    const product = furnitureProducts.find(p => p.id === productId);
+    if (!product?.pricing) return 0;
+    const planPrice = product.pricing.find(p => p.plan === selectedPlan);
+    return planPrice?.price ?? 0;
+  };
+
+  // シリーズの価格レンジを取得（6畳〜14畳の価格範囲）
+  const getSeriesPriceRange = (productPrefix: string): string => {
+    const prices = ['6', '10', '14'].map(size => getPlanPrice(`${productPrefix}${size}`)).filter(p => p > 0);
+    if (prices.length === 0) return '';
+    const minPrice = Math.min(...prices);
+    const maxPrice = Math.max(...prices);
+    return `¥${(minPrice / 10000).toFixed(1)}万〜${(maxPrice / 10000).toFixed(1)}万円`;
+  };
 
   // 複数台管理
   const [units, setUnits] = useState<AirconUnit[]>([
@@ -299,7 +318,7 @@ export const AirconSelector: React.FC<AirconSelectorProps> = ({
                 placeholderEmoji={series.icon}
                 placeholderBgColor={series.manufacturer === 'ダイキン' ? 'from-blue-100 to-cyan-100' : 'from-red-100 to-orange-100'}
                 manufacturer={series.manufacturer}
-                priceRange={series.priceRange}
+                priceRange={getSeriesPriceRange(series.productPrefix)}
                 isSelected={activeUnit.series === series.id}
                 onClick={() => updateUnit('series', series.id)}
               />
@@ -325,18 +344,25 @@ export const AirconSelector: React.FC<AirconSelectorProps> = ({
             選択中: {AIRCON_SERIES.find(s => s.id === activeUnit.series)?.manufacturer} {AIRCON_SERIES.find(s => s.id === activeUnit.series)?.name}
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-            {ROOM_SIZES.map((size) => (
-              <SelectionCard
-                key={size.id}
-                id={size.id}
-                name={size.name}
-                description={size.description}
-                placeholderEmoji="🏠"
-                placeholderBgColor="from-green-100 to-emerald-100"
-                isSelected={activeUnit.roomSize === size.id}
-                onClick={() => updateUnit('roomSize', size.id)}
-              />
-            ))}
+            {ROOM_SIZES.map((size) => {
+              const seriesInfo = AIRCON_SERIES.find(s => s.id === activeUnit.series);
+              const productId = seriesInfo ? `${seriesInfo.productPrefix}${size.id}` : '';
+              const price = productId ? getPlanPrice(productId) : 0;
+              return (
+                <SelectionCard
+                  key={size.id}
+                  id={size.id}
+                  name={size.name}
+                  description={size.description}
+                  placeholderEmoji="🏠"
+                  placeholderBgColor="from-green-100 to-emerald-100"
+                  price={price}
+                  isOption={price > 0}
+                  isSelected={activeUnit.roomSize === size.id}
+                  onClick={() => updateUnit('roomSize', size.id)}
+                />
+              );
+            })}
           </div>
         </div>
       )}
