@@ -1,25 +1,146 @@
 import React, { useState } from 'react';
-import { Check, X, Plus, Trash2, Wind, Thermometer, Building2, Layers } from 'lucide-react';
+import { Check, X, Plus, Trash2, Wind, Thermometer, Building2, ChevronLeft, Image as ImageIcon } from 'lucide-react';
 import { useCartStore } from '../../stores/useCartStore';
 import { furnitureProducts } from '../../data/furnitureProducts';
 import type { Product } from '../../types/product';
 
-// エアコン画像プレースホルダー生成
-const generateAirconPlaceholder = (seriesName: string, manufacturer: string): string => {
-  const primaryColor = manufacturer === 'ダイキン' ? '#0072CE' : '#E60012'; // ダイキンはブルー、三菱は赤
-  const svgContent = `
-    <svg width="200" height="80" xmlns="http://www.w3.org/2000/svg">
-      <rect width="200" height="80" fill="#f5f5f4" rx="8"/>
-      <rect x="10" y="15" width="180" height="50" fill="white" rx="6" stroke="${primaryColor}" stroke-width="2"/>
-      <rect x="20" y="45" width="160" height="8" fill="#e5e7eb" rx="2"/>
-      <rect x="20" y="45" width="60" height="8" fill="${primaryColor}" rx="2"/>
-      <circle cx="170" cy="32" r="6" fill="${primaryColor}" opacity="0.3"/>
-      <text x="30" y="35" fill="${primaryColor}" font-family="system-ui" font-size="10" font-weight="600">
-        ${seriesName.slice(0, 8)}
-      </text>
-    </svg>
-  `;
-  return `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svgContent)))}`;
+// ====================
+// 選択カードコンポーネント（ItemCard風）
+// ====================
+interface SelectionCardProps {
+  id: string;
+  name: string;
+  description?: string;
+  imageUrl?: string;
+  placeholderEmoji?: string;
+  placeholderBgColor?: string;
+  isStandard?: boolean;
+  isOption?: boolean;
+  price?: number;
+  priceRange?: string;
+  isSelected: boolean;
+  onClick: () => void;
+  manufacturer?: string;
+}
+
+const SelectionCard: React.FC<SelectionCardProps> = ({
+  name,
+  description,
+  imageUrl,
+  placeholderEmoji = '📦',
+  placeholderBgColor = 'from-gray-100 to-gray-200',
+  isStandard,
+  isOption,
+  price,
+  priceRange,
+  isSelected,
+  onClick,
+  manufacturer,
+}) => {
+  const [imageError, setImageError] = React.useState(false);
+
+  return (
+    <article
+      className={`group bg-white dark:bg-gray-800 rounded-2xl overflow-hidden transition-all duration-200 cursor-pointer ${
+        isSelected
+          ? 'border-4 border-blue-500 shadow-xl shadow-blue-200 dark:shadow-blue-900/50 ring-4 ring-blue-100 dark:ring-blue-900/50 scale-[1.02]'
+          : 'border-2 border-gray-200 dark:border-gray-700 shadow-md hover:shadow-xl hover:border-blue-300 dark:hover:border-blue-600 hover:scale-[1.02]'
+      }`}
+      onClick={onClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick();
+        }
+      }}
+      aria-label={`${name}${isSelected ? ' - 選択中' : ''}`}
+      aria-pressed={isSelected}
+    >
+      {/* 画像エリア */}
+      <div className="aspect-[4/3] bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
+        {imageUrl && !imageError ? (
+          <img
+            src={imageUrl}
+            alt={name}
+            loading="lazy"
+            decoding="async"
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            onError={() => setImageError(true)}
+          />
+        ) : (
+          <div className={`w-full h-full flex flex-col items-center justify-center p-4 bg-gradient-to-br ${placeholderBgColor}`}>
+            <span className="text-5xl mb-2 transition-transform duration-200 group-hover:scale-110">
+              {placeholderEmoji}
+            </span>
+            <div className="mt-2 flex items-center gap-1 text-gray-400">
+              <ImageIcon className="w-3 h-3" />
+              <span className="text-[10px]">画像準備中</span>
+            </div>
+          </div>
+        )}
+
+        {/* 標準/オプションバッジ */}
+        {(isStandard || isOption) && (
+          <div className="absolute top-2 left-2">
+            <span className={`px-2 py-1 rounded-md text-xs font-bold shadow-md ${
+              isStandard
+                ? 'bg-emerald-500 text-white'
+                : 'bg-orange-500 text-white'
+            }`}>
+              {isStandard ? '標準' : 'オプション'}
+            </span>
+          </div>
+        )}
+
+        {/* メーカーバッジ */}
+        {manufacturer && (
+          <div className="absolute top-2 right-2">
+            <span className="px-2 py-1 rounded-md text-xs font-medium bg-white/90 text-gray-700 shadow-md">
+              {manufacturer}
+            </span>
+          </div>
+        )}
+
+        {/* 選択済みオーバーレイ */}
+        {isSelected && (
+          <div className="absolute inset-0 bg-blue-500/30 flex items-center justify-center">
+            <div className="bg-white rounded-full p-3 shadow-xl ring-4 ring-blue-400/50">
+              <Check className="w-8 h-8 text-blue-600" strokeWidth={3} />
+            </div>
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2">
+              <span className="px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full shadow-lg">
+                選択中
+              </span>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* 情報エリア */}
+      <div className="p-4">
+        <h3 className="font-semibold text-sm text-gray-800 dark:text-gray-200 line-clamp-2 mb-1 leading-snug">
+          {name}
+        </h3>
+        {description && (
+          <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 mb-2">
+            {description}
+          </p>
+        )}
+        {priceRange && (
+          <p className="text-sm font-bold text-blue-600 dark:text-blue-400">
+            {priceRange}
+          </p>
+        )}
+        {price !== undefined && price > 0 && (
+          <p className="text-sm font-bold text-blue-600 dark:text-blue-400">
+            +{price.toLocaleString()}円
+          </p>
+        )}
+      </div>
+    </article>
+  );
 };
 
 // エアコンシリーズ定義
@@ -38,9 +159,9 @@ const ROOM_SIZES = [
 
 // 設置階定義
 const FLOOR_OPTIONS = [
-  { id: '1f', name: '1階設置', icon: Building2 },
-  { id: '2f', name: '2階設置', icon: Building2 },
-  { id: '3f', name: '3階設置', icon: Layers },
+  { id: '1f', name: '1階設置' },
+  { id: '2f', name: '2階設置' },
+  { id: '3f', name: '3階設置' },
 ];
 
 // 風向調整板オプション
@@ -306,36 +427,20 @@ export const AirconSelector: React.FC<AirconSelectorProps> = ({
             <Thermometer className="w-5 h-5 text-blue-500" />
             シリーズを選んでください
           </h4>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
             {AIRCON_SERIES.map((series) => (
-              <button
+              <SelectionCard
                 key={series.id}
+                id={series.id}
+                name={series.name}
+                description={series.description}
+                placeholderEmoji={series.icon}
+                placeholderBgColor={series.manufacturer === 'ダイキン' ? 'from-blue-100 to-cyan-100' : 'from-red-100 to-orange-100'}
+                manufacturer={series.manufacturer}
+                priceRange={series.priceRange}
+                isSelected={activeUnit.series === series.id}
                 onClick={() => updateUnit('series', series.id)}
-                className="flex flex-col items-start p-4 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500 transition-all text-left bg-white dark:bg-gray-800"
-              >
-                <div className="w-full mb-3 rounded-lg overflow-hidden">
-                  <img
-                    src={generateAirconPlaceholder(series.name, series.manufacturer)}
-                    alt={series.name}
-                    className="w-full h-auto"
-                  />
-                </div>
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-lg">{series.icon}</span>
-                  <span className="text-xs text-gray-500 dark:text-gray-400">
-                    {series.manufacturer}
-                  </span>
-                </div>
-                <span className="font-bold text-gray-800 dark:text-white mb-1">
-                  {series.name}
-                </span>
-                <span className="text-xs text-gray-600 dark:text-gray-400 mb-2">
-                  {series.description}
-                </span>
-                <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
-                  {series.priceRange}
-                </span>
-              </button>
+              />
             ))}
           </div>
         </div>
@@ -348,7 +453,7 @@ export const AirconSelector: React.FC<AirconSelectorProps> = ({
             onClick={() => updateUnit('series', null as unknown as string)}
             className="mb-4 text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1"
           >
-            ← シリーズ選択に戻る
+            <ChevronLeft className="w-4 h-4" /> シリーズ選択に戻る
           </button>
           <h4 className="font-medium text-gray-800 dark:text-white mb-4 flex items-center gap-2">
             <Wind className="w-5 h-5 text-blue-500" />
@@ -357,20 +462,18 @@ export const AirconSelector: React.FC<AirconSelectorProps> = ({
           <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
             選択中: {AIRCON_SERIES.find(s => s.id === activeUnit.series)?.manufacturer} {AIRCON_SERIES.find(s => s.id === activeUnit.series)?.name}
           </p>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
             {ROOM_SIZES.map((size) => (
-              <button
+              <SelectionCard
                 key={size.id}
+                id={size.id}
+                name={size.name}
+                description={size.description}
+                placeholderEmoji="🏠"
+                placeholderBgColor="from-green-100 to-emerald-100"
+                isSelected={activeUnit.roomSize === size.id}
                 onClick={() => updateUnit('roomSize', size.id)}
-                className="flex flex-col items-center p-4 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500 transition-all"
-              >
-                <span className="text-2xl font-bold text-gray-800 dark:text-white mb-1">
-                  {size.name}
-                </span>
-                <span className="text-xs text-gray-500 dark:text-gray-400">
-                  {size.description}
-                </span>
-              </button>
+              />
             ))}
           </div>
         </div>
@@ -383,28 +486,24 @@ export const AirconSelector: React.FC<AirconSelectorProps> = ({
             onClick={() => updateUnit('roomSize', null as unknown as string)}
             className="mb-4 text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1"
           >
-            ← 畳数選択に戻る
+            <ChevronLeft className="w-4 h-4" /> 畳数選択に戻る
           </button>
           <h4 className="font-medium text-gray-800 dark:text-white mb-4 flex items-center gap-2">
             <Building2 className="w-5 h-5 text-blue-500" />
             設置する階を選んでください
           </h4>
-          <div className="grid grid-cols-3 gap-3">
-            {FLOOR_OPTIONS.map((floor) => {
-              const Icon = floor.icon;
-              return (
-                <button
-                  key={floor.id}
-                  onClick={() => updateUnit('floor', floor.id)}
-                  className="flex flex-col items-center p-4 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500 transition-all"
-                >
-                  <Icon className="w-8 h-8 text-gray-600 dark:text-gray-400 mb-2" />
-                  <span className="font-medium text-gray-800 dark:text-white">
-                    {floor.name}
-                  </span>
-                </button>
-              );
-            })}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            {FLOOR_OPTIONS.map((floor) => (
+              <SelectionCard
+                key={floor.id}
+                id={floor.id}
+                name={floor.name}
+                placeholderEmoji={floor.id === '1f' ? '1️⃣' : floor.id === '2f' ? '2️⃣' : '3️⃣'}
+                placeholderBgColor="from-slate-100 to-gray-200"
+                isSelected={activeUnit.floor === floor.id}
+                onClick={() => updateUnit('floor', floor.id)}
+              />
+            ))}
           </div>
         </div>
       )}
@@ -416,31 +515,25 @@ export const AirconSelector: React.FC<AirconSelectorProps> = ({
             onClick={() => updateUnit('floor', null as unknown as string)}
             className="mb-4 text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1"
           >
-            ← 設置階選択に戻る
+            <ChevronLeft className="w-4 h-4" /> 設置階選択に戻る
           </button>
           <h4 className="font-medium text-gray-800 dark:text-white mb-4 flex items-center gap-2">
             <Wind className="w-5 h-5 text-blue-500" />
             風向調整板の有無
           </h4>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-4">
             {WIND_PLATE_OPTIONS.map((option) => (
-              <button
+              <SelectionCard
                 key={option.id}
+                id={option.id}
+                name={option.name}
+                description={option.description}
+                placeholderEmoji={option.id === 'with' ? '🌬️' : '✕'}
+                placeholderBgColor={option.id === 'with' ? 'from-blue-100 to-cyan-100' : 'from-gray-100 to-gray-200'}
+                price={option.price}
+                isSelected={activeUnit.windPlate === option.id}
                 onClick={() => updateUnit('windPlate', option.id)}
-                className="flex flex-col items-center p-6 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500 transition-all"
-              >
-                <span className="text-xl font-bold text-gray-800 dark:text-white mb-2">
-                  {option.name}
-                </span>
-                <span className="text-sm text-gray-500 dark:text-gray-400 mb-2">
-                  {option.description}
-                </span>
-                {option.price > 0 && (
-                  <span className="text-xs text-blue-600 dark:text-blue-400">
-                    +{option.price.toLocaleString()}円
-                  </span>
-                )}
-              </button>
+              />
             ))}
           </div>
         </div>
