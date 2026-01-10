@@ -36,6 +36,7 @@ const HierarchyPage = lazy(() => import('./pages/HierarchyPage').then(m => ({ de
 const ImageTestPage = lazy(() => import('./pages/ImageTestPage').then(m => ({ default: m.ImageTestPage })));
 const StaffDashboard = lazy(() => import('./pages/StaffDashboard').then(m => ({ default: m.StaffDashboard })));
 const CustomerPage = lazy(() => import('./pages/CustomerPage').then(m => ({ default: m.CustomerPage })));
+const CustomerLoginPage = lazy(() => import('./pages/CustomerLoginPage').then(m => ({ default: m.CustomerLoginPage })));
 
 // Loading fallback component
 const PageLoader = () => (
@@ -163,6 +164,15 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
           <p className="text-gray-600">読み込み中...</p>
         </div>
       </div>
+    );
+  }
+
+  // お客様ログインページは認証不要でアクセス可能
+  if (location.pathname === '/customer-login') {
+    return (
+      <Suspense fallback={<PageLoader />}>
+        <CustomerLoginPage />
+      </Suspense>
     );
   }
 

@@ -18,6 +18,8 @@ interface AuthContextType {
   signUp: (email: string, password: string, fullName: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<{ error: Error | null }>;
+  // Magic Link (お客様用)
+  sendMagicLink: (email: string, redirectTo?: string) => Promise<{ error: Error | null }>;
   // Role checks
   isSuperAdmin: boolean;
   isAdmin: boolean;
@@ -189,6 +191,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { error: error ? new Error(error.message) : null };
   };
 
+  // Magic Link認証（お客様用パスワードレスログイン）
+  const sendMagicLink = async (email: string, redirectTo?: string) => {
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: redirectTo || `${window.location.origin}/customer`,
+        shouldCreateUser: true,
+      },
+    });
+
+    if (error) {
+      logger.error('Magic link error:', error);
+      return { error: new Error(error.message) };
+    }
+
+    // 監査ログ記録
+    logger.info('Magic link sent to:', email);
+    return { error: null };
+  };
+
   // Role checks
   const isSuperAdmin = user?.is_super_admin === true || user?.role === 'super_admin';
   const isAdmin = user?.role === 'admin' || isSuperAdmin;
@@ -209,6 +231,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         signUp,
         signOut,
         resetPassword,
+        sendMagicLink,
         isSuperAdmin,
         isAdmin,
         isCoordinator,
@@ -259,6 +282,7 @@ export function DemoAuthProvider({ children }: { children: ReactNode }) {
     signUp: async () => ({ error: null }),
     signOut: async () => {},
     resetPassword: async () => ({ error: null }),
+    sendMagicLink: async () => ({ error: null }),
     isSuperAdmin: true,
     isAdmin: true,
     isCoordinator: false,

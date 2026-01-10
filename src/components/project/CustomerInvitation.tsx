@@ -1,8 +1,8 @@
 /**
- * お客様招待リンク生成コンポーネント
- * - 招待URLの生成
+ * お客様招待コンポーネント（マジックリンク対応）
+ * - マジックリンクによるログイン招待
  * - QRコード表示
- * - メール送信リンク
+ * - メール送信
  */
 import React, { useState, useMemo, useCallback } from 'react';
 import {
@@ -12,76 +12,70 @@ import {
   Mail,
   QrCode,
   ExternalLink,
-  RefreshCw,
   AlertCircle,
   User,
-  Key,
   Loader2,
+  Send,
+  Clock,
+  CheckCircle2,
 } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { useProjectStore } from '../../stores/useProjectStore';
 import { useToast } from '../common/Toast';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface CustomerInvitationProps {
   projectId?: string;
+  customerEmail?: string;
+  customerName?: string;
 }
 
-export const CustomerInvitation: React.FC<CustomerInvitationProps> = ({ projectId }) => {
-  const { currentProject, projects, setAccessCode: saveAccessCode } = useProjectStore();
+export const CustomerInvitation: React.FC<CustomerInvitationProps> = ({
+  projectId,
+  customerEmail: propEmail,
+  customerName: propName,
+}) => {
+  const { currentProject, projects } = useProjectStore();
+  const { sendMagicLink } = useAuth();
   const toast = useToast();
+
   const [copied, setCopied] = useState(false);
   const [showQR, setShowQR] = useState(false);
-  const [accessCode, setAccessCode] = useState<string | null>(null);
-  const [isSendingEmail, setIsSendingEmail] = useState(false);
+  const [isSending, setIsSending] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
+  const [email, setEmail] = useState(propEmail || '');
 
   // 対象プロジェクト
   const project = projectId
     ? projects.find((p) => p.id === projectId)
     : currentProject;
 
-  // 既存のアクセスコードがあれば読み込む
+  // プロジェクトからメールアドレスを取得
   React.useEffect(() => {
-    if (project?.accessCode && !accessCode) {
-      setAccessCode(project.accessCode);
+    if (project?.customer?.email && !email) {
+      setEmail(project.customer.email);
     }
-  }, [project?.accessCode, accessCode]);
-
-  // アクセスコード生成
-  const generateAccessCode = useCallback(() => {
-    const code = Math.random().toString(36).substring(2, 8).toUpperCase();
-    setAccessCode(code);
-    // プロジェクトに保存
-    if (project) {
-      saveAccessCode(project.id, code);
-      toast.success('コード生成', '新しいアクセスコードを生成しました');
+    if (propEmail) {
+      setEmail(propEmail);
     }
-    return code;
-  }, [project, saveAccessCode, toast]);
+  }, [project?.customer?.email, propEmail, email]);
 
-  // 招待URL生成
-  const invitationUrl = useMemo(() => {
-    if (!project) return null;
+  // お客様ログインURL
+  const loginUrl = useMemo(() => {
     const baseUrl = window.location.origin;
-    // 既存コードがあれば使用、なければ生成
-    const code = accessCode || project.accessCode;
-    if (!code) {
-      // 初回アクセス時にコードを生成
-      const newCode = Math.random().toString(36).substring(2, 8).toUpperCase();
-      setAccessCode(newCode);
-      saveAccessCode(project.id, newCode);
-      return `${baseUrl}/customer?project=${project.id}&code=${newCode}`;
+    if (project) {
+      return `${baseUrl}/customer-login?project=${project.id}`;
     }
-    return `${baseUrl}/customer?project=${project.id}&code=${code}`;
-  }, [project, accessCode, saveAccessCode]);
+    return `${baseUrl}/customer-login`;
+  }, [project]);
 
   // URLをクリップボードにコピー
   const handleCopyUrl = async () => {
-    if (!invitationUrl) return;
+    if (!loginUrl) return;
     try {
-      await navigator.clipboard.writeText(invitationUrl);
+      await navigator.clipboard.writeText(loginUrl);
       setCopied(true);
-      toast.success('コピー完了', '招待URLをクリップボードにコピーしました');
+      toast.success('コピー完了', 'ログインURLをクリップボードにコピーしました');
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
       console.error('Failed to copy:', err);
@@ -89,120 +83,164 @@ export const CustomerInvitation: React.FC<CustomerInvitationProps> = ({ projectI
     }
   };
 
-  // メール作成
-  const handleSendEmail = useCallback(() => {
-    if (!project || !invitationUrl) return;
+  // マジックリンク送信
+  const handleSendMagicLink = useCallback(async () => {
+    if (!email) {
+      toast.error('エラー', 'メールアドレスを入力してください');
+      return;
+    }
 
-    setIsSendingEmail(true);
+    setIsSending(true);
 
     try {
-      const subject = encodeURIComponent(
-        `【STYLEBOOK】${project.name} 仕様選択のご案内`
-      );
-      const body = encodeURIComponent(
-        `${project.customer.name}様\n\n` +
-        `お世話になっております。\n` +
-        `下記URLより、住宅仕様の選択をお願いいたします。\n\n` +
-        `▼ アクセスURL\n` +
-        `${invitationUrl}\n\n` +
-        `▼ アクセスコード\n` +
-        `${accessCode}\n\n` +
-        `ご不明な点がございましたら、お気軽にお問い合わせください。\n\n` +
-        `よろしくお願いいたします。`
-      );
+      // リダイレクト先にプロジェクトIDを含める
+      const redirectTo = project
+        ? `${window.location.origin}/customer?project=${project.id}`
+        : `${window.location.origin}/customer`;
 
-      window.open(`mailto:${project.customer.email}?subject=${subject}&body=${body}`);
+      const { error } = await sendMagicLink(email, redirectTo);
 
-      setEmailSent(true);
-      toast.success('メール準備完了', 'メールアプリが開きました。送信してください。');
-      setTimeout(() => setEmailSent(false), 5000);
+      if (error) {
+        toast.error('送信失敗', error.message);
+      } else {
+        setEmailSent(true);
+        toast.success(
+          'メール送信完了',
+          `${email} 宛にログインリンクを送信しました`
+        );
+      }
     } catch (err) {
-      console.error('Failed to open mail client:', err);
-      toast.error('エラー', 'メールアプリを開けませんでした');
+      console.error('Failed to send magic link:', err);
+      toast.error('エラー', 'メールの送信に失敗しました');
     } finally {
-      setIsSendingEmail(false);
+      setIsSending(false);
     }
-  }, [project, invitationUrl, accessCode, toast]);
+  }, [email, project, sendMagicLink, toast]);
 
-  // アクセスコード再生成
-  const handleRegenerateCode = () => {
-    generateAccessCode();
-  };
+  // メールアプリで開く（手動送信用）
+  const handleOpenMailClient = useCallback(() => {
+    const customerName = propName || project?.customer?.name || 'お客様';
+    const projectName = project?.name || 'プロジェクト';
 
-  if (!project) {
-    return (
-      <div className="bg-white rounded-xl shadow-sm border p-6 text-center">
-        <AlertCircle className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-        <p className="text-gray-500">プロジェクトを選択してください</p>
-      </div>
+    const subject = encodeURIComponent(
+      `【Gハウス】${projectName} インテリア選択のご案内`
     );
-  }
+    const body = encodeURIComponent(
+      `${customerName}様\n\n` +
+      `お世話になっております。\n` +
+      `Gハウスのインテリアコーディネートシステムへのご招待です。\n\n` +
+      `▼ 下記URLからログインしてください\n` +
+      `${loginUrl}\n\n` +
+      `※ ログイン時にメールアドレスを入力すると、ログイン用リンクがメールで届きます。\n` +
+      `※ パスワードは不要です。\n\n` +
+      `ご不明な点がございましたら、お気軽にお問い合わせください。\n\n` +
+      `よろしくお願いいたします。\n` +
+      `Gハウス インテリアコーディネート担当`
+    );
+
+    window.open(`mailto:${email}?subject=${subject}&body=${body}`);
+    toast.success('メールアプリを開きました', '内容を確認して送信してください');
+  }, [email, loginUrl, propName, project, toast]);
 
   return (
     <div className="space-y-6">
       {/* プロジェクト情報 */}
-      <div className="bg-white rounded-xl shadow-sm border p-6">
-        <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
-          <User className="w-5 h-5 text-blue-500" />
-          招待先お客様情報
-        </h3>
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <p className="text-sm text-gray-500">お客様名</p>
-            <p className="font-medium">{project.customer.name}様</p>
-          </div>
-          <div>
-            <p className="text-sm text-gray-500">メールアドレス</p>
-            <p className="font-medium">{project.customer.email}</p>
-          </div>
-          <div>
-            <p className="text-sm text-gray-500">プロジェクト名</p>
-            <p className="font-medium">{project.name}</p>
-          </div>
-          <div>
-            <p className="text-sm text-gray-500">プラン</p>
-            <p className="font-medium">{project.building.planType}</p>
-          </div>
-        </div>
-      </div>
-
-      {/* アクセスコード */}
-      <div className="bg-white rounded-xl shadow-sm border p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="font-bold text-gray-900 flex items-center gap-2">
-            <Key className="w-5 h-5 text-purple-500" />
-            アクセスコード
+      {project && (
+        <div className="bg-white rounded-xl shadow-sm border p-6">
+          <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <User className="w-5 h-5 text-blue-500" />
+            招待先お客様情報
           </h3>
-          <button
-            onClick={handleRegenerateCode}
-            className="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700"
-          >
-            <RefreshCw className="w-4 h-4" />
-            再生成
-          </button>
-        </div>
-        <div className="flex items-center gap-4">
-          <div className="flex-1 bg-gray-100 rounded-lg p-4 text-center">
-            <p className="text-3xl font-mono font-bold tracking-widest text-gray-900">
-              {accessCode || '------'}
-            </p>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <p className="text-sm text-gray-500">お客様名</p>
+              <p className="font-medium">{propName || project.customer?.name || '-'}様</p>
+            </div>
+            <div>
+              <p className="text-sm text-gray-500">プロジェクト名</p>
+              <p className="font-medium">{project.name}</p>
+            </div>
           </div>
         </div>
-        <p className="text-xs text-gray-500 mt-2">
-          お客様がシステムにアクセスする際に必要なコードです
-        </p>
-      </div>
+      )}
 
-      {/* 招待URL */}
+      {/* メールアドレス入力 & マジックリンク送信 */}
       <div className="bg-white rounded-xl shadow-sm border p-6">
         <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
-          <Link className="w-5 h-5 text-green-500" />
-          招待URL
+          <Mail className="w-5 h-5 text-green-500" />
+          マジックリンク送信
         </h3>
-        <div className="flex items-center gap-2">
+
+        {emailSent ? (
+          <div className="text-center py-6">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <CheckCircle2 className="w-8 h-8 text-green-600" />
+            </div>
+            <h4 className="text-lg font-medium text-gray-900 mb-2">
+              メールを送信しました
+            </h4>
+            <p className="text-gray-600 mb-4">
+              <strong>{email}</strong> 宛にログインリンクを送信しました。
+            </p>
+            <div className="flex items-center justify-center gap-2 text-sm text-gray-500 mb-4">
+              <Clock className="w-4 h-4" />
+              リンクの有効期限: 30分
+            </div>
+            <button
+              onClick={() => setEmailSent(false)}
+              className="text-blue-600 hover:text-blue-700 text-sm"
+            >
+              別のメールアドレスに送信
+            </button>
+          </div>
+        ) : (
+          <>
+            <div className="flex items-center gap-2 mb-4">
+              <div className="relative flex-1">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="customer@example.com"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+              <button
+                onClick={handleSendMagicLink}
+                disabled={isSending || !email}
+                className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                {isSending ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    送信中...
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-5 h-5" />
+                    招待メール送信
+                  </>
+                )}
+              </button>
+            </div>
+            <p className="text-sm text-gray-500">
+              お客様のメールアドレス宛に、ログイン用のリンクが送信されます。
+            </p>
+          </>
+        )}
+      </div>
+
+      {/* ログインURL */}
+      <div className="bg-white rounded-xl shadow-sm border p-6">
+        <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
+          <Link className="w-5 h-5 text-purple-500" />
+          ログインページURL
+        </h3>
+        <div className="flex items-center gap-2 mb-2">
           <input
             type="text"
-            value={invitationUrl || ''}
+            value={loginUrl}
             readOnly
             className="flex-1 px-4 py-2 bg-gray-100 rounded-lg text-sm text-gray-700 font-mono"
           />
@@ -218,30 +256,20 @@ export const CustomerInvitation: React.FC<CustomerInvitationProps> = ({ projectI
             {copied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
           </button>
         </div>
-        {copied && (
-          <p className="text-sm text-green-600 mt-2">URLをコピーしました</p>
-        )}
+        <p className="text-sm text-gray-500">
+          このURLをお客様にお伝えください。メールアドレスを入力するとログインリンクが届きます。
+        </p>
       </div>
 
       {/* アクションボタン */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <button
-          onClick={handleSendEmail}
-          disabled={isSendingEmail}
-          className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg transition-colors ${
-            emailSent
-              ? 'bg-green-600 text-white'
-              : 'bg-blue-600 text-white hover:bg-blue-700'
-          } disabled:opacity-50`}
+          onClick={handleOpenMailClient}
+          disabled={!email}
+          className="flex items-center justify-center gap-2 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
         >
-          {isSendingEmail ? (
-            <Loader2 className="w-5 h-5 animate-spin" />
-          ) : emailSent ? (
-            <Check className="w-5 h-5" />
-          ) : (
-            <Mail className="w-5 h-5" />
-          )}
-          {emailSent ? '送信準備完了' : 'メールで送信'}
+          <Mail className="w-5 h-5" />
+          メールアプリで開く
         </button>
         <button
           onClick={() => setShowQR(!showQR)}
@@ -251,7 +279,7 @@ export const CustomerInvitation: React.FC<CustomerInvitationProps> = ({ projectI
           QRコード{showQR ? 'を閉じる' : 'を表示'}
         </button>
         <button
-          onClick={() => window.open(invitationUrl || '', '_blank')}
+          onClick={() => window.open(loginUrl, '_blank')}
           className="flex items-center justify-center gap-2 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
         >
           <ExternalLink className="w-5 h-5" />
@@ -260,12 +288,12 @@ export const CustomerInvitation: React.FC<CustomerInvitationProps> = ({ projectI
       </div>
 
       {/* QRコード表示 */}
-      {showQR && invitationUrl && (
+      {showQR && (
         <div className="bg-white rounded-xl shadow-sm border p-6 text-center">
           <h3 className="font-bold text-gray-900 mb-4">QRコード</h3>
           <div className="inline-block p-4 bg-white border-2 border-gray-200 rounded-lg">
             <QRCodeSVG
-              value={invitationUrl}
+              value={loginUrl}
               size={192}
               level="M"
               includeMargin={true}
@@ -274,24 +302,22 @@ export const CustomerInvitation: React.FC<CustomerInvitationProps> = ({ projectI
             />
           </div>
           <p className="text-sm text-gray-500 mt-4">
-            スマートフォンで読み取ると、招待URLにアクセスできます
-          </p>
-          <p className="text-xs text-gray-400 mt-2">
-            アクセスコード: <span className="font-mono font-bold">{accessCode}</span>
+            スマートフォンで読み取ると、ログインページにアクセスできます
           </p>
         </div>
       )}
 
-      {/* 注意事項 */}
-      <div className="bg-yellow-50 rounded-xl border border-yellow-200 p-4">
+      {/* マジックリンクの説明 */}
+      <div className="bg-blue-50 rounded-xl border border-blue-200 p-4">
         <div className="flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
-          <div className="text-sm text-yellow-800">
-            <p className="font-medium mb-1">ご注意</p>
-            <ul className="list-disc list-inside space-y-1 text-yellow-700">
-              <li>招待URLとアクセスコードはお客様のみに共有してください</li>
-              <li>アクセスコードを再生成すると、以前のコードは無効になります</li>
-              <li>お客様がアクセスするとログイン履歴に記録されます</li>
+          <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+          <div className="text-sm text-blue-800">
+            <p className="font-medium mb-2">マジックリンク認証について</p>
+            <ul className="list-disc list-inside space-y-1 text-blue-700">
+              <li>お客様はパスワード不要でログインできます</li>
+              <li>メールアドレスに届くリンクをクリックするだけ</li>
+              <li>リンクの有効期限は30分、1回限り有効です</li>
+              <li>ログイン後は14日間セッションが維持されます</li>
             </ul>
           </div>
         </div>

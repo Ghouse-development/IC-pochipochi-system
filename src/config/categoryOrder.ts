@@ -8,7 +8,9 @@ export interface CategoryOrderConfig {
 }
 
 // 外装カテゴリ順序
-// 順序: 外壁 → ポーチ → 屋根 → 軒天 → 外部建材 → 窓 → 玄関ドア → 外部設備 → TV視聴 → ガレージシャッター → 庇 → 換気システム → エコキュート → 太陽光・蓄電池
+// 順序: 外壁 → 屋根 → ポーチ → 外部建材 → 軒天 → 窓 → 玄関ドア → 外部設備
+// ※ 任意・未選択項目（ガレージシャッター・庇・換気システム・給湯器・太陽光・蓄電池等）は設計タブに移動
+// ※ TV視聴は外部設備内に統合（21項目フィードバック③）
 export const EXTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
   {
     name: '外壁',
@@ -74,6 +76,11 @@ export const EXTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
     ]
   },
   {
+    name: '屋根',
+    icon: '🏛️',
+    subcategoryOrder: ['屋根材']
+  },
+  {
     name: 'ポーチ',
     icon: '🚶',
     subcategoryOrder: [
@@ -86,9 +93,14 @@ export const EXTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
     ]
   },
   {
-    name: '屋根',
-    icon: '🏛️',
-    subcategoryOrder: ['屋根材']
+    name: '外部建材',
+    icon: '🔧',
+    subcategoryOrder: [
+      // 樋関連（価格順）
+      '軒樋', '竪樋', '土台水切', 'パラペット笠木', 'バルコニー笠木',
+      // 破風
+      '破風',
+    ]
   },
   {
     name: '軒天',
@@ -99,26 +111,6 @@ export const EXTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
       'ラフォーレティンバー', // 12,000円/㎡
       'アルテザート',        // 18,000円/㎡
     ]
-  },
-  {
-    name: '外部建材',
-    icon: '🔧',
-    subcategoryOrder: [
-      // 樋関連
-      '軒樋', '竪樋', '土台水切', 'パラペット笠木', 'バルコニー笠木',
-      // 破風
-      '破風',
-    ]
-  },
-  {
-    name: '樋・水切',
-    icon: '💧',
-    subcategoryOrder: ['軒樋', '竪樋', '土台水切', 'パラペット笠木', 'バルコニー笠木']
-  },
-  {
-    name: '破風',
-    icon: '🏠',
-    subcategoryOrder: ['破風']
   },
   {
     name: '窓',
