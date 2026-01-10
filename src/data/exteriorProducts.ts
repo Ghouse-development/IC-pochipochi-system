@@ -4263,4 +4263,49 @@ export const exteriorProducts: Product[] = [
       { plan: 'LIFE', price: 0 }
     ]
   },
+
+  // ===== 室内窓（設計カテゴリ） =====
+  // 室内窓の有無を設計で決定、種類・ガラスは内装タブで選択
+  {
+    id: 'ext-interior-window-yes',
+    categoryId: 'interior-window',
+    categoryName: '室内窓',
+    subcategory: '室内窓',
+    name: '室内窓あり',
+    manufacturer: 'Gハウス',
+    modelNumber: 'IWIN-YES',
+    unit: 'set',
+    isOption: true,
+    description: '室内窓を設置する※内装タブで種類・ガラスを選択',
+    variants: [
+      { id: 'v1', color: '室内窓あり', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+  {
+    id: 'ext-interior-window-no',
+    categoryId: 'interior-window',
+    categoryName: '室内窓',
+    subcategory: '室内窓',
+    name: '室内窓なし',
+    manufacturer: 'Gハウス',
+    modelNumber: 'IWIN-NO',
+    unit: 'set',
+    isOption: false,
+    description: '室内窓を設置しない',
+    variants: [
+      { id: 'v1', color: '室内窓なし', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
 ];
