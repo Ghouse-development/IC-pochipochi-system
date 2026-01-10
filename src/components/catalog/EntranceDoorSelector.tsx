@@ -4,7 +4,43 @@ import { useCartStore } from '../../stores/useCartStore';
 import { exteriorProducts } from '../../data/exteriorProducts';
 import type { Product } from '../../types/product';
 
-// ドアデザイン画像プレースホルダー生成（デザイン別の特徴的なパターン）
+// ====================
+// 画像パス定義（写真ベース）
+// 画像ファイルは /public/images/exterior/doors/ に配置
+// ====================
+const DOOR_IMAGE_BASE = '/images/exterior/doors';
+
+// ドアデザイン画像パス
+export const DOOR_DESIGN_IMAGES: Record<string, string> = {
+  'N08': `${DOOR_IMAGE_BASE}/designs/n08.jpg`,
+  'N18': `${DOOR_IMAGE_BASE}/designs/n18.jpg`,
+  'N15': `${DOOR_IMAGE_BASE}/designs/n15.jpg`,
+  'C10': `${DOOR_IMAGE_BASE}/designs/c10.jpg`,
+};
+
+// ドアカラー画像パス（デザイン-カラー）
+export const getDoorColorImagePath = (designId: string, colorName: string): string => {
+  const sanitizedColor = colorName.replace(/\s+/g, '-').toLowerCase();
+  return `${DOOR_IMAGE_BASE}/colors/${designId.toLowerCase()}-${sanitizedColor}.jpg`;
+};
+
+// ハンドル画像パス
+export const HANDLE_IMAGES: Record<string, string> = {
+  'straight': `${DOOR_IMAGE_BASE}/handles/straight.jpg`,
+  'curve': `${DOOR_IMAGE_BASE}/handles/curve.jpg`,
+  'round-straight': `${DOOR_IMAGE_BASE}/handles/round-straight.jpg`,
+  'square-straight': `${DOOR_IMAGE_BASE}/handles/square-straight.jpg`,
+  'iron': `${DOOR_IMAGE_BASE}/handles/iron.jpg`,
+};
+
+// 鍵タイプ画像パス
+export const KEY_IMAGES: Record<string, string> = {
+  'manual': `${DOOR_IMAGE_BASE}/keys/manual.jpg`,
+  'pocket': `${DOOR_IMAGE_BASE}/keys/pocket.jpg`,
+  'face': `${DOOR_IMAGE_BASE}/keys/face.jpg`,
+};
+
+// ドアデザイン画像プレースホルダー生成（デザイン別の特徴的なパターン - 画像がない場合のフォールバック）
 const generateDoorPlaceholder = (designName: string): string => {
   // デザイン別のパターンを定義
   const designPatterns: Record<string, string> = {
