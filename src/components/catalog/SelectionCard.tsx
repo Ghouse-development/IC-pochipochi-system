@@ -137,12 +137,12 @@ export const SelectionCard: React.FC<SelectionCardProps> = ({
           </p>
         )}
         {priceRange && (
-          <p className="text-lg font-black text-gray-900 dark:text-gray-100">
+          <p className="text-2xl font-black text-gray-900 dark:text-gray-100">
             {priceRange}
           </p>
         )}
         {price !== undefined && (
-          <p className={`text-lg font-black ${price === 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-900 dark:text-gray-100'}`}>
+          <p className={`text-2xl font-black ${price === 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-900 dark:text-gray-100'}`}>
             {price === 0 ? '差額なし' : `+${price.toLocaleString()}円`}
           </p>
         )}
