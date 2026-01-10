@@ -363,7 +363,23 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
         const uniqueCategories = visibleCategories.filter((cat, index, self) =>
           index === self.findIndex(c => c.name === cat.name)
         );
-        setCategories(uniqueCategories);
+        // categoryOrder.tsの設定に従ってソート
+        const catalogType = activeTab === 'exterior' ? 'exterior'
+          : activeTab === 'interior' ? 'interior'
+          : activeTab === 'equipment' ? 'water'
+          : activeTab === 'electrical' ? 'electrical'
+          : 'furniture';
+        const orderConfig = getCategoryOrderConfig(catalogType);
+        const orderMap = new Map(orderConfig.map((c, i) => [c.name, i]));
+        const sortedCategories = [...uniqueCategories].sort((a, b) => {
+          const orderA = orderMap.get(a.name) ?? 999;
+          const orderB = orderMap.get(b.name) ?? 999;
+          if (orderA !== orderB) return orderA - orderB;
+          // 順序が同じ場合はdisplay_order、それも同じなら名前順
+          if (a.display_order !== b.display_order) return a.display_order - b.display_order;
+          return a.name.localeCompare(b.name, 'ja');
+        });
+        setCategories(sortedCategories);
         // 最初の未決カテゴリを自動選択
         const firstUndecided = uniqueCategories.find(cat =>
           !cartItems.some(item => item.product.categoryName === cat.name)
@@ -418,13 +434,28 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
         });
 
         const generatedCategories = Array.from(categoryMap.values());
-        setCategories(generatedCategories);
+        // categoryOrder.tsの設定に従ってソート
+        const catalogType = activeTab === 'exterior' ? 'exterior'
+          : activeTab === 'interior' ? 'interior'
+          : activeTab === 'equipment' ? 'water'
+          : activeTab === 'electrical' ? 'electrical'
+          : 'furniture';
+        const orderConfig = getCategoryOrderConfig(catalogType);
+        const orderMap = new Map(orderConfig.map((c, i) => [c.name, i]));
+        const sortedCategories = generatedCategories.sort((a, b) => {
+          const orderA = orderMap.get(a.name) ?? 999;
+          const orderB = orderMap.get(b.name) ?? 999;
+          if (orderA !== orderB) return orderA - orderB;
+          if (a.display_order !== b.display_order) return a.display_order - b.display_order;
+          return a.name.localeCompare(b.name, 'ja');
+        });
+        setCategories(sortedCategories);
 
-        const firstUndecided = generatedCategories.find(cat =>
+        const firstUndecided = sortedCategories.find(cat =>
           !cartItems.some(item => item.product.categoryName === cat.name)
         );
         if (!selectedCategoryId) {
-          setSelectedCategoryId(firstUndecided?.id || generatedCategories[0]?.id || null);
+          setSelectedCategoryId(firstUndecided?.id || sortedCategories[0]?.id || null);
         }
       }
     };
