@@ -939,6 +939,29 @@ const staticInteriorProducts: Product[] = [
   },
 
   // ========== インテリアカウンター ==========
+  // 選択しない
+  {
+    id: 'int-counter-none',
+    categoryId: 'counter',
+    categoryName: 'カウンター',
+    subcategory: 'インテリアカウンター',
+    name: '選択しない',
+    manufacturer: '-',
+    modelNumber: 'NONE',
+    unit: 'set',
+    isOption: true,
+    description: 'インテリアカウンターを設置しない場合はこちらを選択',
+    variants: [
+      { id: 'v1', color: '-', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+  // トイレ用ちょい置きスペース ¥20,000
   {
     id: 'int-counter-toilet',
     categoryId: 'counter',
@@ -949,17 +972,17 @@ const staticInteriorProducts: Product[] = [
     modelNumber: 'COUNTER-TOILET',
     unit: 'piece',
     isOption: true,
-    description: '耐水集成タイプ 厚み24mm トイレなどちょい置きスペースに',
+    description: '耐水集成タイプ 厚み24mm トイレなどちょい置きスペースに 長さ1400mm以下 奥行300mm以下',
     variants: [
-      { id: 'v1', color: 'ソフトウォールナット色', images: [] },
-      { id: 'v2', color: 'ウォールナット色', images: [] },
-      { id: 'v3', color: 'チェリー色', images: [] },
-      { id: 'v4', color: 'グレージュアッシュ色', images: [] },
-      { id: 'v5', color: 'イタリアオーク色', images: [] },
-      { id: 'v6', color: 'メープル色', images: [] },
-      { id: 'v7', color: 'ホワイトオーク色', images: [] },
-      { id: 'v8', color: 'ホワイトアッシュ色', images: [] },
-      { id: 'v9', color: 'しっくいホワイト色', images: [] }
+      { id: 'v1', color: 'ソフトウォールナット色 LV', images: [] },
+      { id: 'v2', color: 'ウォールナット色 TY', images: [] },
+      { id: 'v3', color: 'チェリー色 CY', images: [] },
+      { id: 'v4', color: 'グレージュアッシュ色 RV', images: [] },
+      { id: 'v5', color: 'イデアオーク色 EV', images: [] },
+      { id: 'v6', color: 'メープル色 OY', images: [] },
+      { id: 'v7', color: 'ホワイトオーク色 WY', images: [] },
+      { id: 'v8', color: 'ホワイトアッシュ色 GY', images: [] },
+      { id: 'v9', color: 'しっくいホワイト色 PY', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 20000 },
@@ -968,27 +991,28 @@ const staticInteriorProducts: Product[] = [
       { plan: 'LIFE', price: 20000 }
     ]
   },
+  // 奥行100〜200mm（飾り棚用）アングル使用
   {
-    id: 'int-counter-shelf-small',
+    id: 'int-counter-shelf-w1000',
     categoryId: 'counter',
     categoryName: 'カウンター',
     subcategory: 'インテリアカウンター',
-    name: 'インテリアカウンター 奥行100〜200mm（飾り棚用）W〜1000mm',
+    name: '奥行100〜200mm W〜1000mm',
     manufacturer: 'Panasonic',
-    modelNumber: 'COUNTER-SHELF-S',
+    modelNumber: 'COUNTER-D200-W1000',
     unit: 'piece',
     isOption: true,
-    description: '耐水集成タイプ 厚み24mm アングル3個付き',
+    description: '飾り棚用 耐水集成タイプ 厚み24mm アングル3個',
     variants: [
-      { id: 'v1', color: 'ソフトウォールナット色', images: [] },
-      { id: 'v2', color: 'ウォールナット色', images: [] },
-      { id: 'v3', color: 'チェリー色', images: [] },
-      { id: 'v4', color: 'グレージュアッシュ色', images: [] },
-      { id: 'v5', color: 'イタリアオーク色', images: [] },
-      { id: 'v6', color: 'メープル色', images: [] },
-      { id: 'v7', color: 'ホワイトオーク色', images: [] },
-      { id: 'v8', color: 'ホワイトアッシュ色', images: [] },
-      { id: 'v9', color: 'しっくいホワイト色', images: [] }
+      { id: 'v1', color: 'ソフトウォールナット色 LV', images: [] },
+      { id: 'v2', color: 'ウォールナット色 TY', images: [] },
+      { id: 'v3', color: 'チェリー色 CY', images: [] },
+      { id: 'v4', color: 'グレージュアッシュ色 RV', images: [] },
+      { id: 'v5', color: 'イデアオーク色 EV', images: [] },
+      { id: 'v6', color: 'メープル色 OY', images: [] },
+      { id: 'v7', color: 'ホワイトオーク色 WY', images: [] },
+      { id: 'v8', color: 'ホワイトアッシュ色 GY', images: [] },
+      { id: 'v9', color: 'しっくいホワイト色 PY', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 41000 },
@@ -998,26 +1022,143 @@ const staticInteriorProducts: Product[] = [
     ]
   },
   {
-    id: 'int-counter-study-medium',
+    id: 'int-counter-shelf-w1800',
     categoryId: 'counter',
     categoryName: 'カウンター',
     subcategory: 'インテリアカウンター',
-    name: 'インテリアカウンター 奥行201〜450mm（スタディスペース用）W1001〜1800mm',
+    name: '奥行100〜200mm W1001〜1800mm',
     manufacturer: 'Panasonic',
-    modelNumber: 'COUNTER-STUDY-M',
+    modelNumber: 'COUNTER-D200-W1800',
     unit: 'piece',
     isOption: true,
-    description: '耐水集成タイプ 厚み24mm ブラケット4個付き',
+    description: '飾り棚用 耐水集成タイプ 厚み24mm アングル4個',
     variants: [
-      { id: 'v1', color: 'ソフトウォールナット色', images: [] },
-      { id: 'v2', color: 'ウォールナット色', images: [] },
-      { id: 'v3', color: 'チェリー色', images: [] },
-      { id: 'v4', color: 'グレージュアッシュ色', images: [] },
-      { id: 'v5', color: 'イタリアオーク色', images: [] },
-      { id: 'v6', color: 'メープル色', images: [] },
-      { id: 'v7', color: 'ホワイトオーク色', images: [] },
-      { id: 'v8', color: 'ホワイトアッシュ色', images: [] },
-      { id: 'v9', color: 'しっくいホワイト色', images: [] }
+      { id: 'v1', color: 'ソフトウォールナット色 LV', images: [] },
+      { id: 'v2', color: 'ウォールナット色 TY', images: [] },
+      { id: 'v3', color: 'チェリー色 CY', images: [] },
+      { id: 'v4', color: 'グレージュアッシュ色 RV', images: [] },
+      { id: 'v5', color: 'イデアオーク色 EV', images: [] },
+      { id: 'v6', color: 'メープル色 OY', images: [] },
+      { id: 'v7', color: 'ホワイトオーク色 WY', images: [] },
+      { id: 'v8', color: 'ホワイトアッシュ色 GY', images: [] },
+      { id: 'v9', color: 'しっくいホワイト色 PY', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 58000 },
+      { plan: 'HOURS', price: 58000 },
+      { plan: 'LIFE+', price: 58000 },
+      { plan: 'LIFE', price: 58000 }
+    ]
+  },
+  {
+    id: 'int-counter-shelf-w2800',
+    categoryId: 'counter',
+    categoryName: 'カウンター',
+    subcategory: 'インテリアカウンター',
+    name: '奥行100〜200mm W1801〜2800mm',
+    manufacturer: 'Panasonic',
+    modelNumber: 'COUNTER-D200-W2800',
+    unit: 'piece',
+    isOption: true,
+    description: '飾り棚用 耐水集成タイプ 厚み24mm アングル6個',
+    variants: [
+      { id: 'v1', color: 'ソフトウォールナット色 LV', images: [] },
+      { id: 'v2', color: 'ウォールナット色 TY', images: [] },
+      { id: 'v3', color: 'チェリー色 CY', images: [] },
+      { id: 'v4', color: 'グレージュアッシュ色 RV', images: [] },
+      { id: 'v5', color: 'イデアオーク色 EV', images: [] },
+      { id: 'v6', color: 'メープル色 OY', images: [] },
+      { id: 'v7', color: 'ホワイトオーク色 WY', images: [] },
+      { id: 'v8', color: 'ホワイトアッシュ色 GY', images: [] },
+      { id: 'v9', color: 'しっくいホワイト色 PY', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 74000 },
+      { plan: 'HOURS', price: 74000 },
+      { plan: 'LIFE+', price: 74000 },
+      { plan: 'LIFE', price: 74000 }
+    ]
+  },
+  {
+    id: 'int-counter-shelf-w4000',
+    categoryId: 'counter',
+    categoryName: 'カウンター',
+    subcategory: 'インテリアカウンター',
+    name: '奥行100〜200mm W2801〜4000mm',
+    manufacturer: 'Panasonic',
+    modelNumber: 'COUNTER-D200-W4000',
+    unit: 'piece',
+    isOption: true,
+    description: '飾り棚用 耐水集成タイプ 厚み24mm アングル9個',
+    variants: [
+      { id: 'v1', color: 'ソフトウォールナット色 LV', images: [] },
+      { id: 'v2', color: 'ウォールナット色 TY', images: [] },
+      { id: 'v3', color: 'チェリー色 CY', images: [] },
+      { id: 'v4', color: 'グレージュアッシュ色 RV', images: [] },
+      { id: 'v5', color: 'イデアオーク色 EV', images: [] },
+      { id: 'v6', color: 'メープル色 OY', images: [] },
+      { id: 'v7', color: 'ホワイトオーク色 WY', images: [] },
+      { id: 'v8', color: 'ホワイトアッシュ色 GY', images: [] },
+      { id: 'v9', color: 'しっくいホワイト色 PY', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 94000 },
+      { plan: 'HOURS', price: 94000 },
+      { plan: 'LIFE+', price: 94000 },
+      { plan: 'LIFE', price: 94000 }
+    ]
+  },
+  // 奥行201〜450mm（スタディスペース用）ブラケット使用
+  {
+    id: 'int-counter-study-w1000',
+    categoryId: 'counter',
+    categoryName: 'カウンター',
+    subcategory: 'インテリアカウンター',
+    name: '奥行201〜450mm W〜1000mm',
+    manufacturer: 'Panasonic',
+    modelNumber: 'COUNTER-D450-W1000',
+    unit: 'piece',
+    isOption: true,
+    description: 'スタディスペース用 耐水集成タイプ 厚み24mm ブラケット3個',
+    variants: [
+      { id: 'v1', color: 'ソフトウォールナット色 LV', images: [] },
+      { id: 'v2', color: 'ウォールナット色 TY', images: [] },
+      { id: 'v3', color: 'チェリー色 CY', images: [] },
+      { id: 'v4', color: 'グレージュアッシュ色 RV', images: [] },
+      { id: 'v5', color: 'イデアオーク色 EV', images: [] },
+      { id: 'v6', color: 'メープル色 OY', images: [] },
+      { id: 'v7', color: 'ホワイトオーク色 WY', images: [] },
+      { id: 'v8', color: 'ホワイトアッシュ色 GY', images: [] },
+      { id: 'v9', color: 'しっくいホワイト色 PY', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 41000 },
+      { plan: 'HOURS', price: 41000 },
+      { plan: 'LIFE+', price: 41000 },
+      { plan: 'LIFE', price: 41000 }
+    ]
+  },
+  {
+    id: 'int-counter-study-w1800',
+    categoryId: 'counter',
+    categoryName: 'カウンター',
+    subcategory: 'インテリアカウンター',
+    name: '奥行201〜450mm W1001〜1800mm',
+    manufacturer: 'Panasonic',
+    modelNumber: 'COUNTER-D450-W1800',
+    unit: 'piece',
+    isOption: true,
+    description: 'スタディスペース用 耐水集成タイプ 厚み24mm ブラケット4個',
+    variants: [
+      { id: 'v1', color: 'ソフトウォールナット色 LV', images: [] },
+      { id: 'v2', color: 'ウォールナット色 TY', images: [] },
+      { id: 'v3', color: 'チェリー色 CY', images: [] },
+      { id: 'v4', color: 'グレージュアッシュ色 RV', images: [] },
+      { id: 'v5', color: 'イデアオーク色 EV', images: [] },
+      { id: 'v6', color: 'メープル色 OY', images: [] },
+      { id: 'v7', color: 'ホワイトオーク色 WY', images: [] },
+      { id: 'v8', color: 'ホワイトアッシュ色 GY', images: [] },
+      { id: 'v9', color: 'しっくいホワイト色 PY', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 64000 },
@@ -1027,32 +1168,202 @@ const staticInteriorProducts: Product[] = [
     ]
   },
   {
-    id: 'int-counter-work-large',
+    id: 'int-counter-study-w2800',
     categoryId: 'counter',
     categoryName: 'カウンター',
     subcategory: 'インテリアカウンター',
-    name: 'インテリアカウンター 奥行451〜600mm（ワークスペース用）W1801〜2800mm',
+    name: '奥行201〜450mm W1801〜2800mm',
     manufacturer: 'Panasonic',
-    modelNumber: 'COUNTER-WORK-L',
+    modelNumber: 'COUNTER-D450-W2800',
     unit: 'piece',
     isOption: true,
-    description: '耐水集成タイプ 厚み24mm ブラケット6個付き',
+    description: 'スタディスペース用 耐水集成タイプ 厚み24mm ブラケット6個',
     variants: [
-      { id: 'v1', color: 'ソフトウォールナット色', images: [] },
-      { id: 'v2', color: 'ウォールナット色', images: [] },
-      { id: 'v3', color: 'チェリー色', images: [] },
-      { id: 'v4', color: 'グレージュアッシュ色', images: [] },
-      { id: 'v5', color: 'イタリアオーク色', images: [] },
-      { id: 'v6', color: 'メープル色', images: [] },
-      { id: 'v7', color: 'ホワイトオーク色', images: [] },
-      { id: 'v8', color: 'ホワイトアッシュ色', images: [] },
-      { id: 'v9', color: 'しっくいホワイト色', images: [] }
+      { id: 'v1', color: 'ソフトウォールナット色 LV', images: [] },
+      { id: 'v2', color: 'ウォールナット色 TY', images: [] },
+      { id: 'v3', color: 'チェリー色 CY', images: [] },
+      { id: 'v4', color: 'グレージュアッシュ色 RV', images: [] },
+      { id: 'v5', color: 'イデアオーク色 EV', images: [] },
+      { id: 'v6', color: 'メープル色 OY', images: [] },
+      { id: 'v7', color: 'ホワイトオーク色 WY', images: [] },
+      { id: 'v8', color: 'ホワイトアッシュ色 GY', images: [] },
+      { id: 'v9', color: 'しっくいホワイト色 PY', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 81000 },
+      { plan: 'HOURS', price: 81000 },
+      { plan: 'LIFE+', price: 81000 },
+      { plan: 'LIFE', price: 81000 }
+    ]
+  },
+  {
+    id: 'int-counter-study-w4000',
+    categoryId: 'counter',
+    categoryName: 'カウンター',
+    subcategory: 'インテリアカウンター',
+    name: '奥行201〜450mm W2801〜4000mm',
+    manufacturer: 'Panasonic',
+    modelNumber: 'COUNTER-D450-W4000',
+    unit: 'piece',
+    isOption: true,
+    description: 'スタディスペース用 耐水集成タイプ 厚み24mm ブラケット9個',
+    variants: [
+      { id: 'v1', color: 'ソフトウォールナット色 LV', images: [] },
+      { id: 'v2', color: 'ウォールナット色 TY', images: [] },
+      { id: 'v3', color: 'チェリー色 CY', images: [] },
+      { id: 'v4', color: 'グレージュアッシュ色 RV', images: [] },
+      { id: 'v5', color: 'イデアオーク色 EV', images: [] },
+      { id: 'v6', color: 'メープル色 OY', images: [] },
+      { id: 'v7', color: 'ホワイトオーク色 WY', images: [] },
+      { id: 'v8', color: 'ホワイトアッシュ色 GY', images: [] },
+      { id: 'v9', color: 'しっくいホワイト色 PY', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 115000 },
+      { plan: 'HOURS', price: 115000 },
+      { plan: 'LIFE+', price: 115000 },
+      { plan: 'LIFE', price: 115000 }
+    ]
+  },
+  // 奥行451〜600mm（ワークスペース用）ブラケット使用
+  {
+    id: 'int-counter-work-w1000',
+    categoryId: 'counter',
+    categoryName: 'カウンター',
+    subcategory: 'インテリアカウンター',
+    name: '奥行451〜600mm W〜1000mm',
+    manufacturer: 'Panasonic',
+    modelNumber: 'COUNTER-D600-W1000',
+    unit: 'piece',
+    isOption: true,
+    description: 'ワークスペース用 耐水集成タイプ 厚み24mm ブラケット3個',
+    variants: [
+      { id: 'v1', color: 'ソフトウォールナット色 LV', images: [] },
+      { id: 'v2', color: 'ウォールナット色 TY', images: [] },
+      { id: 'v3', color: 'チェリー色 CY', images: [] },
+      { id: 'v4', color: 'グレージュアッシュ色 RV', images: [] },
+      { id: 'v5', color: 'イデアオーク色 EV', images: [] },
+      { id: 'v6', color: 'メープル色 OY', images: [] },
+      { id: 'v7', color: 'ホワイトオーク色 WY', images: [] },
+      { id: 'v8', color: 'ホワイトアッシュ色 GY', images: [] },
+      { id: 'v9', color: 'しっくいホワイト色 PY', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 61000 },
+      { plan: 'HOURS', price: 61000 },
+      { plan: 'LIFE+', price: 61000 },
+      { plan: 'LIFE', price: 61000 }
+    ]
+  },
+  {
+    id: 'int-counter-work-w1800',
+    categoryId: 'counter',
+    categoryName: 'カウンター',
+    subcategory: 'インテリアカウンター',
+    name: '奥行451〜600mm W1001〜1800mm',
+    manufacturer: 'Panasonic',
+    modelNumber: 'COUNTER-D600-W1800',
+    unit: 'piece',
+    isOption: true,
+    description: 'ワークスペース用 耐水集成タイプ 厚み24mm ブラケット4個',
+    variants: [
+      { id: 'v1', color: 'ソフトウォールナット色 LV', images: [] },
+      { id: 'v2', color: 'ウォールナット色 TY', images: [] },
+      { id: 'v3', color: 'チェリー色 CY', images: [] },
+      { id: 'v4', color: 'グレージュアッシュ色 RV', images: [] },
+      { id: 'v5', color: 'イデアオーク色 EV', images: [] },
+      { id: 'v6', color: 'メープル色 OY', images: [] },
+      { id: 'v7', color: 'ホワイトオーク色 WY', images: [] },
+      { id: 'v8', color: 'ホワイトアッシュ色 GY', images: [] },
+      { id: 'v9', color: 'しっくいホワイト色 PY', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 103000 },
+      { plan: 'HOURS', price: 103000 },
+      { plan: 'LIFE+', price: 103000 },
+      { plan: 'LIFE', price: 103000 }
+    ]
+  },
+  {
+    id: 'int-counter-work-w2800',
+    categoryId: 'counter',
+    categoryName: 'カウンター',
+    subcategory: 'インテリアカウンター',
+    name: '奥行451〜600mm W1801〜2800mm',
+    manufacturer: 'Panasonic',
+    modelNumber: 'COUNTER-D600-W2800',
+    unit: 'piece',
+    isOption: true,
+    description: 'ワークスペース用 耐水集成タイプ 厚み24mm ブラケット6個',
+    variants: [
+      { id: 'v1', color: 'ソフトウォールナット色 LV', images: [] },
+      { id: 'v2', color: 'ウォールナット色 TY', images: [] },
+      { id: 'v3', color: 'チェリー色 CY', images: [] },
+      { id: 'v4', color: 'グレージュアッシュ色 RV', images: [] },
+      { id: 'v5', color: 'イデアオーク色 EV', images: [] },
+      { id: 'v6', color: 'メープル色 OY', images: [] },
+      { id: 'v7', color: 'ホワイトオーク色 WY', images: [] },
+      { id: 'v8', color: 'ホワイトアッシュ色 GY', images: [] },
+      { id: 'v9', color: 'しっくいホワイト色 PY', images: [] }
     ],
     pricing: [
       { plan: 'LACIE', price: 141000 },
       { plan: 'HOURS', price: 141000 },
       { plan: 'LIFE+', price: 141000 },
       { plan: 'LIFE', price: 141000 }
+    ]
+  },
+  {
+    id: 'int-counter-work-w4000',
+    categoryId: 'counter',
+    categoryName: 'カウンター',
+    subcategory: 'インテリアカウンター',
+    name: '奥行451〜600mm W2801〜4000mm',
+    manufacturer: 'Panasonic',
+    modelNumber: 'COUNTER-D600-W4000',
+    unit: 'piece',
+    isOption: true,
+    description: 'ワークスペース用 耐水集成タイプ 厚み24mm ブラケット9個',
+    variants: [
+      { id: 'v1', color: 'ソフトウォールナット色 LV', images: [] },
+      { id: 'v2', color: 'ウォールナット色 TY', images: [] },
+      { id: 'v3', color: 'チェリー色 CY', images: [] },
+      { id: 'v4', color: 'グレージュアッシュ色 RV', images: [] },
+      { id: 'v5', color: 'イデアオーク色 EV', images: [] },
+      { id: 'v6', color: 'メープル色 OY', images: [] },
+      { id: 'v7', color: 'ホワイトオーク色 WY', images: [] },
+      { id: 'v8', color: 'ホワイトアッシュ色 GY', images: [] },
+      { id: 'v9', color: 'しっくいホワイト色 PY', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 192000 },
+      { plan: 'HOURS', price: 192000 },
+      { plan: 'LIFE+', price: 192000 },
+      { plan: 'LIFE', price: 192000 }
+    ]
+  },
+  // 配線用キャップ穴加工オプション
+  {
+    id: 'int-counter-cable-cap',
+    categoryId: 'counter',
+    categoryName: 'カウンター',
+    subcategory: 'インテリアカウンターオプション',
+    name: '配線用キャップ穴加工',
+    manufacturer: 'Panasonic',
+    modelNumber: 'COUNTER-CABLE-CAP',
+    unit: 'piece',
+    isOption: true,
+    description: 'カウンターに配線用キャップ穴を加工',
+    variants: [
+      { id: 'v1', color: 'ブラウン', images: [] },
+      { id: 'v2', color: 'ブラック', images: [] },
+      { id: 'v3', color: 'グレー', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 5000 },
+      { plan: 'HOURS', price: 5000 },
+      { plan: 'LIFE+', price: 5000 },
+      { plan: 'LIFE', price: 5000 }
     ]
   },
 
@@ -2969,6 +3280,31 @@ const staticInteriorProducts: Product[] = [
   },
 
   // ========== 床材タイル（PDF21追加）==========
+  // タイル目地色（タイル床材選択時に必須）
+  {
+    id: 'int-tile-grout-001',
+    categoryId: 'base-floor',
+    categoryName: 'ベース床',
+    subcategory: 'タイル目地',
+    materialType: 'タイル',
+    name: 'タイル目地色',
+    manufacturer: '共通',
+    modelNumber: 'SS-GROUT',
+    unit: 'set',
+    isOption: true,
+    description: 'タイル床材選択時に目地色を選択（タイル施工費に含む）',
+    variants: [
+      { id: 'v1', color: '①ホワイト（SS-11K）', images: [] },
+      { id: 'v2', color: '②ライトグレー（SS-32K）', images: [] },
+      { id: 'v3', color: '③ダークグレー（SS-23K）', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
   {
     id: 'int-tile-floor-001',
     categoryId: 'base-floor',
@@ -3763,6 +4099,28 @@ const staticInteriorProducts: Product[] = [
   },
 
   // ========== 室内窓（PDF28準拠）==========
+  // 選択しない
+  {
+    id: 'int-window-none',
+    categoryId: 'window-interior',
+    categoryName: '室内窓',
+    subcategory: '室内窓',
+    name: '選択しない',
+    manufacturer: '-',
+    modelNumber: 'NONE',
+    unit: 'set',
+    isOption: true,
+    description: '室内窓を設置しない場合はこちらを選択',
+    variants: [
+      { id: 'v1', color: '-', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
   // Aパターン（A-1〜A-4形状）
   {
     id: 'int-window-a-standard',
@@ -3922,6 +4280,28 @@ const staticInteriorProducts: Product[] = [
   },
 
   // ========== アクセントパネル（PDF29追加）==========
+  // 選択しない
+  {
+    id: 'int-panel-none',
+    categoryId: 'wall',
+    categoryName: '壁材',
+    subcategory: 'アクセントパネル',
+    name: '選択しない',
+    manufacturer: '-',
+    modelNumber: 'NONE',
+    unit: 'set',
+    isOption: true,
+    description: 'アクセントパネルを設置しない場合はこちらを選択',
+    variants: [
+      { id: 'v1', color: '-', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
   // THE WALL 朝日ウッドテック パネルサイズ 2,730mm×600mm
   {
     id: 'int-panel-001',
@@ -4112,6 +4492,28 @@ const staticInteriorProducts: Product[] = [
   },
 
   // ========== 格子（PDF30追加）==========
+  // 選択しない
+  {
+    id: 'int-lattice-none',
+    categoryId: 'partition',
+    categoryName: '間仕切り',
+    subcategory: '格子',
+    name: '選択しない',
+    manufacturer: '-',
+    modelNumber: 'NONE',
+    unit: 'set',
+    isOption: true,
+    description: '格子を設置しない場合はこちらを選択',
+    variants: [
+      { id: 'v1', color: '-', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
   {
     id: 'int-lattice-001',
     categoryId: 'partition',
@@ -4138,6 +4540,55 @@ const staticInteriorProducts: Product[] = [
   },
 
   // ========== アクセントタイル（PDF31-34追加）==========
+  // 選択しない
+  {
+    id: 'int-wall-tile-none',
+    categoryId: 'wall',
+    categoryName: '壁材',
+    subcategory: 'アクセントタイル',
+    name: '選択しない',
+    manufacturer: '-',
+    modelNumber: 'NONE',
+    unit: 'set',
+    isOption: true,
+    description: 'アクセントタイルを設置しない場合はこちらを選択',
+    variants: [
+      { id: 'v1', color: '-', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+  // 壁アクセントタイル目地色（壁タイル選択時に必須）※エコカラットは目地無しのみ
+  {
+    id: 'int-wall-tile-grout-001',
+    categoryId: 'wall',
+    categoryName: '壁材',
+    subcategory: 'アクセントタイル目地',
+    name: '壁タイル目地色',
+    manufacturer: '共通',
+    modelNumber: 'SS-WALL-GROUT',
+    unit: 'set',
+    isOption: true,
+    description: '壁アクセントタイル選択時に目地色を選択（タイル施工費に含む）※エコカラットは目地無しのみ',
+    variants: [
+      { id: 'v1', color: '①ホワイト（SS-11K）', images: [] },
+      { id: 'v2', color: '②ライトグレー（SS-32K）', images: [] },
+      { id: 'v3', color: '③グレー（SS-22K）', images: [] },
+      { id: 'v4', color: '④ダークグレー（SS-23K）', images: [] },
+      { id: 'v5', color: '⑤ベージュ（SS-33K）', images: [] },
+      { id: 'v6', color: '⑥目地無し', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
   {
     id: 'int-tile-001',
     categoryId: 'wall',
@@ -4529,6 +4980,28 @@ const staticInteriorProducts: Product[] = [
   },
 
   // ========== エコカラット（PDF34追加）==========
+  // 選択しない
+  {
+    id: 'int-ecocarat-none',
+    categoryId: 'wall',
+    categoryName: '壁材',
+    subcategory: 'エコカラット',
+    name: '選択しない',
+    manufacturer: '-',
+    modelNumber: 'NONE',
+    unit: 'set',
+    isOption: true,
+    description: 'エコカラットを設置しない場合はこちらを選択',
+    variants: [
+      { id: 'v1', color: '-', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
   {
     id: 'int-ecocarat-001',
     categoryId: 'wall',
