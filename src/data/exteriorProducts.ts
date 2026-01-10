@@ -1744,6 +1744,7 @@ export const exteriorProducts: Product[] = [
   },
 
   // ===== 庇 - アルフィン庇 AF95シリーズ 木目調仕上げ =====
+  // 屋根部カラー4色 × 軒天面カラー4色 = 16パターン
   {
     id: 'ext-awning-alfin-af95',
     categoryId: 'awning',
@@ -1754,12 +1755,28 @@ export const exteriorProducts: Product[] = [
     modelNumber: 'AF95',
     unit: 'piece',
     isOption: true,
-    description: 'W1800×D950 屋根部カラー(ステンカラー/シルバー/ブロンズ/ブラック)と軒天面カラー(ヒッコリー/ウォルナット/チーク/ナラ)の組み合わせ',
+    description: 'W1800×D950 屋根部カラー×軒天面カラーの組み合わせ（16パターン）',
     variants: [
-      { id: 'v1', color: 'ヒッコリー', colorCode: 'ヒッコリー', images: [] },
-      { id: 'v2', color: 'ウォルナット', colorCode: 'ウォルナット', images: [] },
-      { id: 'v3', color: 'チーク', colorCode: 'チーク', images: [] },
-      { id: 'v4', color: 'ナラ', colorCode: 'ナラ', images: [] },
+      // ステンカラー × 軒天面4色
+      { id: 'v01', color: 'ステンカラー×ヒッコリー', colorCode: 'ステンカラー×ヒッコリー', images: [] },
+      { id: 'v02', color: 'ステンカラー×ウォルナット', colorCode: 'ステンカラー×ウォルナット', images: [] },
+      { id: 'v03', color: 'ステンカラー×チーク', colorCode: 'ステンカラー×チーク', images: [] },
+      { id: 'v04', color: 'ステンカラー×ナラ', colorCode: 'ステンカラー×ナラ', images: [] },
+      // シルバー × 軒天面4色
+      { id: 'v05', color: 'シルバー×ヒッコリー', colorCode: 'シルバー×ヒッコリー', images: [] },
+      { id: 'v06', color: 'シルバー×ウォルナット', colorCode: 'シルバー×ウォルナット', images: [] },
+      { id: 'v07', color: 'シルバー×チーク', colorCode: 'シルバー×チーク', images: [] },
+      { id: 'v08', color: 'シルバー×ナラ', colorCode: 'シルバー×ナラ', images: [] },
+      // ブロンズ × 軒天面4色
+      { id: 'v09', color: 'ブロンズ×ヒッコリー', colorCode: 'ブロンズ×ヒッコリー', images: [] },
+      { id: 'v10', color: 'ブロンズ×ウォルナット', colorCode: 'ブロンズ×ウォルナット', images: [] },
+      { id: 'v11', color: 'ブロンズ×チーク', colorCode: 'ブロンズ×チーク', images: [] },
+      { id: 'v12', color: 'ブロンズ×ナラ', colorCode: 'ブロンズ×ナラ', images: [] },
+      // ブラック × 軒天面4色
+      { id: 'v13', color: 'ブラック×ヒッコリー', colorCode: 'ブラック×ヒッコリー', images: [] },
+      { id: 'v14', color: 'ブラック×ウォルナット', colorCode: 'ブラック×ウォルナット', images: [] },
+      { id: 'v15', color: 'ブラック×チーク', colorCode: 'ブラック×チーク', images: [] },
+      { id: 'v16', color: 'ブラック×ナラ', colorCode: 'ブラック×ナラ', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 352000 },
