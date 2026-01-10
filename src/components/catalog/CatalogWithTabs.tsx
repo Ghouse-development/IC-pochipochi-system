@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { Search, ClipboardCheck, Check, Star, ChevronRight, ChevronLeft, Home, Zap, Heart, X, Scale, FileDown, HelpCircle, Eye } from 'lucide-react';
+import { Search, ClipboardCheck, Check, Star, ChevronRight, ChevronLeft, Home, Zap, Heart, X, Scale, FileDown, HelpCircle, Eye, Flame } from 'lucide-react';
 import { useToast } from '../common/Toast';
 import { useTimeout } from '../../hooks/useTimeout';
 import { useDebounce } from '../../hooks/useDebounce';
@@ -2206,6 +2206,48 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                       setSelectedSeries(null);
                     }}
                   />
+                </div>
+              ) : activeTab === 'furniture' && currentCategoryName === 'ガス乾燥機' && !hasGasSupply ? (
+                /* 家具・家電タブ: ガス乾燥機カテゴリでガス未選択時のプロンプト */
+                <div className="max-w-2xl mx-auto px-4 py-12">
+                  <div className="bg-gradient-to-br from-orange-50 to-amber-50 dark:from-orange-900/20 dark:to-amber-900/20 border border-orange-200 dark:border-orange-800 rounded-2xl p-8 text-center">
+                    <div className="text-5xl mb-4">🔥</div>
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-3">
+                      乾太くんをご検討ですか？
+                    </h2>
+                    <p className="text-gray-600 dark:text-gray-400 mb-6">
+                      ガス衣類乾燥機「乾太くん」を設置するには、<br />
+                      <span className="font-semibold text-orange-600 dark:text-orange-400">ガス引込み工事（税込 約35万円）</span>が必要です。
+                    </p>
+                    <div className="bg-white dark:bg-gray-800 rounded-xl p-4 mb-6 text-left">
+                      <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">乾太くんのメリット</h3>
+                      <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                        <li>✓ 電気式の約1/3の時間で乾燥（5kgで約52分）</li>
+                        <li>✓ ふんわり仕上がり、生乾き臭なし</li>
+                        <li>✓ 天候に左右されない</li>
+                      </ul>
+                    </div>
+                    <button
+                      onClick={() => {
+                        // 設計タブのガス引込みカテゴリに移動
+                        navigate('/catalog/design');
+                        // ガス引込みカテゴリを選択（カテゴリIDを探す）
+                        const gasCategory = categories.find(c => c.name === 'ガス引込み');
+                        if (gasCategory) {
+                          setTimeout(() => {
+                            navigate(`/catalog/design/${gasCategory.id}`);
+                          }, 100);
+                        }
+                      }}
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-semibold rounded-xl shadow-lg transition-all"
+                    >
+                      <Flame className="w-5 h-5" />
+                      ガス引込みを追加する
+                    </button>
+                    <p className="text-xs text-gray-500 dark:text-gray-500 mt-4">
+                      ※設計タブでガス引込みの有無を選択できます
+                    </p>
+                  </div>
                 </div>
               ) : filteredItems.length === 0 ? (
                 <EmptyState searchTerm={searchTerm} onClear={() => setSearchTerm('')} />
