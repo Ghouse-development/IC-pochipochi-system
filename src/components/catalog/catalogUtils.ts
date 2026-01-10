@@ -180,7 +180,6 @@ export const FURNITURE_CATEGORIES = [
   'カーテン',
   'ブラインド',
   '家具',
-  'ガス乾燥機', // 乾太くん
 ];
 
 // 「電気設備」に属するカテゴリ名
@@ -196,6 +195,7 @@ export const ELECTRICAL_CATEGORIES = [
   '電気設備',
   'インターホン',
   '配線',
+  'ガス乾燥機', // 乾太くん
 ];
 
 // IC提案依頼が有効なカテゴリ

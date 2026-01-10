@@ -400,7 +400,6 @@ export const INTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
       '玄関手洗い',
       '水栓',
       '洗濯パン',
-      'ガス乾燥機',
       'ガス工事',
       'ナノバブル',
     ]
@@ -566,6 +565,11 @@ export const ELECTRICAL_CATEGORY_ORDER: CategoryOrderConfig[] = [
     name: '電気配線',
     icon: '⚡',
     subcategoryOrder: ['配線', '分電盤', 'アース', 'LAN配線', '空配管']
+  },
+  {
+    name: 'ガス乾燥機',
+    icon: '🔥',
+    subcategoryOrder: ['乾太くん', 'ガス乾燥機なし']
   },
 ];
 

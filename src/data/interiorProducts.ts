@@ -6129,6 +6129,135 @@ const staticInteriorProducts: Product[] = [
       { plan: 'LIFE+', price: 200000 },
       { plan: 'LIFE', price: 200000 }
     ]
+  },
+
+  // ========== 乾太くん（ガス衣類乾燥機）==========
+  // ※ガス引込みが必要（設計で「ガス引込みあり」選択時のみ表示）
+  {
+    id: 'int-dryer-001',
+    categoryId: 'gas-dryer',
+    categoryName: 'ガス乾燥機',
+    subcategory: '乾太くん',
+    name: '乾太くん スタンダード 5kg',
+    manufacturer: 'リンナイ',
+    modelNumber: 'RDT-54S',
+    unit: '個',
+    isOption: true,
+    description: 'ガス衣類乾燥機 スタンダードタイプ 5kg ※ガス引込み必須',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 272000 },
+      { plan: 'HOURS', price: 272000 },
+      { plan: 'LIFE+', price: 272000 },
+      { plan: 'LIFE', price: 272000 }
+    ]
+  },
+  {
+    id: 'int-dryer-002',
+    categoryId: 'gas-dryer',
+    categoryName: 'ガス乾燥機',
+    subcategory: '乾太くん',
+    name: '乾太くん デラックス 6kg',
+    manufacturer: 'リンナイ',
+    modelNumber: 'RDT-63',
+    unit: '個',
+    isOption: true,
+    description: 'ガス衣類乾燥機 デラックスタイプ 6kg ※ガス引込み必須',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 297000 },
+      { plan: 'HOURS', price: 297000 },
+      { plan: 'LIFE+', price: 297000 },
+      { plan: 'LIFE', price: 297000 }
+    ]
+  },
+  {
+    id: 'int-dryer-003',
+    categoryId: 'gas-dryer',
+    categoryName: 'ガス乾燥機',
+    subcategory: '乾太くん',
+    name: '乾太くん デラックス 9kg',
+    manufacturer: 'リンナイ',
+    modelNumber: 'RDT-93',
+    unit: '個',
+    isOption: true,
+    description: 'ガス衣類乾燥機 デラックスタイプ 9kg ※ガス引込み必須',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 330000 },
+      { plan: 'HOURS', price: 330000 },
+      { plan: 'LIFE+', price: 330000 },
+      { plan: 'LIFE', price: 330000 }
+    ]
+  },
+  {
+    id: 'int-dryer-004',
+    categoryId: 'gas-dryer',
+    categoryName: 'ガス乾燥機',
+    subcategory: '乾太くん',
+    name: '乾太くん専用架台',
+    manufacturer: 'リンナイ',
+    modelNumber: 'DS-KADAI',
+    unit: '個',
+    isOption: true,
+    description: '乾太くん専用架台 ※乾太くん選択時のみ',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 30000 },
+      { plan: 'HOURS', price: 30000 },
+      { plan: 'LIFE+', price: 30000 },
+      { plan: 'LIFE', price: 30000 }
+    ]
+  },
+  {
+    id: 'int-dryer-005',
+    categoryId: 'gas-dryer',
+    categoryName: 'ガス乾燥機',
+    subcategory: '乾太くん',
+    name: '乾太くん専用収納ユニット',
+    manufacturer: 'リンナイ',
+    modelNumber: 'DS-UNIT',
+    unit: '個',
+    isOption: true,
+    description: '乾太くん専用収納ユニット ※乾太くん選択時のみ',
+    variants: [
+      { id: 'v1', color: 'ホワイト', colorCode: '#FFFFFF', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 140000 },
+      { plan: 'HOURS', price: 140000 },
+      { plan: 'LIFE+', price: 140000 },
+      { plan: 'LIFE', price: 140000 }
+    ]
+  },
+  {
+    id: 'int-dryer-none',
+    categoryId: 'gas-dryer',
+    categoryName: 'ガス乾燥機',
+    subcategory: '乾太くん',
+    name: 'ガス乾燥機なし（標準）',
+    manufacturer: '-',
+    modelNumber: 'DRYER-NONE',
+    unit: 'セット',
+    isOption: false,
+    description: 'ガス乾燥機を設置しない場合はこちらを選択',
+    variants: [
+      { id: 'v1', color: '選択なし', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
   }
 ];
 
