@@ -36,26 +36,26 @@ const STAIR_TYPES = [
 
 // 木製階段メーカー
 const WOOD_MANUFACTURERS = [
-  { id: 'panasonic', name: 'Panasonic', productId: 'int-stair-001', description: '11柄ラインアップ', isStandard: true },
-  { id: 'woodtec', name: 'WOODTEC Live Natural', productId: 'int-stair-002', description: '乱尺柄の天然木', isStandard: true },
-  { id: 'ikuta', name: 'ikuta', productId: 'int-stair-003', description: '無垢材仕様', isStandard: false, price: 240000 },
-  { id: 'ikuta-aging', name: 'ikuta エイジング', productId: 'int-stair-003b', description: 'エイジング加工', isStandard: false, price: 350000 },
+  { id: 'panasonic', name: 'Panasonic', productId: 'int-stair-001', description: '11柄ラインアップ' },
+  { id: 'woodtec', name: 'WOODTEC Live Natural', productId: 'int-stair-002', description: '乱尺柄の天然木' },
+  { id: 'ikuta', name: 'ikuta', productId: 'int-stair-003', description: '無垢材仕様' },
+  { id: 'ikuta-aging', name: 'ikuta エイジング', productId: 'int-stair-003b', description: 'エイジング加工' },
 ];
 
 // 手摺タイプ
 const HANDRAIL_TYPES = [
-  { id: 'lixil-white', name: 'LIXIL ホワイト', productId: 'int-stair-handrail-lixil', variantId: 'v1', description: 'スクエアタイプ壁付手摺', isStandard: true },
-  { id: 'lixil-black', name: 'LIXIL ブラック', productId: 'int-stair-handrail-lixil', variantId: 'v2', description: 'スクエアタイプ壁付手摺', isStandard: false },
-  { id: 'iron-handrail', name: 'アイアン手すり', productId: 'int-stair-005', description: 'フラットバー上桟+中桟2本', isStandard: false, price: 240000 },
-  { id: 'none', name: '手摺なし', description: '手摺を設置しない', isStandard: false },
+  { id: 'lixil-white', name: 'LIXIL ホワイト', productId: 'int-stair-handrail-lixil', variantId: 'v1', description: 'スクエアタイプ壁付手摺' },
+  { id: 'lixil-black', name: 'LIXIL ブラック', productId: 'int-stair-handrail-lixil', variantId: 'v2', description: 'スクエアタイプ壁付手摺' },
+  { id: 'iron-handrail', name: 'アイアン手すり', productId: 'int-stair-005', description: 'フラットバー上桟+中桟2本' },
+  { id: 'none', name: '手摺なし', description: '手摺を設置しない' },
 ];
 
 // オプション
 const STAIR_OPTIONS = [
-  { id: 'landing', name: '踊り場形状変更', productId: 'int-stair-landing', description: '踊り場を追加', price: 80000 },
-  { id: 'turn', name: '一曲がり追加', productId: 'int-stair-004b', description: 'アイアン階段用', price: 100000 },
-  { id: 'double-handrail', name: '両側手摺', productId: 'int-stair-004d', description: 'アイアン階段用', price: 250000 },
-  { id: 'fall-prevention', name: '転落防止型', productId: 'int-stair-004c', description: 'アイアン階段用', price: 150000 },
+  { id: 'landing', name: '踊り場形状変更', productId: 'int-stair-landing', description: '踊り場を追加' },
+  { id: 'turn', name: '一曲がり追加', productId: 'int-stair-004b', description: 'アイアン階段用' },
+  { id: 'double-handrail', name: '両側手摺', productId: 'int-stair-004d', description: 'アイアン階段用' },
+  { id: 'fall-prevention', name: '転落防止型', productId: 'int-stair-004c', description: 'アイアン階段用' },
 ];
 
 type Step = 'type' | 'manufacturer' | 'color' | 'handrail' | 'options' | 'complete';

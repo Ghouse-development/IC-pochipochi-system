@@ -28,8 +28,8 @@ const FLOOR_OPTIONS = [
 
 // 風向調整板オプション
 const WIND_PLATE_OPTIONS = [
-  { id: 'with', name: 'あり', description: '風向きを細かく調整可能', price: 5000 },
-  { id: 'without', name: 'なし', description: '標準仕様', price: 0 },
+  { id: 'with', name: 'あり', description: '風向きを細かく調整可能', productId: 'furn-aircon-wind-plate' },
+  { id: 'without', name: 'なし', description: '標準仕様' },
 ];
 
 interface AirconUnit {
@@ -410,19 +410,23 @@ export const AirconSelector: React.FC<AirconSelectorProps> = ({
             風向調整板の有無
           </h4>
           <div className="grid grid-cols-2 gap-4">
-            {WIND_PLATE_OPTIONS.map((option) => (
-              <SelectionCard
-                key={option.id}
-                id={option.id}
-                name={option.name}
-                description={option.description}
-                placeholderEmoji={option.id === 'with' ? '🌬️' : '✕'}
-                placeholderBgColor={option.id === 'with' ? 'from-blue-100 to-cyan-100' : 'from-gray-100 to-gray-200'}
-                price={option.price}
-                isSelected={activeUnit.windPlate === option.id}
-                onClick={() => updateUnit('windPlate', option.id)}
-              />
-            ))}
+            {WIND_PLATE_OPTIONS.map((option) => {
+              const price = option.productId ? getPlanPrice(option.productId) : 0;
+              return (
+                <SelectionCard
+                  key={option.id}
+                  id={option.id}
+                  name={option.name}
+                  description={option.description}
+                  placeholderEmoji={option.id === 'with' ? '🌬️' : '✕'}
+                  placeholderBgColor={option.id === 'with' ? 'from-blue-100 to-cyan-100' : 'from-gray-100 to-gray-200'}
+                  price={price}
+                  isOption={price > 0}
+                  isSelected={activeUnit.windPlate === option.id}
+                  onClick={() => updateUnit('windPlate', option.id)}
+                />
+              );
+            })}
           </div>
         </div>
       )}

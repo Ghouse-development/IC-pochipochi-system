@@ -195,6 +195,29 @@ const staticProducts: Product[] = [
     ]
   },
 
+  // ========== エアコンオプション ==========
+  {
+    id: 'furn-aircon-wind-plate',
+    categoryId: 'aircon',
+    categoryName: 'エアコン',
+    subcategory: 'オプション',
+    name: '風向調整板',
+    manufacturer: '共通',
+    modelNumber: 'WIND-PLATE',
+    unit: '個',
+    isOption: true,
+    description: 'エアコン風向きを細かく調整できるオプション部品',
+    variants: [
+      { id: 'v1', color: '標準', images: [] }
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 5000 },
+      { plan: 'HOURS', price: 5000 },
+      { plan: 'LIFE+', price: 5000 },
+      { plan: 'LIFE', price: 5000 }
+    ]
+  },
+
   // ========== カーテン ==========
   {
     id: 'furn-curtain-ic',
