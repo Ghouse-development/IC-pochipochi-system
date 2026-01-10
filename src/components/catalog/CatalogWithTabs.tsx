@@ -19,7 +19,7 @@ import type { ItemWithDetails, Category, Product } from '../../types/database';
 import { ProductDetailModal } from './ProductDetailModal';
 import { ProductCompareModal } from './ProductCompareModal';
 import { RoomInteriorSelector } from '../interior/RoomInteriorSelector';
-import { useCustomerMode, CustomerWelcomeBanner } from '../customer/CustomerModeWrapper';
+import { useCustomerMode } from '../customer/CustomerModeWrapper';
 import * as Dialog from '@radix-ui/react-dialog';
 import type { Product as CatalogProduct } from '../../types/product';
 import { ManufacturerSelector, SelectionBar } from './ManufacturerSelector';
@@ -826,8 +826,12 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
       const pricing = item.pricing?.find(p => p.product?.code === selectedPlanId);
       if (filterType === 'standard' && pricing && !pricing.is_standard) return false;
       if (filterType === 'option' && pricing?.is_standard) return false;
-      // 素材タイプフィルター
-      if (selectedMaterialType && item.material_type !== selectedMaterialType) return false;
+      // 素材タイプフィルター（外部建材はcategory_nameも考慮）
+      if (selectedMaterialType) {
+        const matchesMaterialType = item.material_type === selectedMaterialType;
+        const matchesCategoryName = item.category_name === selectedMaterialType;
+        if (!matchesMaterialType && !matchesCategoryName) return false;
+      }
       // サブカテゴリフィルター（商品名）
       if (selectedSubcategory && item.category_name !== selectedSubcategory) return false;
       // 色フィルター
@@ -1201,9 +1205,6 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
         onClose={() => setShowGuide(false)}
         onComplete={() => setShowGuide(false)}
       />
-
-      {/* 顧客モード時のウェルカムバナー */}
-      {isCustomerMode && <CustomerWelcomeBanner />}
 
       <div className="flex flex-col h-full bg-gray-50 dark:bg-gray-900">
         {/* ヘッダー - コンパクト・固定 */}
@@ -1758,6 +1759,41 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                             </p>
                           </div>
                           <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-blue-500 transition-colors" />
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : currentCategoryName === '外部建材' && !selectedMaterialType ? (
+                /* 外部建材カテゴリ選択カード */
+                <div className="max-w-4xl mx-auto px-4">
+                  <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                    外部建材を選択
+                  </h2>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+                    樋・水切り・破風などの外部建材を選んでください。
+                  </p>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    {EXTERIOR_MATERIAL_TYPES.map((type) => {
+                      const itemCount = items.filter(i => i.material_type === type.id || i.category_name === type.id).length;
+                      return (
+                        <button
+                          key={type.id}
+                          onClick={() => setSelectedMaterialType(type.id)}
+                          className="group flex flex-col items-start bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl p-5 hover:border-blue-500 hover:shadow-lg transition-all"
+                        >
+                          <div className="w-full flex items-center justify-between mb-2">
+                            <h3 className="font-bold text-base text-gray-900 dark:text-gray-100 text-left">
+                              {type.name}
+                            </h3>
+                            <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-blue-500 transition-colors" />
+                          </div>
+                          <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
+                            {type.description}
+                          </p>
+                          <p className="text-sm font-medium text-blue-600 dark:text-blue-400">
+                            {itemCount > 0 ? `${itemCount}種類から選択` : '準備中'}
+                          </p>
                         </button>
                       );
                     })}
@@ -2605,6 +2641,27 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                       >
                         <ChevronLeft className="w-4 h-4" />
                         戻る
+                      </button>
+                    </div>
+                  )}
+
+                  {/* 外部建材選択状態バー */}
+                  {currentCategoryName === '外部建材' && selectedMaterialType && (
+                    <div className="mb-4 flex items-center justify-between bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
+                      <div className="flex items-center gap-2">
+                        <span className="text-gray-900 dark:text-gray-100 font-bold text-lg">
+                          {selectedMaterialType}
+                        </span>
+                        <span className="text-sm text-gray-500 dark:text-gray-400">
+                          {filteredItems.length}件
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => setSelectedMaterialType('')}
+                        className="flex items-center gap-1 px-3 py-1.5 text-sm bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-lg transition-colors border border-gray-200 dark:border-gray-600"
+                      >
+                        <ChevronLeft className="w-4 h-4" />
+                        他の建材を選ぶ
                       </button>
                     </div>
                   )}

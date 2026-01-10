@@ -4,20 +4,67 @@ import { useCartStore } from '../../stores/useCartStore';
 import { exteriorProducts } from '../../data/exteriorProducts';
 import type { Product } from '../../types/product';
 
-// ドアデザイン画像プレースホルダー生成
+// ドアデザイン画像プレースホルダー生成（デザイン別の特徴的なパターン）
 const generateDoorPlaceholder = (designName: string): string => {
+  // デザイン別のパターンを定義
+  const designPatterns: Record<string, string> = {
+    // N08: 木目の水平線が印象的
+    'N08': `
+      <rect x="40" y="50" width="120" height="8" fill="#A67C52" rx="1"/>
+      <rect x="40" y="80" width="120" height="8" fill="#8B6914" rx="1"/>
+      <rect x="40" y="110" width="120" height="8" fill="#A67C52" rx="1"/>
+      <rect x="40" y="140" width="120" height="8" fill="#8B6914" rx="1"/>
+      <rect x="40" y="170" width="120" height="8" fill="#A67C52" rx="1"/>
+      <rect x="40" y="200" width="120" height="8" fill="#8B6914" rx="1"/>
+    `,
+    // N18: 框とバランスが印象的なコンテンポラリーデザイン
+    'N18': `
+      <rect x="40" y="40" width="120" height="4" fill="#6B5B4F"/>
+      <rect x="40" y="40" width="4" height="200" fill="#6B5B4F"/>
+      <rect x="156" y="40" width="4" height="200" fill="#6B5B4F"/>
+      <rect x="40" y="236" width="120" height="4" fill="#6B5B4F"/>
+      <rect x="40" y="135" width="120" height="4" fill="#6B5B4F"/>
+      <rect x="95" y="40" width="4" height="200" fill="#6B5B4F"/>
+    `,
+    // N15: 木目の水平線が印象的（N08と似ているが異なる配置）
+    'N15': `
+      <rect x="45" y="60" width="110" height="6" fill="#B8956B"/>
+      <rect x="45" y="90" width="110" height="6" fill="#B8956B"/>
+      <rect x="45" y="120" width="110" height="6" fill="#B8956B"/>
+      <rect x="45" y="150" width="110" height="6" fill="#B8956B"/>
+      <rect x="45" y="180" width="110" height="6" fill="#B8956B"/>
+      <rect x="45" y="210" width="110" height="6" fill="#B8956B"/>
+    `,
+    // C10: プレーンデザイン
+    'C10': `
+      <rect x="50" y="50" width="100" height="180" fill="#9B8B7A" rx="2"/>
+    `,
+  };
+
+  const pattern = designPatterns[designName] || '';
+
   const svgContent = `
     <svg width="200" height="300" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <linearGradient id="door-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+        <linearGradient id="door-bg-${designName}" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" style="stop-color:#8B7355;stop-opacity:1" />
           <stop offset="100%" style="stop-color:#6B5344;stop-opacity:1" />
         </linearGradient>
+        <filter id="shadow-${designName}" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="2" dy="4" stdDeviation="4" flood-color="#000" flood-opacity="0.2"/>
+        </filter>
       </defs>
-      <rect width="200" height="300" fill="#f5f5f4" rx="8"/>
-      <rect x="30" y="20" width="140" height="260" fill="url(#door-bg)" rx="4"/>
-      <rect x="50" y="120" width="10" height="60" fill="#B8860B" rx="2"/>
-      <text x="50%" y="85%" text-anchor="middle" fill="#78716c" font-family="system-ui" font-size="16" font-weight="600">
+      <!-- 背景 -->
+      <rect width="200" height="300" fill="#e7e5e4" rx="12"/>
+      <!-- ドア本体 -->
+      <rect x="30" y="20" width="140" height="260" fill="url(#door-bg-${designName})" rx="6" filter="url(#shadow-${designName})"/>
+      <!-- デザインパターン -->
+      ${pattern}
+      <!-- ドアハンドル -->
+      <rect x="145" y="130" width="8" height="40" fill="#D4AF37" rx="3"/>
+      <circle cx="149" cy="145" r="4" fill="#B8860B"/>
+      <!-- デザイン名 -->
+      <text x="50%" y="95%" text-anchor="middle" fill="#57534e" font-family="system-ui" font-size="18" font-weight="700">
         ${designName}
       </text>
     </svg>

@@ -115,12 +115,12 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
 
   return (
     <article
-      className={`group bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden border-2 transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${
+      className={`group bg-white dark:bg-gray-800 rounded-2xl overflow-hidden transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${
         inCart
-          ? 'border-blue-400 shadow-md shadow-blue-100 dark:shadow-blue-900/30 ring-2 ring-blue-50 dark:ring-blue-900/50'
+          ? 'border-4 border-blue-500 shadow-xl shadow-blue-200 dark:shadow-blue-900/50 ring-4 ring-blue-100 dark:ring-blue-900/50 scale-[1.02]'
           : inCompare
-          ? 'border-purple-400 shadow-md shadow-purple-100 dark:shadow-purple-900/30'
-          : 'border-transparent hover:border-gray-200 dark:hover:border-gray-600 hover:shadow-lg'
+          ? 'border-4 border-purple-500 shadow-xl shadow-purple-200 dark:shadow-purple-900/50'
+          : 'border-2 border-gray-200 dark:border-gray-700 shadow-md hover:shadow-xl hover:border-blue-300 dark:hover:border-blue-600 hover:scale-[1.02]'
       } ${isJustAdded ? 'animate-pochipochi' : ''}`}
       style={{ animationDelay: `${index * 30}ms` }}
       onMouseEnter={() => setHoveredItem(item.id)}
@@ -293,11 +293,11 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
 
         {/* 価格と単位 */}
         <div className="flex items-baseline gap-1.5 mb-3">
-          <span className={`text-xl font-bold ${price === 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-900 dark:text-gray-100'}`}>
+          <span className={`text-2xl font-black ${price === 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-900 dark:text-gray-100'}`}>
             {price === 0 ? '標準' : formatPrice(price)}
           </span>
           {item.unit && (
-            <span className="text-xs text-gray-400 dark:text-gray-500">/{item.unit.symbol}</span>
+            <span className="text-sm text-gray-500 dark:text-gray-400">/{item.unit.symbol}</span>
           )}
         </div>
 
@@ -320,10 +320,10 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
               e.stopPropagation();
               handleOpenDetail(item);
             }}
-            className="w-full py-3 rounded-xl text-sm font-bold bg-gradient-to-r from-blue-500 to-indigo-500 text-white flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25 transition-all active:scale-95"
+            className="w-full py-3.5 rounded-xl text-base font-black bg-gradient-to-r from-indigo-600 to-purple-600 text-white flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/30 hover:shadow-xl hover:from-indigo-700 hover:to-purple-700 transition-all active:scale-95"
             aria-label={`${item.name}の${item.variants?.length}色を見る`}
           >
-            <Eye className="w-4 h-4" aria-hidden="true" />
+            <Eye className="w-5 h-5" aria-hidden="true" />
             {item.variants?.length}色から選ぶ
           </button>
         ) : (
@@ -332,10 +332,10 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
               e.stopPropagation();
               handleAddToCart(item);
             }}
-            className="w-full py-3 rounded-xl text-sm font-bold bg-gradient-to-r from-blue-500 to-emerald-500 text-white flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25 transition-all active:scale-95"
+            className="w-full py-3.5 rounded-xl text-base font-black bg-gradient-to-r from-blue-600 to-blue-500 text-white flex items-center justify-center gap-2 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:from-blue-700 hover:to-blue-600 transition-all active:scale-95"
             aria-label={`${item.name}を選択`}
           >
-            <ShoppingCart className="w-4 h-4" aria-hidden="true" />
+            <ShoppingCart className="w-5 h-5" aria-hidden="true" />
             選択する
           </button>
         )}
