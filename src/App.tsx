@@ -203,8 +203,6 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
       <Header
         onCartClick={() => setIsCartOpen(true)}
         onShareClick={() => setIsShareModalOpen(true)}
-        onCompareClick={() => setIsCompareModalOpen(true)}
-        compareCount={compareProducts.length}
         isAdmin={isAdmin}
         onAdminClick={() => navigate('/admin')}
         onHierarchyClick={() => navigate('/hierarchy')}

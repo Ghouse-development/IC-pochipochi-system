@@ -3689,10 +3689,10 @@ export const exteriorProducts: Product[] = [
       { id: 'v1', color: '設置あり', colorCode: '設置あり', images: [] },
     ],
     pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 },
-      { plan: 'LIFE+', price: 0 },
-      { plan: 'LIFE', price: 0 }
+      { plan: 'LACIE', price: 1500000 },
+      { plan: 'HOURS', price: 1500000 },
+      { plan: 'LIFE+', price: 1500000 },
+      { plan: 'LIFE', price: 1500000 }
     ]
   },
 
