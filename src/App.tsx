@@ -15,7 +15,7 @@ import { SelectedItemsBar } from './components/catalog/SelectedItemsBar';
 import { ConfirmOrderModal } from './components/catalog/ConfirmOrderModal';
 import { ShareModal } from './components/common/ShareModal';
 import { GlobalErrorBoundary } from './components/common/GlobalErrorHandler';
-import { OnboardingGuide, HelpButton, useOnboarding } from './components/common/OnboardingGuide';
+import { HelpButton } from './components/common/OnboardingGuide';
 import { InteractiveTutorial, DEFAULT_TUTORIAL_STEPS } from './components/common/InteractiveTutorial';
 import { useTutorialStore } from './stores/useTutorialStore';
 import { ToastProvider } from './components/common/Toast';
@@ -130,12 +130,7 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
     onHelp: () => setIsShortcutHelpOpen(true),
   });
 
-  // オンボーディングガイド
-  const {
-    showOnboarding,
-    closeOnboarding,
-    completeOnboarding,
-  } = useOnboarding();
+  // オンボーディングガイド - 無効化済み
 
   // インタラクティブチュートリアル
   const {
@@ -297,12 +292,12 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
         allowSkip={true}
       />
 
-      {/* オンボーディングガイド（従来のスライド形式） */}
-      <OnboardingGuide
+      {/* オンボーディングガイド - 無効化済み */}
+      {/* <OnboardingGuide
         isOpen={showOnboarding}
         onClose={closeOnboarding}
         onComplete={completeOnboarding}
-      />
+      /> */}
 
       {/* キーボードショートカットヘルプ */}
       <ShortcutHelpModal
