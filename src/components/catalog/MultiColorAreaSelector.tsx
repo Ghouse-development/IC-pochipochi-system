@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Check, ChevronLeft, Palette } from 'lucide-react';
+import { Check, ChevronLeft, Palette, ChevronDown, ChevronUp, Image as ImageIcon } from 'lucide-react';
 import { useCartStore } from '../../stores/useCartStore';
-import { SelectionCard } from './SelectionCard';
 import type { Product, ProductVariant } from '../../types/product';
 
 interface ColorSelection {
@@ -19,6 +18,188 @@ interface MultiColorAreaSelectorProps {
   onComplete: () => void;
   onCancel: () => void;
 }
+
+// 商品カード（色選択内蔵）
+interface ProductCardProps {
+  product: Product;
+  isSelected: boolean;
+  selectedVariantId?: string;
+  onSelect: (product: Product, variant: ProductVariant) => void;
+}
+
+const ProductCard: React.FC<ProductCardProps> = ({
+  product,
+  isSelected,
+  selectedVariantId,
+  onSelect,
+}) => {
+  const [showColorPicker, setShowColorPicker] = useState(false);
+  const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
+
+  const variants = product.variants || [];
+  const currentVariant = variants[selectedVariantIndex] || variants[0];
+
+  // 選択済みの場合、該当バリアントを表示
+  useEffect(() => {
+    if (isSelected && selectedVariantId) {
+      const idx = variants.findIndex(v => v.id === selectedVariantId);
+      if (idx >= 0) setSelectedVariantIndex(idx);
+    }
+  }, [isSelected, selectedVariantId, variants]);
+
+  const getVariantImage = (variant: ProductVariant | undefined): string | null => {
+    if (!variant) return null;
+    return variant.images?.[0] || variant.imageUrl || null;
+  };
+
+  const currentImage = getVariantImage(currentVariant);
+  const hasMultipleVariants = variants.length > 1;
+
+  const handleSelect = () => {
+    if (currentVariant) {
+      onSelect(product, currentVariant);
+    }
+  };
+
+  const handleVariantClick = (e: React.MouseEvent, idx: number) => {
+    e.stopPropagation();
+    setSelectedVariantIndex(idx);
+    // 選択中の商品の場合、バリアント変更も即座に反映
+    if (isSelected && variants[idx]) {
+      onSelect(product, variants[idx]);
+    }
+  };
+
+  return (
+    <div
+      className={`bg-white rounded-xl border-2 overflow-hidden transition-all ${
+        isSelected
+          ? 'border-blue-500 ring-2 ring-blue-200 shadow-lg'
+          : 'border-gray-200 hover:border-blue-300 hover:shadow-md'
+      }`}
+    >
+      {/* 画像エリア */}
+      <div
+        className="aspect-[4/3] bg-gradient-to-br from-gray-50 to-gray-100 relative cursor-pointer"
+        onClick={handleSelect}
+      >
+        {currentImage ? (
+          <img
+            src={currentImage}
+            alt={`${product.name} - ${currentVariant?.color || ''}`}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <div className="w-full h-full flex flex-col items-center justify-center">
+            <span className="text-4xl mb-2">🎨</span>
+            {currentVariant?.color && (
+              <span className="text-xs text-gray-500">{currentVariant.color}</span>
+            )}
+            <div className="mt-1 flex items-center gap-1 text-gray-400">
+              <ImageIcon className="w-3 h-3" />
+              <span className="text-[10px]">画像準備中</span>
+            </div>
+          </div>
+        )}
+
+        {/* 選択済みマーク */}
+        {isSelected && (
+          <div className="absolute top-2 right-2 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center shadow">
+            <Check className="w-4 h-4 text-white" strokeWidth={3} />
+          </div>
+        )}
+      </div>
+
+      {/* 情報エリア */}
+      <div className="p-3">
+        <h4 className="font-bold text-sm text-gray-800 line-clamp-2 min-h-[2.5rem]">
+          {product.name}
+        </h4>
+        <p className="text-xs text-gray-500 mb-2">{product.manufacturer}</p>
+
+        {/* 色選択（複数バリアントがある場合） */}
+        {hasMultipleVariants && (
+          <div className="mb-2">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowColorPicker(!showColorPicker);
+              }}
+              className="w-full flex items-center justify-between px-2 py-1.5 bg-gray-50 rounded-lg text-xs hover:bg-gray-100 transition-colors"
+            >
+              <div className="flex items-center gap-1.5">
+                {currentVariant?.colorCode && (
+                  <div
+                    className="w-4 h-4 rounded-full border border-gray-300"
+                    style={{ backgroundColor: currentVariant.colorCode }}
+                  />
+                )}
+                <span className="text-gray-700 truncate max-w-[80px]">{currentVariant?.color || '色を選択'}</span>
+              </div>
+              <div className="flex items-center gap-1 text-gray-400">
+                <span className="text-[10px]">{variants.length}色</span>
+                {showColorPicker ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+              </div>
+            </button>
+
+            {/* 色選択パネル */}
+            {showColorPicker && (
+              <div className="mt-1.5 p-1.5 bg-gray-50 rounded-lg max-h-32 overflow-y-auto">
+                <div className="grid grid-cols-4 gap-1">
+                  {variants.map((variant, idx) => {
+                    const variantImg = getVariantImage(variant);
+                    const isVariantSelected = idx === selectedVariantIndex;
+                    return (
+                      <button
+                        key={variant.id}
+                        onClick={(e) => handleVariantClick(e, idx)}
+                        className={`relative rounded overflow-hidden border transition-all ${
+                          isVariantSelected
+                            ? 'border-blue-500 ring-1 ring-blue-200'
+                            : 'border-gray-200 hover:border-blue-300'
+                        }`}
+                        title={variant.color}
+                      >
+                        <div className="aspect-square bg-gray-100">
+                          {variantImg ? (
+                            <img src={variantImg} alt={variant.color} className="w-full h-full object-cover" />
+                          ) : variant.colorCode ? (
+                            <div className="w-full h-full" style={{ backgroundColor: variant.colorCode }} />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center">
+                              <ImageIcon className="w-3 h-3 text-gray-300" />
+                            </div>
+                          )}
+                        </div>
+                        {isVariantSelected && (
+                          <div className="absolute top-0.5 right-0.5 w-3 h-3 bg-blue-500 rounded-full flex items-center justify-center">
+                            <Check className="w-2 h-2 text-white" strokeWidth={3} />
+                          </div>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* 選択ボタン */}
+        <button
+          onClick={handleSelect}
+          className={`w-full py-2 rounded-lg text-sm font-medium transition-all ${
+            isSelected
+              ? 'bg-blue-100 text-blue-700'
+              : 'bg-blue-600 text-white hover:bg-blue-700'
+          }`}
+        >
+          {isSelected ? '選択中' : '選択する'}
+        </button>
+      </div>
+    </div>
+  );
+};
 
 export const MultiColorAreaSelector: React.FC<MultiColorAreaSelectorProps> = ({
   categoryId,
@@ -127,7 +308,7 @@ export const MultiColorAreaSelector: React.FC<MultiColorAreaSelectorProps> = ({
   }, {} as Record<string, Product[]>);
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="p-6 max-w-5xl mx-auto">
       {/* ヘッダー */}
       <div className="mb-6">
         <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
@@ -209,7 +390,7 @@ export const MultiColorAreaSelector: React.FC<MultiColorAreaSelectorProps> = ({
           {/* 現在の色の選択状態 */}
           {currentSelection && (
             <div className="mb-6 p-4 bg-gray-50 rounded-xl">
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between flex-wrap gap-4">
                 <h5 className="font-medium text-gray-800">
                   <span className={`inline-block w-3 h-3 rounded-full mr-2 ${
                     currentColorIndex === 1 ? 'bg-blue-500' :
@@ -241,30 +422,20 @@ export const MultiColorAreaSelector: React.FC<MultiColorAreaSelectorProps> = ({
             </div>
           )}
 
-          {/* 製品選択 */}
+          {/* 製品選択 - 1商品1カード */}
           <div className="space-y-6">
             {Object.entries(groupedProducts).map(([subcategory, subcategoryProducts]) => (
               <div key={subcategory}>
                 <h5 className="text-sm font-medium text-gray-500 mb-3">{subcategory}</h5>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                   {subcategoryProducts.map(product => (
-                    product.variants?.map(variant => (
-                      <SelectionCard
-                        key={`${product.id}-${variant.id}`}
-                        id={`${product.id}-${variant.id}`}
-                        name={product.name}
-                        description={variant.color}
-                        colorCode={variant.colorCode?.startsWith('#') ? variant.colorCode : undefined}
-                        imageUrl={variant.images?.[0] || variant.imageUrl}
-                        placeholderEmoji="🎨"
-                        placeholderBgColor="from-gray-100 to-gray-200"
-                        isSelected={
-                          currentSelection?.product?.id === product.id &&
-                          currentSelection?.variant?.id === variant.id
-                        }
-                        onClick={() => handleProductSelect(product, variant)}
-                      />
-                    ))
+                    <ProductCard
+                      key={product.id}
+                      product={product}
+                      isSelected={currentSelection?.product?.id === product.id}
+                      selectedVariantId={currentSelection?.variant?.id}
+                      onSelect={handleProductSelect}
+                    />
                   ))}
                 </div>
               </div>
