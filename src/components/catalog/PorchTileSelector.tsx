@@ -1,44 +1,8 @@
 import React, { useState } from 'react';
-import { Check, ChevronLeft, Star } from 'lucide-react';
+import { Check, ChevronLeft, Star, Loader2, Image as ImageIcon } from 'lucide-react';
 import { useCartStore } from '../../stores/useCartStore';
+import { usePorchTileSettings, type TileOption, type GroutOption } from '../../hooks/usePorchTileSettings';
 import type { Product, ProductVariant, PlanType } from '../../types/product';
-
-// ポーチタイル種類
-interface TileOption {
-  id: string;
-  name: string;
-  manufacturer: string;
-  description: string;
-  price: number;
-  isStandard: boolean;
-  isRecommended?: boolean;
-}
-
-const PORCH_TILES: TileOption[] = [
-  { id: 'mortar', name: 'モルタル金鏝抑え', manufacturer: '標準', description: '標準仕上げ（目地不要）', price: 0, isStandard: true },
-  { id: 'nature2', name: 'ネイチャーII', manufacturer: 'Nagoya mozaic', description: '300×300 自然な風合い', price: 22000, isStandard: false, isRecommended: true },
-  { id: 'vespa', name: 'ベスパ', manufacturer: 'LIXIL', description: '300×300 モダンデザイン', price: 22000, isStandard: false, isRecommended: true },
-  { id: 'memphis', name: 'メンフィス', manufacturer: 'LIXIL', description: '600×600 大判タイル', price: 27000, isStandard: false },
-  { id: 'landstone', name: 'ランドストン', manufacturer: 'Nagoya mozaic', description: '600×600 岩面', price: 5000, isStandard: false },
-  { id: 'pietra-soni', name: 'ピエトラソーニ', manufacturer: 'Nagoya mozaic', description: '600×600 粗目', price: 5000, isStandard: false },
-];
-
-// 目地色オプション
-interface GroutOption {
-  id: string;
-  name: string;
-  colorCode: string;
-  isRecommended?: boolean;
-  recommendedFor?: string;
-}
-
-const GROUT_COLORS: GroutOption[] = [
-  { id: 'white', name: '白', colorCode: '#FFFFFF', isRecommended: true, recommendedFor: '明るめのタイル' },
-  { id: 'dark-gray', name: '濃い灰色', colorCode: '#4A4A4A' },
-  { id: 'brown', name: 'こげ茶', colorCode: '#4A3728' },
-  { id: 'beige', name: 'ベージュ', colorCode: '#D4C4A8' },
-  { id: 'light-gray', name: '薄い灰色', colorCode: '#B8B8B8', isRecommended: true, recommendedFor: '暗めのタイル' },
-];
 
 interface PorchTileSelectorProps {
   selectedPlan: string;
@@ -52,6 +16,7 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
   onCancel,
 }) => {
   const { addItem, items, clearCategoryItems } = useCartStore();
+  const { tiles, groutColors, isLoading } = usePorchTileSettings();
 
   // 既存のポーチ選択を確認
   const existingPorchItem = items.find(i => i.product.categoryName === 'ポーチ');
@@ -104,14 +69,14 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
       unit: '㎡',
       isOption: !selectedTile.isStandard,
       variants: [
-        { id: 'v1', color: selectedTile.name }
+        { id: 'v1', color: selectedTile.name, imageUrl: selectedTile.imageUrl }
       ],
       pricing: [
         { plan: selectedPlan as PlanType, price: selectedTile.price }
       ],
     };
 
-    const tileVariant: ProductVariant = { id: 'v1', color: selectedTile.name };
+    const tileVariant: ProductVariant = { id: 'v1', color: selectedTile.name, imageUrl: selectedTile.imageUrl };
     addItem(tileProduct, 1, tileVariant);
 
     // タイル選択時のみ目地も追加
@@ -143,6 +108,22 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
 
   // モルタル以外のタイルは目地選択が必要
   const needsGrout = selectedTile && selectedTile.id !== 'mortar';
+
+  // 標準タイルとオプションタイルを分離
+  const standardTiles = tiles.filter(t => t.isStandard);
+  const optionTiles = tiles.filter(t => !t.isStandard);
+
+  // ローディング中
+  if (isLoading) {
+    return (
+      <div className="p-6 max-w-4xl mx-auto">
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+          <span className="ml-2 text-gray-600">読み込み中...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
@@ -181,57 +162,38 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
           <h4 className="font-medium text-gray-800 mb-4">ポーチの仕上げを選択</h4>
 
           {/* 標準オプション */}
-          <div className="mb-6">
-            <h5 className="text-sm font-medium text-gray-500 mb-3">標準</h5>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              {PORCH_TILES.filter(t => t.isStandard).map(tile => (
-                <button
-                  key={tile.id}
-                  onClick={() => handleTileSelect(tile)}
-                  className={`relative p-4 border-2 rounded-xl text-left transition-all ${
-                    selectedTile?.id === tile.id
-                      ? 'border-blue-500 bg-blue-50'
-                      : 'border-gray-200 hover:border-blue-300'
-                  }`}
-                >
-                  <div className="font-medium text-gray-900">{tile.name}</div>
-                  <div className="text-xs text-gray-500 mt-1">{tile.description}</div>
-                  <div className="text-sm font-medium text-blue-600 mt-2">標準</div>
-                </button>
-              ))}
+          {standardTiles.length > 0 && (
+            <div className="mb-6">
+              <h5 className="text-sm font-medium text-gray-500 mb-3">標準</h5>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {standardTiles.map(tile => (
+                  <TileButton
+                    key={tile.id}
+                    tile={tile}
+                    isSelected={selectedTile?.id === tile.id}
+                    onClick={() => handleTileSelect(tile)}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* タイルオプション */}
-          <div>
-            <h5 className="text-sm font-medium text-gray-500 mb-3">タイル（オプション）</h5>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              {PORCH_TILES.filter(t => !t.isStandard).map(tile => (
-                <button
-                  key={tile.id}
-                  onClick={() => handleTileSelect(tile)}
-                  className={`relative p-4 border-2 rounded-xl text-left transition-all ${
-                    selectedTile?.id === tile.id
-                      ? 'border-blue-500 bg-blue-50'
-                      : 'border-gray-200 hover:border-blue-300'
-                  }`}
-                >
-                  {tile.isRecommended && (
-                    <div className="absolute top-2 right-2 flex items-center gap-1 px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full text-xs">
-                      <Star className="w-3 h-3 fill-amber-500" />
-                      オススメ
-                    </div>
-                  )}
-                  <div className="font-medium text-gray-900">{tile.name}</div>
-                  <div className="text-xs text-gray-500">{tile.manufacturer}</div>
-                  <div className="text-xs text-gray-500 mt-1">{tile.description}</div>
-                  <div className="text-sm font-medium text-orange-600 mt-2">
-                    +¥{tile.price.toLocaleString()}/㎡
-                  </div>
-                </button>
-              ))}
+          {optionTiles.length > 0 && (
+            <div>
+              <h5 className="text-sm font-medium text-gray-500 mb-3">タイル（オプション）</h5>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {optionTiles.map(tile => (
+                  <TileButton
+                    key={tile.id}
+                    tile={tile}
+                    isSelected={selectedTile?.id === tile.id}
+                    onClick={() => handleTileSelect(tile)}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       )}
 
@@ -245,15 +207,24 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
             <ChevronLeft className="w-4 h-4" /> タイル選択に戻る
           </button>
 
-          <div className="mb-4 p-3 bg-gray-50 rounded-lg">
-            <span className="text-sm text-gray-600">選択中のタイル: </span>
-            <span className="font-medium">{selectedTile.name}</span>
+          <div className="mb-4 p-3 bg-gray-50 rounded-lg flex items-center gap-3">
+            {selectedTile.imageUrl && (
+              <img
+                src={selectedTile.imageUrl}
+                alt={selectedTile.name}
+                className="w-12 h-12 object-cover rounded"
+              />
+            )}
+            <div>
+              <span className="text-sm text-gray-600">選択中のタイル: </span>
+              <span className="font-medium">{selectedTile.name}</span>
+            </div>
           </div>
 
           <h4 className="font-medium text-gray-800 mb-4">目地色を選択</h4>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-6">
-            {GROUT_COLORS.map(grout => (
+            {groutColors.map(grout => (
               <button
                 key={grout.id}
                 onClick={() => handleGroutSelect(grout)}
@@ -312,6 +283,13 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
           {/* 新規選択時 */}
           {selectedTile && (
             <div className="text-sm text-gray-600 mb-4">
+              {selectedTile.imageUrl && (
+                <img
+                  src={selectedTile.imageUrl}
+                  alt={selectedTile.name}
+                  className="w-16 h-16 object-cover rounded mx-auto mb-2"
+                />
+              )}
               <p>{selectedTile.name}</p>
               {selectedGrout && <p>目地色: {selectedGrout.name}</p>}
             </div>
@@ -344,5 +322,72 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
     </div>
   );
 };
+
+// タイルボタンコンポーネント
+interface TileButtonProps {
+  tile: TileOption;
+  isSelected: boolean;
+  onClick: () => void;
+}
+
+const TileButton: React.FC<TileButtonProps> = ({ tile, isSelected, onClick }) => (
+  <button
+    onClick={onClick}
+    className={`relative border-2 rounded-xl text-left transition-all overflow-hidden ${
+      isSelected
+        ? 'border-blue-500 bg-blue-50'
+        : 'border-gray-200 hover:border-blue-300'
+    }`}
+  >
+    {/* 画像エリア */}
+    <div className="w-full h-24 bg-gray-100 flex items-center justify-center">
+      {tile.imageUrl ? (
+        <img
+          src={tile.imageUrl}
+          alt={tile.name}
+          className="w-full h-full object-cover"
+          onError={(e) => {
+            // 画像読み込みエラー時はプレースホルダーを表示
+            const target = e.target as HTMLImageElement;
+            target.style.display = 'none';
+            const parent = target.parentElement;
+            if (parent) {
+              parent.innerHTML = '<div class="flex items-center justify-center w-full h-full text-gray-400"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg></div>';
+            }
+          }}
+        />
+      ) : (
+        <ImageIcon className="w-8 h-8 text-gray-400" />
+      )}
+    </div>
+
+    {/* おすすめバッジ */}
+    {tile.isRecommended && (
+      <div className="absolute top-2 right-2 flex items-center gap-1 px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full text-xs">
+        <Star className="w-3 h-3 fill-amber-500" />
+        オススメ
+      </div>
+    )}
+
+    {/* 情報エリア */}
+    <div className="p-3">
+      <div className="font-medium text-gray-900">{tile.name}</div>
+      {!tile.isStandard && (
+        <div className="text-xs text-gray-500">{tile.manufacturer}</div>
+      )}
+      <div className="text-xs text-gray-500 mt-1">{tile.description}</div>
+      <div className={`text-sm font-medium mt-2 ${tile.isStandard ? 'text-blue-600' : 'text-orange-600'}`}>
+        {tile.isStandard ? '標準' : `+¥${tile.price.toLocaleString()}/㎡`}
+      </div>
+    </div>
+
+    {/* 選択状態 */}
+    {isSelected && (
+      <div className="absolute top-2 left-2 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+        <Check className="w-4 h-4 text-white" />
+      </div>
+    )}
+  </button>
+);
 
 export default PorchTileSelector;
