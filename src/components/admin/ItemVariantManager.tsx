@@ -27,6 +27,9 @@ interface ItemVariantManagerProps {
   onVariantsChange: () => void;
 }
 
+// 許可する画像形式
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+
 export function ItemVariantManager({
   itemId,
   itemName: _itemName,
@@ -39,10 +42,100 @@ export function ItemVariantManager({
   const [editingVariant, setEditingVariant] = useState<ItemVariant | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [draggingOverVariantId, setDraggingOverVariantId] = useState<string | null>(null);
+  const [uploadingVariantId, setUploadingVariantId] = useState<string | null>(null);
 
   useEffect(() => {
     setVariants(initialVariants);
   }, [initialVariants]);
+
+  // バリアントカードへの直接画像アップロード
+  const uploadImageToVariant = async (variantId: string, files: File[]) => {
+    const validFiles = files.filter(file => ALLOWED_IMAGE_TYPES.includes(file.type));
+    if (validFiles.length === 0) {
+      toast.error('エラー', '対応形式: JPEG, PNG, WebP, GIF');
+      return;
+    }
+
+    const variant = variants.find(v => v.id === variantId);
+    if (!variant) return;
+
+    setUploadingVariantId(variantId);
+
+    try {
+      for (const file of validFiles) {
+        const timestamp = Date.now();
+        const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+        const filePath = `variants/${itemId}/${timestamp}_${safeName}`;
+
+        // Supabase Storageにアップロード
+        const { data, error } = await supabase.storage
+          .from(STORAGE_BUCKETS.ITEM_IMAGES)
+          .upload(filePath, file, {
+            cacheControl: '3600',
+            upsert: false,
+          });
+
+        if (error) {
+          logger.error('Upload error:', error);
+          toast.error('アップロード失敗', `${file.name}: ${error.message}`);
+          continue;
+        }
+
+        // 公開URLを取得
+        const { data: urlData } = supabase.storage
+          .from(STORAGE_BUCKETS.ITEM_IMAGES)
+          .getPublicUrl(data.path);
+
+        // DBに画像を登録
+        await itemVariantImagesApi.create({
+          variant_id: variantId,
+          image_url: urlData.publicUrl,
+          thumbnail_url: urlData.publicUrl,
+          alt_text: variant.color_name || file.name,
+          is_primary: !variant.images || variant.images.length === 0,
+          display_order: variant.images?.length || 0,
+        });
+      }
+
+      toast.success('アップロード完了', `${validFiles.length}枚の画像を追加しました`);
+      onVariantsChange(); // リフレッシュ
+    } catch (err) {
+      logger.error('Upload exception:', err);
+      toast.error('アップロード失敗', '画像の保存に失敗しました');
+    } finally {
+      setUploadingVariantId(null);
+    }
+  };
+
+  // カードへのドラッグ&ドロップハンドラー
+  const handleCardDragEnter = (e: React.DragEvent, variantId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDraggingOverVariantId(variantId);
+  };
+
+  const handleCardDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDraggingOverVariantId(null);
+  };
+
+  const handleCardDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleCardDrop = (e: React.DragEvent, variantId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDraggingOverVariantId(null);
+
+    const files = Array.from(e.dataTransfer.files);
+    if (files.length > 0) {
+      uploadImageToVariant(variantId, files);
+    }
+  };
 
   const handleCreateVariant = () => {
     setEditingVariant({
@@ -153,52 +246,82 @@ export function ItemVariantManager({
         </div>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {variants.map(variant => (
-            <div
-              key={variant.id}
-              className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
-            >
-              {/* Thumbnail */}
-              <div className="aspect-square bg-gray-100 relative">
-                {variant.images && variant.images.length > 0 ? (
-                  <img
-                    src={variant.images.find(i => i.is_primary)?.image_url || variant.images[0].image_url}
-                    alt={variant.color_name}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <ImageIcon className="w-12 h-12 text-gray-300" />
-                  </div>
-                )}
-                <div className="absolute bottom-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
-                  {variant.images?.length || 0}枚
-                </div>
-              </div>
+          {variants.map(variant => {
+            const isUploading = uploadingVariantId === variant.id;
+            const isDragOver = draggingOverVariantId === variant.id;
 
-              {/* Info */}
-              <div className="p-3">
-                <h5 className="font-medium text-gray-900 truncate">{variant.color_name}</h5>
-                {variant.color_code && (
-                  <p className="text-sm text-gray-500 truncate">{variant.color_code}</p>
-                )}
-                <div className="flex gap-2 mt-2">
-                  <button
-                    onClick={() => handleEditVariant(variant)}
-                    className="flex-1 px-2 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
-                  >
-                    編集
-                  </button>
-                  <button
-                    onClick={() => handleDeleteVariant(variant.id)}
-                    className="px-2 py-1 text-sm text-red-600 hover:bg-red-50 rounded"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+            return (
+              <div
+                key={variant.id}
+                onDragEnter={(e) => handleCardDragEnter(e, variant.id)}
+                onDragLeave={handleCardDragLeave}
+                onDragOver={handleCardDragOver}
+                onDrop={(e) => handleCardDrop(e, variant.id)}
+                className={`bg-white border-2 rounded-lg overflow-hidden transition-all ${
+                  isDragOver
+                    ? 'border-teal-500 shadow-lg scale-[1.02]'
+                    : 'border-gray-200 hover:shadow-md'
+                }`}
+              >
+                {/* Thumbnail with Drop Overlay */}
+                <div className="aspect-square bg-gray-100 relative">
+                  {variant.images && variant.images.length > 0 ? (
+                    <img
+                      src={variant.images.find(i => i.is_primary)?.image_url || variant.images[0].image_url}
+                      alt={variant.color_name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <ImageIcon className="w-12 h-12 text-gray-300" />
+                    </div>
+                  )}
+
+                  {/* ドラッグオーバー時のオーバーレイ */}
+                  {isDragOver && (
+                    <div className="absolute inset-0 bg-teal-500/80 flex flex-col items-center justify-center text-white">
+                      <Upload className="w-10 h-10 mb-2" />
+                      <p className="text-sm font-medium">ドロップして追加</p>
+                    </div>
+                  )}
+
+                  {/* アップロード中のオーバーレイ */}
+                  {isUploading && (
+                    <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center text-white">
+                      <Loader2 className="w-10 h-10 mb-2 animate-spin" />
+                      <p className="text-sm">アップロード中...</p>
+                    </div>
+                  )}
+
+                  <div className="absolute bottom-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
+                    {variant.images?.length || 0}枚
+                  </div>
+                </div>
+
+                {/* Info */}
+                <div className="p-3">
+                  <h5 className="font-medium text-gray-900 truncate">{variant.color_name}</h5>
+                  {variant.color_code && (
+                    <p className="text-sm text-gray-500 truncate">{variant.color_code}</p>
+                  )}
+                  <div className="flex gap-2 mt-2">
+                    <button
+                      onClick={() => handleEditVariant(variant)}
+                      className="flex-1 px-2 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+                    >
+                      編集
+                    </button>
+                    <button
+                      onClick={() => handleDeleteVariant(variant.id)}
+                      className="px-2 py-1 text-sm text-red-600 hover:bg-red-50 rounded"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
@@ -247,9 +370,6 @@ function VariantEditModal({
   const [uploadProgress, setUploadProgress] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dropZoneRef = useRef<HTMLDivElement>(null);
-
-  // 許可する画像形式
-  const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
 
   // ドラッグ&ドロップハンドラー
   const handleDragEnter = useCallback((e: React.DragEvent) => {

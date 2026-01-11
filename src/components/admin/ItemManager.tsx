@@ -121,10 +121,38 @@ export function ItemManager() {
     [items]
   );
 
-  // Filter items (memoized for performance, uses debounced search)
+  // Build category path map for sorting
+  const categoryPathMap = useMemo(() => {
+    const map = new Map<string, { path: string; order: number }>();
+
+    // Sort parent categories by display_order
+    const sortedParents = [...categories]
+      .filter(c => !c.parent_id)
+      .sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
+
+    sortedParents.forEach((parent, parentIndex) => {
+      map.set(parent.id, { path: parent.name, order: parentIndex * 1000 });
+
+      // Sort child categories by display_order
+      const children = categories
+        .filter(c => c.parent_id === parent.id)
+        .sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
+
+      children.forEach((child, childIndex) => {
+        map.set(child.id, {
+          path: `${parent.name} > ${child.name}`,
+          order: parentIndex * 1000 + childIndex + 1
+        });
+      });
+    });
+
+    return map;
+  }, [categories]);
+
+  // Filter and sort items (memoized for performance, uses debounced search)
   const filteredItems = useMemo(() => {
     const searchLower = debouncedSearchTerm.toLowerCase();
-    return items.filter((item) => {
+    const filtered = items.filter((item) => {
       const matchesSearch =
         item.name.toLowerCase().includes(searchLower) ||
         item.item_code.toLowerCase().includes(searchLower) ||
@@ -133,7 +161,22 @@ export function ItemManager() {
         manufacturerFilter === 'all' || item.manufacturer === manufacturerFilter;
       return matchesSearch && matchesManufacturer;
     });
-  }, [items, debouncedSearchTerm, manufacturerFilter]);
+
+    // Sort by category hierarchy, then by display_order, then by name
+    return filtered.sort((a, b) => {
+      const catA = a.category_id ? categoryPathMap.get(a.category_id)?.order ?? 9999 : 9999;
+      const catB = b.category_id ? categoryPathMap.get(b.category_id)?.order ?? 9999 : 9999;
+
+      if (catA !== catB) return catA - catB;
+
+      // Same category - sort by display_order then name
+      const orderA = a.display_order ?? 9999;
+      const orderB = b.display_order ?? 9999;
+      if (orderA !== orderB) return orderA - orderB;
+
+      return a.name.localeCompare(b.name, 'ja');
+    });
+  }, [items, debouncedSearchTerm, manufacturerFilter, categoryPathMap]);
 
   // Build category tree for display
   const parentCategories = categories.filter((c) => !c.parent_id);
