@@ -1813,7 +1813,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                     // キャンセル処理
                   }}
                 />
-              ) : currentCategoryName === 'ポーチ' ? (
+              ) : activeTab === 'exterior' && (currentCategoryName === 'ポーチ' || (currentCategoryName?.includes('ポーチ') && !currentCategoryName?.includes('サイズ') && !currentCategoryName?.includes('目地'))) ? (
                 /* ポーチタイル選択UI（タイル→目地色の順） */
                 <PorchTileSelector
                   selectedPlan={selectedPlanId}

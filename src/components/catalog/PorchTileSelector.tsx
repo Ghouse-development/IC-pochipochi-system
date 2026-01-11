@@ -54,13 +54,23 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
   const { addItem, items, clearCategoryItems } = useCartStore();
 
   // 既存のポーチ選択を確認
-  const existingItem = items.find(i => i.product.categoryName === 'ポーチ');
+  const existingPorchItem = items.find(i => i.product.categoryName === 'ポーチ');
+  const existingGroutItem = items.find(i => i.product.categoryName === 'ポーチタイル目地');
 
   const [step, setStep] = useState<'tile' | 'grout' | 'complete'>(
-    existingItem ? 'complete' : 'tile'
+    existingPorchItem ? 'complete' : 'tile'
   );
   const [selectedTile, setSelectedTile] = useState<TileOption | null>(null);
   const [selectedGrout, setSelectedGrout] = useState<GroutOption | null>(null);
+
+  // 選び直す処理
+  const handleReselect = () => {
+    clearCategoryItems('porch');
+    clearCategoryItems('porch-grout');
+    setSelectedTile(null);
+    setSelectedGrout(null);
+    setStep('tile');
+  };
 
   const handleTileSelect = (tile: TileOption) => {
     setSelectedTile(tile);
@@ -299,18 +309,36 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
           <h4 className="font-bold text-gray-800 mb-2">
             ポーチの選択が完了しました
           </h4>
+          {/* 新規選択時 */}
           {selectedTile && (
             <div className="text-sm text-gray-600 mb-4">
               <p>{selectedTile.name}</p>
               {selectedGrout && <p>目地色: {selectedGrout.name}</p>}
             </div>
           )}
-          <button
-            onClick={onComplete}
-            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium"
-          >
-            次のカテゴリへ
-          </button>
+          {/* 既存選択（カートから）時 */}
+          {!selectedTile && existingPorchItem && (
+            <div className="text-sm text-gray-600 mb-4">
+              <p>{existingPorchItem.product.name}</p>
+              {existingGroutItem && (
+                <p>目地色: {existingGroutItem.selectedVariant?.color || existingGroutItem.product.name}</p>
+              )}
+            </div>
+          )}
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <button
+              onClick={handleReselect}
+              className="px-6 py-3 border border-gray-300 text-gray-700 rounded-xl font-medium hover:bg-gray-50"
+            >
+              選び直す
+            </button>
+            <button
+              onClick={onComplete}
+              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium"
+            >
+              次のカテゴリへ
+            </button>
+          </div>
         </div>
       )}
     </div>
