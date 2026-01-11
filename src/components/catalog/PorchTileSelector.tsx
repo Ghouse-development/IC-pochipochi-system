@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Check, ChevronLeft, Star, Loader2, Image as ImageIcon } from 'lucide-react';
+import { Check, ChevronLeft, Loader2, Image as ImageIcon } from 'lucide-react';
 import { useCartStore } from '../../stores/useCartStore';
 import { usePorchTileSettings, type TileOption, type GroutOption } from '../../hooks/usePorchTileSettings';
 import type { Product, ProductVariant, PlanType } from '../../types/product';
@@ -234,19 +234,11 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
                     : 'border-gray-200 hover:border-blue-300'
                 }`}
               >
-                {grout.isRecommended && (
-                  <div className="absolute top-1 right-1 flex items-center gap-0.5 px-1.5 py-0.5 bg-amber-100 text-amber-700 rounded-full text-xs">
-                    <Star className="w-2.5 h-2.5 fill-amber-500" />
-                  </div>
-                )}
                 <div
                   className="w-full h-8 rounded mb-2 border border-gray-300"
                   style={{ backgroundColor: grout.colorCode }}
                 />
                 <div className="text-sm font-medium text-gray-900">{grout.name}</div>
-                {grout.recommendedFor && (
-                  <div className="text-xs text-amber-600 mt-1">{grout.recommendedFor}に◎</div>
-                )}
                 {selectedGrout?.id === grout.id && (
                   <Check className="absolute top-2 left-2 w-4 h-4 text-blue-500" />
                 )}
@@ -361,13 +353,6 @@ const TileButton: React.FC<TileButtonProps> = ({ tile, isSelected, onClick }) =>
       )}
     </div>
 
-    {/* おすすめバッジ */}
-    {tile.isRecommended && (
-      <div className="absolute top-2 right-2 flex items-center gap-1 px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full text-xs">
-        <Star className="w-3 h-3 fill-amber-500" />
-        オススメ
-      </div>
-    )}
 
     {/* 情報エリア */}
     <div className="p-3">
