@@ -19,10 +19,14 @@ interface CartStore {
   lastUpdated: string | null;
   setSelectedPlanId: (planId: string) => void;
   addItem: (product: Product, quantity?: number, variant?: ProductVariant) => void;
+  addItemWithArea: (product: Product, variant: ProductVariant, area: number, colorIndex: number) => void;
   removeItem: (productId: string) => void;
+  removeItemByColorIndex: (productId: string, colorIndex: number) => void;
   updateQuantity: (productId: string, quantity: number) => void;
+  updateItemArea: (productId: string, colorIndex: number, area: number) => void;
   reorderItems: (items: CartItem[]) => void;
   clearCart: () => void;
+  clearCategoryItems: (categoryId: string) => void;
   getTotalPrice: () => number;
 }
 
@@ -114,6 +118,52 @@ export const useCartStore = create<CartStore>()(
     });
   },
 
+  addItemWithArea: (product, variant, area, colorIndex) => {
+    set((state) => {
+      // 既存の同じ商品+バリアント+colorIndexを探す
+      const existingItem = state.items.find(
+        (i) => i.product.id === product.id &&
+               i.selectedVariant?.id === variant.id &&
+               i.colorIndex === colorIndex
+      );
+
+      addOperationLog('cart_add', 'select', {
+        productId: product.id,
+        productName: product.name,
+        itemName: `${product.name}（${colorIndex}色目）をカートに追加`,
+        area,
+        colorIndex,
+        variant: variant.color,
+        isUpdate: !!existingItem,
+      });
+
+      if (existingItem) {
+        // 既存アイテムの面積を更新
+        return {
+          items: state.items.map((i) =>
+            i.product.id === product.id &&
+            i.selectedVariant?.id === variant.id &&
+            i.colorIndex === colorIndex
+              ? { ...i, area }
+              : i
+          ),
+          lastUpdated: new Date().toISOString(),
+        };
+      }
+
+      const newItem: CartItem = {
+        product,
+        selectedVariant: variant,
+        quantity: 1,
+        plan: state.selectedPlanId as PlanType,
+        area,
+        colorIndex,
+      };
+
+      return { items: [...state.items, newItem], lastUpdated: new Date().toISOString() };
+    });
+  },
+
   removeItem: (productId) => {
     const state = get();
     const item = state.items.find((i) => i.product.id === productId);
@@ -138,6 +188,28 @@ export const useCartStore = create<CartStore>()(
         if (isWallCloth && i.product.id === ceilingAutoId) return false;
         return true;
       }),
+      lastUpdated: new Date().toISOString(),
+    }));
+  },
+
+  removeItemByColorIndex: (productId, colorIndex) => {
+    const state = get();
+    const item = state.items.find(
+      (i) => i.product.id === productId && i.colorIndex === colorIndex
+    );
+    if (item) {
+      addOperationLog('cart_remove', 'remove', {
+        productId,
+        productName: item.product.name,
+        itemName: `${item.product.name}（${colorIndex}色目）をカートから削除`,
+        colorIndex,
+      });
+    }
+
+    set((state) => ({
+      items: state.items.filter(
+        (i) => !(i.product.id === productId && i.colorIndex === colorIndex)
+      ),
       lastUpdated: new Date().toISOString(),
     }));
   },
@@ -170,6 +242,32 @@ export const useCartStore = create<CartStore>()(
     }));
   },
 
+  updateItemArea: (productId, colorIndex, area) => {
+    const state = get();
+    const item = state.items.find(
+      (i) => i.product.id === productId && i.colorIndex === colorIndex
+    );
+    if (item) {
+      addOperationLog('cart_update', 'other', {
+        productId,
+        productName: item.product.name,
+        itemName: `${item.product.name}（${colorIndex}色目）の面積を${area}㎡に変更`,
+        oldArea: item.area,
+        newArea: area,
+        colorIndex,
+      });
+    }
+
+    set((state) => ({
+      items: state.items.map((i) =>
+        i.product.id === productId && i.colorIndex === colorIndex
+          ? { ...i, area }
+          : i
+      ),
+      lastUpdated: new Date().toISOString(),
+    }));
+  },
+
   reorderItems: (newItems) => {
     set({ items: newItems, lastUpdated: new Date().toISOString() });
   },
@@ -182,7 +280,22 @@ export const useCartStore = create<CartStore>()(
     });
     set({ items: [], lastUpdated: new Date().toISOString() });
   },
-  
+
+  clearCategoryItems: (categoryId) => {
+    const state = get();
+    const categoryItems = state.items.filter(i => i.product.categoryId === categoryId);
+    if (categoryItems.length > 0) {
+      addOperationLog('cart_clear', 'remove', {
+        itemName: `${categoryItems[0].product.categoryName}の選択をクリア`,
+        itemCount: categoryItems.length,
+      });
+    }
+    set((state) => ({
+      items: state.items.filter(i => i.product.categoryId !== categoryId),
+      lastUpdated: new Date().toISOString(),
+    }));
+  },
+
   getTotalPrice: () => {
     const { items, selectedPlanId } = get();
     return items.reduce((total, item) => {

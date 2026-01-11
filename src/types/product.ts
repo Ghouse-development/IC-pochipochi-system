@@ -81,4 +81,20 @@ export interface CartItem {
   selectedVariant: ProductVariant;
   quantity: number;
   plan?: PlanType;
+  // ㎡指定アイテム用
+  area?: number;           // 面積（㎡）
+  colorIndex?: number;     // 色番号（1, 2, 3...）複数色選択時の識別用
 }
+
+// ㎡指定が必要なカテゴリID
+export const AREA_BASED_CATEGORIES = [
+  'exterior-wall',      // 外壁
+  'soffit',             // 軒天
+  'flooring',           // 床材
+  'wall-cloth',         // 壁クロス
+  'ceiling-cloth',      // 天井クロス
+  'wall-material',      // 壁材
+  'base-floor',         // ベース床
+  'base-wall-cloth',    // ベースクロス（壁）
+  'base-ceiling-cloth', // ベースクロス（天井）
+] as const;
