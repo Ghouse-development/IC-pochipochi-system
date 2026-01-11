@@ -2695,12 +2695,12 @@ const staticInteriorProducts: Product[] = [
     ]
   },
 
-  // ========== 床補強 ==========
-  // 選択しない（標準）
+  // ========== 補強・下地 ==========
+  // 床補強 - 選択しない（標準）
   {
     id: 'int-floor-reinforce-none',
-    categoryId: 'floor-reinforcement',
-    categoryName: '床補強',
+    categoryId: 'reinforcement',
+    categoryName: '補強・下地',
     subcategory: '床補強',
     name: '床補強なし（標準）',
     manufacturer: '-',
@@ -2720,8 +2720,8 @@ const staticInteriorProducts: Product[] = [
   },
   {
     id: 'int-reinforce-floor',
-    categoryId: 'floor-reinforcement',
-    categoryName: '床補強',
+    categoryId: 'reinforcement',
+    categoryName: '補強・下地',
     subcategory: '床補強',
     name: '床補強',
     manufacturer: 'Gハウス',
@@ -2740,13 +2740,12 @@ const staticInteriorProducts: Product[] = [
     ]
   },
 
-  // ========== 壁下地 ==========
-  // 選択しない（標準）
+  // 壁下地 - 選択しない（標準）
   {
     id: 'int-wall-reinforce-none',
-    categoryId: 'wall-reinforcement',
-    categoryName: '壁下地',
-    subcategory: '壁下地',
+    categoryId: 'reinforcement',
+    categoryName: '補強・下地',
+    subcategory: '壁下地補強',
     name: '壁下地なし（標準）',
     manufacturer: '-',
     modelNumber: 'NONE',
@@ -2765,9 +2764,9 @@ const staticInteriorProducts: Product[] = [
   },
   {
     id: 'int-reinforce-wall',
-    categoryId: 'wall-reinforcement',
-    categoryName: '壁下地',
-    subcategory: '壁下地',
+    categoryId: 'reinforcement',
+    categoryName: '補強・下地',
+    subcategory: '壁下地補強',
     name: '壁下地補強',
     manufacturer: 'Gハウス',
     modelNumber: 'REINFORCE-WALL',
@@ -2784,13 +2783,12 @@ const staticInteriorProducts: Product[] = [
       { plan: 'LIFE', price: 6000 }
     ]
   },
-  // ========== 天井下地 ==========
-  // 選択しない（標準）
+  // 天井下地 - 選択しない（標準）
   {
     id: 'int-ceiling-reinforce-none',
-    categoryId: 'ceiling-reinforcement',
-    categoryName: '天井下地',
-    subcategory: '天井下地',
+    categoryId: 'reinforcement',
+    categoryName: '補強・下地',
+    subcategory: 'ロールカーテン用天井下地',
     name: '天井下地なし（標準）',
     manufacturer: '-',
     modelNumber: 'NONE',
@@ -2809,9 +2807,9 @@ const staticInteriorProducts: Product[] = [
   },
   {
     id: 'int-reinforce-ceiling-1m',
-    categoryId: 'ceiling-reinforcement',
-    categoryName: '天井下地',
-    subcategory: '天井下地',
+    categoryId: 'reinforcement',
+    categoryName: '補強・下地',
+    subcategory: 'ロールカーテン用天井下地',
     name: 'ロールカーテン用天井下地（1m未満）',
     manufacturer: 'Gハウス',
     modelNumber: 'REINFORCE-CEILING-1M',
@@ -2830,9 +2828,9 @@ const staticInteriorProducts: Product[] = [
   },
   {
     id: 'int-reinforce-ceiling-2m',
-    categoryId: 'ceiling-reinforcement',
-    categoryName: '天井下地',
-    subcategory: '天井下地',
+    categoryId: 'reinforcement',
+    categoryName: '補強・下地',
+    subcategory: 'ロールカーテン用天井下地',
     name: 'ロールカーテン用天井下地（2m未満）',
     manufacturer: 'Gハウス',
     modelNumber: 'REINFORCE-CEILING-2M',
@@ -2851,9 +2849,9 @@ const staticInteriorProducts: Product[] = [
   },
   {
     id: 'int-reinforce-ceiling-3m',
-    categoryId: 'ceiling-reinforcement',
-    categoryName: '天井下地',
-    subcategory: '天井下地',
+    categoryId: 'reinforcement',
+    categoryName: '補強・下地',
+    subcategory: 'ロールカーテン用天井下地',
     name: 'ロールカーテン用天井下地（3m未満）',
     manufacturer: 'Gハウス',
     modelNumber: 'REINFORCE-CEILING-3M',
@@ -2872,9 +2870,9 @@ const staticInteriorProducts: Product[] = [
   },
   {
     id: 'int-reinforce-ceiling-4m',
-    categoryId: 'ceiling-reinforcement',
-    categoryName: '天井下地',
-    subcategory: '天井下地',
+    categoryId: 'reinforcement',
+    categoryName: '補強・下地',
+    subcategory: 'ロールカーテン用天井下地',
     name: 'ロールカーテン用天井下地（4m未満）',
     manufacturer: 'Gハウス',
     modelNumber: 'REINFORCE-CEILING-4M',
