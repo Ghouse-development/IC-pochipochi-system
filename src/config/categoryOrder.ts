@@ -316,17 +316,22 @@ export const INTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
     ]
   },
   {
-    name: '収納',
+    name: '玄関収納',
+    icon: '🚪',
+    subcategoryOrder: [
+      '玄関靴箱',
+    ]
+  },
+  {
+    name: '居室収納',
     icon: '🗄️',
     subcategoryOrder: [
       'クローゼット',
       'システム収納',
-      '玄関靴箱',
+      '枕棚',
       '可動棚',
       '樹脂製可動棚',
-      '枕棚',
       'ハンガーパイプ',
-      '床下収納',
       '小上がり下収納',
     ]
   },
@@ -334,6 +339,14 @@ export const INTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
     name: 'トイレ収納',
     icon: '🚽',
     subcategoryOrder: ['トイレ収納', 'トイレカウンター']
+  },
+  {
+    name: 'その他収納',
+    icon: '📦',
+    subcategoryOrder: [
+      '床下収納',
+      'ランドリー可動棚',
+    ]
   },
   {
     name: '階段',

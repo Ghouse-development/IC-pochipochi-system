@@ -2266,11 +2266,11 @@ const staticInteriorProducts: Product[] = [
     ]
   },
 
-  // ========== 収納 ==========
+  // ========== 居室収納 ==========
   {
     id: 'int-storage-001',
-    categoryId: 'storage',
-    categoryName: '収納',
+    categoryId: 'room-storage',
+    categoryName: '居室収納',
     subcategory: 'クローゼット',
     name: '枕棚+PH',
     manufacturer: 'Panasonic',
@@ -2288,8 +2288,8 @@ const staticInteriorProducts: Product[] = [
   },
   {
     id: 'int-storage-002',
-    categoryId: 'storage',
-    categoryName: '収納',
+    categoryId: 'room-storage',
+    categoryName: '居室収納',
     subcategory: 'クローゼット',
     name: '枕棚+PH（追加）',
     manufacturer: 'Panasonic',
@@ -2307,8 +2307,8 @@ const staticInteriorProducts: Product[] = [
   },
   {
     id: 'int-storage-003',
-    categoryId: 'storage',
-    categoryName: '収納',
+    categoryId: 'room-storage',
+    categoryName: '居室収納',
     subcategory: 'システム収納',
     name: 'インテグレート可動棚',
     manufacturer: 'Panasonic',
@@ -3513,8 +3513,8 @@ const staticInteriorProducts: Product[] = [
   },
   {
     id: 'int-koagari-002',
-    categoryId: 'storage',
-    categoryName: '収納',
+    categoryId: 'room-storage',
+    categoryName: '居室収納',
     subcategory: '小上がり下収納',
     name: '小上がり下引出収納 H350',
     manufacturer: 'Gハウス',
@@ -3538,8 +3538,8 @@ const staticInteriorProducts: Product[] = [
   },
   {
     id: 'int-koagari-003',
-    categoryId: 'storage',
-    categoryName: '収納',
+    categoryId: 'room-storage',
+    categoryName: '居室収納',
     subcategory: '小上がり下収納',
     name: '小上がり下引出収納 H400',
     manufacturer: 'Gハウス',
@@ -3636,8 +3636,8 @@ const staticInteriorProducts: Product[] = [
   },
   {
     id: 'int-storage-floor-001',
-    categoryId: 'storage',
-    categoryName: '収納',
+    categoryId: 'other-storage',
+    categoryName: 'その他収納',
     subcategory: '床下収納',
     name: '床下収納庫',
     manufacturer: '城東テクノ',
@@ -5109,8 +5109,8 @@ const staticInteriorProducts: Product[] = [
   // ========== 収納棚（PDF36追加）==========
   {
     id: 'int-shelf-001',
-    categoryId: 'storage',
-    categoryName: '収納',
+    categoryId: 'room-storage',
+    categoryName: '居室収納',
     subcategory: '枕棚',
     name: '枕棚+PH（2カ所目以降）W910',
     manufacturer: 'Panasonic',
@@ -5130,8 +5130,8 @@ const staticInteriorProducts: Product[] = [
   },
   {
     id: 'int-shelf-002',
-    categoryId: 'storage',
-    categoryName: '収納',
+    categoryId: 'room-storage',
+    categoryName: '居室収納',
     subcategory: '枕棚',
     name: '枕棚+PH（2カ所目以降）W1820',
     manufacturer: 'Panasonic',
@@ -5151,8 +5151,8 @@ const staticInteriorProducts: Product[] = [
   },
   {
     id: 'int-shelf-003',
-    categoryId: 'storage',
-    categoryName: '収納',
+    categoryId: 'room-storage',
+    categoryName: '居室収納',
     subcategory: '枕棚',
     name: '枕棚+PH（2カ所目以降）W2730',
     manufacturer: 'Panasonic',
@@ -5172,8 +5172,8 @@ const staticInteriorProducts: Product[] = [
   },
   {
     id: 'int-shelf-004',
-    categoryId: 'storage',
-    categoryName: '収納',
+    categoryId: 'room-storage',
+    categoryName: '居室収納',
     subcategory: '枕棚',
     name: '枕棚のみ W910',
     manufacturer: 'Panasonic',
@@ -5193,8 +5193,8 @@ const staticInteriorProducts: Product[] = [
   },
   {
     id: 'int-shelf-005',
-    categoryId: 'storage',
-    categoryName: '収納',
+    categoryId: 'room-storage',
+    categoryName: '居室収納',
     subcategory: '枕棚',
     name: '枕棚+中段 W910',
     manufacturer: 'Panasonic',
@@ -5216,8 +5216,8 @@ const staticInteriorProducts: Product[] = [
   // ========== 可動棚（PDF37追加）==========
   {
     id: 'int-movable-shelf-001',
-    categoryId: 'storage',
-    categoryName: '収納',
+    categoryId: 'room-storage',
+    categoryName: '居室収納',
     subcategory: '可動棚',
     name: '可動棚 両壁収まり C300-2',
     manufacturer: 'Gハウス',
@@ -5238,8 +5238,8 @@ const staticInteriorProducts: Product[] = [
   },
   {
     id: 'int-movable-shelf-002',
-    categoryId: 'storage',
-    categoryName: '収納',
+    categoryId: 'room-storage',
+    categoryName: '居室収納',
     subcategory: '可動棚',
     name: '可動棚 両壁収まり C300-4',
     manufacturer: 'Gハウス',
@@ -5260,8 +5260,8 @@ const staticInteriorProducts: Product[] = [
   },
   {
     id: 'int-movable-shelf-003',
-    categoryId: 'storage',
-    categoryName: '収納',
+    categoryId: 'room-storage',
+    categoryName: '居室収納',
     subcategory: '可動棚',
     name: '可動棚 両壁収まり C300-6',
     manufacturer: 'Gハウス',
@@ -5282,8 +5282,8 @@ const staticInteriorProducts: Product[] = [
   },
   {
     id: 'int-movable-shelf-004',
-    categoryId: 'storage',
-    categoryName: '収納',
+    categoryId: 'room-storage',
+    categoryName: '居室収納',
     subcategory: '可動棚',
     name: '可動棚 両壁収まり C450-4',
     manufacturer: 'Gハウス',
@@ -5304,8 +5304,8 @@ const staticInteriorProducts: Product[] = [
   },
   {
     id: 'int-movable-shelf-005',
-    categoryId: 'storage',
-    categoryName: '収納',
+    categoryId: 'room-storage',
+    categoryName: '居室収納',
     subcategory: '可動棚',
     name: '可動棚 両壁収まり C450-6',
     manufacturer: 'Gハウス',
@@ -5326,9 +5326,9 @@ const staticInteriorProducts: Product[] = [
   },
   {
     id: 'int-movable-shelf-006',
-    categoryId: 'storage',
-    categoryName: '収納',
-    subcategory: '可動棚',
+    categoryId: 'other-storage',
+    categoryName: 'その他収納',
+    subcategory: 'ランドリー可動棚',
     name: 'ランドリー可動棚 W600',
     manufacturer: 'Gハウス',
     modelNumber: 'LAUNDRY-SHELF-600',
@@ -5349,8 +5349,8 @@ const staticInteriorProducts: Product[] = [
   // ========== 樹脂製可動棚・ハンガーパイプ（PDF38追加）==========
   {
     id: 'int-resin-shelf-001',
-    categoryId: 'storage',
-    categoryName: '収納',
+    categoryId: 'room-storage',
+    categoryName: '居室収納',
     subcategory: '樹脂製可動棚',
     name: '樹脂製可動棚 S1',
     manufacturer: 'Gハウス',
@@ -5371,8 +5371,8 @@ const staticInteriorProducts: Product[] = [
   },
   {
     id: 'int-resin-shelf-002',
-    categoryId: 'storage',
-    categoryName: '収納',
+    categoryId: 'room-storage',
+    categoryName: '居室収納',
     subcategory: '樹脂製可動棚',
     name: '樹脂製可動棚 S2',
     manufacturer: 'Gハウス',
@@ -5393,8 +5393,8 @@ const staticInteriorProducts: Product[] = [
   },
   {
     id: 'int-resin-shelf-003',
-    categoryId: 'storage',
-    categoryName: '収納',
+    categoryId: 'room-storage',
+    categoryName: '居室収納',
     subcategory: '樹脂製可動棚',
     name: '樹脂製可動棚 S3',
     manufacturer: 'Gハウス',
@@ -5415,8 +5415,8 @@ const staticInteriorProducts: Product[] = [
   },
   {
     id: 'int-hanger-pipe-001',
-    categoryId: 'storage',
-    categoryName: '収納',
+    categoryId: 'room-storage',
+    categoryName: '居室収納',
     subcategory: 'ハンガーパイプ',
     name: 'ハンガーパイプセット P1',
     manufacturer: 'Gハウス',
@@ -5436,8 +5436,8 @@ const staticInteriorProducts: Product[] = [
   },
   {
     id: 'int-hanger-pipe-002',
-    categoryId: 'storage',
-    categoryName: '収納',
+    categoryId: 'room-storage',
+    categoryName: '居室収納',
     subcategory: 'ハンガーパイプ',
     name: 'ハンガーパイプセット P2',
     manufacturer: 'Gハウス',
@@ -5457,8 +5457,8 @@ const staticInteriorProducts: Product[] = [
   },
   {
     id: 'int-hanger-pipe-003',
-    categoryId: 'storage',
-    categoryName: '収納',
+    categoryId: 'room-storage',
+    categoryName: '居室収納',
     subcategory: 'ハンガーパイプ',
     name: 'ハンガーパイプセット P3',
     manufacturer: 'Gハウス',
@@ -5478,8 +5478,8 @@ const staticInteriorProducts: Product[] = [
   },
   {
     id: 'int-hanger-pipe-004',
-    categoryId: 'storage',
-    categoryName: '収納',
+    categoryId: 'room-storage',
+    categoryName: '居室収納',
     subcategory: 'ハンガーパイプ',
     name: 'ハンガーパイプセット P4',
     manufacturer: 'Gハウス',
@@ -5501,8 +5501,8 @@ const staticInteriorProducts: Product[] = [
   // ========== 玄関靴箱（PDF39追加）==========
   {
     id: 'int-shoebox-001',
-    categoryId: 'storage',
-    categoryName: '収納',
+    categoryId: 'entrance-storage',
+    categoryName: '玄関収納',
     subcategory: '玄関靴箱',
     name: 'コンポリア W800',
     manufacturer: 'Panasonic',
@@ -5535,8 +5535,8 @@ const staticInteriorProducts: Product[] = [
   },
   {
     id: 'int-shoebox-002',
-    categoryId: 'storage',
-    categoryName: '収納',
+    categoryId: 'entrance-storage',
+    categoryName: '玄関収納',
     subcategory: '玄関靴箱',
     name: 'コンポリア W1200',
     manufacturer: 'Panasonic',
@@ -5569,8 +5569,8 @@ const staticInteriorProducts: Product[] = [
   },
   {
     id: 'int-shoebox-003',
-    categoryId: 'storage',
-    categoryName: '収納',
+    categoryId: 'entrance-storage',
+    categoryName: '玄関収納',
     subcategory: '玄関靴箱',
     name: 'コンポリア W1600',
     manufacturer: 'Panasonic',
@@ -5603,8 +5603,8 @@ const staticInteriorProducts: Product[] = [
   },
   {
     id: 'int-shoebox-004',
-    categoryId: 'storage',
-    categoryName: '収納',
+    categoryId: 'entrance-storage',
+    categoryName: '玄関収納',
     subcategory: '玄関靴箱',
     name: 'コンポリア ミラー追加',
     manufacturer: 'Panasonic',
