@@ -121,11 +121,15 @@ export function usePorchItems(selectedPlan: string) {
             product:products(*)
           )
         `)
-        .contains('tags', ['porch-tile'])
+        .filter('tags', 'cs', '{"porch-tile"}')
         .eq('is_active', true)
         .order('display_order');
 
-      if (tileError) throw tileError;
+      if (tileError) {
+        console.error('Tile fetch error:', tileError);
+        throw tileError;
+      }
+      console.log('Fetched tiles:', tileItems?.length, tileItems);
 
       if (tileItems && tileItems.length > 0) {
         const convertedTiles = (tileItems as ItemWithDetails[]).map(item =>
@@ -150,11 +154,15 @@ export function usePorchItems(selectedPlan: string) {
             product:products(*)
           )
         `)
-        .contains('tags', ['porch-grout'])
+        .filter('tags', 'cs', '{"porch-grout"}')
         .eq('is_active', true)
         .order('display_order');
 
-      if (groutError) throw groutError;
+      if (groutError) {
+        console.error('Grout fetch error:', groutError);
+        throw groutError;
+      }
+      console.log('Fetched grout:', groutItems?.length, groutItems);
 
       if (groutItems && groutItems.length > 0) {
         const convertedGrout = (groutItems as ItemWithDetails[]).map(itemToGroutOption);
