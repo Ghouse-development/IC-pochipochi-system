@@ -44,6 +44,7 @@ import { RoomSelectionModal } from './RoomSelectionModal';
 import { ActionChecklist } from './ActionChecklist';
 import { BeginnerGuide } from './BeginnerGuide';
 import { EstimateExportDialog } from '../estimate/EstimateExportDialog';
+import { useConfirmDialog } from '../common/ConfirmDialog';
 import { useSelectionStore } from '../../stores/useSelectionStore';
 import { ICProposalSelector, type ICProposalSelection } from './ICProposalSelector';
 import { AirconSelector } from './AirconSelector';
@@ -155,6 +156,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   // 商品詳細モーダル用
   const [selectedProductForDetail, setSelectedProductForDetail] = useState<CatalogProduct | null>(null);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+
+  // 選択解除確認ダイアログ
+  const { confirm: confirmRemoval, ConfirmDialogComponent: RemovalConfirmDialog } = useConfirmDialog();
 
   // 見積書出力ダイアログ
   const [isEstimateDialogOpen, setIsEstimateDialogOpen] = useState(false);
@@ -1035,13 +1039,23 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roomSelectionModal, items, addItem, selectedPlanId, setProductSelection, toast]); // setTimeoutはグローバル関数
 
-  const handleRemoveFromCart = useCallback((itemId: string) => {
+  const handleRemoveFromCart = useCallback(async (itemId: string) => {
     const item = cartItems.find(i => i.product.id === itemId);
-    removeItem(itemId);
-    if (item) {
+    if (!item) return;
+
+    const confirmed = await confirmRemoval({
+      title: '選択を解除しますか？',
+      message: `「${item.product.name}」の選択を解除します。\n解除した場合、再度選択し直す必要があります。`,
+      confirmText: '解除する',
+      cancelText: 'キャンセル',
+      variant: 'warning',
+    });
+
+    if (confirmed) {
+      removeItem(itemId);
       toast.info('解除しました', item.product.name);
     }
-  }, [removeItem, cartItems, toast]);
+  }, [removeItem, cartItems, toast, confirmRemoval]);
 
   // 商品詳細モーダルを開く（URL付き）
   const handleOpenDetail = useCallback((item: ItemWithDetails) => {
@@ -3019,6 +3033,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
         isOpen={isEstimateDialogOpen}
         onClose={() => setIsEstimateDialogOpen(false)}
       />
+
+      {/* 選択解除確認ダイアログ */}
+      <RemovalConfirmDialog />
 
       {/* 部屋選択モーダル（商品の適用部屋を選択） */}
       {roomSelectionModal && (
