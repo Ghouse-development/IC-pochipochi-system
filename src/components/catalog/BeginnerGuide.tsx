@@ -98,7 +98,7 @@ export const BeginnerGuide: React.FC<BeginnerGuideProps> = ({ onComplete, isOpen
 
   return (
     <div className="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 animate-fade-in">
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden">
         {/* ヘッダー */}
         <div className="bg-gradient-to-r from-teal-500 to-emerald-500 p-4 text-white">
           <div className="flex items-center justify-between">
@@ -130,39 +130,39 @@ export const BeginnerGuide: React.FC<BeginnerGuideProps> = ({ onComplete, isOpen
         <div className="p-6">
           {/* アイコン */}
           <div className="flex justify-center mb-4">
-            <div className="w-16 h-16 bg-teal-100 dark:bg-teal-900/30 rounded-full flex items-center justify-center text-teal-600 dark:text-teal-400">
+            <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center text-teal-600">
               {step.icon}
             </div>
           </div>
 
           {/* タイトル */}
-          <h2 className="text-xl font-bold text-center text-gray-800 dark:text-gray-200 mb-3">
+          <h2 className="text-xl font-bold text-center text-gray-800 mb-3">
             {step.title}
           </h2>
 
           {/* 説明 */}
-          <p className="text-gray-600 dark:text-gray-400 text-center mb-4 leading-relaxed">
+          <p className="text-gray-600 text-center mb-4 leading-relaxed">
             {step.description}
           </p>
 
           {/* ヒント */}
-          <div className="bg-yellow-50 dark:bg-yellow-900/20 rounded-xl p-3 flex items-start gap-2">
+          <div className="bg-yellow-50 rounded-xl p-3 flex items-start gap-2">
             <Lightbulb className="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5" />
-            <p className="text-sm text-yellow-700 dark:text-yellow-400">
+            <p className="text-sm text-yellow-700">
               {step.tip}
             </p>
           </div>
         </div>
 
         {/* フッター */}
-        <div className="p-4 bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between">
+        <div className="p-4 bg-gray-50 border-t border-gray-200 flex items-center justify-between">
           <button
             onClick={handlePrev}
             disabled={currentStep === 0}
             className={`flex items-center gap-1 px-4 py-2 rounded-lg font-medium transition-colors ${
               currentStep === 0
                 ? 'text-gray-400 cursor-not-allowed'
-                : 'text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+                : 'text-gray-600 hover:bg-gray-200:bg-gray-700'
             }`}
           >
             <ChevronLeft className="w-4 h-4" />
@@ -171,7 +171,7 @@ export const BeginnerGuide: React.FC<BeginnerGuideProps> = ({ onComplete, isOpen
 
           <button
             onClick={handleSkip}
-            className="text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+            className="text-sm text-gray-500 hover:text-gray-700:text-gray-300"
           >
             スキップ
           </button>

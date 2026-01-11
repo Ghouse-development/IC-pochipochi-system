@@ -439,7 +439,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
+    <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
       {/* ヘッダー */}
       <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4">
         <div className="flex items-center justify-between">
@@ -469,9 +469,9 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
       </div>
 
       {/* クイックアクション */}
-      <div className="p-3 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/30 dark:to-purple-900/30 border-b border-indigo-100 dark:border-indigo-800">
+      <div className="p-3 bg-gradient-to-r from-indigo-50 to-purple-50 border-b border-indigo-100">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-xs font-medium text-indigo-700 dark:text-indigo-300 flex items-center gap-1">
+          <span className="text-xs font-medium text-indigo-700 flex items-center gap-1">
             <Zap className="w-3 h-3" />
             時短ツール:
           </span>
@@ -481,7 +481,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
               showBulkPanel
                 ? 'bg-indigo-600 text-white'
-                : 'bg-white dark:bg-gray-700 text-indigo-600 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-gray-600'
+                : 'bg-white text-indigo-600 hover:bg-indigo-100:bg-gray-600'
             }`}
           >
             <Layers className="w-3.5 h-3.5" />
@@ -490,7 +490,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
 
           <button
             onClick={applyStandardItems}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-gray-700 text-green-600 dark:text-green-400 rounded-full text-xs font-medium hover:bg-green-100 dark:hover:bg-gray-600 transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-white text-green-600 rounded-full text-xs font-medium hover:bg-green-100:bg-gray-600 transition-colors"
           >
             <Wand2 className="w-3.5 h-3.5" />
             標準仕様で自動設定
@@ -499,7 +499,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
           {viewMode === 'card' && (
             <button
               onClick={() => toggleAllRooms(expandedRooms.size < rooms.length)}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full text-xs font-medium hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-white text-gray-600 rounded-full text-xs font-medium hover:bg-gray-100:bg-gray-600 transition-colors"
             >
               {expandedRooms.size < rooms.length ? (
                 <>
@@ -516,13 +516,13 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
           )}
 
           {/* 表示モード切替 */}
-          <div className="ml-auto flex items-center gap-1 bg-white dark:bg-gray-700 rounded-full p-1">
+          <div className="ml-auto flex items-center gap-1 bg-white rounded-full p-1">
             <button
               onClick={() => setViewMode('table')}
               className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium transition-colors ${
                 viewMode === 'table'
                   ? 'bg-indigo-600 text-white'
-                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
+                  : 'text-gray-600 hover:bg-gray-100:bg-gray-600'
               }`}
             >
               <Table2 className="w-3.5 h-3.5" />
@@ -533,7 +533,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
               className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium transition-colors ${
                 viewMode === 'card'
                   ? 'bg-indigo-600 text-white'
-                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
+                  : 'text-gray-600 hover:bg-gray-100:bg-gray-600'
               }`}
             >
               <LayoutGrid className="w-3.5 h-3.5" />
@@ -545,8 +545,8 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
 
       {/* 一括設定パネル */}
       {showBulkPanel && (
-        <div className="p-4 bg-indigo-50 dark:bg-indigo-900/20 border-b border-indigo-200 dark:border-indigo-800">
-          <h3 className="text-sm font-bold text-indigo-800 dark:text-indigo-200 mb-3 flex items-center gap-2">
+        <div className="p-4 bg-indigo-50 border-b border-indigo-200">
+          <h3 className="text-sm font-bold text-indigo-800 mb-3 flex items-center gap-2">
             <Layers className="w-4 h-4" />
             一括設定（同じ素材を複数の部屋に適用）
           </h3>
@@ -555,12 +555,12 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
               <button
                 key={part.id}
                 onClick={() => setSelectedPartForPicker({ roomId: '', partId: part.id, bulkMode: true, bulkGroup: 'all' })}
-                className="flex items-center gap-2 p-3 bg-white dark:bg-gray-700 rounded-xl border-2 border-indigo-200 dark:border-indigo-700 hover:border-indigo-500 dark:hover:border-indigo-500 transition-colors text-left"
+                className="flex items-center gap-2 p-3 bg-white rounded-xl border-2 border-indigo-200 hover:border-indigo-500:border-indigo-500 transition-colors text-left"
               >
                 <span className="text-xl">{part.icon}</span>
                 <div>
-                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{part.name}</p>
-                  <p className="text-xs text-indigo-600 dark:text-indigo-400">全室に適用</p>
+                  <p className="text-sm font-medium text-gray-900">{part.name}</p>
+                  <p className="text-xs text-indigo-600">全室に適用</p>
                 </div>
               </button>
             ))}
@@ -572,15 +572,15 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
       {viewMode === 'table' && (
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-gray-100 dark:bg-gray-700 sticky top-0">
+            <thead className="bg-gray-100 sticky top-0">
               <tr>
-                <th className="px-3 py-3 text-left font-semibold text-gray-700 dark:text-gray-200 whitespace-nowrap border-b border-gray-200 dark:border-gray-600">
+                <th className="px-3 py-3 text-left font-semibold text-gray-700 whitespace-nowrap border-b border-gray-200">
                   部屋
                 </th>
                 {INTERIOR_PARTS.filter(p => ['flooring', 'wall', 'accent', 'door', 'lighting'].includes(p.id)).map(part => (
                   <th
                     key={part.id}
-                    className="px-2 py-3 text-center font-semibold text-gray-700 dark:text-gray-200 whitespace-nowrap border-b border-gray-200 dark:border-gray-600 min-w-[100px]"
+                    className="px-2 py-3 text-center font-semibold text-gray-700 whitespace-nowrap border-b border-gray-200 min-w-[100px]"
                   >
                     <span className="flex flex-col items-center gap-1">
                       <span className="text-lg">{part.icon}</span>
@@ -590,15 +590,15 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
+            <tbody className="divide-y divide-gray-100">
               {rooms.map((room, index) => {
                 const roomType = ROOM_TYPES.find(rt => room.roomId.startsWith(rt.id));
                 return (
                   <tr
                     key={room.roomId}
-                    className={`${index % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-750'} hover:bg-teal-50 dark:hover:bg-teal-900/20 transition-colors`}
+                    className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-teal-50:bg-teal-900/20 transition-colors`}
                   >
-                    <td className="px-3 py-3 font-medium text-gray-900 dark:text-gray-100 whitespace-nowrap">
+                    <td className="px-3 py-3 font-medium text-gray-900 whitespace-nowrap">
                       <div className="flex items-center gap-2">
                         <span className="text-lg">{roomType?.icon || '🏠'}</span>
                         <span>{room.roomName}</span>
@@ -617,7 +617,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
                       if (!isApplicable) {
                         return (
                           <td key={part.id} className="px-2 py-3 text-center">
-                            <span className="text-gray-300 dark:text-gray-600">-</span>
+                            <span className="text-gray-300">-</span>
                           </td>
                         );
                       }
@@ -628,10 +628,10 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
                             onClick={() => setSelectedPartForPicker({ roomId: room.roomId, partId: part.id })}
                             className={`w-full flex items-center justify-center gap-2 p-2 rounded-lg transition-all ${
                               selection?.product
-                                ? 'bg-teal-50 dark:bg-teal-900/30 border border-teal-300 dark:border-teal-600 hover:bg-teal-100 dark:hover:bg-teal-900/50'
+                                ? 'bg-teal-50 border border-teal-300 hover:bg-teal-100:bg-teal-900/50'
                                 : part.required
-                                ? 'bg-orange-50 dark:bg-orange-900/20 border border-dashed border-orange-300 dark:border-orange-600 hover:bg-orange-100 dark:hover:bg-orange-900/30'
-                                : 'bg-gray-50 dark:bg-gray-700 border border-dashed border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600'
+                                ? 'bg-orange-50 border border-dashed border-orange-300 hover:bg-orange-100:bg-orange-900/30'
+                                : 'bg-gray-50 border border-dashed border-gray-200 hover:bg-gray-100:bg-gray-600'
                             }`}
                           >
                             {selection?.product ? (
@@ -645,7 +645,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
                                   }}
                                 />
                                 <div className="text-left min-w-0">
-                                  <p className="text-xs font-medium text-gray-700 dark:text-gray-200 truncate max-w-[80px]">
+                                  <p className="text-xs font-medium text-gray-700 truncate max-w-[80px]">
                                     {selectedVariant?.color || '選択済'}
                                   </p>
                                 </div>
@@ -669,15 +669,15 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
 
       {/* カード形式ビュー（部屋リスト） */}
       {viewMode === 'card' && (
-      <div className="divide-y divide-gray-100 dark:divide-gray-700">
+      <div className="divide-y divide-gray-100">
         {[1, 2, 0].map(floor => {
           const floorRooms = roomsByFloor[floor] || [];
           if (floorRooms.length === 0) return null;
 
           return (
             <div key={floor} className="p-4">
-              <h3 className="text-sm font-bold text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
-                <span className="w-6 h-6 bg-gray-200 dark:bg-gray-600 rounded-lg flex items-center justify-center text-xs">
+              <h3 className="text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
+                <span className="w-6 h-6 bg-gray-200 rounded-lg flex items-center justify-center text-xs">
                   {floor === 0 ? '共' : `${floor}F`}
                 </span>
                 {floorNames[floor]}
@@ -698,22 +698,22 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
                       key={room.roomId}
                       className={`border rounded-xl overflow-hidden transition-colors ${
                         isComplete
-                          ? 'border-green-300 dark:border-green-700 bg-green-50/50 dark:bg-green-900/20'
-                          : 'border-gray-200 dark:border-gray-600'
+                          ? 'border-green-300 bg-green-50/50'
+                          : 'border-gray-200'
                       }`}
                     >
                       {/* 部屋ヘッダー */}
                       <button
                         onClick={() => toggleRoom(room.roomId)}
-                        className="w-full flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                        className="w-full flex items-center justify-between p-3 hover:bg-gray-50:bg-gray-700/50 transition-colors"
                       >
                         <div className="flex items-center gap-3">
                           <span className="text-xl">{roomType?.icon || '🏠'}</span>
-                          <span className="font-medium text-gray-900 dark:text-gray-100">{room.roomName}</span>
+                          <span className="font-medium text-gray-900">{room.roomName}</span>
                           <span className={`text-xs px-2 py-0.5 rounded-full ${
                             isComplete
-                              ? 'bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300'
-                              : 'bg-gray-100 dark:bg-gray-600 text-gray-500 dark:text-gray-300'
+                              ? 'bg-green-100 text-green-700'
+                              : 'bg-gray-100 text-gray-500'
                           }`}>
                             {isComplete ? (
                               <span className="flex items-center gap-1">
@@ -730,7 +730,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
                               e.stopPropagation();
                               removeRoom(room.roomId);
                             }}
-                            className="p-1 hover:bg-red-100 dark:hover:bg-red-900/30 rounded text-red-500"
+                            className="p-1 hover:bg-red-100:bg-red-900/30 rounded text-red-500"
                             aria-label="部屋を削除"
                           >
                             <Trash2 className="w-4 h-4" />
@@ -745,7 +745,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
 
                       {/* パーツ選択エリア（部屋タイプに応じたパーツのみ表示） */}
                       {isExpanded && (
-                        <div className="p-3 bg-gray-50 dark:bg-gray-700/30 border-t border-gray-200 dark:border-gray-600">
+                        <div className="p-3 bg-gray-50 border-t border-gray-200">
                           {/* グループ別パーツ表示 */}
                           {PART_GROUPS.map(group => {
                             const groupParts = INTERIOR_PARTS.filter(p =>
@@ -756,7 +756,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
 
                             return (
                               <div key={group.id} className="mb-4 last:mb-0">
-                                <h4 className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 flex items-center gap-1">
+                                <h4 className="text-xs font-semibold text-gray-500 mb-2 flex items-center gap-1">
                                   <span>{group.icon}</span>
                                   {group.name}
                                 </h4>
@@ -772,14 +772,14 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
                                   key={part.id}
                                   className={`p-3 rounded-xl border-2 transition-all ${
                                     selection?.product
-                                      ? 'border-teal-500 dark:border-teal-400 bg-teal-50 dark:bg-teal-900/30'
+                                      ? 'border-teal-500 bg-teal-50'
                                       : part.required
-                                      ? 'border-orange-300 dark:border-orange-600 bg-orange-50 dark:bg-orange-900/20'
-                                      : 'border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800'
+                                      ? 'border-orange-300 bg-orange-50'
+                                      : 'border-gray-200 bg-white'
                                   }`}
                                 >
                                   <div className="flex items-center justify-between mb-2">
-                                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-1">
+                                    <span className="text-sm font-medium text-gray-700 flex items-center gap-1">
                                       <span>{part.icon}</span>
                                       {part.name}
                                       {part.required && (
@@ -789,7 +789,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
                                     {selection?.product && (
                                       <button
                                         onClick={() => removePart(room.roomId, part.id)}
-                                        className="p-1 hover:bg-red-100 dark:hover:bg-red-900/30 rounded"
+                                        className="p-1 hover:bg-red-100:bg-red-900/30 rounded"
                                         aria-label="選択を解除"
                                       >
                                         <X className="w-3 h-3 text-red-500" />
@@ -801,7 +801,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
                                     <div className="flex items-center gap-2">
                                       {selectedVariant && (
                                         <div
-                                          className="w-8 h-8 rounded-lg border-2 border-gray-300 dark:border-gray-500 flex-shrink-0"
+                                          className="w-8 h-8 rounded-lg border-2 border-gray-300 flex-shrink-0"
                                           style={{
                                             backgroundColor: getHexColor(
                                               selectedVariant.colorCode || selectedVariant.color
@@ -810,10 +810,10 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
                                         />
                                       )}
                                       <div className="flex-1 min-w-0">
-                                        <p className="text-xs font-medium text-gray-900 dark:text-gray-100 truncate">
+                                        <p className="text-xs font-medium text-gray-900 truncate">
                                           {selection.product.name}
                                         </p>
-                                        <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                                        <p className="text-xs text-gray-500 truncate">
                                           {selectedVariant?.color}
                                         </p>
                                       </div>
@@ -826,7 +826,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
                                           partId: part.id,
                                         })
                                       }
-                                      className="w-full py-2 border-2 border-dashed border-gray-300 dark:border-gray-500 rounded-lg text-sm text-gray-500 dark:text-gray-400 hover:border-teal-500 dark:hover:border-teal-400 hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
+                                      className="w-full py-2 border-2 border-dashed border-gray-300 rounded-lg text-sm text-gray-500 hover:border-teal-500:border-teal-400 hover:text-teal-600:text-teal-400 transition-colors"
                                     >
                                       + 選択する
                                     </button>
@@ -841,7 +841,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
 
                           {/* 他の部屋にコピー */}
                           {Object.keys(room.parts).length > 0 && (
-                            <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
+                            <div className="mt-3 pt-3 border-t border-gray-200">
                               <button
                                 onClick={() => {
                                   // この部屋の設定を他の同グループの部屋にコピー
@@ -859,7 +859,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
                                   onSelectionsChange(newRooms);
                                   toast.success('コピー完了', '同じタイプの部屋に設定をコピーしました');
                                 }}
-                                className="flex items-center gap-1.5 text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300"
+                                className="flex items-center gap-1.5 text-xs text-indigo-600 hover:text-indigo-800:text-indigo-300"
                               >
                                 <Copy className="w-3.5 h-3.5" />
                                 この設定を同タイプの部屋にコピー
@@ -879,14 +879,14 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
       )}
 
       {/* 部屋追加ボタン */}
-      <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-        <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">部屋を追加</p>
+      <div className="p-4 border-t border-gray-200">
+        <p className="text-sm font-medium text-gray-700 mb-2">部屋を追加</p>
         <div className="flex flex-wrap gap-2">
           {ROOM_TYPES.map(rt => (
             <button
               key={rt.id}
               onClick={() => addRoom(rt)}
-              className="flex items-center gap-1 px-3 py-1.5 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full text-sm transition-colors text-gray-700 dark:text-gray-300"
+              className="flex items-center gap-1 px-3 py-1.5 bg-gray-100 hover:bg-gray-200:bg-gray-600 rounded-full text-sm transition-colors text-gray-700"
             >
               <span>{rt.icon}</span>
               <span>{rt.name}</span>
@@ -897,7 +897,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
 
       {/* カートに追加ボタン */}
       {progress > 0 && (
-        <div className="p-4 bg-gray-50 dark:bg-gray-700/50 border-t border-gray-200 dark:border-gray-700">
+        <div className="p-4 bg-gray-50 border-t border-gray-200">
           <button
             onClick={() => setShowConfirmAddToCart(true)}
             className="w-full py-3 bg-gradient-to-r from-teal-500 to-emerald-500 text-white rounded-xl font-bold hover:from-teal-600 hover:to-emerald-600 transition-colors flex items-center justify-center gap-2"
@@ -911,13 +911,13 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
       {/* 製品ピッカーモーダル */}
       {selectedPartForPicker && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-end sm:items-center justify-center">
-          <div className="bg-white dark:bg-gray-800 w-full max-w-2xl max-h-[85vh] rounded-t-2xl sm:rounded-2xl overflow-hidden">
-            <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4">
+          <div className="bg-white w-full max-w-2xl max-h-[85vh] rounded-t-2xl sm:rounded-2xl overflow-hidden">
+            <div className="sticky top-0 bg-white border-b border-gray-200 p-4">
               <div className="flex items-center justify-between mb-3">
-                <h3 className="font-bold text-gray-900 dark:text-gray-100">
+                <h3 className="font-bold text-gray-900">
                   {INTERIOR_PARTS.find(p => p.id === selectedPartForPicker.partId)?.name}を選択
                   {selectedPartForPicker.bulkMode && (
-                    <span className="ml-2 text-xs bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-300 px-2 py-0.5 rounded-full">
+                    <span className="ml-2 text-xs bg-indigo-100 text-indigo-600 px-2 py-0.5 rounded-full">
                       一括適用モード
                     </span>
                   )}
@@ -927,10 +927,10 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
                     setSelectedPartForPicker(null);
                     setSearchQuery('');
                   }}
-                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full"
+                  className="p-2 hover:bg-gray-100:bg-gray-700 rounded-full"
                   aria-label="閉じる"
                 >
-                  <X className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                  <X className="w-5 h-5 text-gray-600" />
                 </button>
               </div>
 
@@ -942,7 +942,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
                   placeholder="商品名・メーカー・色で検索..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm bg-white text-gray-900 placeholder-gray-400"
                 />
               </div>
 
@@ -956,7 +956,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
                       className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
                         selectedPartForPicker.bulkGroup === group.id
                           ? 'bg-indigo-600 text-white'
-                          : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200:bg-gray-600'
                       }`}
                     >
                       {group.name}
@@ -971,10 +971,10 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
                 {getProductsForPart(selectedPartForPicker.partId).map(product => (
                   <div
                     key={product.id}
-                    className="border border-gray-200 dark:border-gray-600 rounded-xl p-3 hover:border-teal-500 dark:hover:border-teal-400 transition-colors bg-white dark:bg-gray-700"
+                    className="border border-gray-200 rounded-xl p-3 hover:border-teal-500:border-teal-400 transition-colors bg-white"
                   >
-                    <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm mb-1">{product.name}</h4>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">{product.manufacturer}</p>
+                    <h4 className="font-medium text-gray-900 text-sm mb-1">{product.name}</h4>
+                    <p className="text-xs text-gray-500 mb-3">{product.manufacturer}</p>
 
                     {/* カラーバリアント */}
                     <div className="flex flex-wrap gap-1.5">
@@ -1004,7 +1004,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
                             title={variant.color}
                           >
                             <div
-                              className="w-10 h-10 rounded-lg border-2 border-gray-300 dark:border-gray-500 hover:border-teal-500 dark:hover:border-teal-400 transition-colors hover:scale-110"
+                              className="w-10 h-10 rounded-lg border-2 border-gray-300 hover:border-teal-500:border-teal-400 transition-colors hover:scale-110"
                               style={{ backgroundColor: hexColor }}
                             />
                             <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
@@ -1018,13 +1018,13 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
                     </div>
 
                     {/* 価格（plan / planId 両方対応） */}
-                    <div className="mt-3 pt-2 border-t border-gray-100 dark:border-gray-600">
+                    <div className="mt-3 pt-2 border-t border-gray-100">
                       <span className={`text-sm font-bold ${
                         (() => {
                           const price = product.pricing.find(
                             p => p.plan === 'LACIE' || p.planId === 'LACIE'
                           )?.price ?? 0;
-                          return price === 0 ? 'text-green-600 dark:text-green-400' : 'text-gray-900 dark:text-gray-100';
+                          return price === 0 ? 'text-green-600' : 'text-gray-900';
                         })()
                       }`}>
                         {(() => {
@@ -1041,7 +1041,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
                 ))}
 
                 {getProductsForPart(selectedPartForPicker.partId).length === 0 && (
-                  <div className="col-span-2 py-12 text-center text-gray-500 dark:text-gray-400">
+                  <div className="col-span-2 py-12 text-center text-gray-500">
                     {debouncedSearchQuery ? '検索結果がありません' : 'このカテゴリの製品がありません'}
                   </div>
                 )}

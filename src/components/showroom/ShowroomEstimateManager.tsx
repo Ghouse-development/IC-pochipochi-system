@@ -191,7 +191,7 @@ export const ShowroomEstimateManager: React.FC<ShowroomEstimateManagerProps> = (
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl">
+      <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl">
         {/* ヘッダー */}
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6">
           <div className="flex items-center justify-between">
@@ -214,13 +214,13 @@ export const ShowroomEstimateManager: React.FC<ShowroomEstimateManagerProps> = (
         </div>
 
         {/* タブ */}
-        <div className="flex border-b border-gray-200 dark:border-gray-700 px-6">
+        <div className="flex border-b border-gray-200 px-6">
           <button
             onClick={() => setActiveTab('manual')}
             className={`px-6 py-3 font-medium border-b-2 transition-colors ${
               activeTab === 'manual'
-                ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400'
+                ? 'border-blue-500 text-blue-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700'
             }`}
           >
             手入力で追加
@@ -229,8 +229,8 @@ export const ShowroomEstimateManager: React.FC<ShowroomEstimateManagerProps> = (
             onClick={() => setActiveTab('import')}
             className={`px-6 py-3 font-medium border-b-2 transition-colors ${
               activeTab === 'import'
-                ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400'
+                ? 'border-blue-500 text-blue-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700'
             }`}
           >
             テキストからインポート
@@ -243,7 +243,7 @@ export const ShowroomEstimateManager: React.FC<ShowroomEstimateManagerProps> = (
             <div className="space-y-6">
               {/* メーカー選択 */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   メーカー <span className="text-red-500">*</span>
                 </label>
                 <div className="grid grid-cols-4 sm:grid-cols-7 gap-2">
@@ -253,8 +253,8 @@ export const ShowroomEstimateManager: React.FC<ShowroomEstimateManagerProps> = (
                       onClick={() => setFormData(prev => ({ ...prev, manufacturer: m.name }))}
                       className={`p-2 rounded-lg text-xs font-medium border-2 transition-all ${
                         formData.manufacturer === m.name
-                          ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30'
-                          : 'border-gray-200 dark:border-gray-600 hover:border-gray-300'
+                          ? 'border-blue-500 bg-blue-50'
+                          : 'border-gray-200 hover:border-gray-300'
                       }`}
                       style={{ borderColor: formData.manufacturer === m.name ? m.color : undefined }}
                     >
@@ -267,37 +267,37 @@ export const ShowroomEstimateManager: React.FC<ShowroomEstimateManagerProps> = (
               {/* 入力フォーム */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     商品名 <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
                     value={formData.productName || ''}
                     onChange={e => setFormData(prev => ({ ...prev, productName: e.target.value }))}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                     placeholder="例: システムキッチン アレスタ"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     品番
                   </label>
                   <input
                     type="text"
                     value={formData.productCode || ''}
                     onChange={e => setFormData(prev => ({ ...prev, productCode: e.target.value }))}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                     placeholder="例: AS-001"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     カテゴリ <span className="text-red-500">*</span>
                   </label>
                   <select
                     value={formData.category || ''}
                     onChange={e => setFormData(prev => ({ ...prev, category: e.target.value }))}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="">選択してください</option>
                     {CATEGORIES.map(cat => (
@@ -306,31 +306,31 @@ export const ShowroomEstimateManager: React.FC<ShowroomEstimateManagerProps> = (
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     色・仕様
                   </label>
                   <input
                     type="text"
                     value={formData.color || ''}
                     onChange={e => setFormData(prev => ({ ...prev, color: e.target.value }))}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                     placeholder="例: ホワイト / 人大天板"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     金額（税別）
                   </label>
                   <input
                     type="number"
                     value={formData.price || ''}
                     onChange={e => setFormData(prev => ({ ...prev, price: parseInt(e.target.value) || 0 }))}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                     placeholder="0"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     数量
                   </label>
                   <input
@@ -338,19 +338,19 @@ export const ShowroomEstimateManager: React.FC<ShowroomEstimateManagerProps> = (
                     min="1"
                     value={formData.quantity || 1}
                     onChange={e => setFormData(prev => ({ ...prev, quantity: parseInt(e.target.value) || 1 }))}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
                   備考
                 </label>
                 <textarea
                   value={formData.notes || ''}
                   onChange={e => setFormData(prev => ({ ...prev, notes: e.target.value }))}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   rows={2}
                   placeholder="特記事項があれば入力"
                 />
@@ -366,22 +366,22 @@ export const ShowroomEstimateManager: React.FC<ShowroomEstimateManagerProps> = (
             </div>
           ) : (
             <div className="space-y-4">
-              <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl">
-                <h4 className="font-medium text-blue-800 dark:text-blue-300 mb-2">インポート形式</h4>
-                <p className="text-sm text-blue-700 dark:text-blue-400">
+              <div className="bg-blue-50 p-4 rounded-xl">
+                <h4 className="font-medium text-blue-800 mb-2">インポート形式</h4>
+                <p className="text-sm text-blue-700">
                   タブまたはカンマ区切りで入力してください。<br />
                   形式: メーカー, 品番, 商品名, 色, 金額, 単位, 数量, カテゴリ, 備考
                 </p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   デフォルトメーカー
                 </label>
                 <select
                   value={selectedManufacturer}
                   onChange={e => setSelectedManufacturer(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="">選択してください</option>
                   {MANUFACTURERS.map(m => (
@@ -393,7 +393,7 @@ export const ShowroomEstimateManager: React.FC<ShowroomEstimateManagerProps> = (
               <textarea
                 value={importText}
                 onChange={e => setImportText(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white font-mono text-sm"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 font-mono text-sm"
                 rows={8}
                 placeholder="ここにデータを貼り付け..."
               />
@@ -410,8 +410,8 @@ export const ShowroomEstimateManager: React.FC<ShowroomEstimateManagerProps> = (
 
           {/* 追加リスト */}
           {showroomItems.length > 0 && (
-            <div className="mt-6 border-t border-gray-200 dark:border-gray-700 pt-6">
-              <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+            <div className="mt-6 border-t border-gray-200 pt-6">
+              <h4 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
                 <Package className="w-5 h-5" />
                 追加リスト（{showroomItems.length}件）
               </h4>
@@ -419,18 +419,18 @@ export const ShowroomEstimateManager: React.FC<ShowroomEstimateManagerProps> = (
                 {showroomItems.map(item => (
                   <div
                     key={item.id}
-                    className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg"
+                    className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
                   >
                     <div className="flex-1 min-w-0">
-                      <p className="font-medium text-gray-900 dark:text-gray-100 truncate">
+                      <p className="font-medium text-gray-900 truncate">
                         {item.productName}
                       </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                      <p className="text-xs text-gray-500">
                         {item.manufacturer} / {item.category} {item.color && `/ ${item.color}`}
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="font-bold text-gray-900 dark:text-gray-100">
+                      <p className="font-bold text-gray-900">
                         {formatPrice(item.price * item.quantity)}
                       </p>
                       {item.quantity > 1 && (
@@ -439,7 +439,7 @@ export const ShowroomEstimateManager: React.FC<ShowroomEstimateManagerProps> = (
                     </div>
                     <button
                       onClick={() => handleRemoveItem(item.id)}
-                      className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
+                      className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50:bg-red-900/30 rounded-lg transition-colors"
                     >
                       <X className="w-4 h-4" />
                     </button>
@@ -451,17 +451,17 @@ export const ShowroomEstimateManager: React.FC<ShowroomEstimateManagerProps> = (
         </div>
 
         {/* フッター */}
-        <div className="p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
+        <div className="p-6 border-t border-gray-200 bg-gray-50">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-gray-600 dark:text-gray-400">追加商品合計</span>
-            <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+            <span className="text-gray-600">追加商品合計</span>
+            <span className="text-2xl font-bold text-gray-900">
               {formatPrice(totalPrice)}
             </span>
           </div>
           <div className="flex gap-3">
             <button
               onClick={onClose}
-              className="flex-1 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl font-bold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+              className="flex-1 py-3 bg-gray-200 text-gray-700 rounded-xl font-bold hover:bg-gray-300:bg-gray-600 transition-colors"
             >
               キャンセル
             </button>

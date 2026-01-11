@@ -46,19 +46,19 @@ export const OperationLogViewer: React.FC = () => {
   const getTypeColor = (type: OperationType) => {
     switch (type) {
       case 'cart_add':
-        return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400';
+        return 'bg-green-100 text-green-700';
       case 'cart_remove':
       case 'cart_clear':
-        return 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400';
+        return 'bg-red-100 text-red-700';
       case 'pdf_export':
       case 'excel_export':
-        return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400';
+        return 'bg-blue-100 text-blue-700';
       case 'estimate_finalize':
-        return 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400';
+        return 'bg-purple-100 text-purple-700';
       case 'error':
-        return 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400';
+        return 'bg-red-100 text-red-700';
       default:
-        return 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300';
+        return 'bg-gray-100 text-gray-700';
     }
   };
 
@@ -97,13 +97,13 @@ export const OperationLogViewer: React.FC = () => {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-      <div className="border-b border-gray-200 dark:border-gray-700 p-4">
+    <div className="bg-white rounded-lg shadow-sm">
+      <div className="border-b border-gray-200 p-4">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <Activity className="w-5 h-5 text-teal-600" />
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">操作ログ</h2>
-            <span className="text-sm text-gray-500 dark:text-gray-400">
+            <h2 className="text-lg font-semibold text-gray-900">操作ログ</h2>
+            <span className="text-sm text-gray-500">
               （本日: {todayCount}件）
             </span>
           </div>
@@ -142,7 +142,7 @@ export const OperationLogViewer: React.FC = () => {
             <select
               value={filterType}
               onChange={(e) => setFilterType(e.target.value as OperationType | 'all')}
-              className="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              className="px-3 py-1 border border-gray-300 rounded-lg text-sm bg-white text-gray-900"
             >
               <option value="all">すべて</option>
               {Object.entries(operationTypeLabels).map(([key, label]) => (
@@ -170,7 +170,7 @@ export const OperationLogViewer: React.FC = () => {
             ))}
           </div>
         ) : filteredLogs.length === 0 ? (
-          <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+          <div className="text-center py-12 text-gray-500">
             <Activity className="w-12 h-12 mx-auto mb-4 opacity-50" />
             <p>操作ログがありません</p>
           </div>
@@ -179,14 +179,14 @@ export const OperationLogViewer: React.FC = () => {
             {filteredLogs.map((log) => (
               <div
                 key={log.id}
-                className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100:bg-gray-700 transition-colors"
               >
                 <div className={`p-2 rounded-lg ${getTypeColor(log.type)}`}>
                   {getIcon(log.type)}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="font-medium text-gray-900 dark:text-gray-100">
+                    <span className="font-medium text-gray-900">
                       {log.action}
                     </span>
                     <span className={`text-xs px-2 py-0.5 rounded-full ${getTypeColor(log.type)}`}>
@@ -194,7 +194,7 @@ export const OperationLogViewer: React.FC = () => {
                     </span>
                   </div>
                   {log.details && Object.keys(log.details).length > 0 && (
-                    <div className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                    <div className="mt-1 text-xs text-gray-500">
                       {Object.entries(log.details).map(([key, value]) => (
                         <span key={key} className="mr-3">
                           {key}: {typeof value === 'object' ? JSON.stringify(value) : String(value)}
@@ -202,7 +202,7 @@ export const OperationLogViewer: React.FC = () => {
                       ))}
                     </div>
                   )}
-                  <div className="flex items-center gap-1 mt-1 text-xs text-gray-400 dark:text-gray-500">
+                  <div className="flex items-center gap-1 mt-1 text-xs text-gray-400">
                     <Clock className="w-3 h-3" />
                     {formatTime(log.timestamp)}
                   </div>

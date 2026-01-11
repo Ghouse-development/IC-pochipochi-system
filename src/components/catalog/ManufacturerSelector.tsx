@@ -24,20 +24,20 @@ export const ManufacturerSelector: React.FC<ManufacturerSelectorProps> = ({
   if (selectedManufacturer && hasSeriesSelection(selectedManufacturer) && !selectedSeries) {
     return (
       <div className="space-y-4">
-        <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+        <div className="flex items-center gap-2 text-sm text-gray-600">
           <button
             onClick={onBack}
-            className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
+            className="hover:text-teal-600:text-teal-400 transition-colors"
           >
             メーカー選択
           </button>
           <ChevronRight className="w-4 h-4" />
-          <span className="font-medium text-gray-900 dark:text-white">
+          <span className="font-medium text-gray-900">
             {selectedManufacturer.name}
           </span>
         </div>
 
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+        <h3 className="text-lg font-semibold text-gray-900">
           シリーズを選択してください
         </h3>
 
@@ -46,9 +46,9 @@ export const ManufacturerSelector: React.FC<ManufacturerSelectorProps> = ({
             <button
               key={series.id}
               onClick={() => onSelectSeries(series)}
-              className="p-6 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl hover:border-teal-500 dark:hover:border-teal-400 hover:shadow-lg transition-all duration-200 text-center group"
+              className="p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-teal-500:border-teal-400 hover:shadow-lg transition-all duration-200 text-center group"
             >
-              <div className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400">
+              <div className="text-lg font-semibold text-gray-900 group-hover:text-teal-600:text-teal-400">
                 {series.name}
               </div>
             </button>
@@ -61,7 +61,7 @@ export const ManufacturerSelector: React.FC<ManufacturerSelectorProps> = ({
   // メーカー選択画面
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+      <h3 className="text-lg font-semibold text-gray-900">
         メーカーを選択してください
       </h3>
 
@@ -76,21 +76,21 @@ export const ManufacturerSelector: React.FC<ManufacturerSelectorProps> = ({
                 onSelectSeries(null);
               }
             }}
-            className={`p-6 bg-white dark:bg-gray-800 border-2 rounded-xl hover:shadow-lg transition-all duration-200 text-center group ${
+            className={`p-6 bg-white border-2 rounded-xl hover:shadow-lg transition-all duration-200 text-center group ${
               selectedManufacturer?.id === manufacturer.id
-                ? 'border-teal-500 dark:border-teal-400 ring-2 ring-teal-500/20'
-                : 'border-gray-200 dark:border-gray-700 hover:border-teal-500 dark:hover:border-teal-400'
+                ? 'border-teal-500 ring-2 ring-teal-500/20'
+                : 'border-gray-200 hover:border-teal-500:border-teal-400'
             }`}
           >
             <div className={`text-lg font-semibold ${
               selectedManufacturer?.id === manufacturer.id
-                ? 'text-teal-600 dark:text-teal-400'
-                : 'text-gray-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400'
+                ? 'text-teal-600'
+                : 'text-gray-900 group-hover:text-teal-600:text-teal-400'
             }`}>
               {manufacturer.name}
             </div>
             {hasSeriesSelection(manufacturer) && (
-              <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+              <div className="mt-2 text-xs text-gray-500">
                 {manufacturer.series.length}シリーズ
               </div>
             )}
@@ -118,16 +118,16 @@ export const SelectionBar: React.FC<SelectionBarProps> = ({
   if (!selectedManufacturer) return null;
 
   return (
-    <div className="flex items-center justify-between bg-teal-50 dark:bg-teal-900/20 border border-teal-200 dark:border-teal-800 rounded-lg px-4 py-2">
+    <div className="flex items-center justify-between bg-teal-50 border border-teal-200 rounded-lg px-4 py-2">
       <div className="flex items-center gap-2 text-sm">
-        <span className="text-gray-600 dark:text-gray-400">{categoryName}:</span>
-        <span className="font-medium text-teal-700 dark:text-teal-300">
+        <span className="text-gray-600">{categoryName}:</span>
+        <span className="font-medium text-teal-700">
           {selectedManufacturer.name}
         </span>
         {selectedSeries && (
           <>
             <ChevronRight className="w-4 h-4 text-gray-400" />
-            <span className="font-medium text-teal-700 dark:text-teal-300">
+            <span className="font-medium text-teal-700">
               {selectedSeries.name}
             </span>
           </>
@@ -135,7 +135,7 @@ export const SelectionBar: React.FC<SelectionBarProps> = ({
       </div>
       <button
         onClick={onClear}
-        className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+        className="text-sm text-gray-500 hover:text-gray-700:text-gray-200"
       >
         変更
       </button>

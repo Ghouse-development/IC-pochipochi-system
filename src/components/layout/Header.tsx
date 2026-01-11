@@ -51,7 +51,7 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <>
-      <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-40">
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
         <div className="px-4 sm:px-6 py-2">
           <div className="flex items-center justify-between">
             {/* ロゴとメニューボタン */}
@@ -123,15 +123,15 @@ export const Header: React.FC<HeaderProps> = ({
               <div className="relative">
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                  className="hidden sm:flex items-center gap-2 p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                  className="hidden sm:flex items-center gap-2 p-2 hover:bg-gray-50:bg-gray-700 rounded-lg transition-colors"
                   aria-label="ユーザーメニュー"
                   aria-expanded={isUserMenuOpen}
                   aria-haspopup="menu"
                   aria-controls="user-menu"
                 >
-                  <User className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                  <User className="w-5 h-5 text-gray-700" />
                   {user && (
-                    <span className="text-sm text-gray-600 dark:text-gray-400 max-w-[100px] truncate">
+                    <span className="text-sm text-gray-600 max-w-[100px] truncate">
                       {user.email?.split('@')[0]}
                     </span>
                   )}
@@ -147,13 +147,13 @@ export const Header: React.FC<HeaderProps> = ({
                       id="user-menu"
                       role="menu"
                       aria-label="ユーザーメニュー"
-                      className="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 z-50 py-2"
+                      className="absolute right-0 top-full mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-200 z-50 py-2"
                     >
-                      <div className="px-4 py-2 border-b border-gray-100 dark:border-gray-700">
-                        <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                      <div className="px-4 py-2 border-b border-gray-100">
+                        <p className="text-sm font-medium text-gray-900">
                           {user?.email}
                         </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                        <p className="text-xs text-gray-500">
                           {isAdmin ? '管理者' : 'ユーザー'}
                         </p>
                       </div>
@@ -165,7 +165,7 @@ export const Header: React.FC<HeaderProps> = ({
                               setIsUserMenuOpen(false);
                               onStaffDashboardClick?.();
                             }}
-                            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100:bg-gray-700"
                           >
                             <Briefcase className="w-4 h-4" />
                             スタッフダッシュボード
@@ -176,7 +176,7 @@ export const Header: React.FC<HeaderProps> = ({
                               setIsUserMenuOpen(false);
                               onHierarchyClick?.();
                             }}
-                            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100:bg-gray-700"
                           >
                             <FileText className="w-4 h-4" />
                             階層表示
@@ -187,7 +187,7 @@ export const Header: React.FC<HeaderProps> = ({
                               setIsUserMenuOpen(false);
                               onImageTestClick?.();
                             }}
-                            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100:bg-gray-700"
                           >
                             <Upload className="w-4 h-4" />
                             画像テスト
@@ -198,7 +198,7 @@ export const Header: React.FC<HeaderProps> = ({
                               setIsUserMenuOpen(false);
                               onAdminClick?.();
                             }}
-                            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100:bg-gray-700"
                           >
                             <Settings className="w-4 h-4" />
                             アイテムのメンテナンス
@@ -211,7 +211,7 @@ export const Header: React.FC<HeaderProps> = ({
                           setIsUserMenuOpen(false);
                           signOut?.();
                         }}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
+                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50:bg-red-900/20"
                       >
                         <LogOut className="w-4 h-4" />
                         ログアウト

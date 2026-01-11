@@ -21,26 +21,26 @@ interface ConfirmDialogProps {
 const variantConfig = {
   danger: {
     icon: Trash2,
-    iconBg: 'bg-red-100 dark:bg-red-900/30',
-    iconColor: 'text-red-600 dark:text-red-400',
+    iconBg: 'bg-red-100',
+    iconColor: 'text-red-600',
     confirmBg: 'bg-red-600 hover:bg-red-700 focus:ring-red-500',
   },
   warning: {
     icon: AlertTriangle,
-    iconBg: 'bg-amber-100 dark:bg-amber-900/30',
-    iconColor: 'text-amber-600 dark:text-amber-400',
+    iconBg: 'bg-amber-100',
+    iconColor: 'text-amber-600',
     confirmBg: 'bg-amber-600 hover:bg-amber-700 focus:ring-amber-500',
   },
   info: {
     icon: Info,
-    iconBg: 'bg-blue-100 dark:bg-blue-900/30',
-    iconColor: 'text-blue-600 dark:text-blue-400',
+    iconBg: 'bg-blue-100',
+    iconColor: 'text-blue-600',
     confirmBg: 'bg-blue-600 hover:bg-blue-700 focus:ring-blue-500',
   },
   success: {
     icon: CheckCircle,
-    iconBg: 'bg-green-100 dark:bg-green-900/30',
-    iconColor: 'text-green-600 dark:text-green-400',
+    iconBg: 'bg-green-100',
+    iconColor: 'text-green-600',
     confirmBg: 'bg-green-600 hover:bg-green-700 focus:ring-green-500',
   },
 };
@@ -71,7 +71,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/60 z-[100] backdrop-blur-sm animate-in fade-in duration-200" />
         <Dialog.Content
-          className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-[90vw] max-w-md z-[100] p-6 animate-in zoom-in-95 duration-200"
+          className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl w-[90vw] max-w-md z-[100] p-6 animate-in zoom-in-95 duration-200"
           aria-describedby="confirm-dialog-description"
         >
           <div className="flex items-start gap-4">
@@ -79,21 +79,21 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
               <Icon className={cn('w-6 h-6', config.iconColor)} />
             </div>
             <div className="flex-1 min-w-0">
-              <Dialog.Title className="text-lg font-bold text-gray-900 dark:text-gray-100">
+              <Dialog.Title className="text-lg font-bold text-gray-900">
                 {title}
               </Dialog.Title>
               <Dialog.Description
                 id="confirm-dialog-description"
-                className="mt-2 text-sm text-gray-600 dark:text-gray-400 whitespace-pre-wrap"
+                className="mt-2 text-sm text-gray-600 whitespace-pre-wrap"
               >
                 {message}
               </Dialog.Description>
             </div>
             <Dialog.Close
-              className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full flex-shrink-0"
+              className="p-1 hover:bg-gray-100:bg-gray-700 rounded-full flex-shrink-0"
               aria-label="閉じる"
             >
-              <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+              <X className="w-5 h-5 text-gray-500" />
             </Dialog.Close>
           </div>
 
@@ -110,7 +110,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
               onClick={handleConfirm}
               disabled={isLoading}
               className={cn(
-                'flex-1 px-4 py-2 text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-50',
+                'flex-1 px-4 py-2 text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2:ring-offset-gray-800 disabled:opacity-50',
                 config.confirmBg
               )}
             >

@@ -443,7 +443,7 @@ export const OrganizationManager: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* 組織名 */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
             組織名 <span className="text-red-500">*</span>
           </label>
           <input
@@ -451,13 +451,13 @@ export const OrganizationManager: React.FC = () => {
             value={formData.name}
             onChange={(e) => handleInputChange('name', e.target.value)}
             placeholder="例: 東京支店"
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
         {/* 組織名（カナ） */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
             組織名（カナ）
           </label>
           <input
@@ -465,13 +465,13 @@ export const OrganizationManager: React.FC = () => {
             value={formData.name_kana}
             onChange={(e) => handleInputChange('name_kana', e.target.value)}
             placeholder="例: トウキョウシテン"
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
         {/* コード */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
             組織コード <span className="text-red-500">*</span>
           </label>
           <input
@@ -480,20 +480,20 @@ export const OrganizationManager: React.FC = () => {
             onChange={(e) => handleInputChange('code', e.target.value.toUpperCase())}
             placeholder="例: TKY001"
             maxLength={10}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100 uppercase"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 uppercase"
           />
           <p className="text-xs text-gray-500 mt-1">半角英数字、最大10文字</p>
         </div>
 
         {/* タイプ */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
             組織タイプ <span className="text-red-500">*</span>
           </label>
           <select
             value={formData.type}
             onChange={(e) => handleInputChange('type', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
           >
             <option value="franchise">フランチャイズ（FC加盟店）</option>
             <option value="partner">パートナー企業</option>
@@ -504,13 +504,13 @@ export const OrganizationManager: React.FC = () => {
 
       {/* 連絡先 */}
       <div className="border-t pt-4 mt-4">
-        <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
+        <h4 className="font-medium text-gray-900 mb-3 flex items-center gap-2">
           <Mail className="w-4 h-4" />
           連絡先情報
         </h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               メールアドレス
             </label>
             <input
@@ -518,11 +518,11 @@ export const OrganizationManager: React.FC = () => {
               value={formData.email}
               onChange={(e) => handleInputChange('email', e.target.value)}
               placeholder="example@company.com"
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               電話番号
             </label>
             <input
@@ -530,7 +530,7 @@ export const OrganizationManager: React.FC = () => {
               value={formData.phone}
               onChange={(e) => handleInputChange('phone', e.target.value)}
               placeholder="03-1234-5678"
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </div>
@@ -538,13 +538,13 @@ export const OrganizationManager: React.FC = () => {
 
       {/* 住所 */}
       <div className="border-t pt-4 mt-4">
-        <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
+        <h4 className="font-medium text-gray-900 mb-3 flex items-center gap-2">
           <MapPin className="w-4 h-4" />
           所在地
         </h4>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               郵便番号
             </label>
             <input
@@ -552,17 +552,17 @@ export const OrganizationManager: React.FC = () => {
               value={formData.postal_code}
               onChange={(e) => handleInputChange('postal_code', e.target.value)}
               placeholder="123-4567"
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               都道府県
             </label>
             <select
               value={formData.prefecture}
               onChange={(e) => handleInputChange('prefecture', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             >
               <option value="">選択してください</option>
               {PREFECTURES.map(pref => (
@@ -571,7 +571,7 @@ export const OrganizationManager: React.FC = () => {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               市区町村
             </label>
             <input
@@ -579,12 +579,12 @@ export const OrganizationManager: React.FC = () => {
               value={formData.city}
               onChange={(e) => handleInputChange('city', e.target.value)}
               placeholder="例: 渋谷区"
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </div>
         <div className="mt-4">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
             住所（番地以降）
           </label>
           <input
@@ -592,14 +592,14 @@ export const OrganizationManager: React.FC = () => {
             value={formData.address}
             onChange={(e) => handleInputChange('address', e.target.value)}
             placeholder="例: 1-2-3 ○○ビル 5F"
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
           />
         </div>
       </div>
 
       {/* 権限設定 */}
       <div className="border-t pt-4 mt-4">
-        <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
+        <h4 className="font-medium text-gray-900 mb-3 flex items-center gap-2">
           <Settings className="w-4 h-4" />
           権限設定
         </h4>
@@ -611,7 +611,7 @@ export const OrganizationManager: React.FC = () => {
               onChange={(e) => handleInputChange('is_active', e.target.checked)}
               className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
             />
-            <span className="text-sm text-gray-700 dark:text-gray-300">
+            <span className="text-sm text-gray-700">
               <span className="font-medium">アクティブ</span>
               <span className="text-gray-500 ml-2">- システムへのアクセスを許可</span>
             </span>
@@ -623,7 +623,7 @@ export const OrganizationManager: React.FC = () => {
               onChange={(e) => handleInputChange('can_customize_pricing', e.target.checked)}
               className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
             />
-            <span className="text-sm text-gray-700 dark:text-gray-300 flex items-center gap-1">
+            <span className="text-sm text-gray-700 flex items-center gap-1">
               <DollarSign className="w-3.5 h-3.5" />
               <span className="font-medium">価格カスタマイズ</span>
               <span className="text-gray-500 ml-1">- 独自の価格設定が可能</span>
@@ -636,7 +636,7 @@ export const OrganizationManager: React.FC = () => {
               onChange={(e) => handleInputChange('can_add_products', e.target.checked)}
               className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
             />
-            <span className="text-sm text-gray-700 dark:text-gray-300 flex items-center gap-1">
+            <span className="text-sm text-gray-700 flex items-center gap-1">
               <Package className="w-3.5 h-3.5" />
               <span className="font-medium">商品追加</span>
               <span className="text-gray-500 ml-1">- 独自商品の登録が可能</span>
@@ -662,11 +662,11 @@ export const OrganizationManager: React.FC = () => {
       {/* ヘッダー */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+          <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
             <Building2 className="w-6 h-6" />
             組織管理
           </h2>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+          <p className="text-sm text-gray-600 mt-1">
             フランチャイズ加盟店・パートナー企業の管理
           </p>
         </div>
@@ -683,32 +683,32 @@ export const OrganizationManager: React.FC = () => {
       {/* 統計カード */}
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
         <Card className="p-4 text-center">
-          <p className="text-3xl font-bold text-gray-900 dark:text-gray-100">{stats.total}</p>
-          <p className="text-xs text-gray-500 dark:text-gray-400">総組織数</p>
+          <p className="text-3xl font-bold text-gray-900">{stats.total}</p>
+          <p className="text-xs text-gray-500">総組織数</p>
         </Card>
-        <Card className="p-4 text-center bg-amber-50 dark:bg-amber-900/20">
-          <p className="text-3xl font-bold text-amber-600 dark:text-amber-400">{stats.headquarters}</p>
-          <p className="text-xs text-amber-600 dark:text-amber-400">本部</p>
+        <Card className="p-4 text-center bg-amber-50">
+          <p className="text-3xl font-bold text-amber-600">{stats.headquarters}</p>
+          <p className="text-xs text-amber-600">本部</p>
         </Card>
-        <Card className="p-4 text-center bg-blue-50 dark:bg-blue-900/20">
-          <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">{stats.franchise}</p>
-          <p className="text-xs text-blue-600 dark:text-blue-400">FC加盟店</p>
+        <Card className="p-4 text-center bg-blue-50">
+          <p className="text-3xl font-bold text-blue-600">{stats.franchise}</p>
+          <p className="text-xs text-blue-600">FC加盟店</p>
         </Card>
-        <Card className="p-4 text-center bg-green-50 dark:bg-green-900/20">
-          <p className="text-3xl font-bold text-green-600 dark:text-green-400">{stats.partner}</p>
-          <p className="text-xs text-green-600 dark:text-green-400">パートナー</p>
-        </Card>
-        <Card className="p-4 text-center">
-          <p className="text-3xl font-bold text-gray-900 dark:text-gray-100">{stats.active}</p>
-          <p className="text-xs text-gray-500 dark:text-gray-400">アクティブ</p>
+        <Card className="p-4 text-center bg-green-50">
+          <p className="text-3xl font-bold text-green-600">{stats.partner}</p>
+          <p className="text-xs text-green-600">パートナー</p>
         </Card>
         <Card className="p-4 text-center">
-          <p className="text-3xl font-bold text-gray-900 dark:text-gray-100">{stats.totalMembers}</p>
-          <p className="text-xs text-gray-500 dark:text-gray-400">総ユーザー</p>
+          <p className="text-3xl font-bold text-gray-900">{stats.active}</p>
+          <p className="text-xs text-gray-500">アクティブ</p>
         </Card>
         <Card className="p-4 text-center">
-          <p className="text-3xl font-bold text-gray-900 dark:text-gray-100">{stats.totalProjects}</p>
-          <p className="text-xs text-gray-500 dark:text-gray-400">総プロジェクト</p>
+          <p className="text-3xl font-bold text-gray-900">{stats.totalMembers}</p>
+          <p className="text-xs text-gray-500">総ユーザー</p>
+        </Card>
+        <Card className="p-4 text-center">
+          <p className="text-3xl font-bold text-gray-900">{stats.totalProjects}</p>
+          <p className="text-xs text-gray-500">総プロジェクト</p>
         </Card>
       </div>
 
@@ -722,7 +722,7 @@ export const OrganizationManager: React.FC = () => {
               placeholder="組織名・コード・都道府県で検索..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               aria-label="組織検索"
             />
           </div>
@@ -731,7 +731,7 @@ export const OrganizationManager: React.FC = () => {
             <select
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}
-              className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100"
+              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               aria-label="組織タイプでフィルター"
             >
               <option value="all">すべて</option>
@@ -764,23 +764,23 @@ export const OrganizationManager: React.FC = () => {
             <p className="text-gray-500">組織が見つかりません</p>
           </div>
         ) : (
-          <div className="divide-y divide-gray-200 dark:divide-gray-700">
+          <div className="divide-y divide-gray-200">
             {filteredOrganizations.map(org => (
               <div
                 key={org.id}
-                className="p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                className="p-4 hover:bg-gray-50:bg-gray-800 transition-colors"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
                       {getTypeIcon(org.type)}
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <h3 className="font-semibold text-gray-900 dark:text-gray-100">
+                        <h3 className="font-semibold text-gray-900">
                           {org.name}
                         </h3>
-                        <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400">
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
                           {org.code}
                         </span>
                         {org.is_active ? (
@@ -789,7 +789,7 @@ export const OrganizationManager: React.FC = () => {
                           <XCircle className="w-4 h-4 text-red-500" />
                         )}
                       </div>
-                      <div className="flex items-center gap-4 mt-1 text-sm text-gray-500 dark:text-gray-400">
+                      <div className="flex items-center gap-4 mt-1 text-sm text-gray-500">
                         <span className="flex items-center gap-1">
                           {getTypeIcon(org.type)}
                           {getTypeLabel(org.type)}
@@ -838,12 +838,12 @@ export const OrganizationManager: React.FC = () => {
 
       {/* 全国マップビュー（プレースホルダー） */}
       <Card className="p-6">
-        <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+        <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
           <MapPin className="w-5 h-5" />
           全国展開マップ
         </h3>
-        <div className="bg-gray-100 dark:bg-gray-800 rounded-lg h-64 flex items-center justify-center">
-          <p className="text-gray-500 dark:text-gray-400">
+        <div className="bg-gray-100 rounded-lg h-64 flex items-center justify-center">
+          <p className="text-gray-500">
             地域別組織分布マップ（近日実装予定）
           </p>
         </div>
@@ -860,15 +860,15 @@ export const OrganizationManager: React.FC = () => {
       {/* 追加モーダル */}
       {showAddModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-          <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden">
-            <div className="flex items-center justify-between p-4 border-b dark:border-gray-700">
-              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden">
+            <div className="flex items-center justify-between p-4 border-b">
+              <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
                 <Plus className="w-5 h-5 text-blue-500" />
                 新規組織を追加
               </h2>
               <button
                 onClick={closeAddModal}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                className="p-2 hover:bg-gray-100:bg-gray-800 rounded-lg transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -876,7 +876,7 @@ export const OrganizationManager: React.FC = () => {
             <div className="p-4 overflow-y-auto max-h-[calc(90vh-140px)]">
               <OrganizationForm />
             </div>
-            <div className="flex justify-end gap-3 p-4 border-t dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+            <div className="flex justify-end gap-3 p-4 border-t bg-gray-50">
               <Button variant="outline" onClick={closeAddModal}>
                 キャンセル
               </Button>
@@ -901,15 +901,15 @@ export const OrganizationManager: React.FC = () => {
       {/* 編集モーダル */}
       {showEditModal && selectedOrg && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-          <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden">
-            <div className="flex items-center justify-between p-4 border-b dark:border-gray-700">
-              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden">
+            <div className="flex items-center justify-between p-4 border-b">
+              <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
                 <Edit2 className="w-5 h-5 text-blue-500" />
                 組織を編集: {selectedOrg.name}
               </h2>
               <button
                 onClick={closeEditModal}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                className="p-2 hover:bg-gray-100:bg-gray-800 rounded-lg transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -917,7 +917,7 @@ export const OrganizationManager: React.FC = () => {
             <div className="p-4 overflow-y-auto max-h-[calc(90vh-140px)]">
               <OrganizationForm isEdit />
             </div>
-            <div className="flex justify-end gap-3 p-4 border-t dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+            <div className="flex justify-end gap-3 p-4 border-t bg-gray-50">
               <Button variant="outline" onClick={closeEditModal}>
                 キャンセル
               </Button>
@@ -942,15 +942,15 @@ export const OrganizationManager: React.FC = () => {
       {/* 詳細モーダル */}
       {showDetailModal && selectedOrg && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-          <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-hidden">
-            <div className="flex items-center justify-between p-4 border-b dark:border-gray-700">
-              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-hidden">
+            <div className="flex items-center justify-between p-4 border-b">
+              <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
                 {getTypeIcon(selectedOrg.type)}
                 {selectedOrg.name}
               </h2>
               <button
                 onClick={() => { setShowDetailModal(false); setSelectedOrg(null); }}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                className="p-2 hover:bg-gray-100:bg-gray-800 rounded-lg transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -959,18 +959,18 @@ export const OrganizationManager: React.FC = () => {
               {/* 基本情報 */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">組織コード</p>
-                  <p className="font-medium text-gray-900 dark:text-gray-100">{selectedOrg.code}</p>
+                  <p className="text-xs text-gray-500">組織コード</p>
+                  <p className="font-medium text-gray-900">{selectedOrg.code}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">組織タイプ</p>
-                  <p className="font-medium text-gray-900 dark:text-gray-100 flex items-center gap-1">
+                  <p className="text-xs text-gray-500">組織タイプ</p>
+                  <p className="font-medium text-gray-900 flex items-center gap-1">
                     {getTypeIcon(selectedOrg.type)}
                     {getTypeLabel(selectedOrg.type)}
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">ステータス</p>
+                  <p className="text-xs text-gray-500">ステータス</p>
                   <p className="font-medium flex items-center gap-1">
                     {selectedOrg.is_active ? (
                       <><CheckCircle className="w-4 h-4 text-green-500" /> アクティブ</>
@@ -980,8 +980,8 @@ export const OrganizationManager: React.FC = () => {
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">作成日</p>
-                  <p className="font-medium text-gray-900 dark:text-gray-100">
+                  <p className="text-xs text-gray-500">作成日</p>
+                  <p className="font-medium text-gray-900">
                     {new Date(selectedOrg.created_at).toLocaleDateString('ja-JP')}
                   </p>
                 </div>
@@ -989,7 +989,7 @@ export const OrganizationManager: React.FC = () => {
 
               {/* 連絡先 */}
               <div className="border-t pt-4">
-                <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2 flex items-center gap-2">
+                <h4 className="font-medium text-gray-900 mb-2 flex items-center gap-2">
                   <Mail className="w-4 h-4" />
                   連絡先
                 </h4>
@@ -1014,7 +1014,7 @@ export const OrganizationManager: React.FC = () => {
 
               {/* 所在地 */}
               <div className="border-t pt-4">
-                <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2 flex items-center gap-2">
+                <h4 className="font-medium text-gray-900 mb-2 flex items-center gap-2">
                   <MapPin className="w-4 h-4" />
                   所在地
                 </h4>
@@ -1034,7 +1034,7 @@ export const OrganizationManager: React.FC = () => {
 
               {/* 権限 */}
               <div className="border-t pt-4">
-                <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2 flex items-center gap-2">
+                <h4 className="font-medium text-gray-900 mb-2 flex items-center gap-2">
                   <Settings className="w-4 h-4" />
                   権限設定
                 </h4>

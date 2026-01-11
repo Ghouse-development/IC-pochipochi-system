@@ -140,18 +140,18 @@ export const AutoNotificationSystem: React.FC<AutoNotificationSystemProps> = ({
     <Card className="overflow-hidden">
       {/* ヘッダー */}
       <div
-        className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 cursor-pointer"
+        className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-indigo-50 cursor-pointer"
         onClick={() => setIsExpanded(!isExpanded)}
       >
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-800 flex items-center justify-center">
-            <Bell className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+          <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+            <Bell className="w-5 h-5 text-blue-600" />
           </div>
           <div>
-            <h3 className="font-bold text-gray-900 dark:text-gray-100">
+            <h3 className="font-bold text-gray-900">
               他部署自動通知
             </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-gray-600">
               選択確定時に関連部署へ自動通知
             </p>
           </div>
@@ -175,22 +175,22 @@ export const AutoNotificationSystem: React.FC<AutoNotificationSystemProps> = ({
             {departments.map(dept => (
               <div
                 key={dept.id}
-                className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg"
+                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
               >
                 <div className="flex items-center gap-3">
                   <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
                     dept.autoNotify
-                      ? 'bg-green-100 dark:bg-green-800'
-                      : 'bg-gray-200 dark:bg-gray-700'
+                      ? 'bg-green-100'
+                      : 'bg-gray-200'
                   }`}>
                     <dept.icon className={`w-4 h-4 ${
                       dept.autoNotify
-                        ? 'text-green-600 dark:text-green-400'
+                        ? 'text-green-600'
                         : 'text-gray-400'
                     }`} />
                   </div>
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-gray-100">
+                    <p className="font-medium text-gray-900">
                       {dept.name}
                     </p>
                     <p className="text-xs text-gray-500">
@@ -207,7 +207,7 @@ export const AutoNotificationSystem: React.FC<AutoNotificationSystemProps> = ({
                     className={`relative w-12 h-6 rounded-full transition-colors ${
                       dept.autoNotify
                         ? 'bg-green-500'
-                        : 'bg-gray-300 dark:bg-gray-600'
+                        : 'bg-gray-300'
                     }`}
                   >
                     <span className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-transform ${
@@ -250,18 +250,18 @@ export const AutoNotificationSystem: React.FC<AutoNotificationSystemProps> = ({
           {/* 通知履歴 */}
           {notificationLogs.length > 0 && (
             <div className="mt-4">
-              <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <h4 className="text-sm font-medium text-gray-700 mb-2">
                 送信履歴
               </h4>
               <div className="space-y-2 max-h-40 overflow-y-auto">
                 {notificationLogs.slice(0, 5).map(log => (
                   <div
                     key={log.id}
-                    className="flex items-center justify-between text-sm p-2 bg-white dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-700"
+                    className="flex items-center justify-between text-sm p-2 bg-white rounded border border-gray-200"
                   >
                     <div className="flex items-center gap-2">
                       <CheckCircle className="w-4 h-4 text-green-500" />
-                      <span className="text-gray-600 dark:text-gray-400">
+                      <span className="text-gray-600">
                         {log.department}
                       </span>
                     </div>
@@ -275,14 +275,14 @@ export const AutoNotificationSystem: React.FC<AutoNotificationSystemProps> = ({
           )}
 
           {/* 通知テンプレート説明 */}
-          <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-sm">
+          <div className="p-3 bg-blue-50 rounded-lg text-sm">
             <div className="flex items-start gap-2">
               <Mail className="w-4 h-4 text-blue-600 mt-0.5" />
               <div>
-                <p className="font-medium text-blue-800 dark:text-blue-200">
+                <p className="font-medium text-blue-800">
                   自動通知内容
                 </p>
-                <ul className="mt-1 text-blue-700 dark:text-blue-300 list-disc list-inside">
+                <ul className="mt-1 text-blue-700 list-disc list-inside">
                   <li>プロジェクト名・顧客名</li>
                   <li>選択商品一覧（カテゴリ別）</li>
                   <li>合計金額</li>

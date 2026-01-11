@@ -580,15 +580,15 @@ export function ProjectEditModal({ projectId, isOpen, onClose, onSave }: Project
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl w-[95vw] max-w-6xl h-[90vh] flex flex-col">
+      <div className="bg-white rounded-xl shadow-2xl w-[95vw] max-w-6xl h-[90vh] flex flex-col">
         {/* ヘッダー */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+          <h2 className="text-xl font-semibold text-gray-900">
             プロジェクトを編集
           </h2>
           <button
             onClick={onClose}
-            className="p-2 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+            className="p-2 text-gray-500 hover:text-gray-700:text-gray-300 rounded-lg hover:bg-gray-100:bg-gray-800"
           >
             <X className="w-5 h-5" />
           </button>
@@ -597,7 +597,7 @@ export function ProjectEditModal({ projectId, isOpen, onClose, onSave }: Project
         {/* メインコンテンツ */}
         <div className="flex flex-1 overflow-hidden">
           {/* サイドバー */}
-          <div className="w-64 border-r border-gray-200 dark:border-gray-700 overflow-y-auto bg-gray-50 dark:bg-gray-800/50">
+          <div className="w-64 border-r border-gray-200 overflow-y-auto bg-gray-50">
             <nav className="p-4 space-y-1">
               {SECTIONS.map((section) => {
                 const Icon = section.icon;
@@ -610,8 +610,8 @@ export function ProjectEditModal({ projectId, isOpen, onClose, onSave }: Project
                     onClick={() => setActiveSection(section.id)}
                     className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-colors ${
                       isActive
-                        ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
-                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                        ? 'bg-blue-50 text-blue-700'
+                        : 'text-gray-700 hover:bg-gray-100:bg-gray-700'
                     }`}
                   >
                     {isCompleted ? (
@@ -676,7 +676,7 @@ export function ProjectEditModal({ projectId, isOpen, onClose, onSave }: Project
 
                 {/* その他のセクションは準備中表示 */}
                 {['interior_1f', 'interior_add_1f', 'interior_2f', 'interior_add_2f', 'interior_3f', 'interior_add_3f'].includes(activeSection) && (
-                  <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+                  <div className="text-center py-12 text-gray-500">
                     <AlertCircle className="w-12 h-12 mx-auto mb-4 opacity-50" />
                     <p>このセクションは準備中です</p>
                   </div>
@@ -687,11 +687,11 @@ export function ProjectEditModal({ projectId, isOpen, onClose, onSave }: Project
         </div>
 
         {/* フッター */}
-        <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+        <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200 bg-gray-50">
           <button
             onClick={goToPrevSection}
             disabled={activeSection === SECTIONS[0].id}
-            className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-2 text-gray-700 hover:bg-gray-100:bg-gray-700 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
           >
             前へ
           </button>
@@ -699,7 +699,7 @@ export function ProjectEditModal({ projectId, isOpen, onClose, onSave }: Project
           <div className="flex gap-3">
             <button
               onClick={onClose}
-              className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+              className="px-4 py-2 text-gray-700 hover:bg-gray-100:bg-gray-700 rounded-lg"
             >
               キャンセル
             </button>
@@ -732,44 +732,44 @@ function GeneralInfoSection({ formData, onChange }: { formData: ProjectFormData;
     <div className="space-y-8">
       {/* クライアント */}
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">クライアント</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">クライアント</h3>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
             お客様名 <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
             value={formData.customer_name}
             onChange={(e) => onChange('customer_name', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900"
           />
         </div>
       </div>
 
       {/* 建設 */}
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">建設</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">建設</h3>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               工事名 <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               value={formData.construction_name}
               onChange={(e) => onChange('construction_name', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               建築地（地番） <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               value={formData.construction_address}
               onChange={(e) => onChange('construction_address', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900"
             />
           </div>
         </div>
@@ -777,16 +777,16 @@ function GeneralInfoSection({ formData, onChange }: { formData: ProjectFormData;
 
       {/* 地域 */}
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">地域</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">地域</h3>
         <div className="grid grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               防火区分 <span className="text-red-500">*</span>
             </label>
             <select
               value={formData.fire_zone}
               onChange={(e) => onChange('fire_zone', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900"
             >
               {FIRE_ZONE_OPTIONS.map(opt => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -794,13 +794,13 @@ function GeneralInfoSection({ formData, onChange }: { formData: ProjectFormData;
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               塩害区分
             </label>
             <select
               value={formData.salt_damage_zone}
               onChange={(e) => onChange('salt_damage_zone', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900"
             >
               {SALT_DAMAGE_OPTIONS.map(opt => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -808,13 +808,13 @@ function GeneralInfoSection({ formData, onChange }: { formData: ProjectFormData;
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               積雪区分
             </label>
             <select
               value={formData.snow_zone}
               onChange={(e) => onChange('snow_zone', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900"
             >
               {SNOW_ZONE_OPTIONS.map(opt => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -826,16 +826,16 @@ function GeneralInfoSection({ formData, onChange }: { formData: ProjectFormData;
 
       {/* 仕様 */}
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">仕様</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">仕様</h3>
         <div className="grid grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               耐火仕様 <span className="text-red-500">*</span>
             </label>
             <select
               value={formData.fire_resistance}
               onChange={(e) => onChange('fire_resistance', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900"
             >
               {FIRE_RESISTANCE_OPTIONS.map(opt => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -843,13 +843,13 @@ function GeneralInfoSection({ formData, onChange }: { formData: ProjectFormData;
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               商品 <span className="text-red-500">*</span>
             </label>
             <select
               value={formData.product_plan}
               onChange={(e) => onChange('product_plan', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900"
             >
               {PRODUCT_PLAN_OPTIONS.map(opt => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -857,13 +857,13 @@ function GeneralInfoSection({ formData, onChange }: { formData: ProjectFormData;
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               工法 <span className="text-red-500">*</span>
             </label>
             <select
               value={formData.construction_method}
               onChange={(e) => onChange('construction_method', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900"
             >
               {CONSTRUCTION_METHOD_OPTIONS.map(opt => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -875,16 +875,16 @@ function GeneralInfoSection({ formData, onChange }: { formData: ProjectFormData;
 
       {/* 建物詳細 */}
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">建物詳細</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">建物詳細</h3>
         <div className="grid grid-cols-4 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               階数 <span className="text-red-500">*</span>
             </label>
             <select
               value={formData.floors}
               onChange={(e) => onChange('floors', parseInt(e.target.value))}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900"
             >
               {FLOOR_OPTIONS.map(opt => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -892,13 +892,13 @@ function GeneralInfoSection({ formData, onChange }: { formData: ProjectFormData;
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               天井高 1階 <span className="text-red-500">*</span>
             </label>
             <select
               value={formData.ceiling_height_1f}
               onChange={(e) => onChange('ceiling_height_1f', parseInt(e.target.value))}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900"
             >
               {CEILING_HEIGHT_OPTIONS.map(opt => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -906,13 +906,13 @@ function GeneralInfoSection({ formData, onChange }: { formData: ProjectFormData;
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               天井高 2階 <span className="text-red-500">*</span>
             </label>
             <select
               value={formData.ceiling_height_2f}
               onChange={(e) => onChange('ceiling_height_2f', parseInt(e.target.value))}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900"
             >
               {CEILING_HEIGHT_OPTIONS.map(opt => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -921,13 +921,13 @@ function GeneralInfoSection({ formData, onChange }: { formData: ProjectFormData;
           </div>
           {formData.floors >= 3 && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 天井高 3階 <span className="text-red-500">*</span>
               </label>
               <select
                 value={formData.ceiling_height_3f}
                 onChange={(e) => onChange('ceiling_height_3f', parseInt(e.target.value))}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900"
               >
                 {CEILING_HEIGHT_OPTIONS.map(opt => (
                   <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -940,16 +940,16 @@ function GeneralInfoSection({ formData, onChange }: { formData: ProjectFormData;
 
       {/* 構造と規格 */}
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">構造と規格</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">構造と規格</h3>
         <div className="grid grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               地盤改良
             </label>
             <select
               value={formData.ground_improvement}
               onChange={(e) => onChange('ground_improvement', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900"
             >
               {GROUND_IMPROVEMENT_OPTIONS.map(opt => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -957,13 +957,13 @@ function GeneralInfoSection({ formData, onChange }: { formData: ProjectFormData;
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               制振ダンパー <span className="text-red-500">*</span>
             </label>
             <select
               value={formData.damper}
               onChange={(e) => onChange('damper', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900"
             >
               {DAMPER_OPTIONS.map(opt => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -971,13 +971,13 @@ function GeneralInfoSection({ formData, onChange }: { formData: ProjectFormData;
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               モジュール <span className="text-red-500">*</span>
             </label>
             <select
               value={formData.module}
               onChange={(e) => onChange('module', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900"
             >
               {MODULE_OPTIONS.map(opt => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -989,7 +989,7 @@ function GeneralInfoSection({ formData, onChange }: { formData: ProjectFormData;
 
       {/* 各種申請 */}
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">各種申請</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">各種申請</h3>
         <div className="grid grid-cols-2 gap-4">
           {CERTIFICATION_OPTIONS.map(opt => (
             <label key={opt.value} className="flex items-center gap-2 cursor-pointer">
@@ -1004,7 +1004,7 @@ function GeneralInfoSection({ formData, onChange }: { formData: ProjectFormData;
                 }}
                 className="w-4 h-4 text-blue-500 rounded border-gray-300"
               />
-              <span className="text-sm text-gray-700 dark:text-gray-300">{opt.label}</span>
+              <span className="text-sm text-gray-700">{opt.label}</span>
             </label>
           ))}
         </div>
@@ -1012,10 +1012,10 @@ function GeneralInfoSection({ formData, onChange }: { formData: ProjectFormData;
 
       {/* アクセントクロス */}
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">アクセントクロス</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">アクセントクロス</h3>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               総合面積
             </label>
             <div className="flex items-center gap-2">
@@ -1023,19 +1023,19 @@ function GeneralInfoSection({ formData, onChange }: { formData: ProjectFormData;
                 type="number"
                 value={formData.total_area}
                 onChange={(e) => onChange('total_area', parseFloat(e.target.value) || 0)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900"
               />
               <span className="text-sm text-gray-500">㎡</span>
             </div>
-            <div className="mt-2 px-3 py-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-              <span className="text-sm text-gray-500 dark:text-gray-400">坪:</span>
-              <span className="ml-2 text-blue-600 dark:text-blue-400 font-medium">
+            <div className="mt-2 px-3 py-2 bg-blue-50 rounded-lg">
+              <span className="text-sm text-gray-500">坪:</span>
+              <span className="ml-2 text-blue-600 font-medium">
                 {(formData.total_area * 0.3025).toFixed(2)}
               </span>
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               アクセントクロス総平米数
             </label>
             <div className="flex items-center gap-2">
@@ -1043,24 +1043,24 @@ function GeneralInfoSection({ formData, onChange }: { formData: ProjectFormData;
                 type="number"
                 value={formData.accent_cross_area}
                 onChange={(e) => onChange('accent_cross_area', parseFloat(e.target.value) || 0)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900"
               />
               <span className="text-sm text-gray-500">㎡</span>
             </div>
-            <div className="mt-2 px-3 py-2 bg-gray-50 dark:bg-gray-800 rounded-lg text-sm">
+            <div className="mt-2 px-3 py-2 bg-gray-50 rounded-lg text-sm">
               <div className="flex justify-between">
-                <span className="text-gray-500 dark:text-gray-400">総合面積:</span>
+                <span className="text-gray-500">総合面積:</span>
                 <span>{formData.total_area} ㎡</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-500 dark:text-gray-400">残り:</span>
+                <span className="text-gray-500">残り:</span>
                 <span>{formData.total_area - formData.accent_cross_area} ㎡</span>
               </div>
-              <div className="flex justify-between text-blue-600 dark:text-blue-400">
+              <div className="flex justify-between text-blue-600">
                 <span>無料アクセントクロス平米数:</span>
                 <span>{Math.min(formData.accent_cross_area, formData.total_area * 0.6).toFixed(1)} ㎡</span>
               </div>
-              <div className="flex justify-between text-red-600 dark:text-red-400">
+              <div className="flex justify-between text-red-600">
                 <span>有料アクセントクロス平米数:</span>
                 <span>{Math.max(0, formData.accent_cross_area - formData.total_area * 0.6).toFixed(1)} ㎡</span>
               </div>
@@ -1076,7 +1076,7 @@ function GeneralInfoSection({ formData, onChange }: { formData: ProjectFormData;
 function ExteriorSection({ formData, onChange }: { formData: ProjectFormData; onChange: (field: keyof ProjectFormData, value: any) => void }) {
   return (
     <div className="space-y-8">
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">外装・屋根・外壁・外部周り</h3>
+      <h3 className="text-lg font-semibold text-gray-900">外装・屋根・外壁・外部周り</h3>
 
       {/* 屋根 */}
       <div className="grid grid-cols-2 gap-4">
@@ -1107,7 +1107,7 @@ function ExteriorSection({ formData, onChange }: { formData: ProjectFormData; on
           <select
             value={formData.fascia}
             onChange={(e) => onChange('fascia', e.target.value)}
-            className="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800"
+            className="w-full px-3 py-2 border rounded-lg bg-white"
           >
             <option value="無">無</option>
             <option value="有">有</option>
@@ -1118,7 +1118,7 @@ function ExteriorSection({ formData, onChange }: { formData: ProjectFormData; on
           <select
             value={formData.awning}
             onChange={(e) => onChange('awning', e.target.value)}
-            className="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800"
+            className="w-full px-3 py-2 border rounded-lg bg-white"
           >
             <option value="無">無</option>
             <option value="有">有</option>
@@ -1146,7 +1146,7 @@ function ExteriorSection({ formData, onChange }: { formData: ProjectFormData; on
                 type="number"
                 value={formData.soffit_a}
                 onChange={(e) => onChange('soffit_a', parseFloat(e.target.value) || 0)}
-                className="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800"
+                className="w-full px-3 py-2 border rounded-lg bg-white"
               />
             </div>
             <div>
@@ -1155,7 +1155,7 @@ function ExteriorSection({ formData, onChange }: { formData: ProjectFormData; on
                 type="number"
                 value={formData.soffit_b}
                 onChange={(e) => onChange('soffit_b', parseFloat(e.target.value) || 0)}
-                className="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800"
+                className="w-full px-3 py-2 border rounded-lg bg-white"
               />
             </div>
             <div>
@@ -1164,7 +1164,7 @@ function ExteriorSection({ formData, onChange }: { formData: ProjectFormData; on
                 type="number"
                 value={formData.soffit_c}
                 onChange={(e) => onChange('soffit_c', parseFloat(e.target.value) || 0)}
-                className="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800"
+                className="w-full px-3 py-2 border rounded-lg bg-white"
               />
             </div>
             <div>
@@ -1173,7 +1173,7 @@ function ExteriorSection({ formData, onChange }: { formData: ProjectFormData; on
                 type="number"
                 value={formData.soffit_d}
                 onChange={(e) => onChange('soffit_d', parseFloat(e.target.value) || 0)}
-                className="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800"
+                className="w-full px-3 py-2 border rounded-lg bg-white"
               />
             </div>
           </div>
@@ -1232,7 +1232,7 @@ function ExteriorSection({ formData, onChange }: { formData: ProjectFormData; on
             <select
               value={formData.garage_shutter}
               onChange={(e) => onChange('garage_shutter', e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800"
+              className="w-full px-3 py-2 border rounded-lg bg-white"
             >
               <option value="無">無</option>
               <option value="有">有</option>
@@ -1245,7 +1245,7 @@ function ExteriorSection({ formData, onChange }: { formData: ProjectFormData; on
                 <select
                   value={formData.garage_shutter_fire_rated}
                   onChange={(e) => onChange('garage_shutter_fire_rated', e.target.value)}
-                  className="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800"
+                  className="w-full px-3 py-2 border rounded-lg bg-white"
                 >
                   <option value="無">無</option>
                   <option value="有">有</option>
@@ -1257,7 +1257,7 @@ function ExteriorSection({ formData, onChange }: { formData: ProjectFormData; on
                   type="number"
                   value={formData.garage_shutter_count}
                   onChange={(e) => onChange('garage_shutter_count', parseInt(e.target.value) || 0)}
-                  className="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800"
+                  className="w-full px-3 py-2 border rounded-lg bg-white"
                 />
               </div>
               <div>
@@ -1267,7 +1267,7 @@ function ExteriorSection({ formData, onChange }: { formData: ProjectFormData; on
                     type="number"
                     value={formData.garage_shutter_price}
                     onChange={(e) => onChange('garage_shutter_price', parseFloat(e.target.value) || 0)}
-                    className="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800"
+                    className="w-full px-3 py-2 border rounded-lg bg-white"
                   />
                   <span className="text-sm">円</span>
                 </div>
@@ -1284,7 +1284,7 @@ function ExteriorSection({ formData, onChange }: { formData: ProjectFormData; on
 function PlumbingSection({ formData, onChange }: { formData: ProjectFormData; onChange: (field: keyof ProjectFormData, value: any) => void }) {
   return (
     <div className="space-y-8">
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">外装・給排水</h3>
+      <h3 className="text-lg font-semibold text-gray-900">外装・給排水</h3>
 
       {/* 1F */}
       <div>
@@ -1300,7 +1300,7 @@ function PlumbingSection({ formData, onChange }: { formData: ProjectFormData; on
                 newRooms[0].name = e.target.value;
                 onChange('rooms_1f', newRooms);
               }}
-              className="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800"
+              className="w-full px-3 py-2 border rounded-lg bg-white"
             >
               <option value="キッチン">キッチン</option>
               <option value="洗面所">洗面所</option>
@@ -1318,7 +1318,7 @@ function PlumbingSection({ formData, onChange }: { formData: ProjectFormData; on
                 newRooms[0].plumbing = e.target.value;
                 onChange('rooms_1f', newRooms);
               }}
-              className="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800"
+              className="w-full px-3 py-2 border rounded-lg bg-white"
             >
               <option value="給水・給湯・排水">給水・給湯・排水</option>
               <option value="給水・排水">給水・排水</option>
@@ -1337,7 +1337,7 @@ function PlumbingSection({ formData, onChange }: { formData: ProjectFormData; on
             <select
               value={formData.balcony_faucet}
               onChange={(e) => onChange('balcony_faucet', e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800"
+              className="w-full px-3 py-2 border rounded-lg bg-white"
             >
               <option value="無">無</option>
               <option value="有（給水のみ）">有（給水のみ）</option>
@@ -1383,7 +1383,7 @@ function PlumbingSection({ formData, onChange }: { formData: ProjectFormData; on
 function ElectricalSection({ formData, onChange }: { formData: ProjectFormData; onChange: (field: keyof ProjectFormData, value: any) => void }) {
   return (
     <div className="space-y-8">
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">外装・電気</h3>
+      <h3 className="text-lg font-semibold text-gray-900">外装・電気</h3>
 
       {/* 電気設備 */}
       <div>
@@ -1455,7 +1455,7 @@ function ElectricalSection({ formData, onChange }: { formData: ProjectFormData; 
             <select
               value={formData.solar_panel}
               onChange={(e) => onChange('solar_panel', e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800"
+              className="w-full px-3 py-2 border rounded-lg bg-white"
             >
               <option value="無">無</option>
               <option value="有">有</option>
@@ -1467,7 +1467,7 @@ function ElectricalSection({ formData, onChange }: { formData: ProjectFormData; 
               <select
                 value={formData.solar_manufacturer}
                 onChange={(e) => onChange('solar_manufacturer', e.target.value)}
-                className="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800"
+                className="w-full px-3 py-2 border rounded-lg bg-white"
               >
                 <option value="ネクストエナジー">ネクストエナジー</option>
                 <option value="パナソニック">パナソニック</option>
@@ -1487,7 +1487,7 @@ function ElectricalSection({ formData, onChange }: { formData: ProjectFormData; 
             <select
               value={formData.battery}
               onChange={(e) => onChange('battery', e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800"
+              className="w-full px-3 py-2 border rounded-lg bg-white"
             >
               <option value="無">無</option>
               <option value="有">有</option>
@@ -1499,7 +1499,7 @@ function ElectricalSection({ formData, onChange }: { formData: ProjectFormData; 
               <select
                 value={formData.battery_manufacturer}
                 onChange={(e) => onChange('battery_manufacturer', e.target.value)}
-                className="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800"
+                className="w-full px-3 py-2 border rounded-lg bg-white"
               >
                 <option value="-">-</option>
                 <option value="パナソニック">パナソニック</option>
@@ -1519,7 +1519,7 @@ function ElectricalSection({ formData, onChange }: { formData: ProjectFormData; 
             <select
               value={formData.ventilation_manufacturer}
               onChange={(e) => onChange('ventilation_manufacturer', e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800"
+              className="w-full px-3 py-2 border rounded-lg bg-white"
             >
               <option value="Panasonic">Panasonic</option>
               <option value="三菱電機">三菱電機</option>
@@ -1573,7 +1573,7 @@ function ElectricalSection({ formData, onChange }: { formData: ProjectFormData; 
 function InteriorOverallSection({ formData, onChange }: { formData: ProjectFormData; onChange: (field: keyof ProjectFormData, value: any) => void }) {
   return (
     <div className="space-y-8">
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">内装全体の追加情報</h3>
+      <h3 className="text-lg font-semibold text-gray-900">内装全体の追加情報</h3>
 
       {/* その他 */}
       <div>
@@ -1584,7 +1584,7 @@ function InteriorOverallSection({ formData, onChange }: { formData: ProjectFormD
             <select
               value={formData.gas_supply}
               onChange={(e) => onChange('gas_supply', e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800"
+              className="w-full px-3 py-2 border rounded-lg bg-white"
             >
               <option value="無">無</option>
               <option value="有">有</option>
@@ -1595,7 +1595,7 @@ function InteriorOverallSection({ formData, onChange }: { formData: ProjectFormD
             <select
               value={formData.gas_dryer}
               onChange={(e) => onChange('gas_dryer', e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800"
+              className="w-full px-3 py-2 border rounded-lg bg-white"
             >
               <option value="無">無</option>
               <option value="有">有</option>
@@ -1611,7 +1611,7 @@ function InteriorOverallSection({ formData, onChange }: { formData: ProjectFormD
           type="number"
           value={formData.downlight_work}
           onChange={(e) => onChange('downlight_work', parseInt(e.target.value) || 0)}
-          className="w-32 px-3 py-2 border rounded-lg bg-white dark:bg-gray-800"
+          className="w-32 px-3 py-2 border rounded-lg bg-white"
         />
       </div>
 
@@ -1624,7 +1624,7 @@ function InteriorOverallSection({ formData, onChange }: { formData: ProjectFormD
             <select
               value={formData.indirect_lighting_box}
               onChange={(e) => onChange('indirect_lighting_box', e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800"
+              className="w-full px-3 py-2 border rounded-lg bg-white"
             >
               <option value="無">無</option>
               <option value="有">有</option>
@@ -1638,7 +1638,7 @@ function InteriorOverallSection({ formData, onChange }: { formData: ProjectFormD
                 value={formData.indirect_lighting_room}
                 onChange={(e) => onChange('indirect_lighting_room', e.target.value)}
                 placeholder="洋室5（3階）"
-                className="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800"
+                className="w-full px-3 py-2 border rounded-lg bg-white"
               />
             </div>
           )}
@@ -1654,7 +1654,7 @@ function InteriorOverallSection({ formData, onChange }: { formData: ProjectFormD
             <select
               value={formData.curtain_box}
               onChange={(e) => onChange('curtain_box', e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800"
+              className="w-full px-3 py-2 border rounded-lg bg-white"
             >
               <option value="無">無</option>
               <option value="有">有</option>
@@ -1668,7 +1668,7 @@ function InteriorOverallSection({ formData, onChange }: { formData: ProjectFormD
                 value={formData.curtain_box_room}
                 onChange={(e) => onChange('curtain_box_room', e.target.value)}
                 placeholder="LDK (2階)"
-                className="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800"
+                className="w-full px-3 py-2 border rounded-lg bg-white"
               />
             </div>
           )}
@@ -1689,7 +1689,7 @@ function InteriorOverallSection({ formData, onChange }: { formData: ProjectFormD
                     type="number"
                     value={formData.pilot_switch}
                     onChange={(e) => onChange('pilot_switch', parseInt(e.target.value) || 0)}
-                    className="w-20 px-2 py-1 border rounded bg-white dark:bg-gray-800 text-sm"
+                    className="w-20 px-2 py-1 border rounded bg-white text-sm"
                   />
                   <span className="text-xs text-gray-500">室に25個まで無料</span>
                 </div>
@@ -1701,7 +1701,7 @@ function InteriorOverallSection({ formData, onChange }: { formData: ProjectFormD
                     type="number"
                     value={formData.three_four_way_switch}
                     onChange={(e) => onChange('three_four_way_switch', parseInt(e.target.value) || 0)}
-                    className="w-20 px-2 py-1 border rounded bg-white dark:bg-gray-800 text-sm"
+                    className="w-20 px-2 py-1 border rounded bg-white text-sm"
                   />
                   <span className="text-xs text-gray-500">室に4組まで無料</span>
                 </div>
@@ -1719,7 +1719,7 @@ function InteriorOverallSection({ formData, onChange }: { formData: ProjectFormD
                     type="number"
                     value={formData.outlet_2port}
                     onChange={(e) => onChange('outlet_2port', parseInt(e.target.value) || 0)}
-                    className="w-20 px-2 py-1 border rounded bg-white dark:bg-gray-800 text-sm"
+                    className="w-20 px-2 py-1 border rounded bg-white text-sm"
                   />
                   <span className="text-xs text-gray-500">室に25個まで無料</span>
                 </div>
@@ -1731,7 +1731,7 @@ function InteriorOverallSection({ formData, onChange }: { formData: ProjectFormD
                     type="number"
                     value={formData.outlet_4port}
                     onChange={(e) => onChange('outlet_4port', parseInt(e.target.value) || 0)}
-                    className="w-20 px-2 py-1 border rounded bg-white dark:bg-gray-800 text-sm"
+                    className="w-20 px-2 py-1 border rounded bg-white text-sm"
                   />
                   <span className="text-xs text-gray-500">室に2組まで無料</span>
                 </div>
@@ -1743,7 +1743,7 @@ function InteriorOverallSection({ formData, onChange }: { formData: ProjectFormD
                     type="number"
                     value={formData.aircon_outlet_100v}
                     onChange={(e) => onChange('aircon_outlet_100v', parseInt(e.target.value) || 0)}
-                    className="w-20 px-2 py-1 border rounded bg-white dark:bg-gray-800 text-sm"
+                    className="w-20 px-2 py-1 border rounded bg-white text-sm"
                   />
                   <span className="text-xs text-gray-500">室に5個まで無料</span>
                 </div>
@@ -1755,7 +1755,7 @@ function InteriorOverallSection({ formData, onChange }: { formData: ProjectFormD
                     type="number"
                     value={formData.aircon_outlet_200v}
                     onChange={(e) => onChange('aircon_outlet_200v', parseInt(e.target.value) || 0)}
-                    className="w-20 px-2 py-1 border rounded bg-white dark:bg-gray-800 text-sm"
+                    className="w-20 px-2 py-1 border rounded bg-white text-sm"
                   />
                   <span className="text-xs text-gray-500">室に1個まで無料</span>
                 </div>

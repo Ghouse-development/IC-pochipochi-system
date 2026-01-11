@@ -1238,7 +1238,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
         onComplete={() => setShowGuide(false)}
       />
 
-      <div className="flex flex-col h-full bg-gray-50 dark:bg-gray-900">
+      <div className="flex flex-col h-full bg-gray-50">
         {/* ヘッダー - コンパクト・固定 */}
         <div className="bg-blue-600 text-white shadow-lg sticky top-0 z-50">
           {/* ステップナビゲーション */}
@@ -1357,19 +1357,19 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
         <div className="flex flex-1 overflow-hidden">
           {/* 左サイドバー - アクションチェックリスト - コンパクト */}
-          <div className={`flex flex-col bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 h-[calc(100vh-140px)] transition-all duration-300 flex-shrink-0 ${
+          <div className={`flex flex-col bg-white border-r border-gray-200 h-[calc(100vh-140px)] transition-all duration-300 flex-shrink-0 ${
             showActionChecklist ? 'w-64' : 'w-12'
           }`}>
             {showActionChecklist ? (
               <>
                 {/* プラン選択 */}
-                <div className="p-3 border-b border-gray-200 dark:border-gray-700">
+                <div className="p-3 border-b border-gray-200">
                   <div className="flex items-center gap-2" data-tutorial="plan-selector">
                     <Star className="w-4 h-4 text-yellow-500" />
                     <select
                       value={selectedPlanId}
                       onChange={(e) => setSelectedPlanId(e.target.value)}
-                      className="flex-1 px-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm font-medium focus:ring-2 focus:ring-blue-500"
+                      className="flex-1 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-medium focus:ring-2 focus:ring-blue-500"
                     >
                       {plans.map(plan => (
                         <option key={plan.id} value={plan.code}>{plan.name}</option>
@@ -1377,7 +1377,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                     </select>
                     <button
                       onClick={() => setShowActionChecklist(false)}
-                      className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                      className="p-1.5 hover:bg-gray-100:bg-gray-700 rounded"
                       title="サイドバーを閉じる"
                     >
                       <ChevronLeft className="w-4 h-4 text-gray-400" />
@@ -1397,7 +1397,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
                 {/* 部屋別プランナー（内装タブの時のみ） */}
                 {activeTab === 'interior' && (
-                  <div className="p-3 border-t border-gray-200 dark:border-gray-700">
+                  <div className="p-3 border-t border-gray-200">
                     <button
                       onClick={() => setIsRoomPlannerOpen(true)}
                       className="w-full flex items-center justify-center gap-2 px-3 py-2.5 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg font-medium text-sm hover:from-blue-600 hover:to-indigo-600 transition-all shadow-md"
@@ -1409,7 +1409,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 )}
 
                 {/* アクションボタン */}
-                <div className="p-3 border-t border-gray-200 dark:border-gray-700">
+                <div className="p-3 border-t border-gray-200">
                   {isCurrentStepComplete ? (
                     <button
                       onClick={goToNextStep}
@@ -1432,10 +1432,10 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 </div>
 
                 {/* ヘルプボタン */}
-                <div className="mt-auto p-3 border-t border-gray-200 dark:border-gray-700">
+                <div className="mt-auto p-3 border-t border-gray-200">
                   <button
                     onClick={() => setShowGuide(true)}
-                    className="w-full flex items-center justify-center gap-2 px-3 py-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg text-sm transition-colors"
+                    className="w-full flex items-center justify-center gap-2 px-3 py-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100:bg-gray-700 rounded-lg text-sm transition-colors"
                   >
                     <HelpCircle className="w-4 h-4" />
                     使い方ガイド
@@ -1447,7 +1447,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
               <div className="flex flex-col items-center py-4 gap-4">
                 <button
                   onClick={() => setShowActionChecklist(true)}
-                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                  className="p-2 hover:bg-gray-100:bg-gray-700 rounded"
                   title="一覧を開く"
                 >
                   <ChevronRight className="w-5 h-5 text-gray-400" />
@@ -1466,26 +1466,26 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
           {/* メインエリア */}
           <div className="flex-1 flex flex-col overflow-hidden">
             {/* モバイル用：検索バー＋プラン選択 */}
-            <div className="sm:hidden bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 px-3 py-2 space-y-2">
+            <div className="sm:hidden bg-white border-b border-gray-100 px-3 py-2 space-y-2">
               {/* モバイル検索バー */}
               <div className="relative">
                 <label htmlFor="catalog-search-mobile" className="sr-only">商品を検索</label>
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" aria-hidden="true" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" aria-hidden="true" />
                 <input
                   id="catalog-search-mobile"
                   type="text"
                   placeholder="商品を検索..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-10 py-2 bg-gray-50 dark:bg-gray-700 dark:text-gray-100 border border-gray-200 dark:border-gray-600 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-gray-600 transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
+                  className="w-full pl-10 pr-10 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white:bg-gray-600 transition-all placeholder:text-gray-400:text-gray-500"
                 />
                 {searchTerm && (
                   <button
                     onClick={() => setSearchTerm('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-200:bg-gray-600 rounded-full"
                     aria-label="検索をクリア"
                   >
-                    <X className="w-4 h-4 text-gray-400 dark:text-gray-500" />
+                    <X className="w-4 h-4 text-gray-400" />
                   </button>
                 )}
               </div>
@@ -1496,7 +1496,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   id="mobile-plan-select"
                   value={selectedPlanId}
                   onChange={(e) => setSelectedPlanId(e.target.value)}
-                  className="flex-1 px-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500"
+                  className="flex-1 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 focus:ring-2 focus:ring-blue-500"
                   aria-label="プランを選択"
                 >
                   {plans.map(plan => (
@@ -1508,17 +1508,17 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
             {/* 素材タイプ・サブカテゴリ・色フィルター（カテゴリ選択時のみ表示） */}
             {selectedCategoryId && (availableMaterialTypes.length > 1 || availableSubcategories.length > 1 || availableColors.length > 1) && (
-              <div className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 px-3 py-2">
+              <div className="bg-white border-b border-gray-100 px-3 py-2">
                 <div className="flex flex-wrap items-center gap-2">
                   {/* 素材タイプフィルター（2段階目: 窯業系/金属/塗り壁 等） */}
                   {availableMaterialTypes.length > 1 && (
                     <div className="flex items-center gap-1">
-                      <label htmlFor="material-filter" className="text-xs text-gray-500 dark:text-gray-400">素材:</label>
+                      <label htmlFor="material-filter" className="text-xs text-gray-500">素材:</label>
                       <select
                         id="material-filter"
                         value={selectedMaterialType}
                         onChange={(e) => setSelectedMaterialType(e.target.value)}
-                        className="px-2 py-1.5 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-lg text-xs font-medium text-blue-700 dark:text-blue-200 focus:ring-2 focus:ring-blue-500"
+                        className="px-2 py-1.5 bg-blue-50 border border-blue-200 rounded-lg text-xs font-medium text-blue-700 focus:ring-2 focus:ring-blue-500"
                       >
                         <option value="">すべての素材 ({availableMaterialTypes.length}種)</option>
                         {availableMaterialTypes.map(mat => (
@@ -1530,12 +1530,12 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   {/* サブカテゴリフィルター（商品シリーズ名） */}
                   {availableSubcategories.length > 1 && (
                     <div className="flex items-center gap-1">
-                      <label htmlFor="subcategory-filter" className="text-xs text-gray-500 dark:text-gray-400">商品:</label>
+                      <label htmlFor="subcategory-filter" className="text-xs text-gray-500">商品:</label>
                       <select
                         id="subcategory-filter"
                         value={selectedSubcategory}
                         onChange={(e) => setSelectedSubcategory(e.target.value)}
-                        className="px-2 py-1.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-xs font-medium text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500"
+                        className="px-2 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-xs font-medium text-gray-700 focus:ring-2 focus:ring-blue-500"
                       >
                         <option value="">すべて ({availableSubcategories.length}種)</option>
                         {availableSubcategories.map(sub => (
@@ -1547,12 +1547,12 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   {/* 色フィルター */}
                   {availableColors.length > 1 && (
                     <div className="flex items-center gap-1">
-                      <label htmlFor="color-filter" className="text-xs text-gray-500 dark:text-gray-400">色:</label>
+                      <label htmlFor="color-filter" className="text-xs text-gray-500">色:</label>
                       <select
                         id="color-filter"
                         value={selectedColor}
                         onChange={(e) => setSelectedColor(e.target.value)}
-                        className="px-2 py-1.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-xs font-medium text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500"
+                        className="px-2 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-xs font-medium text-gray-700 focus:ring-2 focus:ring-blue-500"
                       >
                         <option value="">すべての色 ({availableColors.length}色)</option>
                         {availableColors.map(color => (
@@ -1563,12 +1563,12 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   )}
                   {/* 価格フィルター */}
                   <div className="flex items-center gap-1">
-                    <label htmlFor="price-filter" className="text-xs text-gray-500 dark:text-gray-400">上限:</label>
+                    <label htmlFor="price-filter" className="text-xs text-gray-500">上限:</label>
                     <select
                       id="price-filter"
                       value={priceMax}
                       onChange={(e) => setPriceMax(parseInt(e.target.value, 10))}
-                      className="px-2 py-1.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-xs font-medium text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500"
+                      className="px-2 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-xs font-medium text-gray-700 focus:ring-2 focus:ring-blue-500"
                     >
                       <option value="0">上限なし</option>
                       <option value="10000">1万円以下</option>
@@ -1586,7 +1586,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                       onChange={(e) => setHideDiscontinued(!e.target.checked)}
                       className="w-3.5 h-3.5 rounded border-gray-300 text-blue-500 focus:ring-blue-500"
                     />
-                    <span className="text-xs text-gray-500 dark:text-gray-400">廃番も表示</span>
+                    <span className="text-xs text-gray-500">廃番も表示</span>
                   </label>
                   {/* フィルタークリア */}
                   {(selectedMaterialType || selectedSubcategory || selectedColor || priceMax > 0) && (
@@ -1597,13 +1597,13 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                         setSelectedColor('');
                         setPriceMax(0);
                       }}
-                      className="px-2 py-1 text-xs text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                      className="px-2 py-1 text-xs text-red-500 hover:text-red-600 hover:bg-red-50:bg-red-900/20 rounded-lg transition-colors"
                     >
                       クリア
                     </button>
                   )}
                   {/* 結果件数 */}
-                  <span className="ml-auto text-xs text-gray-400 dark:text-gray-500">
+                  <span className="ml-auto text-xs text-gray-400">
                     {filteredItems.length}件
                   </span>
                 </div>
@@ -1618,17 +1618,17 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 </div>
               ) : error ? (
                 <div className="flex flex-col items-center justify-center py-20">
-                  <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mb-4">
+                  <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
                     <X className="w-8 h-8 text-red-500" />
                   </div>
-                  <p className="text-red-500 dark:text-red-400 font-medium mb-2">{error}</p>
-                  <p className="text-gray-500 dark:text-gray-400 text-sm mb-4">
+                  <p className="text-red-500 font-medium mb-2">{error}</p>
+                  <p className="text-gray-500 text-sm mb-4">
                     接続を確認して再試行してください
                   </p>
                   <div className="flex gap-3">
                     <button
                       onClick={() => setError(null)}
-                      className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 text-sm"
+                      className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200:bg-gray-600 text-sm"
                     >
                       エラーをクリア
                     </button>
@@ -1681,12 +1681,12 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
               ) : activeTab === 'exterior' && currentCategoryName?.includes('ガレージシャッター') && !hasGarageShutter ? (
                 /* 外装タブ: ガレージシャッター未設定メッセージ */
                 <div className="max-w-3xl mx-auto px-4">
-                  <div className="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl p-8 text-center">
+                  <div className="bg-gray-50 border border-gray-200 rounded-xl p-8 text-center">
                     <span className="text-4xl mb-4 block">🚗</span>
-                    <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                    <h2 className="text-lg font-medium text-gray-900 mb-2">
                       ガレージシャッターは設定されていません
                     </h2>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                    <p className="text-sm text-gray-500 mb-4">
                       設計タブで「あり」を選択すると、ここで色を選択できます。
                     </p>
                     <button
@@ -1700,12 +1700,12 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
               ) : activeTab === 'exterior' && currentCategoryName === '庇' && !hasAwning ? (
                 /* 外装タブ: 庇未設定メッセージ */
                 <div className="max-w-3xl mx-auto px-4">
-                  <div className="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl p-8 text-center">
+                  <div className="bg-gray-50 border border-gray-200 rounded-xl p-8 text-center">
                     <span className="text-4xl mb-4 block">🏠</span>
-                    <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                    <h2 className="text-lg font-medium text-gray-900 mb-2">
                       庇は設定されていません
                     </h2>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                    <p className="text-sm text-gray-500 mb-4">
                       設計タブで「あり」を選択すると、ここで色を選択できます。
                     </p>
                     <button
@@ -1719,7 +1719,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
               ) : currentCategoryName === '外壁' && !selectedMaterialType ? (
                 /* 素材タイプ選択カード（外壁用）- 常に3つ表示 */
                 <div className="max-w-3xl mx-auto px-4">
-                  <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-6">
+                  <h2 className="text-lg font-medium text-gray-900 mb-6">
                     素材を選択
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -1729,17 +1729,17 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                         <button
                           key={material}
                           onClick={() => setSelectedMaterialType(material)}
-                          className="group flex items-center justify-between bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:border-blue-400 dark:hover:border-blue-500 transition-all"
+                          className="group flex items-center justify-between bg-white border-2 border-gray-200 rounded-xl p-4 hover:border-blue-400:border-blue-500 transition-all"
                         >
                           <div>
-                            <h3 className="font-medium text-gray-900 dark:text-gray-100 text-left">
+                            <h3 className="font-medium text-gray-900 text-left">
                               {material}
                             </h3>
-                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                            <p className="text-xs text-gray-500 mt-0.5">
                               {itemCount > 0 ? `${itemCount}種類` : '準備中'}
                             </p>
                           </div>
-                          <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors" />
+                          <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-gray-600:text-gray-300 transition-colors" />
                         </button>
                       );
                     })}
@@ -1784,10 +1784,10 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
               ) : currentCategoryName === '外部設備' && !selectedMaterialType ? (
                 /* 外部設備カテゴリ選択カード */
                 <div className="max-w-4xl mx-auto px-4">
-                  <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                  <h2 className="text-lg font-medium text-gray-900 mb-2">
                     外部設備を選択
                   </h2>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+                  <p className="text-sm text-gray-500 mb-6">
                     以下の項目は必須です。各カテゴリから選択してください。
                   </p>
                   {/* 必須カテゴリ（8項目） */}
@@ -1798,15 +1798,15 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                         <button
                           key={type.id}
                           onClick={() => setSelectedMaterialType(type.id)}
-                          className="group flex flex-col items-start bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:border-blue-400 dark:hover:border-blue-500 transition-all"
+                          className="group flex flex-col items-start bg-white border-2 border-gray-200 rounded-xl p-4 hover:border-blue-400:border-blue-500 transition-all"
                         >
                           <div className="w-full flex items-center justify-between mb-1">
-                            <h3 className="font-medium text-sm text-gray-900 dark:text-gray-100 text-left">
+                            <h3 className="font-medium text-sm text-gray-900 text-left">
                               {type.name}
                             </h3>
                             <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors" />
                           </div>
-                          <p className="text-xs text-blue-600 dark:text-blue-400">
+                          <p className="text-xs text-blue-600">
                             {itemCount > 0 ? `${itemCount}種類` : '準備中'}
                           </p>
                         </button>
@@ -1814,20 +1814,20 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                     })}
                   </div>
                   {/* その他オプション */}
-                  <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+                  <div className="border-t border-gray-200 pt-4">
                     {EXTERIOR_FACILITY_TYPES.filter(t => !t.required).map((type) => {
                       const itemCount = items.filter(i => i.material_type === type.id).length;
                       return (
                         <button
                           key={type.id}
                           onClick={() => setSelectedMaterialType(type.id)}
-                          className="w-full group flex items-center justify-between bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:border-blue-400 dark:hover:border-blue-500 transition-all"
+                          className="w-full group flex items-center justify-between bg-white border-2 border-gray-200 rounded-xl p-4 hover:border-blue-400:border-blue-500 transition-all"
                         >
                           <div>
-                            <h4 className="font-medium text-gray-900 dark:text-gray-100 text-left">
+                            <h4 className="font-medium text-gray-900 text-left">
                               {type.name}
                             </h4>
-                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                            <p className="text-xs text-gray-500 mt-0.5">
                               {itemCount > 0 ? `${itemCount}種類` : '準備中'}
                             </p>
                           </div>
@@ -1840,10 +1840,10 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
               ) : currentCategoryName === '外部建材' && !selectedMaterialType ? (
                 /* 外部建材カテゴリ選択カード */
                 <div className="max-w-4xl mx-auto px-4">
-                  <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                  <h2 className="text-lg font-medium text-gray-900 mb-2">
                     外部建材を選択
                   </h2>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+                  <p className="text-sm text-gray-500 mb-6">
                     樋・水切り・破風などの外部建材を選んでください。
                   </p>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
@@ -1853,18 +1853,18 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                         <button
                           key={type.id}
                           onClick={() => setSelectedMaterialType(type.id)}
-                          className="group flex flex-col items-start bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl p-5 hover:border-blue-500 hover:shadow-lg transition-all"
+                          className="group flex flex-col items-start bg-white border-2 border-gray-200 rounded-xl p-5 hover:border-blue-500 hover:shadow-lg transition-all"
                         >
                           <div className="w-full flex items-center justify-between mb-2">
-                            <h3 className="font-bold text-base text-gray-900 dark:text-gray-100 text-left">
+                            <h3 className="font-bold text-base text-gray-900 text-left">
                               {type.name}
                             </h3>
                             <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-blue-500 transition-colors" />
                           </div>
-                          <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
+                          <p className="text-sm text-gray-500 mb-3">
                             {type.description}
                           </p>
-                          <p className="text-sm font-medium text-blue-600 dark:text-blue-400">
+                          <p className="text-sm font-medium text-blue-600">
                             {itemCount > 0 ? `${itemCount}種類から選択` : '準備中'}
                           </p>
                         </button>
@@ -1875,10 +1875,10 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
               ) : currentCategoryName === 'ベース床' && !selectedMaterialType ? (
                 /* ベース床カテゴリ選択カード */
                 <div className="max-w-4xl mx-auto px-4">
-                  <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                  <h2 className="text-lg font-medium text-gray-900 mb-2">
                     床材を選択
                   </h2>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+                  <p className="text-sm text-gray-500 mb-6">
                     お部屋に合った床材タイプを選んでください。
                   </p>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -1888,15 +1888,15 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                         <button
                           key={type.id}
                           onClick={() => setSelectedMaterialType(type.id)}
-                          className="group flex flex-col items-start bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:border-blue-400 dark:hover:border-blue-500 transition-all"
+                          className="group flex flex-col items-start bg-white border-2 border-gray-200 rounded-xl p-4 hover:border-blue-400:border-blue-500 transition-all"
                         >
-                          <h3 className="font-medium text-sm text-gray-900 dark:text-gray-100 text-left mb-1">
+                          <h3 className="font-medium text-sm text-gray-900 text-left mb-1">
                             {type.name}
                           </h3>
-                          <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                          <p className="text-xs text-gray-500 mb-2">
                             {type.description}
                           </p>
-                          <p className="text-xs text-blue-600 dark:text-blue-400">
+                          <p className="text-xs text-blue-600">
                             {itemCount > 0 ? `${itemCount}種類` : '準備中'}
                           </p>
                         </button>
@@ -1907,10 +1907,10 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
               ) : currentCategoryName === '周辺部材' && !selectedMaterialType ? (
                 /* 周辺部材カテゴリ選択カード */
                 <div className="max-w-4xl mx-auto px-4">
-                  <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                  <h2 className="text-lg font-medium text-gray-900 mb-2">
                     周辺部材を選択
                   </h2>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+                  <p className="text-sm text-gray-500 mb-6">
                     各部材を選んでください。
                   </p>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -1920,22 +1920,22 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                         <button
                           key={type.id}
                           onClick={() => setSelectedMaterialType(type.id)}
-                          className="group flex flex-col items-start bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:border-blue-400 dark:hover:border-blue-500 transition-all"
+                          className="group flex flex-col items-start bg-white border-2 border-gray-200 rounded-xl p-4 hover:border-blue-400:border-blue-500 transition-all"
                         >
                           <div className="w-full flex items-center justify-between mb-1">
-                            <h3 className="font-medium text-sm text-gray-900 dark:text-gray-100 text-left">
+                            <h3 className="font-medium text-sm text-gray-900 text-left">
                               {type.name}
                             </h3>
                             {'optional' in type && type.optional && (
-                              <span className="text-[10px] px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded">
+                              <span className="text-[10px] px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded">
                                 任意
                               </span>
                             )}
                           </div>
-                          <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                          <p className="text-xs text-gray-500 mb-2">
                             {type.description}
                           </p>
-                          <p className="text-xs text-blue-600 dark:text-blue-400">
+                          <p className="text-xs text-blue-600">
                             {itemCount > 0 ? `${itemCount}種類` : '準備中'}
                           </p>
                         </button>
@@ -1946,10 +1946,10 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
               ) : currentCategoryName === '外部建材' && !selectedMaterialType ? (
                 /* 外部建材カテゴリ選択カード */
                 <div className="max-w-4xl mx-auto px-4">
-                  <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                  <h2 className="text-lg font-medium text-gray-900 mb-2">
                     外部建材を選択
                   </h2>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+                  <p className="text-sm text-gray-500 mb-6">
                     各部材の色を選んでください。統一感のある外観に仕上がります。
                   </p>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -1959,18 +1959,18 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                         <button
                           key={type.id}
                           onClick={() => setSelectedMaterialType(type.id)}
-                          className="group flex flex-col items-start bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:border-blue-400 dark:hover:border-blue-500 transition-all"
+                          className="group flex flex-col items-start bg-white border-2 border-gray-200 rounded-xl p-4 hover:border-blue-400:border-blue-500 transition-all"
                         >
                           <div className="w-full flex items-center justify-between mb-1">
-                            <h3 className="font-medium text-sm text-gray-900 dark:text-gray-100 text-left">
+                            <h3 className="font-medium text-sm text-gray-900 text-left">
                               {type.name}
                             </h3>
                             <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors" />
                           </div>
-                          <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                          <p className="text-xs text-gray-500 mb-2">
                             {type.description}
                           </p>
-                          <p className="text-xs text-blue-600 dark:text-blue-400">
+                          <p className="text-xs text-blue-600">
                             {itemCount > 0 ? `${itemCount}種類` : '1種類'}
                           </p>
                         </button>
@@ -1982,17 +1982,17 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 /* 設計タブ: ガレージシャッター有無選択カード */
                 <div className="max-w-3xl mx-auto px-4">
                   {isDesignReadOnly && (
-                    <div className="mb-4 px-3 py-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
-                      <p className="text-sm text-amber-700 dark:text-amber-400 flex items-center gap-2">
+                    <div className="mb-4 px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg">
+                      <p className="text-sm text-amber-700 flex items-center gap-2">
                         <Eye className="w-4 h-4" />
                         閲覧専用：設計担当が設定した内容を表示しています
                       </p>
                     </div>
                   )}
-                  <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                  <h2 className="text-lg font-medium text-gray-900 mb-2">
                     ガレージシャッター
                   </h2>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+                  <p className="text-sm text-gray-500 mb-6">
                     {isDesignReadOnly ? '設計担当が設定した内容です。' : '電動ガレージシャッターの種類を選択してください。'}
                   </p>
                   <div className="grid grid-cols-3 gap-4">
@@ -2040,9 +2040,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                           }}
                           className={`relative flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all ${
                             isSelected
-                              ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                              : 'border-gray-200 dark:border-gray-700'
-                          } ${isDesignReadOnly ? 'cursor-default opacity-75' : 'hover:border-blue-300 dark:hover:border-blue-600'}`}
+                              ? 'border-blue-500 bg-blue-50'
+                              : 'border-gray-200'
+                          } ${isDesignReadOnly ? 'cursor-default opacity-75' : 'hover:border-blue-300:border-blue-600'}`}
                         >
                           {isSelected && (
                             <div className="absolute top-2 right-2">
@@ -2050,14 +2050,14 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                             </div>
                           )}
                           <span className="text-2xl mb-2">{emoji}</span>
-                          <span className="font-medium text-gray-900 dark:text-gray-100 text-sm text-center">{option.name}</span>
-                          <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 text-center">{option.description}</span>
+                          <span className="font-medium text-gray-900 text-sm text-center">{option.name}</span>
+                          <span className="text-xs text-gray-500 mt-1 text-center">{option.description}</span>
                         </button>
                       );
                     })}
                   </div>
                   {!isDesignReadOnly && (
-                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-4 text-center">
+                    <p className="text-xs text-gray-400 mt-4 text-center">
                       ※この設定は設計担当が管理者画面で設定します
                     </p>
                   )}
@@ -2066,17 +2066,17 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 /* 設計タブ: 庇種類選択カード */
                 <div className="max-w-3xl mx-auto px-4">
                   {isDesignReadOnly && (
-                    <div className="mb-4 px-3 py-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
-                      <p className="text-sm text-amber-700 dark:text-amber-400 flex items-center gap-2">
+                    <div className="mb-4 px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg">
+                      <p className="text-sm text-amber-700 flex items-center gap-2">
                         <Eye className="w-4 h-4" />
                         閲覧専用：設計担当が設定した内容を表示しています
                       </p>
                     </div>
                   )}
-                  <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                  <h2 className="text-lg font-medium text-gray-900 mb-2">
                     庇（ひさし）
                   </h2>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+                  <p className="text-sm text-gray-500 mb-6">
                     {isDesignReadOnly ? '設計担当が設定した内容です。' : '玄関・窓上に設置する庇の種類を選択してください。'}
                   </p>
                   <div className="grid grid-cols-3 gap-4">
@@ -2124,9 +2124,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                           }}
                           className={`relative flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all ${
                             isSelected
-                              ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                              : 'border-gray-200 dark:border-gray-700'
-                          } ${isDesignReadOnly ? 'cursor-default opacity-75' : 'hover:border-blue-300 dark:hover:border-blue-600'}`}
+                              ? 'border-blue-500 bg-blue-50'
+                              : 'border-gray-200'
+                          } ${isDesignReadOnly ? 'cursor-default opacity-75' : 'hover:border-blue-300:border-blue-600'}`}
                         >
                           {isSelected && (
                             <div className="absolute top-2 right-2">
@@ -2134,14 +2134,14 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                             </div>
                           )}
                           <span className="text-2xl mb-2">{emoji}</span>
-                          <span className="font-medium text-gray-900 dark:text-gray-100 text-sm text-center">{option.name}</span>
-                          <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 text-center">{option.description}</span>
+                          <span className="font-medium text-gray-900 text-sm text-center">{option.name}</span>
+                          <span className="text-xs text-gray-500 mt-1 text-center">{option.description}</span>
                         </button>
                       );
                     })}
                   </div>
                   {!isDesignReadOnly && (
-                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-4 text-center">
+                    <p className="text-xs text-gray-400 mt-4 text-center">
                       ※この設定は設計担当が管理者画面で設定します
                     </p>
                   )}
@@ -2150,17 +2150,17 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 /* 設計タブ: 窓タイプ選択カード */
                 <div className="max-w-3xl mx-auto px-4">
                   {isDesignReadOnly && (
-                    <div className="mb-4 px-3 py-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
-                      <p className="text-sm text-amber-700 dark:text-amber-400 flex items-center gap-2">
+                    <div className="mb-4 px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg">
+                      <p className="text-sm text-amber-700 flex items-center gap-2">
                         <Eye className="w-4 h-4" />
                         閲覧専用：設計担当が設定した内容を表示しています
                       </p>
                     </div>
                   )}
-                  <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                  <h2 className="text-lg font-medium text-gray-900 mb-2">
                     窓タイプ
                   </h2>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+                  <p className="text-sm text-gray-500 mb-6">
                     {isDesignReadOnly ? '設計担当が設定した内容です。' : '樹脂サッシのグレードを選択してください。'}
                     {!isDesignReadOnly && (
                       <>
@@ -2196,9 +2196,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                           }}
                           className={`relative flex flex-col items-center justify-center p-6 rounded-xl border-2 transition-all ${
                             isSelected
-                              ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                              : 'border-gray-200 dark:border-gray-700'
-                          } ${isDesignReadOnly ? 'cursor-default opacity-75' : 'hover:border-blue-300 dark:hover:border-blue-600'}`}
+                              ? 'border-blue-500 bg-blue-50'
+                              : 'border-gray-200'
+                          } ${isDesignReadOnly ? 'cursor-default opacity-75' : 'hover:border-blue-300:border-blue-600'}`}
                         >
                           {isSelected && (
                             <div className="absolute top-2 right-2">
@@ -2206,19 +2206,19 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                             </div>
                           )}
                           {'isOption' in option && option.isOption && (
-                            <span className="absolute top-2 left-2 text-[10px] px-1.5 py-0.5 bg-orange-100 dark:bg-orange-900/50 text-orange-600 dark:text-orange-400 rounded">
+                            <span className="absolute top-2 left-2 text-[10px] px-1.5 py-0.5 bg-orange-100 text-orange-600 rounded">
                               オプション
                             </span>
                           )}
                           <span className="text-2xl mb-2">🪟</span>
-                          <span className="font-medium text-gray-900 dark:text-gray-100">{option.name}</span>
-                          <span className="text-xs text-gray-500 dark:text-gray-400 mt-1">{option.description}</span>
+                          <span className="font-medium text-gray-900">{option.name}</span>
+                          <span className="text-xs text-gray-500 mt-1">{option.description}</span>
                         </button>
                       );
                     })}
                   </div>
                   {!isDesignReadOnly && (
-                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-4 text-center">
+                    <p className="text-xs text-gray-400 mt-4 text-center">
                       ※この設定は設計担当が管理者画面で設定します
                     </p>
                   )}
@@ -2227,17 +2227,17 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 /* 設計タブ: ガス引込み選択カード */
                 <div className="max-w-3xl mx-auto px-4">
                   {isDesignReadOnly && (
-                    <div className="mb-4 px-3 py-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
-                      <p className="text-sm text-amber-700 dark:text-amber-400 flex items-center gap-2">
+                    <div className="mb-4 px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg">
+                      <p className="text-sm text-amber-700 flex items-center gap-2">
                         <Eye className="w-4 h-4" />
                         閲覧専用：設計担当が設定した内容を表示しています
                       </p>
                     </div>
                   )}
-                  <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                  <h2 className="text-lg font-medium text-gray-900 mb-2">
                     ガス引込み
                   </h2>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+                  <p className="text-sm text-gray-500 mb-6">
                     {isDesignReadOnly ? '設計担当が設定した内容です。' : 'ガスの引き込み有無を選択してください。'}
                     {!isDesignReadOnly && (
                       <>
@@ -2282,9 +2282,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                           }}
                           className={`relative flex flex-col items-center justify-center p-6 rounded-xl border-2 transition-all ${
                             isSelected
-                              ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                              : 'border-gray-200 dark:border-gray-700'
-                          } ${isDesignReadOnly ? 'cursor-default opacity-75' : 'hover:border-blue-300 dark:hover:border-blue-600'}`}
+                              ? 'border-blue-500 bg-blue-50'
+                              : 'border-gray-200'
+                          } ${isDesignReadOnly ? 'cursor-default opacity-75' : 'hover:border-blue-300:border-blue-600'}`}
                         >
                           {isSelected && (
                             <div className="absolute top-2 right-2">
@@ -2292,14 +2292,14 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                             </div>
                           )}
                           <span className="text-2xl mb-2">{option.id === 'gas-supply-yes' ? '🔥' : '⚡'}</span>
-                          <span className="font-medium text-gray-900 dark:text-gray-100">{option.name}</span>
-                          <span className="text-xs text-gray-500 dark:text-gray-400 mt-1">{option.description}</span>
+                          <span className="font-medium text-gray-900">{option.name}</span>
+                          <span className="text-xs text-gray-500 mt-1">{option.description}</span>
                         </button>
                       );
                     })}
                   </div>
                   {!isDesignReadOnly && (
-                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-4 text-center">
+                    <p className="text-xs text-gray-400 mt-4 text-center">
                       ※この設定は設計担当が管理者画面で設定します
                     </p>
                   )}
@@ -2308,17 +2308,17 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 /* 設計タブ: 室内窓選択カード（有無のみ） */
                 <div className="max-w-3xl mx-auto px-4">
                   {isDesignReadOnly && (
-                    <div className="mb-4 px-3 py-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
-                      <p className="text-sm text-amber-700 dark:text-amber-400 flex items-center gap-2">
+                    <div className="mb-4 px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg">
+                      <p className="text-sm text-amber-700 flex items-center gap-2">
                         <Eye className="w-4 h-4" />
                         閲覧専用：設計担当が設定した内容を表示しています
                       </p>
                     </div>
                   )}
-                  <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                  <h2 className="text-lg font-medium text-gray-900 mb-2">
                     室内窓
                   </h2>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+                  <p className="text-sm text-gray-500 mb-6">
                     {isDesignReadOnly ? '設計担当が設定した内容です。' : '室内窓の設置有無を選択してください。'}
                     {!isDesignReadOnly && (
                       <>
@@ -2355,9 +2355,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                           }}
                           className={`relative flex flex-col items-center justify-center p-6 rounded-xl border-2 transition-all ${
                             isSelected
-                              ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                              : 'border-gray-200 dark:border-gray-700'
-                          } ${isDesignReadOnly ? 'cursor-default opacity-75' : 'hover:border-blue-300 dark:hover:border-blue-600'}`}
+                              ? 'border-blue-500 bg-blue-50'
+                              : 'border-gray-200'
+                          } ${isDesignReadOnly ? 'cursor-default opacity-75' : 'hover:border-blue-300:border-blue-600'}`}
                         >
                           {isSelected && (
                             <div className="absolute top-2 right-2">
@@ -2365,14 +2365,14 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                             </div>
                           )}
                           <span className="text-2xl mb-2">{option.id === 'interior-window-yes' ? '🪟' : '🚫'}</span>
-                          <span className="font-medium text-gray-900 dark:text-gray-100">{option.name}</span>
-                          <span className="text-xs text-gray-500 dark:text-gray-400 mt-1">{option.description}</span>
+                          <span className="font-medium text-gray-900">{option.name}</span>
+                          <span className="text-xs text-gray-500 mt-1">{option.description}</span>
                         </button>
                       );
                     })}
                   </div>
                   {!isDesignReadOnly && (
-                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-4 text-center">
+                    <p className="text-xs text-gray-400 mt-4 text-center">
                       ※この設定は設計担当が管理者画面で設定します
                     </p>
                   )}
@@ -2381,17 +2381,17 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 /* 設計タブ: 給湯器種類選択カード */
                 <div className="max-w-4xl mx-auto px-4">
                   {isDesignReadOnly && (
-                    <div className="mb-4 px-3 py-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
-                      <p className="text-sm text-amber-700 dark:text-amber-400 flex items-center gap-2">
+                    <div className="mb-4 px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg">
+                      <p className="text-sm text-amber-700 flex items-center gap-2">
                         <Eye className="w-4 h-4" />
                         閲覧専用：設計担当が設定した内容を表示しています
                       </p>
                     </div>
                   )}
-                  <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                  <h2 className="text-lg font-medium text-gray-900 mb-2">
                     給湯器の種類
                   </h2>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+                  <p className="text-sm text-gray-500 mb-6">
                     {isDesignReadOnly ? '設計担当が設定した内容です。' : '給湯器の種類を選択してください。外装タブで容量などの詳細を選べます。'}
                   </p>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -2445,9 +2445,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                           }}
                           className={`relative flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all ${
                             isSelected
-                              ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                              : 'border-gray-200 dark:border-gray-700'
-                          } ${isDesignReadOnly ? 'cursor-default opacity-75' : 'hover:border-blue-300 dark:hover:border-blue-600'}`}
+                              ? 'border-blue-500 bg-blue-50'
+                              : 'border-gray-200'
+                          } ${isDesignReadOnly ? 'cursor-default opacity-75' : 'hover:border-blue-300:border-blue-600'}`}
                         >
                           {isSelected && (
                             <div className="absolute top-2 right-2">
@@ -2455,14 +2455,14 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                             </div>
                           )}
                           <span className="text-2xl mb-2">{emoji}</span>
-                          <span className="font-medium text-gray-900 dark:text-gray-100 text-sm text-center">{option.name}</span>
-                          <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 text-center">{option.description}</span>
+                          <span className="font-medium text-gray-900 text-sm text-center">{option.name}</span>
+                          <span className="text-xs text-gray-500 mt-1 text-center">{option.description}</span>
                         </button>
                       );
                     })}
                   </div>
                   {!isDesignReadOnly && (
-                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-4 text-center">
+                    <p className="text-xs text-gray-400 mt-4 text-center">
                       ※この設定は設計担当が管理者画面で設定します
                     </p>
                   )}
@@ -2485,18 +2485,18 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
               ) : activeTab === 'furniture' && currentCategoryName === 'ガス乾燥機' && !hasGasSupply ? (
                 /* 家具・家電タブ: ガス乾燥機カテゴリでガス未選択時のプロンプト */
                 <div className="max-w-2xl mx-auto px-4 py-12">
-                  <div className="bg-gradient-to-br from-orange-50 to-amber-50 dark:from-orange-900/20 dark:to-amber-900/20 border border-orange-200 dark:border-orange-800 rounded-2xl p-8 text-center">
+                  <div className="bg-gradient-to-br from-orange-50 to-amber-50 border border-orange-200 rounded-2xl p-8 text-center">
                     <div className="text-5xl mb-4">🔥</div>
-                    <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-3">
+                    <h2 className="text-xl font-bold text-gray-900 mb-3">
                       乾太くんをご検討ですか？
                     </h2>
-                    <p className="text-gray-600 dark:text-gray-400 mb-6">
+                    <p className="text-gray-600 mb-6">
                       ガス衣類乾燥機「乾太くん」を設置するには、<br />
-                      <span className="font-semibold text-orange-600 dark:text-orange-400">ガス引込み工事（税別 35万円）</span>が必要です。
+                      <span className="font-semibold text-orange-600">ガス引込み工事（税別 35万円）</span>が必要です。
                     </p>
-                    <div className="bg-white dark:bg-gray-800 rounded-xl p-4 mb-6 text-left">
-                      <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">乾太くんのメリット</h3>
-                      <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                    <div className="bg-white rounded-xl p-4 mb-6 text-left">
+                      <h3 className="font-semibold text-gray-900 mb-2">乾太くんのメリット</h3>
+                      <ul className="text-sm text-gray-600 space-y-1">
                         <li>✓ 電気式の約1/3の時間で乾燥（5kgで約52分）</li>
                         <li>✓ ふんわり仕上がり、生乾き臭なし</li>
                         <li>✓ 天候に左右されない</li>
@@ -2519,7 +2519,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                       <Flame className="w-5 h-5" />
                       ガス引込みを追加する
                     </button>
-                    <p className="text-xs text-gray-500 dark:text-gray-500 mt-4">
+                    <p className="text-xs text-gray-500 mt-4">
                       ※設計タブでガス引込みの有無を選択できます
                     </p>
                   </div>
@@ -2528,19 +2528,19 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 /* 家具・家電タブ: ガス乾燥機カテゴリでガス引込み済みの場合、カード選択UI */
                 <div className="max-w-4xl mx-auto px-4 py-6">
                   {/* 乾太くんのメリットバナー */}
-                  <div className="bg-gradient-to-r from-orange-100 to-amber-100 dark:from-orange-900/30 dark:to-amber-900/30 border border-orange-200 dark:border-orange-700 rounded-xl p-4 mb-6">
+                  <div className="bg-gradient-to-r from-orange-100 to-amber-100 border border-orange-200 rounded-xl p-4 mb-6">
                     <div className="flex items-center gap-3 mb-2">
                       <span className="text-2xl">🔥</span>
-                      <h3 className="font-bold text-gray-900 dark:text-gray-100">乾太くん（ガス衣類乾燥機）</h3>
+                      <h3 className="font-bold text-gray-900">乾太くん（ガス衣類乾燥機）</h3>
                     </div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-sm text-gray-600">
                       電気式の約1/3の時間でふっくら乾燥。ガス引込み済みのため選択可能です。
                     </p>
                   </div>
 
                   {/* 乾太くん本体選択 */}
                   <div className="mb-8">
-                    <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">本体を選択</h4>
+                    <h4 className="text-sm font-medium text-gray-500 mb-3">本体を選択</h4>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                       {GAS_DRYER_OPTIONS.map((option) => {
                         const isSelected = cartItems.some(i => i.product.id === option.productId);
@@ -2571,8 +2571,8 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                             }}
                             className={`relative p-4 rounded-xl border-2 transition-all text-left ${
                               isSelected
-                                ? 'border-orange-500 bg-orange-50 dark:bg-orange-900/20'
-                                : 'border-gray-200 dark:border-gray-700 hover:border-orange-300 dark:hover:border-orange-600'
+                                ? 'border-orange-500 bg-orange-50'
+                                : 'border-gray-200 hover:border-orange-300:border-orange-600'
                             }`}
                           >
                             {isSelected && (
@@ -2581,13 +2581,13 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                               </div>
                             )}
                             <div className="text-2xl mb-2">{option.icon}</div>
-                            <div className="font-medium text-gray-900 dark:text-gray-100 text-sm">
+                            <div className="font-medium text-gray-900 text-sm">
                               {option.name}
                             </div>
-                            <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                            <div className="text-xs text-gray-500 mt-1">
                               {option.description}
                             </div>
-                            <div className="text-sm font-semibold text-orange-600 dark:text-orange-400 mt-2">
+                            <div className="text-sm font-semibold text-orange-600 mt-2">
                               {option.price === 0 ? '¥0' : `+¥${option.price.toLocaleString()}`}
                             </div>
                           </button>
@@ -2603,7 +2603,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                     i.product.id === 'furn-dryer-003'
                   ) && (
                     <div>
-                      <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">オプション（任意）</h4>
+                      <h4 className="text-sm font-medium text-gray-500 mb-3">オプション（任意）</h4>
                       <div className="grid grid-cols-2 gap-3">
                         {GAS_DRYER_ACCESSORIES.map((option) => {
                           const isSelected = cartItems.some(i => i.product.id === option.productId);
@@ -2624,8 +2624,8 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                               }}
                               className={`relative p-4 rounded-xl border-2 transition-all text-left ${
                                 isSelected
-                                  ? 'border-orange-500 bg-orange-50 dark:bg-orange-900/20'
-                                  : 'border-gray-200 dark:border-gray-700 hover:border-orange-300 dark:hover:border-orange-600'
+                                  ? 'border-orange-500 bg-orange-50'
+                                  : 'border-gray-200 hover:border-orange-300:border-orange-600'
                               }`}
                             >
                               {isSelected && (
@@ -2633,13 +2633,13 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                                   <Check className="w-5 h-5 text-orange-500" />
                                 </div>
                               )}
-                              <div className="font-medium text-gray-900 dark:text-gray-100">
+                              <div className="font-medium text-gray-900">
                                 {option.name}
                               </div>
-                              <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                              <div className="text-xs text-gray-500 mt-1">
                                 {option.description}
                               </div>
-                              <div className="text-sm font-semibold text-orange-600 dark:text-orange-400 mt-2">
+                              <div className="text-sm font-semibold text-orange-600 mt-2">
                                 +¥{option.price.toLocaleString()}
                               </div>
                             </button>
@@ -2657,16 +2657,16 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   {currentCategoryName === '外壁' && selectedMaterialType && (
                     <div className="mb-4 flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <span className="text-gray-900 dark:text-gray-100 font-medium">
+                        <span className="text-gray-900 font-medium">
                           {selectedMaterialType}
                         </span>
-                        <span className="text-sm text-gray-500 dark:text-gray-400">
+                        <span className="text-sm text-gray-500">
                           {filteredItems.length}件
                         </span>
                       </div>
                       <button
                         onClick={() => setSelectedMaterialType('')}
-                        className="flex items-center gap-1 px-2 py-1 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
+                        className="flex items-center gap-1 px-2 py-1 text-sm text-gray-600 hover:text-gray-900:text-gray-200 transition-colors"
                       >
                         <ChevronLeft className="w-4 h-4" />
                         戻る
@@ -2678,18 +2678,18 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   {currentCategoryName === '玄関ドア' && selectedMaterialType && (
                     <div className="mb-4 flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <span className="text-gray-900 dark:text-gray-100 font-medium">
+                        <span className="text-gray-900 font-medium">
                           {selectedMaterialType === 'ハンドル' ? 'ハンドル形状' :
                            selectedMaterialType === 'オプション' ? '追加オプション' :
                            `デザイン: ${selectedMaterialType}`}
                         </span>
-                        <span className="text-sm text-gray-500 dark:text-gray-400">
+                        <span className="text-sm text-gray-500">
                           {filteredItems.length}件
                         </span>
                       </div>
                       <button
                         onClick={() => setSelectedMaterialType('')}
-                        className="flex items-center gap-1 px-2 py-1 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
+                        className="flex items-center gap-1 px-2 py-1 text-sm text-gray-600 hover:text-gray-900:text-gray-200 transition-colors"
                       >
                         <ChevronLeft className="w-4 h-4" />
                         戻る
@@ -2701,16 +2701,16 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   {currentCategoryName === '外部設備' && selectedMaterialType && (
                     <div className="mb-4 flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <span className="text-gray-900 dark:text-gray-100 font-medium">
+                        <span className="text-gray-900 font-medium">
                           {selectedMaterialType}
                         </span>
-                        <span className="text-sm text-gray-500 dark:text-gray-400">
+                        <span className="text-sm text-gray-500">
                           {filteredItems.length}件
                         </span>
                       </div>
                       <button
                         onClick={() => setSelectedMaterialType('')}
-                        className="flex items-center gap-1 px-2 py-1 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
+                        className="flex items-center gap-1 px-2 py-1 text-sm text-gray-600 hover:text-gray-900:text-gray-200 transition-colors"
                       >
                         <ChevronLeft className="w-4 h-4" />
                         戻る
@@ -2720,18 +2720,18 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
                   {/* 外部建材選択状態バー */}
                   {currentCategoryName === '外部建材' && selectedMaterialType && (
-                    <div className="mb-4 flex items-center justify-between bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
+                    <div className="mb-4 flex items-center justify-between bg-gray-50 p-3 rounded-lg">
                       <div className="flex items-center gap-2">
-                        <span className="text-gray-900 dark:text-gray-100 font-bold text-lg">
+                        <span className="text-gray-900 font-bold text-lg">
                           {selectedMaterialType}
                         </span>
-                        <span className="text-sm text-gray-500 dark:text-gray-400">
+                        <span className="text-sm text-gray-500">
                           {filteredItems.length}件
                         </span>
                       </div>
                       <button
                         onClick={() => setSelectedMaterialType('')}
-                        className="flex items-center gap-1 px-3 py-1.5 text-sm bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-lg transition-colors border border-gray-200 dark:border-gray-600"
+                        className="flex items-center gap-1 px-3 py-1.5 text-sm bg-white text-gray-600 hover:bg-gray-100:bg-gray-600 rounded-lg transition-colors border border-gray-200"
                       >
                         <ChevronLeft className="w-4 h-4" />
                         他の建材を選ぶ
@@ -2743,16 +2743,16 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   {currentCategoryName === 'ベース床' && selectedMaterialType && (
                     <div className="mb-4 flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <span className="text-gray-900 dark:text-gray-100 font-medium">
+                        <span className="text-gray-900 font-medium">
                           {selectedMaterialType}
                         </span>
-                        <span className="text-sm text-gray-500 dark:text-gray-400">
+                        <span className="text-sm text-gray-500">
                           {filteredItems.length}件
                         </span>
                       </div>
                       <button
                         onClick={() => setSelectedMaterialType('')}
-                        className="flex items-center gap-1 px-2 py-1 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
+                        className="flex items-center gap-1 px-2 py-1 text-sm text-gray-600 hover:text-gray-900:text-gray-200 transition-colors"
                       >
                         <ChevronLeft className="w-4 h-4" />
                         戻る
@@ -2764,16 +2764,16 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   {currentCategoryName === '周辺部材' && selectedMaterialType && (
                     <div className="mb-4 flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <span className="text-gray-900 dark:text-gray-100 font-medium">
+                        <span className="text-gray-900 font-medium">
                           {selectedMaterialType}
                         </span>
-                        <span className="text-sm text-gray-500 dark:text-gray-400">
+                        <span className="text-sm text-gray-500">
                           {filteredItems.length}件
                         </span>
                       </div>
                       <button
                         onClick={() => setSelectedMaterialType('')}
-                        className="flex items-center gap-1 px-2 py-1 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
+                        className="flex items-center gap-1 px-2 py-1 text-sm text-gray-600 hover:text-gray-900:text-gray-200 transition-colors"
                       >
                         <ChevronLeft className="w-4 h-4" />
                         戻る
@@ -2978,7 +2978,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
         </div>
 
         {/* モバイル用 - 下部ナビゲーションバー */}
-        <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 shadow-lg safe-area-pb">
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 shadow-lg safe-area-pb">
           <div className="flex items-center justify-between p-3 gap-3">
             {/* メインアクション */}
             {isCurrentStepComplete ? (
@@ -2998,7 +2998,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 <ChevronRight className="w-5 h-5" />
               </button>
             ) : (
-              <div className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 rounded-xl font-medium">
+              <div className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-orange-100 text-orange-700 rounded-xl font-medium">
                 <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse" />
                 {categories.find(c => c.id === selectedCategoryId)?.name || 'カテゴリ'}を選択中
               </div>

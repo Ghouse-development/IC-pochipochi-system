@@ -85,21 +85,21 @@ export const StaffOptionDashboard: React.FC = () => {
             <DollarSign className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">オプション金額分析</h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400">担当者別・会社全体の実績</p>
+            <h2 className="text-xl font-bold text-gray-900">オプション金額分析</h2>
+            <p className="text-sm text-gray-500">担当者別・会社全体の実績</p>
           </div>
         </div>
 
         {/* 期間フィルター */}
-        <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 rounded-xl p-1">
+        <div className="flex items-center gap-2 bg-gray-100 rounded-xl p-1">
           {(['month', 'quarter', 'year'] as const).map((period) => (
             <button
               key={period}
               onClick={() => setSelectedPeriod(period)}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                 selectedPeriod === period
-                  ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 shadow-sm'
-                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                  ? 'bg-white text-gray-900 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900:text-gray-200'
               }`}
             >
               {{
@@ -123,26 +123,26 @@ export const StaffOptionDashboard: React.FC = () => {
           <p className="text-sm mt-1 opacity-75">{periodLabel}の実績</p>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-5 border border-gray-100 dark:border-gray-700">
-          <div className="flex items-center gap-2 mb-2 text-gray-500 dark:text-gray-400">
+        <div className="bg-white rounded-2xl p-5 border border-gray-100">
+          <div className="flex items-center gap-2 mb-2 text-gray-500">
             <BarChart3 className="w-5 h-5" />
             <span className="text-sm font-medium">標準仕様総額</span>
           </div>
-          <div className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">
+          <div className="text-2xl sm:text-3xl font-bold text-gray-900">
             {formatPrice(companyStats.totalStandardAmount)}
           </div>
-          <p className="text-sm mt-1 text-gray-500 dark:text-gray-400">{periodLabel}の実績</p>
+          <p className="text-sm mt-1 text-gray-500">{periodLabel}の実績</p>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-5 border border-gray-100 dark:border-gray-700">
-          <div className="flex items-center gap-2 mb-2 text-gray-500 dark:text-gray-400">
+        <div className="bg-white rounded-2xl p-5 border border-gray-100">
+          <div className="flex items-center gap-2 mb-2 text-gray-500">
             <Users className="w-5 h-5" />
             <span className="text-sm font-medium">案件数</span>
           </div>
-          <div className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">
+          <div className="text-2xl sm:text-3xl font-bold text-gray-900">
             {companyStats.totalProjects}件
           </div>
-          <p className="text-sm mt-1 text-gray-500 dark:text-gray-400">{periodLabel}の実績</p>
+          <p className="text-sm mt-1 text-gray-500">{periodLabel}の実績</p>
         </div>
 
         <div className="bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl p-5 text-white">
@@ -156,16 +156,16 @@ export const StaffOptionDashboard: React.FC = () => {
       </div>
 
       {/* トップパフォーマー */}
-      <div className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-2xl p-6 border border-amber-200 dark:border-amber-800">
+      <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl p-6 border border-amber-200">
         <div className="flex items-center gap-2 mb-4">
           <Award className="w-6 h-6 text-amber-600" />
-          <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">トップパフォーマー</h3>
+          <h3 className="text-lg font-bold text-gray-900">トップパフォーマー</h3>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {companyStats.topStaff.map((staff, idx) => (
             <div
               key={staff.staffId}
-              className={`bg-white dark:bg-gray-800 rounded-xl p-4 ${
+              className={`bg-white rounded-xl p-4 ${
                 idx === 0 ? 'ring-2 ring-amber-400' : ''
               }`}
             >
@@ -178,12 +178,12 @@ export const StaffOptionDashboard: React.FC = () => {
                   {idx + 1}
                 </div>
                 <div>
-                  <p className="font-bold text-gray-900 dark:text-gray-100">{staff.staffName}</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">{staff.projectCount}件担当</p>
+                  <p className="font-bold text-gray-900">{staff.staffName}</p>
+                  <p className="text-xs text-gray-500">{staff.projectCount}件担当</p>
                 </div>
               </div>
               <div className="text-xl font-bold text-green-600">{formatPrice(staff.totalOptionAmount)}</div>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              <p className="text-xs text-gray-500 mt-1">
                 平均 {formatPrice(staff.avgOptionPerProject)}/件
               </p>
             </div>
@@ -192,14 +192,14 @@ export const StaffOptionDashboard: React.FC = () => {
       </div>
 
       {/* 担当者別詳細 */}
-      <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
-        <div className="p-6 border-b border-gray-100 dark:border-gray-700">
+      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+        <div className="p-6 border-b border-gray-100">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Users className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-              <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">担当者別実績</h3>
+              <Users className="w-5 h-5 text-gray-600" />
+              <h3 className="text-lg font-bold text-gray-900">担当者別実績</h3>
             </div>
-            <button className="flex items-center gap-2 px-3 py-1.5 text-sm bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+            <button className="flex items-center gap-2 px-3 py-1.5 text-sm bg-gray-100 rounded-lg hover:bg-gray-200:bg-gray-600 transition-colors">
               <Filter className="w-4 h-4" />
               フィルター
             </button>
@@ -209,22 +209,22 @@ export const StaffOptionDashboard: React.FC = () => {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="bg-gray-50 dark:bg-gray-900/50">
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">担当者</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">オプション金額</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">標準仕様金額</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">案件数</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">平均オプション</th>
-                <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">推移</th>
+              <tr className="bg-gray-50">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">担当者</th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">オプション金額</th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">標準仕様金額</th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">案件数</th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">平均オプション</th>
+                <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">推移</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
+            <tbody className="divide-y divide-gray-100">
               {staffData.map((staff) => (
                   <tr
                     key={staff.staffId}
                     onClick={() => setSelectedStaff(selectedStaff === staff.staffId ? null : staff.staffId)}
-                    className={`hover:bg-gray-50 dark:hover:bg-gray-900/30 cursor-pointer transition-colors ${
-                      selectedStaff === staff.staffId ? 'bg-blue-50 dark:bg-blue-900/20' : ''
+                    className={`hover:bg-gray-50:bg-gray-900/30 cursor-pointer transition-colors ${
+                      selectedStaff === staff.staffId ? 'bg-blue-50' : ''
                     }`}
                   >
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -232,20 +232,20 @@ export const StaffOptionDashboard: React.FC = () => {
                         <div className="w-8 h-8 bg-gradient-to-br from-teal-500 to-emerald-600 rounded-full flex items-center justify-center text-white font-medium text-sm">
                           {staff.staffName.charAt(0)}
                         </div>
-                        <span className="font-medium text-gray-900 dark:text-gray-100">{staff.staffName}</span>
+                        <span className="font-medium text-gray-900">{staff.staffName}</span>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
                       <span className="font-bold text-green-600">{formatPrice(staff.totalOptionAmount)}</span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-gray-600 dark:text-gray-400">
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-gray-600">
                       {formatPrice(staff.totalStandardAmount)}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-gray-900 dark:text-gray-100">
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-gray-900">
                       {staff.projectCount}件
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
-                      <span className="text-sm text-gray-600 dark:text-gray-400">
+                      <span className="text-sm text-gray-600">
                         {formatPrice(staff.avgOptionPerProject)}
                       </span>
                     </td>
@@ -273,17 +273,17 @@ export const StaffOptionDashboard: React.FC = () => {
         </div>
 
         {/* 合計行 */}
-        <div className="px-6 py-4 bg-gray-50 dark:bg-gray-900/50 border-t border-gray-200 dark:border-gray-700">
+        <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
           <div className="flex justify-between items-center">
-            <span className="font-bold text-gray-900 dark:text-gray-100">合計</span>
+            <span className="font-bold text-gray-900">合計</span>
             <div className="flex gap-8">
               <div>
-                <span className="text-sm text-gray-500 dark:text-gray-400 mr-2">オプション:</span>
+                <span className="text-sm text-gray-500 mr-2">オプション:</span>
                 <span className="font-bold text-green-600">{formatPrice(companyStats.totalOptionAmount)}</span>
               </div>
               <div>
-                <span className="text-sm text-gray-500 dark:text-gray-400 mr-2">標準:</span>
-                <span className="font-bold text-gray-900 dark:text-gray-100">{formatPrice(companyStats.totalStandardAmount)}</span>
+                <span className="text-sm text-gray-500 mr-2">標準:</span>
+                <span className="font-bold text-gray-900">{formatPrice(companyStats.totalStandardAmount)}</span>
               </div>
             </div>
           </div>

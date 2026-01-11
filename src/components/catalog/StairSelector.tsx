@@ -243,11 +243,11 @@ export const StairSelector: React.FC<StairSelectorProps> = ({
     <div className="p-6 max-w-3xl mx-auto">
       {/* ヘッダー */}
       <div className="mb-6">
-        <h3 className="text-lg font-bold text-gray-800 dark:text-white flex items-center gap-2">
+        <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
           <Layers className="w-6 h-6 text-blue-500" />
           階段を選択
         </h3>
-        <p className="text-sm text-gray-600 dark:text-gray-400">
+        <p className="text-sm text-gray-600">
           階段タイプと仕様を選んでください
         </p>
       </div>
@@ -263,10 +263,10 @@ export const StairSelector: React.FC<StairSelectorProps> = ({
               <React.Fragment key={step}>
                 <span className={`px-3 py-1 rounded-full whitespace-nowrap ${
                   isCompleted
-                    ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
+                    ? 'bg-green-100 text-green-700'
                     : isCurrent
                       ? 'bg-blue-500 text-white'
-                      : 'bg-gray-100 dark:bg-gray-800 text-gray-400'
+                      : 'bg-gray-100 text-gray-400'
                 }`}>
                   {isCompleted && <Check className="w-3 h-3 inline mr-1" />}
                   {step}
@@ -281,7 +281,7 @@ export const StairSelector: React.FC<StairSelectorProps> = ({
       {/* ステップ1: 階段タイプ選択 */}
       {currentStep === 'type' && (
         <div>
-          <h4 className="font-medium text-gray-800 dark:text-white mb-4">
+          <h4 className="font-medium text-gray-800 mb-4">
             階段タイプを選んでください
           </h4>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
@@ -323,7 +323,7 @@ export const StairSelector: React.FC<StairSelectorProps> = ({
           >
             <ChevronLeft className="w-4 h-4" /> タイプ選択に戻る
           </button>
-          <h4 className="font-medium text-gray-800 dark:text-white mb-4">
+          <h4 className="font-medium text-gray-800 mb-4">
             メーカーを選んでください
           </h4>
           <div className="grid grid-cols-2 gap-4">
@@ -363,10 +363,10 @@ export const StairSelector: React.FC<StairSelectorProps> = ({
             <ChevronLeft className="w-4 h-4" />
             {selectedType === 'wood' ? 'メーカー選択に戻る' : 'タイプ選択に戻る'}
           </button>
-          <h4 className="font-medium text-gray-800 dark:text-white mb-2">
+          <h4 className="font-medium text-gray-800 mb-2">
             色・柄を選んでください
           </h4>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+          <p className="text-sm text-gray-500 mb-4">
             {selectedType === 'wood' && `選択中: ${WOOD_MANUFACTURERS.find(m => m.id === selectedManufacturer)?.name}`}
             {selectedType === 'iron' && '選択中: アイアン階段'}
             {selectedType === 'carpet' && '選択中: カーペット階段'}
@@ -399,7 +399,7 @@ export const StairSelector: React.FC<StairSelectorProps> = ({
           >
             <ChevronLeft className="w-4 h-4" /> 色選択に戻る
           </button>
-          <h4 className="font-medium text-gray-800 dark:text-white mb-4">
+          <h4 className="font-medium text-gray-800 mb-4">
             手摺を選んでください
           </h4>
           <div className="grid grid-cols-2 gap-4">
@@ -437,7 +437,7 @@ export const StairSelector: React.FC<StairSelectorProps> = ({
           >
             <ChevronLeft className="w-4 h-4" /> 手摺選択に戻る
           </button>
-          <h4 className="font-medium text-gray-800 dark:text-white mb-4">
+          <h4 className="font-medium text-gray-800 mb-4">
             オプションを選択（複数選択可）
           </h4>
           <div className="grid grid-cols-2 gap-4 mb-6">
@@ -470,12 +470,12 @@ export const StairSelector: React.FC<StairSelectorProps> = ({
 
       {/* 完了画面 */}
       {currentStep === 'complete' && (
-        <div className="bg-green-50 dark:bg-green-900/20 rounded-xl p-6 text-center">
+        <div className="bg-green-50 rounded-xl p-6 text-center">
           <Check className="w-12 h-12 text-green-500 mx-auto mb-3" />
-          <h4 className="font-bold text-gray-800 dark:text-white mb-2">
+          <h4 className="font-bold text-gray-800 mb-2">
             階段の選択が完了しました
           </h4>
-          <div className="text-sm text-gray-600 dark:text-gray-400 mb-4 space-y-1">
+          <div className="text-sm text-gray-600 mb-4 space-y-1">
             <p>タイプ: {STAIR_TYPES.find(t => t.id === selectedType)?.name}</p>
             {selectedType === 'wood' && (
               <p>メーカー: {WOOD_MANUFACTURERS.find(m => m.id === selectedManufacturer)?.name}</p>
@@ -497,10 +497,10 @@ export const StairSelector: React.FC<StairSelectorProps> = ({
 
       {/* キャンセルボタン */}
       {currentStep !== 'complete' && currentStep !== 'options' && (
-        <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+        <div className="mt-8 pt-6 border-t border-gray-200">
           <button
             onClick={onCancel}
-            className="w-full py-3 px-4 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+            className="w-full py-3 px-4 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50:bg-gray-800"
           >
             キャンセル
           </button>

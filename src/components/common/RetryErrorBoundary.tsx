@@ -148,18 +148,18 @@ Time: ${new Date().toISOString()}
 
       return (
         <div className="min-h-[400px] flex items-center justify-center p-8">
-          <div className="max-w-lg w-full bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-red-200 dark:border-red-800 overflow-hidden">
+          <div className="max-w-lg w-full bg-white rounded-xl shadow-lg border border-red-200 overflow-hidden">
             {/* Header */}
-            <div className="bg-red-50 dark:bg-red-900/30 px-6 py-4 border-b border-red-200 dark:border-red-800">
+            <div className="bg-red-50 px-6 py-4 border-b border-red-200">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-red-100 dark:bg-red-900/50 rounded-lg">
-                  <AlertTriangle className="w-6 h-6 text-red-600 dark:text-red-400" />
+                <div className="p-2 bg-red-100 rounded-lg">
+                  <AlertTriangle className="w-6 h-6 text-red-600" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-red-900 dark:text-red-100">
+                  <h2 className="text-lg font-bold text-red-900">
                     エラーが発生しました
                   </h2>
-                  <p className="text-sm text-red-700 dark:text-red-300">
+                  <p className="text-sm text-red-700">
                     申し訳ありません。問題が発生しました。
                   </p>
                 </div>
@@ -169,15 +169,15 @@ Time: ${new Date().toISOString()}
             {/* Content */}
             <div className="p-6 space-y-4">
               {/* Error Message */}
-              <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                <p className="text-sm text-gray-700 dark:text-gray-300 font-mono">
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <p className="text-sm text-gray-700 font-mono">
                   {error?.message || '予期しないエラーが発生しました'}
                 </p>
               </div>
 
               {/* Retry Info */}
               {canRetry && (
-                <div className="text-sm text-gray-600 dark:text-gray-400">
+                <div className="text-sm text-gray-600">
                   リトライ回数: {retryCount} / {maxRetries}
                 </div>
               )}
@@ -185,11 +185,11 @@ Time: ${new Date().toISOString()}
               {/* Error Details (Development) */}
               {showErrorDetails && errorInfo && (
                 <details className="text-sm">
-                  <summary className="cursor-pointer text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 flex items-center gap-1">
+                  <summary className="cursor-pointer text-gray-600 hover:text-gray-800:text-gray-200 flex items-center gap-1">
                     <Bug className="w-4 h-4" />
                     詳細情報（開発者向け）
                   </summary>
-                  <pre className="mt-2 p-3 bg-gray-100 dark:bg-gray-800 rounded text-xs overflow-auto max-h-40">
+                  <pre className="mt-2 p-3 bg-gray-100 rounded text-xs overflow-auto max-h-40">
                     {error?.stack}
                     {'\n\nComponent Stack:'}
                     {errorInfo.componentStack}
@@ -212,7 +212,7 @@ Time: ${new Date().toISOString()}
 
                 <button
                   onClick={this.handleGoHome}
-                  className="flex-1 px-4 py-2.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors flex items-center justify-center gap-2"
+                  className="flex-1 px-4 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200:bg-gray-700 transition-colors flex items-center justify-center gap-2"
                 >
                   <Home className="w-4 h-4" />
                   ホームに戻る
@@ -220,7 +220,7 @@ Time: ${new Date().toISOString()}
 
                 <button
                   onClick={this.handleCopyError}
-                  className="px-4 py-2.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors flex items-center justify-center gap-2"
+                  className="px-4 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200:bg-gray-700 transition-colors flex items-center justify-center gap-2"
                   title="エラー情報をコピー"
                 >
                   {copied ? (
@@ -232,7 +232,7 @@ Time: ${new Date().toISOString()}
               </div>
 
               {/* Support Info */}
-              <p className="text-xs text-gray-500 dark:text-gray-400 text-center pt-2">
+              <p className="text-xs text-gray-500 text-center pt-2">
                 問題が続く場合は、サポートにお問い合わせください。
               </p>
             </div>

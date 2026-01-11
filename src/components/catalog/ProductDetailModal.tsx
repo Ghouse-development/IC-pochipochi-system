@@ -244,27 +244,27 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
     <Dialog.Root open={isOpen} onOpenChange={onClose}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/60 z-50 backdrop-blur-sm" />
-        <Dialog.Content className="fixed inset-4 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl md:max-w-2xl md:w-full md:max-h-[85vh] z-50 flex flex-col overflow-hidden">
+        <Dialog.Content className="fixed inset-4 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 bg-white rounded-2xl shadow-2xl md:max-w-2xl md:w-full md:max-h-[85vh] z-50 flex flex-col overflow-hidden">
           <Dialog.Title className="sr-only">{product.name} - 商品詳細</Dialog.Title>
           {/* ヘッダー（固定） */}
-          <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800">
+          <div className="flex items-center justify-between p-4 border-b border-gray-100 bg-white">
             <div className="flex-1 min-w-0">
-              <p className="text-xs text-teal-600 dark:text-teal-400 font-medium">{product.categoryName}</p>
-              <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 truncate">{product.name}</h2>
+              <p className="text-xs text-teal-600 font-medium">{product.categoryName}</p>
+              <h2 className="text-lg font-bold text-gray-900 truncate">{product.name}</h2>
             </div>
-            <Dialog.Close className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full ml-2 flex-shrink-0">
-              <X className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+            <Dialog.Close className="p-2 hover:bg-gray-100:bg-gray-700 rounded-full ml-2 flex-shrink-0">
+              <X className="w-5 h-5 text-gray-600" />
             </Dialog.Close>
           </div>
 
           {/* スクロール可能なコンテンツ */}
           <div className="flex-1 overflow-y-auto overscroll-contain">
             {/* 画像エリア */}
-            <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 p-6">
-              <div className="aspect-video max-w-md mx-auto relative rounded-xl overflow-hidden bg-white dark:bg-gray-900 shadow-lg">
+            <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-6">
+              <div className="aspect-video max-w-md mx-auto relative rounded-xl overflow-hidden bg-white shadow-lg">
                 {/* Loading Skeleton */}
                 {!imageLoaded && (
-                  <div className="absolute inset-0 animate-pulse bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 dark:from-gray-700 dark:via-gray-600 dark:to-gray-700" />
+                  <div className="absolute inset-0 animate-pulse bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200" />
                 )}
                 <img
                   src={variant?.imageUrl || imagePlaceholder}
@@ -287,25 +287,25 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
               {/* メーカー・品番 */}
               <div className="flex flex-wrap items-center gap-3 text-sm">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-gray-500 dark:text-gray-400">メーカー:</span>
-                  <span className="font-medium text-gray-900 dark:text-gray-100">{product.manufacturer}</span>
+                  <span className="text-gray-500">メーカー:</span>
+                  <span className="font-medium text-gray-900">{product.manufacturer}</span>
                 </div>
                 {product.modelNumber && (
                   <div className="flex items-center gap-1.5">
-                    <span className="text-gray-500 dark:text-gray-400">品番:</span>
-                    <span className="font-medium text-gray-900 dark:text-gray-100">{product.modelNumber}</span>
+                    <span className="text-gray-500">品番:</span>
+                    <span className="font-medium text-gray-900">{product.modelNumber}</span>
                   </div>
                 )}
               </div>
 
               {/* 価格 */}
-              <div className="bg-gradient-to-r from-teal-50 to-emerald-50 dark:from-teal-900/30 dark:to-emerald-900/30 rounded-xl p-4">
+              <div className="bg-gradient-to-r from-teal-50 to-emerald-50 rounded-xl p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">単価（税別）</p>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                    <p className="text-xs text-gray-500 mb-1">単価（税別）</p>
+                    <p className="text-2xl font-bold text-gray-900">
                       {price === 0 ? '標準仕様' : `${formatPrice(price)}`}
-                      {price > 0 && <span className="text-sm font-normal text-gray-500 dark:text-gray-400">/{UNIT_SYMBOLS[product.unit] || product.unit}</span>}
+                      {price > 0 && <span className="text-sm font-normal text-gray-500">/{UNIT_SYMBOLS[product.unit] || product.unit}</span>}
                     </p>
                   </div>
                   {product.isOption ? (
@@ -319,13 +319,13 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
               {/* カラー選択 */}
               {product.variants.length > 1 && (
                 <div>
-                  <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200 mb-3">
-                    カラー選択 <span className="text-gray-400 dark:text-gray-500 font-normal">（{product.variants.length}色）</span>
+                  <h3 className="text-sm font-bold text-gray-800 mb-3">
+                    カラー選択 <span className="text-gray-400 font-normal">（{product.variants.length}色）</span>
                   </h3>
                   {/* 床色に合わせたおすすめ表示 */}
                   {floorColorInfo && (
-                    <div className="mb-3 p-3 bg-amber-50 dark:bg-amber-900/30 rounded-lg border border-amber-200 dark:border-amber-700">
-                      <p className="text-sm text-amber-800 dark:text-amber-200 flex items-center gap-2">
+                    <div className="mb-3 p-3 bg-amber-50 rounded-lg border border-amber-200">
+                      <p className="text-sm text-amber-800 flex items-center gap-2">
                         <span className="text-base">💡</span>
                         <span>床色「{floorColorInfo.floorColor}」に合わせて</span>
                         <span className="font-bold">おすすめ</span>
@@ -348,12 +348,12 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                           className={cn(
                             'flex items-center gap-2 p-3 rounded-xl border-2 transition-all text-left relative',
                             isSelected
-                              ? 'border-teal-500 bg-teal-50 dark:bg-teal-900/30 shadow-md'
+                              ? 'border-teal-500 bg-teal-50 shadow-md'
                               : isPrimaryRecommended
-                              ? 'border-amber-400 bg-amber-50 dark:bg-amber-900/20 hover:border-amber-500'
+                              ? 'border-amber-400 bg-amber-50 hover:border-amber-500'
                               : isRecommended
-                              ? 'border-amber-200 hover:border-amber-300 dark:border-amber-700 dark:hover:border-amber-600'
-                              : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700'
+                              ? 'border-amber-200 hover:border-amber-300:border-amber-600'
+                              : 'border-gray-200 hover:border-gray-300:border-gray-500 hover:bg-gray-50:bg-gray-700'
                           )}
                         >
                           {/* おすすめバッジ */}
@@ -368,7 +368,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                           />
                           <span className={cn(
                             'text-sm truncate',
-                            isSelected ? 'font-medium text-teal-700 dark:text-teal-300' : 'text-gray-700 dark:text-gray-300'
+                            isSelected ? 'font-medium text-teal-700' : 'text-gray-700'
                           )}>
                             {v.color}
                           </span>
@@ -384,28 +384,28 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
 
               {/* 数量選択 */}
               <div>
-                <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200 mb-3">数量</h3>
+                <h3 className="text-sm font-bold text-gray-800 mb-3">数量</h3>
                 <div className="flex items-center gap-4">
-                  <div className="flex items-center bg-gray-100 dark:bg-gray-700 rounded-xl">
+                  <div className="flex items-center bg-gray-100 rounded-xl">
                     <button
                       onClick={() => handleQuantityChange(-1)}
-                      className="p-3 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-l-xl disabled:opacity-50 transition-colors"
+                      className="p-3 hover:bg-gray-200:bg-gray-600 rounded-l-xl disabled:opacity-50 transition-colors"
                       disabled={quantity <= 1}
                     >
-                      <Minus className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+                      <Minus className="w-5 h-5 text-gray-600" />
                     </button>
-                    <span className="px-6 py-3 min-w-[80px] text-center font-bold text-lg dark:text-gray-100">
+                    <span className="px-6 py-3 min-w-[80px] text-center font-bold text-lg">
                       {quantity}
                     </span>
                     <button
                       onClick={() => handleQuantityChange(1)}
-                      className="p-3 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-r-xl disabled:opacity-50 transition-colors"
+                      className="p-3 hover:bg-gray-200:bg-gray-600 rounded-r-xl disabled:opacity-50 transition-colors"
                       disabled={quantity >= 99}
                     >
-                      <Plus className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+                      <Plus className="w-5 h-5 text-gray-600" />
                     </button>
                   </div>
-                  <span className="text-gray-500 dark:text-gray-400">{UNIT_SYMBOLS[product.unit] || product.unit}</span>
+                  <span className="text-gray-500">{UNIT_SYMBOLS[product.unit] || product.unit}</span>
                 </div>
               </div>
 
@@ -434,13 +434,13 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
               )}
 
               {/* QRコード */}
-              <div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4">
+              <div className="bg-gray-50 rounded-xl p-4">
                 <button
                   onClick={() => setShowQR(!showQR)}
                   className="flex items-center gap-2 w-full"
                 >
-                  <QrCode className="w-4 h-4 text-gray-600 dark:text-gray-400" />
-                  <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200">商品QRコード</h3>
+                  <QrCode className="w-4 h-4 text-gray-600" />
+                  <h3 className="text-sm font-bold text-gray-800">商品QRコード</h3>
                   <span className="text-xs text-gray-500 ml-auto">{showQR ? '閉じる' : '表示'}</span>
                 </button>
                 {showQR && (
@@ -453,7 +453,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                         includeMargin
                       />
                     </div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
+                    <p className="text-xs text-gray-500 text-center">
                       スキャンして商品ページを共有
                     </p>
                   </div>
@@ -462,20 +462,20 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
 
               {/* カテゴリルール表示 */}
               {categoryRule.description && (
-                <div className="p-3 bg-blue-50 dark:bg-blue-900/30 rounded-xl border border-blue-100 dark:border-blue-800">
+                <div className="p-3 bg-blue-50 rounded-xl border border-blue-100">
                   <div className="flex items-center gap-2">
-                    <AlertCircle className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
-                    <span className="text-sm text-blue-700 dark:text-blue-300">{categoryRule.description}</span>
+                    <AlertCircle className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                    <span className="text-sm text-blue-700">{categoryRule.description}</span>
                   </div>
                 </div>
               )}
 
               {/* 選択制限の警告 */}
               {!canAddToCart && (
-                <div className="p-3 bg-red-50 dark:bg-red-900/30 rounded-xl border border-red-100 dark:border-red-800">
+                <div className="p-3 bg-red-50 rounded-xl border border-red-100">
                   <div className="flex items-start gap-2">
-                    <AlertCircle className="w-4 h-4 text-red-600 dark:text-red-400 mt-0.5 flex-shrink-0" />
-                    <div className="text-sm text-red-700 dark:text-red-300">
+                    <AlertCircle className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" />
+                    <div className="text-sm text-red-700">
                       {isSingleSelection && (
                         <p>このカテゴリは1つのみ選択可能です。既に別の商品が選択されています。</p>
                       )}
@@ -501,7 +501,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
           </div>
 
           {/* フッター（固定） */}
-          <div className="p-4 border-t border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800">
+          <div className="p-4 border-t border-gray-100 bg-white">
             <div className="flex gap-3">
               <Button
                 variant="outline"

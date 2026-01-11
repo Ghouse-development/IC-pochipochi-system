@@ -25,7 +25,7 @@ export const Card = memo<CardProps>(({
   return (
     <div
       className={cn(
-        'bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700',
+        'bg-white rounded-lg shadow-sm border border-gray-200',
         hoverable && 'transition-all hover:shadow-md hover:scale-[1.02] cursor-pointer',
         className
       )}

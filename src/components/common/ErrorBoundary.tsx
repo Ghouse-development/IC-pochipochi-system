@@ -235,20 +235,20 @@ export class SectionErrorBoundary extends Component<
   render() {
     if (this.state.hasError) {
       return (
-        <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
+        <div className="p-4 bg-red-50 rounded-lg border border-red-200">
           <div className="flex items-center gap-3">
-            <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0" />
+            <AlertTriangle className="w-5 h-5 text-red-600 flex-shrink-0" />
             <div className="flex-1">
-              <p className="text-sm font-medium text-red-800 dark:text-red-200">
+              <p className="text-sm font-medium text-red-800">
                 {this.props.sectionName ? `${this.props.sectionName}の` : ''}読み込みエラー
               </p>
-              <p className="text-xs text-red-600 dark:text-red-400 mt-0.5">
+              <p className="text-xs text-red-600 mt-0.5">
                 {this.state.error?.message || 'エラーが発生しました'}
               </p>
             </div>
             <button
               onClick={this.handleRetry}
-              className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-red-700 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-900/30 rounded transition-colors"
+              className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-red-700 hover:bg-red-100:bg-red-900/30 rounded transition-colors"
             >
               <RefreshCw className="w-3 h-3" />
               再試行

@@ -115,12 +115,12 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
 
   return (
     <article
-      className={`group bg-white dark:bg-gray-800 rounded-2xl overflow-hidden transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${
+      className={`group bg-white rounded-2xl overflow-hidden transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${
         inCart
-          ? 'border-4 border-blue-500 shadow-xl shadow-blue-200 dark:shadow-blue-900/50 ring-4 ring-blue-100 dark:ring-blue-900/50 scale-[1.02]'
+          ? 'border-4 border-blue-500 shadow-xl shadow-blue-200 ring-4 ring-blue-100 scale-[1.02]'
           : inCompare
-          ? 'border-4 border-purple-500 shadow-xl shadow-purple-200 dark:shadow-purple-900/50'
-          : 'border-2 border-gray-200 dark:border-gray-700 shadow-md hover:shadow-xl hover:border-blue-300 dark:hover:border-blue-600 hover:scale-[1.02]'
+          ? 'border-4 border-purple-500 shadow-xl shadow-purple-200'
+          : 'border-2 border-gray-200 shadow-md hover:shadow-xl hover:border-blue-300:border-blue-600 hover:scale-[1.02]'
       } ${isJustAdded ? 'animate-pochipochi' : ''}`}
       style={{ animationDelay: `${index * 30}ms` }}
       onMouseEnter={() => setHoveredItem(item.id)}
@@ -293,11 +293,11 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
 
         {/* 価格と単位 */}
         <div className="flex items-baseline gap-1.5 mb-3">
-          <span className={`text-2xl font-black ${price === 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-900 dark:text-gray-100'}`}>
+          <span className={`text-2xl font-black ${price === 0 ? 'text-emerald-600' : 'text-gray-900'}`}>
             {price === 0 ? '標準' : formatPrice(price)}
           </span>
           {item.unit && (
-            <span className="text-sm text-gray-500 dark:text-gray-400">/{item.unit.symbol}</span>
+            <span className="text-sm text-gray-500">/{item.unit.symbol}</span>
           )}
         </div>
 
@@ -308,7 +308,7 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
               e.stopPropagation();
               handleRemoveFromCart(item.id);
             }}
-            className="w-full py-3 rounded-xl text-sm font-semibold bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 dark:hover:text-red-400 flex items-center justify-center gap-2 transition-all active:scale-95"
+            className="w-full py-3 rounded-xl text-sm font-semibold bg-gray-100 text-gray-600 hover:bg-red-50:bg-red-900/30 hover:text-red-600:text-red-400 flex items-center justify-center gap-2 transition-all active:scale-95"
             aria-label={`${item.name}を選択解除`}
           >
             <X className="w-4 h-4" aria-hidden="true" />

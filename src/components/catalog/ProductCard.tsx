@@ -69,10 +69,10 @@ const ProductCardComponent: React.FC<ProductCardProps> = ({ product, onSelect })
       onKeyDown={handleKeyDown}
       aria-label={`${product.name}の詳細を見る。価格: ${price === 0 ? '標準仕様' : formatPrice(price)}`}
     >
-      <div ref={imgRef} className="aspect-w-16 aspect-h-12 bg-gray-100 dark:bg-gray-800 relative">
+      <div ref={imgRef} className="aspect-w-16 aspect-h-12 bg-gray-100 relative">
         {/* Loading Skeleton */}
         {(!imageLoaded || !isVisible) && (
-          <div className="absolute inset-0 animate-pulse bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 dark:from-gray-700 dark:via-gray-600 dark:to-gray-700 bg-[length:200%_100%]" />
+          <div className="absolute inset-0 animate-pulse bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 bg-[length:200%_100%]" />
         )}
         {isVisible && (
           <img

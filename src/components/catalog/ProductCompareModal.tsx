@@ -159,9 +159,9 @@ export const ProductCompareModal: React.FC<ProductCompareModalProps> = ({
             </div>
 
             {/* ツールバー */}
-            <div className="bg-gray-100 dark:bg-gray-800 p-2 flex flex-wrap items-center justify-between gap-2 border-b border-gray-200 dark:border-gray-700">
+            <div className="bg-gray-100 p-2 flex flex-wrap items-center justify-between gap-2 border-b border-gray-200">
               <div className="flex items-center gap-3">
-                <label className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-300 cursor-pointer">
+                <label className="flex items-center gap-1.5 text-sm text-gray-600 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={highlightBest}
@@ -171,7 +171,7 @@ export const ProductCompareModal: React.FC<ProductCompareModalProps> = ({
                   <Star className="w-4 h-4" />
                   最良値ハイライト
                 </label>
-                <label className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-300 cursor-pointer">
+                <label className="flex items-center gap-1.5 text-sm text-gray-600 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={showDifferences}
@@ -186,7 +186,7 @@ export const ProductCompareModal: React.FC<ProductCompareModalProps> = ({
               <div className="flex items-center gap-2">
                 <button
                   onClick={generateShareUrl}
-                  className="flex items-center gap-1 px-3 py-1.5 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+                  className="flex items-center gap-1 px-3 py-1.5 text-sm bg-white border border-gray-300 rounded-lg hover:bg-gray-50:bg-gray-600 transition-colors"
                   title="共有URLをコピー"
                 >
                   {copied ? <Check className="w-4 h-4 text-green-500" /> : <Share2 className="w-4 h-4" />}
@@ -194,7 +194,7 @@ export const ProductCompareModal: React.FC<ProductCompareModalProps> = ({
                 </button>
                 <button
                   onClick={exportToCSV}
-                  className="flex items-center gap-1 px-3 py-1.5 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+                  className="flex items-center gap-1 px-3 py-1.5 text-sm bg-white border border-gray-300 rounded-lg hover:bg-gray-50:bg-gray-600 transition-colors"
                   title="CSVとしてエクスポート"
                 >
                   <FileSpreadsheet className="w-4 h-4" />
@@ -202,7 +202,7 @@ export const ProductCompareModal: React.FC<ProductCompareModalProps> = ({
                 </button>
                 <button
                   onClick={handlePrint}
-                  className="flex items-center gap-1 px-3 py-1.5 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors print:hidden"
+                  className="flex items-center gap-1 px-3 py-1.5 text-sm bg-white border border-gray-300 rounded-lg hover:bg-gray-50:bg-gray-600 transition-colors print:hidden"
                   title="印刷"
                 >
                   <Printer className="w-4 h-4" />

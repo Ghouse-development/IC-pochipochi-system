@@ -90,13 +90,13 @@ export const DeliveryCalendar: React.FC = () => {
   const getStatusColor = (status: DeliveryItem['status']) => {
     switch (status) {
       case 'confirmed':
-        return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400';
+        return 'bg-green-100 text-green-700';
       case 'pending':
-        return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400';
+        return 'bg-yellow-100 text-yellow-700';
       case 'delivered':
-        return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400';
+        return 'bg-blue-100 text-blue-700';
       case 'delayed':
-        return 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400';
+        return 'bg-red-100 text-red-700';
       default:
         return 'bg-gray-100 text-gray-700';
     }
@@ -126,13 +126,13 @@ export const DeliveryCalendar: React.FC = () => {
   const monthName = `${currentDate.getFullYear()}年${currentDate.getMonth() + 1}月`;
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden">
+    <div className="bg-white rounded-xl shadow-sm overflow-hidden">
       {/* ヘッダー */}
-      <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+      <div className="p-4 border-b border-gray-200">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Calendar className="w-5 h-5 text-indigo-600" />
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">納期カレンダー</h2>
+            <h2 className="text-lg font-semibold text-gray-900">納期カレンダー</h2>
           </div>
           <Button variant="primary" size="sm" onClick={() => setShowAddModal(true)}>
             <Plus className="w-4 h-4 mr-1" />
@@ -142,19 +142,19 @@ export const DeliveryCalendar: React.FC = () => {
       </div>
 
       {/* カレンダーナビゲーション */}
-      <div className="p-4 flex items-center justify-between bg-gray-50 dark:bg-gray-700/50">
+      <div className="p-4 flex items-center justify-between bg-gray-50">
         <button
           onClick={prevMonth}
-          className="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full transition-colors"
+          className="p-2 hover:bg-gray-200:bg-gray-600 rounded-full transition-colors"
         >
-          <ChevronLeft className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+          <ChevronLeft className="w-5 h-5 text-gray-600" />
         </button>
-        <span className="text-lg font-medium text-gray-900 dark:text-gray-100">{monthName}</span>
+        <span className="text-lg font-medium text-gray-900">{monthName}</span>
         <button
           onClick={nextMonth}
-          className="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full transition-colors"
+          className="p-2 hover:bg-gray-200:bg-gray-600 rounded-full transition-colors"
         >
-          <ChevronRight className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+          <ChevronRight className="w-5 h-5 text-gray-600" />
         </button>
       </div>
 
@@ -166,7 +166,7 @@ export const DeliveryCalendar: React.FC = () => {
             <div
               key={day}
               className={`text-center text-sm font-medium py-2 ${
-                idx === 0 ? 'text-red-500' : idx === 6 ? 'text-blue-500' : 'text-gray-600 dark:text-gray-400'
+                idx === 0 ? 'text-red-500' : idx === 6 ? 'text-blue-500' : 'text-gray-600'
               }`}
             >
               {day}
@@ -194,8 +194,8 @@ export const DeliveryCalendar: React.FC = () => {
                   isSelected
                     ? 'bg-indigo-500 text-white'
                     : isToday
-                    ? 'bg-indigo-100 dark:bg-indigo-900/30'
-                    : 'hover:bg-gray-100 dark:hover:bg-gray-700'
+                    ? 'bg-indigo-100'
+                    : 'hover:bg-gray-100:bg-gray-700'
                 }`}
               >
                 <div
@@ -206,7 +206,7 @@ export const DeliveryCalendar: React.FC = () => {
                       ? 'text-red-500'
                       : dayOfWeek === 6
                       ? 'text-blue-500'
-                      : 'text-gray-900 dark:text-gray-100'
+                      : 'text-gray-900'
                   }`}
                 >
                   {date.getDate()}
@@ -235,8 +235,8 @@ export const DeliveryCalendar: React.FC = () => {
 
       {/* 選択日の納期一覧 */}
       {selectedDate && (
-        <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-          <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+        <div className="p-4 border-t border-gray-200">
+          <h3 className="text-sm font-semibold text-gray-700 mb-3">
             {selectedDate.toLocaleDateString('ja-JP', {
               year: 'numeric',
               month: 'long',
@@ -245,27 +245,27 @@ export const DeliveryCalendar: React.FC = () => {
             の納期
           </h3>
           {getDeliveriesForDate(selectedDate).length === 0 ? (
-            <p className="text-sm text-gray-500 dark:text-gray-400">納期予定はありません</p>
+            <p className="text-sm text-gray-500">納期予定はありません</p>
           ) : (
             <div className="space-y-3">
               {getDeliveriesForDate(selectedDate).map((d) => (
                 <div
                   key={d.id}
-                  className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg"
+                  className="p-3 bg-gray-50 rounded-lg"
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <span className="font-medium text-gray-900 dark:text-gray-100">{d.projectName}</span>
+                    <span className="font-medium text-gray-900">{d.projectName}</span>
                     <span className={`flex items-center gap-1 text-xs px-2 py-1 rounded-full ${getStatusColor(d.status)}`}>
                       {getStatusIcon(d.status)}
                       {statusLabels[d.status]}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">{d.customerName} 様</p>
+                  <p className="text-sm text-gray-600">{d.customerName} 様</p>
                   <div className="mt-2 flex flex-wrap gap-1">
                     {d.items.map((item, i) => (
                       <span
                         key={i}
-                        className="text-xs px-2 py-0.5 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded"
+                        className="text-xs px-2 py-0.5 bg-gray-200 text-gray-700 rounded"
                       >
                         {item}
                       </span>
@@ -279,23 +279,23 @@ export const DeliveryCalendar: React.FC = () => {
       )}
 
       {/* 凡例 */}
-      <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/30">
+      <div className="p-4 border-t border-gray-200 bg-gray-50">
         <div className="flex flex-wrap gap-4 text-xs">
           <div className="flex items-center gap-1">
             <div className="w-3 h-3 rounded-full bg-green-500" />
-            <span className="text-gray-600 dark:text-gray-400">確定</span>
+            <span className="text-gray-600">確定</span>
           </div>
           <div className="flex items-center gap-1">
             <div className="w-3 h-3 rounded-full bg-yellow-500" />
-            <span className="text-gray-600 dark:text-gray-400">未確定</span>
+            <span className="text-gray-600">未確定</span>
           </div>
           <div className="flex items-center gap-1">
             <div className="w-3 h-3 rounded-full bg-red-500" />
-            <span className="text-gray-600 dark:text-gray-400">遅延</span>
+            <span className="text-gray-600">遅延</span>
           </div>
           <div className="flex items-center gap-1">
             <div className="w-3 h-3 rounded-full bg-blue-500" />
-            <span className="text-gray-600 dark:text-gray-400">納品済</span>
+            <span className="text-gray-600">納品済</span>
           </div>
         </div>
       </div>

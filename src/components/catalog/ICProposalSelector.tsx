@@ -81,10 +81,10 @@ export const ICProposalSelector: React.FC<ICProposalSelectorProps> = ({
   if (step === 'choice') {
     return (
       <div className="p-6">
-        <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-2">
+        <h3 className="text-lg font-bold text-gray-800 mb-2">
           {categoryName}のIC提案
         </h3>
-        <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+        <p className="text-sm text-gray-600 mb-6">
           {isCurtain
             ? 'インテリアコーディネーターにカーテンの提案を希望しますか？'
             : 'インテリアコーディネーターに家具の提案を希望しますか？'}
@@ -140,10 +140,10 @@ export const ICProposalSelector: React.FC<ICProposalSelectorProps> = ({
         ← 戻る
       </button>
 
-      <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-2">
+      <h3 className="text-lg font-bold text-gray-800 mb-2">
         {isCurtain ? 'どの部屋のカーテンを希望しますか？' : '何の家具を希望しますか？'}
       </h3>
-      <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+      <p className="text-sm text-gray-600 mb-6">
         複数選択できます
       </p>
 
@@ -158,17 +158,17 @@ export const ICProposalSelector: React.FC<ICProposalSelectorProps> = ({
               onClick={() => toggleItem(item.id)}
               className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
                 isSelected
-                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30'
-                  : 'border-gray-200 dark:border-gray-700 hover:border-blue-300'
+                  ? 'border-blue-500 bg-blue-50'
+                  : 'border-gray-200 hover:border-blue-300'
               }`}
             >
               <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                isSelected ? 'bg-blue-500 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
+                isSelected ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-600'
               }`}>
                 <Icon className="w-5 h-5" />
               </div>
               <span className={`text-sm font-medium ${
-                isSelected ? 'text-blue-700 dark:text-blue-300' : 'text-gray-700 dark:text-gray-300'
+                isSelected ? 'text-blue-700' : 'text-gray-700'
               }`}>
                 {item.name}
               </span>
@@ -183,7 +183,7 @@ export const ICProposalSelector: React.FC<ICProposalSelectorProps> = ({
       {/* その他の自由入力 */}
       {selectedItems.includes('other') && (
         <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
             その他（自由入力）
           </label>
           <input
@@ -191,7 +191,7 @@ export const ICProposalSelector: React.FC<ICProposalSelectorProps> = ({
             value={otherText}
             onChange={(e) => setOtherText(e.target.value)}
             placeholder="希望する家具を入力してください"
-            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
       )}
@@ -199,7 +199,7 @@ export const ICProposalSelector: React.FC<ICProposalSelectorProps> = ({
       <div className="flex gap-3">
         <button
           onClick={onCancel}
-          className="flex-1 py-3 px-4 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+          className="flex-1 py-3 px-4 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50:bg-gray-800 transition-colors"
         >
           キャンセル
         </button>

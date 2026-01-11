@@ -280,7 +280,7 @@ export function useEnhancedSearch<T extends SearchableItem>(
           parts.push(text.slice(lastIndex, start));
         }
         parts.push(
-          <mark key={index} className="bg-yellow-200 dark:bg-yellow-800 px-0.5 rounded">
+          <mark key={index} className="bg-yellow-200 px-0.5 rounded">
             {text.slice(start, end)}
           </mark>
         );

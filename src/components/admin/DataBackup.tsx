@@ -419,8 +419,8 @@ export const DataBackup: React.FC = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">データバックアップ</h2>
-        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+        <h2 className="text-xl font-bold text-gray-900">データバックアップ</h2>
+        <p className="text-sm text-gray-600 mt-1">
           システムデータのバックアップと復元を行います
         </p>
       </div>
@@ -429,8 +429,8 @@ export const DataBackup: React.FC = () => {
       {message && (
         <div className={`p-4 rounded-lg flex items-center gap-3 ${
           message.type === 'success'
-            ? 'bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300'
-            : 'bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300'
+            ? 'bg-green-50 text-green-700'
+            : 'bg-red-50 text-red-700'
         }`}>
           {message.type === 'success' ? (
             <CheckCircle className="w-5 h-5" />
@@ -444,34 +444,34 @@ export const DataBackup: React.FC = () => {
       {/* ストレージ情報 */}
       <Card className="p-4">
         <div className="flex items-center gap-3 mb-4">
-          <HardDrive className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-          <h3 className="font-semibold text-gray-900 dark:text-gray-100">ストレージ情報</h3>
+          <HardDrive className="w-5 h-5 text-gray-600" />
+          <h3 className="font-semibold text-gray-900">ストレージ情報</h3>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-4">
-          <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 text-center">
-            <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{dataCounts.cartItems}</p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">カート商品</p>
+          <div className="bg-gray-50 rounded-lg p-3 text-center">
+            <p className="text-2xl font-bold text-gray-900">{dataCounts.cartItems}</p>
+            <p className="text-xs text-gray-500">カート商品</p>
           </div>
-          <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 text-center">
-            <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{dataCounts.productStats}</p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">採用統計</p>
+          <div className="bg-gray-50 rounded-lg p-3 text-center">
+            <p className="text-2xl font-bold text-gray-900">{dataCounts.productStats}</p>
+            <p className="text-xs text-gray-500">採用統計</p>
           </div>
-          <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 text-center">
-            <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{dataCounts.vendorOrders}</p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">発注書</p>
+          <div className="bg-gray-50 rounded-lg p-3 text-center">
+            <p className="text-2xl font-bold text-gray-900">{dataCounts.vendorOrders}</p>
+            <p className="text-xs text-gray-500">発注書</p>
           </div>
-          <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 text-center">
-            <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{dataCounts.vendors}</p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">業者</p>
+          <div className="bg-gray-50 rounded-lg p-3 text-center">
+            <p className="text-2xl font-bold text-gray-900">{dataCounts.vendors}</p>
+            <p className="text-xs text-gray-500">業者</p>
           </div>
-          <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 text-center">
-            <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{dataCounts.estimates}</p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">確定見積</p>
+          <div className="bg-gray-50 rounded-lg p-3 text-center">
+            <p className="text-2xl font-bold text-gray-900">{dataCounts.estimates}</p>
+            <p className="text-xs text-gray-500">確定見積</p>
           </div>
         </div>
 
-        <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
+        <div className="flex items-center justify-between text-sm text-gray-600">
           <span>使用容量: {getStorageUsage()} KB</span>
           {lastBackup && (
             <span>最終バックアップ: {new Date(lastBackup).toLocaleString('ja-JP')}</span>
@@ -482,8 +482,8 @@ export const DataBackup: React.FC = () => {
       {/* Supabaseデータ情報 */}
       <Card className="p-4">
         <div className="flex items-center gap-3 mb-4">
-          <Cloud className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-          <h3 className="font-semibold text-gray-900 dark:text-gray-100">Supabaseデータ（商品マスター）</h3>
+          <Cloud className="w-5 h-5 text-blue-600" />
+          <h3 className="font-semibold text-gray-900">Supabaseデータ（商品マスター）</h3>
         </div>
 
         {loadingStats ? (
@@ -493,29 +493,29 @@ export const DataBackup: React.FC = () => {
         ) : supabaseStats ? (
           <>
             <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-4">
-              <div className="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-3 text-center">
-                <p className="text-2xl font-bold text-blue-900 dark:text-blue-100">{supabaseStats.items}</p>
-                <p className="text-xs text-blue-600 dark:text-blue-400">商品</p>
+              <div className="bg-blue-50 rounded-lg p-3 text-center">
+                <p className="text-2xl font-bold text-blue-900">{supabaseStats.items}</p>
+                <p className="text-xs text-blue-600">商品</p>
               </div>
-              <div className="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-3 text-center">
-                <p className="text-2xl font-bold text-blue-900 dark:text-blue-100">{supabaseStats.variants}</p>
-                <p className="text-xs text-blue-600 dark:text-blue-400">バリアント</p>
+              <div className="bg-blue-50 rounded-lg p-3 text-center">
+                <p className="text-2xl font-bold text-blue-900">{supabaseStats.variants}</p>
+                <p className="text-xs text-blue-600">バリアント</p>
               </div>
-              <div className="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-3 text-center">
-                <p className="text-2xl font-bold text-blue-900 dark:text-blue-100">{supabaseStats.pricing}</p>
-                <p className="text-xs text-blue-600 dark:text-blue-400">価格</p>
+              <div className="bg-blue-50 rounded-lg p-3 text-center">
+                <p className="text-2xl font-bold text-blue-900">{supabaseStats.pricing}</p>
+                <p className="text-xs text-blue-600">価格</p>
               </div>
-              <div className="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-3 text-center">
-                <p className="text-2xl font-bold text-blue-900 dark:text-blue-100">{supabaseStats.categories}</p>
-                <p className="text-xs text-blue-600 dark:text-blue-400">カテゴリ</p>
+              <div className="bg-blue-50 rounded-lg p-3 text-center">
+                <p className="text-2xl font-bold text-blue-900">{supabaseStats.categories}</p>
+                <p className="text-xs text-blue-600">カテゴリ</p>
               </div>
-              <div className="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-3 text-center">
-                <p className="text-2xl font-bold text-blue-900 dark:text-blue-100">{supabaseStats.projects}</p>
-                <p className="text-xs text-blue-600 dark:text-blue-400">プロジェクト</p>
+              <div className="bg-blue-50 rounded-lg p-3 text-center">
+                <p className="text-2xl font-bold text-blue-900">{supabaseStats.projects}</p>
+                <p className="text-xs text-blue-600">プロジェクト</p>
               </div>
-              <div className="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-3 text-center">
-                <p className="text-2xl font-bold text-blue-900 dark:text-blue-100">{supabaseStats.selections}</p>
-                <p className="text-xs text-blue-600 dark:text-blue-400">選択履歴</p>
+              <div className="bg-blue-50 rounded-lg p-3 text-center">
+                <p className="text-2xl font-bold text-blue-900">{supabaseStats.selections}</p>
+                <p className="text-xs text-blue-600">選択履歴</p>
               </div>
             </div>
 
@@ -567,10 +567,10 @@ export const DataBackup: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card className="p-6">
           <div className="flex items-center gap-3 mb-4">
-            <Download className="w-6 h-6 text-teal-600 dark:text-teal-400" />
+            <Download className="w-6 h-6 text-teal-600" />
             <div>
-              <h3 className="font-semibold text-gray-900 dark:text-gray-100">データをエクスポート</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">全データをJSONファイルとして保存</p>
+              <h3 className="font-semibold text-gray-900">データをエクスポート</h3>
+              <p className="text-sm text-gray-600">全データをJSONファイルとして保存</p>
             </div>
           </div>
           <Button
@@ -595,10 +595,10 @@ export const DataBackup: React.FC = () => {
 
         <Card className="p-6">
           <div className="flex items-center gap-3 mb-4">
-            <Upload className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+            <Upload className="w-6 h-6 text-blue-600" />
             <div>
-              <h3 className="font-semibold text-gray-900 dark:text-gray-100">データをインポート</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">バックアップファイルから復元</p>
+              <h3 className="font-semibold text-gray-900">データをインポート</h3>
+              <p className="text-sm text-gray-600">バックアップファイルから復元</p>
             </div>
           </div>
           <label className="block">
@@ -611,10 +611,10 @@ export const DataBackup: React.FC = () => {
               aria-label="バックアップファイルを選択"
             />
             <span
-              className={`inline-flex items-center justify-center w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium cursor-pointer ${
+              className={`inline-flex items-center justify-center w-full px-4 py-2 border border-gray-300 rounded-md text-sm font-medium cursor-pointer ${
                 isImporting
-                  ? 'bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500'
-                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                  ? 'bg-gray-100 text-gray-400'
+                  : 'bg-white text-gray-700 hover:bg-gray-50:bg-gray-700'
               }`}
             >
               {isImporting ? (
@@ -634,18 +634,18 @@ export const DataBackup: React.FC = () => {
       </div>
 
       {/* 危険な操作 */}
-      <Card className="p-6 border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20">
+      <Card className="p-6 border-red-200 bg-red-50">
         <div className="flex items-center gap-3 mb-4">
-          <AlertTriangle className="w-6 h-6 text-red-600 dark:text-red-400" />
+          <AlertTriangle className="w-6 h-6 text-red-600" />
           <div>
-            <h3 className="font-semibold text-red-900 dark:text-red-200">危険な操作</h3>
-            <p className="text-sm text-red-700 dark:text-red-300">この操作は取り消せません</p>
+            <h3 className="font-semibold text-red-900">危険な操作</h3>
+            <p className="text-sm text-red-700">この操作は取り消せません</p>
           </div>
         </div>
         <Button
           variant="outline"
           onClick={handleClearAll}
-          className="border-red-300 dark:border-red-700 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30"
+          className="border-red-300 text-red-600 hover:bg-red-100:bg-red-900/30"
         >
           <Trash2 className="w-4 h-4 mr-2" />
           全データを削除
@@ -653,12 +653,12 @@ export const DataBackup: React.FC = () => {
       </Card>
 
       {/* 注意事項 */}
-      <Card className="p-4 bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800">
+      <Card className="p-4 bg-amber-50 border-amber-200">
         <div className="flex items-start gap-3">
-          <Database className="w-5 h-5 text-amber-600 dark:text-amber-400 mt-0.5" />
-          <div className="text-sm text-amber-800 dark:text-amber-200">
+          <Database className="w-5 h-5 text-amber-600 mt-0.5" />
+          <div className="text-sm text-amber-800">
             <p className="font-medium mb-1">バックアップについて</p>
-            <ul className="list-disc list-inside space-y-1 text-amber-700 dark:text-amber-300">
+            <ul className="list-disc list-inside space-y-1 text-amber-700">
               <li>定期的なバックアップをお勧めします（週1回以上）</li>
               <li>重要な変更前には必ずバックアップを取ってください</li>
               <li>バックアップファイルは安全な場所に保管してください</li>

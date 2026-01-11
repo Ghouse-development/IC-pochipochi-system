@@ -32,27 +32,27 @@ interface MaterialWarningModalProps {
 
 const WARNING_STYLES = {
   critical: {
-    bg: 'bg-red-50 dark:bg-red-900/30',
-    border: 'border-red-200 dark:border-red-800',
+    bg: 'bg-red-50',
+    border: 'border-red-200',
     icon: AlertTriangle,
-    iconColor: 'text-red-600 dark:text-red-400',
-    title: 'text-red-800 dark:text-red-200',
+    iconColor: 'text-red-600',
+    title: 'text-red-800',
     badge: 'bg-red-500 text-white'
   },
   warning: {
-    bg: 'bg-amber-50 dark:bg-amber-900/30',
-    border: 'border-amber-200 dark:border-amber-800',
+    bg: 'bg-amber-50',
+    border: 'border-amber-200',
     icon: AlertCircle,
-    iconColor: 'text-amber-600 dark:text-amber-400',
-    title: 'text-amber-800 dark:text-amber-200',
+    iconColor: 'text-amber-600',
+    title: 'text-amber-800',
     badge: 'bg-amber-500 text-white'
   },
   info: {
-    bg: 'bg-blue-50 dark:bg-blue-900/30',
-    border: 'border-blue-200 dark:border-blue-800',
+    bg: 'bg-blue-50',
+    border: 'border-blue-200',
     icon: Info,
-    iconColor: 'text-blue-600 dark:text-blue-400',
-    title: 'text-blue-800 dark:text-blue-200',
+    iconColor: 'text-blue-600',
+    title: 'text-blue-800',
     badge: 'bg-blue-500 text-white'
   }
 };
@@ -100,7 +100,7 @@ export const MaterialWarningModal: React.FC<MaterialWarningModalProps> = ({
     <Dialog.Root open={isOpen} onOpenChange={(open) => !open && onCancel()}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/60 z-50 backdrop-blur-sm" />
-        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-[95vw] max-w-2xl max-h-[90vh] flex flex-col z-50">
+        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl w-[95vw] max-w-2xl max-h-[90vh] flex flex-col z-50">
           {/* ヘッダー */}
           <div className="bg-gradient-to-r from-amber-500 to-orange-500 text-white p-6 rounded-t-2xl">
             <div className="flex items-center gap-3">
@@ -137,12 +137,12 @@ export const MaterialWarningModal: React.FC<MaterialWarningModalProps> = ({
                         </span>
                         <h4 className={`font-bold ${style.title}`}>{warning.title}</h4>
                       </div>
-                      <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
+                      <p className="text-gray-700 text-sm leading-relaxed">
                         {warning.description}
                       </p>
                       {warning.requiredAction && (
-                        <div className="mt-3 p-3 bg-white/50 dark:bg-gray-900/30 rounded-lg">
-                          <p className="text-sm font-medium text-gray-800 dark:text-gray-200">
+                        <div className="mt-3 p-3 bg-white/50 rounded-lg">
+                          <p className="text-sm font-medium text-gray-800">
                             対応事項: {warning.requiredAction}
                           </p>
                         </div>
@@ -157,7 +157,7 @@ export const MaterialWarningModal: React.FC<MaterialWarningModalProps> = ({
                         </button>
                       )}
                       {isAcknowledged && (
-                        <div className="mt-3 flex items-center gap-2 text-green-600 dark:text-green-400">
+                        <div className="mt-3 flex items-center gap-2 text-green-600">
                           <CheckCircle className="w-4 h-4" />
                           <span className="text-sm font-medium">確認済み</span>
                         </div>
@@ -170,15 +170,15 @@ export const MaterialWarningModal: React.FC<MaterialWarningModalProps> = ({
           </div>
 
           {/* フッター */}
-          <div className="p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 rounded-b-2xl">
+          <div className="p-6 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
             {criticalWarnings.length > 0 && !allCriticalAcknowledged && (
-              <p className="text-sm text-red-600 dark:text-red-400 mb-4 flex items-center gap-2">
+              <p className="text-sm text-red-600 mb-4 flex items-center gap-2">
                 <AlertTriangle className="w-4 h-4" />
                 全ての重要項目を確認してください（残り{criticalWarnings.length - acknowledged.size}件）
               </p>
             )}
             {allCriticalAcknowledged && readTime < minReadTime && (
-              <p className="text-sm text-amber-600 dark:text-amber-400 mb-4 flex items-center gap-2">
+              <p className="text-sm text-amber-600 mb-4 flex items-center gap-2">
                 <Clock className="w-4 h-4" />
                 内容をご確認ください（あと{minReadTime - readTime}秒）
               </p>
@@ -186,7 +186,7 @@ export const MaterialWarningModal: React.FC<MaterialWarningModalProps> = ({
             <div className="flex gap-3">
               <button
                 onClick={onCancel}
-                className="flex-1 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl font-bold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                className="flex-1 py-3 bg-gray-200 text-gray-700 rounded-xl font-bold hover:bg-gray-300:bg-gray-600 transition-colors"
               >
                 キャンセル
               </button>
@@ -196,7 +196,7 @@ export const MaterialWarningModal: React.FC<MaterialWarningModalProps> = ({
                 className={`flex-[2] py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${
                   canConfirm
                     ? 'bg-gradient-to-r from-teal-500 to-emerald-500 text-white hover:from-teal-600 hover:to-emerald-600'
-                    : 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
+                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 }`}
               >
                 <CheckCircle className="w-5 h-5" />

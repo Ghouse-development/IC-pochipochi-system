@@ -182,18 +182,18 @@ export const AirconSelector: React.FC<AirconSelectorProps> = ({
   if (showNoSelection) {
     return (
       <div className="p-6 max-w-2xl mx-auto">
-        <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-8 text-center">
+        <div className="bg-gray-50 rounded-xl p-8 text-center">
           <span className="text-4xl mb-4 block">❄️</span>
-          <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-2">
+          <h3 className="text-lg font-bold text-gray-800 mb-2">
             エアコンを選択しない
           </h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+          <p className="text-sm text-gray-600 mb-6">
             エアコンは施主支給または後から設置しますか？
           </p>
           <div className="flex gap-3 justify-center">
             <button
               onClick={() => setShowNoSelection(false)}
-              className="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+              className="px-6 py-3 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-100:bg-gray-700"
             >
               戻る
             </button>
@@ -217,16 +217,16 @@ export const AirconSelector: React.FC<AirconSelectorProps> = ({
       {/* ヘッダー */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h3 className="text-lg font-bold text-gray-800 dark:text-white">
+          <h3 className="text-lg font-bold text-gray-800">
             エアコンを選択
           </h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-sm text-gray-600">
             1台ずつ設定してください。複数台追加できます。
           </p>
         </div>
         <button
           onClick={handleNoSelection}
-          className="px-4 py-2 text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800"
+          className="px-4 py-2 text-sm text-gray-500 hover:text-gray-700:text-gray-200 border border-gray-300 rounded-lg hover:bg-gray-50:bg-gray-800"
         >
           選択しない
         </button>
@@ -245,8 +245,8 @@ export const AirconSelector: React.FC<AirconSelectorProps> = ({
                 isActive
                   ? 'bg-blue-500 text-white'
                   : isComplete
-                    ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 border border-green-300 dark:border-green-700'
-                    : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700'
+                    ? 'bg-green-100 text-green-700 border border-green-300'
+                    : 'bg-gray-100 text-gray-600 border border-gray-200'
               }`}
             >
               {isComplete && <Check className="w-4 h-4" />}
@@ -257,7 +257,7 @@ export const AirconSelector: React.FC<AirconSelectorProps> = ({
                     e.stopPropagation();
                     removeUnit(index);
                   }}
-                  className="ml-1 p-0.5 hover:bg-red-100 dark:hover:bg-red-900/30 rounded"
+                  className="ml-1 p-0.5 hover:bg-red-100:bg-red-900/30 rounded"
                 >
                   <X className="w-3 h-3 text-red-500" />
                 </button>
@@ -267,7 +267,7 @@ export const AirconSelector: React.FC<AirconSelectorProps> = ({
         })}
         <button
           onClick={addUnit}
-          className="flex items-center gap-1 px-3 py-2 text-sm text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-full border border-blue-300 dark:border-blue-700 border-dashed"
+          className="flex items-center gap-1 px-3 py-2 text-sm text-blue-600 hover:bg-blue-50:bg-blue-900/30 rounded-full border border-blue-300 border-dashed"
         >
           <Plus className="w-4 h-4" />
           追加
@@ -287,10 +287,10 @@ export const AirconSelector: React.FC<AirconSelectorProps> = ({
             <React.Fragment key={step}>
               <span className={`px-3 py-1 rounded-full ${
                 isCompleted
-                  ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
+                  ? 'bg-green-100 text-green-700'
                   : isCurrent
                     ? 'bg-blue-500 text-white'
-                    : 'bg-gray-100 dark:bg-gray-800 text-gray-400'
+                    : 'bg-gray-100 text-gray-400'
               }`}>
                 {isCompleted && <Check className="w-3 h-3 inline mr-1" />}
                 {stepLabels[index]}
@@ -304,7 +304,7 @@ export const AirconSelector: React.FC<AirconSelectorProps> = ({
       {/* ステップ1: シリーズ選択 */}
       {currentStep === 'series' && (
         <div>
-          <h4 className="font-medium text-gray-800 dark:text-white mb-4 flex items-center gap-2">
+          <h4 className="font-medium text-gray-800 mb-4 flex items-center gap-2">
             <Thermometer className="w-5 h-5 text-blue-500" />
             シリーズを選んでください
           </h4>
@@ -336,11 +336,11 @@ export const AirconSelector: React.FC<AirconSelectorProps> = ({
           >
             <ChevronLeft className="w-4 h-4" /> シリーズ選択に戻る
           </button>
-          <h4 className="font-medium text-gray-800 dark:text-white mb-4 flex items-center gap-2">
+          <h4 className="font-medium text-gray-800 mb-4 flex items-center gap-2">
             <Wind className="w-5 h-5 text-blue-500" />
             何畳用を選びますか？
           </h4>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+          <p className="text-sm text-gray-500 mb-4">
             選択中: {AIRCON_SERIES.find(s => s.id === activeUnit.series)?.manufacturer} {AIRCON_SERIES.find(s => s.id === activeUnit.series)?.name}
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
@@ -376,7 +376,7 @@ export const AirconSelector: React.FC<AirconSelectorProps> = ({
           >
             <ChevronLeft className="w-4 h-4" /> 畳数選択に戻る
           </button>
-          <h4 className="font-medium text-gray-800 dark:text-white mb-4 flex items-center gap-2">
+          <h4 className="font-medium text-gray-800 mb-4 flex items-center gap-2">
             <Building2 className="w-5 h-5 text-blue-500" />
             設置する階を選んでください
           </h4>
@@ -405,7 +405,7 @@ export const AirconSelector: React.FC<AirconSelectorProps> = ({
           >
             <ChevronLeft className="w-4 h-4" /> 設置階選択に戻る
           </button>
-          <h4 className="font-medium text-gray-800 dark:text-white mb-4 flex items-center gap-2">
+          <h4 className="font-medium text-gray-800 mb-4 flex items-center gap-2">
             <Wind className="w-5 h-5 text-blue-500" />
             風向調整板の有無
           </h4>
@@ -433,12 +433,12 @@ export const AirconSelector: React.FC<AirconSelectorProps> = ({
 
       {/* ステップ完了 */}
       {currentStep === 'complete' && (
-        <div className="bg-green-50 dark:bg-green-900/20 rounded-xl p-6 text-center">
+        <div className="bg-green-50 rounded-xl p-6 text-center">
           <Check className="w-12 h-12 text-green-500 mx-auto mb-3" />
-          <h4 className="font-bold text-gray-800 dark:text-white mb-2">
+          <h4 className="font-bold text-gray-800 mb-2">
             {activeUnitIndex + 1}台目の設定完了
           </h4>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+          <p className="text-sm text-gray-600 mb-4">
             {AIRCON_SERIES.find(s => s.id === activeUnit.series)?.manufacturer} {AIRCON_SERIES.find(s => s.id === activeUnit.series)?.name} {ROOM_SIZES.find(r => r.id === activeUnit.roomSize)?.name}
             <br />
             {FLOOR_OPTIONS.find(f => f.id === activeUnit.floor)?.name}
@@ -447,7 +447,7 @@ export const AirconSelector: React.FC<AirconSelectorProps> = ({
           <div className="flex gap-3 justify-center">
             <button
               onClick={addUnit}
-              className="px-4 py-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg border border-blue-300 dark:border-blue-700"
+              className="px-4 py-2 text-blue-600 hover:bg-blue-50:bg-blue-900/30 rounded-lg border border-blue-300"
             >
               <Plus className="w-4 h-4 inline mr-1" />
               もう1台追加
@@ -459,7 +459,7 @@ export const AirconSelector: React.FC<AirconSelectorProps> = ({
                   i === activeUnitIndex ? { ...u, series: null, roomSize: null, floor: null, windPlate: null } : u
                 ));
               }}
-              className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
+              className="px-4 py-2 text-gray-600 hover:bg-gray-100:bg-gray-800 rounded-lg"
             >
               <Trash2 className="w-4 h-4 inline mr-1" />
               やり直す
@@ -469,17 +469,17 @@ export const AirconSelector: React.FC<AirconSelectorProps> = ({
       )}
 
       {/* 決定ボタン */}
-      <div className="flex gap-3 mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+      <div className="flex gap-3 mt-8 pt-6 border-t border-gray-200">
         <button
           onClick={onCancel}
-          className="flex-1 py-3 px-4 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+          className="flex-1 py-3 px-4 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50:bg-gray-800"
         >
           キャンセル
         </button>
         <button
           onClick={handleComplete}
           disabled={completeUnitCount === 0}
-          className="flex-1 py-3 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 dark:disabled:bg-gray-700 disabled:cursor-not-allowed text-white rounded-xl font-medium"
+          className="flex-1 py-3 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300:bg-gray-700 disabled:cursor-not-allowed text-white rounded-xl font-medium"
         >
           決定 ({completeUnitCount}台選択)
         </button>

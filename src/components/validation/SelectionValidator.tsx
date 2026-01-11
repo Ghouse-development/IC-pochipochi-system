@@ -149,7 +149,7 @@ export const SelectionValidator: React.FC<SelectionValidatorProps> = ({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Shield className="w-5 h-5 text-blue-600" />
-          <h3 className="font-bold text-gray-900 dark:text-gray-100">
+          <h3 className="font-bold text-gray-900">
             選択チェック
           </h3>
         </div>
@@ -165,7 +165,7 @@ export const SelectionValidator: React.FC<SelectionValidatorProps> = ({
       </div>
 
       {/* プログレスバー */}
-      <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+      <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
         <div
           className={`h-full transition-all duration-500 ${
             validation.isComplete
@@ -180,9 +180,9 @@ export const SelectionValidator: React.FC<SelectionValidatorProps> = ({
 
       {/* ステータス */}
       {validation.isComplete ? (
-        <div className="flex items-center gap-2 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+        <div className="flex items-center gap-2 p-3 bg-green-50 rounded-lg">
           <CheckCircle className="w-5 h-5 text-green-600" />
-          <span className="text-green-700 dark:text-green-300 font-medium">
+          <span className="text-green-700 font-medium">
             全ての必須項目が選択されています
           </span>
         </div>
@@ -202,7 +202,7 @@ export const SelectionValidator: React.FC<SelectionValidatorProps> = ({
                   <button
                     key={name}
                     onClick={() => onNavigateToCategory?.(name)}
-                    className="flex items-center gap-1 px-3 py-1.5 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-lg text-sm hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors"
+                    className="flex items-center gap-1 px-3 py-1.5 bg-red-50 text-red-700 rounded-lg text-sm hover:bg-red-100:bg-red-900/50 transition-colors"
                   >
                     <AlertCircle className="w-3 h-3" />
                     {name}
@@ -227,7 +227,7 @@ export const SelectionValidator: React.FC<SelectionValidatorProps> = ({
                   <button
                     key={name}
                     onClick={() => onNavigateToCategory?.(name)}
-                    className="flex items-center gap-1 px-3 py-1.5 bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 rounded-lg text-sm hover:bg-amber-100 dark:hover:bg-amber-900/50 transition-colors"
+                    className="flex items-center gap-1 px-3 py-1.5 bg-amber-50 text-amber-700 rounded-lg text-sm hover:bg-amber-100:bg-amber-900/50 transition-colors"
                   >
                     {name}
                     <ChevronRight className="w-3 h-3" />
@@ -241,9 +241,9 @@ export const SelectionValidator: React.FC<SelectionValidatorProps> = ({
 
       {/* 警告 */}
       {validation.warnings.length > 0 && (
-        <div className="space-y-1 p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg">
+        <div className="space-y-1 p-3 bg-amber-50 rounded-lg">
           {validation.warnings.map((warning, i) => (
-            <div key={i} className="flex items-center gap-2 text-sm text-amber-700 dark:text-amber-300">
+            <div key={i} className="flex items-center gap-2 text-sm text-amber-700">
               <AlertTriangle className="w-4 h-4 flex-shrink-0" />
               {warning}
             </div>
@@ -253,9 +253,9 @@ export const SelectionValidator: React.FC<SelectionValidatorProps> = ({
 
       {/* 提案 */}
       {validation.suggestions.length > 0 && !validation.isComplete && (
-        <div className="flex items-center gap-2 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+        <div className="flex items-center gap-2 p-3 bg-blue-50 rounded-lg">
           <Zap className="w-4 h-4 text-blue-600" />
-          <span className="text-sm text-blue-700 dark:text-blue-300">
+          <span className="text-sm text-blue-700">
             {validation.suggestions[0]}
           </span>
         </div>

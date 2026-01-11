@@ -33,3 +33,4 @@ dist-ssr
 # Reference documents (PDFs) - large files not needed in repo
 sankousiryou/
 *.pdf
+.env*.local

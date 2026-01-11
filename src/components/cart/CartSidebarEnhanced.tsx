@@ -488,7 +488,7 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
                   </div>
                   <button
                     onClick={handleClearCart}
-                    className="w-full px-4 py-2 text-gray-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors text-sm"
+                    className="w-full px-4 py-2 text-gray-500 hover:text-red-500 hover:bg-red-50:bg-red-900/20 rounded-lg transition-colors text-sm"
                     aria-label="選択した商品をすべてクリア"
                   >
                     選択をクリア

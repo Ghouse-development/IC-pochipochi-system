@@ -62,12 +62,12 @@ export const catalogAnimations = `
 
 // スケルトンカード
 export const SkeletonCard = React.memo(() => (
-  <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm overflow-hidden border border-gray-100 dark:border-gray-700">
-    <div className="aspect-square animate-shimmer dark:opacity-20" />
+  <div className="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
+    <div className="aspect-square animate-shimmer" />
     <div className="p-3 space-y-2">
-      <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded animate-shimmer w-1/3" />
-      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-shimmer" />
-      <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded-xl animate-shimmer mt-3" />
+      <div className="h-3 bg-gray-200 rounded animate-shimmer w-1/3" />
+      <div className="h-4 bg-gray-200 rounded animate-shimmer" />
+      <div className="h-8 bg-gray-200 rounded-xl animate-shimmer mt-3" />
     </div>
   </div>
 ));
@@ -80,11 +80,11 @@ export const EmptyState = React.memo(({ searchTerm, onClear }: { searchTerm: str
     role="status"
     aria-live="polite"
   >
-    <div className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 rounded-full flex items-center justify-center mb-6 animate-float">
-      <Package className="w-12 h-12 text-gray-400 dark:text-gray-500" aria-hidden="true" />
+    <div className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mb-6 animate-float">
+      <Package className="w-12 h-12 text-gray-400" aria-hidden="true" />
     </div>
-    <h3 className="text-xl font-bold text-gray-700 dark:text-gray-200 mb-2">商品が見つかりません</h3>
-    <p className="text-gray-500 dark:text-gray-400 mb-6 text-center max-w-sm">
+    <h3 className="text-xl font-bold text-gray-700 mb-2">商品が見つかりません</h3>
+    <p className="text-gray-500 mb-6 text-center max-w-sm">
       {searchTerm
         ? `「${searchTerm}」に一致する商品がありません`
         : 'このカテゴリには商品がありません'}

@@ -188,7 +188,7 @@ export const AccessibleSelect = forwardRef<HTMLButtonElement, AccessibleSelectPr
         {label && (
           <label
             htmlFor={selectId}
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+            className="block text-sm font-medium text-gray-700 mb-1"
           >
             {label}
             {required && <span className="text-red-500 ml-1">*</span>}
@@ -212,19 +212,19 @@ export const AccessibleSelect = forwardRef<HTMLButtonElement, AccessibleSelectPr
           onClick={toggleOpen}
           onKeyDown={handleKeyDown}
           className={cn(
-            'w-full px-3 py-2 text-left bg-white dark:bg-gray-800 border rounded-lg transition-colors',
+            'w-full px-3 py-2 text-left bg-white border rounded-lg transition-colors',
             'focus:outline-none focus:ring-2 focus:ring-blue-500',
             'flex items-center justify-between gap-2',
             disabled && 'opacity-50 cursor-not-allowed',
             error
               ? 'border-red-500 focus:ring-red-500'
-              : 'border-gray-300 dark:border-gray-600'
+              : 'border-gray-300'
           )}
         >
           <span
             className={cn(
               'truncate',
-              selectedOption ? 'text-gray-900 dark:text-gray-100' : 'text-gray-500'
+              selectedOption ? 'text-gray-900' : 'text-gray-500'
             )}
           >
             {selectedOption ? (
@@ -241,7 +241,7 @@ export const AccessibleSelect = forwardRef<HTMLButtonElement, AccessibleSelectPr
               <button
                 type="button"
                 onClick={handleClear}
-                className="p-0.5 hover:bg-gray-200 dark:hover:bg-gray-700 rounded"
+                className="p-0.5 hover:bg-gray-200:bg-gray-700 rounded"
                 aria-label="選択をクリア"
               >
                 <X className="w-4 h-4 text-gray-400" />
@@ -258,10 +258,10 @@ export const AccessibleSelect = forwardRef<HTMLButtonElement, AccessibleSelectPr
 
         {/* ドロップダウン */}
         {isOpen && (
-          <div className="absolute z-50 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg overflow-hidden">
+          <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg overflow-hidden">
             {/* 検索フィールド */}
             {searchable && (
-              <div className="p-2 border-b dark:border-gray-700">
+              <div className="p-2 border-b">
                 <input
                   ref={searchInputRef}
                   type="text"
@@ -269,7 +269,7 @@ export const AccessibleSelect = forwardRef<HTMLButtonElement, AccessibleSelectPr
                   onChange={(e) => setSearchTerm(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="検索..."
-                  className="w-full px-3 py-1.5 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="w-full px-3 py-1.5 text-sm bg-gray-50 border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
                   aria-label="オプションを検索"
                 />
               </div>
@@ -301,15 +301,15 @@ export const AccessibleSelect = forwardRef<HTMLButtonElement, AccessibleSelectPr
                       'px-3 py-2 cursor-pointer flex items-center justify-between gap-2',
                       option.disabled
                         ? 'opacity-50 cursor-not-allowed'
-                        : 'hover:bg-gray-100 dark:hover:bg-gray-700',
-                      focusedIndex === index && 'bg-gray-100 dark:bg-gray-700',
-                      option.value === value && 'bg-blue-50 dark:bg-blue-900/30'
+                        : 'hover:bg-gray-100:bg-gray-700',
+                      focusedIndex === index && 'bg-gray-100',
+                      option.value === value && 'bg-blue-50'
                     )}
                   >
                     <div className="flex items-center gap-2 min-w-0">
                       {option.icon}
                       <div className="min-w-0">
-                        <div className="text-sm text-gray-900 dark:text-gray-100 truncate">
+                        <div className="text-sm text-gray-900 truncate">
                           {option.label}
                         </div>
                         {option.description && (

@@ -44,10 +44,10 @@ export const SelectionCard: React.FC<SelectionCardProps> = ({
 
   return (
     <article
-      className={`group bg-white dark:bg-gray-800 rounded-2xl overflow-hidden transition-all duration-200 cursor-pointer ${
+      className={`group bg-white rounded-2xl overflow-hidden transition-all duration-200 cursor-pointer ${
         isSelected
-          ? 'border-4 border-blue-500 shadow-xl shadow-blue-200 dark:shadow-blue-900/50 ring-4 ring-blue-100 dark:ring-blue-900/50 scale-[1.02]'
-          : 'border-2 border-gray-200 dark:border-gray-700 shadow-md hover:shadow-xl hover:border-blue-300 dark:hover:border-blue-600 hover:scale-[1.02]'
+          ? 'border-4 border-blue-500 shadow-xl shadow-blue-200 ring-4 ring-blue-100 scale-[1.02]'
+          : 'border-2 border-gray-200 shadow-md hover:shadow-xl hover:border-blue-300:border-blue-600 hover:scale-[1.02]'
       }`}
       onClick={onClick}
       role="button"
@@ -154,17 +154,17 @@ export const SelectionCard: React.FC<SelectionCardProps> = ({
           {name}
         </h3>
         {description && (
-          <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 mb-2">
+          <p className="text-xs text-gray-500 line-clamp-2 mb-2">
             {description}
           </p>
         )}
         {priceRange && (
-          <p className="text-2xl font-black text-gray-900 dark:text-gray-100">
+          <p className="text-2xl font-black text-gray-900">
             {priceRange}
           </p>
         )}
         {price !== undefined && (
-          <p className={`text-2xl font-black ${price === 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-900 dark:text-gray-100'}`}>
+          <p className={`text-2xl font-black ${price === 0 ? 'text-emerald-600' : 'text-gray-900'}`}>
             {price === 0 ? '差額なし' : `+${price.toLocaleString()}円`}
           </p>
         )}

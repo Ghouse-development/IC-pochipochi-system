@@ -102,8 +102,8 @@ export const RoomFinishSelector: React.FC<RoomFinishSelectorProps> = ({
 
   if (rooms.length === 0) {
     return (
-      <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl p-4">
-        <p className="text-sm text-yellow-700 dark:text-yellow-400">
+      <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
+        <p className="text-sm text-yellow-700">
           先に「設計」タブで間取りを設定してください。部屋ごとの{typeConfig.label}選択が可能になります。
         </p>
       </div>
@@ -111,7 +111,7 @@ export const RoomFinishSelector: React.FC<RoomFinishSelectorProps> = ({
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+    <div className="bg-white rounded-xl shadow-lg overflow-hidden">
       {/* ヘッダー */}
       <div className={`bg-gradient-to-r from-${typeConfig.color}-500 to-${typeConfig.color}-600 p-4 text-white`}>
         <div className="flex items-center justify-between">
@@ -132,13 +132,13 @@ export const RoomFinishSelector: React.FC<RoomFinishSelectorProps> = ({
       </div>
 
       {/* メイン選択表示 */}
-      <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+      <div className="p-4 border-b border-gray-200">
         <div className="flex items-center gap-4">
           <div className="flex-1">
-            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">メイン{typeConfig.label}</div>
+            <div className="text-xs text-gray-500 mb-1">メイン{typeConfig.label}</div>
             {mainSelectedItem ? (
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-700">
+                <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100">
                   {(() => {
                     const imgUrl = getImageUrl(mainSelectedItem);
                     return imgUrl ? (
@@ -155,7 +155,7 @@ export const RoomFinishSelector: React.FC<RoomFinishSelectorProps> = ({
                   })()}
                 </div>
                 <div>
-                  <div className="font-medium text-sm text-gray-800 dark:text-gray-200">
+                  <div className="font-medium text-sm text-gray-800">
                     {mainSelectedItem.name}
                   </div>
                   <div className="text-xs text-gray-500">
@@ -164,15 +164,15 @@ export const RoomFinishSelector: React.FC<RoomFinishSelectorProps> = ({
                 </div>
               </div>
             ) : (
-              <div className="text-sm text-gray-500 dark:text-gray-400">
+              <div className="text-sm text-gray-500">
                 まだ選択されていません
               </div>
             )}
           </div>
           <ArrowRight className="w-5 h-5 text-gray-400" />
           <div className="text-right">
-            <div className="text-xs text-gray-500 dark:text-gray-400">適用先</div>
-            <div className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            <div className="text-xs text-gray-500">適用先</div>
+            <div className="text-sm font-medium text-gray-700">
               全{rooms.length}部屋
             </div>
           </div>
@@ -182,7 +182,7 @@ export const RoomFinishSelector: React.FC<RoomFinishSelectorProps> = ({
       {/* 部屋ごとの選択（展開時） */}
       {isExpanded && (
         <div className="p-4">
-          <div className="text-xs text-gray-500 dark:text-gray-400 mb-3">
+          <div className="text-xs text-gray-500 mb-3">
             変更したい部屋だけを個別に選択できます
           </div>
 
@@ -200,9 +200,9 @@ export const RoomFinishSelector: React.FC<RoomFinishSelectorProps> = ({
                         : [...prev, floor]
                     );
                   }}
-                  className="w-full flex items-center justify-between p-2 bg-gray-100 dark:bg-gray-700 rounded-lg mb-2"
+                  className="w-full flex items-center justify-between p-2 bg-gray-100 rounded-lg mb-2"
                 >
-                  <span className="font-medium text-sm text-gray-700 dark:text-gray-300">
+                  <span className="font-medium text-sm text-gray-700">
                     {floor}F ({floorRooms.length}部屋)
                   </span>
                   {isFloorExpanded ? (
@@ -225,13 +225,13 @@ export const RoomFinishSelector: React.FC<RoomFinishSelectorProps> = ({
                           key={room.id}
                           className={`flex items-center gap-3 p-3 rounded-lg border ${
                             isCustom
-                              ? 'border-amber-300 bg-amber-50 dark:border-amber-700 dark:bg-amber-900/20'
-                              : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800'
+                              ? 'border-amber-300 bg-amber-50'
+                              : 'border-gray-200 bg-gray-50'
                           }`}
                         >
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2">
-                              <span className="font-medium text-sm text-gray-800 dark:text-gray-200">
+                              <span className="font-medium text-sm text-gray-800">
                                 {room.name}
                               </span>
                               {isCustom && (
@@ -255,7 +255,7 @@ export const RoomFinishSelector: React.FC<RoomFinishSelectorProps> = ({
                           <select
                             value={currentSelection || ''}
                             onChange={(e) => handleRoomSelect(room.id, e.target.value)}
-                            className="text-xs bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1.5 max-w-[150px]"
+                            className="text-xs bg-white border border-gray-300 rounded-lg px-2 py-1.5 max-w-[150px]"
                           >
                             <option value="">メインと同じ</option>
                             {availableItems.map(item => (
@@ -266,7 +266,7 @@ export const RoomFinishSelector: React.FC<RoomFinishSelectorProps> = ({
                           </select>
 
                           {selectedItem && (
-                            <div className="w-10 h-10 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-600 flex-shrink-0">
+                            <div className="w-10 h-10 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
                               {(() => {
                                 const imgUrl = getImageUrl(selectedItem);
                                 return imgUrl ? (

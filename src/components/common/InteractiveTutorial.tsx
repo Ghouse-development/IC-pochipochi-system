@@ -184,7 +184,7 @@ const TutorialTooltip: React.FC<{
   return (
     <div
       ref={tooltipRef}
-      className="fixed z-[10000] w-80 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-300 animate-bounce-in"
+      className="fixed z-[10000] w-80 bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden transition-all duration-300 animate-bounce-in"
       style={{ top: position.top, left: position.left }}
     >
       {/* ヘッダー */}
@@ -209,12 +209,12 @@ const TutorialTooltip: React.FC<{
 
       {/* コンテンツ */}
       <div className="p-4">
-        <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
+        <p className="text-gray-700 text-sm leading-relaxed">
           {step.content}
         </p>
 
         {step.action && step.action !== 'none' && (
-          <div className="mt-3 flex items-center gap-2 text-teal-600 dark:text-teal-400 text-sm">
+          <div className="mt-3 flex items-center gap-2 text-teal-600 text-sm">
             <MousePointer className="w-4 h-4 animate-bounce" />
             <span>{step.actionText || 'ハイライトされた要素を操作してみましょう'}</span>
           </div>
@@ -224,7 +224,7 @@ const TutorialTooltip: React.FC<{
       {/* プログレスバー */}
       {showProgress && (
         <div className="px-4 pb-2">
-          <div className="h-1 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+          <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
             <div
               className="h-full bg-teal-500 transition-all duration-300"
               style={{ width: `${((currentIndex + 1) / totalSteps) * 100}%` }}
@@ -239,7 +239,7 @@ const TutorialTooltip: React.FC<{
           {allowSkip && !isLastStep && (
             <button
               onClick={onSkip}
-              className="text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 flex items-center gap-1"
+              className="text-sm text-gray-500 hover:text-gray-700:text-gray-300 flex items-center gap-1"
             >
               <SkipForward className="w-4 h-4" />
               スキップ

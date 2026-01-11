@@ -159,7 +159,7 @@ export const QuickSelectPanel: React.FC<QuickSelectPanelProps> = ({
   }, [products, items]);
 
   return (
-    <Card className="p-4 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-indigo-900/30 dark:via-purple-900/30 dark:to-pink-900/30 border-2 border-indigo-200 dark:border-indigo-800">
+    <Card className="p-4 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 border-2 border-indigo-200">
       {/* ヘッダー */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
@@ -167,16 +167,16 @@ export const QuickSelectPanel: React.FC<QuickSelectPanelProps> = ({
             <Zap className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h3 className="font-bold text-gray-900 dark:text-gray-100">
+            <h3 className="font-bold text-gray-900">
               クイックセレクト
             </h3>
-            <p className="text-xs text-gray-600 dark:text-gray-400">
+            <p className="text-xs text-gray-600">
               ワンクリックで一括選択
             </p>
           </div>
         </div>
         <div className="text-right">
-          <p className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">
+          <p className="text-2xl font-bold text-indigo-600">
             {selectedCount}
           </p>
           <p className="text-xs text-gray-500">選択済み</p>
@@ -198,46 +198,46 @@ export const QuickSelectPanel: React.FC<QuickSelectPanelProps> = ({
             tabIndex={focusedIndex === index || (focusedIndex === -1 && index === 0) ? 0 : -1}
             className={`w-full p-4 rounded-xl border-2 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${
               selectedSetId === set.id
-                ? 'border-indigo-500 bg-indigo-100 dark:bg-indigo-900/50 scale-[1.02]'
-                : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-indigo-300 hover:shadow-lg'
+                ? 'border-indigo-500 bg-indigo-100 scale-[1.02]'
+                : 'border-gray-200 bg-white hover:border-indigo-300 hover:shadow-lg'
             } ${isApplying ? 'pointer-events-none' : ''}`}
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
                   set.id === 'standard-all'
-                    ? 'bg-green-100 dark:bg-green-800'
+                    ? 'bg-green-100'
                     : set.id === 'popular'
-                    ? 'bg-amber-100 dark:bg-amber-800'
-                    : 'bg-blue-100 dark:bg-blue-800'
+                    ? 'bg-amber-100'
+                    : 'bg-blue-100'
                 }`}>
                   <set.icon className={`w-6 h-6 ${
                     set.id === 'standard-all'
-                      ? 'text-green-600 dark:text-green-400'
+                      ? 'text-green-600'
                       : set.id === 'popular'
-                      ? 'text-amber-600 dark:text-amber-400'
-                      : 'text-blue-600 dark:text-blue-400'
+                      ? 'text-amber-600'
+                      : 'text-blue-600'
                   }`} />
                 </div>
                 <div className="text-left">
-                  <p className="font-bold text-gray-900 dark:text-gray-100">
+                  <p className="font-bold text-gray-900">
                     {set.name}
                   </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-sm text-gray-600">
                     {set.description}
                   </p>
                   <div className="flex items-center gap-2 mt-1">
-                    <span className="text-xs px-2 py-0.5 bg-gray-100 dark:bg-gray-700 rounded-full text-gray-600 dark:text-gray-400">
+                    <span className="text-xs px-2 py-0.5 bg-gray-100 rounded-full text-gray-600">
                       {set.products.length}商品
                     </span>
                     {set.popularity && (
-                      <span className="text-xs px-2 py-0.5 bg-amber-100 dark:bg-amber-800 rounded-full text-amber-700 dark:text-amber-300 flex items-center gap-1">
+                      <span className="text-xs px-2 py-0.5 bg-amber-100 rounded-full text-amber-700 flex items-center gap-1">
                         <TrendingUp className="w-3 h-3" />
                         {set.popularity}%人気
                       </span>
                     )}
                     {set.savings && set.savings > 0 && (
-                      <span className="text-xs px-2 py-0.5 bg-green-100 dark:bg-green-800 rounded-full text-green-700 dark:text-green-300">
+                      <span className="text-xs px-2 py-0.5 bg-green-100 rounded-full text-green-700">
                         {formatPrice(set.savings)}お得
                       </span>
                     )}
@@ -257,14 +257,14 @@ export const QuickSelectPanel: React.FC<QuickSelectPanelProps> = ({
       </div>
 
       {/* ヒント */}
-      <div className="mt-4 p-3 bg-white/50 dark:bg-gray-800/50 rounded-lg">
+      <div className="mt-4 p-3 bg-white/50 rounded-lg">
         <div className="flex items-start gap-2">
           <Sparkles className="w-4 h-4 text-indigo-500 mt-0.5" />
           <div className="text-sm">
-            <p className="font-medium text-gray-900 dark:text-gray-100">
+            <p className="font-medium text-gray-900">
               時短のヒント
             </p>
-            <p className="text-gray-600 dark:text-gray-400">
+            <p className="text-gray-600">
               標準セットを選択後、必要に応じてオプション品を追加すると効率的です
             </p>
           </div>
@@ -294,7 +294,7 @@ export const RecentSelectionsPanel: React.FC<{
     <Card className="p-4">
       <div className="flex items-center gap-2 mb-3">
         <Clock className="w-4 h-4 text-gray-500" />
-        <h4 className="font-medium text-gray-900 dark:text-gray-100">
+        <h4 className="font-medium text-gray-900">
           最近の選択
         </h4>
       </div>
@@ -303,10 +303,10 @@ export const RecentSelectionsPanel: React.FC<{
           <button
             key={product.id}
             onClick={() => onProductSelect?.(product)}
-            className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-sm"
+            className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 rounded-lg hover:bg-gray-200:bg-gray-700 transition-colors text-sm"
           >
             <Package className="w-3 h-3 text-gray-400" />
-            <span className="text-gray-700 dark:text-gray-300">{product.name}</span>
+            <span className="text-gray-700">{product.name}</span>
           </button>
         ))}
       </div>

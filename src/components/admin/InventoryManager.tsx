@@ -98,10 +98,10 @@ export const InventoryManager: React.FC = () => {
 
   const getStatusBadge = (status: InventoryItem['status']) => {
     const configs = {
-      in_stock: { color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400', label: '在庫あり' },
-      low_stock: { color: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400', label: '在庫少' },
-      out_of_stock: { color: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400', label: '在庫切れ' },
-      overstocked: { color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400', label: '過剰在庫' },
+      in_stock: { color: 'bg-green-100 text-green-700', label: '在庫あり' },
+      low_stock: { color: 'bg-yellow-100 text-yellow-700', label: '在庫少' },
+      out_of_stock: { color: 'bg-red-100 text-red-700', label: '在庫切れ' },
+      overstocked: { color: 'bg-blue-100 text-blue-700', label: '過剰在庫' },
     };
     const config = configs[status];
     return (
@@ -121,7 +121,7 @@ export const InventoryManager: React.FC = () => {
         : 'bg-green-500';
 
     return (
-      <div className="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
+      <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
         <div className={`h-full ${barColor} transition-all`} style={{ width: `${percentage}%` }} />
       </div>
     );
@@ -133,7 +133,7 @@ export const InventoryManager: React.FC = () => {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Package className="w-6 h-6 text-indigo-600" />
-          <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">在庫管理</h2>
+          <h2 className="text-xl font-bold text-gray-900">在庫管理</h2>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" size="sm">
@@ -149,35 +149,35 @@ export const InventoryManager: React.FC = () => {
 
       {/* 集計カード */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-          <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 mb-1">
+        <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+          <div className="flex items-center gap-2 text-gray-500 mb-1">
             <Package className="w-4 h-4" />
             <span className="text-sm">総商品数</span>
           </div>
-          <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">{stats.total}</div>
+          <div className="text-2xl font-bold text-gray-900">{stats.total}</div>
         </div>
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+        <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
           <div className="flex items-center gap-2 text-green-600 mb-1">
             <TrendingUp className="w-4 h-4" />
             <span className="text-sm">在庫あり</span>
           </div>
           <div className="text-2xl font-bold text-green-600">{stats.inStock}</div>
         </div>
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+        <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
           <div className="flex items-center gap-2 text-yellow-600 mb-1">
             <AlertTriangle className="w-4 h-4" />
             <span className="text-sm">在庫少</span>
           </div>
           <div className="text-2xl font-bold text-yellow-600">{stats.lowStock}</div>
         </div>
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+        <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
           <div className="flex items-center gap-2 text-red-600 mb-1">
             <TrendingDown className="w-4 h-4" />
             <span className="text-sm">在庫切れ</span>
           </div>
           <div className="text-2xl font-bold text-red-600">{stats.outOfStock}</div>
         </div>
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+        <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
           <div className="flex items-center gap-2 text-indigo-600 mb-1">
             <span className="text-sm">在庫総額</span>
           </div>
@@ -186,7 +186,7 @@ export const InventoryManager: React.FC = () => {
       </div>
 
       {/* フィルター */}
-      <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+      <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
         <div className="flex flex-wrap gap-4">
           <div className="flex-1 min-w-[200px]">
             <div className="relative">
@@ -196,7 +196,7 @@ export const InventoryManager: React.FC = () => {
                 placeholder="商品名、SKU、メーカーで検索..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm bg-white text-gray-900"
               />
             </div>
           </div>
@@ -205,7 +205,7 @@ export const InventoryManager: React.FC = () => {
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white text-gray-900"
             >
               <option value="all">すべてのステータス</option>
               <option value="in_stock">在庫あり</option>
@@ -215,7 +215,7 @@ export const InventoryManager: React.FC = () => {
             <select
               value={filterCategory}
               onChange={(e) => setFilterCategory(e.target.value)}
-              className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white text-gray-900"
             >
               <option value="all">すべてのカテゴリ</option>
               {categories.map((cat) => (
@@ -227,45 +227,45 @@ export const InventoryManager: React.FC = () => {
       </div>
 
       {/* 在庫テーブル */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 dark:bg-gray-700">
+            <thead className="bg-gray-50">
               <tr>
-                <th className="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-200">商品</th>
-                <th className="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-200">SKU</th>
-                <th className="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-200">カテゴリ</th>
-                <th className="px-4 py-3 text-center font-semibold text-gray-700 dark:text-gray-200">在庫数</th>
-                <th className="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-200 min-w-[120px]">在庫状況</th>
-                <th className="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-200">ステータス</th>
-                <th className="px-4 py-3 text-right font-semibold text-gray-700 dark:text-gray-200">単価</th>
+                <th className="px-4 py-3 text-left font-semibold text-gray-700">商品</th>
+                <th className="px-4 py-3 text-left font-semibold text-gray-700">SKU</th>
+                <th className="px-4 py-3 text-left font-semibold text-gray-700">カテゴリ</th>
+                <th className="px-4 py-3 text-center font-semibold text-gray-700">在庫数</th>
+                <th className="px-4 py-3 text-left font-semibold text-gray-700 min-w-[120px]">在庫状況</th>
+                <th className="px-4 py-3 text-left font-semibold text-gray-700">ステータス</th>
+                <th className="px-4 py-3 text-right font-semibold text-gray-700">単価</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
+            <tbody className="divide-y divide-gray-100">
               {filteredInventory.map((item) => (
-                <tr key={item.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                <tr key={item.id} className="hover:bg-gray-50:bg-gray-700/50 transition-colors">
                   <td className="px-4 py-3">
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-gray-100">{item.productName}</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">{item.manufacturer}</p>
+                      <p className="font-medium text-gray-900">{item.productName}</p>
+                      <p className="text-xs text-gray-500">{item.manufacturer}</p>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-gray-600 dark:text-gray-400">{item.sku}</td>
-                  <td className="px-4 py-3 text-gray-600 dark:text-gray-400">{item.category}</td>
-                  <td className="px-4 py-3 text-center font-semibold text-gray-900 dark:text-gray-100">
+                  <td className="px-4 py-3 text-gray-600">{item.sku}</td>
+                  <td className="px-4 py-3 text-gray-600">{item.category}</td>
+                  <td className="px-4 py-3 text-center font-semibold text-gray-900">
                     {item.currentStock}
                   </td>
                   <td className="px-4 py-3">
                     <div className="space-y-1">
                       {getStockBar(item)}
-                      <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400">
+                      <div className="flex justify-between text-xs text-gray-500">
                         <span>最小: {item.minStock}</span>
                         <span>最大: {item.maxStock}</span>
                       </div>
                     </div>
                   </td>
                   <td className="px-4 py-3">{getStatusBadge(item.status)}</td>
-                  <td className="px-4 py-3 text-right font-medium text-gray-900 dark:text-gray-100">
+                  <td className="px-4 py-3 text-right font-medium text-gray-900">
                     {formatPrice(item.unitPrice)}
                   </td>
                 </tr>

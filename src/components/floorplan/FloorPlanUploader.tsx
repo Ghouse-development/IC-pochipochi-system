@@ -135,7 +135,7 @@ export const FloorPlanUploader: React.FC = () => {
   const currentFloorImage = floorPlanImages.find(img => img.floor === selectedFloor);
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+    <div className="bg-white rounded-xl shadow-lg overflow-hidden">
       {/* ヘッダー */}
       <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-4 text-white">
         <div className="flex items-center gap-3">
@@ -148,7 +148,7 @@ export const FloorPlanUploader: React.FC = () => {
       </div>
 
       {/* 階数タブ */}
-      <div className="border-b border-gray-200 dark:border-gray-700 px-4">
+      <div className="border-b border-gray-200 px-4">
         <div className="flex items-center gap-2 py-3">
           {[1, 2, 3].map(floor => (
             <button
@@ -156,8 +156,8 @@ export const FloorPlanUploader: React.FC = () => {
               onClick={() => setSelectedFloor(floor)}
               className={`px-4 py-2 rounded-lg font-medium transition-all ${
                 selectedFloor === floor
-                  ? 'bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300'
-                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+                  ? 'bg-indigo-100 text-indigo-700'
+                  : 'text-gray-600 hover:bg-gray-100:bg-gray-700'
               }`}
             >
               {floor}F
@@ -174,16 +174,16 @@ export const FloorPlanUploader: React.FC = () => {
       <div className="p-4 grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* 左側：画像アップロード */}
         <div>
-          <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+          <h3 className="text-sm font-semibold text-gray-700 mb-3">
             {selectedFloor}F 間取り画像
           </h3>
 
           {currentFloorImage ? (
-            <div className="relative rounded-xl overflow-hidden border-2 border-gray-200 dark:border-gray-700">
+            <div className="relative rounded-xl overflow-hidden border-2 border-gray-200">
               <img
                 src={currentFloorImage.imageUrl}
                 alt={`${selectedFloor}F 間取り図`}
-                className="w-full h-64 object-contain bg-gray-50 dark:bg-gray-900"
+                className="w-full h-64 object-contain bg-gray-50"
               />
               <button
                 onClick={() => removeFloorPlanImage(currentFloorImage.id)}
@@ -196,7 +196,7 @@ export const FloorPlanUploader: React.FC = () => {
               </div>
             </div>
           ) : (
-            <label className="flex flex-col items-center justify-center h-64 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl cursor-pointer hover:border-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-all">
+            <label className="flex flex-col items-center justify-center h-64 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-indigo-400 hover:bg-indigo-50:bg-indigo-900/20 transition-all">
               <input
                 type="file"
                 accept="image/*"
@@ -207,14 +207,14 @@ export const FloorPlanUploader: React.FC = () => {
               {isAnalyzing ? (
                 <>
                   <Loader2 className="w-12 h-12 text-indigo-500 animate-spin mb-3" />
-                  <span className="text-sm text-indigo-600 dark:text-indigo-400 font-medium">
+                  <span className="text-sm text-indigo-600 font-medium">
                     AIが間取りを解析中...
                   </span>
                 </>
               ) : (
                 <>
                   <Upload className="w-12 h-12 text-gray-400 mb-3" />
-                  <span className="text-sm text-gray-600 dark:text-gray-400 font-medium">
+                  <span className="text-sm text-gray-600 font-medium">
                     クリックして{selectedFloor}Fの間取り画像をアップロード
                   </span>
                   <span className="text-xs text-gray-400 mt-1">
@@ -226,7 +226,7 @@ export const FloorPlanUploader: React.FC = () => {
           )}
 
           {error && (
-            <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-sm text-red-600 dark:text-red-400">
+            <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600">
               {error}
             </div>
           )}
@@ -235,12 +235,12 @@ export const FloorPlanUploader: React.FC = () => {
         {/* 右側：部屋リスト */}
         <div>
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+            <h3 className="text-sm font-semibold text-gray-700">
               {selectedFloor}F 部屋リスト
             </h3>
             <button
               onClick={handleAddRoom}
-              className="flex items-center gap-1 px-3 py-1.5 text-sm bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 rounded-lg hover:bg-indigo-200 dark:hover:bg-indigo-800 transition-colors"
+              className="flex items-center gap-1 px-3 py-1.5 text-sm bg-indigo-100 text-indigo-700 rounded-lg hover:bg-indigo-200:bg-indigo-800 transition-colors"
             >
               <Plus className="w-4 h-4" />
               部屋を追加
@@ -248,7 +248,7 @@ export const FloorPlanUploader: React.FC = () => {
           </div>
 
           {currentFloorRooms.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-64 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-xl">
+            <div className="flex flex-col items-center justify-center h-64 border-2 border-dashed border-gray-200 rounded-xl">
               <ImageIcon className="w-12 h-12 text-gray-300 mb-3" />
               <span className="text-sm text-gray-500">
                 間取り画像をアップロードすると<br />部屋が自動検出されます
@@ -259,7 +259,7 @@ export const FloorPlanUploader: React.FC = () => {
               {currentFloorRooms.map(room => (
                 <div
                   key={room.id}
-                  className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg"
+                  className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
                 >
                   {editingRoomId === room.id ? (
                     <>
@@ -267,19 +267,19 @@ export const FloorPlanUploader: React.FC = () => {
                         type="text"
                         value={editingName}
                         onChange={(e) => setEditingName(e.target.value)}
-                        className="flex-1 px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800"
+                        className="flex-1 px-2 py-1 text-sm border border-gray-300 rounded bg-white"
                         autoFocus
                         onKeyDown={(e) => e.key === 'Enter' && handleSaveEdit()}
                       />
                       <button
                         onClick={handleSaveEdit}
-                        className="p-1 text-green-600 hover:bg-green-100 dark:hover:bg-green-900/30 rounded"
+                        className="p-1 text-green-600 hover:bg-green-100:bg-green-900/30 rounded"
                       >
                         <Check className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => setEditingRoomId(null)}
-                        className="p-1 text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600 rounded"
+                        className="p-1 text-gray-400 hover:bg-gray-200:bg-gray-600 rounded"
                       >
                         <X className="w-4 h-4" />
                       </button>
@@ -288,12 +288,12 @@ export const FloorPlanUploader: React.FC = () => {
                     <>
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
-                          <span className="font-medium text-sm text-gray-800 dark:text-gray-200">
+                          <span className="font-medium text-sm text-gray-800">
                             {room.name}
                           </span>
                           <button
                             onClick={() => handleStartEdit(room)}
-                            className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                            className="p-1 text-gray-400 hover:text-gray-600:text-gray-300"
                           >
                             <Edit2 className="w-3 h-3" />
                           </button>
@@ -302,7 +302,7 @@ export const FloorPlanUploader: React.FC = () => {
                           <select
                             value={room.type}
                             onChange={(e) => handleTypeChange(room.id, e.target.value as RoomType)}
-                            className="text-xs bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded px-1.5 py-0.5"
+                            className="text-xs bg-white border border-gray-200 rounded px-1.5 py-0.5"
                           >
                             {Object.entries(ROOM_TYPE_NAMES).map(([type, name]) => (
                               <option key={type} value={type}>{name}</option>
@@ -318,7 +318,7 @@ export const FloorPlanUploader: React.FC = () => {
                       </div>
                       <button
                         onClick={() => removeRoom(room.id)}
-                        className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded"
+                        className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50:bg-red-900/30 rounded"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -334,12 +334,12 @@ export const FloorPlanUploader: React.FC = () => {
       {/* 部屋数サマリー */}
       {rooms.length > 0 && (
         <div className="px-4 pb-4">
-          <div className="p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg">
+          <div className="p-3 bg-indigo-50 rounded-lg">
             <div className="flex items-center justify-between text-sm">
-              <span className="text-indigo-700 dark:text-indigo-300 font-medium">
+              <span className="text-indigo-700 font-medium">
                 合計 {rooms.length} 部屋
               </span>
-              <div className="flex items-center gap-4 text-xs text-indigo-600 dark:text-indigo-400">
+              <div className="flex items-center gap-4 text-xs text-indigo-600">
                 {floors.map(floor => (
                   <span key={floor}>
                     {floor}F: {roomsByFloor[floor]?.length || 0}部屋
