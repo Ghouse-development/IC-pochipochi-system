@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Save, RefreshCw, Building, Percent, Ruler, Mail, Bell, FileText, Grid3X3 } from 'lucide-react';
+import { Save, RefreshCw, Building, Percent, Ruler, Mail, Bell, FileText } from 'lucide-react';
 import { settingsApi } from '../../services/api';
 import type { SystemSetting } from '../../types/database';
 import { useTimeout } from '../../hooks/useTimeout';
 import { createLogger } from '../../lib/logger';
-import { PorchTileSettings } from './PorchTileSettings';
 
 const logger = createLogger('SystemSettings');
 
@@ -239,15 +238,6 @@ export function SystemSettings() {
             保存
           </button>
         </div>
-      </SettingCard>
-
-      {/* Porch Tile Settings */}
-      <SettingCard
-        title="ポーチタイル設定"
-        description="ポーチのタイル種類と目地色を管理"
-        icon={<Grid3X3 className="w-5 h-5" />}
-      >
-        <PorchTileSettings />
       </SettingCard>
 
       {/* Window Count Settings */}

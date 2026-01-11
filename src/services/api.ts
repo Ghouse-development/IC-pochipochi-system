@@ -1,4 +1,4 @@
-import { supabase } from '../lib/supabase';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { createLogger } from '../lib/logger';
 import type {
   Category,
@@ -30,6 +30,10 @@ const logger = createLogger('API');
 
 export const productsApi = {
   async getAll(): Promise<Product[]> {
+    if (!isSupabaseConfigured) {
+      logger.debug('Supabase not configured, returning empty products');
+      return [];
+    }
     const { data, error } = await supabase
       .from('products')
       .select('*')
@@ -41,6 +45,7 @@ export const productsApi = {
   },
 
   async getById(id: string): Promise<Product | null> {
+    if (!isSupabaseConfigured) return null;
     const { data, error } = await supabase
       .from('products')
       .select('*')
@@ -58,6 +63,10 @@ export const productsApi = {
 
 export const categoriesApi = {
   async getAll(): Promise<Category[]> {
+    if (!isSupabaseConfigured) {
+      logger.debug('Supabase not configured, returning empty categories');
+      return [];
+    }
     const { data, error } = await supabase
       .from('categories')
       .select('*')
@@ -69,6 +78,7 @@ export const categoriesApi = {
   },
 
   async getByType(type: string): Promise<Category[]> {
+    if (!isSupabaseConfigured) return [];
     const { data, error } = await supabase
       .from('categories')
       .select('*')
@@ -81,6 +91,7 @@ export const categoriesApi = {
   },
 
   async getWithChildren(): Promise<CategoryWithChildren[]> {
+    if (!isSupabaseConfigured) return [];
     const { data, error } = await supabase
       .from('categories')
       .select('*')
@@ -100,6 +111,7 @@ export const categoriesApi = {
   },
 
   async getBySlug(slug: string): Promise<Category | null> {
+    if (!isSupabaseConfigured) return null;
     const { data, error } = await supabase
       .from('categories')
       .select('*')
@@ -140,6 +152,10 @@ export const categoriesApi = {
 
 export const itemsApi = {
   async getAll(): Promise<Item[]> {
+    if (!isSupabaseConfigured) {
+      logger.debug('Supabase not configured, returning empty items');
+      return [];
+    }
     const { data, error } = await supabase
       .from('items')
       .select('*')
@@ -151,6 +167,7 @@ export const itemsApi = {
   },
 
   async getByCategory(categoryId: string): Promise<Item[]> {
+    if (!isSupabaseConfigured) return [];
     const { data, error } = await supabase
       .from('items')
       .select('*')
@@ -702,6 +719,10 @@ export const presetsApi = {
 
 export const settingsApi = {
   async getAll(): Promise<SystemSetting[]> {
+    if (!isSupabaseConfigured) {
+      logger.debug('Supabase not configured, returning empty settings');
+      return [];
+    }
     const { data, error } = await supabase
       .from('system_settings')
       .select('*')
@@ -712,6 +733,7 @@ export const settingsApi = {
   },
 
   async getByKey(key: string): Promise<SystemSetting | null> {
+    if (!isSupabaseConfigured) return null;
     const { data, error } = await supabase
       .from('system_settings')
       .select('*')
@@ -795,6 +817,10 @@ export const usersApi = {
 
 export const unitsApi = {
   async getAll(): Promise<{ id: string; code: string; name: string; symbol: string }[]> {
+    if (!isSupabaseConfigured) {
+      logger.debug('Supabase not configured, returning empty units');
+      return [];
+    }
     const { data, error } = await supabase
       .from('units')
       .select('*')
