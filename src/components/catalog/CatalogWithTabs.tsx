@@ -560,19 +560,43 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
         // Supabaseにデータがある場合はSupabaseを優先使用
         if (supabaseItems && supabaseItems.length > 0) {
-          // カテゴリタイプでフィルタ（JOINの条件が効かない場合の補完）
+          // タブに応じてカテゴリタイプでフィルタ
+          // activeTab → category_type マッピング:
+          // - design: DESIGN_CATEGORIES名で抽出（exterior/equipment両方から）
+          // - exterior: category_type='exterior'、DESIGN_CATEGORIES除外
+          // - interior: category_type='interior'、ELECTRICAL/FURNITURE除外
+          // - electrical: category_type='interior'、ELECTRICAL_CATEGORIESのみ
+          // - furniture: category_type='other'
+          // - equipment: category_type='equipment'、DESIGN_CATEGORIES除外
           let filteredItems = supabaseItems;
+
           if (activeTab === 'design') {
             filteredItems = supabaseItems.filter(item =>
               DESIGN_CATEGORIES.some(dc => item.category?.name === dc)
             );
+          } else if (activeTab === 'exterior') {
+            filteredItems = supabaseItems.filter(item =>
+              item.category?.category_type === 'exterior' &&
+              !DESIGN_CATEGORIES.some(dc => item.category?.name === dc)
+            );
           } else if (activeTab === 'interior') {
             filteredItems = supabaseItems.filter(item =>
-              item.category?.category_type === activeTab
+              item.category?.category_type === 'interior' &&
+              !ELECTRICAL_CATEGORIES.some(ec => item.category?.name?.includes(ec) || ec.includes(item.category?.name || '')) &&
+              !FURNITURE_CATEGORIES.some(fc => item.category?.name?.includes(fc) || fc.includes(item.category?.name || ''))
             );
-          } else {
+          } else if (activeTab === 'electrical') {
             filteredItems = supabaseItems.filter(item =>
-              item.category?.category_type === activeTab &&
+              item.category?.category_type === 'interior' &&
+              ELECTRICAL_CATEGORIES.some(ec => item.category?.name?.includes(ec) || ec.includes(item.category?.name || ''))
+            );
+          } else if (activeTab === 'furniture') {
+            filteredItems = supabaseItems.filter(item =>
+              item.category?.category_type === 'other'
+            );
+          } else if (activeTab === 'equipment') {
+            filteredItems = supabaseItems.filter(item =>
+              item.category?.category_type === 'equipment' &&
               !DESIGN_CATEGORIES.some(dc => item.category?.name === dc)
             );
           }

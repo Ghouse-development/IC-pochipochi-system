@@ -304,27 +304,30 @@ export const useProductStore = create<ProductStore>()(
         set({ isLoading: true });
 
         try {
-          // 並列でDB取得
-          const [exteriorFromDB, interiorFromDB, equipmentFromDB] = await Promise.all([
+          // 並列でDB取得（家具・家電も含む）
+          const [exteriorFromDB, interiorFromDB, equipmentFromDB, otherFromDB] = await Promise.all([
             fetchItemsByCategory('exterior'),
             fetchItemsByCategory('interior'),
             fetchItemsByCategory('equipment'),
+            fetchItemsByCategory('other'), // 家具・家電・その他
           ]);
 
-          // DBにデータがあれば使用、なければ静的データにフォールバック
-          const hasExteriorData = exteriorFromDB.length > 0 &&
-            exteriorFromDB.some(p => p.variants.length > 0);
-          const hasInteriorData = interiorFromDB.length > 0 &&
-            interiorFromDB.some(p => p.variants.length > 0);
-          const hasEquipmentData = equipmentFromDB.length > 0 &&
-            equipmentFromDB.some(p => p.variants.length > 0);
+          // DBにデータがあれば使用（バリアント有無は問わない）
+          const hasExteriorData = exteriorFromDB.length > 0;
+          const hasInteriorData = interiorFromDB.length > 0;
+          const hasEquipmentData = equipmentFromDB.length > 0;
+          const hasOtherData = otherFromDB.length > 0;
 
-          const isDBConnected = hasExteriorData || hasInteriorData || hasEquipmentData;
+          const isDBConnected = hasExteriorData || hasInteriorData || hasEquipmentData || hasOtherData;
+
+          // ログ出力
+          logger.info(`DB fetch results: exterior=${exteriorFromDB.length}, interior=${interiorFromDB.length}, equipment=${equipmentFromDB.length}, other=${otherFromDB.length}`);
 
           set({
             exteriorProducts: hasExteriorData ? exteriorFromDB : staticExteriorProducts,
             interiorProducts: hasInteriorData ? interiorFromDB : staticInteriorProducts,
             waterProducts: hasEquipmentData ? equipmentFromDB : staticWaterProducts,
+            furnitureProducts: hasOtherData ? otherFromDB : staticFurnitureProducts,
             isLoading: false,
             isDBConnected,
             lastFetchedAt: new Date(),
@@ -333,7 +336,7 @@ export const useProductStore = create<ProductStore>()(
           if (isDBConnected) {
             logger.info('Products loaded from database');
           } else {
-            logger.info('Products loaded from static files (DB has no data or variants)');
+            logger.info('Products loaded from static files (DB has no data)');
           }
         } catch (err) {
           logger.error('Error fetching products:', err);
@@ -342,6 +345,7 @@ export const useProductStore = create<ProductStore>()(
             exteriorProducts: staticExteriorProducts,
             interiorProducts: staticInteriorProducts,
             waterProducts: staticWaterProducts,
+            furnitureProducts: staticFurnitureProducts,
             isLoading: false,
             isDBConnected: false,
           });
