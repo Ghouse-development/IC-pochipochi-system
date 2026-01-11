@@ -4529,54 +4529,6 @@ const staticInteriorProducts: Product[] = [
     ]
   },
 
-  // ========== 格子（PDF30追加）==========
-  // 選択しない（標準）
-  {
-    id: 'int-partition-lattice-none',
-    categoryId: 'partition',
-    categoryName: '間仕切り',
-    subcategory: '格子',
-    name: '格子なし（標準）',
-    manufacturer: '-',
-    modelNumber: 'NONE',
-    unit: 'セット',
-    isOption: false,
-    description: '格子を設置しない場合はこちらを選択',
-    variants: [
-      { id: 'v1', color: '-', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 0 },
-      { plan: 'HOURS', price: 0 },
-      { plan: 'LIFE+', price: 0 },
-      { plan: 'LIFE', price: 0 }
-    ]
-  },
-  {
-    id: 'int-lattice-001',
-    categoryId: 'partition',
-    categoryName: '間仕切り',
-    subcategory: '格子',
-    name: 'インテリア格子',
-    manufacturer: 'LIXIL',
-    modelNumber: 'INT-LATTICE',
-    unit: '個',
-    isOption: true,
-    description: 'インテリア格子（室内用）',
-    variants: [
-      { id: 'v1', color: 'クリエペール', colorCode: '#E8DCC8', images: [] },
-      { id: 'v2', color: 'クリエラスク', colorCode: '#B8956E', images: [] },
-      { id: 'v3', color: 'クリエダーク', colorCode: '#5C4033', images: [] },
-      { id: 'v4', color: 'コウノキ', colorCode: '#8B7355', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 110000 },
-      { plan: 'HOURS', price: 110000 },
-      { plan: 'LIFE+', price: 110000 },
-      { plan: 'LIFE', price: 110000 }
-    ]
-  },
-
   // ========== アクセントタイル（PDF31-34追加）==========
   // 選択しない（標準）
   {

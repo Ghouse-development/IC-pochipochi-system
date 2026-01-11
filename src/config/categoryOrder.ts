@@ -363,11 +363,6 @@ export const INTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
     subcategoryOrder: ['インテリア格子', 'ルーバー']
   },
   {
-    name: '間仕切り',
-    icon: '🚧',
-    subcategoryOrder: ['間仕切り', 'パーティション']
-  },
-  {
     name: '造作',
     icon: '🔨',
     subcategoryOrder: ['造作ニッチ', 'カウンター', '飾り棚']

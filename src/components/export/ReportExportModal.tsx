@@ -27,7 +27,7 @@ const REPORT_CATEGORIES = [
 // カテゴリを大分類に分類
 const categorizeItem = (categoryName: string): string => {
   const exteriorKeywords = ['外壁', '屋根', '軒天', '窓', '玄関ドア', '外部設備', 'ポーチ', '庇', 'ガレージシャッター', '破風', '樋', '水切'];
-  const interiorKeywords = ['床', 'クロス', '建具', '収納', '階段', '手摺', '室内窓', '造作', 'カウンター', '間仕切り'];
+  const interiorKeywords = ['床', 'クロス', '建具', '収納', '階段', '手摺', '室内窓', '造作', 'カウンター', '格子'];
   const waterKeywords = ['キッチン', 'バス', '洗面', 'トイレ', 'ランドリー', '給湯器', 'エコキュート'];
   const electricalKeywords = ['照明', 'スイッチ', 'コンセント', 'インターホン', '電気', 'IoT', 'セキュリティ'];
   const furnitureKeywords = ['カーテン', 'エアコン', 'ブラインド', '家具', '家電'];
