@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { Product, ProductVariant, PricingInfo } from '../types/product';
-import { supabase } from '../lib/supabase';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { createLogger } from '../lib/logger';
 
 // 静的データ（フォールバック用）
@@ -20,6 +20,13 @@ let productCodeCache: Map<string, string> | null = null;
 // キャッシュ初期化
 const initializeCaches = async () => {
   if (unitCache && categoryCache && productCodeCache) return;
+  if (!isSupabaseConfigured) {
+    // Supabase未設定時は空のキャッシュを設定
+    unitCache = new Map();
+    categoryCache = new Map();
+    productCodeCache = new Map();
+    return;
+  }
 
   try {
     // 単位マスタを取得
@@ -230,6 +237,11 @@ interface ProductStore {
 
 // カテゴリタイプでアイテムを取得するヘルパー
 const fetchItemsByCategory = async (categoryType: string): Promise<Product[]> => {
+  // Supabase未設定時は空配列を返す（静的データにフォールバック）
+  if (!isSupabaseConfigured) {
+    return [];
+  }
+
   try {
     const { data, error } = await supabase
       .from('items')
