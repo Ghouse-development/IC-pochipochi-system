@@ -6,6 +6,14 @@ import { useState, useEffect, useCallback } from 'react';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import type { ItemWithDetails } from '../types/database';
 
+// タイルの色バリアント
+export interface TileColorVariant {
+  id: string;
+  colorName: string;
+  colorCode?: string;
+  imageUrl?: string;
+}
+
 // タイルオプションの型（PorchTileSelector互換）
 export interface TileOption {
   id: string;
@@ -17,6 +25,7 @@ export interface TileOption {
   isRecommended?: boolean;
   imageUrl?: string;
   displayOrder?: number;
+  colorVariants?: TileColorVariant[];
 }
 
 // 目地色オプションの型（PorchTileSelector互換）
@@ -61,6 +70,17 @@ function itemToTileOption(item: ItemWithDetails, selectedPlan: string): TileOpti
   const primaryVariant = item.variants?.[0];
   const primaryImage = primaryVariant?.images?.find(img => img.is_primary) || primaryVariant?.images?.[0];
 
+  // 色バリアントを変換
+  const colorVariants: TileColorVariant[] = (item.variants || []).map(v => {
+    const variantImage = v.images?.find(img => img.is_primary) || v.images?.[0];
+    return {
+      id: v.id,
+      colorName: v.color_name,
+      colorCode: v.color_code || undefined,
+      imageUrl: variantImage?.image_url,
+    };
+  });
+
   return {
     id: item.id,
     name: item.name,
@@ -71,6 +91,7 @@ function itemToTileOption(item: ItemWithDetails, selectedPlan: string): TileOpti
     isRecommended: item.is_recommended ?? false,
     imageUrl: primaryImage?.image_url,
     displayOrder: item.display_order,
+    colorVariants: colorVariants.length > 0 ? colorVariants : undefined,
   };
 }
 

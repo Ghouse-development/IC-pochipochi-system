@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Check, ChevronLeft, Star, Loader2, Image as ImageIcon } from 'lucide-react';
 import { useCartStore } from '../../stores/useCartStore';
-import { usePorchItems, type TileOption, type GroutOption } from '../../hooks/usePorchItems';
+import { usePorchItems, type TileOption, type GroutOption, type TileColorVariant } from '../../hooks/usePorchItems';
 import type { Product, ProductVariant, PlanType } from '../../types/product';
 
 interface PorchTileSelectorProps {
@@ -22,10 +22,11 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
   const existingPorchItem = items.find(i => i.product.categoryName === 'ポーチ');
   const existingGroutItem = items.find(i => i.product.categoryName === 'ポーチタイル目地');
 
-  const [step, setStep] = useState<'tile' | 'grout' | 'complete'>(
+  const [step, setStep] = useState<'tile' | 'color' | 'grout' | 'complete'>(
     existingPorchItem ? 'complete' : 'tile'
   );
   const [selectedTile, setSelectedTile] = useState<TileOption | null>(null);
+  const [selectedColor, setSelectedColor] = useState<TileColorVariant | null>(null);
   const [selectedGrout, setSelectedGrout] = useState<GroutOption | null>(null);
 
   // 選び直す処理
@@ -33,6 +34,7 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
     clearCategoryItems('porch');
     clearCategoryItems('porch-grout');
     setSelectedTile(null);
+    setSelectedColor(null);
     setSelectedGrout(null);
     setStep('tile');
   };
@@ -42,14 +44,33 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
     return tile.name.includes('モルタル') || tile.description?.includes('目地不要');
   };
 
+  // 色選択が必要かどうか（複数バリアントがある場合）
+  const needsColorSelection = (tile: TileOption) => {
+    return tile.colorVariants && tile.colorVariants.length > 1;
+  };
+
   const handleTileSelect = (tile: TileOption) => {
     setSelectedTile(tile);
+    setSelectedColor(null);
+
     // モルタルの場合は目地不要なので完了へ
     if (isMortar(tile)) {
       setStep('complete');
+    } else if (needsColorSelection(tile)) {
+      // 色選択が必要な場合
+      setStep('color');
     } else {
+      // 色が1つだけの場合は自動選択して目地選択へ
+      if (tile.colorVariants && tile.colorVariants.length === 1) {
+        setSelectedColor(tile.colorVariants[0]);
+      }
       setStep('grout');
     }
+  };
+
+  const handleColorSelect = (color: TileColorVariant) => {
+    setSelectedColor(color);
+    setStep('grout');
   };
 
   const handleGroutSelect = (grout: GroutOption) => {
@@ -62,26 +83,30 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
     // 既存のポーチをクリア
     clearCategoryItems('porch');
 
+    // 選択された色の名前と画像
+    const colorName = selectedColor?.colorName || selectedTile.name;
+    const colorImageUrl = selectedColor?.imageUrl || selectedTile.imageUrl;
+
     // タイルアイテムを作成
     const tileProduct: Product = {
       id: `ext-porch-${selectedTile.id}`,
       categoryId: 'porch',
       categoryName: 'ポーチ',
       subcategory: selectedTile.name,
-      name: selectedTile.name,
+      name: `${selectedTile.name}${selectedColor ? ` (${colorName})` : ''}`,
       manufacturer: selectedTile.manufacturer,
       modelNumber: `PORCH-${selectedTile.id.toUpperCase()}`,
       unit: '㎡',
       isOption: !selectedTile.isStandard,
       variants: [
-        { id: 'v1', color: selectedTile.name, imageUrl: selectedTile.imageUrl }
+        { id: selectedColor?.id || 'v1', color: colorName, imageUrl: colorImageUrl }
       ],
       pricing: [
         { plan: selectedPlan as PlanType, price: selectedTile.price }
       ],
     };
 
-    const tileVariant: ProductVariant = { id: 'v1', color: selectedTile.name, imageUrl: selectedTile.imageUrl };
+    const tileVariant: ProductVariant = { id: selectedColor?.id || 'v1', color: colorName, imageUrl: colorImageUrl };
     addItem(tileProduct, 1, tileVariant);
 
     // タイル選択時のみ目地も追加（モルタル以外）
@@ -144,16 +169,25 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
 
       {/* ステップインジケーター */}
       {step !== 'complete' && (
-        <div className="flex items-center gap-2 mb-6">
+        <div className="flex items-center gap-2 mb-6 flex-wrap">
           <div className={`flex items-center gap-1 ${step === 'tile' ? 'text-blue-600 font-medium' : 'text-gray-400'}`}>
-            <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm">1</span>
-            <span>タイル選択</span>
+            <span className={`w-6 h-6 rounded-full flex items-center justify-center text-sm ${step === 'tile' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100'}`}>1</span>
+            <span>タイル</span>
           </div>
+          {selectedTile && needsColorSelection(selectedTile) && (
+            <>
+              <div className="w-6 h-px bg-gray-300" />
+              <div className={`flex items-center gap-1 ${step === 'color' ? 'text-blue-600 font-medium' : 'text-gray-400'}`}>
+                <span className={`w-6 h-6 rounded-full flex items-center justify-center text-sm ${step === 'color' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100'}`}>2</span>
+                <span>色</span>
+              </div>
+            </>
+          )}
           {needsGrout && (
             <>
-              <div className="w-8 h-px bg-gray-300" />
+              <div className="w-6 h-px bg-gray-300" />
               <div className={`flex items-center gap-1 ${step === 'grout' ? 'text-blue-600 font-medium' : 'text-gray-400'}`}>
-                <span className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-sm">2</span>
+                <span className={`w-6 h-6 rounded-full flex items-center justify-center text-sm ${step === 'grout' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100'}`}>{selectedTile && needsColorSelection(selectedTile) ? '3' : '2'}</span>
                 <span>目地色</span>
               </div>
             </>
@@ -202,8 +236,8 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
         </div>
       )}
 
-      {/* ステップ2: 目地色選択 */}
-      {step === 'grout' && selectedTile && (
+      {/* ステップ2: 色選択（複数バリアントがある場合のみ） */}
+      {step === 'color' && selectedTile && selectedTile.colorVariants && (
         <div>
           <button
             onClick={() => setStep('tile')}
@@ -223,6 +257,81 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
             <div>
               <span className="text-sm text-gray-600">選択中のタイル: </span>
               <span className="font-medium">{selectedTile.name}</span>
+            </div>
+          </div>
+
+          <h4 className="font-medium text-gray-800 mb-4">色を選択（{selectedTile.colorVariants.length}色）</h4>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-6">
+            {selectedTile.colorVariants.map(color => (
+              <button
+                key={color.id}
+                onClick={() => handleColorSelect(color)}
+                className={`relative border-2 rounded-xl text-left transition-all overflow-hidden ${
+                  selectedColor?.id === color.id
+                    ? 'border-blue-500 bg-blue-50'
+                    : 'border-gray-200 hover:border-blue-300'
+                }`}
+              >
+                {/* 色画像 */}
+                <div className="aspect-square bg-gray-100">
+                  {color.imageUrl ? (
+                    <img
+                      src={color.imageUrl}
+                      alt={color.colorName}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : color.colorCode ? (
+                    <div
+                      className="w-full h-full"
+                      style={{ backgroundColor: color.colorCode }}
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <ImageIcon className="w-8 h-8 text-gray-300" />
+                    </div>
+                  )}
+                </div>
+                {/* 色名 */}
+                <div className="p-2">
+                  <span className="text-sm font-medium text-gray-900">{color.colorName}</span>
+                </div>
+                {/* 選択チェック */}
+                {selectedColor?.id === color.id && (
+                  <div className="absolute top-2 left-2 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                    <Check className="w-4 h-4 text-white" />
+                  </div>
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ステップ3: 目地色選択 */}
+      {step === 'grout' && selectedTile && (
+        <div>
+          <button
+            onClick={() => needsColorSelection(selectedTile) ? setStep('color') : setStep('tile')}
+            className="mb-4 text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1"
+          >
+            <ChevronLeft className="w-4 h-4" /> {needsColorSelection(selectedTile) ? '色選択に戻る' : 'タイル選択に戻る'}
+          </button>
+
+          <div className="mb-4 p-3 bg-gray-50 rounded-lg flex items-center gap-3">
+            {(selectedColor?.imageUrl || selectedTile.imageUrl) && (
+              <img
+                src={selectedColor?.imageUrl || selectedTile.imageUrl}
+                alt={selectedColor?.colorName || selectedTile.name}
+                className="w-12 h-12 object-cover rounded"
+              />
+            )}
+            <div>
+              <span className="text-sm text-gray-600">選択中: </span>
+              <span className="font-medium">{selectedTile.name}</span>
+              {selectedColor && (
+                <span className="text-sm text-gray-500 ml-1">({selectedColor.colorName})</span>
+              )}
             </div>
           </div>
 
