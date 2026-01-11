@@ -161,6 +161,8 @@ export interface Item {
   discontinue_note: string | null;
   display_order: number;
   material_type: string | null; // 素材タイプ（外壁: 窯業系/金属/塗り壁、床材: 突板/シート等）
+  tags: string[] | null; // タグ（複数カテゴリ所属用: porch-tile, porch-grout等）
+  is_recommended: boolean | null; // おすすめフラグ
   created_at: string;
   updated_at: string;
   // Joined data

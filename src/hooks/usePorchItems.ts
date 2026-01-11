@@ -66,7 +66,7 @@ function itemToTileOption(item: ItemWithDetails, selectedPlan: string): TileOpti
     description: item.note || '',
     price,
     isStandard,
-    isRecommended: (item as ItemWithDetails & { is_recommended?: boolean }).is_recommended ?? false,
+    isRecommended: item.is_recommended ?? false,
     imageUrl: primaryImage?.image_url,
     displayOrder: item.display_order,
   };
@@ -82,7 +82,7 @@ function itemToGroutOption(item: ItemWithDetails): GroutOption {
     id: item.id,
     name: item.name,
     colorCode,
-    isRecommended: (item as ItemWithDetails & { is_recommended?: boolean }).is_recommended ?? false,
+    isRecommended: item.is_recommended ?? false,
     displayOrder: item.display_order,
   };
 }
@@ -103,75 +103,60 @@ export function usePorchItems(selectedPlan: string) {
     setError(null);
 
     try {
-      // カテゴリを取得
-      const { data: categories, error: catError } = await supabase
-        .from('categories')
-        .select('id, slug')
-        .in('slug', ['porch-tile', 'porch-grout']);
-
-      if (catError) throw catError;
-
-      const tileCategory = categories?.find(c => c.slug === 'porch-tile');
-      const groutCategory = categories?.find(c => c.slug === 'porch-grout');
-
-      // タイルアイテムを取得
-      if (tileCategory) {
-        const { data: tileItems, error: tileError } = await supabase
-          .from('items')
-          .select(`
+      // タグでタイルアイテムを取得（tags配列に'porch-tile'を含むもの）
+      const { data: tileItems, error: tileError } = await supabase
+        .from('items')
+        .select(`
+          *,
+          category:categories(*),
+          unit:units(*),
+          variants:item_variants(
             *,
-            category:categories(*),
-            unit:units(*),
-            variants:item_variants(
-              *,
-              images:item_variant_images(*)
-            ),
-            pricing:item_pricing(
-              *,
-              product:products(*)
-            )
-          `)
-          .eq('category_id', tileCategory.id)
-          .eq('is_active', true)
-          .order('display_order');
+            images:item_variant_images(*)
+          ),
+          pricing:item_pricing(
+            *,
+            product:products(*)
+          )
+        `)
+        .contains('tags', ['porch-tile'])
+        .eq('is_active', true)
+        .order('display_order');
 
-        if (tileError) throw tileError;
+      if (tileError) throw tileError;
 
-        if (tileItems && tileItems.length > 0) {
-          const convertedTiles = (tileItems as ItemWithDetails[]).map(item =>
-            itemToTileOption(item, selectedPlan)
-          );
-          setTiles(convertedTiles);
-        }
+      if (tileItems && tileItems.length > 0) {
+        const convertedTiles = (tileItems as ItemWithDetails[]).map(item =>
+          itemToTileOption(item, selectedPlan)
+        );
+        setTiles(convertedTiles);
       }
 
-      // 目地アイテムを取得
-      if (groutCategory) {
-        const { data: groutItems, error: groutError } = await supabase
-          .from('items')
-          .select(`
+      // タグで目地アイテムを取得（tags配列に'porch-grout'を含むもの）
+      const { data: groutItems, error: groutError } = await supabase
+        .from('items')
+        .select(`
+          *,
+          category:categories(*),
+          unit:units(*),
+          variants:item_variants(
             *,
-            category:categories(*),
-            unit:units(*),
-            variants:item_variants(
-              *,
-              images:item_variant_images(*)
-            ),
-            pricing:item_pricing(
-              *,
-              product:products(*)
-            )
-          `)
-          .eq('category_id', groutCategory.id)
-          .eq('is_active', true)
-          .order('display_order');
+            images:item_variant_images(*)
+          ),
+          pricing:item_pricing(
+            *,
+            product:products(*)
+          )
+        `)
+        .contains('tags', ['porch-grout'])
+        .eq('is_active', true)
+        .order('display_order');
 
-        if (groutError) throw groutError;
+      if (groutError) throw groutError;
 
-        if (groutItems && groutItems.length > 0) {
-          const convertedGrout = (groutItems as ItemWithDetails[]).map(itemToGroutOption);
-          setGroutColors(convertedGrout);
-        }
+      if (groutItems && groutItems.length > 0) {
+        const convertedGrout = (groutItems as ItemWithDetails[]).map(itemToGroutOption);
+        setGroutColors(convertedGrout);
       }
     } catch (err) {
       console.warn('ポーチアイテムの取得に失敗しました。デフォルト値を使用します。', err);
