@@ -8,6 +8,9 @@
  * 注意: 既存データを削除してから挿入します
  */
 
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 import { createClient } from '@supabase/supabase-js';
 import { exteriorProducts } from '../src/data/exteriorProducts';
 import { interiorProducts } from '../src/data/interiorProducts';
