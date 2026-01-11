@@ -52,6 +52,7 @@ import { EntranceDoorSelector } from './EntranceDoorSelector';
 import { DiningTableSelector } from './DiningTableSelector';
 import { StairSelector } from './StairSelector';
 import { MultiColorAreaSelector } from './MultiColorAreaSelector';
+import { BaseBuildingSelector } from './BaseBuildingSelector';
 
 // ユーティリティ関数とコンポーネント (ItemCard, SkeletonCard, EmptyState, Confetti) はインポート済み
 
@@ -1793,6 +1794,18 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   selectedPlan={selectedPlanId}
                   onComplete={() => {
                     toast.success('階段をカートに追加しました');
+                    goToNextCategory();
+                  }}
+                  onCancel={() => {
+                    // キャンセル処理
+                  }}
+                />
+              ) : currentCategoryName === 'ベース建具' ? (
+                /* ベース建具選択UI（色→デザインの順） */
+                <BaseBuildingSelector
+                  selectedPlan={selectedPlanId}
+                  onComplete={() => {
+                    toast.success('ベース建具をカートに追加しました');
                     goToNextCategory();
                   }}
                   onCancel={() => {
