@@ -273,7 +273,7 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
       </div>
 
       {/* 選択済みアイテムバー（クイック解除用） */}
-      <SelectedItemsBar />
+      <SelectedItemsBar isCartOpen={isCartOpen} />
 
       <CartSidebarEnhanced isOpen={isCartOpen} onClose={handleCartClose} />
 

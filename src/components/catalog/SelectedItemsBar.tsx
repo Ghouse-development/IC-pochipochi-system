@@ -3,7 +3,11 @@ import { X, ChevronUp, ChevronDown, ShoppingBag, Trash2 } from 'lucide-react';
 import { useCartStore } from '../../stores/useCartStore';
 import { formatPrice } from '../../lib/utils';
 
-export const SelectedItemsBar: React.FC = () => {
+interface SelectedItemsBarProps {
+  isCartOpen?: boolean;
+}
+
+export const SelectedItemsBar: React.FC<SelectedItemsBarProps> = ({ isCartOpen = false }) => {
   const { items, removeItem, getTotalPrice, selectedPlanId } = useCartStore();
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -20,7 +24,9 @@ export const SelectedItemsBar: React.FC = () => {
   }, {} as Record<string, typeof items>);
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 pointer-events-none">
+    <div className={`fixed bottom-0 left-0 z-40 pointer-events-none transition-all duration-300 ${
+      isCartOpen ? 'right-0 sm:right-[480px]' : 'right-0'
+    }`}>
       {/* 展開時のオーバーレイ */}
       {isExpanded && (
         <div
