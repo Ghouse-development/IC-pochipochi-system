@@ -51,6 +51,7 @@ import { AirconSelector } from './AirconSelector';
 import { EntranceDoorSelector } from './EntranceDoorSelector';
 import { DiningTableSelector } from './DiningTableSelector';
 import { StairSelector } from './StairSelector';
+import { MultiColorAreaSelector } from './MultiColorAreaSelector';
 
 // ユーティリティ関数とコンポーネント (ItemCard, SkeletonCard, EmptyState, Confetti) はインポート済み
 
@@ -656,6 +657,16 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   // 外壁の固定素材タイプリスト（常に3つ表示）
   const EXTERIOR_WALL_MATERIAL_TYPES = ['窯業系サイディング', 'ガルバリウム鋼板', '塗り壁'];
 
+  // ㎡指定で複数色選択が必要なカテゴリ名（1〜3色選択、各色の面積を指定）
+  const MULTI_COLOR_CATEGORY_NAMES = [
+    '外壁',           // 外装 - 素材タイプ選択後
+    '軒天',           // 外装
+    'ベース床',       // 内装 - 素材タイプ選択後
+    'ベースクロス（壁）',   // 内装
+    'ベースクロス（天井）', // 内装
+    '壁材',           // 内装
+  ];
+
   // 外部設備の必須カテゴリ（8項目）+ その他オプション
   const EXTERIOR_FACILITY_TYPES = [
     { id: '電気メーター', name: '電気メーター', required: true },
@@ -966,6 +977,24 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   const catalogProducts = useMemo(() => {
     return items.map(convertToCatalogProduct);
   }, [items]);
+
+  // 複数色選択が必要なカテゴリかどうか判定
+  const needsMultiColorSelector = useMemo(() => {
+    if (!currentCategoryName) return false;
+    if (!MULTI_COLOR_CATEGORY_NAMES.includes(currentCategoryName)) return false;
+
+    // 素材タイプ選択が必要なカテゴリは、素材タイプ選択後のみ表示
+    const needsMaterialTypeFirst = ['外壁', 'ベース床'].includes(currentCategoryName);
+    if (needsMaterialTypeFirst && !selectedMaterialType) return false;
+
+    return true;
+  }, [currentCategoryName, selectedMaterialType]);
+
+  // 複数色選択用の商品リスト（CatalogProduct形式）
+  const multiColorProducts = useMemo(() => {
+    if (!needsMultiColorSelector) return [];
+    return filteredItems.map(convertToCatalogProduct);
+  }, [needsMultiColorSelector, filteredItems]);
 
   // カートに追加（部屋選択が必要な場合はモーダルを表示）
   const handleAddToCart = useCallback((item: ItemWithDetails, skipRoomSelection?: boolean) => {
@@ -2638,6 +2667,24 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                     </div>
                   )}
                 </div>
+              ) : needsMultiColorSelector ? (
+                /* 複数色・面積指定選択UI（外壁、軒天、ベース床、クロス等） */
+                <MultiColorAreaSelector
+                  categoryId={selectedCategoryId || ''}
+                  categoryName={currentCategoryName || ''}
+                  products={multiColorProducts}
+                  maxColors={3}
+                  onComplete={() => {
+                    toast.success(`${currentCategoryName}の選択が完了しました`);
+                    goToNextCategory();
+                  }}
+                  onCancel={() => {
+                    // 素材タイプ選択に戻る（該当する場合）
+                    if (['外壁', 'ベース床'].includes(currentCategoryName || '')) {
+                      setSelectedMaterialType('');
+                    }
+                  }}
+                />
               ) : filteredItems.length === 0 ? (
                 <EmptyState searchTerm={searchTerm} onClear={() => setSearchTerm('')} />
               ) : (
