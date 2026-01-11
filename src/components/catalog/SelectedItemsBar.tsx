@@ -37,7 +37,7 @@ export const SelectedItemsBar: React.FC = () => {
             <div className="max-w-7xl mx-auto p-4">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-bold text-gray-900 flex items-center gap-2">
-                  <ShoppingBag className="w-5 h-5 text-teal-600" />
+                  <ShoppingBag className="w-5 h-5 text-blue-600" />
                   選択済みアイテム（{items.length}件）
                 </h3>
                 <button
@@ -94,7 +94,7 @@ export const SelectedItemsBar: React.FC = () => {
 
         {/* 常時表示バー */}
         <div
-          className="bg-gradient-to-r from-teal-600 to-teal-500 text-white cursor-pointer"
+          className="bg-gradient-to-r from-blue-600 to-blue-500 text-white cursor-pointer"
           onClick={() => setIsExpanded(!isExpanded)}
         >
           <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
