@@ -13,7 +13,7 @@ import { useProductStore } from '../../stores/useProductStore';
 import { useFavoritesStore } from '../../stores/useFavoritesStore';
 import { sanitizeSearchQuery } from '../../lib/sanitize';
 import { ANIMATION_DURATIONS, CART_MILESTONES, CATEGORY_GROUPS } from '../../lib/constants';
-import type { ItemWithDetails, Category, Product } from '../../types/database';
+import type { ItemWithDetails, Category, Product, ItemVariant } from '../../types/database';
 // RecommendationPanel removed - 不要
 import { ProductDetailModal } from './ProductDetailModal';
 import { RoomInteriorSelector } from '../interior/RoomInteriorSelector';
@@ -999,7 +999,12 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   }, [needsMultiColorSelector, filteredItems]);
 
   // カートに追加（部屋選択が必要な場合はモーダルを表示）
-  const handleAddToCart = useCallback((item: ItemWithDetails, skipRoomSelection?: boolean) => {
+  const handleAddToCart = useCallback((item: ItemWithDetails, variantOrSkip?: ItemVariant | boolean) => {
+    // 第2引数がbooleanの場合はskipRoomSelection、それ以外はvariant
+    const isSkipRoomSelection = typeof variantOrSkip === 'boolean';
+    const skipRoomSelection = isSkipRoomSelection ? variantOrSkip : false;
+    const selectedVariant = !isSkipRoomSelection && variantOrSkip ? variantOrSkip : item.variants?.[0];
+
     const categoryName = item.category?.name || '';
     const notNeededOption = getNotNeededOption(categoryName);
 
@@ -1010,14 +1015,22 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
         categoryName,
         productId: item.id,
         productName: item.name,
-        variantId: item.variants?.[0]?.id,
-        variantName: item.variants?.[0]?.color_name,
+        variantId: selectedVariant?.id,
+        variantName: selectedVariant?.color_name,
       });
       return;
     }
 
     const cartProduct = convertToCartItem(item);
-    addItem(cartProduct, 1);
+    // 選択されたバリアントをカート用の形式に変換
+    const cartVariant = selectedVariant ? {
+      id: selectedVariant.id,
+      color: selectedVariant.color_name,
+      colorCode: selectedVariant.color_code || undefined,
+      imageUrl: selectedVariant.images?.[0]?.image_url,
+      thumbnailUrl: selectedVariant.images?.[0]?.thumbnail_url || undefined,
+    } : undefined;
+    addItem(cartProduct, 1, cartVariant);
     useCartStore.getState().setSelectedPlanId(selectedPlanId);
 
     // 選択状態ストアにも保存
@@ -1025,8 +1038,8 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
       categoryName,
       item.id,
       item.name,
-      item.variants?.[0]?.id,
-      item.variants?.[0]?.color_name
+      selectedVariant?.id,
+      selectedVariant?.color_name
     );
 
     setAddedItemId(item.id);

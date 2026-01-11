@@ -7,7 +7,7 @@ interface SelectedItemsBarProps {
   isCartOpen?: boolean;
 }
 
-export const SelectedItemsBar: React.FC<SelectedItemsBarProps> = ({ isCartOpen = false }) => {
+export const SelectedItemsBar: React.FC<SelectedItemsBarProps> = ({ isCartOpen: _isCartOpen = false }) => {
   const { items, removeItem, getTotalPrice, selectedPlanId } = useCartStore();
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -24,9 +24,7 @@ export const SelectedItemsBar: React.FC<SelectedItemsBarProps> = ({ isCartOpen =
   }, {} as Record<string, typeof items>);
 
   return (
-    <div className={`fixed bottom-0 left-0 z-40 pointer-events-none transition-all duration-300 ${
-      isCartOpen ? 'right-0 sm:right-[480px]' : 'right-0'
-    }`}>
+    <div className="fixed bottom-0 left-0 w-64 z-40 pointer-events-none transition-all duration-300 hidden lg:block">
       {/* 展開時のオーバーレイ */}
       {isExpanded && (
         <div
@@ -39,29 +37,29 @@ export const SelectedItemsBar: React.FC<SelectedItemsBarProps> = ({ isCartOpen =
       <div className="relative pointer-events-auto">
         {/* 展開パネル */}
         {isExpanded && (
-          <div className="bg-white border-t border-gray-200 shadow-xl max-h-[50vh] overflow-y-auto animate-slide-up">
-            <div className="max-w-7xl mx-auto p-4">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-bold text-gray-900 flex items-center gap-2">
-                  <ShoppingBag className="w-5 h-5 text-blue-600" />
-                  選択済みアイテム（{items.length}件）
+          <div className="bg-white border border-gray-200 rounded-t-xl shadow-xl max-h-[60vh] overflow-y-auto animate-slide-up">
+            <div className="p-3">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-bold text-gray-900 text-sm flex items-center gap-2">
+                  <ShoppingBag className="w-4 h-4 text-blue-600" />
+                  選択済み（{items.length}件）
                 </h3>
                 <button
                   onClick={() => setIsExpanded(false)}
-                  className="p-2 hover:bg-gray-100 rounded-full"
+                  className="p-1.5 hover:bg-gray-100 rounded-full"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-4 h-4" />
                 </button>
               </div>
 
               {/* カテゴリごとのアイテム */}
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {Object.entries(groupedItems).map(([category, categoryItems]) => (
                   <div key={category}>
-                    <h4 className="text-sm font-medium text-gray-500 mb-2">
-                      {category}（{categoryItems.length}件）
+                    <h4 className="text-xs font-medium text-gray-500 mb-1.5">
+                      {category}（{categoryItems.length}）
                     </h4>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                    <div className="space-y-1">
                       {categoryItems.map((item) => {
                         const price = item.product.pricing?.find(
                           (p) => p.planId === selectedPlanId || p.plan === selectedPlanId
@@ -70,22 +68,22 @@ export const SelectedItemsBar: React.FC<SelectedItemsBarProps> = ({ isCartOpen =
                         return (
                           <div
                             key={`${item.product.id}-${item.selectedVariant.id}`}
-                            className="flex items-center justify-between bg-gray-50 rounded-lg p-3 group hover:bg-red-50 transition-colors"
+                            className="flex items-center justify-between bg-gray-50 rounded-lg p-2 group hover:bg-red-50 transition-colors"
                           >
                             <div className="flex-1 min-w-0 mr-2">
-                              <p className="text-sm font-medium text-gray-900 truncate">
+                              <p className="text-xs font-medium text-gray-900 truncate">
                                 {item.product.name}
                               </p>
-                              <p className="text-xs text-gray-500 truncate">
+                              <p className="text-[10px] text-gray-500 truncate">
                                 {item.selectedVariant.color} • {formatPrice(price)}
                               </p>
                             </div>
                             <button
                               onClick={() => removeItem(item.product.id)}
-                              className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-100 rounded-full transition-colors flex-shrink-0"
+                              className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-100 rounded-full transition-colors flex-shrink-0"
                               title="選択解除"
                             >
-                              <Trash2 className="w-4 h-4" />
+                              <Trash2 className="w-3 h-3" />
                             </button>
                           </div>
                         );
@@ -100,45 +98,22 @@ export const SelectedItemsBar: React.FC<SelectedItemsBarProps> = ({ isCartOpen =
 
         {/* 常時表示バー */}
         <div
-          className="bg-gradient-to-r from-blue-600 to-blue-500 text-white cursor-pointer"
+          className={`bg-gradient-to-r from-blue-600 to-blue-500 text-white cursor-pointer ${isExpanded ? '' : 'rounded-t-xl'}`}
           onClick={() => setIsExpanded(!isExpanded)}
         >
-          <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2">
-                <ShoppingBag className="w-5 h-5" />
-                <span className="font-semibold">{items.length}件選択中</span>
-              </div>
-              <div className="hidden sm:flex items-center gap-2 text-sm opacity-80">
-                {/* 最新3件を表示 */}
-                {items.slice(-3).map((item, i) => (
-                  <React.Fragment key={item.product.id}>
-                    {i > 0 && <span>•</span>}
-                    <span className="truncate max-w-[120px]">{item.product.name}</span>
-                  </React.Fragment>
-                ))}
-                {items.length > 3 && <span>他{items.length - 3}件</span>}
-              </div>
+          <div className="px-3 py-2.5 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <ShoppingBag className="w-4 h-4" />
+              <span className="font-semibold text-sm">{items.length}件選択</span>
             </div>
 
-            <div className="flex items-center gap-4">
-              <div className="text-right">
-                <p className="text-xs opacity-80">オプション合計</p>
-                <p className="font-bold text-lg">{formatPrice(totalPrice)}</p>
-              </div>
-              <div className="flex items-center gap-1 text-sm opacity-80">
-                {isExpanded ? (
-                  <>
-                    <span>閉じる</span>
-                    <ChevronDown className="w-4 h-4" />
-                  </>
-                ) : (
-                  <>
-                    <span>開いて解除</span>
-                    <ChevronUp className="w-4 h-4" />
-                  </>
-                )}
-              </div>
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-sm">{formatPrice(totalPrice)}</span>
+              {isExpanded ? (
+                <ChevronDown className="w-4 h-4" />
+              ) : (
+                <ChevronUp className="w-4 h-4" />
+              )}
             </div>
           </div>
         </div>
