@@ -12,9 +12,11 @@ import {
   Star,
   AlertTriangle,
   Palette,
+  DollarSign,
 } from 'lucide-react';
 import { itemsApi, categoriesApi, productsApi, unitsApi } from '../../services/api';
 import { ItemVariantManager } from './ItemVariantManager';
+import { ItemPricingManager } from './ItemPricingManager';
 import { useDebounce } from '../../hooks/useDebounce';
 import { supabase } from '../../lib/supabase';
 import type { ItemWithDetails, Category, Product } from '../../types/database';
@@ -556,7 +558,7 @@ function ItemFormModal({
   onSaved: () => void;
 }) {
   const toast = useToast();
-  const [activeTab, setActiveTab] = useState<'basic' | 'variants'>('basic');
+  const [activeTab, setActiveTab] = useState<'basic' | 'pricing' | 'variants'>('basic');
   const [formData, setFormData] = useState({
     item_code: item?.item_code || '',
     name: item?.name || '',
@@ -564,6 +566,7 @@ function ItemFormModal({
     manufacturer: item?.manufacturer || '',
     model_number: item?.model_number || '',
     note: item?.note || '',
+    catalog_url: (item as ItemWithDetails & { catalog_url?: string })?.catalog_url || '',
     unit_id: item?.unit_id || '',
     is_hit: item?.is_hit || false,
     is_discontinued: item?.is_discontinued || false,
@@ -573,6 +576,7 @@ function ItemFormModal({
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [variants, setVariants] = useState(item?.variants || []);
+  const [pricing, setPricing] = useState(item?.pricing || []);
 
   const parentCategories = categories.filter((c) => !c.parent_id);
 
@@ -586,6 +590,20 @@ function ItemFormModal({
         }
       } catch (err) {
         logger.error('Failed to reload variants:', err);
+      }
+    }
+  };
+
+  const handlePricingChange = async () => {
+    // Reload item to get updated pricing
+    if (item) {
+      try {
+        const updatedItem = await itemsApi.getWithDetails(item.id);
+        if (updatedItem) {
+          setPricing(updatedItem.pricing || []);
+        }
+      } catch (err) {
+        logger.error('Failed to reload pricing:', err);
       }
     }
   };
@@ -656,6 +674,17 @@ function ItemFormModal({
             >
               <Tag className="w-4 h-4 inline-block mr-2" />
               基本情報
+            </button>
+            <button
+              onClick={() => setActiveTab('pricing')}
+              className={`px-4 py-3 text-sm font-medium border-b-2 -mb-px ${
+                activeTab === 'pricing'
+                  ? 'border-teal-500 text-teal-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              <DollarSign className="w-4 h-4 inline-block mr-2" />
+              価格設定
             </button>
             <button
               onClick={() => setActiveTab('variants')}
@@ -772,13 +801,30 @@ function ItemFormModal({
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">備考</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">商品メモ・特徴</label>
                 <textarea
                   value={formData.note}
                   onChange={(e) => setFormData({ ...formData, note: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
                   rows={3}
+                  placeholder="商品の特徴やメモを入力"
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  商品URL（メーカーサイト等）
+                </label>
+                <input
+                  type="url"
+                  value={formData.catalog_url}
+                  onChange={(e) => setFormData({ ...formData, catalog_url: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                  placeholder="https://example.com/product/..."
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  設定するとユーザー画面でリンクが表示されます（任意）
+                </p>
               </div>
 
               <div className="flex items-center gap-6 pt-2">
@@ -843,6 +889,29 @@ function ItemFormModal({
                 </button>
               </div>
             </form>
+          ) : activeTab === 'pricing' ? (
+            <div className="p-6">
+              {item ? (
+                <ItemPricingManager
+                  itemId={item.id}
+                  pricing={pricing}
+                  onPricingChange={handlePricingChange}
+                />
+              ) : (
+                <div className="text-center py-8 text-gray-500">
+                  <p>アイテムを保存してから価格設定ができます</p>
+                </div>
+              )}
+              <div className="flex justify-end pt-4 mt-4 border-t">
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                >
+                  閉じる
+                </button>
+              </div>
+            </div>
           ) : (
             <div className="p-6">
               {item ? (

@@ -423,6 +423,7 @@ export interface CreateItemPricingInput {
   variant_id?: string;
   product_id: string;
   price: number;
+  installation_cost?: number;
   is_standard?: boolean;
   is_available?: boolean;
 }
