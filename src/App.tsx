@@ -1,4 +1,4 @@
-import { useState, useEffect, lazy, Suspense } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { AuthProvider, DemoAuthProvider, useAuth } from './contexts/AuthContext';
 import { CustomerModeProvider } from './components/customer/CustomerModeWrapper';
@@ -15,9 +15,10 @@ import { SelectedItemsBar } from './components/catalog/SelectedItemsBar';
 import { ConfirmOrderModal } from './components/catalog/ConfirmOrderModal';
 import { ShareModal } from './components/common/ShareModal';
 import { GlobalErrorBoundary } from './components/common/GlobalErrorHandler';
-import { HelpButton } from './components/common/OnboardingGuide';
-import { InteractiveTutorial, DEFAULT_TUTORIAL_STEPS } from './components/common/InteractiveTutorial';
-import { useTutorialStore } from './stores/useTutorialStore';
+// チュートリアル関連は無効化
+// import { HelpButton } from './components/common/OnboardingGuide';
+// import { InteractiveTutorial, DEFAULT_TUTORIAL_STEPS } from './components/common/InteractiveTutorial';
+// import { useTutorialStore } from './stores/useTutorialStore';
 import { ToastProvider } from './components/common/Toast';
 import { AnnouncerProvider } from './components/common/ScreenReaderAnnouncer';
 import { HelpProvider } from './components/common/InAppHelp';
@@ -132,25 +133,16 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
 
   // オンボーディングガイド - 無効化済み
 
-  // インタラクティブチュートリアル
-  const {
-    isOpen: isTutorialOpen,
-    isFirstVisit,
-    hasCompletedTutorial,
-    openTutorial,
-    closeTutorial,
-    completeTutorial,
-    markAsVisited,
-  } = useTutorialStore();
-
-  // 初回訪問時の自動チュートリアル表示は無効化
-  useEffect(() => {
-    // 自動表示は行わない（ヘルプボタンからのみアクセス可能）
-    if (isFirstVisit && !hasCompletedTutorial) {
-      // 訪問済みとしてマーク（ポップアップは表示しない）
-      markAsVisited();
-    }
-  }, [isFirstVisit, hasCompletedTutorial, openTutorial, markAsVisited]);
+  // インタラクティブチュートリアルは無効化
+  // const {
+  //   isOpen: isTutorialOpen,
+  //   isFirstVisit,
+  //   hasCompletedTutorial,
+  //   openTutorial,
+  //   closeTutorial,
+  //   completeTutorial,
+  //   markAsVisited,
+  // } = useTutorialStore();
 
   const handleCartClose = () => {
     setIsCartOpen(false);
@@ -279,18 +271,7 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
         onClose={() => setIsShareModalOpen(false)}
       />
 
-      {/* ヘルプボタン（チュートリアル開始） */}
-      <HelpButton onClick={openTutorial} />
-
-      {/* インタラクティブチュートリアル */}
-      <InteractiveTutorial
-        steps={DEFAULT_TUTORIAL_STEPS}
-        isOpen={isTutorialOpen}
-        onClose={closeTutorial}
-        onComplete={completeTutorial}
-        showProgress={true}
-        allowSkip={true}
-      />
+      {/* ヘルプボタン・チュートリアルは無効化 */}
 
       {/* オンボーディングガイド - 無効化済み */}
       {/* <OnboardingGuide
