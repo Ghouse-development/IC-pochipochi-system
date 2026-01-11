@@ -3,8 +3,13 @@ import { createLogger } from './logger';
 
 const logger = createLogger('Supabase');
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+// 環境変数をトリムして改行や空白を除去
+const supabaseUrl = (import.meta.env.VITE_SUPABASE_URL || '').trim();
+const supabaseAnonKey = (import.meta.env.VITE_SUPABASE_ANON_KEY || '').trim();
+
+// デバッグ: 環境変数の状態をログ出力
+logger.debug('Supabase URL:', supabaseUrl ? `${supabaseUrl.substring(0, 30)}...` : 'NOT SET');
+logger.debug('Supabase Key:', supabaseAnonKey ? 'SET' : 'NOT SET');
 
 // ダミークライアント（環境変数未設定時用）
 const createDummyClient = (): SupabaseClient => {
