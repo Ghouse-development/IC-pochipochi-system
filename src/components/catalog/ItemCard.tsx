@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShoppingCart, Check, Sparkles, X, Eye, Scale, Heart, ThumbsUp, Star, Image as ImageIcon } from 'lucide-react';
+import { ShoppingCart, Check, Sparkles, X, Eye, Heart, ThumbsUp, Star, Image as ImageIcon } from 'lucide-react';
 import { formatPrice } from '../../lib/utils';
 import type { ItemWithDetails } from '../../types/database';
 import type { RecommendBadgeInfo } from './catalogUtils';
@@ -69,8 +69,6 @@ export interface ItemCardProps {
   handleOpenDetail: (item: ItemWithDetails) => void;
   handleAddToCart: (item: ItemWithDetails) => void;
   handleRemoveFromCart: (itemId: string) => void;
-  handleToggleCompare: (item: ItemWithDetails) => void;
-  isInCompare: (itemId: string) => boolean;
   handleToggleFavorite: (itemId: string) => void;
   isFavorite: (itemId: string) => boolean;
   searchTerm: string;
@@ -92,8 +90,6 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
   handleOpenDetail,
   handleAddToCart,
   handleRemoveFromCart,
-  handleToggleCompare,
-  isInCompare,
   handleToggleFavorite,
   isFavorite,
   searchTerm,
@@ -109,7 +105,6 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
   const isJustAdded = addedItemId === item.id;
   const isHovered = hoveredItem === item.id;
   const variant = item.variants?.[0];
-  const inCompare = isInCompare(item.id);
   const inFavorite = isFavorite(item.id);
   const hasMultipleVariants = (item.variants?.length || 0) > 1;
 
@@ -118,9 +113,7 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
       className={`group bg-white rounded-2xl overflow-hidden transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${
         inCart
           ? 'border-4 border-blue-500 shadow-xl shadow-blue-200 ring-4 ring-blue-100 scale-[1.02]'
-          : inCompare
-          ? 'border-4 border-purple-500 shadow-xl shadow-purple-200'
-          : 'border-2 border-gray-200 shadow-md hover:shadow-xl hover:border-blue-300:border-blue-600 hover:scale-[1.02]'
+          : 'border-2 border-gray-200 shadow-md hover:shadow-xl hover:border-blue-300 hover:scale-[1.02]'
       } ${isJustAdded ? 'animate-pochipochi' : ''}`}
       style={{ animationDelay: `${index * 30}ms` }}
       onMouseEnter={() => setHoveredItem(item.id)}
@@ -133,7 +126,7 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
         }
       }}
       tabIndex={0}
-      aria-label={`${item.name}${inCart ? ' - 選択済み' : ''}${inCompare ? ' - 比較中' : ''}`}
+      aria-label={`${item.name}${inCart ? ' - 選択済み' : ''}`}
     >
       {/* 画像エリア */}
       <div className="aspect-[4/3] bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
@@ -221,21 +214,6 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
           >
             <Heart className={`w-3.5 h-3.5 ${inFavorite ? 'fill-current' : ''}`} aria-hidden="true" />
           </button>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleToggleCompare(item);
-            }}
-            className={`p-1.5 rounded-full shadow-sm transition-all ${
-              inCompare
-                ? 'bg-purple-500 text-white'
-                : 'bg-white/90 text-gray-400 hover:text-purple-500'
-            }`}
-            aria-label={inCompare ? '比較から削除' : '比較に追加'}
-            aria-pressed={inCompare}
-          >
-            <Scale className="w-3.5 h-3.5" aria-hidden="true" />
-          </button>
         </div>
 
         {/* 選択済みオーバーレイ - クリックで解除可能 */}
@@ -268,15 +246,6 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
               <span className="px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full shadow-lg">
                 選択中
               </span>
-            </div>
-          </div>
-        )}
-
-        {/* 比較中マーク */}
-        {inCompare && !inCart && (
-          <div className="absolute bottom-1.5 right-1.5">
-            <div className="bg-purple-500 rounded-full p-1">
-              <Scale className="w-3 h-3 text-white" />
             </div>
           </div>
         )}
@@ -351,7 +320,6 @@ export const ItemCard = React.memo(ItemCardComponent, (prevProps, nextProps) => 
     prevProps.cartItemIds === nextProps.cartItemIds &&
     prevProps.addedItemId === nextProps.addedItemId &&
     prevProps.hoveredItem === nextProps.hoveredItem &&
-    prevProps.isInCompare(prevProps.item.id) === nextProps.isInCompare(nextProps.item.id) &&
     prevProps.isFavorite(prevProps.item.id) === nextProps.isFavorite(nextProps.item.id) &&
     prevProps.searchTerm === nextProps.searchTerm
   );

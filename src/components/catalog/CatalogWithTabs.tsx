@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { Search, ClipboardCheck, Check, Star, ChevronRight, ChevronLeft, Home, X, Scale, FileDown, HelpCircle, Eye, Flame } from 'lucide-react';
+import { Search, ClipboardCheck, Check, Star, ChevronRight, ChevronLeft, Home, X, FileDown, HelpCircle, Eye, Flame } from 'lucide-react';
 import { useToast } from '../common/Toast';
 import { useTimeout } from '../../hooks/useTimeout';
 import { useDebounce } from '../../hooks/useDebounce';
@@ -16,7 +16,6 @@ import { ANIMATION_DURATIONS, CART_MILESTONES, CATEGORY_GROUPS } from '../../lib
 import type { ItemWithDetails, Category, Product } from '../../types/database';
 // RecommendationPanel removed - 不要
 import { ProductDetailModal } from './ProductDetailModal';
-import { ProductCompareModal } from './ProductCompareModal';
 import { RoomInteriorSelector } from '../interior/RoomInteriorSelector';
 import { useCustomerMode } from '../customer/CustomerModeWrapper';
 import * as Dialog from '@radix-ui/react-dialog';
@@ -156,10 +155,6 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   // 商品詳細モーダル用
   const [selectedProductForDetail, setSelectedProductForDetail] = useState<CatalogProduct | null>(null);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
-
-  // 比較機能用
-  const [compareProducts, setCompareProducts] = useState<CatalogProduct[]>([]);
-  const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
 
   // 見積書出力ダイアログ
   const [isEstimateDialogOpen, setIsEstimateDialogOpen] = useState(false);
@@ -1059,25 +1054,6 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     }
   }, [navigate, activeTab, selectedCategoryId]);
 
-  // 比較に追加/削除
-  const handleToggleCompare = useCallback((item: ItemWithDetails) => {
-    const product = convertToCatalogProduct(item);
-    setCompareProducts(prev => {
-      const exists = prev.some(p => p.id === product.id);
-      if (exists) {
-        return prev.filter(p => p.id !== product.id);
-      } else if (prev.length < 3) {
-        return [...prev, product];
-      }
-      return prev;
-    });
-  }, []);
-
-  // 比較リストにあるかチェック
-  const isInCompare = useCallback((itemId: string) => {
-    return compareProducts.some(p => p.id === itemId);
-  }, [compareProducts]);
-
   const getPrice = (item: ItemWithDetails) => {
     return item.pricing?.find(p => p.product?.code === selectedPlanId)?.price || 0;
   };
@@ -1175,10 +1151,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // モーダルが開いている場合はEscでのみ閉じる
-      if (isDetailModalOpen || isCompareModalOpen || isRoomPlannerOpen) {
+      if (isDetailModalOpen || isRoomPlannerOpen) {
         if (e.key === 'Escape') {
           if (isDetailModalOpen) handleCloseDetailModal();
-          if (isCompareModalOpen) setIsCompareModalOpen(false);
           if (isRoomPlannerOpen) setIsRoomPlannerOpen(false);
         }
         return;
@@ -1224,7 +1199,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isDetailModalOpen, isCompareModalOpen, isRoomPlannerOpen, handleCloseDetailModal, searchTerm, setSearchTerm, undecidedCategories, goToNextCategory]);
+  }, [isDetailModalOpen, isRoomPlannerOpen, handleCloseDetailModal, searchTerm, setSearchTerm, undecidedCategories, goToNextCategory]);
 
   return (
     <>
@@ -2868,8 +2843,6 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                             handleOpenDetail={handleOpenDetail}
                             handleAddToCart={handleAddToCart}
                             handleRemoveFromCart={handleRemoveFromCart}
-                            handleToggleCompare={handleToggleCompare}
-                            isInCompare={isInCompare}
                             handleToggleFavorite={handleToggleFavorite}
                             isFavorite={isFavorite}
                             searchTerm={searchTerm}
@@ -3030,36 +3003,6 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
           </div>
         </div>
 
-        {/* 比較バー（PC用） */}
-        {compareProducts.length > 0 && (
-          <div className="hidden lg:flex fixed bottom-0 left-0 right-0 bg-purple-600 text-white py-3 px-6 items-center justify-between z-40">
-            <div className="flex items-center gap-4">
-              <Scale className="w-5 h-5" />
-              <span className="font-medium">比較中: {compareProducts.length}件</span>
-              <div className="flex gap-2">
-                {compareProducts.map(p => (
-                  <span key={p.id} className="bg-white/20 px-2 py-1 rounded text-sm">
-                    {p.name.substring(0, 15)}...
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div className="flex gap-3">
-              <button
-                onClick={() => setCompareProducts([])}
-                className="px-4 py-2 bg-white/20 rounded-lg hover:bg-white/30 transition-colors"
-              >
-                クリア
-              </button>
-              <button
-                onClick={() => setIsCompareModalOpen(true)}
-                className="px-4 py-2 bg-white text-purple-600 rounded-lg font-medium hover:bg-purple-50 transition-colors"
-              >
-                比較する
-              </button>
-            </div>
-          </div>
-        )}
       </div>
 
       {/* 商品詳細モーダル */}
@@ -3069,14 +3012,6 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
         onClose={handleCloseDetailModal}
         allProducts={catalogProducts}
         onProductSelect={handleRecommendedProductSelect}
-      />
-
-      {/* 比較モーダル */}
-      <ProductCompareModal
-        products={compareProducts}
-        isOpen={isCompareModalOpen}
-        onClose={() => setIsCompareModalOpen(false)}
-        onRemoveProduct={(productId) => setCompareProducts(prev => prev.filter(p => p.id !== productId))}
       />
 
       {/* 見積書出力ダイアログ */}

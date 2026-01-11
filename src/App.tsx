@@ -14,7 +14,6 @@ import { CartSidebarEnhanced } from './components/cart/CartSidebarEnhanced';
 import { SelectedItemsBar } from './components/catalog/SelectedItemsBar';
 import { ConfirmOrderModal } from './components/catalog/ConfirmOrderModal';
 import { ShareModal } from './components/common/ShareModal';
-import { ProductCompareModal } from './components/catalog/ProductCompareModal';
 import { GlobalErrorBoundary } from './components/common/GlobalErrorHandler';
 import { OnboardingGuide, HelpButton, useOnboarding } from './components/common/OnboardingGuide';
 import { InteractiveTutorial, DEFAULT_TUTORIAL_STEPS } from './components/common/InteractiveTutorial';
@@ -28,7 +27,6 @@ import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { useVersionStore } from './stores/useVersionStore';
 import { useCartStore } from './stores/useCartStore';
 import { CompletionCelebration } from './components/common/CompletionCelebration';
-import type { Product } from './types/product';
 
 // Lazy loaded components for code splitting
 const AdminDashboard = lazy(() => import('./components/admin/AdminDashboard').then(m => ({ default: m.AdminDashboard })));
@@ -81,9 +79,7 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
-  const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
   const [isShortcutHelpOpen, setIsShortcutHelpOpen] = useState(false);
-  const [compareProducts, setCompareProducts] = useState<Product[]>([]);
 
   // ダークモード状態
   const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -129,7 +125,6 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
       setIsCartOpen(false);
       setIsConfirmModalOpen(false);
       setIsShareModalOpen(false);
-      setIsCompareModalOpen(false);
       setIsShortcutHelpOpen(false);
     },
     onHelp: () => setIsShortcutHelpOpen(true),
@@ -290,13 +285,6 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
       <ShareModal
         isOpen={isShareModalOpen}
         onClose={() => setIsShareModalOpen(false)}
-      />
-
-      <ProductCompareModal
-        isOpen={isCompareModalOpen}
-        onClose={() => setIsCompareModalOpen(false)}
-        products={compareProducts}
-        onRemoveProduct={(productId) => setCompareProducts(prev => prev.filter(p => p.id !== productId))}
       />
 
       {/* ヘルプボタン（チュートリアル開始） */}
