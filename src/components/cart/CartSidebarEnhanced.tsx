@@ -10,7 +10,7 @@ import { ConfirmDialog } from '../common/ConfirmDialog';
 import { exportToExcel } from '../../utils/estimateExport';
 import { openSpecificationWindow } from '../../utils/specificationPDF';
 import { generatePresentation } from '../../utils/presentationGenerator';
-import { supabase } from '../../lib/supabase';
+import { supabase, isSupabaseConfigured } from '../../lib/supabase';
 import { createLogger } from '../../lib/logger';
 import { STORAGE_KEYS } from '../../lib/constants';
 import { ShowroomEstimateManager } from '../showroom/ShowroomEstimateManager';
@@ -44,6 +44,19 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
   useEffect(() => {
     const fetchPlanName = async () => {
       if (!selectedPlanId) return;
+
+      // Supabase未設定時はハードコード値を使用
+      if (!isSupabaseConfigured) {
+        const planNames: Record<string, string> = {
+          'LACIE': 'LACIE',
+          'HOURS': 'HOURS',
+          'LIFE_PLUS': 'LIFE+',
+          'LIFE': 'LIFE',
+        };
+        setPlanName(planNames[selectedPlanId] || selectedPlanId);
+        return;
+      }
+
       const { data } = await supabase
         .from('products')
         .select('name')
