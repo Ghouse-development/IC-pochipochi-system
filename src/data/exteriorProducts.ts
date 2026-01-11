@@ -1502,6 +1502,33 @@ export const exteriorProducts: Product[] = [
     ]
   },
 
+  // ===== ポーチタイル目地色（タイル選択時に必須） =====
+  {
+    id: 'ext-porch-grout',
+    categoryId: 'porch-grout',
+    categoryName: 'ポーチタイル目地',
+    subcategory: '目地色',
+    name: 'ポーチタイル目地色',
+    manufacturer: '標準',
+    modelNumber: 'GROUT-PORCH',
+    unit: '一式',
+    isOption: false,
+    description: 'ポーチタイル選択時に目地色を選択（タイル施工費に含む）※おすすめ: 明るめのタイルには白系、暗めのタイルには灰色系',
+    variants: [
+      { id: 'v1', color: '①白（オススメ）', colorCode: '#FFFFFF', images: [] },
+      { id: 'v2', color: '②濃い灰色', colorCode: '#4A4A4A', images: [] },
+      { id: 'v3', color: '③こげ茶', colorCode: '#4A3728', images: [] },
+      { id: 'v4', color: '④ベージュ', colorCode: '#D4C4A8', images: [] },
+      { id: 'v5', color: '⑤薄い灰色（オススメ）', colorCode: '#B8B8B8', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 },
+      { plan: 'LIFE+', price: 0 },
+      { plan: 'LIFE', price: 0 }
+    ]
+  },
+
   // ===== 屋根材 =====
   {
     id: 'ext-roof-nisc',

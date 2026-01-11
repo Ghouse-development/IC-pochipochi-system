@@ -53,6 +53,7 @@ import { DiningTableSelector } from './DiningTableSelector';
 import { StairSelector } from './StairSelector';
 import { MultiColorAreaSelector } from './MultiColorAreaSelector';
 import { BaseBuildingSelector } from './BaseBuildingSelector';
+import { PorchTileSelector } from './PorchTileSelector';
 
 // ユーティリティ関数とコンポーネント (ItemCard, SkeletonCard, EmptyState, Confetti) はインポート済み
 
@@ -1806,6 +1807,18 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   selectedPlan={selectedPlanId}
                   onComplete={() => {
                     toast.success('ベース建具をカートに追加しました');
+                    goToNextCategory();
+                  }}
+                  onCancel={() => {
+                    // キャンセル処理
+                  }}
+                />
+              ) : currentCategoryName === 'ポーチ' ? (
+                /* ポーチタイル選択UI（タイル→目地色の順） */
+                <PorchTileSelector
+                  selectedPlan={selectedPlanId}
+                  onComplete={() => {
+                    toast.success('ポーチをカートに追加しました');
                     goToNextCategory();
                   }}
                   onCancel={() => {
