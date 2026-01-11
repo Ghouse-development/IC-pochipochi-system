@@ -395,11 +395,8 @@ export const INTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
     icon: '💨',
     subcategoryOrder: ['換気扇', '24時間換気']
   },
-  {
-    name: '換気システム',
-    icon: '🌬️',
-    subcategoryOrder: ['換気システム']
-  },
+  // 換気システム（DSDD選択）は設計タブで行うため、内装からは削除
+  // DSDDの色選択は外部設備の「DSDD給気口」で行う
   {
     name: '設備',
     icon: '⚙️',

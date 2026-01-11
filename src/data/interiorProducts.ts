@@ -3656,28 +3656,9 @@ const staticInteriorProducts: Product[] = [
     ]
   },
 
-  // ========== 換気システム（PDF23追加）==========
-  {
-    id: 'int-ventilation-001',
-    categoryId: 'ventilation',
-    categoryName: '換気システム',
-    subcategory: '第一種換気',
-    name: 'DSDD換気システム',
-    manufacturer: 'DSDD',
-    modelNumber: 'DSDD-SYSTEM',
-    unit: 'セット',
-    isOption: true,
-    description: 'DSDD第一種全熱交換換気システムへ変更',
-    variants: [
-      { id: 'v1', color: '標準', images: [] }
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 1500000 },
-      { plan: 'HOURS', price: 1500000 },
-      { plan: 'LIFE+', price: 1500000 },
-      { plan: 'LIFE', price: 1500000 }
-    ]
-  },
+  // ========== 換気システム ==========
+  // ※ DSDD換気システムの選択は設計タブで行うため、内装からは削除
+  // ※ DSDDの給気口色選択は外部設備の「DSDD給気口」カテゴリで行う
 
   // ========== 階段（PDF24-25追加）==========
   {
