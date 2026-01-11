@@ -11,6 +11,7 @@ import {
   AlertCircle,
   Upload,
   Loader2,
+  Sparkles,
 } from 'lucide-react';
 import { itemVariantsApi, itemVariantImagesApi } from '../../services/api';
 import type { ItemVariant, ItemVariantImage } from '../../types/database';
@@ -146,6 +147,7 @@ export function ItemVariantManager({
       color_code: '',
       description: '',
       is_active: true,
+      is_hit: false,
       display_order: variants.length,
       created_at: '',
       updated_at: '',
@@ -186,6 +188,7 @@ export function ItemVariantManager({
           variant_code: variant.variant_code || `${itemId}_${variant.color_name}`,
           color_name: variant.color_name,
           color_code: variant.color_code || undefined,
+          is_hit: variant.is_hit || undefined,
         });
       } else {
         // Update existing variant
@@ -193,6 +196,7 @@ export function ItemVariantManager({
           color_name: variant.color_name,
           color_code: variant.color_code || undefined,
           description: variant.description || undefined,
+          is_hit: variant.is_hit,
         });
       }
 
@@ -298,6 +302,14 @@ export function ItemVariantManager({
                   </div>
                 </div>
 
+                {/* HIT badge */}
+                {variant.is_hit && (
+                  <div className="absolute top-2 left-2 bg-red-500 text-white px-1.5 py-0.5 rounded-full text-xs font-bold flex items-center gap-0.5 shadow-md">
+                    <Sparkles className="w-3 h-3" />
+                    HIT
+                  </div>
+                )}
+
                 {/* Info */}
                 <div className="p-3">
                   <h5 className="font-medium text-gray-900 truncate">{variant.color_name}</h5>
@@ -361,6 +373,7 @@ function VariantEditModal({
     color_name: variant.color_name,
     color_code: variant.color_code || '',
     description: variant.description || '',
+    is_hit: variant.is_hit || false,
   });
   const [images, setImages] = useState<ItemVariantImage[]>(variant.images || []);
   const [imageUrl, setImageUrl] = useState('');
@@ -543,6 +556,7 @@ function VariantEditModal({
         color_name: formData.color_name,
         color_code: formData.color_code || null,
         description: formData.description || null,
+        is_hit: formData.is_hit,
       },
       images
     );
@@ -602,6 +616,21 @@ function VariantEditModal({
                 rows={2}
                 placeholder="色の説明やメモ"
               />
+            </div>
+
+            {/* HIT設定 */}
+            <div className="flex items-center gap-3 p-3 bg-red-50 rounded-lg border border-red-100">
+              <input
+                type="checkbox"
+                id="variant-is-hit"
+                checked={formData.is_hit}
+                onChange={e => setFormData({ ...formData, is_hit: e.target.checked })}
+                className="w-5 h-5 text-red-500 rounded border-gray-300 focus:ring-red-500"
+              />
+              <label htmlFor="variant-is-hit" className="flex items-center gap-2 cursor-pointer">
+                <Sparkles className="w-4 h-4 text-red-500" />
+                <span className="font-medium text-gray-800">この色をHIT表示する</span>
+              </label>
             </div>
           </div>
 

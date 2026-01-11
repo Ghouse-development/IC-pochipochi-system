@@ -180,6 +180,7 @@ export interface ItemVariant {
   color_code: string | null;
   description: string | null;
   is_active: boolean;
+  is_hit: boolean;
   display_order: number;
   created_at: string;
   updated_at: string;
@@ -420,6 +421,7 @@ export interface CreateItemVariantInput {
   variant_code: string;
   color_name: string;
   color_code?: string;
+  is_hit?: boolean;
 }
 
 export interface CreateItemPricingInput {

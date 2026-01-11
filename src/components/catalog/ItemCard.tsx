@@ -203,7 +203,8 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
 
         {/* お気に入り */}
         <div className="absolute top-1.5 right-1.5 flex flex-col gap-1">
-          {item.is_hit && (
+          {/* HIT表示：アイテムまたは選択中のバリアントがHITの場合 */}
+          {(item.is_hit || selectedVariant?.is_hit) && (
             <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-red-500 text-white shadow-sm flex items-center gap-0.5">
               <Sparkles className="w-2.5 h-2.5" />
             </span>
