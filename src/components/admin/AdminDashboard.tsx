@@ -7,6 +7,7 @@ import { SystemSettings } from './SystemSettings';
 import { ProjectManager } from './ProjectManager';
 import { ItemManager } from './ItemManager';
 import { CategoryManager } from './CategoryManager';
+import { ProductMaster } from './ProductMaster';
 import { UserManager } from './UserManager';
 import { VendorOrderManager } from './VendorOrderManager';
 import { DataBackup } from './DataBackup';
@@ -29,7 +30,7 @@ interface AdminDashboardProps {
 type MainTab = 'products' | 'statistics' | 'projects' | 'vendors' | 'data' | 'system';
 
 // 商品マスタのサブタブ
-type ProductSubTab = 'items' | 'categories';
+type ProductSubTab = 'plans' | 'items' | 'categories';
 
 // 統計のサブタブ
 type StatsSubTab = 'dashboard' | 'adoption' | 'staffOption' | 'behavior';
@@ -145,7 +146,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
   const [activeTab, setActiveTab] = useState<MainTab>('products');
 
   // サブタブ
-  const [productSubTab, setProductSubTab] = useState<ProductSubTab>('items');
+  const [productSubTab, setProductSubTab] = useState<ProductSubTab>('plans');
   const [statsSubTab, setStatsSubTab] = useState<StatsSubTab>('dashboard');
   const [dataSubTab, setDataSubTab] = useState<DataSubTab>('backup');
   const [systemSubTab, setSystemSubTab] = useState<SystemSubTab>('settings');
@@ -350,6 +351,19 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
         {activeTab === 'products' && (
           <div className="flex gap-2 mb-4">
             <button
+              onClick={() => setProductSubTab('plans')}
+              className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
+                productSubTab === 'plans'
+                  ? 'bg-teal-100 text-teal-700 font-medium'
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              <div className="flex items-center gap-1.5">
+                <DollarSign className="w-3.5 h-3.5" />
+                商品（プラン）
+              </div>
+            </button>
+            <button
               onClick={() => setProductSubTab('items')}
               className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
                 productSubTab === 'items'
@@ -359,7 +373,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
             >
               <div className="flex items-center gap-1.5">
                 <Package className="w-3.5 h-3.5" />
-                アイテム管理
+                アイテム
               </div>
             </button>
             <button
@@ -539,6 +553,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
         {/* 商品マスタ */}
         {activeTab === 'products' && (
           <div>
+            {productSubTab === 'plans' && (
+              <SectionErrorBoundary sectionName="商品マスタ">
+                <ProductMaster />
+              </SectionErrorBoundary>
+            )}
             {productSubTab === 'items' && (
               <SectionErrorBoundary sectionName="アイテム管理">
                 <ItemManager />
