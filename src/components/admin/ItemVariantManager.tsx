@@ -12,6 +12,8 @@ import {
   Upload,
   Loader2,
   Sparkles,
+  ChevronUp,
+  ChevronDown,
 } from 'lucide-react';
 import { itemVariantsApi, itemVariantImagesApi } from '../../services/api';
 import type { ItemVariant, ItemVariantImage } from '../../types/database';
@@ -175,6 +177,41 @@ export function ItemVariantManager({
     }
   };
 
+  // 並び替え処理
+  const handleMoveVariant = async (variantId: string, direction: 'up' | 'down') => {
+    const currentIndex = variants.findIndex(v => v.id === variantId);
+    if (currentIndex === -1) return;
+
+    const newIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
+    if (newIndex < 0 || newIndex >= variants.length) return;
+
+    // ローカル状態を即座に更新
+    const newVariants = [...variants];
+    const [movedVariant] = newVariants.splice(currentIndex, 1);
+    newVariants.splice(newIndex, 0, movedVariant);
+
+    // display_orderを更新
+    const updatedVariants = newVariants.map((v, idx) => ({
+      ...v,
+      display_order: idx,
+    }));
+
+    setVariants(updatedVariants);
+
+    // DBに保存
+    try {
+      await Promise.all([
+        itemVariantsApi.update(variants[currentIndex].id, { display_order: newIndex }),
+        itemVariantsApi.update(variants[newIndex].id, { display_order: currentIndex }),
+      ]);
+    } catch (err) {
+      logger.error('Failed to reorder variants:', err);
+      toast.error('エラー', '並び替えの保存に失敗しました');
+      // 失敗時は元に戻す
+      setVariants(variants);
+    }
+  };
+
   const handleSaveVariant = async (variant: ItemVariant, images: ItemVariantImage[]) => {
     setIsSaving(true);
 
@@ -250,9 +287,11 @@ export function ItemVariantManager({
         </div>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {variants.map(variant => {
+          {variants.map((variant, index) => {
             const isUploading = uploadingVariantId === variant.id;
             const isDragOver = draggingOverVariantId === variant.id;
+            const isFirst = index === 0;
+            const isLast = index === variants.length - 1;
 
             return (
               <div
@@ -261,12 +300,47 @@ export function ItemVariantManager({
                 onDragLeave={handleCardDragLeave}
                 onDragOver={handleCardDragOver}
                 onDrop={(e) => handleCardDrop(e, variant.id)}
-                className={`bg-white border-2 rounded-lg overflow-hidden transition-all ${
+                className={`bg-white border-2 rounded-lg overflow-hidden transition-all relative ${
                   isDragOver
                     ? 'border-teal-500 shadow-lg scale-[1.02]'
                     : 'border-gray-200 hover:shadow-md'
                 }`}
               >
+                {/* 並び替えボタン（右上） */}
+                {variants.length > 1 && (
+                  <div className="absolute top-2 right-2 flex flex-col gap-0.5 z-10">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleMoveVariant(variant.id, 'up');
+                      }}
+                      disabled={isFirst}
+                      className={`p-1 rounded bg-white/90 shadow-sm transition-all ${
+                        isFirst
+                          ? 'text-gray-300 cursor-not-allowed'
+                          : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                      }`}
+                      title="上に移動"
+                    >
+                      <ChevronUp className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleMoveVariant(variant.id, 'down');
+                      }}
+                      disabled={isLast}
+                      className={`p-1 rounded bg-white/90 shadow-sm transition-all ${
+                        isLast
+                          ? 'text-gray-300 cursor-not-allowed'
+                          : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                      }`}
+                      title="下に移動"
+                    >
+                      <ChevronDown className="w-4 h-4" />
+                    </button>
+                  </div>
+                )}
                 {/* Thumbnail with Drop Overlay */}
                 <div className="aspect-square bg-gray-100 relative">
                   {variant.images && variant.images.length > 0 ? (

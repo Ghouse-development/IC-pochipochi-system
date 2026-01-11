@@ -13,6 +13,8 @@ import {
   AlertTriangle,
   Palette,
   DollarSign,
+  ChevronUp,
+  ChevronDown,
 } from 'lucide-react';
 import { itemsApi, categoriesApi, productsApi, unitsApi } from '../../services/api';
 import { ItemVariantManager } from './ItemVariantManager';
@@ -272,6 +274,46 @@ export function ItemManager() {
     }
   };
 
+  // アイテム並び替え（同じカテゴリ内のみ）
+  const handleMoveItem = async (itemId: string, direction: 'up' | 'down') => {
+    // 同じカテゴリ内のアイテムのみを対象にする
+    const item = filteredItems.find(i => i.id === itemId);
+    if (!item) return;
+
+    const sameCategoryItems = filteredItems.filter(i => i.category_id === item.category_id);
+    const currentIndex = sameCategoryItems.findIndex(i => i.id === itemId);
+    if (currentIndex === -1) return;
+
+    const newIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
+    if (newIndex < 0 || newIndex >= sameCategoryItems.length) return;
+
+    const targetItem = sameCategoryItems[newIndex];
+
+    // DBに保存
+    try {
+      const currentOrder = item.display_order ?? currentIndex;
+      const targetOrder = targetItem.display_order ?? newIndex;
+
+      await Promise.all([
+        supabase
+          .from('items')
+          .update({ display_order: targetOrder, updated_at: new Date().toISOString() })
+          .eq('id', item.id),
+        supabase
+          .from('items')
+          .update({ display_order: currentOrder, updated_at: new Date().toISOString() })
+          .eq('id', targetItem.id),
+      ]);
+
+      // リロード
+      await loadItems(categoryFilter === 'all' ? undefined : categoryFilter);
+      toast.success('並び替え完了', 'アイテムの順序を変更しました');
+    } catch (err) {
+      logger.error('Failed to reorder items:', err);
+      toast.error('エラー', '並び替えの保存に失敗しました');
+    }
+  };
+
   const handleExportItems = () => {
     // Export items as CSV
     const headers = ['アイテムコード', '名前', 'メーカー', '型番', 'カテゴリ', 'HIT', '有効'];
@@ -399,6 +441,9 @@ export function ItemManager() {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
+                <th className="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-16">
+                  順序
+                </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   アイテム
                 </th>
@@ -425,13 +470,49 @@ export function ItemManager() {
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredItems.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-6 py-12 text-center text-gray-500">
+                  <td colSpan={8} className="px-6 py-12 text-center text-gray-500">
                     アイテムが見つかりません
                   </td>
                 </tr>
               ) : (
-                filteredItems.map((item) => (
+                filteredItems.map((item) => {
+                  // 同じカテゴリ内での位置を計算
+                  const sameCategoryItems = filteredItems.filter(i => i.category_id === item.category_id);
+                  const categoryIndex = sameCategoryItems.findIndex(i => i.id === item.id);
+                  const isFirstInCategory = categoryIndex === 0;
+                  const isLastInCategory = categoryIndex === sameCategoryItems.length - 1;
+
+                  return (
                   <tr key={item.id} className="hover:bg-gray-50">
+                    {/* 並び替えボタン */}
+                    <td className="px-3 py-4">
+                      <div className="flex flex-col items-center gap-0.5">
+                        <button
+                          onClick={() => handleMoveItem(item.id, 'up')}
+                          disabled={isFirstInCategory}
+                          className={`p-1 rounded transition-all ${
+                            isFirstInCategory
+                              ? 'text-gray-300 cursor-not-allowed'
+                              : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'
+                          }`}
+                          title="上に移動"
+                        >
+                          <ChevronUp className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleMoveItem(item.id, 'down')}
+                          disabled={isLastInCategory}
+                          className={`p-1 rounded transition-all ${
+                            isLastInCategory
+                              ? 'text-gray-300 cursor-not-allowed'
+                              : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'
+                          }`}
+                          title="下に移動"
+                        >
+                          <ChevronDown className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
@@ -527,7 +608,8 @@ export function ItemManager() {
                       </div>
                     </td>
                   </tr>
-                ))
+                  );
+                })
               )}
             </tbody>
           </table>
