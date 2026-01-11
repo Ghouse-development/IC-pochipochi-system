@@ -95,9 +95,8 @@ export function ItemManager() {
       if (categoryId) {
         itemsData = await itemsApi.getByCategoryWithDetails(categoryId);
       } else {
-        // Load all items (without details for performance)
-        const allItems = await itemsApi.getAll();
-        itemsData = allItems as ItemWithDetails[];
+        // Load all items with details (variants, pricing)
+        itemsData = await itemsApi.getAllWithDetails();
       }
       setItems(itemsData);
     } catch (err) {

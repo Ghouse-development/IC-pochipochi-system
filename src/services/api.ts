@@ -172,6 +172,33 @@ export const itemsApi = {
     return data || [];
   },
 
+  async getAllWithDetails(): Promise<ItemWithDetails[]> {
+    if (!isSupabaseConfigured) {
+      logger.debug('Supabase not configured, returning empty items');
+      return [];
+    }
+    const { data, error } = await supabase
+      .from('items')
+      .select(`
+        *,
+        category:categories(*),
+        unit:units(*),
+        variants:item_variants(
+          *,
+          images:item_variant_images(*)
+        ),
+        pricing:item_pricing(
+          *,
+          product:products(*)
+        )
+      `)
+      .eq('is_active', true)
+      .order('display_order');
+
+    if (error) throw error;
+    return (data as ItemWithDetails[]) || [];
+  },
+
   async getByCategory(categoryId: string): Promise<Item[]> {
     if (!isSupabaseConfigured) return [];
     const { data, error } = await supabase

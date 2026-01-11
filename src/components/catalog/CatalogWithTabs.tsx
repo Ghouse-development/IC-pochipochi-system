@@ -647,6 +647,20 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   // 外壁の固定素材タイプリスト（常に3つ表示）
   const EXTERIOR_WALL_MATERIAL_TYPES = ['窯業系サイディング', 'ガルバリウム鋼板', '塗り壁'];
 
+  // noteカラムから素材タイプを判定するヘルパー関数
+  const getMaterialTypeFromNote = (note: string | null | undefined): string => {
+    if (!note) return '窯業系サイディング'; // デフォルトは窯業系
+    const lowerNote = note.toLowerCase();
+    if (lowerNote.includes('ガルバリウム') || lowerNote.includes('金属サイディング') || lowerNote.includes('金属系')) {
+      return 'ガルバリウム鋼板';
+    }
+    if (lowerNote.includes('塗り壁') || lowerNote.includes('漆喰') || lowerNote.includes('ジョリパット') || lowerNote.includes('塗装仕上げ')) {
+      return '塗り壁';
+    }
+    // 窯業系サイディングのキーワード、または不明な場合はデフォルトで窯業系
+    return '窯業系サイディング';
+  };
+
   // ㎡指定で複数色選択が必要なカテゴリ名（1〜3色選択、各色の面積を指定）
   const MULTI_COLOR_CATEGORY_NAMES = [
     '外壁',           // 外装 - 素材タイプ選択後
@@ -785,7 +799,8 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     const materialOrder = ['窯業系サイディング', 'ガルバリウム鋼板', '塗り壁'];
     const materials = new Set<string>();
     items.forEach(item => {
-      if (item.material_type) materials.add(item.material_type);
+      const materialType = getMaterialTypeFromNote(item.note);
+      if (materialType) materials.add(materialType);
     });
     return Array.from(materials).sort((a, b) => {
       const indexA = materialOrder.indexOf(a);
@@ -803,7 +818,8 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     const subs = new Set<string>();
     items.forEach(item => {
       // 素材タイプが選択されている場合、その素材タイプのアイテムのみ対象
-      if (selectedMaterialType && item.material_type !== selectedMaterialType) return;
+      const materialType = getMaterialTypeFromNote(item.note);
+      if (selectedMaterialType && materialType !== selectedMaterialType && item.category_name !== selectedMaterialType) return;
       if (item.category_name) subs.add(item.category_name);
     });
     return Array.from(subs).sort((a, b) => a.localeCompare(b, 'ja'));
@@ -813,7 +829,8 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     const colors = new Set<string>();
     items.forEach(item => {
       // 素材タイプ・サブカテゴリでフィルタ
-      if (selectedMaterialType && item.material_type !== selectedMaterialType) return;
+      const materialType = getMaterialTypeFromNote(item.note);
+      if (selectedMaterialType && materialType !== selectedMaterialType && item.category_name !== selectedMaterialType) return;
       if (selectedSubcategory && item.category_name !== selectedSubcategory) return;
       item.variants?.forEach(v => {
         if (v.color_name) colors.add(v.color_name);
@@ -860,7 +877,8 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
       if (filterType === 'option' && pricing?.is_standard) return false;
       // 素材タイプフィルター（外部建材はcategory_nameも考慮）
       if (selectedMaterialType) {
-        const matchesMaterialType = item.material_type === selectedMaterialType;
+        const materialType = getMaterialTypeFromNote(item.note);
+        const matchesMaterialType = materialType === selectedMaterialType;
         const matchesCategoryName = item.category_name === selectedMaterialType;
         if (!matchesMaterialType && !matchesCategoryName) return false;
       }
@@ -1745,7 +1763,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     {EXTERIOR_WALL_MATERIAL_TYPES.map((material) => {
-                      const itemCount = items.filter(i => i.material_type === material).length;
+                      const itemCount = items.filter(i => getMaterialTypeFromNote(i.note) === material).length;
                       return (
                         <button
                           key={material}
@@ -1838,7 +1856,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   {/* 必須カテゴリ（8項目） */}
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
                     {EXTERIOR_FACILITY_TYPES.filter(t => t.required).map((type) => {
-                      const itemCount = items.filter(i => i.material_type === type.id).length;
+                      const itemCount = items.filter(i => i.category_name === type.id).length;
                       return (
                         <button
                           key={type.id}
@@ -1861,7 +1879,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   {/* その他オプション */}
                   <div className="border-t border-gray-200 pt-4">
                     {EXTERIOR_FACILITY_TYPES.filter(t => !t.required).map((type) => {
-                      const itemCount = items.filter(i => i.material_type === type.id).length;
+                      const itemCount = items.filter(i => i.category_name === type.id).length;
                       return (
                         <button
                           key={type.id}
@@ -1893,7 +1911,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   </p>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                     {EXTERIOR_MATERIAL_TYPES.map((type) => {
-                      const itemCount = items.filter(i => i.material_type === type.id || i.category_name === type.id).length;
+                      const itemCount = items.filter(i => i.category_name === type.id).length;
                       return (
                         <button
                           key={type.id}
@@ -1960,7 +1978,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   </p>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                     {PERIPHERAL_PARTS_TYPES.map((type) => {
-                      const itemCount = items.filter(i => i.material_type === type.id).length;
+                      const itemCount = items.filter(i => i.category_name === type.id).length;
                       return (
                         <button
                           key={type.id}
@@ -1999,7 +2017,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   </p>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                     {EXTERIOR_MATERIAL_TYPES.map((type) => {
-                      const itemCount = items.filter(i => i.category_name === type.id || i.material_type === type.id).length;
+                      const itemCount = items.filter(i => i.category_name === type.id).length;
                       return (
                         <button
                           key={type.id}

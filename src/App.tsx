@@ -148,15 +148,12 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
     markAsVisited,
   } = useTutorialStore();
 
-  // 初回訪問時に自動でチュートリアル表示
+  // 初回訪問時の自動チュートリアル表示は無効化
   useEffect(() => {
+    // 自動表示は行わない（ヘルプボタンからのみアクセス可能）
     if (isFirstVisit && !hasCompletedTutorial) {
-      // 少し遅延させてからチュートリアルを表示
-      const timer = globalThis.setTimeout(() => {
-        openTutorial();
-        markAsVisited();
-      }, 1500);
-      return () => globalThis.clearTimeout(timer);
+      // 訪問済みとしてマーク（ポップアップは表示しない）
+      markAsVisited();
     }
   }, [isFirstVisit, hasCompletedTutorial, openTutorial, markAsVisited]);
 

@@ -286,14 +286,10 @@ export const useOnboarding = () => {
     return stored === 'true';
   });
 
+  // 初回アクセス時の自動表示は無効化
+  // ユーザーがヘルプボタンをクリックした時のみ表示
   useEffect(() => {
-    // 初回アクセス時は自動表示
-    if (!hasCompletedOnboarding) {
-      const timer = setTimeout(() => {
-        setShowOnboarding(true);
-      }, 1000);
-      return () => clearTimeout(timer);
-    }
+    // 自動表示は行わない
   }, [hasCompletedOnboarding]);
 
   const openOnboarding = () => setShowOnboarding(true);
