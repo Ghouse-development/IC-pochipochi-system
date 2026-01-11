@@ -155,6 +155,26 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
     );
   }
 
+  // データがない場合
+  if (tiles.length === 0) {
+    return (
+      <div className="p-6 max-w-4xl mx-auto">
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 text-center">
+          <p className="text-amber-800 font-medium mb-2">ポーチタイルのデータがありません</p>
+          <p className="text-sm text-amber-600 mb-4">
+            管理画面でポーチタイル（porch-tileタグ）を登録してください
+          </p>
+          <button
+            onClick={onCancel}
+            className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+          >
+            戻る
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-6 max-w-4xl mx-auto">
       {/* ヘッダー */}
