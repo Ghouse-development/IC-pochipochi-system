@@ -151,6 +151,7 @@ export interface Item {
   manufacturer: string | null;
   series: string | null; // シリーズ名（水回り設備用）
   note: string | null;
+  catalog_url: string | null; // メーカーカタログ・商品ページのURL
   unit_id: string | null;
   formula: string | null;
   is_hit: boolean;
@@ -407,6 +408,7 @@ export interface CreateItemInput {
   manufacturer?: string;
   model_number?: string;
   note?: string;
+  catalog_url?: string;
   unit_id?: string;
   is_hit?: boolean;
 }

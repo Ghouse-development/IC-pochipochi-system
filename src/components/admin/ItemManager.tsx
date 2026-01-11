@@ -566,7 +566,7 @@ function ItemFormModal({
     manufacturer: item?.manufacturer || '',
     model_number: item?.model_number || '',
     note: item?.note || '',
-    catalog_url: (item as ItemWithDetails & { catalog_url?: string })?.catalog_url || '',
+    catalog_url: item?.catalog_url || '',
     unit_id: item?.unit_id || '',
     is_hit: item?.is_hit || false,
     is_discontinued: item?.is_discontinued || false,
@@ -632,6 +632,7 @@ function ItemFormModal({
           manufacturer: formData.manufacturer || undefined,
           model_number: formData.model_number || undefined,
           note: formData.note || undefined,
+          catalog_url: formData.catalog_url || undefined,
           unit_id: formData.unit_id || undefined,
           is_hit: formData.is_hit,
         });
