@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Plus,
   Trash2,
@@ -9,11 +9,14 @@ import {
   Check,
   Link,
   AlertCircle,
+  Upload,
+  Loader2,
 } from 'lucide-react';
 import { itemVariantsApi, itemVariantImagesApi } from '../../services/api';
 import type { ItemVariant, ItemVariantImage } from '../../types/database';
 import { useToast } from '../common/Toast';
 import { createLogger } from '../../lib/logger';
+import { supabase, STORAGE_BUCKETS } from '../../lib/supabase';
 
 const logger = createLogger('ItemVariantManager');
 
@@ -230,6 +233,7 @@ function VariantEditModal({
   onSave: (variant: ItemVariant, images: ItemVariantImage[]) => void;
   onClose: () => void;
 }) {
+  const toast = useToast();
   const [formData, setFormData] = useState({
     color_name: variant.color_name,
     color_code: variant.color_code || '',
@@ -238,6 +242,128 @@ function VariantEditModal({
   const [images, setImages] = useState<ItemVariantImage[]>(variant.images || []);
   const [imageUrl, setImageUrl] = useState('');
   const [urlError, setUrlError] = useState('');
+  const [isDragging, setIsDragging] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState<string[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const dropZoneRef = useRef<HTMLDivElement>(null);
+
+  // 許可する画像形式
+  const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+
+  // ドラッグ&ドロップハンドラー
+  const handleDragEnter = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  }, []);
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // dropZone外に出た時のみfalseにする
+    if (dropZoneRef.current && !dropZoneRef.current.contains(e.relatedTarget as Node)) {
+      setIsDragging(false);
+    }
+  }, []);
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  }, []);
+
+  // ファイルアップロード処理
+  const uploadFiles = async (files: File[]) => {
+    const validFiles = files.filter(file => ALLOWED_IMAGE_TYPES.includes(file.type));
+
+    if (validFiles.length === 0) {
+      toast.error('エラー', '対応形式: JPEG, PNG, WebP, GIF');
+      return;
+    }
+
+    setIsUploading(true);
+    setUploadProgress(validFiles.map(f => f.name));
+
+    const newImages: ItemVariantImage[] = [];
+
+    for (const file of validFiles) {
+      try {
+        // ファイル名を生成（タイムスタンプ + オリジナル名）
+        const timestamp = Date.now();
+        const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+        const filePath = `variants/${variant.item_id}/${timestamp}_${safeName}`;
+
+        // Supabase Storageにアップロード
+        const { data, error } = await supabase.storage
+          .from(STORAGE_BUCKETS.ITEM_IMAGES)
+          .upload(filePath, file, {
+            cacheControl: '3600',
+            upsert: false,
+          });
+
+        if (error) {
+          logger.error('Upload error:', error);
+          toast.error('アップロード失敗', `${file.name}: ${error.message}`);
+          continue;
+        }
+
+        // 公開URLを取得
+        const { data: urlData } = supabase.storage
+          .from(STORAGE_BUCKETS.ITEM_IMAGES)
+          .getPublicUrl(data.path);
+
+        const newImage: ItemVariantImage = {
+          id: `new_${timestamp}_${Math.random().toString(36).substr(2, 9)}`,
+          variant_id: variant.id,
+          image_url: urlData.publicUrl,
+          image_path: data.path,
+          thumbnail_url: urlData.publicUrl,
+          file_name: file.name,
+          file_size: file.size,
+          mime_type: file.type,
+          alt_text: formData.color_name || file.name,
+          is_primary: images.length === 0 && newImages.length === 0,
+          display_order: images.length + newImages.length,
+          created_at: '',
+          updated_at: '',
+        };
+
+        newImages.push(newImage);
+      } catch (err) {
+        logger.error('Upload exception:', err);
+        toast.error('アップロード失敗', `${file.name}`);
+      }
+    }
+
+    if (newImages.length > 0) {
+      setImages(prev => [...prev, ...newImages]);
+      toast.success('アップロード完了', `${newImages.length}枚の画像を追加しました`);
+    }
+
+    setIsUploading(false);
+    setUploadProgress([]);
+  };
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const files = Array.from(e.dataTransfer.files);
+    if (files.length > 0) {
+      uploadFiles(files);
+    }
+  }, [images.length, formData.color_name, variant.id, variant.item_id]);
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      uploadFiles(Array.from(files));
+    }
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
 
   const handleAddImageFromUrl = () => {
     if (!imageUrl.trim()) {
@@ -366,44 +492,102 @@ function VariantEditModal({
               画像登録
             </h4>
 
-            {/* URL Input */}
-            <div className="mb-4 p-3 bg-teal-50 border border-teal-200 rounded-lg">
-              <div className="flex items-center gap-2 mb-2">
-                <Link className="w-4 h-4 text-teal-600" />
-                <span className="text-sm font-medium text-teal-700">画像URLを入力</span>
-              </div>
-              <div className="flex gap-2">
-                <input
-                  type="url"
-                  value={imageUrl}
-                  onChange={e => {
-                    setImageUrl(e.target.value);
-                    setUrlError('');
-                  }}
-                  onKeyDown={e => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      handleAddImageFromUrl();
-                    }
-                  }}
-                  placeholder="https://example.com/image.jpg"
-                  className="flex-1 px-3 py-2 border border-teal-300 rounded-lg focus:ring-2 focus:ring-teal-500 text-sm"
-                />
-                <button
-                  onClick={handleAddImageFromUrl}
-                  disabled={!imageUrl.trim()}
-                  className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50 text-sm"
-                >
-                  <Plus className="w-4 h-4" />
-                </button>
-              </div>
-              {urlError && (
-                <div className="mt-2 flex items-center gap-1 text-red-500 text-xs">
-                  <AlertCircle className="w-3 h-3" />
-                  {urlError}
+            {/* ドラッグ&ドロップエリア */}
+            <div
+              ref={dropZoneRef}
+              onDragEnter={handleDragEnter}
+              onDragLeave={handleDragLeave}
+              onDragOver={handleDragOver}
+              onDrop={handleDrop}
+              className={`mb-4 border-2 border-dashed rounded-lg p-6 text-center transition-all ${
+                isDragging
+                  ? 'border-teal-500 bg-teal-50'
+                  : 'border-gray-300 hover:border-teal-400 hover:bg-gray-50'
+              }`}
+            >
+              <input
+                ref={fileInputRef}
+                type="file"
+                multiple
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                onChange={handleFileSelect}
+                className="hidden"
+                disabled={isUploading}
+              />
+
+              {isUploading ? (
+                <div className="space-y-2">
+                  <Loader2 className="w-10 h-10 mx-auto text-teal-500 animate-spin" />
+                  <p className="text-sm text-gray-600">アップロード中...</p>
+                  {uploadProgress.map((name, i) => (
+                    <p key={i} className="text-xs text-gray-500 truncate">{name}</p>
+                  ))}
+                </div>
+              ) : isDragging ? (
+                <div className="space-y-2">
+                  <Upload className="w-10 h-10 mx-auto text-teal-500" />
+                  <p className="text-sm font-medium text-teal-600">ここにドロップして追加</p>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <Upload className="w-10 h-10 mx-auto text-gray-400" />
+                  <p className="text-sm text-gray-600">
+                    画像をドラッグ&ドロップ
+                  </p>
+                  <p className="text-xs text-gray-400">または</p>
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    className="px-4 py-2 bg-teal-600 text-white text-sm rounded-lg hover:bg-teal-700"
+                  >
+                    ファイルを選択
+                  </button>
+                  <p className="text-xs text-gray-400 mt-2">
+                    JPEG, PNG, WebP, GIF 対応
+                  </p>
                 </div>
               )}
             </div>
+
+            {/* URL Input（折りたたみ可能） */}
+            <details className="mb-4">
+              <summary className="cursor-pointer text-sm text-gray-500 hover:text-gray-700 flex items-center gap-1">
+                <Link className="w-4 h-4" />
+                URLから追加
+              </summary>
+              <div className="mt-2 p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                <div className="flex gap-2">
+                  <input
+                    type="url"
+                    value={imageUrl}
+                    onChange={e => {
+                      setImageUrl(e.target.value);
+                      setUrlError('');
+                    }}
+                    onKeyDown={e => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleAddImageFromUrl();
+                      }
+                    }}
+                    placeholder="https://example.com/image.jpg"
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 text-sm"
+                  />
+                  <button
+                    onClick={handleAddImageFromUrl}
+                    disabled={!imageUrl.trim()}
+                    className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 disabled:opacity-50 text-sm"
+                  >
+                    <Plus className="w-4 h-4" />
+                  </button>
+                </div>
+                {urlError && (
+                  <div className="mt-2 flex items-center gap-1 text-red-500 text-xs">
+                    <AlertCircle className="w-3 h-3" />
+                    {urlError}
+                  </div>
+                )}
+              </div>
+            </details>
 
             {/* Image Grid */}
             {images.length > 0 ? (

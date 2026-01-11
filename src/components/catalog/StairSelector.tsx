@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Check, ChevronLeft, Layers } from 'lucide-react';
 import { useCartStore } from '../../stores/useCartStore';
-import { interiorProducts } from '../../data/interiorProducts';
+import { useProductStore } from '../../stores/useProductStore';
 import { SelectionCard } from './SelectionCard';
 import type { Product } from '../../types/product';
 
@@ -72,6 +72,7 @@ export const StairSelector: React.FC<StairSelectorProps> = ({
   onCancel,
 }) => {
   const addItem = useCartStore((state) => state.addItem);
+  const interiorProducts = useProductStore((state) => state.interiorProducts);
 
   // プラン別価格を取得
   const getPlanPrice = (productId: string): number => {

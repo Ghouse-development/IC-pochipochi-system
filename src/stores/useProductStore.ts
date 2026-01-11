@@ -4,13 +4,33 @@ import type { Product, ProductVariant, PricingInfo } from '../types/product';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { createLogger } from '../lib/logger';
 
-// 静的データ（フォールバック用）
-import { exteriorProducts as staticExteriorProducts } from '../data/exteriorProducts';
-import { interiorProducts as staticInteriorProducts } from '../data/interiorProducts';
-import { waterEquipmentProducts as staticWaterProducts } from '../data/waterEquipmentProducts';
-import { furnitureProducts as staticFurnitureProducts } from '../data/furnitureProducts';
-
 const logger = createLogger('ProductStore');
+
+// 静的データの動的インポート（フォールバック時のみ読み込み）
+const loadStaticData = async (): Promise<{
+  exterior: Product[];
+  interior: Product[];
+  water: Product[];
+  furniture: Product[];
+}> => {
+  const [
+    { exteriorProducts },
+    { interiorProducts },
+    { waterEquipmentProducts },
+    { furnitureProducts },
+  ] = await Promise.all([
+    import('../data/exteriorProducts'),
+    import('../data/interiorProducts'),
+    import('../data/waterEquipmentProducts'),
+    import('../data/furnitureProducts'),
+  ]);
+  return {
+    exterior: exteriorProducts,
+    interior: interiorProducts,
+    water: waterEquipmentProducts,
+    furniture: furnitureProducts,
+  };
+};
 
 // 単位コードからIDを取得するためのキャッシュ
 let unitCache: Map<string, string> | null = null;
@@ -291,10 +311,10 @@ const fetchItemsByCategory = async (categoryType: string): Promise<Product[]> =>
 export const useProductStore = create<ProductStore>()(
   persist(
     (set, get) => ({
-      exteriorProducts: staticExteriorProducts,
-      interiorProducts: staticInteriorProducts,
-      waterProducts: staticWaterProducts,
-      furnitureProducts: staticFurnitureProducts,
+      exteriorProducts: [],
+      interiorProducts: [],
+      waterProducts: [],
+      furnitureProducts: [],
       isLoading: false,
       isDBConnected: false,
       lastFetchedAt: null,
@@ -323,11 +343,26 @@ export const useProductStore = create<ProductStore>()(
           // ログ出力
           logger.info(`DB fetch results: exterior=${exteriorFromDB.length}, interior=${interiorFromDB.length}, equipment=${equipmentFromDB.length}, other=${otherFromDB.length}`);
 
+          // DBにデータがない場合のみ静的データをフォールバックとして読み込む
+          let finalExterior = exteriorFromDB;
+          let finalInterior = interiorFromDB;
+          let finalWater = equipmentFromDB;
+          let finalFurniture = otherFromDB;
+
+          if (!isDBConnected) {
+            logger.info('Loading static data as fallback...');
+            const staticData = await loadStaticData();
+            finalExterior = hasExteriorData ? exteriorFromDB : staticData.exterior;
+            finalInterior = hasInteriorData ? interiorFromDB : staticData.interior;
+            finalWater = hasEquipmentData ? equipmentFromDB : staticData.water;
+            finalFurniture = hasOtherData ? otherFromDB : staticData.furniture;
+          }
+
           set({
-            exteriorProducts: hasExteriorData ? exteriorFromDB : staticExteriorProducts,
-            interiorProducts: hasInteriorData ? interiorFromDB : staticInteriorProducts,
-            waterProducts: hasEquipmentData ? equipmentFromDB : staticWaterProducts,
-            furnitureProducts: hasOtherData ? otherFromDB : staticFurnitureProducts,
+            exteriorProducts: finalExterior,
+            interiorProducts: finalInterior,
+            waterProducts: finalWater,
+            furnitureProducts: finalFurniture,
             isLoading: false,
             isDBConnected,
             lastFetchedAt: new Date(),
@@ -340,15 +375,21 @@ export const useProductStore = create<ProductStore>()(
           }
         } catch (err) {
           logger.error('Error fetching products:', err);
-          // エラー時は静的データを使用
-          set({
-            exteriorProducts: staticExteriorProducts,
-            interiorProducts: staticInteriorProducts,
-            waterProducts: staticWaterProducts,
-            furnitureProducts: staticFurnitureProducts,
-            isLoading: false,
-            isDBConnected: false,
-          });
+          // エラー時は静的データを使用（動的読み込み）
+          try {
+            const staticData = await loadStaticData();
+            set({
+              exteriorProducts: staticData.exterior,
+              interiorProducts: staticData.interior,
+              waterProducts: staticData.water,
+              furnitureProducts: staticData.furniture,
+              isLoading: false,
+              isDBConnected: false,
+            });
+          } catch (loadErr) {
+            logger.error('Failed to load static data:', loadErr);
+            set({ isLoading: false, isDBConnected: false });
+          }
         }
       },
 

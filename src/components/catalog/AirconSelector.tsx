@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Check, X, Plus, Trash2, Wind, Thermometer, Building2, ChevronLeft } from 'lucide-react';
 import { useCartStore } from '../../stores/useCartStore';
-import { furnitureProducts } from '../../data/furnitureProducts';
+import { useProductStore } from '../../stores/useProductStore';
 import { SelectionCard } from './SelectionCard';
 import type { Product } from '../../types/product';
 
@@ -53,6 +53,7 @@ export const AirconSelector: React.FC<AirconSelectorProps> = ({
 }) => {
   // カート操作
   const addItem = useCartStore((state) => state.addItem);
+  const furnitureProducts = useProductStore((state) => state.furnitureProducts);
 
   // プラン別価格を取得
   const getPlanPrice = (productId: string): number => {

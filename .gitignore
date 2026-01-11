@@ -34,3 +34,4 @@ dist-ssr
 sankousiryou/
 *.pdf
 .env*.local
+.env.vercel

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Check, ChevronLeft, DoorOpen, Key, Grip, Monitor } from 'lucide-react';
 import { useCartStore } from '../../stores/useCartStore';
-import { exteriorProducts } from '../../data/exteriorProducts';
+import { useProductStore } from '../../stores/useProductStore';
 import { SelectionCard } from './SelectionCard';
 import type { Product } from '../../types/product';
 
@@ -131,6 +131,7 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
   onCancel,
 }) => {
   const addItem = useCartStore((state) => state.addItem);
+  const exteriorProducts = useProductStore((state) => state.exteriorProducts);
 
   // 選択状態
   const [currentStep, setCurrentStep] = useState<Step>('design');
