@@ -123,6 +123,9 @@ export const categoriesApi = {
   },
 
   async create(category: Partial<Category>): Promise<Category> {
+    if (!isSupabaseConfigured) {
+      throw new Error('Supabase not configured');
+    }
     const { data, error } = await supabase
       .from('categories')
       .insert(category)
@@ -134,6 +137,9 @@ export const categoriesApi = {
   },
 
   async update(id: string, updates: Partial<Category>): Promise<Category> {
+    if (!isSupabaseConfigured) {
+      throw new Error('Supabase not configured');
+    }
     const { data, error } = await supabase
       .from('categories')
       .update({ ...updates, updated_at: new Date().toISOString() })
@@ -180,6 +186,7 @@ export const itemsApi = {
   },
 
   async getWithDetails(itemId: string): Promise<ItemWithDetails | null> {
+    if (!isSupabaseConfigured) return null;
     const { data, error } = await supabase
       .from('items')
       .select(`
@@ -203,6 +210,7 @@ export const itemsApi = {
   },
 
   async getByCategoryWithDetails(categoryId: string): Promise<ItemWithDetails[]> {
+    if (!isSupabaseConfigured) return [];
     const { data, error } = await supabase
       .from('items')
       .select(`
@@ -227,6 +235,7 @@ export const itemsApi = {
   },
 
   async getByProductAndCategory(productId: string, categoryId: string): Promise<ItemWithDetails[]> {
+    if (!isSupabaseConfigured) return [];
     const { data, error } = await supabase
       .from('items')
       .select(`
@@ -253,6 +262,9 @@ export const itemsApi = {
   },
 
   async create(item: CreateItemInput): Promise<Item> {
+    if (!isSupabaseConfigured) {
+      throw new Error('Supabase not configured');
+    }
     const { data, error } = await supabase
       .from('items')
       .insert(item)
@@ -264,6 +276,9 @@ export const itemsApi = {
   },
 
   async update(id: string, updates: Partial<Item>): Promise<Item> {
+    if (!isSupabaseConfigured) {
+      throw new Error('Supabase not configured');
+    }
     const { data, error } = await supabase
       .from('items')
       .update({ ...updates, updated_at: new Date().toISOString() })
@@ -276,6 +291,7 @@ export const itemsApi = {
   },
 
   async delete(id: string): Promise<void> {
+    if (!isSupabaseConfigured) return;
     const { error } = await supabase
       .from('items')
       .update({ is_active: false, updated_at: new Date().toISOString() })
@@ -403,6 +419,10 @@ export const itemPricingApi = {
 
 export const projectsApi = {
   async getAll(): Promise<Project[]> {
+    if (!isSupabaseConfigured) {
+      logger.debug('Supabase not configured, returning empty projects');
+      return [];
+    }
     const { data, error } = await supabase
       .from('projects')
       .select(`
@@ -416,6 +436,7 @@ export const projectsApi = {
   },
 
   async getById(id: string): Promise<Project | null> {
+    if (!isSupabaseConfigured) return null;
     const { data, error } = await supabase
       .from('projects')
       .select(`
@@ -430,6 +451,7 @@ export const projectsApi = {
   },
 
   async getWithDetails(id: string): Promise<ProjectWithDetails | null> {
+    if (!isSupabaseConfigured) return null;
     const { data, error } = await supabase
       .from('projects')
       .select(`
@@ -452,6 +474,9 @@ export const projectsApi = {
   },
 
   async create(project: CreateProjectInput): Promise<Project> {
+    if (!isSupabaseConfigured) {
+      throw new Error('Supabase not configured');
+    }
     // Generate project code
     const projectCode = `PRJ-${Date.now().toString(36).toUpperCase()}`;
 
@@ -470,6 +495,9 @@ export const projectsApi = {
   },
 
   async update(id: string, updates: Partial<Project>): Promise<Project> {
+    if (!isSupabaseConfigured) {
+      throw new Error('Supabase not configured');
+    }
     const { data, error } = await supabase
       .from('projects')
       .update({ ...updates, updated_at: new Date().toISOString() })
@@ -482,6 +510,7 @@ export const projectsApi = {
   },
 
   async acquireLock(projectId: string, userId: string): Promise<boolean> {
+    if (!isSupabaseConfigured) return false;
     const { data, error } = await supabase.rpc('acquire_edit_lock', {
       p_project_id: projectId,
       p_user_id: userId,
@@ -496,6 +525,7 @@ export const projectsApi = {
   },
 
   async releaseLock(projectId: string, userId: string): Promise<boolean> {
+    if (!isSupabaseConfigured) return false;
     const { data, error } = await supabase.rpc('release_edit_lock', {
       p_project_id: projectId,
       p_user_id: userId,
@@ -510,6 +540,7 @@ export const projectsApi = {
   },
 
   async forceReleaseLock(projectId: string): Promise<boolean> {
+    if (!isSupabaseConfigured) return false;
     const { data, error } = await supabase.rpc('force_release_edit_lock', {
       p_project_id: projectId,
     });
@@ -529,6 +560,10 @@ export const projectsApi = {
 
 export const selectionsApi = {
   async getByProject(projectId: string): Promise<Selection[]> {
+    if (!isSupabaseConfigured) {
+      logger.debug('Supabase not configured, returning empty selections');
+      return [];
+    }
     const { data, error } = await supabase
       .from('selections')
       .select(`
@@ -545,6 +580,9 @@ export const selectionsApi = {
   },
 
   async create(selection: CreateSelectionInput): Promise<Selection> {
+    if (!isSupabaseConfigured) {
+      throw new Error('Supabase not configured');
+    }
     // Get pricing info - try variant-specific first, then item-level
     let unitPrice = 0;
 
@@ -598,6 +636,9 @@ export const selectionsApi = {
   },
 
   async update(id: string, updates: Partial<Selection>): Promise<Selection> {
+    if (!isSupabaseConfigured) {
+      throw new Error('Supabase not configured');
+    }
     const { data, error } = await supabase
       .from('selections')
       .update({ ...updates, updated_at: new Date().toISOString() })
@@ -610,12 +651,14 @@ export const selectionsApi = {
   },
 
   async delete(id: string): Promise<void> {
+    if (!isSupabaseConfigured) return;
     const { error } = await supabase.from('selections').delete().eq('id', id);
 
     if (error) throw error;
   },
 
   async undoLast(projectId: string): Promise<Selection | null> {
+    if (!isSupabaseConfigured) return null;
     // Get last history entry
     const { data: history } = await supabase
       .from('selection_history')
@@ -656,6 +699,10 @@ export const selectionsApi = {
 
 export const roomsApi = {
   async getAll(): Promise<Room[]> {
+    if (!isSupabaseConfigured) {
+      logger.debug('Supabase not configured, returning empty rooms');
+      return [];
+    }
     const { data, error } = await supabase
       .from('rooms')
       .select('*')
@@ -673,6 +720,10 @@ export const roomsApi = {
 
 export const presetsApi = {
   async getAll(): Promise<PresetTemplate[]> {
+    if (!isSupabaseConfigured) {
+      logger.debug('Supabase not configured, returning empty presets');
+      return [];
+    }
     const { data, error } = await supabase
       .from('preset_templates')
       .select(`
@@ -687,6 +738,7 @@ export const presetsApi = {
   },
 
   async getByProduct(productId: string): Promise<PresetTemplate[]> {
+    if (!isSupabaseConfigured) return [];
     const { data, error } = await supabase
       .from('preset_templates')
       .select(`
@@ -702,6 +754,9 @@ export const presetsApi = {
   },
 
   async create(preset: Partial<PresetTemplate>): Promise<PresetTemplate> {
+    if (!isSupabaseConfigured) {
+      throw new Error('Supabase not configured');
+    }
     const { data, error } = await supabase
       .from('preset_templates')
       .insert(preset)
@@ -745,6 +800,9 @@ export const settingsApi = {
   },
 
   async update(key: string, value: Record<string, unknown>): Promise<SystemSetting> {
+    if (!isSupabaseConfigured) {
+      throw new Error('Supabase not configured');
+    }
     const { data, error } = await supabase
       .from('system_settings')
       .update({
@@ -766,6 +824,10 @@ export const settingsApi = {
 
 export const usersApi = {
   async getAll(): Promise<User[]> {
+    if (!isSupabaseConfigured) {
+      logger.debug('Supabase not configured, returning empty users');
+      return [];
+    }
     const { data, error } = await supabase
       .from('users')
       .select('*')
@@ -776,6 +838,7 @@ export const usersApi = {
   },
 
   async getById(id: string): Promise<User | null> {
+    if (!isSupabaseConfigured) return null;
     const { data, error } = await supabase
       .from('users')
       .select('*')
@@ -787,6 +850,7 @@ export const usersApi = {
   },
 
   async getCoordinators(): Promise<User[]> {
+    if (!isSupabaseConfigured) return [];
     const { data, error } = await supabase
       .from('users')
       .select('*')
@@ -799,6 +863,9 @@ export const usersApi = {
   },
 
   async update(id: string, updates: Partial<User>): Promise<User> {
+    if (!isSupabaseConfigured) {
+      throw new Error('Supabase not configured');
+    }
     const { data, error } = await supabase
       .from('users')
       .update({ ...updates, updated_at: new Date().toISOString() })

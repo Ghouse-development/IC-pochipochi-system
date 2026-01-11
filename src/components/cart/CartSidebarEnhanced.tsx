@@ -95,7 +95,7 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
       } catch (error) {
         // 破損した下書きを削除
         logger.warn('Draft restore failed:', error);
-        localStorage.removeItem('lifex_draft_estimate');
+        localStorage.removeItem(STORAGE_KEYS.DRAFT_ESTIMATE);
         addLog('error', 'other', { itemName: '下書き復元エラー', error: String(error) });
       }
     }
