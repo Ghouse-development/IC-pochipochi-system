@@ -50,8 +50,10 @@ const DEFAULT_GROUT_COLORS: GroutOption[] = [
 
 // ItemWithDetailsからTileOptionへ変換
 function itemToTileOption(item: ItemWithDetails, selectedPlan: string): TileOption {
-  // 価格を取得（選択中のプランに基づく）
-  const pricing = item.pricing?.find(p => p.product?.code === selectedPlan);
+  // 価格を取得（選択中のプランに基づく - IDまたはコードで検索）
+  const pricing = item.pricing?.find(p =>
+    p.product_id === selectedPlan || p.product?.code === selectedPlan
+  );
   const price = pricing?.price ?? 0;
   const isStandard = pricing?.is_standard ?? (price === 0);
 
