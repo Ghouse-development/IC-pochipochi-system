@@ -563,41 +563,34 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
           }
         }
 
-        // 静的データを取得（完全なデータセット）
-        const staticItems = getStaticItems(activeTab);
-
-        // Supabaseにデータがあり、静的データより多い場合のみSupabaseを使用
-        // 現時点では静的データの方が完全なため、静的データを優先
+        // Supabaseにデータがある場合はSupabaseを優先使用
         if (supabaseItems && supabaseItems.length > 0) {
-          const hasVariants = supabaseItems.some(item => item.variants && item.variants.length > 0);
+          // カテゴリタイプでフィルタ（JOINの条件が効かない場合の補完）
+          let filteredItems = supabaseItems;
+          if (activeTab === 'design') {
+            filteredItems = supabaseItems.filter(item =>
+              DESIGN_CATEGORIES.some(dc => item.category?.name === dc)
+            );
+          } else if (activeTab === 'interior') {
+            filteredItems = supabaseItems.filter(item =>
+              item.category?.category_type === activeTab
+            );
+          } else {
+            filteredItems = supabaseItems.filter(item =>
+              item.category?.category_type === activeTab &&
+              !DESIGN_CATEGORIES.some(dc => item.category?.name === dc)
+            );
+          }
 
-          // Supabaseデータが静的データより多い場合のみSupabaseを使用
-          if (hasVariants && supabaseItems.length > staticItems.length) {
-            // カテゴリタイプでフィルタ（JOINの条件が効かない場合の補完）
-            let filteredItems = supabaseItems;
-            if (activeTab === 'design') {
-              filteredItems = supabaseItems.filter(item =>
-                DESIGN_CATEGORIES.some(dc => item.category?.name === dc)
-              );
-            } else if (activeTab === 'interior') {
-              filteredItems = supabaseItems.filter(item =>
-                item.category?.category_type === activeTab
-              );
-            } else {
-              filteredItems = supabaseItems.filter(item =>
-                item.category?.category_type === activeTab &&
-                !DESIGN_CATEGORIES.some(dc => item.category?.name === dc)
-              );
-            }
-            if (filteredItems.length > staticItems.length) {
-              setItems(filteredItems);
-              setIsLoading(false);
-              return;
-            }
+          if (filteredItems.length > 0) {
+            setItems(filteredItems);
+            setIsLoading(false);
+            return;
           }
         }
 
-        // 静的データを使用（完全なデータセットを保証）
+        // Supabaseにデータがない場合は静的データにフォールバック
+        const staticItems = getStaticItems(activeTab);
 
         // カテゴリでフィルタリング
         let filteredStaticItems = staticItems;
