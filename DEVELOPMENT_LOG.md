@@ -48,8 +48,16 @@ item_pricing (価格: 5,280件)
 
 #### コミット履歴
 
+- `d4e7cdf` fix: カタログのSupabaseクエリ修正
+- `7df995d` docs: 2026-01-11開発記録を追加
 - `5ab259e` fix: カタログでSupabaseデータを優先使用
 - `b239f14` fix: vercel.json routesのみ使用に修正
 - `07acbe1` chore: インポートスクリプトにdotenv追加
 - `bc0b01c` fix: CartSidebarEnhancedでSupabaseチェックを追加
 - `a289a93` feat: 商品マスタ管理画面を追加
+
+#### 次のステップ
+
+- 管理画面からのカテゴリ・商品・価格編集機能の実装
+- 画像アップロード機能の統合
+- プラン別選択可否設定の管理UI
