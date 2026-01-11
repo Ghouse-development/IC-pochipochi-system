@@ -6,6 +6,7 @@ import type {
   Item,
   ItemWithDetails,
   ItemVariant,
+  ItemVariantImage,
   ItemPricing,
   Product,
   Project,
@@ -382,6 +383,94 @@ export const itemVariantsApi = {
 
     if (error) throw error;
     return data;
+  },
+
+  async delete(id: string): Promise<void> {
+    // First delete associated images
+    await supabase
+      .from('item_variant_images')
+      .delete()
+      .eq('variant_id', id);
+
+    // Then delete the variant
+    const { error } = await supabase
+      .from('item_variants')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+  },
+};
+
+// ========================================
+// Item Variant Images
+// ========================================
+
+export const itemVariantImagesApi = {
+  async getByVariant(variantId: string): Promise<ItemVariantImage[]> {
+    const { data, error } = await supabase
+      .from('item_variant_images')
+      .select('*')
+      .eq('variant_id', variantId)
+      .order('display_order');
+
+    if (error) throw error;
+    return data || [];
+  },
+
+  async create(image: {
+    variant_id: string;
+    image_url: string;
+    thumbnail_url?: string;
+    alt_text?: string;
+    is_primary?: boolean;
+    display_order?: number;
+  }): Promise<ItemVariantImage> {
+    const { data, error } = await supabase
+      .from('item_variant_images')
+      .insert(image)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+
+  async update(id: string, updates: Partial<ItemVariantImage>): Promise<ItemVariantImage> {
+    const { data, error } = await supabase
+      .from('item_variant_images')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+
+  async delete(id: string): Promise<void> {
+    const { error } = await supabase
+      .from('item_variant_images')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+  },
+
+  async setPrimary(variantId: string, imageId: string): Promise<void> {
+    // Reset all images to non-primary
+    await supabase
+      .from('item_variant_images')
+      .update({ is_primary: false })
+      .eq('variant_id', variantId);
+
+    // Set the selected image as primary
+    const { error } = await supabase
+      .from('item_variant_images')
+      .update({ is_primary: true })
+      .eq('id', imageId);
+
+    if (error) throw error;
   },
 };
 
