@@ -547,13 +547,8 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
           // カテゴリでフィルタ
           if (selectedCategoryId) {
             query = query.eq('category_id', selectedCategoryId);
-          } else if (activeTab === 'design') {
-            // 設計タブ：外装と設備両方からフィルタ
-            query = query.in('category.category_type', ['exterior', 'equipment']);
-          } else {
-            // カテゴリタイプでフィルタ（カテゴリ未選択時）
-            query = query.eq('category.category_type', activeTab);
           }
+          // カテゴリ未選択時は全アイテムを取得し、後でJavaScriptでフィルタ
 
           const { data, error: fetchError } = await query;
           supabaseItems = data;
