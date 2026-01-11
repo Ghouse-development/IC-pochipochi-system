@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ClipboardCheck, User, Settings, Menu, X, FileText, Upload, Share2, Search, LogOut, Briefcase } from 'lucide-react';
 import { useCartStore } from '../../stores/useCartStore';
 import { formatPrice } from '../../lib/utils';
@@ -27,12 +28,56 @@ export const Header: React.FC<HeaderProps> = ({
   onImageTestClick,
   onStaffDashboardClick,
 }) => {
+  const navigate = useNavigate();
   const { items, getTotalPrice } = useCartStore();
   const { user, signOut } = useAuth();
   const totalPrice = getTotalPrice();
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+
+  // ロゴ長押しで管理画面ログインへ（3秒）
+  const longPressTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const [isLongPressing, setIsLongPressing] = useState(false);
+
+  const handleLogoMouseDown = useCallback(() => {
+    setIsLongPressing(true);
+    longPressTimerRef.current = setTimeout(() => {
+      navigate('/login');
+    }, 3000);
+  }, [navigate]);
+
+  const handleLogoMouseUp = useCallback(() => {
+    setIsLongPressing(false);
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current);
+      longPressTimerRef.current = null;
+    }
+  }, []);
+
+  const handleLogoMouseLeave = useCallback(() => {
+    setIsLongPressing(false);
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current);
+      longPressTimerRef.current = null;
+    }
+  }, []);
+
+  // タッチデバイス用
+  const handleLogoTouchStart = useCallback(() => {
+    setIsLongPressing(true);
+    longPressTimerRef.current = setTimeout(() => {
+      navigate('/login');
+    }, 3000);
+  }, [navigate]);
+
+  const handleLogoTouchEnd = useCallback(() => {
+    setIsLongPressing(false);
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current);
+      longPressTimerRef.current = null;
+    }
+  }, []);
 
   // キーボードイベント: Escapeでメニューを閉じる
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
@@ -65,7 +110,19 @@ export const Header: React.FC<HeaderProps> = ({
               >
                 {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>
-              <h1 className="text-xl sm:text-2xl font-bold text-gray-900">STYLEBOOK</h1>
+              <h1
+                className={`text-xl sm:text-2xl font-bold text-gray-900 select-none cursor-default transition-opacity ${
+                  isLongPressing ? 'opacity-50' : ''
+                }`}
+                onMouseDown={handleLogoMouseDown}
+                onMouseUp={handleLogoMouseUp}
+                onMouseLeave={handleLogoMouseLeave}
+                onTouchStart={handleLogoTouchStart}
+                onTouchEnd={handleLogoTouchEnd}
+                onTouchCancel={handleLogoTouchEnd}
+              >
+                STYLEBOOK
+              </h1>
             </div>
 
             {/* 検索バー */}

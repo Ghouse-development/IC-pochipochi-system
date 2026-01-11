@@ -172,7 +172,12 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
     );
   }
 
-  // Show login if not authenticated
+  // スタッフログインページ（DEMOモードでもアクセス可能）
+  if (location.pathname === '/login') {
+    return <LoginPage onDemoLogin={() => navigate('/catalog')} />;
+  }
+
+  // Show login if not authenticated (非DEMOモードのみ)
   if (!user && !isDemo) {
     return <LoginPage onDemoLogin={onDemoSwitch} />;
   }

@@ -254,42 +254,119 @@ export function useAuth() {
   return context;
 }
 
-// Demo mode provider for development without auth
+// Demo mode provider - カタログはログイン不要、管理画面はログイン必須
 export function DemoAuthProvider({ children }: { children: ReactNode }) {
-  const demoUser: User = {
-    id: 'demo-admin-001',
+  const [session, setSession] = useState<Session | null>(null);
+  const [supabaseUser, setSupabaseUser] = useState<SupabaseUser | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // 匿名ユーザー（カタログ閲覧用）
+  const anonymousUser: User = {
+    id: 'anonymous',
     auth_id: null,
-    email: 'admin@ghouse.com',
-    full_name: '管理者（デモ）',
-    full_name_kana: 'カンリシャ',
-    role: 'super_admin',
+    email: '',
+    full_name: 'ゲスト',
+    full_name_kana: null,
+    role: 'user',
     phone: null,
-    company_name: 'Gハウス本部',
+    company_name: null,
     organization_id: null,
-    is_super_admin: true,
+    is_super_admin: false,
     is_active: true,
-    last_login_at: new Date().toISOString(),
+    last_login_at: null,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   };
 
+  // Fetch app user data from users table
+  const fetchUserData = async (authId: string): Promise<User | null> => {
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('auth_id', authId)
+      .single();
+
+    if (error) {
+      logger.error('Error fetching user data:', error);
+      return null;
+    }
+
+    return data;
+  };
+
+  useEffect(() => {
+    // Check current session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setSupabaseUser(session?.user ?? null);
+
+      if (session?.user) {
+        fetchUserData(session.user.id).then((userData) => {
+          setUser(userData);
+          setIsLoading(false);
+        });
+      } else {
+        setUser(null);
+        setIsLoading(false);
+      }
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (_event, session) => {
+        setSession(session);
+        setSupabaseUser(session?.user ?? null);
+
+        if (session?.user) {
+          const userData = await fetchUserData(session.user.id);
+          setUser(userData);
+        } else {
+          setUser(null);
+        }
+      }
+    );
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  // ログイン処理
+  const signIn = async (email: string, password: string) => {
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    return { error: error ? new Error(error.message) : null };
+  };
+
+  // ログアウト処理
+  const signOut = async () => {
+    await supabase.auth.signOut();
+    setSession(null);
+    setSupabaseUser(null);
+    setUser(null);
+  };
+
+  // 実際のユーザーまたは匿名ユーザー
+  const currentUser = user || anonymousUser;
+  const isLoggedIn = !!session && !!user;
+  const role = user?.role;
+
   const value: AuthContextType = {
-    session: null,
-    supabaseUser: null,
-    user: demoUser,
-    isLoading: false,
-    signIn: async () => ({ error: null }),
-    signUp: async () => ({ error: null }),
-    signOut: async () => {},
-    resetPassword: async () => ({ error: null }),
-    sendMagicLink: async () => ({ error: null }),
-    isSuperAdmin: true,
-    isAdmin: true,
-    isCoordinator: false,
-    isCustomer: false,
-    canManageItems: true,
-    canManageProjects: true,
-    canViewAllOrganizations: true,
+    session,
+    supabaseUser,
+    user: currentUser,
+    isLoading,
+    signIn,
+    signUp: async () => ({ error: new Error('Sign up not available in demo mode') }),
+    signOut,
+    resetPassword: async () => ({ error: new Error('Password reset not available in demo mode') }),
+    sendMagicLink: async () => ({ error: new Error('Magic link not available in demo mode') }),
+    // 実際にログインしている場合のみ権限を付与
+    isSuperAdmin: isLoggedIn && (role === 'super_admin' || user?.is_super_admin === true),
+    isAdmin: isLoggedIn && (role === 'super_admin' || role === 'admin' || user?.is_super_admin === true),
+    isCoordinator: isLoggedIn && role === 'coordinator',
+    isCustomer: !isLoggedIn || role === 'user',
+    canManageItems: isLoggedIn && (role === 'super_admin' || role === 'admin'),
+    canManageProjects: isLoggedIn && (role === 'super_admin' || role === 'admin' || role === 'coordinator'),
+    canViewAllOrganizations: isLoggedIn && (role === 'super_admin'),
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
