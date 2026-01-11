@@ -61,8 +61,8 @@ export const SelectionCard: React.FC<SelectionCardProps> = ({
       aria-label={`${name}${isSelected ? ' - 選択中' : ''}`}
       aria-pressed={isSelected}
     >
-      {/* 画像エリア */}
-      <div className="aspect-[4/3] bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
+      {/* 画像エリア（正方形） */}
+      <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
         {imageUrl && !imageError ? (
           <img
             src={imageUrl}

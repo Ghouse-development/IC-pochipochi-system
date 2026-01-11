@@ -37,10 +37,15 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
     setStep('tile');
   };
 
+  // モルタルかどうかを判定（名前に「モルタル」を含むか、標準で目地不要のもの）
+  const isMortar = (tile: TileOption) => {
+    return tile.name.includes('モルタル') || tile.description?.includes('目地不要');
+  };
+
   const handleTileSelect = (tile: TileOption) => {
     setSelectedTile(tile);
     // モルタルの場合は目地不要なので完了へ
-    if (tile.id === 'mortar') {
+    if (isMortar(tile)) {
       setStep('complete');
     } else {
       setStep('grout');
@@ -79,8 +84,8 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
     const tileVariant: ProductVariant = { id: 'v1', color: selectedTile.name, imageUrl: selectedTile.imageUrl };
     addItem(tileProduct, 1, tileVariant);
 
-    // タイル選択時のみ目地も追加
-    if (selectedTile.id !== 'mortar' && selectedGrout) {
+    // タイル選択時のみ目地も追加（モルタル以外）
+    if (!isMortar(selectedTile) && selectedGrout) {
       const groutProduct: Product = {
         id: 'ext-porch-grout',
         categoryId: 'porch-grout',
@@ -107,7 +112,7 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
   };
 
   // モルタル以外のタイルは目地選択が必要
-  const needsGrout = selectedTile && selectedTile.id !== 'mortar';
+  const needsGrout = selectedTile && !isMortar(selectedTile);
 
   // 標準タイルとオプションタイルを分離
   const standardTiles = tiles.filter(t => t.isStandard);
@@ -337,8 +342,8 @@ const TileButton: React.FC<TileButtonProps> = ({ tile, isSelected, onClick }) =>
         : 'border-gray-200 hover:border-blue-300'
     }`}
   >
-    {/* 画像エリア */}
-    <div className="w-full h-24 bg-gray-100 flex items-center justify-center">
+    {/* 画像エリア（正方形） */}
+    <div className="w-full aspect-square bg-gray-100 flex items-center justify-center">
       {tile.imageUrl ? (
         <img
           src={tile.imageUrl}
