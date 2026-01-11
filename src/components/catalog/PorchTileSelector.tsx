@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Check, ChevronLeft, Star, Loader2, Image as ImageIcon } from 'lucide-react';
 import { useCartStore } from '../../stores/useCartStore';
-import { usePorchTileSettings, type TileOption, type GroutOption } from '../../hooks/usePorchTileSettings';
+import { usePorchItems, type TileOption, type GroutOption } from '../../hooks/usePorchItems';
 import type { Product, ProductVariant, PlanType } from '../../types/product';
 
 interface PorchTileSelectorProps {
@@ -16,7 +16,7 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
   onCancel,
 }) => {
   const { addItem, items, clearCategoryItems } = useCartStore();
-  const { tiles, groutColors, isLoading } = usePorchTileSettings();
+  const { tiles, groutColors, isLoading } = usePorchItems(selectedPlan);
 
   // 既存のポーチ選択を確認
   const existingPorchItem = items.find(i => i.product.categoryName === 'ポーチ');
