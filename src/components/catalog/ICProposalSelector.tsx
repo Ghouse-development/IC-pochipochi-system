@@ -90,7 +90,7 @@ export const ICProposalSelector: React.FC<ICProposalSelectorProps> = ({
             : 'インテリアコーディネーターに家具の提案を希望しますか？'}
         </p>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
           {/* 提案希望する */}
           <button
             onClick={() => handleChoiceSelect(true)}

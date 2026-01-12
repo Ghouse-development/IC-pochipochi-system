@@ -12,7 +12,6 @@ interface NotNeededCardProps {
 const NotNeededCardComponent: React.FC<NotNeededCardProps> = ({
   categoryName,
   title,
-  description,
   isSelected,
   onSelect,
 }) => {
@@ -80,21 +79,15 @@ const NotNeededCardComponent: React.FC<NotNeededCardProps> = ({
       </div>
 
       {/* 情報エリア */}
-      <div className="p-4">
-        <p className="text-sm text-gray-400 font-medium mb-1">{categoryName}</p>
-        <h3 className="font-bold text-base text-gray-700 line-clamp-2 min-h-[2.5rem] mb-2 leading-snug">
+      <div className="p-3">
+        <p className="text-xs text-gray-500 mb-0.5 truncate">{categoryName}</p>
+        <h3 className="font-bold text-sm text-gray-800 line-clamp-2 mb-1">
           {title}
         </h3>
 
-        {description && (
-          <p className="text-xs text-gray-500 mb-2 line-clamp-2">
-            {description}
-          </p>
-        )}
-
         {/* 価格 */}
-        <div className="flex items-baseline gap-1.5">
-          <span className="text-2xl font-black text-emerald-600">
+        <div className="flex items-baseline gap-1">
+          <span className="text-lg font-black text-emerald-600">
             標準
           </span>
         </div>

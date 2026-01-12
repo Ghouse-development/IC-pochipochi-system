@@ -224,7 +224,7 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
           {standardTiles.length > 0 && (
             <div className="mb-6">
               <h5 className="text-sm font-medium text-gray-500 mb-3">標準</h5>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
                 {standardTiles.map(tile => (
                   <TileButton
                     key={tile.id}
@@ -241,7 +241,7 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
           {optionTiles.length > 0 && (
             <div>
               <h5 className="text-sm font-medium text-gray-500 mb-3">タイル（オプション）</h5>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
                 {optionTiles.map(tile => (
                   <TileButton
                     key={tile.id}
@@ -282,7 +282,7 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
 
           <h4 className="font-medium text-gray-800 mb-4">色を選択（{selectedTile.colorVariants.length}色）</h4>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 mb-6">
             {selectedTile.colorVariants.map(color => (
               <button
                 key={color.id}
@@ -357,7 +357,7 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
 
           <h4 className="font-medium text-gray-800 mb-4">目地色を選択</h4>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 mb-6">
             {groutColors.map(grout => (
               <button
                 key={grout.id}
@@ -525,20 +525,17 @@ const TileButton: React.FC<TileButtonProps> = ({ tile, isSelected, onClick }) =>
     </div>
 
     {/* 情報エリア */}
-    <div className="p-4">
-      <p className="text-sm text-gray-500 font-medium mb-1 truncate">{tile.manufacturer}</p>
-      <h3 className="font-bold text-base text-gray-800 line-clamp-2 min-h-[2.5rem] mb-2 leading-snug">
+    <div className="p-3">
+      <p className="text-xs text-gray-500 mb-0.5 truncate">{tile.manufacturer}</p>
+      <h3 className="font-bold text-sm text-gray-800 line-clamp-2 mb-1">
         {tile.name}
       </h3>
-      {tile.description && (
-        <p className="text-xs text-gray-500 mb-2">{tile.description}</p>
-      )}
-      <div className="flex items-baseline gap-1.5">
-        <span className={`text-2xl font-black ${tile.isStandard ? 'text-emerald-600' : 'text-gray-900'}`}>
+      <div className="flex items-baseline gap-1">
+        <span className={`text-lg font-black ${tile.isStandard ? 'text-emerald-600' : 'text-gray-900'}`}>
           {tile.isStandard ? '標準' : `+¥${tile.price.toLocaleString()}`}
         </span>
         {!tile.isStandard && (
-          <span className="text-sm text-gray-500">/㎡</span>
+          <span className="text-xs text-gray-500">/㎡</span>
         )}
       </div>
     </div>

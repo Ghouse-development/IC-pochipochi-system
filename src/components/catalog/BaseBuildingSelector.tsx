@@ -171,7 +171,7 @@ export const BaseBuildingSelector: React.FC<BaseBuildingSelectorProps> = ({
       {step === 'color-category' && (
         <div>
           <h4 className="font-medium text-gray-800 mb-4">カラータイプを選択</h4>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
             <button
               onClick={() => handleColorCategorySelect('standard')}
               className="p-6 border-2 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-all text-left"
@@ -255,7 +255,7 @@ export const BaseBuildingSelector: React.FC<BaseBuildingSelectorProps> = ({
 
           <h4 className="font-medium text-gray-800 mb-4">デザインを選択</h4>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 mb-6">
             {DESIGN_OPTIONS.map(design => (
               <button
                 key={design.id}

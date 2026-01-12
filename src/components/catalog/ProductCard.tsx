@@ -99,19 +99,19 @@ const ProductCardComponent: React.FC<ProductCardProps> = ({ product, onSelect })
       </div>
 
       {/* 情報エリア */}
-      <div className="p-4">
-        <p className="text-sm text-gray-500 font-medium mb-1 truncate">{product.manufacturer}</p>
-        <h3 className="font-bold text-base text-gray-800 line-clamp-2 min-h-[2.5rem] mb-2 leading-snug">
+      <div className="p-3">
+        <p className="text-xs text-gray-500 mb-0.5 truncate">{product.manufacturer}</p>
+        <h3 className="font-bold text-sm text-gray-800 line-clamp-2 mb-1">
           {product.name}
         </h3>
 
         {/* 価格 */}
-        <div className="flex items-baseline gap-1.5 mb-3">
-          <span className={`text-2xl font-black ${price === 0 ? 'text-emerald-600' : 'text-gray-900'}`}>
+        <div className="flex items-baseline gap-1 mb-2">
+          <span className={`text-lg font-black ${price === 0 ? 'text-emerald-600' : 'text-gray-900'}`}>
             {price === 0 ? '標準' : formatPrice(price)}
           </span>
           {price > 0 && product.unit && (
-            <span className="text-sm text-gray-500">
+            <span className="text-xs text-gray-500">
               /{UNIT_SYMBOLS[product.unit] || product.unit}
             </span>
           )}
@@ -119,8 +119,8 @@ const ProductCardComponent: React.FC<ProductCardProps> = ({ product, onSelect })
 
         {/* 色バリアント（サムネイル表示） */}
         {product.variants.length > 1 && (
-          <div className="flex gap-1.5 flex-wrap">
-            {product.variants.slice(0, 5).map((variant) => {
+          <div className="flex gap-1 flex-wrap">
+            {product.variants.slice(0, 4).map((variant) => {
               const hasImage = variant.imageUrl || variant.thumbnailUrl;
               const hexColor = getHexColor(variant.colorCode) !== '#CCCCCC'
                 ? getHexColor(variant.colorCode)
@@ -130,21 +130,21 @@ const ProductCardComponent: React.FC<ProductCardProps> = ({ product, onSelect })
                   key={variant.id}
                   src={variant.thumbnailUrl || variant.imageUrl}
                   alt={variant.color}
-                  className="w-8 h-8 rounded-md object-cover border-2 border-gray-200"
+                  className="w-6 h-6 rounded object-cover border border-gray-200"
                   title={variant.color}
                 />
               ) : (
                 <div
                   key={variant.id}
-                  className="w-8 h-8 rounded-md border-2 border-gray-200 shadow-sm"
+                  className="w-6 h-6 rounded border border-gray-200"
                   style={{ backgroundColor: hexColor }}
                   title={variant.color}
                 />
               );
             })}
-            {product.variants.length > 5 && (
-              <div className="w-8 h-8 rounded-md border-2 border-gray-200 bg-gray-100 flex items-center justify-center">
-                <span className="text-xs text-gray-600">+{product.variants.length - 5}</span>
+            {product.variants.length > 4 && (
+              <div className="w-6 h-6 rounded border border-gray-200 bg-gray-100 flex items-center justify-center">
+                <span className="text-[10px] text-gray-600">+{product.variants.length - 4}</span>
               </div>
             )}
           </div>

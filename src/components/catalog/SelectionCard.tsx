@@ -27,7 +27,6 @@ export interface SelectionCardProps {
 
 export const SelectionCard: React.FC<SelectionCardProps> = ({
   name,
-  description,
   imageUrl,
   placeholderEmoji = '📦',
   placeholderBgColor = 'from-gray-100 to-gray-200',
@@ -150,22 +149,20 @@ export const SelectionCard: React.FC<SelectionCardProps> = ({
       </div>
 
       {/* 情報エリア */}
-      <div className="p-4">
-        <h3 className="font-bold text-base text-gray-800 line-clamp-2 mb-1 leading-snug">
+      <div className="p-3">
+        {manufacturer && (
+          <p className="text-xs text-gray-500 mb-0.5 truncate">{manufacturer}</p>
+        )}
+        <h3 className="font-bold text-sm text-gray-800 line-clamp-2 mb-1">
           {name}
         </h3>
-        {description && (
-          <p className="text-xs text-gray-500 line-clamp-2 mb-2">
-            {description}
-          </p>
-        )}
         {priceRange && (
-          <p className="text-2xl font-black text-gray-900">
+          <p className="text-lg font-black text-gray-900">
             {priceRange}
           </p>
         )}
         {price !== undefined && (
-          <p className={`text-2xl font-black ${price === 0 ? 'text-emerald-600' : 'text-gray-900'}`}>
+          <p className={`text-lg font-black ${price === 0 ? 'text-emerald-600' : 'text-gray-900'}`}>
             {price === 0 ? '標準' : formatPrice(price)}
           </p>
         )}
