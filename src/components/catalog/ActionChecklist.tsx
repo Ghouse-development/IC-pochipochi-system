@@ -1,41 +1,9 @@
-import React, { useMemo, useState } from 'react';
-import { Check, ChevronRight, FileText, AlertCircle, Circle, HelpCircle, Lightbulb, X } from 'lucide-react';
+import React, { useMemo } from 'react';
+import { Check, ChevronRight, FileText, AlertCircle, Circle } from 'lucide-react';
 import { formatPrice } from '../../lib/utils';
 import type { Category } from '../../types/database';
 import type { CartItem } from '../../types/product';
-import { isRequiredCategory, getCategoryExplanation } from './catalogUtils';
-
-// 用語説明ポップオーバー
-const CategoryHelpPopover: React.FC<{
-  categoryName: string;
-  onClose: () => void;
-}> = ({ categoryName, onClose }) => {
-  const explanation = getCategoryExplanation(categoryName);
-  if (!explanation) return null;
-
-  return (
-    <div className="absolute left-0 top-full mt-1 z-50 w-64 bg-white rounded-xl shadow-xl border border-gray-200 p-3 animate-fade-in">
-      <button
-        onClick={onClose}
-        className="absolute top-2 right-2 p-1 hover:bg-gray-100:bg-gray-700 rounded-full"
-      >
-        <X className="w-3 h-3 text-gray-400" />
-      </button>
-      <h4 className="font-bold text-sm text-gray-800 mb-1.5 pr-6">
-        {categoryName}とは？
-      </h4>
-      <p className="text-xs text-gray-600 mb-2">
-        {explanation.description}
-      </p>
-      <div className="flex items-start gap-1.5 bg-yellow-50 rounded-lg p-2">
-        <Lightbulb className="w-3.5 h-3.5 text-yellow-500 flex-shrink-0 mt-0.5" />
-        <p className="text-xs text-yellow-700">
-          {explanation.tip}
-        </p>
-      </div>
-    </div>
-  );
-};
+import { isRequiredCategory } from './catalogUtils';
 
 interface ActionChecklistProps {
   categories: Category[];
@@ -54,9 +22,6 @@ export const ActionChecklist: React.FC<ActionChecklistProps> = ({
   onCategorySelect,
   onReportClick,
 }) => {
-  // 用語説明ポップオーバーの状態
-  const [helpOpenCategoryId, setHelpOpenCategoryId] = useState<string | null>(null);
-
   // カテゴリごとの選択済み商品を集計
   const categorySelections = useMemo(() => {
     const selections = new Map<string, CartItem[]>();
@@ -145,61 +110,31 @@ export const ActionChecklist: React.FC<ActionChecklistProps> = ({
             <div className="space-y-1.5">
               {requiredUnselected.map((cat) => {
                 const isSelected = selectedCategoryId === cat.id;
-                const hasExplanation = getCategoryExplanation(cat.name) !== null;
 
                 return (
-                  <div key={cat.id} className="relative">
-                    <button
-                      onClick={() => onCategorySelect(cat.id)}
-                      className={`w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all ${
-                        isSelected
-                          ? 'bg-red-100 border-2 border-red-400 shadow-md'
-                          : 'bg-red-50 border-2 border-red-200 hover:border-red-300:border-red-700 hover:shadow-sm'
-                      }`}
-                    >
-                      {/* 必須マーク */}
-                      <div className="w-7 h-7 rounded-lg bg-red-500 flex items-center justify-center flex-shrink-0">
-                        <span className="text-white text-xs font-bold">!</span>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-1">
-                          <span className="font-medium text-sm text-gray-800 truncate">
-                            {cat.name}
-                          </span>
-                          {hasExplanation && (
-                            <span
-                              role="button"
-                              tabIndex={0}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setHelpOpenCategoryId(helpOpenCategoryId === cat.id ? null : cat.id);
-                              }}
-                              onKeyDown={(e) => {
-                                if (e.key === 'Enter' || e.key === ' ') {
-                                  e.stopPropagation();
-                                  setHelpOpenCategoryId(helpOpenCategoryId === cat.id ? null : cat.id);
-                                }
-                              }}
-                              className="p-0.5 hover:bg-red-200:bg-red-800 rounded-full cursor-pointer"
-                              title="用語説明を見る"
-                            >
-                              <HelpCircle className="w-3.5 h-3.5 text-red-400" />
-                            </span>
-                          )}
-                        </div>
-                        <span className="text-[10px] text-red-500 font-medium">必須 - 選択してください</span>
-                      </div>
-                      <ChevronRight className={`w-4 h-4 flex-shrink-0 transition-transform ${
-                        isSelected ? 'text-red-500 translate-x-1' : 'text-red-300'
-                      }`} />
-                    </button>
-                    {helpOpenCategoryId === cat.id && (
-                      <CategoryHelpPopover
-                        categoryName={cat.name}
-                        onClose={() => setHelpOpenCategoryId(null)}
-                      />
-                    )}
-                  </div>
+                  <button
+                    key={cat.id}
+                    onClick={() => onCategorySelect(cat.id)}
+                    className={`w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all ${
+                      isSelected
+                        ? 'bg-red-100 border-2 border-red-400 shadow-md'
+                        : 'bg-red-50 border-2 border-red-200 hover:border-red-300 hover:shadow-sm'
+                    }`}
+                  >
+                    {/* 必須マーク */}
+                    <div className="w-7 h-7 rounded-lg bg-red-500 flex items-center justify-center flex-shrink-0">
+                      <span className="text-white text-xs font-bold">!</span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <span className="font-medium text-sm text-gray-800 truncate block">
+                        {cat.name}
+                      </span>
+                      <span className="text-[10px] text-red-500 font-medium">必須 - 選択してください</span>
+                    </div>
+                    <ChevronRight className={`w-4 h-4 flex-shrink-0 transition-transform ${
+                      isSelected ? 'text-red-500 translate-x-1' : 'text-red-300'
+                    }`} />
+                  </button>
                 );
               })}
             </div>
@@ -218,61 +153,31 @@ export const ActionChecklist: React.FC<ActionChecklistProps> = ({
             <div className="space-y-1.5">
               {optionalUnselected.map((cat) => {
                 const isSelected = selectedCategoryId === cat.id;
-                const hasExplanation = getCategoryExplanation(cat.name) !== null;
 
                 return (
-                  <div key={cat.id} className="relative">
-                    <button
-                      onClick={() => onCategorySelect(cat.id)}
-                      className={`w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all ${
-                        isSelected
-                          ? 'bg-blue-100 border-2 border-blue-400 shadow-md'
-                          : 'bg-white border-2 border-gray-100 hover:border-blue-200:border-blue-800 hover:shadow-sm'
-                      }`}
-                    >
-                      {/* 空のチェックマーク */}
-                      <div className="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
-                        <Circle className="w-4 h-4 text-gray-400" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-1">
-                          <span className="font-medium text-sm text-gray-800 truncate">
-                            {cat.name}
-                          </span>
-                          {hasExplanation && (
-                            <span
-                              role="button"
-                              tabIndex={0}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setHelpOpenCategoryId(helpOpenCategoryId === cat.id ? null : cat.id);
-                              }}
-                              onKeyDown={(e) => {
-                                if (e.key === 'Enter' || e.key === ' ') {
-                                  e.stopPropagation();
-                                  setHelpOpenCategoryId(helpOpenCategoryId === cat.id ? null : cat.id);
-                                }
-                              }}
-                              className="p-0.5 hover:bg-gray-200:bg-gray-600 rounded-full cursor-pointer"
-                              title="用語説明を見る"
-                            >
-                              <HelpCircle className="w-3.5 h-3.5 text-gray-400" />
-                            </span>
-                          )}
-                        </div>
-                        <span className="text-[10px] text-gray-400 font-medium">任意</span>
-                      </div>
-                      <ChevronRight className={`w-4 h-4 flex-shrink-0 transition-transform ${
-                        isSelected ? 'text-blue-500 translate-x-1' : 'text-gray-300'
-                      }`} />
-                    </button>
-                    {helpOpenCategoryId === cat.id && (
-                      <CategoryHelpPopover
-                        categoryName={cat.name}
-                        onClose={() => setHelpOpenCategoryId(null)}
-                      />
-                    )}
-                  </div>
+                  <button
+                    key={cat.id}
+                    onClick={() => onCategorySelect(cat.id)}
+                    className={`w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all ${
+                      isSelected
+                        ? 'bg-blue-100 border-2 border-blue-400 shadow-md'
+                        : 'bg-white border-2 border-gray-100 hover:border-blue-200 hover:shadow-sm'
+                    }`}
+                  >
+                    {/* 空のチェックマーク */}
+                    <div className="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
+                      <Circle className="w-4 h-4 text-gray-400" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <span className="font-medium text-sm text-gray-800 truncate block">
+                        {cat.name}
+                      </span>
+                      <span className="text-[10px] text-gray-400 font-medium">任意</span>
+                    </div>
+                    <ChevronRight className={`w-4 h-4 flex-shrink-0 transition-transform ${
+                      isSelected ? 'text-blue-500 translate-x-1' : 'text-gray-300'
+                    }`} />
+                  </button>
                 );
               })}
             </div>
