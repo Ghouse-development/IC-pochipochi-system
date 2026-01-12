@@ -35,3 +35,5 @@ sankousiryou/
 *.pdf
 .env*.local
 .env.vercel
+tmpclaude-*
+nul
