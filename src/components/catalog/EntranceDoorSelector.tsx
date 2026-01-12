@@ -307,7 +307,7 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
           <h4 className="font-medium text-gray-800 mb-4">
             ドアデザインを選んでください
           </h4>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
             {DOOR_DESIGNS.map((design) => (
               <SelectionCard
                 key={design.id}
@@ -343,7 +343,7 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
           <p className="text-sm text-gray-500 mb-4">
             選択中: {DOOR_DESIGNS.find(d => d.id === selectedDesign)?.name}
           </p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
             {getDoorColors().map((variant) => (
               <SelectionCard
                 key={variant.id}
@@ -377,7 +377,7 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
             <Key className="w-5 h-5 text-blue-500" />
             鍵の種類を選んでください
           </h4>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
             {KEY_TYPES.map((keyType) => {
               const isStandard = keyType.standardFor.includes(selectedPlan);
               return (
@@ -421,7 +421,7 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
           <p className="text-sm text-gray-500 mb-4">
             {isElectronicKey ? '電子錠用ハンドル' : '手動錠用ハンドル'}（形状と色の組み合わせ）
           </p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
             {getHandleColorCombos().map((combo) => (
               <SelectionCard
                 key={combo.id}
@@ -460,7 +460,7 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
           <p className="text-sm text-gray-500 mb-4">
             玄関ドア付近に設置する操作盤です
           </p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
             <SelectionCard
               id="interface-yes"
               name="あり"

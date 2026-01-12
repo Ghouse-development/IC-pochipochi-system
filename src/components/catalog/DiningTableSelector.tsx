@@ -298,7 +298,7 @@ export const DiningTableSelector: React.FC<DiningTableSelectorProps> = ({
       <div className="p-4 max-h-[60vh] overflow-y-auto">
         {/* Step 1: 形状選択 */}
         {currentStep === 'shape' && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
             <SelectionCard
               id="square"
               name="スクエアテーブル"
@@ -335,7 +335,7 @@ export const DiningTableSelector: React.FC<DiningTableSelectorProps> = ({
 
         {/* Step 2: サイズ選択 */}
         {currentStep === 'size' && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
             {sizeOptions.map((size) => (
               <SelectionCard
                 key={size.id}
@@ -354,7 +354,7 @@ export const DiningTableSelector: React.FC<DiningTableSelectorProps> = ({
 
         {/* Step 3: 脚タイプ選択 */}
         {currentStep === 'leg' && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
             {legOptions.map((leg) => (
               <SelectionCard
                 key={leg.id}
@@ -373,7 +373,7 @@ export const DiningTableSelector: React.FC<DiningTableSelectorProps> = ({
 
         {/* Step 4: 天板カラー選択 */}
         {currentStep === 'color' && (
-          <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
             {topColors.map((color) => (
               <SelectionCard
                 key={color.id}
@@ -391,7 +391,7 @@ export const DiningTableSelector: React.FC<DiningTableSelectorProps> = ({
 
         {/* Step 5: コンセント選択（スクエアのみ） */}
         {currentStep === 'outlet' && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
             {outletOptions.map((outlet) => (
               <SelectionCard
                 key={outlet.id}

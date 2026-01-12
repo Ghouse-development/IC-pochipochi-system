@@ -224,7 +224,7 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
           {standardTiles.length > 0 && (
             <div className="mb-4">
               <h5 className="text-sm font-medium text-gray-500 mb-3">標準</h5>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2">
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
                 {standardTiles.map(tile => (
                   <TileButton
                     key={tile.id}
@@ -241,7 +241,7 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
           {optionTiles.length > 0 && (
             <div>
               <h5 className="text-sm font-medium text-gray-500 mb-3">タイル（オプション）</h5>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2">
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
                 {optionTiles.map(tile => (
                   <TileButton
                     key={tile.id}

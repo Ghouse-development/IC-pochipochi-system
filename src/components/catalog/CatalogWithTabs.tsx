@@ -2628,7 +2628,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   {/* 乾太くん本体選択 */}
                   <div className="mb-8">
                     <h4 className="text-sm font-medium text-gray-500 mb-3">本体を選択</h4>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
                       {GAS_DRYER_OPTIONS.map((option) => {
                         const isSelected = cartItems.some(i => i.product.id === option.productId);
                         return (
@@ -2691,7 +2691,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   ) && (
                     <div>
                       <h4 className="text-sm font-medium text-gray-500 mb-3">オプション（任意）</h4>
-                      <div className="grid grid-cols-2 gap-3">
+                      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
                         {GAS_DRYER_ACCESSORIES.map((option) => {
                           const isSelected = cartItems.some(i => i.product.id === option.productId);
                           return (

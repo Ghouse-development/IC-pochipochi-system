@@ -41,7 +41,7 @@ export const ManufacturerSelector: React.FC<ManufacturerSelectorProps> = ({
           シリーズを選択してください
         </h3>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
           {selectedManufacturer.series.map((series) => (
             <button
               key={series.id}
@@ -65,7 +65,7 @@ export const ManufacturerSelector: React.FC<ManufacturerSelectorProps> = ({
         メーカーを選択してください
       </h3>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
+      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
         {manufacturers.map((manufacturer) => (
           <button
             key={manufacturer.id}

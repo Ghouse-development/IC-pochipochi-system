@@ -172,7 +172,7 @@ export const AllCatalogView: React.FC = () => {
                 
                 {expandedCategories.has(category) && (
                   <div className="p-4 bg-white">
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4">
+                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
                       {products.map((product) => (
                         <ProductCard
                           key={product.id}
