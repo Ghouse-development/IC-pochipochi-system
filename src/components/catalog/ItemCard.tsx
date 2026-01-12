@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShoppingCart, Check, Sparkles, X, Heart, ThumbsUp, Star, Image as ImageIcon, ChevronDown, ChevronUp } from 'lucide-react';
+import { ShoppingCart, Check, Sparkles, X, Heart, ThumbsUp, Star, Image as ImageIcon } from 'lucide-react';
 import { formatPrice } from '../../lib/utils';
 import type { ItemWithDetails, ItemVariant } from '../../types/database';
 import type { RecommendBadgeInfo } from './catalogUtils';
@@ -98,8 +98,8 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
   recommendBadge,
 }) => {
   const [imageError, setImageError] = useState(false);
-  const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
-  const [showColorPicker, setShowColorPicker] = useState(false);
+  const [selectedVariantIndex, _setSelectedVariantIndex] = useState(0);
+  
 
   const price = getPrice(item);
   const standard = isStandard(item);
@@ -109,7 +109,7 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
   const isJustAdded = addedItemId === item.id;
   const isHovered = hoveredItem === item.id;
   const inFavorite = isFavorite(item.id);
-  const hasMultipleVariants = variants.length > 1;
+  
 
   // 選択中のバリアントの画像を取得
   const getVariantImageUrl = (variant: ItemVariant | undefined): string | null => {
@@ -125,16 +125,11 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
     handleAddToCart(item, selectedVariant);
   };
 
-  const handleVariantClick = (e: React.MouseEvent, variantIndex: number) => {
-    e.stopPropagation();
-    setSelectedVariantIndex(variantIndex);
-  };
-
   return (
     <article
-      className={`group bg-white rounded-2xl overflow-hidden transition-all duration-200 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${
+      className={`group bg-white rounded-lg overflow-hidden transition-all duration-200 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${
         inCart
-          ? 'border-4 border-blue-500 shadow-xl shadow-blue-200 ring-4 ring-blue-100 scale-[1.02]'
+          ? 'border-2 border-blue-500 shadow-xl shadow-blue-200 ring-2 ring-blue-100 scale-[1.02]'
           : 'border-2 border-gray-200 shadow-md hover:shadow-xl hover:border-blue-300'
       } ${isJustAdded ? 'animate-pochipochi' : ''}`}
       style={{ animationDelay: `${index * 30}ms` }}
@@ -145,7 +140,7 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
     >
       {/* 画像エリア（正方形） - クリックで詳細 */}
       <div
-        className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden cursor-pointer"
+        className="aspect-[4/3] bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden cursor-pointer"
         onClick={() => handleOpenDetail(item)}
       >
         {currentImageUrl && !imageError ? (
@@ -162,7 +157,7 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
             const placeholder = getPlaceholder(item.category?.name);
             return (
               <div className={`w-full h-full flex flex-col items-center justify-center p-4 bg-gradient-to-br ${placeholder.bgColor}`}>
-                <span className={`text-5xl mb-2 transition-transform duration-200 ${isHovered ? 'scale-110' : ''}`}>
+                <span className={`text-2xl mb-2 transition-transform duration-200 ${isHovered ? 'scale-110' : ''}`}>
                   {placeholder.emoji}
                 </span>
                 {selectedVariant?.color_name && (
@@ -254,7 +249,7 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
       </div>
 
       {/* 情報エリア */}
-      <div className="p-4">
+      <div className="p-2">
         {showManufacturer && (
           <p className="text-sm text-gray-500 font-medium mb-1 truncate">{item.manufacturer}</p>
         )}
@@ -264,93 +259,17 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
 
         {/* 価格 */}
         <div className="flex items-baseline gap-1.5 mb-3">
-          <span className={`text-2xl font-black ${price === 0 ? 'text-emerald-600' : 'text-gray-900'}`}>
+          <span className={`text-sm font-black ${price === 0 ? 'text-emerald-600' : 'text-gray-900'}`}>
             {price === 0 ? '標準' : formatPrice(price)}
           </span>
           {item.unit && (
             <span className="text-sm text-gray-500">/{item.unit.symbol}</span>
           )}
+          {variants.length > 1 && (
+            <span className="text-xs text-gray-400">({variants.length}色)</span>
+          )}
         </div>
 
-        {/* 色選択（複数バリアントがある場合） */}
-        {hasMultipleVariants && !inCart && (
-          <div className="mb-3">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowColorPicker(!showColorPicker);
-              }}
-              className="w-full flex items-center justify-between px-3 py-2 bg-gray-50 rounded-lg text-sm hover:bg-gray-100 transition-colors"
-            >
-              <div className="flex items-center gap-2">
-                {selectedVariant?.color_code && (
-                  <div
-                    className="w-5 h-5 rounded-full border-2 border-gray-300 shadow-inner"
-                    style={{ backgroundColor: selectedVariant.color_code }}
-                  />
-                )}
-                <span className="font-medium text-gray-700">{selectedVariant?.color_name || '色を選択'}</span>
-              </div>
-              <div className="flex items-center gap-1 text-gray-500">
-                <span className="text-xs">{variants.length}色</span>
-                {showColorPicker ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-              </div>
-            </button>
-
-            {/* 色選択パネル */}
-            {showColorPicker && (
-              <div className="mt-2 p-2 bg-gray-50 rounded-lg max-h-48 overflow-y-auto">
-                <div className="grid grid-cols-3 gap-2">
-                  {variants.map((variant, idx) => {
-                    const variantImage = getVariantImageUrl(variant);
-                    const isSelected = idx === selectedVariantIndex;
-                    return (
-                      <button
-                        key={variant.id}
-                        onClick={(e) => handleVariantClick(e, idx)}
-                        className={`relative rounded-lg overflow-hidden border-2 transition-all ${
-                          isSelected
-                            ? 'border-blue-500 ring-2 ring-blue-200'
-                            : 'border-gray-200 hover:border-blue-300'
-                        }`}
-                      >
-                        {/* 色画像 */}
-                        <div className="aspect-square bg-gray-100">
-                          {variantImage ? (
-                            <img
-                              src={variantImage}
-                              alt={variant.color_name}
-                              className="w-full h-full object-cover"
-                            />
-                          ) : variant.color_code ? (
-                            <div
-                              className="w-full h-full"
-                              style={{ backgroundColor: variant.color_code }}
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center">
-                              <ImageIcon className="w-4 h-4 text-gray-300" />
-                            </div>
-                          )}
-                        </div>
-                        {/* 色名 */}
-                        <div className="px-1 py-1 text-center">
-                          <span className="text-[10px] text-gray-600 line-clamp-1">{variant.color_name}</span>
-                        </div>
-                        {/* 選択チェック */}
-                        {isSelected && (
-                          <div className="absolute top-1 right-1 w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
-                            <Check className="w-3 h-3 text-white" strokeWidth={3} />
-                          </div>
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-          </div>
-        )}
 
         {/* アクションボタン */}
         {inCart ? (
@@ -359,7 +278,7 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
               e.stopPropagation();
               handleRemoveFromCart(item.id);
             }}
-            className="w-full py-3 rounded-xl text-sm font-semibold bg-gray-100 text-gray-600 hover:bg-red-50 hover:text-red-600 flex items-center justify-center gap-2 transition-all active:scale-95"
+            className="w-full py-1.5 rounded-lg text-xs font-semibold bg-gray-100 text-gray-600 hover:bg-red-50 hover:text-red-600 flex items-center justify-center gap-2 transition-all active:scale-95"
           >
             <X className="w-4 h-4" />
             選択解除
@@ -367,7 +286,7 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
         ) : (
           <button
             onClick={handleSelectAndAdd}
-            className="w-full py-3.5 rounded-xl text-base font-black bg-gradient-to-r from-blue-600 to-blue-500 text-white flex items-center justify-center gap-2 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:from-blue-700 hover:to-blue-600 transition-all active:scale-95"
+            className="w-full py-1.5 rounded-lg text-xs font-bold bg-gradient-to-r from-blue-600 to-blue-500 text-white flex items-center justify-center gap-2 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:from-blue-700 hover:to-blue-600 transition-all active:scale-95"
           >
             <ShoppingCart className="w-5 h-5" />
             選択する
