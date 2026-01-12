@@ -67,11 +67,6 @@ const PageLoader = () => (
 // Environment check for demo mode
 const isDemoMode = import.meta.env.VITE_DEMO_MODE === 'true' || !import.meta.env.VITE_SUPABASE_URL;
 
-// Debug logging for production
-console.log('[App] VITE_DEMO_MODE:', import.meta.env.VITE_DEMO_MODE);
-console.log('[App] VITE_SUPABASE_URL exists:', !!import.meta.env.VITE_SUPABASE_URL);
-console.log('[App] isDemoMode:', isDemoMode);
-
 // メインアプリケーションコンテンツ
 interface MainContentProps {
   onDemoSwitch?: () => void;
@@ -79,9 +74,7 @@ interface MainContentProps {
 }
 
 function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
-  console.log('[MainContent] Rendering, isDemo:', isDemo);
   const { user, isLoading, isAdmin } = useAuth();
-  console.log('[MainContent] Auth state - isLoading:', isLoading, 'user:', !!user, 'isAdmin:', isAdmin);
   const navigate = useNavigate();
   const location = useLocation();
   const [isCartOpen, setIsCartOpen] = useState(false);

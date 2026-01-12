@@ -305,24 +305,18 @@ export function DemoAuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    console.log('[DemoAuthProvider] Starting initialization...');
-
     // タイムアウト設定（5秒）- ロードが止まらないようにする
     const timeoutId = setTimeout(() => {
-      console.log('[DemoAuthProvider] Timeout reached, forcing isLoading to false');
       logger.warn('Demo auth initialization timeout, proceeding without session');
       setIsLoading(false);
     }, 5000);
 
     // Check current session with error handling
-    console.log('[DemoAuthProvider] Calling supabase.auth.getSession()...');
     supabase.auth.getSession()
       .then(({ data: { session }, error }) => {
-        console.log('[DemoAuthProvider] getSession resolved, session:', !!session, 'error:', error?.message);
         clearTimeout(timeoutId);
 
         if (error) {
-          console.log('[DemoAuthProvider] Session error, setting isLoading false');
           logger.error('Error getting session in demo mode:', error);
           setIsLoading(false);
           return;
@@ -332,26 +326,21 @@ export function DemoAuthProvider({ children }: { children: ReactNode }) {
         setSupabaseUser(session?.user ?? null);
 
         if (session?.user) {
-          console.log('[DemoAuthProvider] User found, fetching user data...');
           fetchUserData(session.user.id)
             .then((userData) => {
-              console.log('[DemoAuthProvider] User data fetched, setting isLoading false');
               setUser(userData);
               setIsLoading(false);
             })
             .catch((err) => {
-              console.log('[DemoAuthProvider] fetchUserData error, setting isLoading false');
               logger.error('Error fetching user data in demo mode:', err);
               setIsLoading(false);
             });
         } else {
-          console.log('[DemoAuthProvider] No user, setting isLoading false');
           setUser(null);
           setIsLoading(false);
         }
       })
       .catch((err) => {
-        console.log('[DemoAuthProvider] getSession catch, setting isLoading false');
         clearTimeout(timeoutId);
         logger.error('Failed to get session in demo mode:', err);
         setIsLoading(false);
