@@ -282,13 +282,17 @@ export const useProductStore = create<ProductStore>()(
   )
 );
 
-// アプリ起動時に自動でDBからフェッチ（1分以上経過していれば）
+// アプリ起動時に自動でフェッチ
+// 商品データは永続化されないため、毎回読み込む必要がある
 const autoFetch = () => {
   const state = useProductStore.getState();
-  const lastFetch = state.lastFetchedAt;
-  const shouldFetch = !lastFetch || (Date.now() - new Date(lastFetch).getTime() > 60000);
+  const hasProducts = state.exteriorProducts.length > 0 ||
+                      state.interiorProducts.length > 0 ||
+                      state.waterProducts.length > 0 ||
+                      state.furnitureProducts.length > 0;
 
-  if (shouldFetch) {
+  // 商品が空なら必ずフェッチ（lastFetchedAtに関係なく）
+  if (!hasProducts) {
     state.fetchProducts();
   }
 };
