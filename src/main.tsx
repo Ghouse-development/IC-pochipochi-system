@@ -12,11 +12,8 @@ const CACHE_VERSION_KEY = 'ic-cache-version';
 
 // 古いキャッシュをクリア
 const clearOldCache = () => {
-  console.log('[DEBUG] clearOldCache 開始');
   const storedVersion = localStorage.getItem(CACHE_VERSION_KEY);
-  console.log('[DEBUG] 保存されたバージョン:', storedVersion, '現在のバージョン:', CACHE_VERSION);
   if (storedVersion !== CACHE_VERSION) {
-    console.log('[Cache] バージョン不一致、キャッシュをクリア:', storedVersion, '->', CACHE_VERSION);
     // 全てのアプリ関連キャッシュをクリア
     const keysToRemove = [
       'lifex-products-storage',
@@ -28,26 +25,16 @@ const clearOldCache = () => {
       'floor-plan-storage',
       'ic-operation-log-storage',
     ];
-    keysToRemove.forEach(key => {
-      localStorage.removeItem(key);
-      console.log('[DEBUG] 削除:', key);
-    });
+    keysToRemove.forEach(key => localStorage.removeItem(key));
     localStorage.setItem(CACHE_VERSION_KEY, CACHE_VERSION);
-    console.log('[Cache] キャッシュクリア完了');
-  } else {
-    console.log('[DEBUG] バージョン一致、キャッシュクリアなし');
   }
 };
 
 // アプリ起動前にキャッシュチェック
-console.log('[DEBUG] main.tsx 開始');
 clearOldCache();
-console.log('[DEBUG] キャッシュチェック完了');
 
 // Sentry初期化（エラー追跡）
-console.log('[DEBUG] Sentry初期化開始');
 initSentry();
-console.log('[DEBUG] Sentry初期化完了');
 
 // Web Vitals計測開始
 initWebVitals();
