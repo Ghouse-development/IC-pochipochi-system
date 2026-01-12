@@ -6,6 +6,37 @@ import { initSentry } from './lib/sentry'
 import { initWebVitals } from './lib/webVitals'
 import { getCsrfToken } from './lib/csrf'
 
+// キャッシュバージョン管理（破壊的変更時にインクリメント）
+const CACHE_VERSION = 'v2';
+const CACHE_VERSION_KEY = 'ic-cache-version';
+
+// 古いキャッシュをクリア
+const clearOldCache = () => {
+  const storedVersion = localStorage.getItem(CACHE_VERSION_KEY);
+  if (storedVersion !== CACHE_VERSION) {
+    console.log('[Cache] バージョン不一致、キャッシュをクリア:', storedVersion, '->', CACHE_VERSION);
+    // 全てのアプリ関連キャッシュをクリア
+    const keysToRemove = [
+      'lifex-products-storage',
+      'ic-cart-storage',
+      'ic-pochipochi-selections',
+      'ic-pochipochi-projects',
+      'ic-favorites-storage',
+      'ic-recently-viewed-storage',
+      'floor-plan-storage',
+      'ic-operation-log-storage',
+    ];
+    keysToRemove.forEach(key => {
+      localStorage.removeItem(key);
+    });
+    localStorage.setItem(CACHE_VERSION_KEY, CACHE_VERSION);
+    console.log('[Cache] キャッシュクリア完了');
+  }
+};
+
+// アプリ起動前にキャッシュチェック
+clearOldCache();
+
 // Sentry初期化（エラー追跡）
 initSentry();
 
