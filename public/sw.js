@@ -1,5 +1,5 @@
 // IC-ぽちぽちシステム Service Worker
-const CACHE_NAME = 'ic-pochipochi-v4';
+const CACHE_NAME = 'ic-pochipochi-v5'; // バージョンアップで古いキャッシュを無効化
 const STATIC_ASSETS = [
   '/',
   '/manifest.json',
@@ -88,7 +88,29 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // 静的アセットはキャッシュ優先
+  // JSファイルはネットワーク優先（ハッシュ付きなので常に最新を取得）
+  if (url.pathname.endsWith('.js') || url.pathname.endsWith('.css')) {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          if (response.ok) {
+            const clonedResponse = response.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(request, clonedResponse);
+            });
+          }
+          return response;
+        })
+        .catch(async () => {
+          // オフライン時のみキャッシュから返す
+          const cached = await caches.match(request);
+          return cached || new Response('Offline', { status: 503 });
+        })
+    );
+    return;
+  }
+
+  // その他の静的アセットはキャッシュ優先
   event.respondWith(
     caches.match(request).then((cachedResponse) => {
       if (cachedResponse) {

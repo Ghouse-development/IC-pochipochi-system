@@ -66,6 +66,7 @@ const PageLoader = () => (
 
 // Environment check for demo mode
 const isDemoMode = import.meta.env.VITE_DEMO_MODE === 'true' || !import.meta.env.VITE_SUPABASE_URL;
+console.log('[DEBUG] App.tsx loaded, isDemoMode:', isDemoMode, 'VITE_DEMO_MODE:', import.meta.env.VITE_DEMO_MODE);
 
 // メインアプリケーションコンテンツ
 interface MainContentProps {
@@ -74,7 +75,9 @@ interface MainContentProps {
 }
 
 function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
+  console.log('[DEBUG] MainContent render, isDemo:', isDemo);
   const { user, isLoading, isAdmin } = useAuth();
+  console.log('[DEBUG] useAuth result - isLoading:', isLoading, 'user:', user?.email || 'null', 'isAdmin:', isAdmin);
   const navigate = useNavigate();
   const location = useLocation();
   const [isCartOpen, setIsCartOpen] = useState(false);
