@@ -465,60 +465,83 @@ interface TileButtonProps {
 const TileButton: React.FC<TileButtonProps> = ({ tile, isSelected, onClick }) => (
   <button
     onClick={onClick}
-    className={`relative border-2 rounded-xl text-left transition-all overflow-hidden ${
+    className={`relative bg-white border-2 rounded-2xl text-left transition-all overflow-hidden ${
       isSelected
-        ? 'border-blue-500 bg-blue-50'
-        : 'border-gray-200 hover:border-blue-300'
+        ? 'border-4 border-blue-500 shadow-xl shadow-blue-200 scale-[1.02]'
+        : 'border-gray-200 hover:shadow-xl hover:border-blue-300 hover:scale-[1.02]'
     }`}
   >
     {/* 画像エリア（正方形） */}
-    <div className="w-full aspect-square bg-gray-100 flex items-center justify-center">
+    <div className="w-full aspect-square bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center relative overflow-hidden">
       {tile.imageUrl ? (
         <img
           src={tile.imageUrl}
           alt={tile.name}
           className="w-full h-full object-cover"
           onError={(e) => {
-            // 画像読み込みエラー時はプレースホルダーを表示
             const target = e.target as HTMLImageElement;
             target.style.display = 'none';
             const parent = target.parentElement;
             if (parent) {
-              parent.innerHTML = '<div class="flex items-center justify-center w-full h-full text-gray-400"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg></div>';
+              parent.innerHTML = '<div class="flex flex-col items-center justify-center w-full h-full text-gray-400"><span class="text-4xl mb-2">🚶</span><span class="text-xs">画像準備中</span></div>';
             }
           }}
         />
       ) : (
-        <ImageIcon className="w-8 h-8 text-gray-400" />
+        <div className="flex flex-col items-center justify-center text-gray-400">
+          <span className="text-4xl mb-2">🚶</span>
+          <span className="text-xs">画像準備中</span>
+        </div>
+      )}
+
+      {/* バッジ（左上） */}
+      <div className="absolute top-2 left-2 flex flex-col gap-1">
+        {tile.isRecommended && (
+          <span className="px-2 py-1 rounded-md text-xs font-bold shadow-md bg-amber-500 text-white flex items-center gap-1">
+            <Star className="w-3 h-3 fill-white" />
+            オススメ
+          </span>
+        )}
+        <span className={`px-2 py-1 rounded-md text-xs font-bold shadow-md ${
+          tile.isStandard ? 'bg-emerald-500 text-white' : 'bg-orange-500 text-white'
+        }`}>
+          {tile.isStandard ? '標準' : 'オプション'}
+        </span>
+      </div>
+
+      {/* 選択済みオーバーレイ */}
+      {isSelected && (
+        <div className="absolute inset-0 bg-blue-500/30 flex items-center justify-center">
+          <div className="bg-white rounded-full p-3 shadow-xl ring-4 ring-blue-400/50">
+            <Check className="w-8 h-8 text-blue-600" strokeWidth={3} />
+          </div>
+          <div className="absolute bottom-2 left-1/2 -translate-x-1/2">
+            <span className="px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full shadow-lg">
+              選択中
+            </span>
+          </div>
+        </div>
       )}
     </div>
-
-    {/* おすすめバッジ（表示のみ、自動選択なし） */}
-    {tile.isRecommended && (
-      <div className="absolute top-2 right-2 flex items-center gap-1 px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full text-xs">
-        <Star className="w-3 h-3 fill-amber-500" />
-        オススメ
-      </div>
-    )}
 
     {/* 情報エリア */}
-    <div className="p-3">
-      <div className="font-medium text-gray-900">{tile.name}</div>
-      {!tile.isStandard && (
-        <div className="text-xs text-gray-500">{tile.manufacturer}</div>
+    <div className="p-4">
+      <p className="text-sm text-gray-500 font-medium mb-1 truncate">{tile.manufacturer}</p>
+      <h3 className="font-bold text-base text-gray-800 line-clamp-2 min-h-[2.5rem] mb-2 leading-snug">
+        {tile.name}
+      </h3>
+      {tile.description && (
+        <p className="text-xs text-gray-500 mb-2">{tile.description}</p>
       )}
-      <div className="text-xs text-gray-500 mt-1">{tile.description}</div>
-      <div className={`text-sm font-medium mt-2 ${tile.isStandard ? 'text-blue-600' : 'text-orange-600'}`}>
-        {tile.isStandard ? '標準' : `+¥${tile.price.toLocaleString()}/㎡`}
+      <div className="flex items-baseline gap-1.5">
+        <span className={`text-2xl font-black ${tile.isStandard ? 'text-emerald-600' : 'text-gray-900'}`}>
+          {tile.isStandard ? '標準' : `+¥${tile.price.toLocaleString()}`}
+        </span>
+        {!tile.isStandard && (
+          <span className="text-sm text-gray-500">/㎡</span>
+        )}
       </div>
     </div>
-
-    {/* 選択状態 */}
-    {isSelected && (
-      <div className="absolute top-2 left-2 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
-        <Check className="w-4 h-4 text-white" />
-      </div>
-    )}
   </button>
 );
 

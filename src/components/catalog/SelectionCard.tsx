@@ -1,5 +1,6 @@
 import React from 'react';
 import { Check, Image as ImageIcon, X } from 'lucide-react';
+import { formatPrice } from '../../lib/utils';
 
 /**
  * 選択カードコンポーネント（ItemCard風）
@@ -46,8 +47,8 @@ export const SelectionCard: React.FC<SelectionCardProps> = ({
     <article
       className={`group bg-white rounded-2xl overflow-hidden transition-all duration-200 cursor-pointer ${
         isSelected
-          ? 'border-4 border-blue-500 shadow-xl shadow-blue-200 ring-4 ring-blue-100 scale-[1.02]'
-          : 'border-2 border-gray-200 shadow-md hover:shadow-xl hover:border-blue-300:border-blue-600 hover:scale-[1.02]'
+          ? 'border-4 border-blue-500 shadow-xl shadow-blue-200 scale-[1.02]'
+          : 'border-2 border-gray-200 hover:shadow-xl hover:border-blue-300 hover:scale-[1.02]'
       }`}
       onClick={onClick}
       role="button"
@@ -141,7 +142,7 @@ export const SelectionCard: React.FC<SelectionCardProps> = ({
             </div>
             <div className="absolute bottom-2 left-1/2 -translate-x-1/2">
               <span className="px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full shadow-lg">
-                選択中（タップで解除）
+                選択中
               </span>
             </div>
           </div>
@@ -165,7 +166,7 @@ export const SelectionCard: React.FC<SelectionCardProps> = ({
         )}
         {price !== undefined && (
           <p className={`text-2xl font-black ${price === 0 ? 'text-emerald-600' : 'text-gray-900'}`}>
-            {price === 0 ? '差額なし' : `+${price.toLocaleString()}円`}
+            {price === 0 ? '標準' : formatPrice(price)}
           </p>
         )}
       </div>

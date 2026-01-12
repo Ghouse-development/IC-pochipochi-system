@@ -1,6 +1,5 @@
 import React, { memo, useCallback } from 'react';
-import { X, Ban, Info } from 'lucide-react';
-import { Card } from '../common/Card';
+import { Ban, Check, X } from 'lucide-react';
 
 interface NotNeededCardProps {
   categoryName: string;
@@ -29,13 +28,12 @@ const NotNeededCardComponent: React.FC<NotNeededCardProps> = ({
   }, [handleSelect]);
 
   return (
-    <Card
-      hoverable
+    <div
       onClick={handleSelect}
-      className={`overflow-hidden transition-all duration-200 ${
+      className={`bg-white border-2 rounded-2xl overflow-hidden cursor-pointer transition-all ${
         isSelected
-          ? 'ring-2 ring-gray-500 bg-gray-50'
-          : 'hover:ring-2 hover:ring-gray-300'
+          ? 'border-4 border-blue-500 shadow-xl shadow-blue-200 scale-[1.02]'
+          : 'border-gray-200 hover:shadow-xl hover:border-blue-300 hover:scale-[1.02]'
       }`}
       role="button"
       tabIndex={0}
@@ -43,47 +41,65 @@ const NotNeededCardComponent: React.FC<NotNeededCardProps> = ({
       aria-label={`${categoryName}を${title}として設定`}
       aria-pressed={isSelected}
     >
-      {/* アイコンエリア */}
-      <div className="aspect-w-16 aspect-h-12 bg-gradient-to-br from-gray-100 to-gray-200 relative flex items-center justify-center h-32 sm:h-48">
+      {/* 画像エリア（正方形） */}
+      <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 relative flex items-center justify-center">
         <div className="text-center">
-          <Ban className="w-12 h-12 sm:w-16 sm:h-16 text-gray-400 mx-auto mb-2" />
-          {isSelected && (
-            <div className="absolute top-2 right-2 bg-gray-600 text-white rounded-full p-1">
-              <X className="w-4 h-4" />
-            </div>
-          )}
+          <Ban className="w-16 h-16 text-gray-400 mx-auto" />
+          <span className="text-sm text-gray-500 mt-2 block">選択しない</span>
         </div>
-      </div>
 
-      <div className="p-2 sm:p-4">
-        <div className="flex items-start justify-between mb-1 sm:mb-2">
-          <h3 className="text-xs sm:text-sm font-semibold text-gray-700 line-clamp-2 flex-1">
-            {title}
-          </h3>
-          <span className="ml-1 sm:ml-2 flex-shrink-0 text-xs px-2 py-0.5 bg-gray-200 text-gray-600 rounded-full">
-            選択可
+        {/* バッジ */}
+        <div className="absolute top-2 left-2">
+          <span className="px-2 py-1 rounded-md text-xs font-bold shadow-md bg-gray-500 text-white">
+            なし
           </span>
         </div>
 
-        {description && (
-          <div className="flex items-start gap-1 mt-2">
-            <Info className="w-3 h-3 text-gray-400 flex-shrink-0 mt-0.5" />
-            <p className="text-xs text-gray-500 line-clamp-2">
-              {description}
-            </p>
+        {/* 選択済みオーバーレイ */}
+        {isSelected && (
+          <div className="absolute inset-0 bg-blue-500/30 flex items-center justify-center">
+            <button
+              className="absolute top-2 right-2 p-1.5 bg-white rounded-full shadow-lg hover:bg-red-50 transition-colors group"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleSelect();
+              }}
+            >
+              <X className="w-4 h-4 text-gray-400 group-hover:text-red-500" />
+            </button>
+            <div className="bg-white rounded-full p-3 shadow-xl ring-4 ring-blue-400/50">
+              <Check className="w-8 h-8 text-blue-600" strokeWidth={3} />
+            </div>
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2">
+              <span className="px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full shadow-lg">
+                選択中
+              </span>
+            </div>
           </div>
         )}
+      </div>
 
-        <div className="flex items-baseline justify-between mt-2 sm:mt-3">
-          <span className="text-sm sm:text-lg font-bold text-gray-500">
-            ¥0
-          </span>
-          <span className="text-xs text-gray-400">
-            追加費用なし
+      {/* 情報エリア */}
+      <div className="p-4">
+        <p className="text-sm text-gray-400 font-medium mb-1">{categoryName}</p>
+        <h3 className="font-bold text-base text-gray-700 line-clamp-2 min-h-[2.5rem] mb-2 leading-snug">
+          {title}
+        </h3>
+
+        {description && (
+          <p className="text-xs text-gray-500 mb-2 line-clamp-2">
+            {description}
+          </p>
+        )}
+
+        {/* 価格 */}
+        <div className="flex items-baseline gap-1.5">
+          <span className="text-2xl font-black text-emerald-600">
+            標準
           </span>
         </div>
       </div>
-    </Card>
+    </div>
   );
 };
 

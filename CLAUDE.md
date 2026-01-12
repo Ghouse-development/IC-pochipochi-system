@@ -72,6 +72,51 @@
 - 状態表示（選択済み、エラー等）以外で色を増やさない
 - 基本は白/グレー/青の3色系統で統一
 
+### アイテムカードのデザイン統一（重要）
+
+すべてのアイテム選択カード（ItemCard, SelectionCard, ProductCard, NotNeededCard, TileButton等）は以下のデザインに統一すること。
+
+**基本構造:**
+```
+┌─────────────────────────┐
+│  [正方形の画像エリア]     │  ← aspect-square
+│  ┌───┐                  │
+│  │標準│ ← バッジ(左上)   │
+│  └───┘                  │
+├─────────────────────────┤
+│  メーカー名              │  ← text-sm text-gray-500
+│  商品名                  │  ← font-bold text-base
+│  ¥12,000 /㎡            │  ← text-2xl font-black
+│  [色サムネイル] [色] ... │  ← 画像優先、なければカラーコード
+└─────────────────────────┘
+```
+
+**必須スタイル:**
+- コンテナ: `border-2 rounded-2xl overflow-hidden`
+- 画像エリア: `aspect-square` (正方形を厳守)
+- パディング: `p-4` (レスポンシブ変更しない)
+- タイトル: `font-bold text-base`
+- 価格: `text-2xl font-black`
+- 角丸: `rounded-2xl` (16px)
+
+**バッジ色:**
+- 標準: `bg-emerald-500 text-white`
+- オプション: `bg-orange-500 text-white`
+- なし/不要: `bg-gray-500 text-white`
+
+**価格表示:**
+- 0円 → `標準` (text-emerald-600)
+- 金額 → `formatPrice(price)` (text-gray-900)
+- ※「差額なし」「標準仕様」「¥0」等の表記ゆれは禁止
+
+**選択状態:**
+- 選択中: `border-4 border-blue-500 shadow-xl shadow-blue-200 scale-[1.02]`
+- ホバー: `hover:shadow-xl hover:border-blue-300 hover:scale-[1.02]`
+
+**サムネイル画像:**
+- すべてのカードに画像を表示する（プレースホルダーでも可）
+- 色バリアントは画像サムネイルを優先、なければカラーコードで表示
+
 ## UX設計思想
 
 ### コンセプト: ポチポチ選択

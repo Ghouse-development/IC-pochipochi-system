@@ -1,8 +1,6 @@
 import React, { useState, useRef, useEffect, memo, useCallback } from 'react';
 import type { Product } from '../../types/product';
 import { UNIT_SYMBOLS } from '../../types/product';
-import { Card } from '../common/Card';
-import { Badge } from '../common/Badge';
 import { formatPrice, getProductPrice } from '../../lib/utils';
 import { generateProductPlaceholder } from '../../utils/imageUtils';
 import { getHexColor } from '../../utils/colorMapping';
@@ -60,16 +58,16 @@ const ProductCardComponent: React.FC<ProductCardProps> = ({ product, onSelect })
   }, [handleSelect]);
 
   return (
-    <Card
-      hoverable
+    <div
       onClick={handleSelect}
-      className="overflow-hidden"
+      className="bg-white border-2 border-gray-200 rounded-2xl overflow-hidden cursor-pointer transition-all hover:shadow-xl hover:border-blue-300 hover:scale-[1.02]"
       role="button"
       tabIndex={0}
       onKeyDown={handleKeyDown}
-      aria-label={`${product.name}の詳細を見る。価格: ${price === 0 ? '標準仕様' : formatPrice(price)}`}
+      aria-label={`${product.name}の詳細を見る。価格: ${price === 0 ? '標準' : formatPrice(price)}`}
     >
-      <div ref={imgRef} className="aspect-square bg-gray-100 relative">
+      {/* 画像エリア（正方形） */}
+      <div ref={imgRef} className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
         {/* Loading Skeleton */}
         {(!imageLoaded || !isVisible) && (
           <div className="absolute inset-0 animate-pulse bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 bg-[length:200%_100%]" />
@@ -78,7 +76,7 @@ const ProductCardComponent: React.FC<ProductCardProps> = ({ product, onSelect })
           <img
             src={displayImage}
             alt={product.name}
-            className={`w-full h-32 sm:h-48 object-cover transition-opacity duration-300 ${
+            className={`w-full h-full object-cover transition-opacity duration-300 ${
               imageLoaded ? 'opacity-100' : 'opacity-0'
             }`}
             loading="lazy"
@@ -89,65 +87,70 @@ const ProductCardComponent: React.FC<ProductCardProps> = ({ product, onSelect })
             }}
           />
         )}
-      </div>
-      
-      <div className="p-2 sm:p-4">
-        <div className="flex items-start justify-between mb-1 sm:mb-2">
-          <h3 className="text-xs sm:text-sm font-semibold text-gray-900 line-clamp-2 flex-1">
-            {product.name}
-          </h3>
-          {product.isOption ? (
-            <Badge variant="option" className="ml-1 sm:ml-2 flex-shrink-0 text-xs">
-              オプション
-            </Badge>
-          ) : (
-            <Badge variant="standard" className="ml-1 sm:ml-2 flex-shrink-0 text-xs">
-              標準
-            </Badge>
-          )}
+
+        {/* バッジ */}
+        <div className="absolute top-2 left-2">
+          <span className={`px-2 py-1 rounded-md text-xs font-bold shadow-md ${
+            product.isOption ? 'bg-orange-500 text-white' : 'bg-emerald-500 text-white'
+          }`}>
+            {product.isOption ? 'オプション' : '標準'}
+          </span>
         </div>
-        
-        <p className="text-xs text-gray-500 mb-0.5 sm:mb-1">{product.manufacturer}</p>
-        
-        {product.modelNumber && (
-          <p className="text-xs text-gray-400 mb-1 sm:mb-2 hidden sm:block">{product.modelNumber}</p>
-        )}
-        
-        <div className="flex items-baseline justify-between mt-2 sm:mt-3">
-          <span className="text-sm sm:text-lg font-bold text-gray-900">
-            {price === 0 ? '標準仕様' : formatPrice(price)}
+      </div>
+
+      {/* 情報エリア */}
+      <div className="p-4">
+        <p className="text-sm text-gray-500 font-medium mb-1 truncate">{product.manufacturer}</p>
+        <h3 className="font-bold text-base text-gray-800 line-clamp-2 min-h-[2.5rem] mb-2 leading-snug">
+          {product.name}
+        </h3>
+
+        {/* 価格 */}
+        <div className="flex items-baseline gap-1.5 mb-3">
+          <span className={`text-2xl font-black ${price === 0 ? 'text-emerald-600' : 'text-gray-900'}`}>
+            {price === 0 ? '標準' : formatPrice(price)}
           </span>
           {price > 0 && product.unit && (
-            <span className="text-xs text-gray-500">
-              / {UNIT_SYMBOLS[product.unit] || product.unit}
+            <span className="text-sm text-gray-500">
+              /{UNIT_SYMBOLS[product.unit] || product.unit}
             </span>
           )}
         </div>
-        
+
+        {/* 色バリアント（サムネイル表示） */}
         {product.variants.length > 1 && (
-          <div className="flex gap-1 mt-3">
+          <div className="flex gap-1.5 flex-wrap">
             {product.variants.slice(0, 5).map((variant) => {
+              const hasImage = variant.imageUrl || variant.thumbnailUrl;
               const hexColor = getHexColor(variant.colorCode) !== '#CCCCCC'
                 ? getHexColor(variant.colorCode)
                 : getHexColor(variant.color);
-              return (
+              return hasImage ? (
+                <img
+                  key={variant.id}
+                  src={variant.thumbnailUrl || variant.imageUrl}
+                  alt={variant.color}
+                  className="w-8 h-8 rounded-md object-cover border-2 border-gray-200"
+                  title={variant.color}
+                />
+              ) : (
                 <div
                   key={variant.id}
-                  className="w-6 h-6 rounded-full border-2 border-gray-300 shadow-sm"
+                  className="w-8 h-8 rounded-md border-2 border-gray-200 shadow-sm"
                   style={{ backgroundColor: hexColor }}
                   title={variant.color}
                 />
               );
             })}
             {product.variants.length > 5 && (
-              <div className="w-6 h-6 rounded-full border-2 border-gray-300 bg-gray-100 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-md border-2 border-gray-200 bg-gray-100 flex items-center justify-center">
                 <span className="text-xs text-gray-600">+{product.variants.length - 5}</span>
               </div>
             )}
           </div>
         )}
       </div>
-    </Card>
+    </div>
   );
 };
 
