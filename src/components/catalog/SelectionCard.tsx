@@ -1,11 +1,11 @@
 import React from 'react';
-import { Check, Image as ImageIcon, X } from 'lucide-react';
+import { Check, Image as ImageIcon } from 'lucide-react';
 import { formatPrice } from '../../lib/utils';
 
 /**
- * 選択カードコンポーネント（ItemCard風）
+ * 選択カードコンポーネント（シンプル版）
  *
- * 玄関ドア・エアコン・階段などのステップ選択UIで使用する共通コンポーネント
+ * 表示内容: サムネイル画像、バッジ、アイテム名、価格、単位、選べるアイテム数のみ
  */
 export interface SelectionCardProps {
   id: string;
@@ -23,6 +23,8 @@ export interface SelectionCardProps {
   onDeselect?: () => void;
   manufacturer?: string;
   colorCode?: string;
+  variantCount?: number;
+  unit?: string;
 }
 
 export const SelectionCard: React.FC<SelectionCardProps> = ({
@@ -33,12 +35,11 @@ export const SelectionCard: React.FC<SelectionCardProps> = ({
   isStandard,
   isOption,
   price,
-  priceRange,
   isSelected,
   onClick,
-  onDeselect,
-  manufacturer,
   colorCode,
+  variantCount,
+  unit,
 }) => {
   const [imageError, setImageError] = React.useState(false);
 
@@ -46,8 +47,8 @@ export const SelectionCard: React.FC<SelectionCardProps> = ({
     <article
       className={`group bg-white rounded-lg overflow-hidden transition-all duration-200 cursor-pointer ${
         isSelected
-          ? 'border-2 border-blue-500 shadow-xl shadow-blue-200 scale-[1.02]'
-          : 'border-2 border-gray-200 hover:shadow-xl hover:border-blue-300 hover:scale-[1.02]'
+          ? 'border-2 border-blue-500 shadow-lg'
+          : 'border border-gray-200 hover:border-blue-300 hover:shadow-md'
       }`}
       onClick={onClick}
       role="button"
@@ -73,28 +74,28 @@ export const SelectionCard: React.FC<SelectionCardProps> = ({
             onError={() => setImageError(true)}
           />
         ) : (
-          <div className={`w-full h-full flex flex-col items-center justify-center p-2 bg-gradient-to-br ${placeholderBgColor}`}>
+          <div className={`w-full h-full flex flex-col items-center justify-center bg-gradient-to-br ${placeholderBgColor}`}>
             {colorCode ? (
               <div
-                className="w-10 h-10 rounded-full border-2 border-white shadow-lg mb-2"
+                className="w-10 h-10 rounded-full border-2 border-white shadow-lg"
                 style={{ backgroundColor: colorCode }}
               />
             ) : (
-              <span className="text-2xl mb-1 transition-transform duration-200 group-hover:scale-110">
+              <span className="text-2xl transition-transform duration-200 group-hover:scale-110">
                 {placeholderEmoji}
               </span>
             )}
-            <div className="mt-2 flex items-center gap-1 text-gray-400">
+            <div className="mt-1 flex items-center gap-1 text-gray-400">
               <ImageIcon className="w-3 h-3" />
               <span className="text-[10px]">画像準備中</span>
             </div>
           </div>
         )}
 
-        {/* 標準/オプションバッジ */}
+        {/* バッジ（標準/オプション） */}
         {(isStandard || isOption) && (
-          <div className="absolute top-2 left-2">
-            <span className={`px-2 py-1 rounded-md text-xs font-bold shadow-md ${
+          <div className="absolute top-1 left-1">
+            <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${
               isStandard
                 ? 'bg-emerald-500 text-white'
                 : 'bg-orange-500 text-white'
@@ -104,67 +105,34 @@ export const SelectionCard: React.FC<SelectionCardProps> = ({
           </div>
         )}
 
-        {/* メーカーバッジ */}
-        {manufacturer && (
-          <div className="absolute top-2 right-2">
-            <span className="px-2 py-1 rounded-md text-xs font-medium bg-white/90 text-gray-700 shadow-md">
-              {manufacturer}
-            </span>
-          </div>
-        )}
-
-        {/* 選択済みオーバーレイ - クリックで解除可能 */}
+        {/* 選択済みマーク */}
         {isSelected && (
-          <div
-            className="absolute inset-0 bg-blue-500/30 flex items-center justify-center cursor-pointer hover:bg-blue-500/40 transition-colors"
-            onClick={(e) => {
-              e.stopPropagation();
-              if (onDeselect) onDeselect();
-              else onClick();
-            }}
-            title="クリックで選択解除"
-          >
-            {/* 解除ボタン（右上） */}
-            <button
-              className="absolute top-2 right-2 p-1.5 bg-white rounded-full shadow-lg hover:bg-red-50 transition-colors group"
-              onClick={(e) => {
-                e.stopPropagation();
-                if (onDeselect) onDeselect();
-                else onClick();
-              }}
-              aria-label="選択解除"
-            >
-              <X className="w-4 h-4 text-gray-400 group-hover:text-red-500" />
-            </button>
-            <div className="bg-white rounded-full p-2 shadow-lg ring-2 ring-blue-400/50">
-              <Check className="w-6 h-6 text-blue-600" strokeWidth={3} />
-            </div>
-            <div className="absolute bottom-2 left-1/2 -translate-x-1/2">
-              <span className="px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full shadow-lg">
-                選択中
-              </span>
-            </div>
+          <div className="absolute top-1 right-1 bg-blue-500 rounded-full p-1">
+            <Check className="w-3 h-3 text-white" strokeWidth={3} />
           </div>
         )}
       </div>
 
-      {/* 情報エリア */}
+      {/* 情報エリア - シンプル化 */}
       <div className="p-2">
-        {manufacturer && (
-          <p className="text-[10px] text-gray-500 truncate">{manufacturer}</p>
-        )}
-        <h3 className="font-bold text-xs text-gray-800 line-clamp-2 mb-0.5 min-h-[1.5rem]">
+        {/* アイテム名 */}
+        <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
           {name}
         </h3>
-        {priceRange && (
-          <p className="text-sm font-black text-gray-900">
-            {priceRange}
-          </p>
-        )}
-        {price !== undefined && (
-          <p className={`text-sm font-black ${price === 0 ? 'text-emerald-600' : 'text-gray-900'}`}>
-            {price === 0 ? '標準' : formatPrice(price)}
-          </p>
+
+        {/* 価格・単位 */}
+        <div className="flex items-baseline gap-1 mt-1">
+          <span className={`text-sm font-bold ${price === 0 || price === undefined ? 'text-emerald-600' : 'text-gray-900'}`}>
+            {price === 0 || price === undefined ? '標準' : formatPrice(price)}
+          </span>
+          {unit && price !== 0 && price !== undefined && (
+            <span className="text-xs text-gray-500">/{unit}</span>
+          )}
+        </div>
+
+        {/* 選べるアイテム数 */}
+        {variantCount && variantCount > 1 && (
+          <span className="text-[10px] text-gray-400">{variantCount}色から選択</span>
         )}
       </div>
     </article>
