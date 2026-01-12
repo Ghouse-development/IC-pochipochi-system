@@ -89,10 +89,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    // Get initial session
+    // Get initial session with timeout
     const initializeAuth = async () => {
+      // タイムアウト設定（5秒）
+      const timeoutId = setTimeout(() => {
+        logger.warn('Auth initialization timeout, proceeding without session');
+        setIsLoading(false);
+      }, 5000);
+
       try {
         const { data: { session }, error } = await supabase.auth.getSession();
+
+        clearTimeout(timeoutId);
 
         if (error) {
           logger.error('Error getting session:', error);
@@ -115,6 +123,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           }
         }
       } catch (error) {
+        clearTimeout(timeoutId);
         logger.error('Error initializing auth:', error);
       } finally {
         setIsLoading(false);
@@ -296,21 +305,46 @@ export function DemoAuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    // Check current session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setSupabaseUser(session?.user ?? null);
+    // タイムアウト設定（5秒）- ロードが止まらないようにする
+    const timeoutId = setTimeout(() => {
+      logger.warn('Demo auth initialization timeout, proceeding without session');
+      setIsLoading(false);
+    }, 5000);
 
-      if (session?.user) {
-        fetchUserData(session.user.id).then((userData) => {
-          setUser(userData);
+    // Check current session with error handling
+    supabase.auth.getSession()
+      .then(({ data: { session }, error }) => {
+        clearTimeout(timeoutId);
+
+        if (error) {
+          logger.error('Error getting session in demo mode:', error);
           setIsLoading(false);
-        });
-      } else {
-        setUser(null);
+          return;
+        }
+
+        setSession(session);
+        setSupabaseUser(session?.user ?? null);
+
+        if (session?.user) {
+          fetchUserData(session.user.id)
+            .then((userData) => {
+              setUser(userData);
+              setIsLoading(false);
+            })
+            .catch((err) => {
+              logger.error('Error fetching user data in demo mode:', err);
+              setIsLoading(false);
+            });
+        } else {
+          setUser(null);
+          setIsLoading(false);
+        }
+      })
+      .catch((err) => {
+        clearTimeout(timeoutId);
+        logger.error('Failed to get session in demo mode:', err);
         setIsLoading(false);
-      }
-    });
+      });
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -327,7 +361,10 @@ export function DemoAuthProvider({ children }: { children: ReactNode }) {
       }
     );
 
-    return () => subscription.unsubscribe();
+    return () => {
+      clearTimeout(timeoutId);
+      subscription.unsubscribe();
+    };
   }, []);
 
   // ログイン処理
