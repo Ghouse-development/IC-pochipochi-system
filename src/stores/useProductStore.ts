@@ -255,10 +255,12 @@ interface ProductStore {
   getAllProducts: () => Product[];
 }
 
-// カテゴリタイプでアイテムを取得するヘルパー（将来のDB連携用）
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const _fetchItemsByCategory = async (categoryType: string): Promise<Product[]> => {
-  // Supabase未設定時は空配列を返す（静的データにフォールバック）
+/*
+ * カテゴリタイプでアイテムを取得するヘルパー（将来のDB連携用）
+ * 現在は静的データを優先しているため未使用
+ * DBにデータを移行したら、この関数を有効化する
+ *
+const fetchItemsByCategory = async (categoryType: string): Promise<Product[]> => {
   if (!isSupabaseConfigured) {
     return [];
   }
@@ -291,12 +293,10 @@ const _fetchItemsByCategory = async (categoryType: string): Promise<Product[]> =
       return [];
     }
 
-    // カテゴリタイプでフィルタリング
     const filteredItems = data.filter(item =>
       item.category?.category_type === categoryType
     );
 
-    // バリアント情報があるかチェック（データ完全性の確認）
     const hasVariants = filteredItems.some(item => item.variants && item.variants.length > 0);
     if (!hasVariants) {
       logger.warn(`No variants found for ${categoryType} items, may need DB import`);
@@ -308,6 +308,7 @@ const _fetchItemsByCategory = async (categoryType: string): Promise<Product[]> =
     return [];
   }
 };
+*/
 
 export const useProductStore = create<ProductStore>()(
   persist(
