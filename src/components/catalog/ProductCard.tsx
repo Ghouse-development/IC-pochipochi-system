@@ -60,14 +60,14 @@ const ProductCardComponent: React.FC<ProductCardProps> = ({ product, onSelect })
   return (
     <div
       onClick={handleSelect}
-      className="bg-white border-2 border-gray-200 rounded-2xl overflow-hidden cursor-pointer transition-all hover:shadow-xl hover:border-blue-300 hover:scale-[1.02]"
+      className="bg-white border-2 border-gray-200 rounded-lg overflow-hidden cursor-pointer transition-all hover:shadow-xl hover:border-blue-300 hover:scale-[1.02]"
       role="button"
       tabIndex={0}
       onKeyDown={handleKeyDown}
       aria-label={`${product.name}の詳細を見る。価格: ${price === 0 ? '標準' : formatPrice(price)}`}
     >
       {/* 画像エリア（正方形） */}
-      <div ref={imgRef} className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
+      <div ref={imgRef} className="aspect-[4/3] bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
         {/* Loading Skeleton */}
         {(!imageLoaded || !isVisible) && (
           <div className="absolute inset-0 animate-pulse bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 bg-[length:200%_100%]" />
@@ -107,7 +107,7 @@ const ProductCardComponent: React.FC<ProductCardProps> = ({ product, onSelect })
 
         {/* 価格 */}
         <div className="flex items-baseline gap-1 mb-2">
-          <span className={`text-lg font-black ${price === 0 ? 'text-emerald-600' : 'text-gray-900'}`}>
+          <span className={`text-sm font-black ${price === 0 ? 'text-emerald-600' : 'text-gray-900'}`}>
             {price === 0 ? '標準' : formatPrice(price)}
           </span>
           {price > 0 && product.unit && (

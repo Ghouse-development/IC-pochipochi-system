@@ -224,7 +224,7 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
           {standardTiles.length > 0 && (
             <div className="mb-6">
               <h5 className="text-sm font-medium text-gray-500 mb-3">標準</h5>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2">
                 {standardTiles.map(tile => (
                   <TileButton
                     key={tile.id}
@@ -241,7 +241,7 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
           {optionTiles.length > 0 && (
             <div>
               <h5 className="text-sm font-medium text-gray-500 mb-3">タイル（オプション）</h5>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2">
                 {optionTiles.map(tile => (
                   <TileButton
                     key={tile.id}
@@ -266,7 +266,7 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
             <ChevronLeft className="w-4 h-4" /> タイル選択に戻る
           </button>
 
-          <div className="mb-4 p-3 bg-gray-50 rounded-lg flex items-center gap-3">
+          <div className="mb-4 p-3 bg-gray-50 rounded-lg flex items-center gap-2">
             {selectedTile.imageUrl && (
               <img
                 src={selectedTile.imageUrl}
@@ -294,7 +294,7 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
                 }`}
               >
                 {/* 色画像 */}
-                <div className="aspect-square bg-gray-100">
+                <div className="aspect-[4/3] bg-gray-100">
                   {color.imageUrl ? (
                     <img
                       src={color.imageUrl}
@@ -338,7 +338,7 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
             <ChevronLeft className="w-4 h-4" /> {needsColorSelection(selectedTile) ? '色選択に戻る' : 'タイル選択に戻る'}
           </button>
 
-          <div className="mb-4 p-3 bg-gray-50 rounded-lg flex items-center gap-3">
+          <div className="mb-4 p-3 bg-gray-50 rounded-lg flex items-center gap-2">
             {(selectedColor?.imageUrl || selectedTile.imageUrl) && (
               <img
                 src={selectedColor?.imageUrl || selectedTile.imageUrl}
@@ -465,14 +465,14 @@ interface TileButtonProps {
 const TileButton: React.FC<TileButtonProps> = ({ tile, isSelected, onClick }) => (
   <button
     onClick={onClick}
-    className={`relative bg-white border-2 rounded-2xl text-left transition-all overflow-hidden ${
+    className={`relative bg-white border-2 rounded-lg text-left transition-all overflow-hidden ${
       isSelected
-        ? 'border-4 border-blue-500 shadow-xl shadow-blue-200 scale-[1.02]'
+        ? 'border-2 border-blue-500 shadow-xl shadow-blue-200 scale-[1.02]'
         : 'border-gray-200 hover:shadow-xl hover:border-blue-300 hover:scale-[1.02]'
     }`}
   >
     {/* 画像エリア（正方形） */}
-    <div className="w-full aspect-square bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center relative overflow-hidden">
+    <div className="w-full aspect-[4/3] bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center relative overflow-hidden">
       {tile.imageUrl ? (
         <img
           src={tile.imageUrl}
@@ -483,13 +483,13 @@ const TileButton: React.FC<TileButtonProps> = ({ tile, isSelected, onClick }) =>
             target.style.display = 'none';
             const parent = target.parentElement;
             if (parent) {
-              parent.innerHTML = '<div class="flex flex-col items-center justify-center w-full h-full text-gray-400"><span class="text-4xl mb-2">🚶</span><span class="text-xs">画像準備中</span></div>';
+              parent.innerHTML = '<div class="flex flex-col items-center justify-center w-full h-full text-gray-400"><span class="text-2xl mb-1">🚶</span><span class="text-xs">画像準備中</span></div>';
             }
           }}
         />
       ) : (
         <div className="flex flex-col items-center justify-center text-gray-400">
-          <span className="text-4xl mb-2">🚶</span>
+          <span className="text-2xl mb-1">🚶</span>
           <span className="text-xs">画像準備中</span>
         </div>
       )}
@@ -512,8 +512,8 @@ const TileButton: React.FC<TileButtonProps> = ({ tile, isSelected, onClick }) =>
       {/* 選択済みオーバーレイ */}
       {isSelected && (
         <div className="absolute inset-0 bg-blue-500/30 flex items-center justify-center">
-          <div className="bg-white rounded-full p-3 shadow-xl ring-4 ring-blue-400/50">
-            <Check className="w-8 h-8 text-blue-600" strokeWidth={3} />
+          <div className="bg-white rounded-full p-3 shadow-xl ring-2 ring-blue-400/50">
+            <Check className="w-6 h-6 text-blue-600" strokeWidth={3} />
           </div>
           <div className="absolute bottom-2 left-1/2 -translate-x-1/2">
             <span className="px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full shadow-lg">
@@ -525,13 +525,13 @@ const TileButton: React.FC<TileButtonProps> = ({ tile, isSelected, onClick }) =>
     </div>
 
     {/* 情報エリア */}
-    <div className="p-3">
+    <div className="p-2">
       <p className="text-xs text-gray-500 mb-0.5 truncate">{tile.manufacturer}</p>
       <h3 className="font-bold text-sm text-gray-800 line-clamp-2 mb-1">
         {tile.name}
       </h3>
       <div className="flex items-baseline gap-1">
-        <span className={`text-lg font-black ${tile.isStandard ? 'text-emerald-600' : 'text-gray-900'}`}>
+        <span className={`text-sm font-black ${tile.isStandard ? 'text-emerald-600' : 'text-gray-900'}`}>
           {tile.isStandard ? '標準' : `+¥${tile.price.toLocaleString()}`}
         </span>
         {!tile.isStandard && (

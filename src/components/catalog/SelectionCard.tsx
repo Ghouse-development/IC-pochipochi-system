@@ -44,9 +44,9 @@ export const SelectionCard: React.FC<SelectionCardProps> = ({
 
   return (
     <article
-      className={`group bg-white rounded-2xl overflow-hidden transition-all duration-200 cursor-pointer ${
+      className={`group bg-white rounded-lg overflow-hidden transition-all duration-200 cursor-pointer ${
         isSelected
-          ? 'border-4 border-blue-500 shadow-xl shadow-blue-200 scale-[1.02]'
+          ? 'border-2 border-blue-500 shadow-xl shadow-blue-200 scale-[1.02]'
           : 'border-2 border-gray-200 hover:shadow-xl hover:border-blue-300 hover:scale-[1.02]'
       }`}
       onClick={onClick}
@@ -62,7 +62,7 @@ export const SelectionCard: React.FC<SelectionCardProps> = ({
       aria-pressed={isSelected}
     >
       {/* 画像エリア（正方形） */}
-      <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
+      <div className="aspect-[4/3] bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
         {imageUrl && !imageError ? (
           <img
             src={imageUrl}
@@ -157,12 +157,12 @@ export const SelectionCard: React.FC<SelectionCardProps> = ({
           {name}
         </h3>
         {priceRange && (
-          <p className="text-lg font-black text-gray-900">
+          <p className="text-sm font-black text-gray-900">
             {priceRange}
           </p>
         )}
         {price !== undefined && (
-          <p className={`text-lg font-black ${price === 0 ? 'text-emerald-600' : 'text-gray-900'}`}>
+          <p className={`text-sm font-black ${price === 0 ? 'text-emerald-600' : 'text-gray-900'}`}>
             {price === 0 ? '標準' : formatPrice(price)}
           </p>
         )}

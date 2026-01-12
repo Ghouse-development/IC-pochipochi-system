@@ -29,9 +29,9 @@ const NotNeededCardComponent: React.FC<NotNeededCardProps> = ({
   return (
     <div
       onClick={handleSelect}
-      className={`bg-white border-2 rounded-2xl overflow-hidden cursor-pointer transition-all ${
+      className={`bg-white border-2 rounded-lg overflow-hidden cursor-pointer transition-all ${
         isSelected
-          ? 'border-4 border-blue-500 shadow-xl shadow-blue-200 scale-[1.02]'
+          ? 'border-2 border-blue-500 shadow-xl shadow-blue-200 scale-[1.02]'
           : 'border-gray-200 hover:shadow-xl hover:border-blue-300 hover:scale-[1.02]'
       }`}
       role="button"
@@ -41,7 +41,7 @@ const NotNeededCardComponent: React.FC<NotNeededCardProps> = ({
       aria-pressed={isSelected}
     >
       {/* 画像エリア（正方形） */}
-      <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 relative flex items-center justify-center">
+      <div className="aspect-[4/3] bg-gradient-to-br from-gray-100 to-gray-200 relative flex items-center justify-center">
         <div className="text-center">
           <Ban className="w-16 h-16 text-gray-400 mx-auto" />
           <span className="text-sm text-gray-500 mt-2 block">選択しない</span>
@@ -87,7 +87,7 @@ const NotNeededCardComponent: React.FC<NotNeededCardProps> = ({
 
         {/* 価格 */}
         <div className="flex items-baseline gap-1">
-          <span className="text-lg font-black text-emerald-600">
+          <span className="text-sm font-black text-emerald-600">
             標準
           </span>
         </div>
