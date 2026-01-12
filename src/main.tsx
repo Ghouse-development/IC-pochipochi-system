@@ -42,63 +42,24 @@ initWebVitals();
 // CSRFトークン初期化
 getCsrfToken();
 
-// Service Worker登録（PWA対応）
-const registerServiceWorker = async () => {
+// Service Worker削除（キャッシュ問題の根本解決）
+// PWA機能は安定するまで無効化
+const unregisterServiceWorkers = async () => {
   if ('serviceWorker' in navigator) {
-    try {
-      const registration = await navigator.serviceWorker.register('/sw.js', {
-        scope: '/',
-      });
-
-      // 更新チェック
-      registration.addEventListener('updatefound', () => {
-        const newWorker = registration.installing;
-        if (newWorker) {
-          newWorker.addEventListener('statechange', () => {
-            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-              // 新しいバージョンが利用可能
-              console.log('[PWA] 新しいバージョンが利用可能です');
-              // 更新通知を表示（ユーザーにリロードを促す）
-              if (window.confirm('新しいバージョンが利用可能です。更新しますか？')) {
-                window.location.reload();
-              }
-            }
-          });
-        }
-      });
-
-      console.log('[PWA] Service Worker登録成功:', registration.scope);
-
-      // バックグラウンド同期サポートチェック
-      if ('sync' in registration) {
-        console.log('[PWA] バックグラウンド同期サポート: 有効');
-      }
-
-      // プッシュ通知サポートチェック
-      if ('pushManager' in registration) {
-        console.log('[PWA] プッシュ通知サポート: 有効');
-      }
-    } catch (error) {
-      console.error('[PWA] Service Worker登録失敗:', error);
+    const registrations = await navigator.serviceWorker.getRegistrations();
+    for (const registration of registrations) {
+      await registration.unregister();
+    }
+    // キャッシュも全削除
+    if ('caches' in window) {
+      const cacheNames = await caches.keys();
+      await Promise.all(cacheNames.map(name => caches.delete(name)));
     }
   }
 };
 
-// Service Workerからのメッセージ処理
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.addEventListener('message', (event) => {
-    if (event.data.type === 'OFFLINE_REQUEST_QUEUED') {
-      console.log('[PWA] オフラインリクエストをキューに追加:', event.data.url);
-    }
-  });
-}
-
-// DOMContentLoaded後にService Worker登録
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', registerServiceWorker);
-} else {
-  registerServiceWorker();
-}
+// 起動時にService Workerを削除
+unregisterServiceWorkers();
 
 const rootElement = document.getElementById('root');
 if (rootElement) {
