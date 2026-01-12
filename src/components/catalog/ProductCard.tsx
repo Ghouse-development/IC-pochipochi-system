@@ -99,9 +99,9 @@ const ProductCardComponent: React.FC<ProductCardProps> = ({ product, onSelect })
       </div>
 
       {/* 情報エリア */}
-      <div className="p-3">
-        <p className="text-xs text-gray-500 mb-0.5 truncate">{product.manufacturer}</p>
-        <h3 className="font-bold text-sm text-gray-800 line-clamp-2 mb-1">
+      <div className="p-2">
+        <p className="text-[10px] text-gray-500 truncate">{product.manufacturer}</p>
+        <h3 className="font-bold text-xs text-gray-800 line-clamp-2 mb-0.5 min-h-[1.5rem]">
           {product.name}
         </h3>
 

@@ -146,7 +146,7 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
   // ローディング中
   if (isLoading) {
     return (
-      <div className="p-6 max-w-4xl mx-auto">
+      <div className="p-4 max-w-6xl mx-auto">
         <div className="flex items-center justify-center py-12">
           <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
           <span className="ml-2 text-gray-600">読み込み中...</span>
@@ -158,7 +158,7 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
   // データがない場合
   if (tiles.length === 0) {
     return (
-      <div className="p-6 max-w-4xl mx-auto">
+      <div className="p-4 max-w-6xl mx-auto">
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 text-center">
           <p className="text-amber-800 font-medium mb-2">ポーチタイルのデータがありません</p>
           <p className="text-sm text-amber-600 mb-4">
@@ -176,9 +176,9 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
   }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="p-4 max-w-6xl mx-auto">
       {/* ヘッダー */}
-      <div className="mb-6">
+      <div className="mb-4">
         <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
           🚶 ポーチを選択
         </h3>
@@ -222,7 +222,7 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
 
           {/* 標準オプション */}
           {standardTiles.length > 0 && (
-            <div className="mb-6">
+            <div className="mb-4">
               <h5 className="text-sm font-medium text-gray-500 mb-3">標準</h5>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2">
                 {standardTiles.map(tile => (
@@ -282,7 +282,7 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
 
           <h4 className="font-medium text-gray-800 mb-4">色を選択（{selectedTile.colorVariants.length}色）</h4>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 mb-6">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-6 gap-2 mb-4">
             {selectedTile.colorVariants.map(color => (
               <button
                 key={color.id}
@@ -357,7 +357,7 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
 
           <h4 className="font-medium text-gray-800 mb-4">目地色を選択</h4>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 mb-6">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-6 gap-2 mb-4">
             {groutColors.map(grout => (
               <button
                 key={grout.id}
@@ -527,7 +527,7 @@ const TileButton: React.FC<TileButtonProps> = ({ tile, isSelected, onClick }) =>
     {/* 情報エリア */}
     <div className="p-2">
       <p className="text-xs text-gray-500 mb-0.5 truncate">{tile.manufacturer}</p>
-      <h3 className="font-bold text-sm text-gray-800 line-clamp-2 mb-1">
+      <h3 className="font-bold text-xs text-gray-800 line-clamp-2 mb-1">
         {tile.name}
       </h3>
       <div className="flex items-baseline gap-1">

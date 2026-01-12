@@ -1676,7 +1676,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
             {/* 商品グリッド */}
             <div className="flex-1 overflow-y-auto p-3 sm:p-4 pb-24 lg:pb-4" data-tutorial="product-grid">
               {isLoading ? (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-6 gap-2">
                   {[...Array(12)].map((_, i) => <SkeletonCard key={i} />)}
                 </div>
               ) : error ? (
@@ -1933,7 +1933,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   <p className="text-sm text-gray-500 mb-6">
                     樋・水切り・破風などの外部建材を選んでください。
                   </p>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-6 gap-2">
                     {EXTERIOR_MATERIAL_TYPES.map((type) => {
                       const itemCount = items.filter(i => i.category_name === type.id).length;
                       return (
@@ -2082,7 +2082,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   <p className="text-sm text-gray-500 mb-6">
                     {isDesignReadOnly ? '設計担当が設定した内容です。' : '電動ガレージシャッターの種類を選択してください。'}
                   </p>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-6 gap-2">
                     {GARAGE_SHUTTER_OPTIONS.map((option) => {
                       const isSelected = cartItems.some(item => item.product.id === option.productId);
                       const emoji = option.id === 'garage-shutter-no' ? '🏠' : option.id === 'garage-shutter-sunauto' ? '🚗' : '🚙';
@@ -2166,7 +2166,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   <p className="text-sm text-gray-500 mb-6">
                     {isDesignReadOnly ? '設計担当が設定した内容です。' : '玄関・窓上に設置する庇の種類を選択してください。'}
                   </p>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-6 gap-2">
                     {AWNING_OPTIONS.map((option) => {
                       const isSelected = cartItems.some(item => item.product.id === option.productId);
                       const emoji = option.id === 'awning-no' ? '🚪' : option.id === 'awning-ad2s' ? '🏠' : '🏡';
@@ -2256,7 +2256,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                       </>
                     )}
                   </p>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-6 gap-2">
                     {WINDOW_TYPE_OPTIONS.map((option) => {
                       const isSelected = option.id === 'apw430' ? hasAPW430 : !hasAPW430;
                       return (
@@ -2333,7 +2333,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                       </>
                     )}
                   </p>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-6 gap-2">
                     {GAS_SUPPLY_OPTIONS.map((option) => {
                       const isSelected = option.id === 'gas-supply-yes' ? hasGasSupply : hasNoGas;
                       return (
@@ -2414,7 +2414,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                       </>
                     )}
                   </p>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-6 gap-2">
                     {INTERIOR_WINDOW_OPTIONS.map((option) => {
                       const isSelected = option.id === 'interior-window-yes' ? hasInteriorWindow : hasNoInteriorWindow;
                       return (
@@ -2481,7 +2481,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   <p className="text-sm text-gray-500 mb-6">
                     {isDesignReadOnly ? '設計担当が設定した内容です。' : '給湯器の種類を選択してください。外装タブで容量などの詳細を選べます。'}
                   </p>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-6 gap-2">
                     {WATER_HEATER_OPTIONS.map((option) => {
                       const isSelected = cartItems.some(item =>
                         item.product.categoryName === '給湯器' &&
@@ -2902,7 +2902,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   )}
 
                   {/* 商品グリッド - 最大6列表示 */}
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-6 gap-2">
                     {(() => {
                       // 現在のカテゴリ用の「不要」オプションを取得
                       const currentCategoryName = selectedCategoryId

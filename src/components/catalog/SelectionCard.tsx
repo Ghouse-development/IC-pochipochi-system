@@ -149,11 +149,11 @@ export const SelectionCard: React.FC<SelectionCardProps> = ({
       </div>
 
       {/* 情報エリア */}
-      <div className="p-3">
+      <div className="p-2">
         {manufacturer && (
-          <p className="text-xs text-gray-500 mb-0.5 truncate">{manufacturer}</p>
+          <p className="text-[10px] text-gray-500 truncate">{manufacturer}</p>
         )}
-        <h3 className="font-bold text-sm text-gray-800 line-clamp-2 mb-1">
+        <h3 className="font-bold text-xs text-gray-800 line-clamp-2 mb-0.5 min-h-[1.5rem]">
           {name}
         </h3>
         {priceRange && (
