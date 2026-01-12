@@ -255,8 +255,9 @@ interface ProductStore {
   getAllProducts: () => Product[];
 }
 
-// カテゴリタイプでアイテムを取得するヘルパー
-const fetchItemsByCategory = async (categoryType: string): Promise<Product[]> => {
+// カテゴリタイプでアイテムを取得するヘルパー（将来のDB連携用）
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const _fetchItemsByCategory = async (categoryType: string): Promise<Product[]> => {
   // Supabase未設定時は空配列を返す（静的データにフォールバック）
   if (!isSupabaseConfigured) {
     return [];
