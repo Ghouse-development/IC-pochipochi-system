@@ -310,7 +310,7 @@ export const MultiColorAreaSelector: React.FC<MultiColorAreaSelectorProps> = ({
   return (
     <div className="p-6 max-w-5xl mx-auto">
       {/* ヘッダー */}
-      <div className="mb-6">
+      <div className="mb-4">
         <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
           <Palette className="w-6 h-6 text-blue-500" />
           {categoryName}を選択
@@ -326,7 +326,7 @@ export const MultiColorAreaSelector: React.FC<MultiColorAreaSelectorProps> = ({
           <h4 className="font-medium text-gray-800 mb-4">
             何色使いますか？
           </h4>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2">
             {[1, 2, 3].filter(n => n <= maxColors).map(count => (
               <button
                 key={count}
@@ -390,7 +390,7 @@ export const MultiColorAreaSelector: React.FC<MultiColorAreaSelectorProps> = ({
           {/* 現在の色の選択状態 */}
           {currentSelection && (
             <div className="mb-6 p-4 bg-gray-50 rounded-xl">
-              <div className="flex items-center justify-between flex-wrap gap-4">
+              <div className="flex items-center justify-between flex-wrap gap-2">
                 <h5 className="font-medium text-gray-800">
                   <span className={`inline-block w-3 h-3 rounded-full mr-2 ${
                     currentColorIndex === 1 ? 'bg-blue-500' :
@@ -400,7 +400,7 @@ export const MultiColorAreaSelector: React.FC<MultiColorAreaSelectorProps> = ({
                   {currentColorIndex}色目の設定
                 </h5>
                 {currentSelection.product && (
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2">
                     <span className="text-sm text-gray-600">
                       {currentSelection.product.name} / {currentSelection.variant?.color}
                     </span>
@@ -427,7 +427,7 @@ export const MultiColorAreaSelector: React.FC<MultiColorAreaSelectorProps> = ({
             {Object.entries(groupedProducts).map(([subcategory, subcategoryProducts]) => (
               <div key={subcategory}>
                 <h5 className="text-sm font-medium text-gray-500 mb-3">{subcategory}</h5>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
                   {subcategoryProducts.map(product => (
                     <ProductCard
                       key={product.id}
@@ -443,7 +443,7 @@ export const MultiColorAreaSelector: React.FC<MultiColorAreaSelectorProps> = ({
           </div>
 
           {/* 完了ボタン */}
-          <div className="mt-8 pt-6 border-t border-gray-200 flex gap-4">
+          <div className="mt-8 pt-6 border-t border-gray-200 flex gap-2">
             <button
               onClick={onCancel}
               className="flex-1 py-3 px-4 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50"

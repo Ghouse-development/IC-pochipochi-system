@@ -80,11 +80,11 @@ export const ICProposalSelector: React.FC<ICProposalSelectorProps> = ({
   // Step 1: 提案希望する/しない選択
   if (step === 'choice') {
     return (
-      <div className="p-6">
+      <div className="p-4">
         <h3 className="text-lg font-bold text-gray-800 mb-2">
           {categoryName}のIC提案
         </h3>
-        <p className="text-sm text-gray-600 mb-6">
+        <p className="text-sm text-gray-600 mb-4">
           {isCurtain
             ? 'インテリアコーディネーターにカーテンの提案を希望しますか？'
             : 'インテリアコーディネーターに家具の提案を希望しますか？'}
@@ -94,10 +94,10 @@ export const ICProposalSelector: React.FC<ICProposalSelectorProps> = ({
           {/* 提案希望する */}
           <button
             onClick={() => handleChoiceSelect(true)}
-            className="flex flex-col items-center gap-3 p-6 rounded-2xl border-2 border-blue-200 bg-blue-50 hover:bg-blue-100 hover:border-blue-400 transition-all group"
+            className="flex flex-col items-center gap-3 p-6 rounded-lg border-2 border-blue-200 bg-blue-50 hover:bg-blue-100 hover:border-blue-400 transition-all group"
           >
-            <div className="w-16 h-16 rounded-full bg-blue-500 flex items-center justify-center group-hover:scale-110 transition-transform">
-              <Check className="w-8 h-8 text-white" />
+            <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+              <Check className="w-5 h-5 text-white" />
             </div>
             <span className="font-bold text-gray-800">提案を希望する</span>
             <span className="text-xs text-gray-500 text-center">
@@ -108,10 +108,10 @@ export const ICProposalSelector: React.FC<ICProposalSelectorProps> = ({
           {/* 提案希望しない */}
           <button
             onClick={() => handleChoiceSelect(false)}
-            className="flex flex-col items-center gap-3 p-6 rounded-2xl border-2 border-gray-200 bg-gray-50 hover:bg-gray-100 hover:border-gray-400 transition-all group"
+            className="flex flex-col items-center gap-3 p-6 rounded-lg border-2 border-gray-200 bg-gray-50 hover:bg-gray-100 hover:border-gray-400 transition-all group"
           >
-            <div className="w-16 h-16 rounded-full bg-gray-400 flex items-center justify-center group-hover:scale-110 transition-transform">
-              <X className="w-8 h-8 text-white" />
+            <div className="w-10 h-10 rounded-full bg-gray-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+              <X className="w-5 h-5 text-white" />
             </div>
             <span className="font-bold text-gray-800">提案を希望しない</span>
             <span className="text-xs text-gray-500 text-center">
@@ -132,7 +132,7 @@ export const ICProposalSelector: React.FC<ICProposalSelectorProps> = ({
 
   // Step 2: 詳細選択（部屋 or 家具種類）
   return (
-    <div className="p-6">
+    <div className="p-4">
       <button
         onClick={() => setStep('choice')}
         className="mb-4 text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1"
@@ -143,11 +143,11 @@ export const ICProposalSelector: React.FC<ICProposalSelectorProps> = ({
       <h3 className="text-lg font-bold text-gray-800 mb-2">
         {isCurtain ? 'どの部屋のカーテンを希望しますか？' : '何の家具を希望しますか？'}
       </h3>
-      <p className="text-sm text-gray-600 mb-6">
+      <p className="text-sm text-gray-600 mb-4">
         複数選択できます
       </p>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
+      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2 mb-4">
         {items.map((item) => {
           const isSelected = selectedItems.includes(item.id);
           const Icon = item.icon;
@@ -182,7 +182,7 @@ export const ICProposalSelector: React.FC<ICProposalSelectorProps> = ({
 
       {/* その他の自由入力 */}
       {selectedItems.includes('other') && (
-        <div className="mb-6">
+        <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-2">
             その他（自由入力）
           </label>

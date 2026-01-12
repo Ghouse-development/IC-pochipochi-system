@@ -73,14 +73,14 @@ export const SelectionCard: React.FC<SelectionCardProps> = ({
             onError={() => setImageError(true)}
           />
         ) : (
-          <div className={`w-full h-full flex flex-col items-center justify-center p-4 bg-gradient-to-br ${placeholderBgColor}`}>
+          <div className={`w-full h-full flex flex-col items-center justify-center p-2 bg-gradient-to-br ${placeholderBgColor}`}>
             {colorCode ? (
               <div
-                className="w-16 h-16 rounded-full border-4 border-white shadow-lg mb-2"
+                className="w-10 h-10 rounded-full border-2 border-white shadow-lg mb-2"
                 style={{ backgroundColor: colorCode }}
               />
             ) : (
-              <span className="text-5xl mb-2 transition-transform duration-200 group-hover:scale-110">
+              <span className="text-2xl mb-1 transition-transform duration-200 group-hover:scale-110">
                 {placeholderEmoji}
               </span>
             )}
@@ -136,8 +136,8 @@ export const SelectionCard: React.FC<SelectionCardProps> = ({
             >
               <X className="w-4 h-4 text-gray-400 group-hover:text-red-500" />
             </button>
-            <div className="bg-white rounded-full p-3 shadow-xl ring-4 ring-blue-400/50">
-              <Check className="w-8 h-8 text-blue-600" strokeWidth={3} />
+            <div className="bg-white rounded-full p-2 shadow-lg ring-2 ring-blue-400/50">
+              <Check className="w-6 h-6 text-blue-600" strokeWidth={3} />
             </div>
             <div className="absolute bottom-2 left-1/2 -translate-x-1/2">
               <span className="px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full shadow-lg">

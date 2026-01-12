@@ -1743,9 +1743,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 </div>
               ) : activeTab === 'exterior' && currentCategoryName?.includes('ガレージシャッター') && !hasGarageShutter ? (
                 /* 外装タブ: ガレージシャッター未設定メッセージ */
-                <div className="max-w-3xl mx-auto px-4">
-                  <div className="bg-gray-50 border border-gray-200 rounded-xl p-8 text-center">
-                    <span className="text-4xl mb-4 block">🚗</span>
+                <div className="max-w-6xl mx-auto px-4">
+                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-center">
+                    <span className="text-2xl mb-2 block">🚗</span>
                     <h2 className="text-lg font-medium text-gray-900 mb-2">
                       ガレージシャッターは設定されていません
                     </h2>
@@ -1762,9 +1762,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 </div>
               ) : activeTab === 'exterior' && currentCategoryName === '庇' && !hasAwning ? (
                 /* 外装タブ: 庇未設定メッセージ */
-                <div className="max-w-3xl mx-auto px-4">
-                  <div className="bg-gray-50 border border-gray-200 rounded-xl p-8 text-center">
-                    <span className="text-4xl mb-4 block">🏠</span>
+                <div className="max-w-6xl mx-auto px-4">
+                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-center">
+                    <span className="text-2xl mb-2 block">🏠</span>
                     <h2 className="text-lg font-medium text-gray-900 mb-2">
                       庇は設定されていません
                     </h2>
@@ -1781,18 +1781,18 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 </div>
               ) : currentCategoryName === '外壁' && !selectedMaterialType ? (
                 /* 素材タイプ選択カード（外壁用）- 常に3つ表示 */
-                <div className="max-w-3xl mx-auto px-4">
-                  <h2 className="text-lg font-medium text-gray-900 mb-6">
+                <div className="max-w-6xl mx-auto px-4">
+                  <h2 className="text-lg font-medium text-gray-900 mb-4">
                     素材を選択
                   </h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
                     {EXTERIOR_WALL_MATERIAL_TYPES.map((material) => {
                       const itemCount = items.filter(i => getMaterialTypeFromNote(i.note) === material).length;
                       return (
                         <button
                           key={material}
                           onClick={() => setSelectedMaterialType(material)}
-                          className="group flex items-center justify-between bg-white border-2 border-gray-200 rounded-xl p-4 hover:border-blue-400:border-blue-500 transition-all"
+                          className="group flex items-center justify-between bg-white border-2 border-gray-200 rounded-lg p-3 hover:border-blue-400:border-blue-500 transition-all"
                         >
                           <div>
                             <h3 className="font-medium text-gray-900 text-left">
@@ -1870,22 +1870,22 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 />
               ) : currentCategoryName === '外部設備' && !selectedMaterialType ? (
                 /* 外部設備カテゴリ選択カード */
-                <div className="max-w-4xl mx-auto px-4">
+                <div className="max-w-6xl mx-auto px-4">
                   <h2 className="text-lg font-medium text-gray-900 mb-2">
                     外部設備を選択
                   </h2>
-                  <p className="text-sm text-gray-500 mb-6">
+                  <p className="text-sm text-gray-500 mb-4">
                     以下の項目は必須です。各カテゴリから選択してください。
                   </p>
                   {/* 必須カテゴリ（8項目） */}
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2 mb-4">
                     {EXTERIOR_FACILITY_TYPES.filter(t => t.required).map((type) => {
                       const itemCount = items.filter(i => i.category_name === type.id).length;
                       return (
                         <button
                           key={type.id}
                           onClick={() => setSelectedMaterialType(type.id)}
-                          className="group flex flex-col items-start bg-white border-2 border-gray-200 rounded-xl p-4 hover:border-blue-400:border-blue-500 transition-all"
+                          className="group flex flex-col items-start bg-white border-2 border-gray-200 rounded-lg p-3 hover:border-blue-400:border-blue-500 transition-all"
                         >
                           <div className="w-full flex items-center justify-between mb-1">
                             <h3 className="font-medium text-sm text-gray-900 text-left">
@@ -1908,7 +1908,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                         <button
                           key={type.id}
                           onClick={() => setSelectedMaterialType(type.id)}
-                          className="w-full group flex items-center justify-between bg-white border-2 border-gray-200 rounded-xl p-4 hover:border-blue-400:border-blue-500 transition-all"
+                          className="w-full group flex items-center justify-between bg-white border-2 border-gray-200 rounded-lg p-3 hover:border-blue-400:border-blue-500 transition-all"
                         >
                           <div>
                             <h4 className="font-medium text-gray-900 text-left">
@@ -1926,11 +1926,11 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 </div>
               ) : currentCategoryName === '外部建材' && !selectedMaterialType ? (
                 /* 外部建材カテゴリ選択カード */
-                <div className="max-w-4xl mx-auto px-4">
+                <div className="max-w-6xl mx-auto px-4">
                   <h2 className="text-lg font-medium text-gray-900 mb-2">
                     外部建材を選択
                   </h2>
-                  <p className="text-sm text-gray-500 mb-6">
+                  <p className="text-sm text-gray-500 mb-4">
                     樋・水切り・破風などの外部建材を選んでください。
                   </p>
                   <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-6 gap-2">
@@ -1940,7 +1940,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                         <button
                           key={type.id}
                           onClick={() => setSelectedMaterialType(type.id)}
-                          className="group flex flex-col items-start bg-white border-2 border-gray-200 rounded-xl p-5 hover:border-blue-500 hover:shadow-lg transition-all"
+                          className="group flex flex-col items-start bg-white border-2 border-gray-200 rounded-lg p-3 hover:border-blue-500 hover:shadow-lg transition-all"
                         >
                           <div className="w-full flex items-center justify-between mb-2">
                             <h3 className="font-bold text-base text-gray-900 text-left">
@@ -1961,21 +1961,21 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 </div>
               ) : currentCategoryName === 'ベース床' && !selectedMaterialType ? (
                 /* ベース床カテゴリ選択カード */
-                <div className="max-w-4xl mx-auto px-4">
+                <div className="max-w-6xl mx-auto px-4">
                   <h2 className="text-lg font-medium text-gray-900 mb-2">
                     床材を選択
                   </h2>
-                  <p className="text-sm text-gray-500 mb-6">
+                  <p className="text-sm text-gray-500 mb-4">
                     お部屋に合った床材タイプを選んでください。
                   </p>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
                     {BASE_FLOOR_TYPES.map((type) => {
                       const itemCount = items.filter(i => i.category_name === type.id).length;
                       return (
                         <button
                           key={type.id}
                           onClick={() => setSelectedMaterialType(type.id)}
-                          className="group flex flex-col items-start bg-white border-2 border-gray-200 rounded-xl p-4 hover:border-blue-400:border-blue-500 transition-all"
+                          className="group flex flex-col items-start bg-white border-2 border-gray-200 rounded-lg p-3 hover:border-blue-400:border-blue-500 transition-all"
                         >
                           <h3 className="font-medium text-sm text-gray-900 text-left mb-1">
                             {type.name}
@@ -1993,21 +1993,21 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 </div>
               ) : currentCategoryName === '周辺部材' && !selectedMaterialType ? (
                 /* 周辺部材カテゴリ選択カード */
-                <div className="max-w-4xl mx-auto px-4">
+                <div className="max-w-6xl mx-auto px-4">
                   <h2 className="text-lg font-medium text-gray-900 mb-2">
                     周辺部材を選択
                   </h2>
-                  <p className="text-sm text-gray-500 mb-6">
+                  <p className="text-sm text-gray-500 mb-4">
                     各部材を選んでください。
                   </p>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
                     {PERIPHERAL_PARTS_TYPES.map((type) => {
                       const itemCount = items.filter(i => i.category_name === type.id).length;
                       return (
                         <button
                           key={type.id}
                           onClick={() => setSelectedMaterialType(type.id)}
-                          className="group flex flex-col items-start bg-white border-2 border-gray-200 rounded-xl p-4 hover:border-blue-400:border-blue-500 transition-all"
+                          className="group flex flex-col items-start bg-white border-2 border-gray-200 rounded-lg p-3 hover:border-blue-400:border-blue-500 transition-all"
                         >
                           <div className="w-full flex items-center justify-between mb-1">
                             <h3 className="font-medium text-sm text-gray-900 text-left">
@@ -2032,21 +2032,21 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 </div>
               ) : currentCategoryName === '外部建材' && !selectedMaterialType ? (
                 /* 外部建材カテゴリ選択カード */
-                <div className="max-w-4xl mx-auto px-4">
+                <div className="max-w-6xl mx-auto px-4">
                   <h2 className="text-lg font-medium text-gray-900 mb-2">
                     外部建材を選択
                   </h2>
-                  <p className="text-sm text-gray-500 mb-6">
+                  <p className="text-sm text-gray-500 mb-4">
                     各部材の色を選んでください。統一感のある外観に仕上がります。
                   </p>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
                     {EXTERIOR_MATERIAL_TYPES.map((type) => {
                       const itemCount = items.filter(i => i.category_name === type.id).length;
                       return (
                         <button
                           key={type.id}
                           onClick={() => setSelectedMaterialType(type.id)}
-                          className="group flex flex-col items-start bg-white border-2 border-gray-200 rounded-xl p-4 hover:border-blue-400:border-blue-500 transition-all"
+                          className="group flex flex-col items-start bg-white border-2 border-gray-200 rounded-lg p-3 hover:border-blue-400:border-blue-500 transition-all"
                         >
                           <div className="w-full flex items-center justify-between mb-1">
                             <h3 className="font-medium text-sm text-gray-900 text-left">
@@ -2067,7 +2067,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 </div>
               ) : activeTab === 'design' && (currentCategoryName?.includes('ガレージシャッター') || currentCategoryName?.includes('電動ガレージシャッター')) ? (
                 /* 設計タブ: ガレージシャッター有無選択カード */
-                <div className="max-w-3xl mx-auto px-4">
+                <div className="max-w-6xl mx-auto px-4">
                   {isDesignReadOnly && (
                     <div className="mb-4 px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg">
                       <p className="text-sm text-amber-700 flex items-center gap-2">
@@ -2079,7 +2079,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   <h2 className="text-lg font-medium text-gray-900 mb-2">
                     ガレージシャッター
                   </h2>
-                  <p className="text-sm text-gray-500 mb-6">
+                  <p className="text-sm text-gray-500 mb-4">
                     {isDesignReadOnly ? '設計担当が設定した内容です。' : '電動ガレージシャッターの種類を選択してください。'}
                   </p>
                   <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-6 gap-2">
@@ -2151,7 +2151,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 </div>
               ) : activeTab === 'design' && currentCategoryName === '庇' ? (
                 /* 設計タブ: 庇種類選択カード */
-                <div className="max-w-3xl mx-auto px-4">
+                <div className="max-w-6xl mx-auto px-4">
                   {isDesignReadOnly && (
                     <div className="mb-4 px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg">
                       <p className="text-sm text-amber-700 flex items-center gap-2">
@@ -2163,7 +2163,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   <h2 className="text-lg font-medium text-gray-900 mb-2">
                     庇（ひさし）
                   </h2>
-                  <p className="text-sm text-gray-500 mb-6">
+                  <p className="text-sm text-gray-500 mb-4">
                     {isDesignReadOnly ? '設計担当が設定した内容です。' : '玄関・窓上に設置する庇の種類を選択してください。'}
                   </p>
                   <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-6 gap-2">
@@ -2235,7 +2235,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 </div>
               ) : activeTab === 'design' && currentCategoryName === '窓タイプ' ? (
                 /* 設計タブ: 窓タイプ選択カード */
-                <div className="max-w-3xl mx-auto px-4">
+                <div className="max-w-6xl mx-auto px-4">
                   {isDesignReadOnly && (
                     <div className="mb-4 px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg">
                       <p className="text-sm text-amber-700 flex items-center gap-2">
@@ -2247,7 +2247,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   <h2 className="text-lg font-medium text-gray-900 mb-2">
                     窓タイプ
                   </h2>
-                  <p className="text-sm text-gray-500 mb-6">
+                  <p className="text-sm text-gray-500 mb-4">
                     {isDesignReadOnly ? '設計担当が設定した内容です。' : '樹脂サッシのグレードを選択してください。'}
                     {!isDesignReadOnly && (
                       <>
@@ -2312,7 +2312,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 </div>
               ) : activeTab === 'design' && currentCategoryName === 'ガス引込み' ? (
                 /* 設計タブ: ガス引込み選択カード */
-                <div className="max-w-3xl mx-auto px-4">
+                <div className="max-w-6xl mx-auto px-4">
                   {isDesignReadOnly && (
                     <div className="mb-4 px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg">
                       <p className="text-sm text-amber-700 flex items-center gap-2">
@@ -2324,7 +2324,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   <h2 className="text-lg font-medium text-gray-900 mb-2">
                     ガス引込み
                   </h2>
-                  <p className="text-sm text-gray-500 mb-6">
+                  <p className="text-sm text-gray-500 mb-4">
                     {isDesignReadOnly ? '設計担当が設定した内容です。' : 'ガスの引き込み有無を選択してください。'}
                     {!isDesignReadOnly && (
                       <>
@@ -2393,7 +2393,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 </div>
               ) : activeTab === 'design' && currentCategoryName === '室内窓' ? (
                 /* 設計タブ: 室内窓選択カード（有無のみ） */
-                <div className="max-w-3xl mx-auto px-4">
+                <div className="max-w-6xl mx-auto px-4">
                   {isDesignReadOnly && (
                     <div className="mb-4 px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg">
                       <p className="text-sm text-amber-700 flex items-center gap-2">
@@ -2405,7 +2405,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   <h2 className="text-lg font-medium text-gray-900 mb-2">
                     室内窓
                   </h2>
-                  <p className="text-sm text-gray-500 mb-6">
+                  <p className="text-sm text-gray-500 mb-4">
                     {isDesignReadOnly ? '設計担当が設定した内容です。' : '室内窓の設置有無を選択してください。'}
                     {!isDesignReadOnly && (
                       <>
@@ -2466,7 +2466,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 </div>
               ) : activeTab === 'design' && currentCategoryName === '給湯器' ? (
                 /* 設計タブ: 給湯器種類選択カード */
-                <div className="max-w-4xl mx-auto px-4">
+                <div className="max-w-6xl mx-auto px-4">
                   {isDesignReadOnly && (
                     <div className="mb-4 px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg">
                       <p className="text-sm text-amber-700 flex items-center gap-2">
@@ -2478,7 +2478,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   <h2 className="text-lg font-medium text-gray-900 mb-2">
                     給湯器の種類
                   </h2>
-                  <p className="text-sm text-gray-500 mb-6">
+                  <p className="text-sm text-gray-500 mb-4">
                     {isDesignReadOnly ? '設計担当が設定した内容です。' : '給湯器の種類を選択してください。外装タブで容量などの詳細を選べます。'}
                   </p>
                   <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-6 gap-2">
@@ -2577,11 +2577,11 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                     <h2 className="text-xl font-bold text-gray-900 mb-3">
                       乾太くんをご検討ですか？
                     </h2>
-                    <p className="text-gray-600 mb-6">
+                    <p className="text-gray-600 mb-4">
                       ガス衣類乾燥機「乾太くん」を設置するには、<br />
                       <span className="font-semibold text-orange-600">ガス引込み工事（税別 35万円）</span>が必要です。
                     </p>
-                    <div className="bg-white rounded-xl p-4 mb-6 text-left">
+                    <div className="bg-white rounded-lg p-3 mb-6 text-left">
                       <h3 className="font-semibold text-gray-900 mb-2">乾太くんのメリット</h3>
                       <ul className="text-sm text-gray-600 space-y-1">
                         <li>✓ 電気式の約1/3の時間で乾燥（5kgで約52分）</li>
@@ -2613,9 +2613,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 </div>
               ) : activeTab === 'furniture' && currentCategoryName === 'ガス乾燥機' && hasGasSupply ? (
                 /* 家具・家電タブ: ガス乾燥機カテゴリでガス引込み済みの場合、カード選択UI */
-                <div className="max-w-4xl mx-auto px-4 py-6">
+                <div className="max-w-6xl mx-auto px-4 py-6">
                   {/* 乾太くんのメリットバナー */}
-                  <div className="bg-gradient-to-r from-orange-100 to-amber-100 border border-orange-200 rounded-xl p-4 mb-6">
+                  <div className="bg-gradient-to-r from-orange-100 to-amber-100 border border-orange-200 rounded-lg p-3 mb-4">
                     <div className="flex items-center gap-3 mb-2">
                       <span className="text-2xl">🔥</span>
                       <h3 className="font-bold text-gray-900">乾太くん（ガス衣類乾燥機）</h3>
