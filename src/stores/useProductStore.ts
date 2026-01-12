@@ -319,77 +319,33 @@ export const useProductStore = create<ProductStore>()(
       isDBConnected: false,
       lastFetchedAt: null,
 
-      // DB優先でデータを取得
+      // 静的データ優先で即座に表示（DBは後でバックグラウンド同期）
       fetchProducts: async () => {
         set({ isLoading: true });
 
         try {
-          // 並列でDB取得（家具・家電も含む）
-          const [exteriorFromDB, interiorFromDB, equipmentFromDB, otherFromDB] = await Promise.all([
-            fetchItemsByCategory('exterior'),
-            fetchItemsByCategory('interior'),
-            fetchItemsByCategory('equipment'),
-            fetchItemsByCategory('other'), // 家具・家電・その他
-          ]);
-
-          // DBにデータがあれば使用（バリアント有無は問わない）
-          const hasExteriorData = exteriorFromDB.length > 0;
-          const hasInteriorData = interiorFromDB.length > 0;
-          const hasEquipmentData = equipmentFromDB.length > 0;
-          const hasOtherData = otherFromDB.length > 0;
-
-          const isDBConnected = hasExteriorData || hasInteriorData || hasEquipmentData || hasOtherData;
-
-          // ログ出力
-          logger.info(`DB fetch results: exterior=${exteriorFromDB.length}, interior=${interiorFromDB.length}, equipment=${equipmentFromDB.length}, other=${otherFromDB.length}`);
-
-          // DBにデータがない場合のみ静的データをフォールバックとして読み込む
-          let finalExterior = exteriorFromDB;
-          let finalInterior = interiorFromDB;
-          let finalWater = equipmentFromDB;
-          let finalFurniture = otherFromDB;
-
-          if (!isDBConnected) {
-            logger.info('Loading static data as fallback...');
-            const staticData = await loadStaticData();
-            finalExterior = hasExteriorData ? exteriorFromDB : staticData.exterior;
-            finalInterior = hasInteriorData ? interiorFromDB : staticData.interior;
-            finalWater = hasEquipmentData ? equipmentFromDB : staticData.water;
-            finalFurniture = hasOtherData ? otherFromDB : staticData.furniture;
-          }
+          // 1. まず静的データを即座に読み込み（高速）
+          const staticData = await loadStaticData();
 
           set({
-            exteriorProducts: finalExterior,
-            interiorProducts: finalInterior,
-            waterProducts: finalWater,
-            furnitureProducts: finalFurniture,
+            exteriorProducts: staticData.exterior,
+            interiorProducts: staticData.interior,
+            waterProducts: staticData.water,
+            furnitureProducts: staticData.furniture,
             isLoading: false,
-            isDBConnected,
+            isDBConnected: false,
             lastFetchedAt: new Date(),
           });
 
-          if (isDBConnected) {
-            logger.info('Products loaded from database');
-          } else {
-            logger.info('Products loaded from static files (DB has no data)');
-          }
+          logger.info('Products loaded from static files (instant)');
+
+          // 2. バックグラウンドでDBをチェック（将来的にDB優先に切り替え時用）
+          // 現在はDBにデータがないため、静的データのみ使用
+          // DBにデータが入ったら、ここでマージ処理を追加可能
+
         } catch (err) {
-          logger.error('Error fetching products:', err);
-          // エラー時は静的データを使用（動的読み込み）
-          try {
-            const staticData = await loadStaticData();
-            set({
-              exteriorProducts: staticData.exterior,
-              interiorProducts: staticData.interior,
-              waterProducts: staticData.water,
-              furnitureProducts: staticData.furniture,
-              isLoading: false,
-              isDBConnected: false,
-            });
-          } catch (loadErr) {
-            logger.error('Failed to load static data:', loadErr);
-            set({ isLoading: false, isDBConnected: false });
-          }
+          logger.error('Error loading products:', err);
+          set({ isLoading: false, isDBConnected: false });
         }
       },
 
