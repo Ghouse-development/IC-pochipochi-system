@@ -67,7 +67,7 @@ const ProductCardComponent: React.FC<ProductCardProps> = ({ product, onSelect })
       aria-label={`${product.name}の詳細を見る。価格: ${price === 0 ? '標準' : formatPrice(price)}`}
     >
       {/* 画像エリア（正方形） */}
-      <div ref={imgRef} className="aspect-[4/3] bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
+      <div ref={imgRef} className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
         {/* Loading Skeleton */}
         {(!imageLoaded || !isVisible) && (
           <div className="absolute inset-0 animate-pulse bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 bg-[length:200%_100%]" />

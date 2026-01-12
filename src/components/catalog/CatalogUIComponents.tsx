@@ -63,7 +63,7 @@ export const catalogAnimations = `
 // スケルトンカード
 export const SkeletonCard = React.memo(() => (
   <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100">
-    <div className="aspect-[4/3] animate-shimmer" />
+    <div className="aspect-square animate-shimmer" />
     <div className="p-3 space-y-2">
       <div className="h-3 bg-gray-200 rounded animate-shimmer w-1/3" />
       <div className="h-4 bg-gray-200 rounded animate-shimmer" />

@@ -41,7 +41,7 @@ const NotNeededCardComponent: React.FC<NotNeededCardProps> = ({
       aria-pressed={isSelected}
     >
       {/* 画像エリア（正方形） */}
-      <div className="aspect-[4/3] bg-gradient-to-br from-gray-100 to-gray-200 relative flex items-center justify-center">
+      <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 relative flex items-center justify-center">
         <div className="text-center">
           <Ban className="w-16 h-16 text-gray-400 mx-auto" />
           <span className="text-sm text-gray-500 mt-2 block">選択しない</span>

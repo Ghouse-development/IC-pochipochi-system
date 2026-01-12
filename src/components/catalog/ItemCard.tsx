@@ -140,7 +140,7 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
     >
       {/* 画像エリア（正方形） - クリックで詳細 */}
       <div
-        className="aspect-[4/3] bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden cursor-pointer"
+        className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden cursor-pointer"
         onClick={() => handleOpenDetail(item)}
       >
         {currentImageUrl && !imageError ? (

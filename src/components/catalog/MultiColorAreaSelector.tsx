@@ -80,7 +80,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
     >
       {/* 画像エリア */}
       <div
-        className="aspect-[4/3] bg-gradient-to-br from-gray-50 to-gray-100 relative cursor-pointer"
+        className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 relative cursor-pointer"
         onClick={handleSelect}
       >
         {currentImage ? (

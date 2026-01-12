@@ -294,7 +294,7 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
                 }`}
               >
                 {/* 色画像 */}
-                <div className="aspect-[4/3] bg-gray-100">
+                <div className="aspect-square bg-gray-100">
                   {color.imageUrl ? (
                     <img
                       src={color.imageUrl}
@@ -472,7 +472,7 @@ const TileButton: React.FC<TileButtonProps> = ({ tile, isSelected, onClick }) =>
     }`}
   >
     {/* 画像エリア（正方形） */}
-    <div className="w-full aspect-[4/3] bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center relative overflow-hidden">
+    <div className="w-full aspect-square bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center relative overflow-hidden">
       {tile.imageUrl ? (
         <img
           src={tile.imageUrl}
