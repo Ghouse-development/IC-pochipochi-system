@@ -76,6 +76,29 @@
 2. 一括で全箇所を修正
 3. ビルド確認後「全XX箇所を修正完了しました」と報告
 
+### 6. 本番URLとプレビューURLの区別（重要）
+
+**確認・デプロイ時は必ずProduction URLを使用すること。**
+
+| 種類 | URL | 用途 |
+|------|-----|------|
+| **Production（本番）** | `https://ic-pochipochi-system.vercel.app/` | ユーザーが使用するURL。これを使用すること |
+| Preview（プレビュー） | `https://ic-pochipochi-system-git-main-...vercel.app/` | Deployment Protection有効で401エラーになる。使用禁止 |
+
+**やってはいけないこと:**
+- Preview URL（`-git-main-`を含むURL）をユーザーに案内する
+- Preview URLでの動作確認をもって「完了」と報告する
+- URLの種類を確認せずに作業を進める
+
+**Supabase情報:**
+- Project: `IC-pochipochi-system`
+- Reference ID: `qqzqffkiyzeaampotgnn`
+- URL: `https://qqzqffkiyzeaampotgnn.supabase.co`
+
+**ログイン情報:**
+- Email: `hn@g-house.osaka.jp`
+- Password: `Ghouse0648`
+
 ## プロジェクト固有の情報
 
 ### 商品データソース
