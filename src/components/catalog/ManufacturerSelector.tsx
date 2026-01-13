@@ -1,5 +1,6 @@
 import React from 'react';
 import { ChevronRight } from 'lucide-react';
+import { PageHeader } from './PageHeader';
 import type { ManufacturerConfig, ManufacturerSeries } from '../../config/waterEquipmentConfig';
 import { hasSeriesSelection } from '../../config/waterEquipmentConfig';
 
@@ -37,9 +38,9 @@ export const ManufacturerSelector: React.FC<ManufacturerSelectorProps> = ({
           </span>
         </div>
 
-        <h3 className="text-lg font-semibold text-gray-900">
-          シリーズを選択してください
-        </h3>
+        <PageHeader
+          title="シリーズを選択"
+        />
 
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
           {selectedManufacturer.series.map((series) => (
@@ -61,9 +62,9 @@ export const ManufacturerSelector: React.FC<ManufacturerSelectorProps> = ({
   // メーカー選択画面
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold text-gray-900">
-        メーカーを選択してください
-      </h3>
+      <PageHeader
+        title="メーカーを選択"
+      />
 
       <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
         {manufacturers.map((manufacturer) => (

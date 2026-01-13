@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Check, X, Home, Sofa, Tv, Coffee, Sparkles, Bed, UtensilsCrossed, Armchair, MessageSquare } from 'lucide-react';
+import { PageHeader } from './PageHeader';
 
 // 窓がある部屋のリスト（カーテン用）
 const ROOMS_WITH_WINDOWS = [
@@ -81,14 +82,12 @@ export const ICProposalSelector: React.FC<ICProposalSelectorProps> = ({
   if (step === 'choice') {
     return (
       <div className="p-4">
-        <h3 className="text-lg font-bold text-gray-800 mb-2">
-          {categoryName}のIC提案
-        </h3>
-        <p className="text-sm text-gray-600 mb-4">
-          {isCurtain
+        <PageHeader
+          title={`${categoryName}のIC提案`}
+          subtitle={isCurtain
             ? 'インテリアコーディネーターにカーテンの提案を希望しますか？'
             : 'インテリアコーディネーターに家具の提案を希望しますか？'}
-        </p>
+        />
 
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
           {/* 提案希望する */}
@@ -140,12 +139,10 @@ export const ICProposalSelector: React.FC<ICProposalSelectorProps> = ({
         ← 戻る
       </button>
 
-      <h3 className="text-lg font-bold text-gray-800 mb-2">
-        {isCurtain ? 'どの部屋のカーテンを希望しますか？' : '何の家具を希望しますか？'}
-      </h3>
-      <p className="text-sm text-gray-600 mb-4">
-        複数選択できます
-      </p>
+      <PageHeader
+        title={isCurtain ? 'どの部屋のカーテンを希望しますか？' : '何の家具を希望しますか？'}
+        subtitle="複数選択できます"
+      />
 
       <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2 mb-4">
         {items.map((item) => {

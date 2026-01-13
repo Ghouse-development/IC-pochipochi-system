@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import { Check, ChevronLeft, Table2 } from 'lucide-react';
+import { Check, ChevronLeft } from 'lucide-react';
+import { PageHeader } from './PageHeader';
 import { useCartStore } from '../../stores/useCartStore';
 import { SelectionCard } from './SelectionCard';
 import diningTableConfig from '../../data/config/diningTableConfig.json';
@@ -222,19 +223,7 @@ export const DiningTableSelector: React.FC<DiningTableSelectorProps> = ({
     onComplete();
   };
 
-  // ステップ表示
-  const getStepTitle = () => {
-    switch (currentStep) {
-      case 'shape': return '① テーブル形状を選択';
-      case 'size': return '② サイズを選択';
-      case 'leg': return '③ 脚タイプを選択';
-      case 'color': return '④ 天板カラーを選択';
-      case 'outlet': return '⑤ コンセント形状を選択';
-      case 'complete': return '選択内容の確認';
-      default: return '';
-    }
-  };
-
+  // ステップ説明
   const getStepDescription = () => {
     switch (currentStep) {
       case 'shape': return 'スクエアまたはラウンドテーブルをお選びください';
@@ -247,51 +236,24 @@ export const DiningTableSelector: React.FC<DiningTableSelectorProps> = ({
     }
   };
 
-  // 進捗表示
-  const getProgress = () => {
-    if (selectedShape === 'none') return 100;
-    const steps = selectedShape === 'square' ? 5 : 4;
-    const current = currentStep === 'shape' ? 1
-      : currentStep === 'size' ? 2
-      : currentStep === 'leg' ? 3
-      : currentStep === 'color' ? 4
-      : currentStep === 'outlet' ? 5
-      : steps;
-    return (current / steps) * 100;
-  };
-
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden">
       {/* ヘッダー */}
-      <div className="bg-gradient-to-r from-amber-500 to-orange-500 text-white p-4">
+      <div className="p-4 border-b">
         <div className="flex items-center gap-2">
           {currentStep !== 'shape' && (
             <button
               onClick={goToPrevStep}
-              className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
           )}
-          <Table2 className="w-6 h-6" />
-          <div>
-            <h2 className="text-lg font-bold">オリジナルダイニングテーブル選択</h2>
-            <p className="text-sm text-white/80">Gハウスオリジナル商品</p>
-          </div>
-        </div>
-        {/* プログレスバー */}
-        <div className="mt-3 h-1 bg-white/30 rounded-full overflow-hidden">
-          <div
-            className="h-full bg-white rounded-full transition-all duration-300"
-            style={{ width: `${getProgress()}%` }}
+          <PageHeader
+            title="オリジナルダイニングテーブル選択"
+            subtitle={getStepDescription()}
           />
         </div>
-      </div>
-
-      {/* ステップタイトル */}
-      <div className="p-4 border-b bg-amber-50">
-        <h3 className="font-bold text-lg text-gray-800">{getStepTitle()}</h3>
-        <p className="text-sm text-gray-600">{getStepDescription()}</p>
       </div>
 
       {/* コンテンツ */}

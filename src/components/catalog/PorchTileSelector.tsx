@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Check, ChevronLeft, Loader2, Image as ImageIcon } from 'lucide-react';
+import { PageHeader } from './PageHeader';
 import { useCartStore } from '../../stores/useCartStore';
 import { usePorchItems, type TileOption, type GroutOption, type TileColorVariant } from '../../hooks/usePorchItems';
 import type { Product, ProductVariant, PlanType } from '../../types/product';
@@ -178,14 +179,10 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
   return (
     <div className="p-4 max-w-6xl mx-auto">
       {/* ヘッダー */}
-      <div className="mb-4">
-        <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
-          🚶 ポーチを選択
-        </h3>
-        <p className="text-sm text-gray-600">
-          ポーチの仕上げとタイルの目地色を選んでください
-        </p>
-      </div>
+      <PageHeader
+        title="ポーチを選択"
+        subtitle="ポーチの仕上げとタイルの目地色を選んでください"
+      />
 
       {/* ステップインジケーター */}
       {step !== 'complete' && (

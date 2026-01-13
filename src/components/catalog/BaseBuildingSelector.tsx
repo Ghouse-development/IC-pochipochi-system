@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import { Check, ChevronLeft, Palette } from 'lucide-react';
+import { Check, ChevronLeft } from 'lucide-react';
+import { PageHeader } from './PageHeader';
 import { useCartStore } from '../../stores/useCartStore';
 import { SelectionCard } from './SelectionCard';
 import type { Product, ProductVariant, PlanType } from '../../types/product';
@@ -137,15 +138,10 @@ export const BaseBuildingSelector: React.FC<BaseBuildingSelectorProps> = ({
   return (
     <div className="p-6 max-w-4xl mx-auto">
       {/* ヘッダー */}
-      <div className="mb-4">
-        <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
-          <Palette className="w-6 h-6 text-blue-500" />
-          ベース建具を選択
-        </h3>
-        <p className="text-sm text-gray-600">
-          室内ドアの色とデザインを選んでください
-        </p>
-      </div>
+      <PageHeader
+        title="ベース建具を選択"
+        subtitle="室内ドアの色とデザインを選んでください"
+      />
 
       {/* ステップインジケーター */}
       {step !== 'complete' && (

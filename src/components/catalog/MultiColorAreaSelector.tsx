@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Check, ChevronLeft, Palette, ChevronDown, ChevronUp, Image as ImageIcon } from 'lucide-react';
+import { Check, ChevronLeft, ChevronDown, ChevronUp, Image as ImageIcon } from 'lucide-react';
+import { PageHeader } from './PageHeader';
 import { useCartStore } from '../../stores/useCartStore';
 import type { Product, ProductVariant } from '../../types/product';
 
@@ -310,15 +311,10 @@ export const MultiColorAreaSelector: React.FC<MultiColorAreaSelectorProps> = ({
   return (
     <div className="p-6 max-w-5xl mx-auto">
       {/* ヘッダー */}
-      <div className="mb-4">
-        <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
-          <Palette className="w-6 h-6 text-blue-500" />
-          {categoryName}を選択
-        </h3>
-        <p className="text-sm text-gray-600">
-          使用する色の数と面積を指定してください
-        </p>
-      </div>
+      <PageHeader
+        title={`${categoryName}を選択`}
+        subtitle="使用する色の数と面積を指定してください"
+      />
 
       {/* ステップ1: 色数選択 */}
       {step === 'count' && (

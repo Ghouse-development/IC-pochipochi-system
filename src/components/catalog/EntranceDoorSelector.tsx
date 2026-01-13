@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Check, ChevronLeft, DoorOpen, Key, Grip, Monitor } from 'lucide-react';
+import { Check, ChevronLeft, Key, Grip, Monitor } from 'lucide-react';
+import { PageHeader } from './PageHeader';
 import { useCartStore } from '../../stores/useCartStore';
 import { useProductStore } from '../../stores/useProductStore';
 import { SelectionCard } from './SelectionCard';
@@ -265,15 +266,10 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
   return (
     <div className="p-6 max-w-3xl mx-auto">
       {/* ヘッダー */}
-      <div className="mb-4">
-        <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
-          <DoorOpen className="w-6 h-6 text-blue-500" />
-          玄関ドアを選択
-        </h3>
-        <p className="text-sm text-gray-600">
-          5つのステップで選んでください
-        </p>
-      </div>
+      <PageHeader
+        title="玄関ドアを選択"
+        subtitle="5つのステップで選んでください"
+      />
 
       {/* ステップ進行表示 */}
       {currentStep !== 'complete' && (
