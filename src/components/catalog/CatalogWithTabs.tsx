@@ -1783,9 +1783,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
               ) : currentCategoryName === '外壁' && !selectedMaterialType ? (
                 /* 素材タイプ選択カード（外壁用）- 常に3つ表示 */
                 <div className="max-w-6xl mx-auto px-4">
-                  <h2 className="text-lg font-medium text-gray-900 mb-4">
-                    素材を選択
-                  </h2>
+                  <PageHeader title="素材を選択" subtitle="外壁の素材タイプを選んでください" />
                   <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
                     {EXTERIOR_WALL_MATERIAL_TYPES.map((material) => {
                       const itemCount = items.filter(i => getMaterialTypeFromNote(i.note) === material).length;
@@ -1872,12 +1870,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
               ) : currentCategoryName === '外部設備' && !selectedMaterialType ? (
                 /* 外部設備カテゴリ選択カード */
                 <div className="max-w-6xl mx-auto px-4">
-                  <h2 className="text-lg font-medium text-gray-900 mb-2">
-                    外部設備を選択
-                  </h2>
-                  <p className="text-sm text-gray-500 mb-4">
-                    以下の項目は必須です。各カテゴリから選択してください。
-                  </p>
+                  <PageHeader title="外部設備を選択" subtitle="以下の項目は必須です。各カテゴリから選択してください" />
                   {/* 必須カテゴリ（8項目） */}
                   <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2 mb-4">
                     {EXTERIOR_FACILITY_TYPES.filter(t => t.required).map((type) => {
@@ -2048,12 +2041,10 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                       </p>
                     </div>
                   )}
-                  <h2 className="text-lg font-medium text-gray-900 mb-2">
-                    ガレージシャッター
-                  </h2>
-                  <p className="text-sm text-gray-500 mb-4">
-                    {isDesignReadOnly ? '設計担当が設定した内容です。' : '電動ガレージシャッターの種類を選択してください。'}
-                  </p>
+                  <PageHeader
+                    title="ガレージシャッター"
+                    subtitle={isDesignReadOnly ? '設計担当が設定した内容です' : '電動ガレージシャッターの種類を選択してください'}
+                  />
                   <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-6 gap-2">
                     {GARAGE_SHUTTER_OPTIONS.map((option) => {
                       const isSelected = cartItems.some(item => item.product.id === option.productId);
@@ -2132,12 +2123,10 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                       </p>
                     </div>
                   )}
-                  <h2 className="text-lg font-medium text-gray-900 mb-2">
-                    庇（ひさし）
-                  </h2>
-                  <p className="text-sm text-gray-500 mb-4">
-                    {isDesignReadOnly ? '設計担当が設定した内容です。' : '玄関・窓上に設置する庇の種類を選択してください。'}
-                  </p>
+                  <PageHeader
+                    title="庇（ひさし）"
+                    subtitle={isDesignReadOnly ? '設計担当が設定した内容です' : '玄関・窓上に設置する庇の種類を選択してください'}
+                  />
                   <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-6 gap-2">
                     {AWNING_OPTIONS.map((option) => {
                       const isSelected = cartItems.some(item => item.product.id === option.productId);
@@ -2216,18 +2205,10 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                       </p>
                     </div>
                   )}
-                  <h2 className="text-lg font-medium text-gray-900 mb-2">
-                    窓タイプ
-                  </h2>
-                  <p className="text-sm text-gray-500 mb-4">
-                    {isDesignReadOnly ? '設計担当が設定した内容です。' : '樹脂サッシのグレードを選択してください。'}
-                    {!isDesignReadOnly && (
-                      <>
-                        <br />
-                        <span className="text-xs">※色は外装タブで選択できます</span>
-                      </>
-                    )}
-                  </p>
+                  <PageHeader
+                    title="窓タイプ"
+                    subtitle={isDesignReadOnly ? '設計担当が設定した内容です' : '樹脂サッシのグレードを選択してください（※色は外装タブで選択）'}
+                  />
                   <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-6 gap-2">
                     {WINDOW_TYPE_OPTIONS.map((option) => {
                       const isSelected = option.id === 'apw430' ? hasAPW430 : !hasAPW430;
@@ -2293,18 +2274,10 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                       </p>
                     </div>
                   )}
-                  <h2 className="text-lg font-medium text-gray-900 mb-2">
-                    ガス引込み
-                  </h2>
-                  <p className="text-sm text-gray-500 mb-4">
-                    {isDesignReadOnly ? '設計担当が設定した内容です。' : 'ガスの引き込み有無を選択してください。'}
-                    {!isDesignReadOnly && (
-                      <>
-                        <br />
-                        <span className="text-xs">※「あり」を選択した場合、家具・家電タブで乾太くんを選択できます</span>
-                      </>
-                    )}
-                  </p>
+                  <PageHeader
+                    title="ガス引込み"
+                    subtitle={isDesignReadOnly ? '設計担当が設定した内容です' : 'ガスの引き込み有無を選択（※ありの場合、乾太くん選択可）'}
+                  />
                   <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-6 gap-2">
                     {GAS_SUPPLY_OPTIONS.map((option) => {
                       const isSelected = option.id === 'gas-supply-yes' ? hasGasSupply : hasNoGas;
@@ -2374,18 +2347,10 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                       </p>
                     </div>
                   )}
-                  <h2 className="text-lg font-medium text-gray-900 mb-2">
-                    室内窓
-                  </h2>
-                  <p className="text-sm text-gray-500 mb-4">
-                    {isDesignReadOnly ? '設計担当が設定した内容です。' : '室内窓の設置有無を選択してください。'}
-                    {!isDesignReadOnly && (
-                      <>
-                        <br />
-                        <span className="text-xs">※「あり」を選択した場合、内装タブで窓の種類・ガラスを選択できます</span>
-                      </>
-                    )}
-                  </p>
+                  <PageHeader
+                    title="室内窓"
+                    subtitle={isDesignReadOnly ? '設計担当が設定した内容です' : '室内窓の設置有無を選択（※ありの場合、内装タブで詳細選択）'}
+                  />
                   <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-6 gap-2">
                     {INTERIOR_WINDOW_OPTIONS.map((option) => {
                       const isSelected = option.id === 'interior-window-yes' ? hasInteriorWindow : hasNoInteriorWindow;
@@ -2447,12 +2412,10 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                       </p>
                     </div>
                   )}
-                  <h2 className="text-lg font-medium text-gray-900 mb-2">
-                    給湯器の種類
-                  </h2>
-                  <p className="text-sm text-gray-500 mb-4">
-                    {isDesignReadOnly ? '設計担当が設定した内容です。' : '給湯器の種類を選択してください。外装タブで容量などの詳細を選べます。'}
-                  </p>
+                  <PageHeader
+                    title="給湯器の種類"
+                    subtitle={isDesignReadOnly ? '設計担当が設定した内容です' : '給湯器の種類を選択（外装タブで容量等の詳細選択）'}
+                  />
                   <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-6 gap-2">
                     {WATER_HEATER_OPTIONS.map((option) => {
                       const isSelected = cartItems.some(item =>
