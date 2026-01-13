@@ -54,6 +54,8 @@ import { StairSelector } from './StairSelector';
 import { MultiColorAreaSelector } from './MultiColorAreaSelector';
 import { BaseBuildingSelector } from './BaseBuildingSelector';
 import { PorchTileSelector } from './PorchTileSelector';
+import { PageHeader } from './PageHeader';
+import { Pagination, ITEMS_PER_PAGE } from './Pagination';
 
 // ユーティリティ関数とコンポーネント (ItemCard, SkeletonCard, EmptyState, Confetti) はインポート済み
 
@@ -197,9 +199,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   const [selectedManufacturer, setSelectedManufacturer] = useState<ManufacturerConfig | null>(null);
   const [selectedSeries, setSelectedSeries] = useState<ManufacturerSeries | null>(null);
 
-  // ページネーション
+  // ページネーション（12アイテム/ページ）
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 24; // 1ページあたりの表示件数（グリッド拡大に伴い増加）
+  const itemsPerPage = ITEMS_PER_PAGE; // 12件/ページ（6列×2行）
 
   // アクションチェックリスト表示切り替え
   const [showActionChecklist, setShowActionChecklist] = useState(true);
@@ -993,7 +995,6 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   }, [items, debouncedSearchTerm, filterType, selectedPlanId, selectedMaterialType, selectedSubcategory, selectedColor, priceMax, showFavoritesOnly, favorites, hideDiscontinued, needsManufacturerSelection, selectedManufacturer, selectedSeries, activeTab, hasGasSupply, hasNoGas]);
 
   // ページネーション計算
-  const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
   const paginatedItems = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
@@ -1927,12 +1928,10 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
               ) : currentCategoryName === '外部建材' && !selectedMaterialType ? (
                 /* 外部建材カテゴリ選択カード（商品カードと統一デザイン） */
                 <div className="max-w-6xl mx-auto px-4">
-                  <h2 className="text-lg font-medium text-gray-900 mb-2">
-                    外部建材を選択
-                  </h2>
-                  <p className="text-sm text-gray-500 mb-4">
-                    樋・水切り・破風などの外部建材を選んでください。
-                  </p>
+                  <PageHeader
+                    title="外部建材を選択"
+                    subtitle="樋・水切り・破風などの外部建材を選んでください"
+                  />
                   <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-6 gap-2">
                     {EXTERIOR_MATERIAL_TYPES.map((type) => {
                       const itemCount = items.filter(i => i.category_name === type.id).length;
@@ -1965,12 +1964,10 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
               ) : currentCategoryName === 'ベース床' && !selectedMaterialType ? (
                 /* ベース床カテゴリ選択カード（商品カードと統一デザイン） */
                 <div className="max-w-6xl mx-auto px-4">
-                  <h2 className="text-lg font-medium text-gray-900 mb-2">
-                    床材を選択
-                  </h2>
-                  <p className="text-sm text-gray-500 mb-4">
-                    お部屋に合った床材タイプを選んでください。
-                  </p>
+                  <PageHeader
+                    title="床材を選択"
+                    subtitle="お部屋に合った床材タイプを選んでください"
+                  />
                   <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
                     {BASE_FLOOR_TYPES.map((type) => {
                       const itemCount = items.filter(i => i.category_name === type.id).length;
@@ -2003,12 +2000,10 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
               ) : currentCategoryName === '周辺部材' && !selectedMaterialType ? (
                 /* 周辺部材カテゴリ選択カード（商品カードと統一デザイン） */
                 <div className="max-w-6xl mx-auto px-4">
-                  <h2 className="text-lg font-medium text-gray-900 mb-2">
-                    周辺部材を選択
-                  </h2>
-                  <p className="text-sm text-gray-500 mb-4">
-                    各部材を選んでください。
-                  </p>
+                  <PageHeader
+                    title="周辺部材を選択"
+                    subtitle="各部材を選んでください"
+                  />
                   <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
                     {PERIPHERAL_PARTS_TYPES.map((type) => {
                       const itemCount = items.filter(i => i.category_name === type.id).length;
@@ -2964,92 +2959,12 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                     })()}
                   </div>
 
-                  {/* ページネーション (G HOUSE風) */}
-                  {totalPages > 1 && (
-                    <div className="flex items-center justify-center gap-2 mt-6 pb-4">
-                      {/* 前へボタン */}
-                      <button
-                        onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                        disabled={currentPage === 1}
-                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
-                          currentPage === 1
-                            ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                            : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300 shadow-sm'
-                        }`}
-                      >
-                        <span className="flex items-center gap-1">
-                          <ChevronLeft className="w-4 h-4" />
-                          前へ
-                        </span>
-                      </button>
-
-                      {/* ページ番号 */}
-                      <div className="flex items-center gap-1">
-                        {(() => {
-                          const pages: (number | string)[] = [];
-                          const showPages = 7; // 表示するページ数
-
-                          if (totalPages <= showPages) {
-                            // 全ページ表示
-                            for (let i = 1; i <= totalPages; i++) {
-                              pages.push(i);
-                            }
-                          } else {
-                            // 省略表示
-                            if (currentPage <= 4) {
-                              for (let i = 1; i <= 5; i++) pages.push(i);
-                              pages.push('...');
-                              pages.push(totalPages);
-                            } else if (currentPage >= totalPages - 3) {
-                              pages.push(1);
-                              pages.push('...');
-                              for (let i = totalPages - 4; i <= totalPages; i++) pages.push(i);
-                            } else {
-                              pages.push(1);
-                              pages.push('...');
-                              for (let i = currentPage - 1; i <= currentPage + 1; i++) pages.push(i);
-                              pages.push('...');
-                              pages.push(totalPages);
-                            }
-                          }
-
-                          return pages.map((page, idx) => (
-                            page === '...' ? (
-                              <span key={`ellipsis-${idx}`} className="px-2 text-gray-400">...</span>
-                            ) : (
-                              <button
-                                key={page}
-                                onClick={() => setCurrentPage(page as number)}
-                                className={`w-10 h-10 rounded-lg text-sm font-medium transition-all ${
-                                  currentPage === page
-                                    ? 'bg-blue-600 text-white shadow-md'
-                                    : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
-                                }`}
-                              >
-                                {page}
-                              </button>
-                            )
-                          ));
-                        })()}
-                      </div>
-
-                      {/* 次へボタン */}
-                      <button
-                        onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-                        disabled={currentPage === totalPages}
-                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
-                          currentPage === totalPages
-                            ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                            : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300 shadow-sm'
-                        }`}
-                      >
-                        <span className="flex items-center gap-1">
-                          次へ
-                          <ChevronRight className="w-4 h-4" />
-                        </span>
-                      </button>
-                    </div>
-                  )}
+                  {/* ページネーション */}
+                  <Pagination
+                    currentPage={currentPage}
+                    totalItems={filteredItems.length}
+                    onPageChange={setCurrentPage}
+                  />
                 </>
               )}
 
