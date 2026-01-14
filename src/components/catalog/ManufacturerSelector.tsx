@@ -1,6 +1,7 @@
 import React from 'react';
 import { ChevronRight } from 'lucide-react';
 import { PageHeader } from './PageHeader';
+import { SelectionCard } from './SelectionCard';
 import type { ManufacturerConfig, ManufacturerSeries } from '../../config/waterEquipmentConfig';
 import { hasSeriesSelection } from '../../config/waterEquipmentConfig';
 
@@ -44,15 +45,15 @@ export const ManufacturerSelector: React.FC<ManufacturerSelectorProps> = ({
 
         <div className="grid grid-cols-6 gap-2">
           {selectedManufacturer.series.map((series) => (
-            <button
+            <SelectionCard
               key={series.id}
+              id={series.id}
+              name={series.name}
+              placeholderEmoji="📦"
+              placeholderBgColor="from-teal-100 to-cyan-100"
+              isSelected={false}
               onClick={() => onSelectSeries(series)}
-              className="p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-teal-500:border-teal-400 hover:shadow-lg transition-all duration-200 text-center group"
-            >
-              <div className="text-lg font-semibold text-gray-900 group-hover:text-teal-600:text-teal-400">
-                {series.name}
-              </div>
-            </button>
+            />
           ))}
         </div>
       </div>
@@ -68,34 +69,21 @@ export const ManufacturerSelector: React.FC<ManufacturerSelectorProps> = ({
 
       <div className="grid grid-cols-6 gap-2">
         {manufacturers.map((manufacturer) => (
-          <button
+          <SelectionCard
             key={manufacturer.id}
+            id={manufacturer.id}
+            name={manufacturer.name}
+            description={hasSeriesSelection(manufacturer) ? `${manufacturer.series.length}シリーズ` : undefined}
+            placeholderEmoji="🏭"
+            placeholderBgColor="from-teal-100 to-cyan-100"
+            isSelected={selectedManufacturer?.id === manufacturer.id}
             onClick={() => {
               onSelectManufacturer(manufacturer);
-              // シリーズが1つ以下の場合は自動的にnullを設定
               if (!hasSeriesSelection(manufacturer)) {
                 onSelectSeries(null);
               }
             }}
-            className={`p-6 bg-white border-2 rounded-xl hover:shadow-lg transition-all duration-200 text-center group ${
-              selectedManufacturer?.id === manufacturer.id
-                ? 'border-teal-500 ring-2 ring-teal-500/20'
-                : 'border-gray-200 hover:border-teal-500:border-teal-400'
-            }`}
-          >
-            <div className={`text-lg font-semibold ${
-              selectedManufacturer?.id === manufacturer.id
-                ? 'text-teal-600'
-                : 'text-gray-900 group-hover:text-teal-600:text-teal-400'
-            }`}>
-              {manufacturer.name}
-            </div>
-            {hasSeriesSelection(manufacturer) && (
-              <div className="mt-2 text-xs text-gray-500">
-                {manufacturer.series.length}シリーズ
-              </div>
-            )}
-          </button>
+          />
         ))}
       </div>
     </div>

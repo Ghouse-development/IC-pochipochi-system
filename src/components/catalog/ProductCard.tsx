@@ -59,7 +59,7 @@ const ProductCardComponent: React.FC<ProductCardProps> = ({ product, onSelect })
   return (
     <div
       onClick={handleSelect}
-      className="bg-white border-2 border-gray-200 rounded-lg overflow-hidden cursor-pointer transition-all hover:shadow-xl hover:border-blue-300 hover:scale-[1.02]"
+      className="bg-white border border-gray-200 rounded-lg overflow-hidden cursor-pointer transition-all duration-200 hover:shadow-md hover:border-blue-300"
       role="button"
       tabIndex={0}
       onKeyDown={handleKeyDown}
@@ -87,14 +87,14 @@ const ProductCardComponent: React.FC<ProductCardProps> = ({ product, onSelect })
           />
         )}
 
-        {/* バッジ */}
-        <div className="absolute top-2 left-2">
-          <span className={`px-2 py-1 rounded-md text-xs font-bold shadow-md ${
-            product.isOption ? 'bg-orange-500 text-white' : 'bg-emerald-500 text-white'
-          }`}>
-            {product.isOption ? 'オプション' : '標準'}
-          </span>
-        </div>
+        {/* バッジ（標準のみ表示） */}
+        {!product.isOption && (
+          <div className="absolute top-1 left-1">
+            <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500 text-white">
+              標準
+            </span>
+          </div>
+        )}
       </div>
 
       {/* 情報エリア - シンプル化 */}
