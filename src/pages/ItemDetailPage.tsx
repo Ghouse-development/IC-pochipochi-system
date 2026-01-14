@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ChevronLeft, Check, Image as ImageIcon } from 'lucide-react';
+import { ChevronLeft, Check, ExternalLink, Image as ImageIcon } from 'lucide-react';
 import { useProductStore } from '../stores/useProductStore';
 import { useCartStore } from '../stores/useCartStore';
 import { useToast } from '../components/common/Toast';
@@ -135,17 +135,6 @@ export const ItemDetailPage: React.FC = () => {
           </div>
         </div>
 
-        {/* 説明・メモ */}
-        {product.description && (
-          <div className="bg-white rounded-xl shadow-sm p-4">
-            <h2 className="text-sm font-bold text-gray-800 mb-3">説明・メモ</h2>
-            <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
-              {product.description}
-            </p>
-          </div>
-        )}
-
-
         {/* カラー選択 */}
         {product.variants.length > 1 && (
           <div className="bg-white rounded-xl shadow-sm p-4">
@@ -185,6 +174,50 @@ export const ItemDetailPage: React.FC = () => {
             </div>
           </div>
         )}
+
+        {/* 説明・メモ */}
+        {product.description && (
+          <div className="bg-white rounded-xl shadow-sm p-4">
+            <h2 className="text-sm font-bold text-gray-800 mb-3">説明・メモ</h2>
+            <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
+              {product.description}
+            </p>
+          </div>
+        )}
+
+        {/* メーカー施工写真 */}
+        {product.installationImages && product.installationImages.length > 0 && (
+          <div className="bg-white rounded-xl shadow-sm p-4">
+            <h2 className="text-sm font-bold text-gray-800 mb-3">メーカー施工写真</h2>
+            <div className="grid grid-cols-2 gap-2">
+              {product.installationImages.map((img: string, idx: number) => (
+                <img
+                  key={idx}
+                  src={img}
+                  alt={`施工写真 ${idx + 1}`}
+                  className="w-full aspect-video object-cover rounded-lg"
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* メーカー詳細ページURL */}
+        {product.productUrl && (
+          <div className="bg-white rounded-xl shadow-sm p-4">
+            <h2 className="text-sm font-bold text-gray-800 mb-3">メーカー詳細ページ</h2>
+            <a
+              href={product.productUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-blue-600 hover:text-blue-800"
+            >
+              <ExternalLink className="w-4 h-4" />
+              <span className="text-sm underline">メーカーサイトで詳細を見る</span>
+            </a>
+          </div>
+        )}
+
       </div>
 
       {/* フッター（固定） */}
