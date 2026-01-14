@@ -1818,9 +1818,12 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                             <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
                               {material}
                             </h3>
-                            <p className="text-[10px] text-blue-600 mt-1">
+                            <div className="flex items-baseline gap-1 mt-1">
+                              <span className="text-sm font-bold text-gray-400">カテゴリ</span>
+                            </div>
+                            <span className="text-[10px] text-blue-600">
                               {itemCount > 0 ? `${itemCount}種類から選択` : '準備中'}
-                            </p>
+                            </span>
                           </div>
                         </button>
                       );
@@ -1912,9 +1915,12 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                             <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
                               {type.name}
                             </h3>
-                            <p className="text-[10px] text-blue-600 mt-1">
+                            <div className="flex items-baseline gap-1 mt-1">
+                              <span className="text-sm font-bold text-gray-400">必須</span>
+                            </div>
+                            <span className="text-[10px] text-blue-600">
                               {itemCount > 0 ? `${itemCount}種類から選択` : '準備中'}
-                            </p>
+                            </span>
                           </div>
                         </button>
                       );
@@ -1942,9 +1948,12 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                               <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
                                 {type.name}
                               </h3>
-                              <p className="text-[10px] text-blue-600 mt-1">
+                              <div className="flex items-baseline gap-1 mt-1">
+                                <span className="text-sm font-bold text-gray-400">オプション</span>
+                              </div>
+                              <span className="text-[10px] text-blue-600">
                                 {itemCount > 0 ? `${itemCount}種類から選択` : '準備中'}
-                              </p>
+                              </span>
                             </div>
                           </button>
                         );
@@ -1979,9 +1988,12 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                             <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
                               {type.name}
                             </h3>
-                            <p className="text-[10px] text-blue-600 mt-1">
+                            <div className="flex items-baseline gap-1 mt-1">
+                              <span className="text-sm font-bold text-gray-400">カテゴリ</span>
+                            </div>
+                            <span className="text-[10px] text-blue-600">
                               {itemCount > 0 ? `${itemCount}種類から選択` : '準備中'}
-                            </p>
+                            </span>
                           </div>
                         </button>
                       );
@@ -2015,9 +2027,12 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                             <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
                               {type.name}
                             </h3>
-                            <p className="text-[10px] text-blue-600 mt-1">
-                              {itemCount > 0 ? `${itemCount}種類` : '準備中'}
-                            </p>
+                            <div className="flex items-baseline gap-1 mt-1">
+                              <span className="text-sm font-bold text-gray-400">カテゴリ</span>
+                            </div>
+                            <span className="text-[10px] text-blue-600">
+                              {itemCount > 0 ? `${itemCount}種類から選択` : '準備中'}
+                            </span>
                           </div>
                         </button>
                       );
@@ -2055,9 +2070,12 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                             <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
                               {type.name}
                             </h3>
-                            <p className="text-[10px] text-blue-600 mt-1">
-                              {itemCount > 0 ? `${itemCount}種類` : '準備中'}
-                            </p>
+                            <div className="flex items-baseline gap-1 mt-1">
+                              <span className="text-sm font-bold text-gray-400">{'optional' in type && type.optional ? '任意' : 'カテゴリ'}</span>
+                            </div>
+                            <span className="text-[10px] text-blue-600">
+                              {itemCount > 0 ? `${itemCount}種類から選択` : '準備中'}
+                            </span>
                           </div>
                         </button>
                       );
