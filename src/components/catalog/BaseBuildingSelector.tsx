@@ -165,34 +165,40 @@ export const BaseBuildingSelector: React.FC<BaseBuildingSelectorProps> = ({
 
       {/* ステップ1: カラータイプ選択 */}
       {step === 'color-category' && (
-        <div>
-          <h4 className="font-medium text-gray-800 mb-4">カラータイプを選択</h4>
-          <div className="grid grid-cols-6 gap-2">
-            <button
-              onClick={() => handleColorCategorySelect('standard')}
-              className="p-6 border-2 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-all text-left"
-            >
-              <h5 className="font-bold text-lg mb-1">標準カラー</h5>
-              <p className="text-sm text-gray-600 mb-2">9色から選べます</p>
-              <p className="text-blue-600 font-medium">標準</p>
-            </button>
-            <button
-              onClick={() => handleColorCategorySelect('paint')}
-              className="p-6 border-2 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-all text-left"
-            >
-              <h5 className="font-bold text-lg mb-1">ペイントカラー</h5>
-              <p className="text-sm text-gray-600 mb-2">4色から選べます</p>
-              <p className="text-orange-600 font-medium">+¥10,000/箇所</p>
-            </button>
-            <button
-              onClick={() => handleColorCategorySelect('solid')}
-              className="p-6 border-2 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-all text-left"
-            >
-              <h5 className="font-bold text-lg mb-1">ソリッドカラー</h5>
-              <p className="text-sm text-gray-600 mb-2">2色から選べます</p>
-              <p className="text-orange-600 font-medium">+¥20,000/箇所</p>
-            </button>
-          </div>
+        <div className="grid grid-cols-6 gap-2">
+          <SelectionCard
+            id="standard"
+            name="標準カラー"
+            description="9色から選べます"
+            placeholderEmoji="🎨"
+            placeholderBgColor="from-amber-100 to-orange-100"
+            isStandard={true}
+            price={0}
+            isSelected={selectedColorCategory === 'standard'}
+            onClick={() => handleColorCategorySelect('standard')}
+          />
+          <SelectionCard
+            id="paint"
+            name="ペイントカラー"
+            description="4色から選べます"
+            placeholderEmoji="🖌️"
+            placeholderBgColor="from-blue-100 to-indigo-100"
+            price={10000}
+            unit="箇所"
+            isSelected={selectedColorCategory === 'paint'}
+            onClick={() => handleColorCategorySelect('paint')}
+          />
+          <SelectionCard
+            id="solid"
+            name="ソリッドカラー"
+            description="2色から選べます"
+            placeholderEmoji="✨"
+            placeholderBgColor="from-gray-200 to-slate-300"
+            price={20000}
+            unit="箇所"
+            isSelected={selectedColorCategory === 'solid'}
+            onClick={() => handleColorCategorySelect('solid')}
+          />
         </div>
       )}
 
@@ -249,29 +255,19 @@ export const BaseBuildingSelector: React.FC<BaseBuildingSelectorProps> = ({
             )}
           </div>
 
-          <h4 className="font-medium text-gray-800 mb-4">デザインを選択</h4>
-
           <div className="grid grid-cols-6 gap-2 mb-4">
             {DESIGN_OPTIONS.map(design => (
-              <button
+              <SelectionCard
                 key={design.id}
+                id={design.id}
+                name={design.name}
+                description={design.description}
+                placeholderEmoji="🚪"
+                placeholderBgColor="from-amber-100 to-yellow-100"
+                isStandard={design.isStandard}
+                isSelected={selectedDesign?.id === design.id}
                 onClick={() => handleDesignSelect(design)}
-                className={`p-4 border-2 rounded-xl transition-all text-left ${
-                  selectedDesign?.id === design.id
-                    ? 'border-blue-500 bg-blue-50'
-                    : 'border-gray-200 hover:border-blue-300'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h5 className="font-medium text-gray-900">{design.name}</h5>
-                    <p className="text-sm text-gray-600">{design.description}</p>
-                  </div>
-                  {selectedDesign?.id === design.id && (
-                    <Check className="w-5 h-5 text-blue-500" />
-                  )}
-                </div>
-              </button>
+              />
             ))}
           </div>
 

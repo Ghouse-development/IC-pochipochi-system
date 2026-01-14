@@ -1,5 +1,5 @@
 import React, { memo, useCallback } from 'react';
-import { Ban, Check, X } from 'lucide-react';
+import { Ban, Check } from 'lucide-react';
 
 interface NotNeededCardProps {
   categoryName: string;
@@ -29,10 +29,10 @@ const NotNeededCardComponent: React.FC<NotNeededCardProps> = ({
   return (
     <div
       onClick={handleSelect}
-      className={`bg-white border-2 rounded-lg overflow-hidden cursor-pointer transition-all ${
+      className={`bg-white rounded-lg overflow-hidden cursor-pointer transition-all duration-200 ${
         isSelected
-          ? 'border-2 border-blue-500 shadow-xl shadow-blue-200 scale-[1.02]'
-          : 'border-gray-200 hover:shadow-xl hover:border-blue-300 hover:scale-[1.02]'
+          ? 'border-2 border-blue-500 shadow-lg'
+          : 'border border-gray-200 hover:border-blue-300 hover:shadow-md'
       }`}
       role="button"
       tabIndex={0}
@@ -43,51 +43,34 @@ const NotNeededCardComponent: React.FC<NotNeededCardProps> = ({
       {/* 画像エリア（正方形） */}
       <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 relative flex items-center justify-center">
         <div className="text-center">
-          <Ban className="w-16 h-16 text-gray-400 mx-auto" />
-          <span className="text-sm text-gray-500 mt-2 block">選択しない</span>
+          <Ban className="w-12 h-12 text-gray-400 mx-auto" />
+          <span className="text-xs text-gray-500 mt-1 block">選択しない</span>
         </div>
 
         {/* バッジ */}
-        <div className="absolute top-2 left-2">
-          <span className="px-2 py-1 rounded-md text-xs font-bold shadow-md bg-gray-500 text-white">
+        <div className="absolute top-1 left-1">
+          <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-gray-500 text-white">
             なし
           </span>
         </div>
 
-        {/* 選択済みオーバーレイ */}
+        {/* 選択済みマーク */}
         {isSelected && (
-          <div className="absolute inset-0 bg-blue-500/30 flex items-center justify-center">
-            <button
-              className="absolute top-2 right-2 p-1.5 bg-white rounded-full shadow-lg hover:bg-red-50 transition-colors group"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleSelect();
-              }}
-            >
-              <X className="w-4 h-4 text-gray-400 group-hover:text-red-500" />
-            </button>
-            <div className="bg-white rounded-full p-3 shadow-xl ring-4 ring-blue-400/50">
-              <Check className="w-8 h-8 text-blue-600" strokeWidth={3} />
-            </div>
-            <div className="absolute bottom-2 left-1/2 -translate-x-1/2">
-              <span className="px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full shadow-lg">
-                選択中
-              </span>
-            </div>
+          <div className="absolute top-1 right-1 bg-blue-500 rounded-full p-1">
+            <Check className="w-3 h-3 text-white" strokeWidth={3} />
           </div>
         )}
       </div>
 
       {/* 情報エリア */}
       <div className="p-2">
-        <p className="text-[10px] text-gray-500 truncate">{categoryName}</p>
-        <h3 className="font-bold text-xs text-gray-800 line-clamp-2 mb-0.5 min-h-[1.5rem]">
+        <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
           {title}
         </h3>
 
         {/* 価格 */}
-        <div className="flex items-baseline gap-1">
-          <span className="text-sm font-black text-emerald-600">
+        <div className="flex items-baseline gap-1 mt-1">
+          <span className="text-sm font-bold text-emerald-600">
             標準
           </span>
         </div>

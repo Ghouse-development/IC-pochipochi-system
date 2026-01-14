@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Check, ChevronLeft, ChevronDown, ChevronUp, Image as ImageIcon } from 'lucide-react';
+import { Check, ChevronLeft, Image as ImageIcon } from 'lucide-react';
 import { PageHeader } from './PageHeader';
+import { SelectionCard } from './SelectionCard';
 import { useCartStore } from '../../stores/useCartStore';
 import type { Product, ProductVariant } from '../../types/product';
 
@@ -34,7 +35,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
   selectedVariantId,
   onSelect,
 }) => {
-  const [showColorPicker, setShowColorPicker] = useState(false);
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
 
   const variants = product.variants || [];
@@ -62,28 +62,17 @@ const ProductCard: React.FC<ProductCardProps> = ({
     }
   };
 
-  const handleVariantClick = (e: React.MouseEvent, idx: number) => {
-    e.stopPropagation();
-    setSelectedVariantIndex(idx);
-    // 選択中の商品の場合、バリアント変更も即座に反映
-    if (isSelected && variants[idx]) {
-      onSelect(product, variants[idx]);
-    }
-  };
-
   return (
     <div
-      className={`bg-white rounded-xl border-2 overflow-hidden transition-all ${
+      className={`bg-white rounded-lg overflow-hidden transition-all cursor-pointer ${
         isSelected
-          ? 'border-blue-500 ring-2 ring-blue-200 shadow-lg'
-          : 'border-gray-200 hover:border-blue-300 hover:shadow-md'
+          ? 'border-2 border-blue-500 shadow-lg'
+          : 'border border-gray-200 hover:border-blue-300 hover:shadow-md'
       }`}
+      onClick={handleSelect}
     >
       {/* 画像エリア */}
-      <div
-        className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 relative cursor-pointer"
-        onClick={handleSelect}
-      >
+      <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 relative">
         {currentImage ? (
           <img
             src={currentImage}
@@ -92,7 +81,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           />
         ) : (
           <div className="w-full h-full flex flex-col items-center justify-center">
-            <span className="text-4xl mb-2">🎨</span>
+            <span className="text-2xl">🎨</span>
             {currentVariant?.color && (
               <span className="text-xs text-gray-500">{currentVariant.color}</span>
             )}
@@ -105,98 +94,22 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
         {/* 選択済みマーク */}
         {isSelected && (
-          <div className="absolute top-2 right-2 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center shadow">
-            <Check className="w-4 h-4 text-white" strokeWidth={3} />
+          <div className="absolute top-1 right-1 bg-blue-500 rounded-full p-1">
+            <Check className="w-3 h-3 text-white" strokeWidth={3} />
           </div>
         )}
       </div>
 
       {/* 情報エリア */}
-      <div className="p-3">
-        <h4 className="font-bold text-sm text-gray-800 line-clamp-2 min-h-[2.5rem]">
+      <div className="p-2">
+        <h4 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
           {product.name}
         </h4>
-        <p className="text-xs text-gray-500 mb-2">{product.manufacturer}</p>
 
-        {/* 色選択（複数バリアントがある場合） */}
+        {/* 選べる色数表示 */}
         {hasMultipleVariants && (
-          <div className="mb-2">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowColorPicker(!showColorPicker);
-              }}
-              className="w-full flex items-center justify-between px-2 py-1.5 bg-gray-50 rounded-lg text-xs hover:bg-gray-100 transition-colors"
-            >
-              <div className="flex items-center gap-1.5">
-                {currentVariant?.colorCode && (
-                  <div
-                    className="w-4 h-4 rounded-full border border-gray-300"
-                    style={{ backgroundColor: currentVariant.colorCode }}
-                  />
-                )}
-                <span className="text-gray-700 truncate max-w-[80px]">{currentVariant?.color || '色を選択'}</span>
-              </div>
-              <div className="flex items-center gap-1 text-gray-400">
-                <span className="text-[10px]">{variants.length}色</span>
-                {showColorPicker ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
-              </div>
-            </button>
-
-            {/* 色選択パネル */}
-            {showColorPicker && (
-              <div className="mt-1.5 p-1.5 bg-gray-50 rounded-lg max-h-32 overflow-y-auto">
-                <div className="grid grid-cols-4 gap-1">
-                  {variants.map((variant, idx) => {
-                    const variantImg = getVariantImage(variant);
-                    const isVariantSelected = idx === selectedVariantIndex;
-                    return (
-                      <button
-                        key={variant.id}
-                        onClick={(e) => handleVariantClick(e, idx)}
-                        className={`relative rounded overflow-hidden border transition-all ${
-                          isVariantSelected
-                            ? 'border-blue-500 ring-1 ring-blue-200'
-                            : 'border-gray-200 hover:border-blue-300'
-                        }`}
-                        title={variant.color}
-                      >
-                        <div className="aspect-square bg-gray-100">
-                          {variantImg ? (
-                            <img src={variantImg} alt={variant.color} className="w-full h-full object-cover" />
-                          ) : variant.colorCode ? (
-                            <div className="w-full h-full" style={{ backgroundColor: variant.colorCode }} />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center">
-                              <ImageIcon className="w-3 h-3 text-gray-300" />
-                            </div>
-                          )}
-                        </div>
-                        {isVariantSelected && (
-                          <div className="absolute top-0.5 right-0.5 w-3 h-3 bg-blue-500 rounded-full flex items-center justify-center">
-                            <Check className="w-2 h-2 text-white" strokeWidth={3} />
-                          </div>
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-          </div>
+          <span className="text-[10px] text-gray-400">{variants.length}色から選択</span>
         )}
-
-        {/* 選択ボタン */}
-        <button
-          onClick={handleSelect}
-          className={`w-full py-2 rounded-lg text-sm font-medium transition-all ${
-            isSelected
-              ? 'bg-blue-100 text-blue-700'
-              : 'bg-blue-600 text-white hover:bg-blue-700'
-          }`}
-        >
-          {isSelected ? '選択中' : '選択する'}
-        </button>
       </div>
     </div>
   );
@@ -318,33 +231,19 @@ export const MultiColorAreaSelector: React.FC<MultiColorAreaSelectorProps> = ({
 
       {/* ステップ1: 色数選択 */}
       {step === 'count' && (
-        <div>
-          <h4 className="font-medium text-gray-800 mb-4">
-            何色使いますか？
-          </h4>
-          <div className="grid grid-cols-6 gap-2">
-            {[1, 2, 3].filter(n => n <= maxColors).map(count => (
-              <button
-                key={count}
-                onClick={() => handleColorCountSelect(count)}
-                className="p-6 border-2 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-all text-center"
-              >
-                <div className="flex justify-center gap-1 mb-2">
-                  {Array.from({ length: count }).map((_, i) => (
-                    <div
-                      key={i}
-                      className={`w-8 h-8 rounded-full border-2 ${
-                        i === 0 ? 'bg-blue-500 border-blue-500' :
-                        i === 1 ? 'bg-green-500 border-green-500' :
-                        'bg-orange-500 border-orange-500'
-                      }`}
-                    />
-                  ))}
-                </div>
-                <p className="font-bold text-lg">{count}色</p>
-              </button>
-            ))}
-          </div>
+        <div className="grid grid-cols-6 gap-2">
+          {[1, 2, 3].filter(n => n <= maxColors).map(count => (
+            <SelectionCard
+              key={count}
+              id={`color-count-${count}`}
+              name={`${count}色`}
+              description={count === 1 ? '単色使い' : `${count}色使い`}
+              placeholderEmoji={count === 1 ? '🔵' : count === 2 ? '🔵🟢' : '🔵🟢🟠'}
+              placeholderBgColor="from-gray-100 to-slate-100"
+              isSelected={selections.length === count}
+              onClick={() => handleColorCountSelect(count)}
+            />
+          ))}
         </div>
       )}
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Check, ChevronLeft, Loader2, Image as ImageIcon } from 'lucide-react';
+import { Check, ChevronLeft, Loader2 } from 'lucide-react';
 import { PageHeader } from './PageHeader';
+import { SelectionCard } from './SelectionCard';
 import { useCartStore } from '../../stores/useCartStore';
 import { usePorchItems, type TileOption, type GroutOption, type TileColorVariant } from '../../hooks/usePorchItems';
 import type { Product, ProductVariant, PlanType } from '../../types/product';
@@ -209,45 +210,17 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
 
           <div className="grid grid-cols-6 gap-2 mb-4">
             {selectedTile.colorVariants.map(color => (
-              <button
+              <SelectionCard
                 key={color.id}
+                id={color.id}
+                name={color.colorName}
+                imageUrl={color.imageUrl}
+                colorCode={color.colorCode}
+                placeholderEmoji="🎨"
+                placeholderBgColor="from-gray-100 to-slate-100"
+                isSelected={selectedColor?.id === color.id}
                 onClick={() => handleColorSelect(color)}
-                className={`relative border-2 rounded-xl text-left transition-all overflow-hidden ${
-                  selectedColor?.id === color.id
-                    ? 'border-blue-500 bg-blue-50'
-                    : 'border-gray-200 hover:border-blue-300'
-                }`}
-              >
-                {/* 色画像 */}
-                <div className="aspect-square bg-gray-100">
-                  {color.imageUrl ? (
-                    <img
-                      src={color.imageUrl}
-                      alt={color.colorName}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : color.colorCode ? (
-                    <div
-                      className="w-full h-full"
-                      style={{ backgroundColor: color.colorCode }}
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <ImageIcon className="w-8 h-8 text-gray-300" />
-                    </div>
-                  )}
-                </div>
-                {/* 色名 */}
-                <div className="p-2">
-                  <span className="text-sm font-medium text-gray-900">{color.colorName}</span>
-                </div>
-                {/* 選択チェック */}
-                {selectedColor?.id === color.id && (
-                  <div className="absolute top-2 left-2 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
-                    <Check className="w-4 h-4 text-white" />
-                  </div>
-                )}
-              </button>
+              />
             ))}
           </div>
         </div>
@@ -265,24 +238,16 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
 
           <div className="grid grid-cols-6 gap-2 mb-4">
             {groutColors.map(grout => (
-              <button
+              <SelectionCard
                 key={grout.id}
+                id={grout.id}
+                name={grout.name}
+                colorCode={grout.colorCode}
+                placeholderEmoji="🧱"
+                placeholderBgColor="from-gray-200 to-slate-300"
+                isSelected={selectedGrout?.id === grout.id}
                 onClick={() => handleGroutSelect(grout)}
-                className={`relative p-4 border-2 rounded-xl text-left transition-all ${
-                  selectedGrout?.id === grout.id
-                    ? 'border-blue-500 bg-blue-50'
-                    : 'border-gray-200 hover:border-blue-300'
-                }`}
-              >
-                <div
-                  className="w-full h-8 rounded mb-2 border border-gray-300"
-                  style={{ backgroundColor: grout.colorCode }}
-                />
-                <div className="text-sm font-medium text-gray-900">{grout.name}</div>
-                {selectedGrout?.id === grout.id && (
-                  <Check className="absolute top-2 left-2 w-4 h-4 text-blue-500" />
-                )}
-              </button>
+              />
             ))}
           </div>
 
