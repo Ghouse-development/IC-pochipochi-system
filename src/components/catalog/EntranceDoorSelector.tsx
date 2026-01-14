@@ -259,7 +259,7 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
   };
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
+    <div className="p-4 max-w-6xl mx-auto">
       {/* ヘッダー */}
       <PageHeader
         title="玄関ドアを選択"

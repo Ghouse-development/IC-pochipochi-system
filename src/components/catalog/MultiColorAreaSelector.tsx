@@ -309,7 +309,7 @@ export const MultiColorAreaSelector: React.FC<MultiColorAreaSelectorProps> = ({
   }, {} as Record<string, Product[]>);
 
   return (
-    <div className="p-6 max-w-5xl mx-auto">
+    <div className="p-4 max-w-6xl mx-auto">
       {/* ヘッダー */}
       <PageHeader
         title={`${categoryName}を選択`}

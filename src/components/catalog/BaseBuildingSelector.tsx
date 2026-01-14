@@ -136,7 +136,7 @@ export const BaseBuildingSelector: React.FC<BaseBuildingSelectorProps> = ({
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="p-4 max-w-6xl mx-auto">
       {/* ヘッダー */}
       <PageHeader
         title="ベース建具を選択"

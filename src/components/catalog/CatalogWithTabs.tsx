@@ -64,8 +64,8 @@ interface CatalogWithTabsProps {
 }
 
 export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick }) => {
-  // URLパラメータ
-  const { step = 'exterior', categoryId: urlCategoryId, productId: urlProductId } = useParams<{
+  // URLパラメータ（categoryIdはslugとして扱う）
+  const { step = 'exterior', categoryId: urlCategorySlug, productId: urlProductId } = useParams<{
     step?: string;
     categoryId?: string;
     productId?: string;
@@ -79,7 +79,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   // URLからactiveTabを設定
   // お客様モードでは設計タブにアクセスできない
   const activeTab = (['design', 'exterior', 'interior', 'equipment', 'electrical', 'furniture'].includes(step) ? step : 'exterior') as 'design' | 'exterior' | 'interior' | 'equipment' | 'electrical' | 'furniture';
-  const selectedCategoryId = urlCategoryId || null;
+  const selectedCategorySlug = urlCategorySlug || null;
 
   // お客様モードで設計タブの閲覧専用フラグ
   const isDesignReadOnly = isCustomerMode && activeTab === 'design';
@@ -243,14 +243,21 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     navigate(`/catalog/${newTab}`);
   }, [navigate]);
 
-  // カテゴリ選択（URL遷移）
+  // カテゴリ選択（URL遷移） - IDからslugを検索してnavigateする
   const setSelectedCategoryId = useCallback((catId: string | null) => {
     if (catId) {
-      navigate(`/catalog/${activeTab}/${catId}`);
+      // IDからカテゴリを検索してslugを取得
+      const category = categories.find(c => c.id === catId);
+      if (category?.slug) {
+        navigate(`/catalog/${activeTab}/${category.slug}`);
+      } else {
+        // フォールバック: IDをそのまま使用
+        navigate(`/catalog/${activeTab}/${catId}`);
+      }
     } else {
       navigate(`/catalog/${activeTab}`);
     }
-  }, [navigate, activeTab]);
+  }, [navigate, activeTab, categories]);
 
   // プラン取得
   useEffect(() => {
@@ -467,17 +474,24 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
     fetchCategories();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeTab, exteriorProducts, interiorProducts, waterProducts, furnitureProducts, cartItems]); // selectedCategoryIdは初期設定時のみ使用
+  }, [activeTab, exteriorProducts, interiorProducts, waterProducts, furnitureProducts, cartItems]); // selectedCategorySlugは初期設定時のみ使用
+
+  // slugからカテゴリIDを導出
+  const selectedCategoryId = useMemo(() => {
+    if (!selectedCategorySlug || categories.length === 0) return null;
+    const category = categories.find(c => c.slug === selectedCategorySlug);
+    return category?.id || null;
+  }, [selectedCategorySlug, categories]);
 
   // タブ変更時にカテゴリが未選択の場合、最初のカテゴリを自動選択
   useEffect(() => {
-    if (categories.length > 0 && !selectedCategoryId) {
+    if (categories.length > 0 && !selectedCategorySlug) {
       const firstCategory = categories[0];
       if (firstCategory) {
-        navigate(`/catalog/${activeTab}/${firstCategory.id}`, { replace: true });
+        navigate(`/catalog/${activeTab}/${firstCategory.slug}`, { replace: true });
       }
     }
-  }, [categories, selectedCategoryId, activeTab, navigate]);
+  }, [categories, selectedCategorySlug, activeTab, navigate]);
 
   // 静的データからItemWithDetails形式のデータを取得
   const getStaticItems = useCallback((tab: string): ItemWithDetails[] => {
@@ -1137,11 +1151,11 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     const product = convertToCatalogProduct(item);
     setSelectedProductForDetail(product);
     setIsDetailModalOpen(true);
-    // URLを更新（ブラウザ履歴に追加）
-    if (selectedCategoryId) {
-      navigate(`/catalog/${activeTab}/${selectedCategoryId}/${item.id}`);
+    // URLを更新（ブラウザ履歴に追加）- slugベースで
+    if (selectedCategorySlug) {
+      navigate(`/catalog/${activeTab}/${selectedCategorySlug}/${item.id}`);
     }
-  }, [navigate, activeTab, selectedCategoryId]);
+  }, [navigate, activeTab, selectedCategorySlug]);
 
   const getPrice = (item: ItemWithDetails) => {
     return item.pricing?.find(p => p.product?.code === selectedPlanId)?.price || 0;
@@ -1222,13 +1236,13 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   const handleCloseDetailModal = useCallback(() => {
     setIsDetailModalOpen(false);
     setSelectedProductForDetail(null);
-    // URLから商品IDを削除
-    if (selectedCategoryId) {
-      navigate(`/catalog/${activeTab}/${selectedCategoryId}`);
+    // URLから商品IDを削除 - slugベースで
+    if (selectedCategorySlug) {
+      navigate(`/catalog/${activeTab}/${selectedCategorySlug}`);
     } else {
       navigate(`/catalog/${activeTab}`);
     }
-  }, [navigate, activeTab, selectedCategoryId]);
+  }, [navigate, activeTab, selectedCategorySlug]);
 
   // レコメンドから商品を選択した時の処理
   const handleRecommendedProductSelect = useCallback((product: CatalogProduct) => {
@@ -2526,14 +2540,12 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                     </div>
                     <button
                       onClick={() => {
-                        // 設計タブのガス引込みカテゴリに移動
-                        navigate('/catalog/design');
-                        // ガス引込みカテゴリを選択（カテゴリIDを探す）
+                        // 設計タブのガス引込みカテゴリに移動 - slugベースで
                         const gasCategory = categories.find(c => c.name === 'ガス引込み');
-                        if (gasCategory) {
-                          setTimeout(() => {
-                            navigate(`/catalog/design/${gasCategory.id}`);
-                          }, 100);
+                        if (gasCategory?.slug) {
+                          navigate(`/catalog/design/${gasCategory.slug}`);
+                        } else {
+                          navigate('/catalog/design');
                         }
                       }}
                       className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-semibold rounded-xl shadow-lg transition-all"
