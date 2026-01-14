@@ -2750,7 +2750,15 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
               ) : filteredItems.length === 0 ? (
                 <EmptyState searchTerm={searchTerm} onClear={() => setSearchTerm('')} />
               ) : (
-                <>
+                <div className="max-w-6xl mx-auto px-4">
+                  {/* カテゴリヘッダー（全カテゴリ共通） */}
+                  {currentCategoryName && (
+                    <PageHeader
+                      title={selectedMaterialType ? `${selectedMaterialType}を選択` : `${currentCategoryName}を選択`}
+                      subtitle={`${filteredItems.length}件の商品から選んでください`}
+                    />
+                  )}
+
                   {/* 素材タイプ選択状態バー（外壁用）- シンプルモダン */}
                   {currentCategoryName === '外壁' && selectedMaterialType && (
                     <div className="mb-4 flex items-center justify-between">
@@ -2986,7 +2994,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                     totalItems={filteredItems.length}
                     onPageChange={setCurrentPage}
                   />
-                </>
+                </div>
               )}
 
             </div>
