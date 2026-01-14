@@ -90,12 +90,12 @@ export const CatalogHeader: React.FC<CatalogHeaderProps> = ({
           <span className="text-xs font-medium text-white/80">{decidedCount}/{totalCount}</span>
           <div className="flex-1 h-1.5 bg-white/20 rounded-full overflow-hidden">
             <div
-              className={`h-full rounded-full transition-all duration-300 ${isComplete ? 'bg-emerald-400' : 'bg-white'}`}
+              className={`h-full rounded-full transition-all duration-300 ${isComplete ? 'bg-blue-400' : 'bg-white'}`}
               style={{ width: `${catProgressPercent}%` }}
             />
           </div>
           {isComplete ? (
-            <span className="text-xs font-bold text-emerald-300">完了</span>
+            <span className="text-xs font-bold text-blue-300">完了</span>
           ) : (
             <span className="text-xs text-white/80">残{totalCount - decidedCount}</span>
           )}

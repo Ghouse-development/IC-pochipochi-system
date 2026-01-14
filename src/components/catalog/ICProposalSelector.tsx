@@ -1,27 +1,27 @@
 import React, { useState } from 'react';
-import { Check, X, Home, Sofa, Tv, Coffee, Sparkles, Bed, UtensilsCrossed, Armchair, MessageSquare } from 'lucide-react';
 import { PageHeader } from './PageHeader';
+import { SelectionCard } from './SelectionCard';
 
 // 窓がある部屋のリスト（カーテン用）
 const ROOMS_WITH_WINDOWS = [
-  { id: 'living', name: 'リビング', icon: Home },
-  { id: 'dining', name: 'ダイニング', icon: UtensilsCrossed },
-  { id: 'bedroom-main', name: '主寝室', icon: Bed },
-  { id: 'bedroom-2', name: '寝室2', icon: Bed },
-  { id: 'bedroom-3', name: '寝室3', icon: Bed },
-  { id: 'kids-room', name: '子供部屋', icon: Sparkles },
-  { id: 'japanese', name: '和室', icon: Home },
+  { id: 'living', name: 'リビング', emoji: '🏠' },
+  { id: 'dining', name: 'ダイニング', emoji: '🍽️' },
+  { id: 'bedroom-main', name: '主寝室', emoji: '🛏️' },
+  { id: 'bedroom-2', name: '寝室2', emoji: '🛏️' },
+  { id: 'bedroom-3', name: '寝室3', emoji: '🛏️' },
+  { id: 'kids-room', name: '子供部屋', emoji: '✨' },
+  { id: 'japanese', name: '和室', emoji: '🏯' },
 ];
 
 // 家具の種類リスト
 const FURNITURE_TYPES = [
-  { id: 'sofa', name: 'ソファ', icon: Sofa },
-  { id: 'tv-board', name: 'TVボード', icon: Tv },
-  { id: 'center-table', name: 'センターテーブル', icon: Coffee },
-  { id: 'rug', name: 'ラグ', icon: Sparkles },
-  { id: 'dining-table', name: 'ダイニングテーブル', icon: UtensilsCrossed },
-  { id: 'dining-chair', name: 'ダイニングチェア', icon: Armchair },
-  { id: 'other', name: 'その他', icon: MessageSquare, hasInput: true },
+  { id: 'sofa', name: 'ソファ', emoji: '🛋️' },
+  { id: 'tv-board', name: 'TVボード', emoji: '📺' },
+  { id: 'center-table', name: 'センターテーブル', emoji: '☕' },
+  { id: 'rug', name: 'ラグ', emoji: '🧶' },
+  { id: 'dining-table', name: 'ダイニングテーブル', emoji: '🍽️' },
+  { id: 'dining-chair', name: 'ダイニングチェア', emoji: '🪑' },
+  { id: 'other', name: 'その他', emoji: '💬', hasInput: true },
 ];
 
 interface ICProposalSelectorProps {
@@ -81,7 +81,7 @@ export const ICProposalSelector: React.FC<ICProposalSelectorProps> = ({
   // Step 1: 提案希望する/しない選択
   if (step === 'choice') {
     return (
-      <div className="p-4">
+      <div className="p-4 max-w-6xl mx-auto">
         <PageHeader
           title={`${categoryName}のIC提案`}
           subtitle={isCurtain
@@ -91,32 +91,24 @@ export const ICProposalSelector: React.FC<ICProposalSelectorProps> = ({
 
         <div className="grid grid-cols-6 gap-2">
           {/* 提案希望する */}
-          <button
+          <SelectionCard
+            id="want-proposal"
+            name="提案を希望する"
+            placeholderEmoji="✓"
+            placeholderBgColor="from-blue-100 to-cyan-100"
+            isSelected={false}
             onClick={() => handleChoiceSelect(true)}
-            className="flex flex-col items-center gap-3 p-6 rounded-lg border-2 border-blue-200 bg-blue-50 hover:bg-blue-100 hover:border-blue-400 transition-all group"
-          >
-            <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center group-hover:scale-110 transition-transform">
-              <Check className="w-5 h-5 text-white" />
-            </div>
-            <span className="font-bold text-gray-800">提案を希望する</span>
-            <span className="text-xs text-gray-500 text-center">
-              ICがお部屋に合わせてご提案
-            </span>
-          </button>
+          />
 
           {/* 提案希望しない */}
-          <button
+          <SelectionCard
+            id="no-proposal"
+            name="提案を希望しない"
+            placeholderEmoji="✕"
+            placeholderBgColor="from-gray-100 to-gray-200"
+            isSelected={false}
             onClick={() => handleChoiceSelect(false)}
-            className="flex flex-col items-center gap-3 p-6 rounded-lg border-2 border-gray-200 bg-gray-50 hover:bg-gray-100 hover:border-gray-400 transition-all group"
-          >
-            <div className="w-10 h-10 rounded-full bg-gray-400 flex items-center justify-center group-hover:scale-110 transition-transform">
-              <X className="w-5 h-5 text-white" />
-            </div>
-            <span className="font-bold text-gray-800">提案を希望しない</span>
-            <span className="text-xs text-gray-500 text-center">
-              {isCurtain ? '施主支給・自分で選ぶ' : '自分で選ぶ・不要'}
-            </span>
-          </button>
+          />
         </div>
 
         <button
@@ -131,7 +123,7 @@ export const ICProposalSelector: React.FC<ICProposalSelectorProps> = ({
 
   // Step 2: 詳細選択（部屋 or 家具種類）
   return (
-    <div className="p-4">
+    <div className="p-4 max-w-6xl mx-auto">
       <button
         onClick={() => setStep('choice')}
         className="mb-4 text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1"
@@ -147,32 +139,17 @@ export const ICProposalSelector: React.FC<ICProposalSelectorProps> = ({
       <div className="grid grid-cols-6 gap-2 mb-4">
         {items.map((item) => {
           const isSelected = selectedItems.includes(item.id);
-          const Icon = item.icon;
 
           return (
-            <button
+            <SelectionCard
               key={item.id}
+              id={item.id}
+              name={item.name}
+              placeholderEmoji={item.emoji}
+              placeholderBgColor={isSelected ? 'from-blue-100 to-cyan-100' : 'from-gray-100 to-gray-200'}
+              isSelected={isSelected}
               onClick={() => toggleItem(item.id)}
-              className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
-                isSelected
-                  ? 'border-blue-500 bg-blue-50'
-                  : 'border-gray-200 hover:border-blue-300'
-              }`}
-            >
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                isSelected ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-600'
-              }`}>
-                <Icon className="w-5 h-5" />
-              </div>
-              <span className={`text-sm font-medium ${
-                isSelected ? 'text-blue-700' : 'text-gray-700'
-              }`}>
-                {item.name}
-              </span>
-              {isSelected && (
-                <Check className="w-4 h-4 text-blue-500" />
-              )}
-            </button>
+            />
           );
         })}
       </div>

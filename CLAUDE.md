@@ -193,7 +193,7 @@
 **バッジ:**
 - 位置: `absolute top-1 left-1`
 - スタイル: `px-1.5 py-0.5 rounded text-[10px] font-bold`
-- 標準: `bg-emerald-500 text-white`
+- 標準: `bg-blue-500 text-white`
 - なし/不要: `bg-gray-500 text-white`
 - ※「オプション」バッジは表示しない（標準のみ表示）
 
@@ -202,7 +202,7 @@
 - スタイル: `bg-blue-500 rounded-full p-1` + `w-3 h-3` アイコン
 
 **価格表示:**
-- 0円 → `標準` (text-emerald-600)
+- 0円 → `標準` (text-blue-600)
 - 金額 → `formatPrice(price)` (text-gray-900)
 - ※「差額なし」「標準仕様」「¥0」等の表記ゆれは禁止
 

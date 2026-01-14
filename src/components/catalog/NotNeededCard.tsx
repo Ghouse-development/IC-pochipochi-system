@@ -70,7 +70,7 @@ const NotNeededCardComponent: React.FC<NotNeededCardProps> = ({
 
         {/* 価格 */}
         <div className="flex items-baseline gap-1 mt-1">
-          <span className="text-sm font-bold text-emerald-600">
+          <span className="text-sm font-bold text-blue-600">
             標準
           </span>
         </div>

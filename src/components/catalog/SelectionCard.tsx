@@ -94,7 +94,7 @@ export const SelectionCard: React.FC<SelectionCardProps> = ({
         {/* バッジ（標準のみ表示） */}
         {isStandard && (
           <div className="absolute top-1 left-1">
-            <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500 text-white">
+            <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-500 text-white">
               標準
             </span>
           </div>
@@ -117,7 +117,7 @@ export const SelectionCard: React.FC<SelectionCardProps> = ({
 
         {/* 価格・単位 */}
         <div className="flex items-baseline gap-1 mt-1">
-          <span className={`text-sm font-bold ${price === 0 || price === undefined ? 'text-emerald-600' : 'text-gray-900'}`}>
+          <span className={`text-sm font-bold ${price === 0 || price === undefined ? 'text-blue-600' : 'text-gray-900'}`}>
             {price === 0 || price === undefined ? '標準' : formatPrice(price)}
           </span>
           {unit && price !== 0 && price !== undefined && (

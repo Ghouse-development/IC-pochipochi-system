@@ -1416,12 +1416,12 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                     <span className="text-xs font-medium text-white/80">{decidedCount}/{totalCount}</span>
                     <div className="flex-1 h-1.5 bg-white/20 rounded-full overflow-hidden">
                       <div
-                        className={`h-full rounded-full transition-all duration-300 ${isComplete ? 'bg-emerald-400' : 'bg-white'}`}
+                        className={`h-full rounded-full transition-all duration-300 ${isComplete ? 'bg-blue-400' : 'bg-white'}`}
                         style={{ width: `${catProgressPercent}%` }}
                       />
                     </div>
                     {isComplete ? (
-                      <span className="text-xs font-bold text-emerald-300">完了</span>
+                      <span className="text-xs font-bold text-blue-300">完了</span>
                     ) : (
                       <span className="text-xs text-white/80">残{totalCount - decidedCount}</span>
                     )}
@@ -1492,7 +1492,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                     <button
                       onClick={goToNextStep}
                       aria-label="次のステップへ進む"
-                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-medium transition-colors"
+                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-xl font-medium transition-colors"
                     >
                       次のステップへ
                       <ChevronRight className="w-5 h-5" />
@@ -3010,7 +3010,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
             {isCurrentStepComplete ? (
               <button
                 onClick={goToNextStep}
-                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl font-bold shadow-lg"
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-xl font-bold shadow-lg"
               >
                 次のステップへ
                 <ChevronRight className="w-5 h-5" />
@@ -3018,7 +3018,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
             ) : isCurrentCategoryDecided ? (
               <button
                 onClick={goToNextCategory}
-                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-blue-500 to-emerald-500 text-white rounded-xl font-bold shadow-lg"
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-xl font-bold shadow-lg"
               >
                 次のカテゴリへ
                 <ChevronRight className="w-5 h-5" />

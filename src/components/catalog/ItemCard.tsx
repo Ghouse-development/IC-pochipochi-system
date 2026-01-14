@@ -154,7 +154,7 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
         {/* バッジ（標準のみ表示） */}
         {standard && (
           <div className="absolute top-1 left-1">
-            <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500 text-white">
+            <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-500 text-white">
               標準
             </span>
           </div>
@@ -177,7 +177,7 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
 
         {/* 価格・単位・選べるアイテム数 */}
         <div className="flex items-baseline gap-1 mt-1">
-          <span className={`text-sm font-bold ${price === 0 ? 'text-emerald-600' : 'text-gray-900'}`}>
+          <span className={`text-sm font-bold ${price === 0 ? 'text-blue-600' : 'text-gray-900'}`}>
             {price === 0 ? '標準' : formatPrice(price)}
           </span>
           {item.unit && (

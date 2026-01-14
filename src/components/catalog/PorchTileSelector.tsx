@@ -188,9 +188,18 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
         <div className="grid grid-cols-6 gap-2">
           {/* 標準を先に、オプションを後に表示 */}
           {[...standardTiles, ...optionTiles].map(tile => (
-            <TileButton
+            <SelectionCard
               key={tile.id}
-              tile={tile}
+              id={tile.id}
+              name={tile.name}
+              imageUrl={tile.imageUrl}
+              placeholderEmoji="🚶"
+              placeholderBgColor="from-gray-100 to-slate-100"
+              isStandard={tile.isStandard}
+              isOption={!tile.isStandard}
+              price={tile.isStandard ? 0 : tile.price}
+              unit="㎡"
+              variantCount={tile.colorVariants?.length}
               isSelected={selectedTile?.id === tile.id}
               onClick={() => handleTileSelect(tile)}
             />
@@ -319,77 +328,5 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
     </div>
   );
 };
-
-// タイルボタンコンポーネント（シンプル版）
-interface TileButtonProps {
-  tile: TileOption;
-  isSelected: boolean;
-  onClick: () => void;
-}
-
-const TileButton: React.FC<TileButtonProps> = ({ tile, isSelected, onClick }) => (
-  <button
-    onClick={onClick}
-    className={`relative bg-white rounded-lg text-left transition-all overflow-hidden ${
-      isSelected
-        ? 'border-2 border-blue-500 shadow-lg'
-        : 'border border-gray-200 hover:border-blue-300 hover:shadow-md'
-    }`}
-  >
-    {/* 画像エリア（正方形） */}
-    <div className="w-full aspect-square bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center relative overflow-hidden">
-      {tile.imageUrl ? (
-        <img
-          src={tile.imageUrl}
-          alt={tile.name}
-          className="w-full h-full object-cover"
-          onError={(e) => {
-            const target = e.target as HTMLImageElement;
-            target.style.display = 'none';
-          }}
-        />
-      ) : (
-        <div className="flex flex-col items-center justify-center text-gray-400">
-          <span className="text-2xl">🚶</span>
-          <span className="text-[10px] mt-1">画像準備中</span>
-        </div>
-      )}
-
-      {/* バッジ（標準のみ表示） */}
-      {tile.isStandard && (
-        <div className="absolute top-1 left-1">
-          <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500 text-white">
-            標準
-          </span>
-        </div>
-      )}
-
-      {/* 選択済みマーク */}
-      {isSelected && (
-        <div className="absolute top-1 right-1 bg-blue-500 rounded-full p-1">
-          <Check className="w-3 h-3 text-white" strokeWidth={3} />
-        </div>
-      )}
-    </div>
-
-    {/* 情報エリア - シンプル化 */}
-    <div className="p-2">
-      <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
-        {tile.name}
-      </h3>
-      <div className="flex items-baseline gap-1 mt-1">
-        <span className={`text-sm font-bold ${tile.isStandard ? 'text-emerald-600' : 'text-gray-900'}`}>
-          {tile.isStandard ? '標準' : `+¥${tile.price.toLocaleString()}`}
-        </span>
-        {!tile.isStandard && (
-          <span className="text-xs text-gray-500">/㎡</span>
-        )}
-      </div>
-      {tile.colorVariants && tile.colorVariants.length > 1 && (
-        <span className="text-[10px] text-gray-400">{tile.colorVariants.length}色から選択</span>
-      )}
-    </div>
-  </button>
-);
 
 export default PorchTileSelector;
