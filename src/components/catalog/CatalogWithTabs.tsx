@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { Search, ClipboardCheck, Check, Star, ChevronRight, ChevronLeft, Home, X, FileDown, HelpCircle, Eye, Flame } from 'lucide-react';
+import { Search, ClipboardCheck, Check, Star, ChevronRight, ChevronLeft, Home, X, FileDown, HelpCircle, Eye, Flame, Image as ImageIcon } from 'lucide-react';
 import { useToast } from '../common/Toast';
 import { useTimeout } from '../../hooks/useTimeout';
 import { useDebounce } from '../../hooks/useDebounce';
@@ -1810,8 +1810,11 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                         >
                           {/* 画像エリア（正方形） */}
                           <div className="aspect-square bg-gradient-to-br from-amber-50 to-orange-100 flex flex-col items-center justify-center">
-                            <span className="text-3xl">{categoryEmoji}</span>
-                            <span className="text-[10px] text-gray-400 mt-1">カテゴリ</span>
+                            <span className="text-2xl">{categoryEmoji}</span>
+                            <div className="mt-1 flex items-center gap-1 text-gray-400">
+                              <ImageIcon className="w-3 h-3" />
+                              <span className="text-[10px]">画像準備中</span>
+                            </div>
                           </div>
                           {/* 情報エリア */}
                           <div className="p-2">
@@ -1821,7 +1824,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                             <div className="flex items-baseline gap-1 mt-1">
                               <span className="text-sm font-bold text-gray-400">カテゴリ</span>
                             </div>
-                            <span className="text-[10px] text-blue-600">
+                            <span className="text-[10px] text-gray-400">
                               {itemCount > 0 ? `${itemCount}種類から選択` : '準備中'}
                             </span>
                           </div>
@@ -1907,8 +1910,11 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                         >
                           {/* 画像エリア（正方形） */}
                           <div className="aspect-square bg-gradient-to-br from-blue-50 to-cyan-100 flex flex-col items-center justify-center relative">
-                            <span className="text-3xl">{categoryEmoji}</span>
-                            <span className="text-[10px] text-gray-400 mt-1">必須</span>
+                            <span className="text-2xl">{categoryEmoji}</span>
+                            <div className="mt-1 flex items-center gap-1 text-gray-400">
+                              <ImageIcon className="w-3 h-3" />
+                              <span className="text-[10px]">画像準備中</span>
+                            </div>
                           </div>
                           {/* 情報エリア */}
                           <div className="p-2">
@@ -1918,7 +1924,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                             <div className="flex items-baseline gap-1 mt-1">
                               <span className="text-sm font-bold text-gray-400">必須</span>
                             </div>
-                            <span className="text-[10px] text-blue-600">
+                            <span className="text-[10px] text-gray-400">
                               {itemCount > 0 ? `${itemCount}種類から選択` : '準備中'}
                             </span>
                           </div>
@@ -1940,8 +1946,11 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                           >
                             {/* 画像エリア（正方形） */}
                             <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col items-center justify-center relative">
-                              <span className="text-3xl">🔧</span>
-                              <span className="text-[10px] text-gray-400 mt-1">オプション</span>
+                              <span className="text-2xl">🔧</span>
+                              <div className="mt-1 flex items-center gap-1 text-gray-400">
+                                <ImageIcon className="w-3 h-3" />
+                                <span className="text-[10px]">画像準備中</span>
+                              </div>
                             </div>
                             {/* 情報エリア */}
                             <div className="p-2">
@@ -1951,7 +1960,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                               <div className="flex items-baseline gap-1 mt-1">
                                 <span className="text-sm font-bold text-gray-400">オプション</span>
                               </div>
-                              <span className="text-[10px] text-blue-600">
+                              <span className="text-[10px] text-gray-400">
                                 {itemCount > 0 ? `${itemCount}種類から選択` : '準備中'}
                               </span>
                             </div>
@@ -1980,8 +1989,11 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                         >
                           {/* 画像エリア（正方形） */}
                           <div className="aspect-square bg-gradient-to-br from-amber-50 to-orange-100 flex flex-col items-center justify-center">
-                            <span className="text-3xl">{categoryEmoji}</span>
-                            <span className="text-[10px] text-gray-400 mt-1">カテゴリ</span>
+                            <span className="text-2xl">{categoryEmoji}</span>
+                            <div className="mt-1 flex items-center gap-1 text-gray-400">
+                              <ImageIcon className="w-3 h-3" />
+                              <span className="text-[10px]">画像準備中</span>
+                            </div>
                           </div>
                           {/* 情報エリア */}
                           <div className="p-2">
@@ -1991,7 +2003,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                             <div className="flex items-baseline gap-1 mt-1">
                               <span className="text-sm font-bold text-gray-400">カテゴリ</span>
                             </div>
-                            <span className="text-[10px] text-blue-600">
+                            <span className="text-[10px] text-gray-400">
                               {itemCount > 0 ? `${itemCount}種類から選択` : '準備中'}
                             </span>
                           </div>
@@ -2019,8 +2031,11 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                         >
                           {/* 画像エリア（正方形） */}
                           <div className="aspect-square bg-gradient-to-br from-amber-50 to-orange-100 flex flex-col items-center justify-center">
-                            <span className="text-3xl">{categoryEmoji}</span>
-                            <span className="text-[10px] text-gray-400 mt-1">カテゴリ</span>
+                            <span className="text-2xl">{categoryEmoji}</span>
+                            <div className="mt-1 flex items-center gap-1 text-gray-400">
+                              <ImageIcon className="w-3 h-3" />
+                              <span className="text-[10px]">画像準備中</span>
+                            </div>
                           </div>
                           {/* 情報エリア */}
                           <div className="p-2">
@@ -2030,7 +2045,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                             <div className="flex items-baseline gap-1 mt-1">
                               <span className="text-sm font-bold text-gray-400">カテゴリ</span>
                             </div>
-                            <span className="text-[10px] text-blue-600">
+                            <span className="text-[10px] text-gray-400">
                               {itemCount > 0 ? `${itemCount}種類から選択` : '準備中'}
                             </span>
                           </div>
@@ -2057,8 +2072,11 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                         >
                           {/* 画像エリア（正方形） */}
                           <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col items-center justify-center relative">
-                            <span className="text-3xl">🔧</span>
-                            <span className="text-[10px] text-gray-400 mt-1">カテゴリ</span>
+                            <span className="text-2xl">🔧</span>
+                            <div className="mt-1 flex items-center gap-1 text-gray-400">
+                              <ImageIcon className="w-3 h-3" />
+                              <span className="text-[10px]">画像準備中</span>
+                            </div>
                             {'optional' in type && type.optional && (
                               <span className="absolute top-1 left-1 text-[10px] px-1.5 py-0.5 bg-gray-500 text-white rounded font-bold">
                                 任意
@@ -2073,7 +2091,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                             <div className="flex items-baseline gap-1 mt-1">
                               <span className="text-sm font-bold text-gray-400">{'optional' in type && type.optional ? '任意' : 'カテゴリ'}</span>
                             </div>
-                            <span className="text-[10px] text-blue-600">
+                            <span className="text-[10px] text-gray-400">
                               {itemCount > 0 ? `${itemCount}種類から選択` : '準備中'}
                             </span>
                           </div>

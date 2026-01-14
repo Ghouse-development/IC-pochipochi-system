@@ -109,9 +109,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
       {/* 情報エリア */}
       <div className="p-2">
-        <h4 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
+        <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
           {product.name}
-        </h4>
+        </h3>
 
         {/* 価格・単位 */}
         <div className="flex items-baseline gap-1 mt-1">
