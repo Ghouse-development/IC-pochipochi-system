@@ -1146,16 +1146,10 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     }
   }, [removeItem, cartItems, toast, confirmRemoval]);
 
-  // 商品詳細モーダルを開く（URL付き）
+  // 商品詳細ページへ遷移
   const handleOpenDetail = useCallback((item: ItemWithDetails) => {
-    const product = convertToCatalogProduct(item);
-    setSelectedProductForDetail(product);
-    setIsDetailModalOpen(true);
-    // URLを更新（ブラウザ履歴に追加）- slugベースで
-    if (selectedCategorySlug) {
-      navigate(`/catalog/${activeTab}/${selectedCategorySlug}/${item.id}`);
-    }
-  }, [navigate, activeTab, selectedCategorySlug]);
+    navigate(`/item/${item.id}`);
+  }, [navigate]);
 
   const getPrice = (item: ItemWithDetails) => {
     return item.pricing?.find(p => p.product?.code === selectedPlanId)?.price || 0;
@@ -1220,17 +1214,13 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     return currentCat ? cartItems.some(item => item.product.categoryName === currentCat.name) : false;
   }, [categories, selectedCategoryId, cartItems]);
 
-  // URLの商品IDで詳細モーダルを自動的に開く
+  // URLの商品IDがある場合は詳細ページにリダイレクト
   useEffect(() => {
     if (urlProductId && items.length > 0) {
-      const item = items.find(i => i.id === urlProductId);
-      if (item) {
-        const product = convertToCatalogProduct(item);
-        setSelectedProductForDetail(product);
-        setIsDetailModalOpen(true);
-      }
+      // 詳細ページへリダイレクト
+      navigate(`/item/${urlProductId}`, { replace: true });
     }
-  }, [urlProductId, items]);
+  }, [urlProductId, items, navigate]);
 
   // モーダルを閉じる（URLから商品IDを削除）
   const handleCloseDetailModal = useCallback(() => {

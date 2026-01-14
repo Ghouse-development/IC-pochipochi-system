@@ -36,6 +36,7 @@ const ImageTestPage = lazy(() => import('./pages/ImageTestPage').then(m => ({ de
 const StaffDashboard = lazy(() => import('./pages/StaffDashboard').then(m => ({ default: m.StaffDashboard })));
 const CustomerPage = lazy(() => import('./pages/CustomerPage').then(m => ({ default: m.CustomerPage })));
 const CustomerLoginPage = lazy(() => import('./pages/CustomerLoginPage').then(m => ({ default: m.CustomerLoginPage })));
+const ItemDetailPage = lazy(() => import('./pages/ItemDetailPage').then(m => ({ default: m.ItemDetailPage })));
 
 // 管理者専用ルートガード - 管理者以外はアクセス不可（リダイレクトなし、404表示）
 const AdminRouteGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -202,6 +203,13 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
           <Route path="/catalog/:step" element={<CatalogWithTabs onCartClick={() => setIsCartOpen(true)} />} />
           <Route path="/catalog/:step/:categoryId" element={<CatalogWithTabs onCartClick={() => setIsCartOpen(true)} />} />
           <Route path="/catalog/:step/:categoryId/:productId" element={<CatalogWithTabs onCartClick={() => setIsCartOpen(true)} />} />
+
+          {/* アイテム詳細ページ */}
+          <Route path="/item/:itemId" element={
+            <Suspense fallback={<PageLoader />}>
+              <ItemDetailPage />
+            </Suspense>
+          } />
 
           {/* 管理画面 - Lazy loaded + AdminRouteGuard（管理者以外は404表示） */}
           <Route path="/admin" element={
