@@ -144,7 +144,7 @@ export const DevToolbar: React.FC<DevToolbarProps> = ({
                 onClick={() => handleViewportChange('responsive')}
                 className={`p-1.5 rounded-md transition-all ${
                   viewportMode === 'responsive'
-                    ? 'bg-teal-600 text-white'
+                    ? 'bg-blue-600 text-white'
                     : 'text-gray-400 hover:text-white hover:bg-gray-700'
                 }`}
                 title="レスポンシブ"
@@ -155,7 +155,7 @@ export const DevToolbar: React.FC<DevToolbarProps> = ({
                 onClick={() => handleViewportChange('desktop')}
                 className={`p-1.5 rounded-md transition-all ${
                   viewportMode === 'desktop'
-                    ? 'bg-teal-600 text-white'
+                    ? 'bg-blue-600 text-white'
                     : 'text-gray-400 hover:text-white hover:bg-gray-700'
                 }`}
                 title="デスクトップ (1280px)"
@@ -166,7 +166,7 @@ export const DevToolbar: React.FC<DevToolbarProps> = ({
                 onClick={() => handleViewportChange('tablet')}
                 className={`p-1.5 rounded-md transition-all ${
                   viewportMode === 'tablet'
-                    ? 'bg-teal-600 text-white'
+                    ? 'bg-blue-600 text-white'
                     : 'text-gray-400 hover:text-white hover:bg-gray-700'
                 }`}
                 title="タブレット (768px)"
@@ -177,7 +177,7 @@ export const DevToolbar: React.FC<DevToolbarProps> = ({
                 onClick={() => handleViewportChange('mobile')}
                 className={`p-1.5 rounded-md transition-all ${
                   viewportMode === 'mobile'
-                    ? 'bg-teal-600 text-white'
+                    ? 'bg-blue-600 text-white'
                     : 'text-gray-400 hover:text-white hover:bg-gray-700'
                 }`}
                 title="モバイル (375px)"

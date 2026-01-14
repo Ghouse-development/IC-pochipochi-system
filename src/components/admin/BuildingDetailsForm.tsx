@@ -201,7 +201,7 @@ export function BuildingDetailsForm({ projectId, onUpdate }: BuildingDetailsForm
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <RefreshCw className="w-8 h-8 animate-spin text-teal-600" />
+        <RefreshCw className="w-8 h-8 animate-spin text-blue-600" />
       </div>
     );
   }
@@ -222,7 +222,7 @@ export function BuildingDetailsForm({ projectId, onUpdate }: BuildingDetailsForm
         <button
           onClick={handleSave}
           disabled={isSaving}
-          className="flex items-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50"
+          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
         >
           {isSaving ? (
             <RefreshCw className="w-4 h-4 animate-spin" />
@@ -248,7 +248,7 @@ export function BuildingDetailsForm({ projectId, onUpdate }: BuildingDetailsForm
           className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50"
         >
           <div className="flex items-center gap-3">
-            <Home className="w-5 h-5 text-teal-600" />
+            <Home className="w-5 h-5 text-blue-600" />
             <span className="font-semibold text-gray-900">基本情報</span>
           </div>
           <ChevronDown
@@ -267,7 +267,7 @@ export function BuildingDetailsForm({ projectId, onUpdate }: BuildingDetailsForm
                 type="text"
                 value={formData.construction_name}
                 onChange={(e) => updateField('construction_name', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 placeholder="例: 山田様邸新築工事"
               />
             </div>
@@ -278,7 +278,7 @@ export function BuildingDetailsForm({ projectId, onUpdate }: BuildingDetailsForm
               <select
                 value={formData.building_standard}
                 onChange={(e) => updateField('building_standard', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               >
                 {BUILDING_STANDARDS.map((opt) => (
                   <option key={opt.value} value={opt.value}>
@@ -298,7 +298,7 @@ export function BuildingDetailsForm({ projectId, onUpdate }: BuildingDetailsForm
           className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50"
         >
           <div className="flex items-center gap-3">
-            <MapPin className="w-5 h-5 text-teal-600" />
+            <MapPin className="w-5 h-5 text-blue-600" />
             <span className="font-semibold text-gray-900">建設地情報</span>
           </div>
           <ChevronDown
@@ -317,7 +317,7 @@ export function BuildingDetailsForm({ projectId, onUpdate }: BuildingDetailsForm
                 type="text"
                 value={formData.construction_address}
                 onChange={(e) => updateField('construction_address', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 placeholder="例: 大阪府大阪市北区..."
               />
             </div>
@@ -329,7 +329,7 @@ export function BuildingDetailsForm({ projectId, onUpdate }: BuildingDetailsForm
                 <select
                   value={formData.region_category}
                   onChange={(e) => updateField('region_category', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 >
                   {REGION_CATEGORIES.map((opt) => (
                     <option key={opt.value} value={opt.value}>
@@ -345,7 +345,7 @@ export function BuildingDetailsForm({ projectId, onUpdate }: BuildingDetailsForm
                 <select
                   value={formData.fire_resistance}
                   onChange={(e) => updateField('fire_resistance', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 >
                   {FIRE_RESISTANCE_OPTIONS.map((opt) => (
                     <option key={opt.value} value={opt.value}>
@@ -366,7 +366,7 @@ export function BuildingDetailsForm({ projectId, onUpdate }: BuildingDetailsForm
           className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50"
         >
           <div className="flex items-center gap-3">
-            <Layers className="w-5 h-5 text-teal-600" />
+            <Layers className="w-5 h-5 text-blue-600" />
             <span className="font-semibold text-gray-900">建物構造</span>
           </div>
           <ChevronDown
@@ -385,7 +385,7 @@ export function BuildingDetailsForm({ projectId, onUpdate }: BuildingDetailsForm
                 <select
                   value={formData.structure}
                   onChange={(e) => updateField('structure', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 >
                   {STRUCTURE_OPTIONS.map((opt) => (
                     <option key={opt.value} value={opt.value}>
@@ -401,7 +401,7 @@ export function BuildingDetailsForm({ projectId, onUpdate }: BuildingDetailsForm
                 <select
                   value={formData.construction_method}
                   onChange={(e) => updateField('construction_method', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 >
                   {CONSTRUCTION_METHODS.map((opt) => (
                     <option key={opt.value} value={opt.value}>
@@ -419,7 +419,7 @@ export function BuildingDetailsForm({ projectId, onUpdate }: BuildingDetailsForm
                 <select
                   value={formData.floors}
                   onChange={(e) => updateField('floors', Number(e.target.value))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 >
                   <option value={1}>1階建て</option>
                   <option value={2}>2階建て</option>
@@ -436,7 +436,7 @@ export function BuildingDetailsForm({ projectId, onUpdate }: BuildingDetailsForm
                   onChange={(e) =>
                     updateField('floor_area', e.target.value ? Number(e.target.value) : null)
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   placeholder="例: 120"
                   step="0.01"
                   min="10"
@@ -453,7 +453,7 @@ export function BuildingDetailsForm({ projectId, onUpdate }: BuildingDetailsForm
                   onChange={(e) =>
                     updateField('ceiling_height', e.target.value ? Number(e.target.value) : null)
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   placeholder="例: 2400"
                   step="10"
                   min="2000"
@@ -463,7 +463,7 @@ export function BuildingDetailsForm({ projectId, onUpdate }: BuildingDetailsForm
             </div>
             {formData.floor_area && (
               <div className="bg-gray-50 rounded-lg p-4 flex items-start gap-3">
-                <Info className="w-5 h-5 text-teal-600 flex-shrink-0 mt-0.5" />
+                <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
                 <div className="text-sm text-gray-600">
                   <p>
                     延床面積: <strong>{formData.floor_area}㎡</strong>（約

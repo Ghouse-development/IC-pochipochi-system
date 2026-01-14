@@ -135,7 +135,7 @@ export const ReportExportModal: React.FC<ReportExportModalProps> = ({
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
         <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto pointer-events-auto">
           {/* ヘッダー */}
-          <div className="bg-gradient-to-r from-teal-600 to-teal-500 text-white p-6 rounded-t-2xl">
+          <div className="bg-gradient-to-r from-blue-600 to-blue-500 text-white p-6 rounded-t-2xl">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Download className="w-6 h-6" />
@@ -164,13 +164,13 @@ export const ReportExportModal: React.FC<ReportExportModalProps> = ({
                   onClick={() => setReportType('estimate')}
                   className={`p-4 rounded-xl border-2 transition-all ${
                     reportType === 'estimate'
-                      ? 'border-teal-500 bg-teal-50'
-                      : 'border-gray-200 hover:border-teal-300'
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-200 hover:border-blue-300'
                   }`}
                 >
                   <div className="flex items-center gap-3">
                     <div className={`p-2 rounded-lg ${
-                      reportType === 'estimate' ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-500'
+                      reportType === 'estimate' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-500'
                     }`}>
                       <DollarSign className="w-5 h-5" />
                     </div>
@@ -184,13 +184,13 @@ export const ReportExportModal: React.FC<ReportExportModalProps> = ({
                   onClick={() => setReportType('specification')}
                   className={`p-4 rounded-xl border-2 transition-all ${
                     reportType === 'specification'
-                      ? 'border-teal-500 bg-teal-50'
-                      : 'border-gray-200 hover:border-teal-300'
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-200 hover:border-blue-300'
                   }`}
                 >
                   <div className="flex items-center gap-3">
                     <div className={`p-2 rounded-lg ${
-                      reportType === 'specification' ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-500'
+                      reportType === 'specification' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-500'
                     }`}>
                       <ClipboardList className="w-5 h-5" />
                     </div>
@@ -258,7 +258,7 @@ export const ReportExportModal: React.FC<ReportExportModalProps> = ({
               </div>
               <div className="mt-3 pt-3 border-t border-gray-200 flex items-center justify-between">
                 <span className="font-medium text-gray-900">オプション合計</span>
-                <span className="text-lg font-bold text-teal-600">{formatPrice(grandTotal)}</span>
+                <span className="text-lg font-bold text-blue-600">{formatPrice(grandTotal)}</span>
               </div>
               <p className="text-xs text-gray-500 mt-2">
                 ※ {reportType === 'estimate' ? '0円のアイテムは表示されません' : '全てのアイテムが表示されます'}
@@ -269,7 +269,7 @@ export const ReportExportModal: React.FC<ReportExportModalProps> = ({
             <button
               onClick={handleExport}
               disabled={isExporting || filteredItems.length === 0}
-              className="w-full py-4 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-xl font-bold text-lg hover:from-teal-600 hover:to-teal-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl font-bold text-lg hover:from-blue-600 hover:to-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {isExporting ? (
                 <>

@@ -136,7 +136,7 @@ export const Preview3D: React.FC<Preview3DProps> = ({
       {/* ヘッダー */}
       <div className="flex items-center justify-between p-4 border-b border-gray-700">
         <div className="flex items-center gap-2">
-          <Box className="w-5 h-5 text-teal-400" />
+          <Box className="w-5 h-5 text-blue-400" />
           <h3 className="text-lg font-semibold text-white">
             3Dプレビュー - {roomLabels[roomType]}
           </h3>
@@ -170,7 +170,7 @@ export const Preview3D: React.FC<Preview3DProps> = ({
             onClick={() => setViewAngle(angle.id as typeof viewAngle)}
             className={`px-3 py-1 rounded text-sm transition-colors ${
               viewAngle === angle.id
-                ? 'bg-teal-500 text-white'
+                ? 'bg-blue-500 text-white'
                 : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
             }`}
           >

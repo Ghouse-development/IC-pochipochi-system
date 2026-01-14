@@ -62,9 +62,9 @@ export const SelectionProgress: React.FC<SelectionProgressProps> = ({
                 disabled={status === 'locked'}
                 className={`flex items-center gap-2 px-3 py-2 rounded-full transition-all ${
                   isActive
-                    ? 'bg-teal-600 text-white shadow-lg scale-105'
+                    ? 'bg-blue-600 text-white shadow-lg scale-105'
                     : status === 'completed'
-                    ? 'bg-teal-100 text-teal-800 hover:bg-teal-200'
+                    ? 'bg-blue-100 text-blue-800 hover:bg-blue-200'
                     : status === 'locked'
                     ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -73,13 +73,13 @@ export const SelectionProgress: React.FC<SelectionProgressProps> = ({
                 <span className="text-lg">{step.icon}</span>
                 <span className="hidden sm:inline font-medium text-sm">{step.label}</span>
                 {status === 'completed' && !isActive && (
-                  <Check className="w-4 h-4 text-teal-600" />
+                  <Check className="w-4 h-4 text-blue-600" />
                 )}
               </button>
 
               {index < STEPS.length - 1 && (
                 <ChevronRight className={`w-5 h-5 flex-shrink-0 ${
-                  isPast ? 'text-teal-400' : 'text-gray-300'
+                  isPast ? 'text-blue-400' : 'text-gray-300'
                 }`} />
               )}
             </React.Fragment>
@@ -93,11 +93,11 @@ export const SelectionProgress: React.FC<SelectionProgressProps> = ({
           <span>選択済み: {items.length}件</span>
           <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-teal-400 to-teal-600 transition-all duration-500"
+              className="h-full bg-gradient-to-r from-blue-400 to-blue-600 transition-all duration-500"
               style={{ width: `${Math.min(100, (items.length / 15) * 100)}%` }}
             />
           </div>
-          <span className="text-teal-600 font-medium">
+          <span className="text-blue-600 font-medium">
             {items.length >= 15 ? '選択完了!' : `あと${15 - items.length}件`}
           </span>
         </div>

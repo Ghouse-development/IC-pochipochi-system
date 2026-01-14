@@ -16,7 +16,7 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
     id: 'welcome',
     title: 'IC-pochipochiシステムへようこそ',
     description: '住宅の外装・内装・水廻り設備を簡単に選択できるシステムです。お客様との打ち合わせで商品を選び、見積書や仕様書を作成できます。',
-    icon: <Zap className="w-8 h-8 text-teal-500" />,
+    icon: <Zap className="w-8 h-8 text-blue-500" />,
     tips: [
       'このシステムで商品選択から見積作成まで一貫して行えます',
       'お客様と一緒に画面を見ながら選択できます',
@@ -89,7 +89,7 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
     id: 'complete',
     title: 'ガイド完了',
     description: 'これで基本的な使い方は完了です。不明な点があればヘルプをご確認いただくか、管理者にお問い合わせください。',
-    icon: <Target className="w-8 h-8 text-teal-500" />,
+    icon: <Target className="w-8 h-8 text-blue-500" />,
     tips: [
       'このガイドはいつでも再表示できます',
       '実際に操作しながら覚えていきましょう',
@@ -159,14 +159,14 @@ export const OnboardingGuide: React.FC<OnboardingGuideProps> = ({
       {/* メインカード */}
       <div className="relative bg-white rounded-2xl shadow-2xl max-w-lg w-full mx-4 overflow-hidden">
         {/* ヘッダー */}
-        <div className="bg-gradient-to-r from-teal-500 to-teal-600 text-white p-6">
+        <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6">
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-4">
               <div className="p-3 bg-white/20 rounded-xl">
                 {step.icon}
               </div>
               <div>
-                <p className="text-teal-100 text-sm">
+                <p className="text-blue-100 text-sm">
                   ステップ {currentStep + 1} / {ONBOARDING_STEPS.length}
                 </p>
                 <h2 className="text-xl font-bold">{step.title}</h2>
@@ -184,7 +184,7 @@ export const OnboardingGuide: React.FC<OnboardingGuideProps> = ({
         {/* プログレスバー */}
         <div className="h-1 bg-gray-200">
           <div
-            className="h-full bg-teal-500 transition-all duration-300"
+            className="h-full bg-blue-500 transition-all duration-300"
             style={{ width: `${((currentStep + 1) / ONBOARDING_STEPS.length) * 100}%` }}
           />
         </div>
@@ -200,7 +200,7 @@ export const OnboardingGuide: React.FC<OnboardingGuideProps> = ({
                 key={`${step.id}-tip-${tipIndex}`}
                 className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg"
               >
-                <CheckCircle className="w-5 h-5 text-teal-500 flex-shrink-0 mt-0.5" />
+                <CheckCircle className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
                 <span className="text-sm text-gray-700">{tip}</span>
               </div>
             ))}
@@ -247,9 +247,9 @@ export const OnboardingGuide: React.FC<OnboardingGuideProps> = ({
               onClick={() => setCurrentStep(index)}
               className={`w-2 h-2 rounded-full transition-all ${
                 index === currentStep
-                  ? 'bg-teal-500 w-6'
+                  ? 'bg-blue-500 w-6'
                   : completedSteps.includes(ONBOARDING_STEPS[index].id)
-                  ? 'bg-teal-300'
+                  ? 'bg-blue-300'
                   : 'bg-gray-300'
               }`}
             />
@@ -265,7 +265,7 @@ export const HelpButton: React.FC<{ onClick: () => void }> = ({ onClick }) => {
   return (
     <button
       onClick={onClick}
-      className="fixed bottom-20 right-4 z-40 bg-teal-500 text-white p-3 rounded-full shadow-lg hover:bg-teal-600 transition-colors group"
+      className="fixed bottom-20 right-4 z-40 bg-blue-500 text-white p-3 rounded-full shadow-lg hover:bg-blue-600 transition-colors group"
       title="ヘルプ・ガイドを表示"
     >
       <HelpCircle className="w-6 h-6" />

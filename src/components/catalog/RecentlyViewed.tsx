@@ -76,7 +76,7 @@ export const RecentlyViewed: React.FC<RecentlyViewedProps> = ({
                 {item.categoryName}
               </p>
               {item.price > 0 && (
-                <p className="text-xs text-teal-600 font-medium">
+                <p className="text-xs text-blue-600 font-medium">
                   {formatPrice(item.price)}
                 </p>
               )}

@@ -100,7 +100,7 @@ export const BeginnerGuide: React.FC<BeginnerGuideProps> = ({ onComplete, isOpen
     <div className="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 animate-fade-in">
       <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden">
         {/* ヘッダー */}
-        <div className="bg-gradient-to-r from-teal-500 to-emerald-500 p-4 text-white">
+        <div className="bg-gradient-to-r from-blue-500 to-emerald-500 p-4 text-white">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="text-2xl">👋</span>
@@ -130,7 +130,7 @@ export const BeginnerGuide: React.FC<BeginnerGuideProps> = ({ onComplete, isOpen
         <div className="p-6">
           {/* アイコン */}
           <div className="flex justify-center mb-4">
-            <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center text-teal-600">
+            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
               {step.icon}
             </div>
           </div>
@@ -178,7 +178,7 @@ export const BeginnerGuide: React.FC<BeginnerGuideProps> = ({ onComplete, isOpen
 
           <button
             onClick={handleNext}
-            className="flex items-center gap-1 px-6 py-2 bg-teal-500 hover:bg-teal-600 text-white rounded-lg font-medium transition-colors"
+            className="flex items-center gap-1 px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors"
           >
             {currentStep === GUIDE_STEPS.length - 1 ? '始める' : '次へ'}
             <ChevronRight className="w-4 h-4" />

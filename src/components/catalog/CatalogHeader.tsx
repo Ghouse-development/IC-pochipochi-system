@@ -35,7 +35,7 @@ export const CatalogHeader: React.FC<CatalogHeaderProps> = ({
   const isComplete = decidedCount === totalCount && totalCount > 0;
 
   return (
-    <div className="bg-teal-600 text-white shadow-lg">
+    <div className="bg-blue-600 text-white shadow-lg">
       {/* ステップナビゲーション */}
       <div className="px-4 py-2">
         <div className="flex items-center justify-between">
@@ -53,16 +53,16 @@ export const CatalogHeader: React.FC<CatalogHeaderProps> = ({
                     title={step.description}
                     className={`group relative flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all duration-200 ${
                       isActive
-                        ? 'bg-white text-teal-600 shadow-md'
+                        ? 'bg-white text-blue-600 shadow-md'
                         : 'bg-white/20 hover:bg-white/30'
                     }`}
                   >
-                    <Icon className={`w-4 h-4 ${isActive ? 'text-teal-500' : ''}`} />
+                    <Icon className={`w-4 h-4 ${isActive ? 'text-blue-500' : ''}`} />
                     <span className="hidden sm:inline text-sm font-medium">{step.label}</span>
                     <span className="sm:hidden text-sm">{step.emoji}</span>
                     {stepCount > 0 && (
                       <span className={`absolute -top-1 -right-1 w-4 h-4 flex items-center justify-center rounded-full text-[10px] font-bold ${
-                        isActive ? 'bg-teal-500 text-white' : 'bg-white text-teal-600'
+                        isActive ? 'bg-blue-500 text-white' : 'bg-white text-blue-600'
                       }`}>
                         {stepCount}
                       </span>

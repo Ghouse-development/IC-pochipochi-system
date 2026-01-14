@@ -88,7 +88,7 @@ export const CustomerHeader: React.FC<{
         <div className="flex items-center justify-between">
           {/* ロゴ・タイトル */}
           <div className="flex items-center gap-4">
-            <div className="w-10 h-10 bg-teal-500 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-lg">G</span>
             </div>
             <div>
@@ -106,7 +106,7 @@ export const CustomerHeader: React.FC<{
           {/* カートボタン */}
           <button
             onClick={onCartClick}
-            className="relative flex items-center gap-2 px-6 py-3 bg-teal-500 text-white rounded-xl hover:bg-teal-600 transition-colors shadow-lg"
+            className="relative flex items-center gap-2 px-6 py-3 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-colors shadow-lg"
           >
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -131,7 +131,7 @@ export const CustomerWelcomeBanner: React.FC = () => {
   const { customerName } = useCustomerMode();
 
   return (
-    <div className="bg-gradient-to-r from-teal-500 to-teal-600 text-white py-6 px-4">
+    <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white py-6 px-4">
       <div className="max-w-4xl mx-auto text-center">
         <h2 className="text-2xl font-bold mb-2">
           {customerName ? `${customerName}様、` : ''}ようこそ！

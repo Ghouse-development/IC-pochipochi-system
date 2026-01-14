@@ -394,7 +394,7 @@ export function CsvImport({ onImportComplete, mode = 'preview' }: CsvImportProps
         <h2 className="text-lg font-semibold">CSVデータインポート</h2>
         <button
           onClick={downloadTemplate}
-          className="flex items-center gap-2 text-sm text-teal-600 hover:text-teal-700"
+          className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700"
         >
           <Download className="w-4 h-4" />
           テンプレートをダウンロード
@@ -404,7 +404,7 @@ export function CsvImport({ onImportComplete, mode = 'preview' }: CsvImportProps
       {!parsedData ? (
         <div
           onClick={handleClick}
-          className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-teal-400 transition-colors cursor-pointer"
+          className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-400 transition-colors cursor-pointer"
         >
           <input
             ref={fileInputRef}
@@ -424,7 +424,7 @@ export function CsvImport({ onImportComplete, mode = 'preview' }: CsvImportProps
             </div>
 
             {isUploading && (
-              <div className="flex items-center gap-2 text-sm text-teal-600">
+              <div className="flex items-center gap-2 text-sm text-blue-600">
                 <Loader2 className="w-4 h-4 animate-spin" />
                 処理中...
               </div>
@@ -436,7 +436,7 @@ export function CsvImport({ onImportComplete, mode = 'preview' }: CsvImportProps
           {/* File info */}
           <div className="flex items-center justify-between bg-gray-50 p-4 rounded-lg">
             <div className="flex items-center gap-3">
-              <FileText className="w-5 h-5 text-teal-600" />
+              <FileText className="w-5 h-5 text-blue-600" />
               <div>
                 <p className="font-medium text-gray-900">{fileName}</p>
                 <p className="text-sm text-gray-500">{parsedData.length}件のデータ</p>
@@ -507,7 +507,7 @@ export function CsvImport({ onImportComplete, mode = 'preview' }: CsvImportProps
               </div>
               <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-teal-500 transition-all"
+                  className="h-full bg-blue-500 transition-all"
                   style={{ width: `${(progress.processed / progress.total) * 100}%` }}
                 />
               </div>
@@ -552,7 +552,7 @@ export function CsvImport({ onImportComplete, mode = 'preview' }: CsvImportProps
               <button
                 onClick={handleImportToDatabase}
                 disabled={isImporting}
-                className="flex items-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50"
+                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
               >
                 {isImporting ? (
                   <>

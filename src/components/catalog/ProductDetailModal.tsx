@@ -249,7 +249,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
           {/* ヘッダー（固定） */}
           <div className="flex items-center justify-between p-4 border-b border-gray-100 bg-white">
             <div className="flex-1 min-w-0">
-              <p className="text-xs text-teal-600 font-medium">{product.categoryName}</p>
+              <p className="text-xs text-blue-600 font-medium">{product.categoryName}</p>
               <h2 className="text-lg font-bold text-gray-900 truncate">{product.name}</h2>
             </div>
             <Dialog.Close className="p-2 hover:bg-gray-100:bg-gray-700 rounded-full ml-2 flex-shrink-0">
@@ -299,7 +299,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
               </div>
 
               {/* 価格 */}
-              <div className="bg-gradient-to-r from-teal-50 to-emerald-50 rounded-xl p-4">
+              <div className="bg-gradient-to-r from-blue-50 to-emerald-50 rounded-xl p-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs text-gray-500 mb-1">単価（税別）</p>
@@ -348,7 +348,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                           className={cn(
                             'flex items-center gap-2 p-3 rounded-xl border-2 transition-all text-left relative',
                             isSelected
-                              ? 'border-teal-500 bg-teal-50 shadow-md'
+                              ? 'border-blue-500 bg-blue-50 shadow-md'
                               : isPrimaryRecommended
                               ? 'border-amber-400 bg-amber-50 hover:border-amber-500'
                               : isRecommended
@@ -368,12 +368,12 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                           />
                           <span className={cn(
                             'text-sm truncate',
-                            isSelected ? 'font-medium text-teal-700' : 'text-gray-700'
+                            isSelected ? 'font-medium text-blue-700' : 'text-gray-700'
                           )}>
                             {v.color}
                           </span>
                           {isSelected && (
-                            <Check className="w-4 h-4 text-teal-500 ml-auto flex-shrink-0" />
+                            <Check className="w-4 h-4 text-blue-500 ml-auto flex-shrink-0" />
                           )}
                         </button>
                       );

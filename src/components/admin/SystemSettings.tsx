@@ -73,7 +73,7 @@ export function SystemSettings() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <RefreshCw className="w-8 h-8 animate-spin text-teal-600" />
+        <RefreshCw className="w-8 h-8 animate-spin text-blue-600" />
       </div>
     );
   }
@@ -116,7 +116,7 @@ export function SystemSettings() {
               type="text"
               value={(editedSettings.company_info?.name as string) || ''}
               onChange={(e) => updateSetting('company_info', 'name', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <div>
@@ -125,7 +125,7 @@ export function SystemSettings() {
               type="text"
               value={(editedSettings.company_info?.phone as string) || ''}
               onChange={(e) => updateSetting('company_info', 'phone', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <div>
@@ -134,7 +134,7 @@ export function SystemSettings() {
               type="email"
               value={(editedSettings.company_info?.email as string) || ''}
               onChange={(e) => updateSetting('company_info', 'email', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <div>
@@ -143,7 +143,7 @@ export function SystemSettings() {
               type="text"
               value={(editedSettings.company_info?.logo_url as string) || ''}
               onChange={(e) => updateSetting('company_info', 'logo_url', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               placeholder="https://..."
             />
           </div>
@@ -153,7 +153,7 @@ export function SystemSettings() {
               type="text"
               value={(editedSettings.company_info?.address as string) || ''}
               onChange={(e) => updateSetting('company_info', 'address', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </div>
@@ -161,7 +161,7 @@ export function SystemSettings() {
           <button
             onClick={() => handleSave('company_info')}
             disabled={isSaving}
-            className="flex items-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
           >
             <Save className="w-4 h-4" />
             保存
@@ -181,7 +181,7 @@ export function SystemSettings() {
             type="number"
             value={(editedSettings.tax_rate?.rate as number) || 10}
             onChange={(e) => updateSetting('tax_rate', 'rate', Number(e.target.value))}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             min="0"
             max="100"
           />
@@ -190,7 +190,7 @@ export function SystemSettings() {
           <button
             onClick={() => handleSave('tax_rate')}
             disabled={isSaving}
-            className="flex items-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
           >
             <Save className="w-4 h-4" />
             保存
@@ -211,7 +211,7 @@ export function SystemSettings() {
               type="number"
               value={(editedSettings.porch_standard_size?.width as number) || 1.8}
               onChange={(e) => updateSetting('porch_standard_size', 'width', Number(e.target.value))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               step="0.1"
               min="0"
             />
@@ -222,7 +222,7 @@ export function SystemSettings() {
               type="number"
               value={(editedSettings.porch_standard_size?.height as number) || 1.8}
               onChange={(e) => updateSetting('porch_standard_size', 'height', Number(e.target.value))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               step="0.1"
               min="0"
             />
@@ -232,7 +232,7 @@ export function SystemSettings() {
           <button
             onClick={() => handleSave('porch_standard_size')}
             disabled={isSaving}
-            className="flex items-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
           >
             <Save className="w-4 h-4" />
             保存
@@ -253,7 +253,7 @@ export function SystemSettings() {
               type="number"
               value={(editedSettings.window_standard_count?.under_35 as number) || 10}
               onChange={(e) => updateSetting('window_standard_count', 'under_35', Number(e.target.value))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               min="0"
             />
           </div>
@@ -263,7 +263,7 @@ export function SystemSettings() {
               type="number"
               value={(editedSettings.window_standard_count?.['35_40'] as number) || 11}
               onChange={(e) => updateSetting('window_standard_count', '35_40', Number(e.target.value))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               min="0"
             />
           </div>
@@ -273,7 +273,7 @@ export function SystemSettings() {
               type="number"
               value={(editedSettings.window_standard_count?.['40_45'] as number) || 12}
               onChange={(e) => updateSetting('window_standard_count', '40_45', Number(e.target.value))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               min="0"
             />
           </div>
@@ -283,7 +283,7 @@ export function SystemSettings() {
               type="number"
               value={(editedSettings.window_standard_count?.['45_50'] as number) || 13}
               onChange={(e) => updateSetting('window_standard_count', '45_50', Number(e.target.value))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               min="0"
             />
           </div>
@@ -293,7 +293,7 @@ export function SystemSettings() {
               type="number"
               value={(editedSettings.window_standard_count?.over_50 as number) || 14}
               onChange={(e) => updateSetting('window_standard_count', 'over_50', Number(e.target.value))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               min="0"
             />
           </div>
@@ -302,7 +302,7 @@ export function SystemSettings() {
           <button
             onClick={() => handleSave('window_standard_count')}
             disabled={isSaving}
-            className="flex items-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
           >
             <Save className="w-4 h-4" />
             保存
@@ -322,7 +322,7 @@ export function SystemSettings() {
             id="tutorial-enabled"
             checked={(editedSettings.tutorial_enabled?.enabled as boolean) ?? true}
             onChange={(e) => updateSetting('tutorial_enabled', 'enabled', e.target.checked)}
-            className="w-5 h-5 text-teal-600 border-gray-300 rounded focus:ring-teal-500"
+            className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
           />
           <label htmlFor="tutorial-enabled" className="text-gray-700">
             新規ユーザーにチュートリアルを表示する
@@ -332,7 +332,7 @@ export function SystemSettings() {
           <button
             onClick={() => handleSave('tutorial_enabled')}
             disabled={isSaving}
-            className="flex items-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
           >
             <Save className="w-4 h-4" />
             保存
@@ -352,7 +352,7 @@ export function SystemSettings() {
             type="text"
             value={(editedSettings.watermark_text?.text as string) || 'DRAFT'}
             onChange={(e) => updateSetting('watermark_text', 'text', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             placeholder="例: DRAFT, 検討中"
           />
         </div>
@@ -360,7 +360,7 @@ export function SystemSettings() {
           <button
             onClick={() => handleSave('watermark_text')}
             disabled={isSaving}
-            className="flex items-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
           >
             <Save className="w-4 h-4" />
             保存
@@ -381,7 +381,7 @@ export function SystemSettings() {
               id="email-enabled"
               checked={(editedSettings.email_notification?.enabled as boolean) ?? false}
               onChange={(e) => updateSetting('email_notification', 'enabled', e.target.checked)}
-              className="w-5 h-5 text-teal-600 border-gray-300 rounded focus:ring-teal-500"
+              className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
             />
             <label htmlFor="email-enabled" className="text-gray-700">
               メール通知を有効にする
@@ -396,7 +396,7 @@ export function SystemSettings() {
                 <select
                   value={(editedSettings.email_notification?.provider as string) || ''}
                   onChange={(e) => updateSetting('email_notification', 'provider', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="">選択してください</option>
                   <option value="sendgrid">SendGrid</option>
@@ -411,7 +411,7 @@ export function SystemSettings() {
                   type="password"
                   value={(editedSettings.email_notification?.api_key as string) || ''}
                   onChange={(e) => updateSetting('email_notification', 'api_key', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   placeholder="••••••••"
                 />
               </div>
@@ -422,7 +422,7 @@ export function SystemSettings() {
           <button
             onClick={() => handleSave('email_notification')}
             disabled={isSaving}
-            className="flex items-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
           >
             <Save className="w-4 h-4" />
             保存
@@ -448,7 +448,7 @@ function SettingCard({
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
       <div className="flex items-start gap-4 mb-4">
-        <div className="p-2 bg-teal-50 text-teal-600 rounded-lg">{icon}</div>
+        <div className="p-2 bg-blue-50 text-blue-600 rounded-lg">{icon}</div>
         <div>
           <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
           <p className="text-sm text-gray-600">{description}</p>

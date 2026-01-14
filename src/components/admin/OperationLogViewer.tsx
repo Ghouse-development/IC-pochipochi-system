@@ -101,7 +101,7 @@ export const OperationLogViewer: React.FC = () => {
       <div className="border-b border-gray-200 p-4">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <Activity className="w-5 h-5 text-teal-600" />
+            <Activity className="w-5 h-5 text-blue-600" />
             <h2 className="text-lg font-semibold text-gray-900">操作ログ</h2>
             <span className="text-sm text-gray-500">
               （本日: {todayCount}件）

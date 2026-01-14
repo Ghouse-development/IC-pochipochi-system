@@ -246,7 +246,7 @@ export function UserManager({ onBack }: UserManagerProps) {
           </div>
           <button
             onClick={() => setIsCreating(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
           >
             <Plus className="w-4 h-4" />
             新規ユーザー
@@ -302,14 +302,14 @@ export function UserManager({ onBack }: UserManagerProps) {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="名前・メール・電話で検索..."
-              className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+              className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </div>
         <select
           value={filterRole}
           onChange={(e) => setFilterRole(e.target.value as UserRole | 'all')}
-          className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+          className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="all">すべての権限</option>
           {ROLE_OPTIONS.map(role => (
@@ -319,7 +319,7 @@ export function UserManager({ onBack }: UserManagerProps) {
         <select
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value as 'all' | 'active' | 'inactive')}
-          className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+          className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="all">すべてのステータス</option>
           <option value="active">アクティブ</option>
@@ -338,7 +338,7 @@ export function UserManager({ onBack }: UserManagerProps) {
       <div className="p-4">
         {loading ? (
           <div className="text-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-500 mx-auto"></div>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
             <p className="mt-2 text-sm text-gray-600">読み込み中...</p>
           </div>
         ) : filteredUsers.length === 0 ? (
@@ -434,7 +434,7 @@ export function UserManager({ onBack }: UserManagerProps) {
                   type="email"
                   value={newUserForm.email}
                   onChange={(e) => setNewUserForm({ ...newUserForm, email: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="user@example.com"
                 />
               </div>
@@ -445,7 +445,7 @@ export function UserManager({ onBack }: UserManagerProps) {
                   type="password"
                   value={newUserForm.password}
                   onChange={(e) => setNewUserForm({ ...newUserForm, password: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="6文字以上"
                   minLength={6}
                 />
@@ -457,7 +457,7 @@ export function UserManager({ onBack }: UserManagerProps) {
                   type="text"
                   value={newUserForm.full_name}
                   onChange={(e) => setNewUserForm({ ...newUserForm, full_name: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="山田 太郎"
                 />
               </div>
@@ -467,7 +467,7 @@ export function UserManager({ onBack }: UserManagerProps) {
                 <select
                   value={newUserForm.role}
                   onChange={(e) => setNewUserForm({ ...newUserForm, role: e.target.value as UserRole })}
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   {ROLE_OPTIONS.map(role => (
                     <option key={role.value} value={role.value}>
@@ -483,7 +483,7 @@ export function UserManager({ onBack }: UserManagerProps) {
                   type="tel"
                   value={newUserForm.phone}
                   onChange={(e) => setNewUserForm({ ...newUserForm, phone: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="090-1234-5678"
                 />
               </div>
@@ -499,7 +499,7 @@ export function UserManager({ onBack }: UserManagerProps) {
               <button
                 onClick={handleCreateUser}
                 disabled={!newUserForm.email || !newUserForm.password || newUserForm.password.length < 6}
-                className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50 flex items-center gap-2"
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center gap-2"
               >
                 <Save className="w-4 h-4" />
                 作成
@@ -541,7 +541,7 @@ export function UserManager({ onBack }: UserManagerProps) {
                   type="text"
                   value={editingUser.full_name || ''}
                   onChange={(e) => setEditingUser({ ...editingUser, full_name: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="山田 太郎"
                 />
               </div>
@@ -551,7 +551,7 @@ export function UserManager({ onBack }: UserManagerProps) {
                 <select
                   value={editingUser.role}
                   onChange={(e) => setEditingUser({ ...editingUser, role: e.target.value as UserRole })}
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   {ROLE_OPTIONS.map(role => (
                     <option key={role.value} value={role.value}>
@@ -567,7 +567,7 @@ export function UserManager({ onBack }: UserManagerProps) {
                   type="tel"
                   value={editingUser.phone || ''}
                   onChange={(e) => setEditingUser({ ...editingUser, phone: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="090-1234-5678"
                 />
               </div>
@@ -594,7 +594,7 @@ export function UserManager({ onBack }: UserManagerProps) {
               </button>
               <button
                 onClick={handleUpdateUser}
-                className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 flex items-center gap-2"
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
               >
                 <Save className="w-4 h-4" />
                 保存

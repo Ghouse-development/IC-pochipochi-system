@@ -145,7 +145,7 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
   // ローディング中
   if (isLoading) {
     return (
-      <div className="p-4 max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto px-4">
         <div className="flex items-center justify-center py-12">
           <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
           <span className="ml-2 text-gray-600">読み込み中...</span>
@@ -157,7 +157,7 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
   // データがない場合
   if (tiles.length === 0) {
     return (
-      <div className="p-4 max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto px-4">
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 text-center">
           <p className="text-amber-800 font-medium mb-2">ポーチタイルのデータがありません</p>
           <p className="text-sm text-amber-600 mb-4">
@@ -175,7 +175,7 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
   }
 
   return (
-    <div className="p-4 max-w-6xl mx-auto">
+    <div className="max-w-6xl mx-auto px-4">
       {/* ヘッダー */}
       <PageHeader
         title="ポーチを選択"

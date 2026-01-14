@@ -183,7 +183,7 @@ export const AirconSelector: React.FC<AirconSelectorProps> = ({
   // 「選択しない」確認画面
   if (showNoSelection) {
     return (
-      <div className="p-4 max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto px-4">
         <div className="bg-gray-50 rounded-lg p-4 text-center">
           <span className="text-2xl mb-2 block">❄️</span>
           <h3 className="text-lg font-bold text-gray-800 mb-2">
@@ -215,7 +215,7 @@ export const AirconSelector: React.FC<AirconSelectorProps> = ({
   const completeUnitCount = units.filter(u => getCurrentStep(u) === 'complete').length;
 
   return (
-    <div className="p-4 max-w-6xl mx-auto">
+    <div className="max-w-6xl mx-auto px-4">
       {/* ヘッダー */}
       <div className="flex items-center justify-between mb-4">
         <PageHeader

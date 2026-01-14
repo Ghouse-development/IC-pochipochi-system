@@ -118,7 +118,7 @@ export function ProjectManager({ onSelectProject }: ProjectManagerProps) {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <RefreshCw className="w-8 h-8 animate-spin text-teal-600" />
+        <RefreshCw className="w-8 h-8 animate-spin text-blue-600" />
       </div>
     );
   }
@@ -133,7 +133,7 @@ export function ProjectManager({ onSelectProject }: ProjectManagerProps) {
         </div>
         <button
           onClick={() => setShowCreateModal(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
+          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
         >
           <Plus className="w-4 h-4" />
           新規プロジェクト
@@ -155,7 +155,7 @@ export function ProjectManager({ onSelectProject }: ProjectManagerProps) {
                 placeholder="プロジェクト名、コード、お客様名で検索..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 aria-label="プロジェクト検索"
               />
             </div>
@@ -164,7 +164,7 @@ export function ProjectManager({ onSelectProject }: ProjectManagerProps) {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               aria-label="ステータスでフィルター"
             >
               <option value="all">全ステータス</option>
@@ -177,7 +177,7 @@ export function ProjectManager({ onSelectProject }: ProjectManagerProps) {
             <select
               value={productFilter}
               onChange={(e) => setProductFilter(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               aria-label="プランでフィルター"
             >
               <option value="all">全プラン</option>
@@ -229,8 +229,8 @@ export function ProjectManager({ onSelectProject }: ProjectManagerProps) {
                   <tr key={project.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="p-2 bg-teal-50 rounded-lg">
-                          <FileText className="w-4 h-4 text-teal-600" />
+                        <div className="p-2 bg-blue-50 rounded-lg">
+                          <FileText className="w-4 h-4 text-blue-600" />
                         </div>
                         <div>
                           <div className="font-medium text-gray-900">{project.name}</div>
@@ -271,7 +271,7 @@ export function ProjectManager({ onSelectProject }: ProjectManagerProps) {
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => onSelectProject?.(project.id)}
-                          className="p-2 text-gray-600 hover:text-teal-600 hover:bg-teal-50 rounded-lg"
+                          className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg"
                           title="詳細を見る"
                         >
                           <Eye className="w-4 h-4" />
@@ -492,7 +492,7 @@ function CreateProjectModal({
               type="text"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               placeholder="例: 山田邸 新築工事"
             />
           </div>
@@ -504,7 +504,7 @@ function CreateProjectModal({
             <select
               value={formData.product_id}
               onChange={(e) => setFormData({ ...formData, product_id: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             >
               <option value="">選択してください</option>
               {products.map((product) => (
@@ -521,7 +521,7 @@ function CreateProjectModal({
               type="text"
               value={formData.customer_name}
               onChange={(e) => setFormData({ ...formData, customer_name: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               placeholder="例: 山田 太郎"
             />
           </div>
@@ -532,7 +532,7 @@ function CreateProjectModal({
               type="text"
               value={formData.construction_name}
               onChange={(e) => setFormData({ ...formData, construction_name: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
@@ -542,7 +542,7 @@ function CreateProjectModal({
               type="text"
               value={formData.construction_address}
               onChange={(e) => setFormData({ ...formData, construction_address: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               placeholder="例: 東京都○○区..."
             />
           </div>
@@ -553,7 +553,7 @@ function CreateProjectModal({
               <select
                 value={formData.floors}
                 onChange={(e) => setFormData({ ...formData, floors: parseInt(e.target.value) })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               >
                 <option value={1}>1階建て</option>
                 <option value={2}>2階建て</option>
@@ -566,7 +566,7 @@ function CreateProjectModal({
                 type="number"
                 value={formData.floor_area}
                 onChange={(e) => setFormData({ ...formData, floor_area: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 step="0.01"
                 min="0"
               />
@@ -584,7 +584,7 @@ function CreateProjectModal({
             <button
               type="submit"
               disabled={isSaving}
-              className="flex-1 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50"
+              className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
             >
               {isSaving ? '作成中...' : '作成'}
             </button>
@@ -670,7 +670,7 @@ function EditProjectModal({
               type="text"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
@@ -680,7 +680,7 @@ function EditProjectModal({
               <select
                 value={formData.product_id}
                 onChange={(e) => setFormData({ ...formData, product_id: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">選択してください</option>
                 {products.map((product) => (
@@ -695,7 +695,7 @@ function EditProjectModal({
               <select
                 value={formData.status}
                 onChange={(e) => setFormData({ ...formData, status: e.target.value as Project['status'] })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               >
                 <option value="draft">下書き</option>
                 <option value="active">進行中</option>
@@ -711,7 +711,7 @@ function EditProjectModal({
             <select
               value={formData.assigned_coordinator_id}
               onChange={(e) => setFormData({ ...formData, assigned_coordinator_id: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             >
               <option value="">未割当</option>
               {coordinators.map((user) => (
@@ -728,7 +728,7 @@ function EditProjectModal({
               type="text"
               value={formData.customer_name}
               onChange={(e) => setFormData({ ...formData, customer_name: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
@@ -738,7 +738,7 @@ function EditProjectModal({
               type="text"
               value={formData.construction_name}
               onChange={(e) => setFormData({ ...formData, construction_name: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
@@ -748,7 +748,7 @@ function EditProjectModal({
               type="text"
               value={formData.construction_address}
               onChange={(e) => setFormData({ ...formData, construction_address: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
@@ -758,7 +758,7 @@ function EditProjectModal({
               <select
                 value={formData.floors}
                 onChange={(e) => setFormData({ ...formData, floors: parseInt(e.target.value) })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               >
                 <option value={1}>1階建て</option>
                 <option value={2}>2階建て</option>
@@ -771,7 +771,7 @@ function EditProjectModal({
                 type="number"
                 value={formData.floor_area}
                 onChange={(e) => setFormData({ ...formData, floor_area: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 step="0.01"
                 min="0"
               />
@@ -789,7 +789,7 @@ function EditProjectModal({
             <button
               type="submit"
               disabled={isSaving}
-              className="flex-1 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50"
+              className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
             >
               {isSaving ? '保存中...' : '保存'}
             </button>

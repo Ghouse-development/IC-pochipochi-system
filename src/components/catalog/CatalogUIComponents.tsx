@@ -92,7 +92,7 @@ export const EmptyState = React.memo(({ searchTerm, onClear }: { searchTerm: str
     {searchTerm && (
       <button
         onClick={onClear}
-        className="px-6 py-2.5 bg-teal-500 text-white rounded-full font-medium hover:bg-teal-600 transition-all hover:scale-105 active:scale-95 focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2"
+        className="px-6 py-2.5 bg-blue-500 text-white rounded-full font-medium hover:bg-blue-600 transition-all hover:scale-105 active:scale-95 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
         aria-label="検索条件をクリアする"
       >
         検索をクリア

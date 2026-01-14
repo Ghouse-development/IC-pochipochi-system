@@ -296,13 +296,13 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
                               onMouseEnter={() => setSelectedIndex(globalIndex)}
                               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${
                                 selectedIndex === globalIndex
-                                  ? 'bg-teal-50 text-teal-700'
+                                  ? 'bg-blue-50 text-blue-700'
                                   : 'text-gray-700 hover:bg-gray-50:bg-gray-700'
                               }`}
                             >
                               <div className={`p-1.5 rounded-lg ${
                                 selectedIndex === globalIndex
-                                  ? 'bg-teal-100 text-teal-600'
+                                  ? 'bg-blue-100 text-blue-600'
                                   : 'bg-gray-100 text-gray-500'
                               }`}>
                                 {action.icon}
@@ -341,13 +341,13 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
                               onMouseEnter={() => setSelectedIndex(globalIndex)}
                               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${
                                 selectedIndex === globalIndex
-                                  ? 'bg-teal-50 text-teal-700'
+                                  ? 'bg-blue-50 text-blue-700'
                                   : 'text-gray-700 hover:bg-gray-50:bg-gray-700'
                               }`}
                             >
                               <div className={`p-1.5 rounded-lg ${
                                 selectedIndex === globalIndex
-                                  ? 'bg-teal-100 text-teal-600'
+                                  ? 'bg-blue-100 text-blue-600'
                                   : 'bg-gray-100 text-gray-500'
                               }`}>
                                 {action.icon}
@@ -386,13 +386,13 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
                               onMouseEnter={() => setSelectedIndex(globalIndex)}
                               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${
                                 selectedIndex === globalIndex
-                                  ? 'bg-teal-50 text-teal-700'
+                                  ? 'bg-blue-50 text-blue-700'
                                   : 'text-gray-700 hover:bg-gray-50:bg-gray-700'
                               }`}
                             >
                               <div className={`p-1.5 rounded-lg ${
                                 selectedIndex === globalIndex
-                                  ? 'bg-teal-100 text-teal-600'
+                                  ? 'bg-blue-100 text-blue-600'
                                   : 'bg-gray-100 text-gray-500'
                               }`}>
                                 {action.icon}

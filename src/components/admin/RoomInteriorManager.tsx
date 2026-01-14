@@ -219,7 +219,7 @@ export function RoomInteriorManager({ projectId, onUpdate }: RoomInteriorManager
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <RefreshCw className="w-8 h-8 animate-spin text-teal-600" />
+        <RefreshCw className="w-8 h-8 animate-spin text-blue-600" />
       </div>
     );
   }
@@ -239,7 +239,7 @@ export function RoomInteriorManager({ projectId, onUpdate }: RoomInteriorManager
         </div>
         <button
           onClick={() => setIsAddingRoom(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
+          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
         >
           <Plus className="w-4 h-4" />
           部屋を追加
@@ -276,7 +276,7 @@ export function RoomInteriorManager({ projectId, onUpdate }: RoomInteriorManager
                   type="text"
                   value={newRoomName}
                   onChange={(e) => setNewRoomName(e.target.value)}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                   placeholder="例: 書斎"
                 />
               </div>
@@ -285,7 +285,7 @@ export function RoomInteriorManager({ projectId, onUpdate }: RoomInteriorManager
                 <select
                   value={newRoomFloor}
                   onChange={(e) => setNewRoomFloor(Number(e.target.value))}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                 >
                   <option value={1}>1階</option>
                   <option value={2}>2階</option>
@@ -323,7 +323,7 @@ export function RoomInteriorManager({ projectId, onUpdate }: RoomInteriorManager
               <button
                 onClick={handleAddRoom}
                 disabled={!newRoomName.trim()}
-                className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50"
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
               >
                 追加
               </button>
@@ -422,7 +422,7 @@ export function RoomInteriorManager({ projectId, onUpdate }: RoomInteriorManager
                                 </>
                               ) : (
                                 <button
-                                  className="text-sm text-teal-600 hover:text-teal-700"
+                                  className="text-sm text-blue-600 hover:text-blue-700"
                                   onClick={() => {
                                     // FUTURE: アイテム選択モーダルを開く（v2.18.0）
                                     toast.info('準備中', 'アイテム選択機能は準備中です');
@@ -451,7 +451,7 @@ export function RoomInteriorManager({ projectId, onUpdate }: RoomInteriorManager
           <p className="text-gray-600 mb-4">部屋を追加して内装仕様を設定してください</p>
           <button
             onClick={() => setIsAddingRoom(true)}
-            className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
           >
             最初の部屋を追加
           </button>

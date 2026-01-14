@@ -278,10 +278,10 @@ export const VendorOrderManager: React.FC = () => {
 
       {/* カート商品サマリー */}
       {items.length > 0 && (
-        <Card className="p-4 bg-teal-50 border-teal-200">
+        <Card className="p-4 bg-blue-50 border-blue-200">
           <div className="flex items-center gap-2 mb-3">
-            <Package className="w-5 h-5 text-teal-600" />
-            <h3 className="font-semibold text-teal-800">現在のカート商品（{items.length}点）</h3>
+            <Package className="w-5 h-5 text-blue-600" />
+            <h3 className="font-semibold text-blue-800">現在のカート商品（{items.length}点）</h3>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {Object.entries(itemsByManufacturer).map(([manufacturer, manufacturerItems]) => (
@@ -309,7 +309,7 @@ export const VendorOrderManager: React.FC = () => {
               <select
                 value={selectedVendorId}
                 onChange={(e) => setSelectedVendorId(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="">業者を選択...</option>
                 {activeVendors.map(vendor => (
@@ -326,7 +326,7 @@ export const VendorOrderManager: React.FC = () => {
                 value={projectName}
                 onChange={(e) => setProjectName(e.target.value)}
                 placeholder="例: 山田邸新築工事"
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
             <div>
@@ -336,7 +336,7 @@ export const VendorOrderManager: React.FC = () => {
                 value={customerName}
                 onChange={(e) => setCustomerName(e.target.value)}
                 placeholder="例: 山田太郎"
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
             <div>
@@ -346,7 +346,7 @@ export const VendorOrderManager: React.FC = () => {
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="納期希望など"
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
           </div>
@@ -449,7 +449,7 @@ export const VendorOrderManager: React.FC = () => {
         <select
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value)}
-          className="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-teal-500"
+          className="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-blue-500"
         >
           <option value="all">すべて ({orders.length})</option>
           <option value="draft">下書き ({orderStats.draft})</option>
@@ -490,7 +490,7 @@ export const VendorOrderManager: React.FC = () => {
               </div>
 
               <details className="mb-4">
-                <summary className="cursor-pointer text-sm text-teal-600 hover:text-teal-700">
+                <summary className="cursor-pointer text-sm text-blue-600 hover:text-blue-700">
                   商品詳細を見る
                 </summary>
                 <div className="mt-2 bg-gray-50 rounded-lg p-3">
@@ -567,7 +567,7 @@ export const VendorOrderManager: React.FC = () => {
               <div className="flex items-start justify-between">
                 <div>
                   <p className="font-medium text-gray-800">{vendor.name}</p>
-                  <p className="text-sm text-teal-600">{vendor.category}</p>
+                  <p className="text-sm text-blue-600">{vendor.category}</p>
                 </div>
                 <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button onClick={() => handleEditVendor(vendor)} className="p-1 hover:bg-gray-200 rounded">

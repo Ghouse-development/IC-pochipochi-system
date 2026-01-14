@@ -29,7 +29,7 @@ export const ManufacturerSelector: React.FC<ManufacturerSelectorProps> = ({
         <div className="flex items-center gap-2 text-sm text-gray-600">
           <button
             onClick={onBack}
-            className="hover:text-teal-600:text-teal-400 transition-colors"
+            className="hover:text-blue-600 transition-colors"
           >
             メーカー選択
           </button>
@@ -41,6 +41,7 @@ export const ManufacturerSelector: React.FC<ManufacturerSelectorProps> = ({
 
         <PageHeader
           title="シリーズを選択"
+          subtitle="ご希望のシリーズを選択してください"
         />
 
         <div className="grid grid-cols-6 gap-2">
@@ -50,7 +51,7 @@ export const ManufacturerSelector: React.FC<ManufacturerSelectorProps> = ({
               id={series.id}
               name={series.name}
               placeholderEmoji="📦"
-              placeholderBgColor="from-teal-100 to-cyan-100"
+              placeholderBgColor="from-blue-100 to-cyan-100"
               isSelected={false}
               onClick={() => onSelectSeries(series)}
             />
@@ -65,6 +66,7 @@ export const ManufacturerSelector: React.FC<ManufacturerSelectorProps> = ({
     <div className="space-y-4">
       <PageHeader
         title="メーカーを選択"
+        subtitle="ご希望のメーカーを選択してください"
       />
 
       <div className="grid grid-cols-6 gap-2">
@@ -75,7 +77,7 @@ export const ManufacturerSelector: React.FC<ManufacturerSelectorProps> = ({
             name={manufacturer.name}
             description={hasSeriesSelection(manufacturer) ? `${manufacturer.series.length}シリーズ` : undefined}
             placeholderEmoji="🏭"
-            placeholderBgColor="from-teal-100 to-cyan-100"
+            placeholderBgColor="from-blue-100 to-cyan-100"
             isSelected={selectedManufacturer?.id === manufacturer.id}
             onClick={() => {
               onSelectManufacturer(manufacturer);
@@ -107,16 +109,16 @@ export const SelectionBar: React.FC<SelectionBarProps> = ({
   if (!selectedManufacturer) return null;
 
   return (
-    <div className="flex items-center justify-between bg-teal-50 border border-teal-200 rounded-lg px-4 py-2">
+    <div className="flex items-center justify-between bg-blue-50 border border-blue-200 rounded-lg px-4 py-2">
       <div className="flex items-center gap-2 text-sm">
         <span className="text-gray-600">{categoryName}:</span>
-        <span className="font-medium text-teal-700">
+        <span className="font-medium text-blue-700">
           {selectedManufacturer.name}
         </span>
         {selectedSeries && (
           <>
             <ChevronRight className="w-4 h-4 text-gray-400" />
-            <span className="font-medium text-teal-700">
+            <span className="font-medium text-blue-700">
               {selectedSeries.name}
             </span>
           </>

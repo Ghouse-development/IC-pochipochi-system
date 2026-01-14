@@ -114,7 +114,7 @@ export function ItemPricingManager({
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-500"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
       </div>
     );
   }
@@ -129,7 +129,7 @@ export function ItemPricingManager({
         <button
           onClick={handleSave}
           disabled={isSaving}
-          className="flex items-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50"
+          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
         >
           {isSaving ? (
             <>
@@ -196,7 +196,7 @@ export function ItemPricingManager({
                         className="sr-only"
                       />
                       <div className={`w-10 h-6 rounded-full transition-colors ${
-                        data.is_standard ? 'bg-teal-500' : 'bg-gray-300'
+                        data.is_standard ? 'bg-blue-500' : 'bg-gray-300'
                       } ${!data.is_available ? 'opacity-50' : ''}`}>
                         <div className={`w-4 h-4 mt-1 rounded-full bg-white shadow transform transition-transform ${
                           data.is_standard ? 'translate-x-5' : 'translate-x-1'
@@ -212,11 +212,11 @@ export function ItemPricingManager({
                         value={data.is_standard ? 0 : data.price}
                         onChange={(e) => handlePricingChange(product.id, 'price', parseInt(e.target.value) || 0)}
                         disabled={!data.is_available || data.is_standard}
-                        className="w-24 px-2 py-1 text-right border border-gray-300 rounded focus:ring-2 focus:ring-teal-500 disabled:bg-gray-100 disabled:text-gray-400"
+                        className="w-24 px-2 py-1 text-right border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:text-gray-400"
                       />
                     </div>
                     {data.is_standard && (
-                      <div className="text-xs text-teal-600 text-right mt-1">標準仕様（0円）</div>
+                      <div className="text-xs text-blue-600 text-right mt-1">標準仕様（0円）</div>
                     )}
                   </td>
                   <td className="px-4 py-3">
@@ -227,7 +227,7 @@ export function ItemPricingManager({
                         value={data.installation_cost}
                         onChange={(e) => handlePricingChange(product.id, 'installation_cost', parseInt(e.target.value) || 0)}
                         disabled={!data.is_available}
-                        className="w-24 px-2 py-1 text-right border border-gray-300 rounded focus:ring-2 focus:ring-teal-500 disabled:bg-gray-100 disabled:text-gray-400"
+                        className="w-24 px-2 py-1 text-right border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:text-gray-400"
                       />
                     </div>
                   </td>

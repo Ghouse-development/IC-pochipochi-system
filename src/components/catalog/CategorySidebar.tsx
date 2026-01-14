@@ -58,7 +58,7 @@ export const CategorySidebar: React.FC<CategorySidebarProps> = ({
                 onClick={() => onSelectCategory(category.id)}
                 className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${
                   isSelected
-                    ? 'bg-teal-500 text-white'
+                    ? 'bg-blue-500 text-white'
                     : isDecided
                       ? 'bg-green-100 text-green-600'
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -107,7 +107,7 @@ export const CategorySidebar: React.FC<CategorySidebarProps> = ({
               onClick={() => onSelectCategory(category.id)}
               className={`w-full text-left px-3 py-2 rounded-lg transition-all flex items-center gap-2 group ${
                 isSelected
-                  ? 'bg-teal-50 text-teal-700 border border-teal-200'
+                  ? 'bg-blue-50 text-blue-700 border border-blue-200'
                   : isDecided
                     ? 'bg-green-50 text-green-700 hover:bg-green-100'
                     : 'hover:bg-gray-100 text-gray-700'
@@ -133,7 +133,7 @@ export const CategorySidebar: React.FC<CategorySidebarProps> = ({
 
               {/* 選択数 */}
               {selectionCount > 0 && (
-                <span className="text-xs bg-teal-100 text-teal-600 px-1.5 py-0.5 rounded-full">
+                <span className="text-xs bg-blue-100 text-blue-600 px-1.5 py-0.5 rounded-full">
                   {selectionCount}
                 </span>
               )}

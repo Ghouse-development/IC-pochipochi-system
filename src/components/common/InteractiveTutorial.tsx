@@ -93,8 +93,8 @@ const SpotlightOverlay: React.FC<{
         className="fixed z-[9999] pointer-events-none transition-all duration-300"
         style={spotlightStyle}
       >
-        <div className="absolute inset-0 border-2 border-teal-400 rounded-lg animate-pulse" />
-        <div className="absolute inset-0 border-2 border-teal-400/50 rounded-lg animate-ping" />
+        <div className="absolute inset-0 border-2 border-blue-400 rounded-lg animate-pulse" />
+        <div className="absolute inset-0 border-2 border-blue-400/50 rounded-lg animate-ping" />
       </div>
     </>
   );
@@ -188,7 +188,7 @@ const TutorialTooltip: React.FC<{
       style={{ top: position.top, left: position.left }}
     >
       {/* ヘッダー */}
-      <div className="bg-gradient-to-r from-teal-500 to-teal-600 text-white p-4">
+      <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Sparkles className="w-5 h-5" />
@@ -214,7 +214,7 @@ const TutorialTooltip: React.FC<{
         </p>
 
         {step.action && step.action !== 'none' && (
-          <div className="mt-3 flex items-center gap-2 text-teal-600 text-sm">
+          <div className="mt-3 flex items-center gap-2 text-blue-600 text-sm">
             <MousePointer className="w-4 h-4 animate-bounce" />
             <span>{step.actionText || 'ハイライトされた要素を操作してみましょう'}</span>
           </div>
@@ -226,7 +226,7 @@ const TutorialTooltip: React.FC<{
         <div className="px-4 pb-2">
           <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
             <div
-              className="h-full bg-teal-500 transition-all duration-300"
+              className="h-full bg-blue-500 transition-all duration-300"
               style={{ width: `${((currentIndex + 1) / totalSteps) * 100}%` }}
             />
           </div>
@@ -499,7 +499,7 @@ export const TutorialStartButton: React.FC<{
 }> = ({ onClick, className = '' }) => (
   <button
     onClick={onClick}
-    className={`flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-lg hover:from-teal-600 hover:to-teal-700 transition-all shadow-md hover:shadow-lg ${className}`}
+    className={`flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all shadow-md hover:shadow-lg ${className}`}
     title="使い方ガイドを開始"
   >
     <Play className="w-4 h-4" />

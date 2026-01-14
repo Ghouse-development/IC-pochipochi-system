@@ -567,7 +567,7 @@ export const DataBackup: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card className="p-6">
           <div className="flex items-center gap-3 mb-4">
-            <Download className="w-6 h-6 text-teal-600" />
+            <Download className="w-6 h-6 text-blue-600" />
             <div>
               <h3 className="font-semibold text-gray-900">データをエクスポート</h3>
               <p className="text-sm text-gray-600">全データをJSONファイルとして保存</p>

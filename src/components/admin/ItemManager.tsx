@@ -339,7 +339,7 @@ export function ItemManager() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <RefreshCw className="w-8 h-8 animate-spin text-teal-600" />
+        <RefreshCw className="w-8 h-8 animate-spin text-blue-600" />
       </div>
     );
   }
@@ -369,7 +369,7 @@ export function ItemManager() {
           </button>
           <button
             onClick={() => setShowCreateModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
           >
             <Plus className="w-4 h-4" />
             新規アイテム
@@ -392,7 +392,7 @@ export function ItemManager() {
                 placeholder="アイテム名、コード、メーカーで検索..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 aria-label="アイテム検索"
               />
             </div>
@@ -401,7 +401,7 @@ export function ItemManager() {
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               aria-label="カテゴリでフィルター"
             >
               <option value="all">全カテゴリ</option>
@@ -421,7 +421,7 @@ export function ItemManager() {
             <select
               value={manufacturerFilter}
               onChange={(e) => setManufacturerFilter(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               aria-label="メーカーでフィルター"
             >
               <option value="all">全メーカー</option>
@@ -794,7 +794,7 @@ function ItemFormModal({
               onClick={() => setActiveTab('basic')}
               className={`px-4 py-3 text-sm font-medium border-b-2 -mb-px ${
                 activeTab === 'basic'
-                  ? 'border-teal-500 text-teal-600'
+                  ? 'border-blue-500 text-blue-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}
             >
@@ -805,7 +805,7 @@ function ItemFormModal({
               onClick={() => setActiveTab('pricing')}
               className={`px-4 py-3 text-sm font-medium border-b-2 -mb-px ${
                 activeTab === 'pricing'
-                  ? 'border-teal-500 text-teal-600'
+                  ? 'border-blue-500 text-blue-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}
             >
@@ -816,7 +816,7 @@ function ItemFormModal({
               onClick={() => setActiveTab('variants')}
               className={`px-4 py-3 text-sm font-medium border-b-2 -mb-px ${
                 activeTab === 'variants'
-                  ? 'border-teal-500 text-teal-600'
+                  ? 'border-blue-500 text-blue-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}
             >
@@ -846,7 +846,7 @@ function ItemFormModal({
                     type="text"
                     value={formData.item_code}
                     onChange={(e) => setFormData({ ...formData, item_code: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                     placeholder="例: NICHIHA-001"
                   />
                 </div>
@@ -857,7 +857,7 @@ function ItemFormModal({
                   <select
                     value={formData.category_id}
                     onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="">選択してください</option>
                     {parentCategories.map((parent) => (
@@ -883,7 +883,7 @@ function ItemFormModal({
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   placeholder="例: モナビストーンV"
                 />
               </div>
@@ -895,7 +895,7 @@ function ItemFormModal({
                     type="text"
                     value={formData.manufacturer}
                     onChange={(e) => setFormData({ ...formData, manufacturer: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                     placeholder="例: ニチハ"
                   />
                 </div>
@@ -905,7 +905,7 @@ function ItemFormModal({
                     type="text"
                     value={formData.model_number}
                     onChange={(e) => setFormData({ ...formData, model_number: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
               </div>
@@ -915,7 +915,7 @@ function ItemFormModal({
                 <select
                   value={formData.unit_id}
                   onChange={(e) => setFormData({ ...formData, unit_id: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="">選択してください</option>
                   {units.map((unit) => (
@@ -931,7 +931,7 @@ function ItemFormModal({
                 <textarea
                   value={formData.note}
                   onChange={(e) => setFormData({ ...formData, note: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   rows={3}
                   placeholder="商品の特徴やメモを入力"
                 />
@@ -945,7 +945,7 @@ function ItemFormModal({
                   type="url"
                   value={formData.catalog_url}
                   onChange={(e) => setFormData({ ...formData, catalog_url: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   placeholder="https://example.com/product/..."
                 />
                 <p className="text-xs text-gray-500 mt-1">
@@ -959,7 +959,7 @@ function ItemFormModal({
                     type="checkbox"
                     checked={formData.is_hit}
                     onChange={(e) => setFormData({ ...formData, is_hit: e.target.checked })}
-                    className="w-5 h-5 text-teal-600 border-gray-300 rounded focus:ring-teal-500"
+                    className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                   />
                   <span className="text-gray-700">HITアイテムとして表示</span>
                 </label>
@@ -982,7 +982,7 @@ function ItemFormModal({
                       type="date"
                       value={formData.discontinue_date}
                       onChange={(e) => setFormData({ ...formData, discontinue_date: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
                   <div>
@@ -991,7 +991,7 @@ function ItemFormModal({
                       type="text"
                       value={formData.discontinue_note}
                       onChange={(e) => setFormData({ ...formData, discontinue_note: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                       placeholder="例: 後継品はXXX"
                     />
                   </div>
@@ -1009,7 +1009,7 @@ function ItemFormModal({
                 <button
                   type="submit"
                   disabled={isSaving}
-                  className="flex-1 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50"
+                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
                 >
                   {isSaving ? '保存中...' : '保存'}
                 </button>
@@ -1148,7 +1148,7 @@ function ImportItemsModal({
             <p className="text-sm text-gray-700 mb-2">
               テンプレートファイルをダウンロードして、アイテム情報を入力してください。
             </p>
-            <button className="text-teal-600 hover:text-teal-700 text-sm font-medium">
+            <button className="text-blue-600 hover:text-blue-700 text-sm font-medium">
               <Download className="w-4 h-4 inline mr-1" />
               テンプレートをダウンロード
             </button>
@@ -1215,7 +1215,7 @@ function ImportItemsModal({
             <button
               onClick={handleImport}
               disabled={!file || isImporting}
-              className="flex-1 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50"
+              className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
             >
               {isImporting ? 'インポート中...' : 'インポート'}
             </button>

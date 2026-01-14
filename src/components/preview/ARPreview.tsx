@@ -199,7 +199,7 @@ export const ARPreview: React.FC<ARPreviewProps> = ({
           </div>
         ) : !stream ? (
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-900 text-white">
-            <Camera className="w-20 h-20 text-teal-400 mb-6" />
+            <Camera className="w-20 h-20 text-blue-400 mb-6" />
             <h3 className="text-xl font-bold mb-2">ARプレビューを開始</h3>
             <p className="text-gray-400 mb-6 text-center max-w-md">
               カメラを使って、商品を実際の空間に配置してみましょう。
@@ -303,7 +303,7 @@ export const ARPreview: React.FC<ARPreviewProps> = ({
 
                 <button
                   onClick={captureScreenshot}
-                  className="p-2 bg-teal-500 rounded-full hover:bg-teal-600"
+                  className="p-2 bg-blue-500 rounded-full hover:bg-blue-600"
                   title="スクリーンショット保存"
                 >
                   <Download className="w-5 h-5" />
@@ -360,7 +360,7 @@ export const ARPreviewButton: React.FC<{
       <button
         onClick={() => setShowAR(true)}
         disabled={disabled}
-        className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-lg hover:from-teal-600 hover:to-cyan-600 transition-colors disabled:opacity-50"
+        className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-lg hover:from-blue-600 hover:to-cyan-600 transition-colors disabled:opacity-50"
       >
         <Camera className="w-4 h-4" />
         ARで見る

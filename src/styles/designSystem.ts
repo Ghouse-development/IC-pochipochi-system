@@ -39,8 +39,8 @@ export const colors = {
     decidedBorder: '#a7f3d0', // emerald-200
 
     // 標準品
-    standard: '#14b8a6', // teal-500
-    standardBg: '#f0fdfa', // teal-50
+    standard: '#14b8a6', // blue-500
+    standardBg: '#f0fdfa', // blue-50
 
     // オプション品
     option: '#f97316', // orange-500
@@ -80,8 +80,8 @@ export const colors = {
 
 // グラデーション（使用を最小限に）
 export const gradients = {
-  primary: 'from-teal-500 to-teal-600',
-  header: 'from-teal-600 to-teal-700',
+  primary: 'from-blue-500 to-blue-600',
+  header: 'from-blue-600 to-blue-700',
   success: 'from-emerald-500 to-emerald-600',
   warning: 'from-amber-400 to-amber-500',
 };
@@ -116,12 +116,12 @@ export const componentStyles = {
   card: {
     base: 'bg-white rounded-xl shadow-sm border border-gray-100',
     hover: 'hover:shadow-md hover:border-gray-200 transition-all',
-    selected: 'border-teal-400 shadow-md ring-2 ring-teal-100',
+    selected: 'border-blue-400 shadow-md ring-2 ring-blue-100',
   },
 
   // ボタン
   button: {
-    primary: 'bg-teal-500 hover:bg-teal-600 text-white',
+    primary: 'bg-blue-500 hover:bg-blue-600 text-white',
     secondary: 'bg-gray-100 hover:bg-gray-200 text-gray-700',
     outline: 'border-2 border-gray-200 hover:border-gray-300 text-gray-700',
     danger: 'bg-red-500 hover:bg-red-600 text-white',
@@ -129,7 +129,7 @@ export const componentStyles = {
 
   // バッジ
   badge: {
-    standard: 'bg-teal-500 text-white',
+    standard: 'bg-blue-500 text-white',
     option: 'bg-orange-500 text-white',
     hit: 'bg-red-500 text-white',
     count: 'bg-gray-100 text-gray-600',
@@ -137,12 +137,12 @@ export const componentStyles = {
 
   // 入力
   input: {
-    base: 'bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all',
+    base: 'bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all',
   },
 
   // タブ
   tab: {
-    active: 'bg-white text-teal-600 shadow-md',
+    active: 'bg-white text-blue-600 shadow-md',
     inactive: 'bg-white/20 text-white/80 hover:bg-white/30',
   },
 };

@@ -190,7 +190,7 @@ export function LoginPage({ onDemoLogin }: LoginPageProps) {
             <button
               type="button"
               onClick={() => setShowResetPassword(true)}
-              className="text-teal-600 hover:text-teal-700"
+              className="text-blue-600 hover:text-blue-700"
             >
               パスワードを忘れた方
             </button>

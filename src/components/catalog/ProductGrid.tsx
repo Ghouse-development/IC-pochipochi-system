@@ -116,7 +116,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
                     onClick={() => handlePageChange(pageNum)}
                     className={`w-8 h-8 rounded-lg text-sm font-medium transition-all ${
                       currentPage === pageNum
-                        ? 'bg-teal-500 text-white'
+                        ? 'bg-blue-500 text-white'
                         : 'hover:bg-gray-100 text-gray-600'
                     }`}
                   >

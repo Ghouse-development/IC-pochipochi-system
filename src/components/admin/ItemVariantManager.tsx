@@ -272,7 +272,7 @@ export function ItemVariantManager({
         </h4>
         <button
           onClick={handleCreateVariant}
-          className="flex items-center gap-2 px-3 py-1.5 bg-teal-600 text-white rounded-lg hover:bg-teal-700 text-sm"
+          className="flex items-center gap-2 px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
         >
           <Plus className="w-4 h-4" />
           色を追加
@@ -302,7 +302,7 @@ export function ItemVariantManager({
                 onDrop={(e) => handleCardDrop(e, variant.id)}
                 className={`bg-white border-2 rounded-lg overflow-hidden transition-all relative ${
                   isDragOver
-                    ? 'border-teal-500 shadow-lg scale-[1.02]'
+                    ? 'border-blue-500 shadow-lg scale-[1.02]'
                     : 'border-gray-200 hover:shadow-md'
                 }`}
               >
@@ -357,7 +357,7 @@ export function ItemVariantManager({
 
                   {/* ドラッグオーバー時のオーバーレイ */}
                   {isDragOver && (
-                    <div className="absolute inset-0 bg-teal-500/80 flex flex-col items-center justify-center text-white">
+                    <div className="absolute inset-0 bg-blue-500/80 flex flex-col items-center justify-center text-white">
                       <Upload className="w-10 h-10 mb-2" />
                       <p className="text-sm font-medium">ドロップして追加</p>
                     </div>
@@ -661,7 +661,7 @@ function VariantEditModal({
                 type="text"
                 value={formData.color_name}
                 onChange={e => setFormData({ ...formData, color_name: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 placeholder="例: フローMGグレー"
               />
             </div>
@@ -674,7 +674,7 @@ function VariantEditModal({
                 type="text"
                 value={formData.color_code}
                 onChange={e => setFormData({ ...formData, color_code: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 placeholder="例: FMG-001"
               />
             </div>
@@ -686,7 +686,7 @@ function VariantEditModal({
               <textarea
                 value={formData.description}
                 onChange={e => setFormData({ ...formData, description: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 rows={2}
                 placeholder="色の説明やメモ"
               />
@@ -724,8 +724,8 @@ function VariantEditModal({
               onDrop={handleDrop}
               className={`mb-4 border-2 border-dashed rounded-lg p-6 text-center transition-all ${
                 isDragging
-                  ? 'border-teal-500 bg-teal-50'
-                  : 'border-gray-300 hover:border-teal-400 hover:bg-gray-50'
+                  ? 'border-blue-500 bg-blue-50'
+                  : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'
               }`}
             >
               <input
@@ -740,7 +740,7 @@ function VariantEditModal({
 
               {isUploading ? (
                 <div className="space-y-2">
-                  <Loader2 className="w-10 h-10 mx-auto text-teal-500 animate-spin" />
+                  <Loader2 className="w-10 h-10 mx-auto text-blue-500 animate-spin" />
                   <p className="text-sm text-gray-600">アップロード中...</p>
                   {uploadProgress.map((name, i) => (
                     <p key={i} className="text-xs text-gray-500 truncate">{name}</p>
@@ -748,8 +748,8 @@ function VariantEditModal({
                 </div>
               ) : isDragging ? (
                 <div className="space-y-2">
-                  <Upload className="w-10 h-10 mx-auto text-teal-500" />
-                  <p className="text-sm font-medium text-teal-600">ここにドロップして追加</p>
+                  <Upload className="w-10 h-10 mx-auto text-blue-500" />
+                  <p className="text-sm font-medium text-blue-600">ここにドロップして追加</p>
                 </div>
               ) : (
                 <div className="space-y-2">
@@ -760,7 +760,7 @@ function VariantEditModal({
                   <p className="text-xs text-gray-400">または</p>
                   <button
                     onClick={() => fileInputRef.current?.click()}
-                    className="px-4 py-2 bg-teal-600 text-white text-sm rounded-lg hover:bg-teal-700"
+                    className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700"
                   >
                     ファイルを選択
                   </button>
@@ -793,7 +793,7 @@ function VariantEditModal({
                       }
                     }}
                     placeholder="https://example.com/image.jpg"
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 text-sm"
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
                   />
                   <button
                     onClick={handleAddImageFromUrl}
@@ -823,7 +823,7 @@ function VariantEditModal({
                       className="w-full aspect-square object-cover rounded-lg border border-gray-200"
                     />
                     {image.is_primary && (
-                      <div className="absolute top-1 left-1 bg-teal-500 text-white text-xs px-1.5 py-0.5 rounded">
+                      <div className="absolute top-1 left-1 bg-blue-500 text-white text-xs px-1.5 py-0.5 rounded">
                         メイン
                       </div>
                     )}
@@ -831,7 +831,7 @@ function VariantEditModal({
                       {!image.is_primary && (
                         <button
                           onClick={() => handleSetPrimaryImage(image.id)}
-                          className="p-1.5 bg-teal-500 text-white rounded hover:bg-teal-600"
+                          className="p-1.5 bg-blue-500 text-white rounded hover:bg-blue-600"
                           title="メイン画像に設定"
                         >
                           <Check className="w-4 h-4" />
@@ -868,7 +868,7 @@ function VariantEditModal({
           <button
             onClick={handleSubmit}
             disabled={isSaving || !formData.color_name.trim()}
-            className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50 flex items-center gap-2"
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center gap-2"
           >
             {isSaving ? (
               <>

@@ -265,7 +265,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
             onClick={() => setActiveTab('products')}
             className={`px-3 py-2 rounded-t-lg font-medium transition-colors ${
               activeTab === 'products'
-                ? 'bg-teal-500 text-white'
+                ? 'bg-blue-500 text-white'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
@@ -354,7 +354,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
               onClick={() => setProductSubTab('plans')}
               className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
                 productSubTab === 'plans'
-                  ? 'bg-teal-100 text-teal-700 font-medium'
+                  ? 'bg-blue-100 text-blue-700 font-medium'
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
@@ -367,7 +367,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
               onClick={() => setProductSubTab('items')}
               className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
                 productSubTab === 'items'
-                  ? 'bg-teal-100 text-teal-700 font-medium'
+                  ? 'bg-blue-100 text-blue-700 font-medium'
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
@@ -380,7 +380,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
               onClick={() => setProductSubTab('categories')}
               className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
                 productSubTab === 'categories'
-                  ? 'bg-teal-100 text-teal-700 font-medium'
+                  ? 'bg-blue-100 text-blue-700 font-medium'
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >

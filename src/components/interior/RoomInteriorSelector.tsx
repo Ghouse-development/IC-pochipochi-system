@@ -596,7 +596,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
                 return (
                   <tr
                     key={room.roomId}
-                    className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-teal-50:bg-teal-900/20 transition-colors`}
+                    className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-blue-50:bg-blue-900/20 transition-colors`}
                   >
                     <td className="px-3 py-3 font-medium text-gray-900 whitespace-nowrap">
                       <div className="flex items-center gap-2">
@@ -628,7 +628,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
                             onClick={() => setSelectedPartForPicker({ roomId: room.roomId, partId: part.id })}
                             className={`w-full flex items-center justify-center gap-2 p-2 rounded-lg transition-all ${
                               selection?.product
-                                ? 'bg-teal-50 border border-teal-300 hover:bg-teal-100:bg-teal-900/50'
+                                ? 'bg-blue-50 border border-blue-300 hover:bg-blue-100:bg-blue-900/50'
                                 : part.required
                                 ? 'bg-orange-50 border border-dashed border-orange-300 hover:bg-orange-100:bg-orange-900/30'
                                 : 'bg-gray-50 border border-dashed border-gray-200 hover:bg-gray-100:bg-gray-600'
@@ -772,7 +772,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
                                   key={part.id}
                                   className={`p-3 rounded-xl border-2 transition-all ${
                                     selection?.product
-                                      ? 'border-teal-500 bg-teal-50'
+                                      ? 'border-blue-500 bg-blue-50'
                                       : part.required
                                       ? 'border-orange-300 bg-orange-50'
                                       : 'border-gray-200 bg-white'
@@ -826,7 +826,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
                                           partId: part.id,
                                         })
                                       }
-                                      className="w-full py-2 border-2 border-dashed border-gray-300 rounded-lg text-sm text-gray-500 hover:border-teal-500:border-teal-400 hover:text-teal-600:text-teal-400 transition-colors"
+                                      className="w-full py-2 border-2 border-dashed border-gray-300 rounded-lg text-sm text-gray-500 hover:border-blue-500:border-blue-400 hover:text-blue-600:text-blue-400 transition-colors"
                                     >
                                       + 選択する
                                     </button>
@@ -900,7 +900,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
         <div className="p-4 bg-gray-50 border-t border-gray-200">
           <button
             onClick={() => setShowConfirmAddToCart(true)}
-            className="w-full py-3 bg-gradient-to-r from-teal-500 to-emerald-500 text-white rounded-xl font-bold hover:from-teal-600 hover:to-emerald-600 transition-colors flex items-center justify-center gap-2"
+            className="w-full py-3 bg-gradient-to-r from-blue-500 to-emerald-500 text-white rounded-xl font-bold hover:from-blue-600 hover:to-emerald-600 transition-colors flex items-center justify-center gap-2"
           >
             <Check className="w-5 h-5" />
             内装設定をカートに追加
@@ -971,7 +971,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
                 {getProductsForPart(selectedPartForPicker.partId).map(product => (
                   <div
                     key={product.id}
-                    className="border border-gray-200 rounded-xl p-3 hover:border-teal-500:border-teal-400 transition-colors bg-white"
+                    className="border border-gray-200 rounded-xl p-3 hover:border-blue-500:border-blue-400 transition-colors bg-white"
                   >
                     <h4 className="font-medium text-gray-900 text-sm mb-1">{product.name}</h4>
                     <p className="text-xs text-gray-500 mb-3">{product.manufacturer}</p>
@@ -1004,7 +1004,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
                             title={variant.color}
                           >
                             <div
-                              className="w-10 h-10 rounded-lg border-2 border-gray-300 hover:border-teal-500:border-teal-400 transition-colors hover:scale-110"
+                              className="w-10 h-10 rounded-lg border-2 border-gray-300 hover:border-blue-500:border-blue-400 transition-colors hover:scale-110"
                               style={{ backgroundColor: hexColor }}
                             />
                             <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">

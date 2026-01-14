@@ -173,7 +173,7 @@ export function SelectionPage({ projectId, onBack }: SelectionPageProps) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-gray-600">読み込み中...</p>
         </div>
       </div>
@@ -209,7 +209,7 @@ export function SelectionPage({ projectId, onBack }: SelectionPageProps) {
               <div className="hidden md:flex items-center gap-2">
                 <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-teal-500 transition-all"
+                    className="h-full bg-blue-500 transition-all"
                     style={{ width: `${progress}%` }}
                   />
                 </div>
@@ -220,7 +220,7 @@ export function SelectionPage({ projectId, onBack }: SelectionPageProps) {
               {/* Cart summary button */}
               <button
                 onClick={() => setShowCartSummary(true)}
-                className="relative p-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
+                className="relative p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
               >
                 <ShoppingCart className="w-5 h-5" />
                 {selections.length > 0 && (
@@ -256,7 +256,7 @@ export function SelectionPage({ projectId, onBack }: SelectionPageProps) {
                             px-3 py-1.5 rounded-full text-sm font-medium transition-all
                             flex items-center gap-1
                             ${isActive
-                              ? 'bg-teal-600 text-white'
+                              ? 'bg-blue-600 text-white'
                               : isComplete
                               ? 'bg-green-100 text-green-700 hover:bg-green-200'
                               : 'bg-white text-gray-700 hover:bg-gray-100'
@@ -318,7 +318,7 @@ export function SelectionPage({ projectId, onBack }: SelectionPageProps) {
         {/* Items grid */}
         {itemsLoading ? (
           <div className="flex items-center justify-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600"></div>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
           </div>
         ) : items.length === 0 ? (
           <div className="text-center py-12 text-gray-500">
@@ -342,7 +342,7 @@ export function SelectionPage({ projectId, onBack }: SelectionPageProps) {
                   className={`
                     bg-white rounded-xl overflow-hidden shadow-sm border-2 cursor-pointer
                     transition-all hover:shadow-md
-                    ${isSelected ? 'border-teal-500 ring-2 ring-teal-100' : 'border-transparent'}
+                    ${isSelected ? 'border-blue-500 ring-2 ring-blue-100' : 'border-transparent'}
                   `}
                 >
                   {/* Image */}
@@ -365,7 +365,7 @@ export function SelectionPage({ projectId, onBack }: SelectionPageProps) {
                       </div>
                     )}
                     {isSelected && (
-                      <div className="absolute top-2 right-2 w-6 h-6 bg-teal-500 rounded-full flex items-center justify-center">
+                      <div className="absolute top-2 right-2 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
                         <Check className="w-4 h-4 text-white" />
                       </div>
                     )}
@@ -478,7 +478,7 @@ export function SelectionPage({ projectId, onBack }: SelectionPageProps) {
                           onClick={() => setSelectedVariant(variant)}
                           className={`
                             relative w-16 h-16 rounded-lg overflow-hidden border-2 transition-all
-                            ${isActive ? 'border-teal-500 ring-2 ring-teal-100' : 'border-gray-200 hover:border-gray-300'}
+                            ${isActive ? 'border-blue-500 ring-2 ring-blue-100' : 'border-gray-200 hover:border-gray-300'}
                           `}
                         >
                           {variantImage ? (
@@ -494,8 +494,8 @@ export function SelectionPage({ projectId, onBack }: SelectionPageProps) {
                             />
                           )}
                           {isActive && (
-                            <div className="absolute inset-0 bg-teal-500/20 flex items-center justify-center">
-                              <Check className="w-5 h-5 text-teal-600" />
+                            <div className="absolute inset-0 bg-blue-500/20 flex items-center justify-center">
+                              <Check className="w-5 h-5 text-blue-600" />
                             </div>
                           )}
                         </button>
@@ -556,7 +556,7 @@ export function SelectionPage({ projectId, onBack }: SelectionPageProps) {
                 onClick={() =>
                   handleSelectItem(selectedItem, selectedVariant || selectedItem.variants?.[0])
                 }
-                className="w-full py-3 bg-teal-600 text-white rounded-lg font-medium hover:bg-teal-700 transition-colors"
+                className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
               >
                 このアイテムを選択
               </button>
@@ -638,7 +638,7 @@ export function SelectionPage({ projectId, onBack }: SelectionPageProps) {
                 </div>
                 <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-teal-500 transition-all"
+                    className="h-full bg-blue-500 transition-all"
                     style={{ width: `${progress}%` }}
                   />
                 </div>
@@ -651,7 +651,7 @@ export function SelectionPage({ projectId, onBack }: SelectionPageProps) {
 
               <button
                 disabled={progress < 100}
-                className="w-full py-3 bg-teal-600 text-white rounded-lg font-medium hover:bg-teal-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 選択を確定する
               </button>

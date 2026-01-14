@@ -278,7 +278,7 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
       {/* サイドバー */}
       <div className="fixed right-0 top-0 h-full w-full sm:w-[480px] bg-white shadow-xl z-50 flex flex-col">
         {/* ヘッダー */}
-        <div className="bg-gradient-to-r from-teal-600 to-teal-500 text-white p-4">
+        <div className="bg-gradient-to-r from-blue-600 to-blue-500 text-white p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <ShoppingBag className="w-5 h-5" />
@@ -461,12 +461,12 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
         {/* フッター */}
         {items.length > 0 && (
           <div className="border-t border-gray-200 p-4">
-            <div className="flex items-center justify-between mb-4 bg-gradient-to-r from-teal-50 to-teal-100 -mx-4 px-4 py-3 border-y border-teal-200">
+            <div className="flex items-center justify-between mb-4 bg-gradient-to-r from-blue-50 to-blue-100 -mx-4 px-4 py-3 border-y border-blue-200">
               <div>
                 <span className="text-lg font-semibold text-gray-700">オプション合計</span>
                 <span className="text-xs text-gray-500 ml-2">税別</span>
               </div>
-              <span className="text-2xl font-bold text-teal-600">
+              <span className="text-2xl font-bold text-blue-600">
                 {formatPrice(totalPrice)}
               </span>
             </div>
@@ -486,14 +486,14 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
                   <div className="flex gap-2">
                     <button
                       onClick={handleTemporarySave}
-                      className="flex-1 px-4 py-2.5 border border-teal-500 text-teal-600 rounded-xl font-medium hover:bg-teal-50 transition-colors flex items-center justify-center gap-2"
+                      className="flex-1 px-4 py-2.5 border border-blue-500 text-blue-600 rounded-xl font-medium hover:bg-blue-50 transition-colors flex items-center justify-center gap-2"
                     >
                       <Save className="w-4 h-4" />
                       一時保存
                     </button>
                     <button
                       onClick={handleFinalize}
-                      className="flex-1 px-4 py-2.5 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-xl font-medium hover:from-teal-600 hover:to-teal-700 transition-colors flex items-center justify-center gap-2 shadow-sm"
+                      className="flex-1 px-4 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl font-medium hover:from-blue-600 hover:to-blue-700 transition-colors flex items-center justify-center gap-2 shadow-sm"
                     >
                       <CheckCircle className="w-4 h-4" />
                       確定
@@ -512,7 +512,7 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
                   {/* エクスポートメニュートグル */}
                   <button
                     onClick={() => setShowExportMenu(!showExportMenu)}
-                    className="w-full px-4 py-2.5 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-xl font-medium hover:from-teal-600 hover:to-teal-700 transition-colors flex items-center justify-center gap-2 shadow-sm"
+                    className="w-full px-4 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl font-medium hover:from-blue-600 hover:to-blue-700 transition-colors flex items-center justify-center gap-2 shadow-sm"
                   >
                     <Download className="w-4 h-4" />
                     書類をダウンロード
@@ -536,7 +536,7 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
                         onClick={handleExportExcel}
                         className="w-full px-3 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm hover:bg-gray-100 transition-colors flex items-center gap-2"
                       >
-                        <FileSpreadsheet className="w-4 h-4 text-green-500" />
+                        <FileSpreadsheet className="w-4 h-4 text-blue-500" />
                         見積書（Excel）
                         <span className="text-xs text-gray-400 ml-auto">編集可能</span>
                       </button>
@@ -586,7 +586,7 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
                         <button
                           onClick={handleExportAll}
                           disabled={isExporting}
-                          className="w-full px-3 py-2 bg-teal-500 text-white rounded-lg text-sm hover:bg-teal-600 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                          className="w-full px-3 py-2 bg-blue-500 text-white rounded-lg text-sm hover:bg-blue-600 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
                         >
                           {isExporting ? (
                             <>

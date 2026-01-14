@@ -81,7 +81,7 @@ export const ICProposalSelector: React.FC<ICProposalSelectorProps> = ({
   // Step 1: 提案希望する/しない選択
   if (step === 'choice') {
     return (
-      <div className="p-4 max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto px-4">
         <PageHeader
           title={`${categoryName}のIC提案`}
           subtitle={isCurtain
@@ -123,7 +123,7 @@ export const ICProposalSelector: React.FC<ICProposalSelectorProps> = ({
 
   // Step 2: 詳細選択（部屋 or 家具種類）
   return (
-    <div className="p-4 max-w-6xl mx-auto">
+    <div className="max-w-6xl mx-auto px-4">
       <button
         onClick={() => setStep('choice')}
         className="mb-4 text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1"

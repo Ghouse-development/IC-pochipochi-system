@@ -195,7 +195,7 @@ export const MaterialWarningModal: React.FC<MaterialWarningModalProps> = ({
                 disabled={!canConfirm}
                 className={`flex-[2] py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${
                   canConfirm
-                    ? 'bg-gradient-to-r from-teal-500 to-emerald-500 text-white hover:from-teal-600 hover:to-emerald-600'
+                    ? 'bg-gradient-to-r from-blue-500 to-emerald-500 text-white hover:from-blue-600 hover:to-emerald-600'
                     : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 }`}
               >

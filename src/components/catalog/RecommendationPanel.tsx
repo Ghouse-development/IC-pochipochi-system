@@ -86,7 +86,7 @@ export const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
                     />
                     <button
                       onClick={(e) => handleQuickAdd(product, e)}
-                      className="absolute bottom-2 right-2 p-2 bg-teal-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-teal-600"
+                      className="absolute bottom-2 right-2 p-2 bg-blue-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-blue-600"
                     >
                       <ShoppingCart className="w-4 h-4" />
                     </button>
@@ -100,7 +100,7 @@ export const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
                     />
                     <span className="text-xs text-gray-500">{product.variants.length}色</span>
                   </div>
-                  <p className="text-sm font-bold text-teal-600 mt-1">
+                  <p className="text-sm font-bold text-blue-600 mt-1">
                     {price === 0 ? '標準' : `${formatPrice(price)}/${UNIT_SYMBOLS[product.unit] || product.unit}`}
                   </p>
                 </button>
@@ -144,7 +144,7 @@ export const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
                   </div>
                   <p className="text-xs text-gray-500 truncate">{product.categoryName}</p>
                   <p className="text-sm font-medium text-gray-900 line-clamp-2">{product.name}</p>
-                  <p className="text-sm font-bold text-teal-600 mt-1">
+                  <p className="text-sm font-bold text-blue-600 mt-1">
                     {price === 0 ? '標準' : formatPrice(price)}
                   </p>
                 </button>
@@ -185,7 +185,7 @@ export const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
                       title={product.name}
                     >
                       <div
-                        className="aspect-square rounded-lg border-2 border-gray-200 hover:border-teal-500 transition-colors"
+                        className="aspect-square rounded-lg border-2 border-gray-200 hover:border-blue-500 transition-colors"
                         style={{ backgroundColor: hexColor }}
                       />
                       <p className="text-[10px] text-gray-500 mt-1 truncate">{product.categoryName}</p>
@@ -215,7 +215,7 @@ export const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
                       title={product.name}
                     >
                       <div
-                        className="aspect-square rounded-lg border-2 border-gray-200 hover:border-teal-500 transition-colors"
+                        className="aspect-square rounded-lg border-2 border-gray-200 hover:border-blue-500 transition-colors"
                         style={{ backgroundColor: hexColor }}
                       />
                       <p className="text-[10px] text-gray-500 mt-1 truncate">{product.categoryName}</p>

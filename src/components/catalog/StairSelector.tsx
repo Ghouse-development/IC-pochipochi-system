@@ -242,7 +242,7 @@ export const StairSelector: React.FC<StairSelectorProps> = ({
   const currentStepIndex = getCurrentStepIndex();
 
   return (
-    <div className="p-4 max-w-6xl mx-auto">
+    <div className="max-w-6xl mx-auto px-4">
       {/* ヘッダー */}
       <PageHeader
         title="階段を選択"

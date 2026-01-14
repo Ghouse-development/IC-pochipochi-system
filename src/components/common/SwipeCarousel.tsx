@@ -192,7 +192,7 @@ export const SwipeCarousel: React.FC<SwipeCarouselProps> = ({
               aria-label={`スライド ${index + 1} / ${maxIndex + 1}`}
               className={`w-2 h-2 rounded-full transition-all ${
                 index === currentIndex
-                  ? 'bg-teal-500 w-4'
+                  ? 'bg-blue-500 w-4'
                   : 'bg-gray-300 hover:bg-gray-400'
               }`}
             />

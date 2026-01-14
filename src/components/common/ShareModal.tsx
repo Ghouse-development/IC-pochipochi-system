@@ -39,7 +39,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose }) => {
 
           {/* ヘッダー */}
           <div className="text-center mb-6">
-            <div className="w-16 h-16 bg-gradient-to-br from-teal-400 to-teal-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <Share2 className="w-8 h-8 text-white" />
             </div>
             <h2 className="text-xl font-bold text-gray-900">選択内容をシェア</h2>
@@ -56,7 +56,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose }) => {
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">オプション合計</span>
-              <span className="font-bold text-teal-600">{formatPrice(totalPrice)}</span>
+              <span className="font-bold text-blue-600">{formatPrice(totalPrice)}</span>
             </div>
           </div>
 
@@ -93,7 +93,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose }) => {
                 className={`px-4 py-2 rounded-lg font-medium transition-all ${
                   copied
                     ? 'bg-green-500 text-white'
-                    : 'bg-teal-500 text-white hover:bg-teal-600'
+                    : 'bg-blue-500 text-white hover:bg-blue-600'
                 }`}
               >
                 {copied ? (

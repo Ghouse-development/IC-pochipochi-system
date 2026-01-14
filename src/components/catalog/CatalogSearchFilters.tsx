@@ -77,7 +77,7 @@ export const CatalogSearchFilters: React.FC<CatalogSearchFiltersProps> = ({
             placeholder="検索..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-sm"
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
           />
           {searchTerm && (
             <button
@@ -136,7 +136,7 @@ export const CatalogSearchFilters: React.FC<CatalogSearchFiltersProps> = ({
             type="checkbox"
             checked={hideDiscontinued}
             onChange={(e) => setHideDiscontinued(e.target.checked)}
-            className="rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
           />
           <span>廃番を非表示</span>
         </label>
@@ -146,7 +146,7 @@ export const CatalogSearchFilters: React.FC<CatalogSearchFiltersProps> = ({
           <select
             value={selectedMaterialType || ''}
             onChange={(e) => setSelectedMaterialType(e.target.value)}
-            className="text-sm border border-gray-300 rounded-lg px-2 py-1.5 focus:ring-2 focus:ring-teal-500"
+            className="text-sm border border-gray-300 rounded-lg px-2 py-1.5 focus:ring-2 focus:ring-blue-500"
           >
             <option value="">素材を選択</option>
             {availableMaterialTypes.map(material => (
@@ -160,7 +160,7 @@ export const CatalogSearchFilters: React.FC<CatalogSearchFiltersProps> = ({
           <select
             value={selectedColor || ''}
             onChange={(e) => setSelectedColor(e.target.value)}
-            className="text-sm border border-gray-300 rounded-lg px-2 py-1.5 focus:ring-2 focus:ring-teal-500"
+            className="text-sm border border-gray-300 rounded-lg px-2 py-1.5 focus:ring-2 focus:ring-blue-500"
           >
             <option value="">色を選択</option>
             {availableColors.map(color => (

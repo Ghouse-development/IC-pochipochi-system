@@ -229,7 +229,7 @@ export const StaffOptionDashboard: React.FC = () => {
                   >
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-gradient-to-br from-teal-500 to-emerald-600 rounded-full flex items-center justify-center text-white font-medium text-sm">
+                        <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-emerald-600 rounded-full flex items-center justify-center text-white font-medium text-sm">
                           {staff.staffName.charAt(0)}
                         </div>
                         <span className="font-medium text-gray-900">{staff.staffName}</span>
@@ -258,7 +258,7 @@ export const StaffOptionDashboard: React.FC = () => {
                           return (
                             <div
                               key={idx}
-                              className="w-2 bg-gradient-to-t from-teal-500 to-emerald-400 rounded-t"
+                              className="w-2 bg-gradient-to-t from-blue-500 to-emerald-400 rounded-t"
                               style={{ height: `${height}%`, minHeight: '2px' }}
                               title={`${m.month}: ${formatPrice(m.amount)}`}
                             />

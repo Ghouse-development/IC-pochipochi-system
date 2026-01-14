@@ -422,12 +422,12 @@ export function ProductVariantEditor({
               />
 
               {/* URL直接入力（推奨） */}
-              <div className="mb-4 p-4 bg-teal-50 border border-teal-200 rounded-lg">
+              <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
                 <div className="flex items-center gap-2 mb-2">
-                  <Link className="w-4 h-4 text-teal-600" />
-                  <span className="text-sm font-medium text-teal-700">画像URLを直接入力（推奨）</span>
+                  <Link className="w-4 h-4 text-blue-600" />
+                  <span className="text-sm font-medium text-blue-700">画像URLを直接入力（推奨）</span>
                 </div>
-                <p className="text-xs text-teal-600 mb-3">
+                <p className="text-xs text-blue-600 mb-3">
                   メーカーサイトの画像URLをコピー＆ペーストできます
                 </p>
                 <div className="flex gap-2">
@@ -445,12 +445,12 @@ export function ProductVariantEditor({
                       }
                     }}
                     placeholder="https://example.com/image.jpg"
-                    className="flex-1 px-3 py-2 border border-teal-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm"
+                    className="flex-1 px-3 py-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                   />
                   <button
                     onClick={handleAddImageFromUrl}
                     disabled={addingUrl || !imageUrl.trim()}
-                    className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm font-medium"
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm font-medium"
                   >
                     {addingUrl ? (
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>

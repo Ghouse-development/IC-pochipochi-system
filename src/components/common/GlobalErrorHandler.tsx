@@ -166,15 +166,15 @@ URL: ${window.location.href}
                 </p>
                 <ul className="mt-3 space-y-2 text-sm text-gray-600">
                   <li className="flex items-center gap-2">
-                    <span className="w-5 h-5 bg-teal-100 text-teal-600 rounded-full flex items-center justify-center text-xs">1</span>
+                    <span className="w-5 h-5 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs">1</span>
                     「再試行」ボタンをクリック
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="w-5 h-5 bg-teal-100 text-teal-600 rounded-full flex items-center justify-center text-xs">2</span>
+                    <span className="w-5 h-5 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs">2</span>
                     ブラウザを更新（F5キー）
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="w-5 h-5 bg-teal-100 text-teal-600 rounded-full flex items-center justify-center text-xs">3</span>
+                    <span className="w-5 h-5 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs">3</span>
                     トップページに戻る
                   </li>
                 </ul>
@@ -186,7 +186,7 @@ URL: ${window.location.href}
               <div className="flex gap-3">
                 <button
                   onClick={this.handleRetry}
-                  className="flex-1 py-3 bg-gradient-to-r from-teal-500 to-emerald-500 text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:from-teal-600 hover:to-emerald-600 transition-all shadow-lg"
+                  className="flex-1 py-3 bg-gradient-to-r from-blue-500 to-emerald-500 text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:from-blue-600 hover:to-emerald-600 transition-all shadow-lg"
                 >
                   <RefreshCw className="w-5 h-5" />
                   再試行
