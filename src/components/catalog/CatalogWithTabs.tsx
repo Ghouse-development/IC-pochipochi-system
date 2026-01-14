@@ -2766,7 +2766,15 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   }}
                 />
               ) : filteredItems.length === 0 ? (
-                <EmptyState searchTerm={searchTerm} onClear={() => setSearchTerm('')} />
+                <div className="max-w-6xl mx-auto px-4">
+                  {currentCategoryName && (
+                    <PageHeader
+                      title={selectedMaterialType ? `${selectedMaterialType}を選択` : `${currentCategoryName}を選択`}
+                      subtitle="該当する商品がありません"
+                    />
+                  )}
+                  <EmptyState searchTerm={searchTerm} onClear={() => setSearchTerm('')} />
+                </div>
               ) : (
                 <div className="max-w-6xl mx-auto px-4">
                   {/* カテゴリヘッダー（全カテゴリ共通） */}
