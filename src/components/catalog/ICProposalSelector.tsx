@@ -89,7 +89,7 @@ export const ICProposalSelector: React.FC<ICProposalSelectorProps> = ({
             : 'インテリアコーディネーターに家具の提案を希望しますか？'}
         />
 
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
+        <div className="grid grid-cols-6 gap-2">
           {/* 提案希望する */}
           <button
             onClick={() => handleChoiceSelect(true)}
@@ -144,7 +144,7 @@ export const ICProposalSelector: React.FC<ICProposalSelectorProps> = ({
         subtitle="複数選択できます"
       />
 
-      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2 mb-4">
+      <div className="grid grid-cols-6 gap-2 mb-4">
         {items.map((item) => {
           const isSelected = selectedItems.includes(item.id);
           const Icon = item.icon;

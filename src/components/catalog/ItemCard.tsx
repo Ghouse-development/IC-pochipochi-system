@@ -151,14 +151,14 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
           })()
         )}
 
-        {/* バッジ（標準/オプション） */}
-        <div className="absolute top-1 left-1">
-          <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${
-            standard ? 'bg-emerald-500 text-white' : 'bg-orange-500 text-white'
-          }`}>
-            {standard ? '標準' : 'オプション'}
-          </span>
-        </div>
+        {/* バッジ（標準のみ表示） */}
+        {standard && (
+          <div className="absolute top-1 left-1">
+            <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500 text-white">
+              標準
+            </span>
+          </div>
+        )}
 
         {/* 選択済みマーク */}
         {inCart && (

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Check, ChevronLeft, Key, Grip, Monitor } from 'lucide-react';
+import { Check, ChevronLeft } from 'lucide-react';
 import { PageHeader } from './PageHeader';
 import { useCartStore } from '../../stores/useCartStore';
 import { useProductStore } from '../../stores/useProductStore';
@@ -258,11 +258,6 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
     setCurrentStep('complete');
   };
 
-  // ステップ進行表示
-  const steps = ['①デザイン', '②色', '③鍵', '④ハンドル', '⑤操作盤'];
-  const stepOrder: Step[] = ['design', 'color', 'key', 'handle', 'interface'];
-  const currentStepIndex = stepOrder.indexOf(currentStep);
-
   return (
     <div className="p-6 max-w-3xl mx-auto">
       {/* ヘッダー */}
@@ -271,75 +266,38 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
         subtitle="5つのステップで選んでください"
       />
 
-      {/* ステップ進行表示 */}
-      {currentStep !== 'complete' && (
-        <div className="flex items-center gap-2 mb-6 text-sm overflow-x-auto pb-2">
-          {steps.map((step, index) => {
-            const isCompleted = currentStepIndex > index;
-            const isCurrent = currentStepIndex === index;
-
-            return (
-              <React.Fragment key={step}>
-                <span className={`px-3 py-1 rounded-full whitespace-nowrap ${
-                  isCompleted
-                    ? 'bg-green-100 text-green-700'
-                    : isCurrent
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-gray-100 text-gray-400'
-                }`}>
-                  {isCompleted && <Check className="w-3 h-3 inline mr-1" />}
-                  {step}
-                </span>
-                {index < 4 && <span className="text-gray-300">→</span>}
-              </React.Fragment>
-            );
-          })}
-        </div>
-      )}
-
-      {/* ステップ1: ドアデザイン選択 */}
+      {/* ドアデザイン選択 */}
       {currentStep === 'design' && (
-        <div>
-          <h4 className="font-medium text-gray-800 mb-4">
-            ドアデザインを選んでください
-          </h4>
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
-            {DOOR_DESIGNS.map((design) => (
-              <SelectionCard
-                key={design.id}
-                id={design.id}
-                name={design.name}
-                description={design.description}
-                imageUrl={DOOR_DESIGN_IMAGES[design.id]}
-                placeholderEmoji="🚪"
-                placeholderBgColor="from-amber-100 to-yellow-100"
-                isSelected={selectedDesign === design.id}
-                onClick={() => {
-                  setSelectedDesign(design.id);
-                  goToStep('color');
-                }}
-              />
-            ))}
-          </div>
+        <div className="grid grid-cols-6 gap-2">
+          {DOOR_DESIGNS.map((design) => (
+            <SelectionCard
+              key={design.id}
+              id={design.id}
+              name={design.name}
+              description={design.description}
+              imageUrl={DOOR_DESIGN_IMAGES[design.id]}
+              placeholderEmoji="🚪"
+              placeholderBgColor="from-amber-100 to-yellow-100"
+              isSelected={selectedDesign === design.id}
+              onClick={() => {
+                setSelectedDesign(design.id);
+                goToStep('color');
+              }}
+            />
+          ))}
         </div>
       )}
 
-      {/* ステップ2: 色選択 */}
+      {/* 色選択 */}
       {currentStep === 'color' && (
         <div>
           <button
             onClick={goBack}
             className="mb-4 text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1"
           >
-            <ChevronLeft className="w-4 h-4" /> デザイン選択に戻る
+            <ChevronLeft className="w-4 h-4" /> 戻る
           </button>
-          <h4 className="font-medium text-gray-800 mb-2">
-            色を選んでください
-          </h4>
-          <p className="text-sm text-gray-500 mb-4">
-            選択中: {DOOR_DESIGNS.find(d => d.id === selectedDesign)?.name}
-          </p>
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
+          <div className="grid grid-cols-6 gap-2">
             {getDoorColors().map((variant) => (
               <SelectionCard
                 key={variant.id}
@@ -360,20 +318,16 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
         </div>
       )}
 
-      {/* ステップ3: 鍵の種類選択 */}
+      {/* 鍵の種類選択 */}
       {currentStep === 'key' && (
         <div>
           <button
             onClick={goBack}
             className="mb-4 text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1"
           >
-            <ChevronLeft className="w-4 h-4" /> 色選択に戻る
+            <ChevronLeft className="w-4 h-4" /> 戻る
           </button>
-          <h4 className="font-medium text-gray-800 mb-4 flex items-center gap-2">
-            <Key className="w-5 h-5 text-blue-500" />
-            鍵の種類を選んでください
-          </h4>
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
+          <div className="grid grid-cols-6 gap-2">
             {KEY_TYPES.map((keyType) => {
               const isStandard = keyType.standardFor.includes(selectedPlan);
               return (
@@ -401,23 +355,16 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
         </div>
       )}
 
-      {/* ステップ4: ハンドル形状+色を一括選択 */}
+      {/* ハンドル選択 */}
       {currentStep === 'handle' && (
         <div>
           <button
             onClick={goBack}
             className="mb-4 text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1"
           >
-            <ChevronLeft className="w-4 h-4" /> 鍵の種類選択に戻る
+            <ChevronLeft className="w-4 h-4" /> 戻る
           </button>
-          <h4 className="font-medium text-gray-800 mb-2 flex items-center gap-2">
-            <Grip className="w-5 h-5 text-blue-500" />
-            ハンドルを選んでください
-          </h4>
-          <p className="text-sm text-gray-500 mb-4">
-            {isElectronicKey ? '電子錠用ハンドル' : '手動錠用ハンドル'}（形状と色の組み合わせ）
-          </p>
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
+          <div className="grid grid-cols-6 gap-2">
             {getHandleColorCombos().map((combo) => (
               <SelectionCard
                 key={combo.id}
@@ -440,23 +387,16 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
         </div>
       )}
 
-      {/* ステップ5: 操作盤付インターフェースユニット */}
+      {/* 操作盤選択 */}
       {currentStep === 'interface' && (
         <div>
           <button
             onClick={goBack}
             className="mb-4 text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1"
           >
-            <ChevronLeft className="w-4 h-4" /> ハンドル選択に戻る
+            <ChevronLeft className="w-4 h-4" /> 戻る
           </button>
-          <h4 className="font-medium text-gray-800 mb-4 flex items-center gap-2">
-            <Monitor className="w-5 h-5 text-blue-500" />
-            操作盤付インターフェースユニット
-          </h4>
-          <p className="text-sm text-gray-500 mb-4">
-            玄関ドア付近に設置する操作盤です
-          </p>
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
+          <div className="grid grid-cols-6 gap-2">
             <SelectionCard
               id="interface-yes"
               name="あり"

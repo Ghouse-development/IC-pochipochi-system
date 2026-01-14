@@ -160,7 +160,7 @@ export const CatalogView: React.FC<CatalogViewProps> = ({ catalogType = 'interio
         </div>
         
         {/* 商品グリッド */}
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
+        <div className="grid grid-cols-6 gap-2">
           {filteredProducts.map((product) => (
             <ProductCard
               key={product.id}

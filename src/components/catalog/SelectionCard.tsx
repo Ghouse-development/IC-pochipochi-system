@@ -33,7 +33,6 @@ export const SelectionCard: React.FC<SelectionCardProps> = ({
   placeholderEmoji = '📦',
   placeholderBgColor = 'from-gray-100 to-gray-200',
   isStandard,
-  isOption,
   price,
   isSelected,
   onClick,
@@ -92,15 +91,11 @@ export const SelectionCard: React.FC<SelectionCardProps> = ({
           </div>
         )}
 
-        {/* バッジ（標準/オプション） */}
-        {(isStandard || isOption) && (
+        {/* バッジ（標準のみ表示） */}
+        {isStandard && (
           <div className="absolute top-1 left-1">
-            <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${
-              isStandard
-                ? 'bg-emerald-500 text-white'
-                : 'bg-orange-500 text-white'
-            }`}>
-              {isStandard ? '標準' : 'オプション'}
+            <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500 text-white">
+              標準
             </span>
           </div>
         )}

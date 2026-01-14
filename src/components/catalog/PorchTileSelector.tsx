@@ -137,9 +137,6 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
     setStep('complete');
   };
 
-  // モルタル以外のタイルは目地選択が必要
-  const needsGrout = selectedTile && !isMortar(selectedTile);
-
   // 標準タイルとオプションタイルを分離
   const standardTiles = tiles.filter(t => t.isStandard);
   const optionTiles = tiles.filter(t => !t.isStandard);
@@ -184,102 +181,33 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
         subtitle="ポーチの仕上げとタイルの目地色を選んでください"
       />
 
-      {/* ステップインジケーター */}
-      {step !== 'complete' && (
-        <div className="flex items-center gap-2 mb-6 flex-wrap">
-          <div className={`flex items-center gap-1 ${step === 'tile' ? 'text-blue-600 font-medium' : 'text-gray-400'}`}>
-            <span className={`w-6 h-6 rounded-full flex items-center justify-center text-sm ${step === 'tile' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100'}`}>1</span>
-            <span>タイル</span>
-          </div>
-          {selectedTile && needsColorSelection(selectedTile) && (
-            <>
-              <div className="w-6 h-px bg-gray-300" />
-              <div className={`flex items-center gap-1 ${step === 'color' ? 'text-blue-600 font-medium' : 'text-gray-400'}`}>
-                <span className={`w-6 h-6 rounded-full flex items-center justify-center text-sm ${step === 'color' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100'}`}>2</span>
-                <span>色</span>
-              </div>
-            </>
-          )}
-          {needsGrout && (
-            <>
-              <div className="w-6 h-px bg-gray-300" />
-              <div className={`flex items-center gap-1 ${step === 'grout' ? 'text-blue-600 font-medium' : 'text-gray-400'}`}>
-                <span className={`w-6 h-6 rounded-full flex items-center justify-center text-sm ${step === 'grout' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100'}`}>{selectedTile && needsColorSelection(selectedTile) ? '3' : '2'}</span>
-                <span>目地色</span>
-              </div>
-            </>
-          )}
-        </div>
-      )}
 
-      {/* ステップ1: タイル選択 */}
+      {/* タイル選択 */}
       {step === 'tile' && (
-        <div>
-          <h4 className="font-medium text-gray-800 mb-4">ポーチの仕上げを選択</h4>
-
-          {/* 標準オプション */}
-          {standardTiles.length > 0 && (
-            <div className="mb-4">
-              <h5 className="text-sm font-medium text-gray-500 mb-3">標準</h5>
-              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
-                {standardTiles.map(tile => (
-                  <TileButton
-                    key={tile.id}
-                    tile={tile}
-                    isSelected={selectedTile?.id === tile.id}
-                    onClick={() => handleTileSelect(tile)}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* タイルオプション */}
-          {optionTiles.length > 0 && (
-            <div>
-              <h5 className="text-sm font-medium text-gray-500 mb-3">タイル（オプション）</h5>
-              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
-                {optionTiles.map(tile => (
-                  <TileButton
-                    key={tile.id}
-                    tile={tile}
-                    isSelected={selectedTile?.id === tile.id}
-                    onClick={() => handleTileSelect(tile)}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
+        <div className="grid grid-cols-6 gap-2">
+          {/* 標準を先に、オプションを後に表示 */}
+          {[...standardTiles, ...optionTiles].map(tile => (
+            <TileButton
+              key={tile.id}
+              tile={tile}
+              isSelected={selectedTile?.id === tile.id}
+              onClick={() => handleTileSelect(tile)}
+            />
+          ))}
         </div>
       )}
 
-      {/* ステップ2: 色選択（複数バリアントがある場合のみ） */}
+      {/* 色選択（複数バリアントがある場合のみ） */}
       {step === 'color' && selectedTile && selectedTile.colorVariants && (
         <div>
           <button
             onClick={() => setStep('tile')}
             className="mb-4 text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1"
           >
-            <ChevronLeft className="w-4 h-4" /> タイル選択に戻る
+            <ChevronLeft className="w-4 h-4" /> 戻る
           </button>
 
-          <div className="mb-4 p-3 bg-gray-50 rounded-lg flex items-center gap-2">
-            {selectedTile.imageUrl && (
-              <img
-                src={selectedTile.imageUrl}
-                alt={selectedTile.name}
-                className="w-12 h-12 object-cover rounded"
-              />
-            )}
-            <div>
-              <span className="text-sm text-gray-600">選択中のタイル: </span>
-              <span className="font-medium">{selectedTile.name}</span>
-            </div>
-          </div>
-
-          <h4 className="font-medium text-gray-800 mb-4">色を選択（{selectedTile.colorVariants.length}色）</h4>
-
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-6 gap-2 mb-4">
+          <div className="grid grid-cols-6 gap-2 mb-4">
             {selectedTile.colorVariants.map(color => (
               <button
                 key={color.id}
@@ -325,36 +253,17 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
         </div>
       )}
 
-      {/* ステップ3: 目地色選択 */}
+      {/* 目地色選択 */}
       {step === 'grout' && selectedTile && (
         <div>
           <button
             onClick={() => needsColorSelection(selectedTile) ? setStep('color') : setStep('tile')}
             className="mb-4 text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1"
           >
-            <ChevronLeft className="w-4 h-4" /> {needsColorSelection(selectedTile) ? '色選択に戻る' : 'タイル選択に戻る'}
+            <ChevronLeft className="w-4 h-4" /> 戻る
           </button>
 
-          <div className="mb-4 p-3 bg-gray-50 rounded-lg flex items-center gap-2">
-            {(selectedColor?.imageUrl || selectedTile.imageUrl) && (
-              <img
-                src={selectedColor?.imageUrl || selectedTile.imageUrl}
-                alt={selectedColor?.colorName || selectedTile.name}
-                className="w-12 h-12 object-cover rounded"
-              />
-            )}
-            <div>
-              <span className="text-sm text-gray-600">選択中: </span>
-              <span className="font-medium">{selectedTile.name}</span>
-              {selectedColor && (
-                <span className="text-sm text-gray-500 ml-1">({selectedColor.colorName})</span>
-              )}
-            </div>
-          </div>
-
-          <h4 className="font-medium text-gray-800 mb-4">目地色を選択</h4>
-
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-6 gap-2 mb-4">
+          <div className="grid grid-cols-6 gap-2 mb-4">
             {groutColors.map(grout => (
               <button
                 key={grout.id}
@@ -481,14 +390,14 @@ const TileButton: React.FC<TileButtonProps> = ({ tile, isSelected, onClick }) =>
         </div>
       )}
 
-      {/* バッジ（標準/オプション） */}
-      <div className="absolute top-1 left-1">
-        <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${
-          tile.isStandard ? 'bg-emerald-500 text-white' : 'bg-orange-500 text-white'
-        }`}>
-          {tile.isStandard ? '標準' : 'オプション'}
-        </span>
-      </div>
+      {/* バッジ（標準のみ表示） */}
+      {tile.isStandard && (
+        <div className="absolute top-1 left-1">
+          <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500 text-white">
+            標準
+          </span>
+        </div>
+      )}
 
       {/* 選択済みマーク */}
       {isSelected && (
