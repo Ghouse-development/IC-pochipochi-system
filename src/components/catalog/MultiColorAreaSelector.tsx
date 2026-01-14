@@ -92,6 +92,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
           </div>
         )}
 
+        {/* バッジ（標準） */}
+        <div className="absolute top-1 left-1">
+          <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500 text-white">
+            標準
+          </span>
+        </div>
+
         {/* 選択済みマーク */}
         {isSelected && (
           <div className="absolute top-1 right-1 bg-blue-500 rounded-full p-1">
@@ -105,6 +112,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <h4 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
           {product.name}
         </h4>
+
+        {/* 価格・単位 */}
+        <div className="flex items-baseline gap-1 mt-1">
+          <span className="text-sm font-bold text-emerald-600">
+            標準
+          </span>
+        </div>
 
         {/* 選べる色数表示 */}
         {hasMultipleVariants && (
