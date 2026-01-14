@@ -1801,21 +1801,27 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   <div className="grid grid-cols-6 gap-2">
                     {EXTERIOR_WALL_MATERIAL_TYPES.map((material) => {
                       const itemCount = items.filter(i => getMaterialTypeFromNote(i.note) === material).length;
+                      const categoryEmoji = material.includes('タイル') ? '🪨' : material.includes('塗り') ? '🖌️' : material.includes('サイディング') ? '🏠' : '🧱';
                       return (
                         <button
                           key={material}
                           onClick={() => setSelectedMaterialType(material)}
-                          className="group flex items-center justify-between bg-white border-2 border-gray-200 rounded-lg p-3 hover:border-blue-400:border-blue-500 transition-all"
+                          className="group bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-blue-300 hover:shadow-md transition-all"
                         >
-                          <div>
-                            <h3 className="font-medium text-gray-900 text-left">
+                          {/* 画像エリア（正方形） */}
+                          <div className="aspect-square bg-gradient-to-br from-amber-50 to-orange-100 flex flex-col items-center justify-center">
+                            <span className="text-3xl">{categoryEmoji}</span>
+                            <span className="text-[10px] text-gray-400 mt-1">カテゴリ</span>
+                          </div>
+                          {/* 情報エリア */}
+                          <div className="p-2">
+                            <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
                               {material}
                             </h3>
-                            <p className="text-xs text-gray-500 mt-0.5">
-                              {itemCount > 0 ? `${itemCount}種類` : '準備中'}
+                            <p className="text-[10px] text-blue-600 mt-1">
+                              {itemCount > 0 ? `${itemCount}種類から選択` : '準備中'}
                             </p>
                           </div>
-                          <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-gray-600:text-gray-300 transition-colors" />
                         </button>
                       );
                     })}
@@ -1889,47 +1895,61 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   <div className="grid grid-cols-6 gap-2 mb-4">
                     {EXTERIOR_FACILITY_TYPES.filter(t => t.required).map((type) => {
                       const itemCount = items.filter(i => i.category_name === type.id).length;
+                      const categoryEmoji = type.id.includes('アンテナ') || type.id.includes('TV') ? '📡' : type.id.includes('給湯') ? '🔥' : type.id.includes('ポスト') ? '📮' : type.id.includes('表札') ? '🏠' : type.id.includes('インターホン') ? '🔔' : type.id.includes('散水') ? '💧' : type.id.includes('立水栓') ? '🚰' : '⚡';
                       return (
                         <button
                           key={type.id}
                           onClick={() => setSelectedMaterialType(type.id)}
-                          className="group flex flex-col items-start bg-white border-2 border-gray-200 rounded-lg p-3 hover:border-blue-400:border-blue-500 transition-all"
+                          className="group bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-blue-300 hover:shadow-md transition-all"
                         >
-                          <div className="w-full flex items-center justify-between mb-1">
-                            <h3 className="font-medium text-sm text-gray-900 text-left">
+                          {/* 画像エリア（正方形） */}
+                          <div className="aspect-square bg-gradient-to-br from-blue-50 to-cyan-100 flex flex-col items-center justify-center relative">
+                            <span className="text-3xl">{categoryEmoji}</span>
+                            <span className="text-[10px] text-gray-400 mt-1">必須</span>
+                          </div>
+                          {/* 情報エリア */}
+                          <div className="p-2">
+                            <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
                               {type.name}
                             </h3>
-                            <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors" />
+                            <p className="text-[10px] text-blue-600 mt-1">
+                              {itemCount > 0 ? `${itemCount}種類から選択` : '準備中'}
+                            </p>
                           </div>
-                          <p className="text-xs text-blue-600">
-                            {itemCount > 0 ? `${itemCount}種類` : '準備中'}
-                          </p>
                         </button>
                       );
                     })}
                   </div>
                   {/* その他オプション */}
                   <div className="border-t border-gray-200 pt-4">
-                    {EXTERIOR_FACILITY_TYPES.filter(t => !t.required).map((type) => {
-                      const itemCount = items.filter(i => i.category_name === type.id).length;
-                      return (
-                        <button
-                          key={type.id}
-                          onClick={() => setSelectedMaterialType(type.id)}
-                          className="w-full group flex items-center justify-between bg-white border-2 border-gray-200 rounded-lg p-3 hover:border-blue-400:border-blue-500 transition-all"
-                        >
-                          <div>
-                            <h4 className="font-medium text-gray-900 text-left">
-                              {type.name}
-                            </h4>
-                            <p className="text-xs text-gray-500 mt-0.5">
-                              {itemCount > 0 ? `${itemCount}種類` : '準備中'}
-                            </p>
-                          </div>
-                          <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-blue-500 transition-colors" />
-                        </button>
-                      );
-                    })}
+                    <p className="text-sm text-gray-500 mb-3">オプション設備</p>
+                    <div className="grid grid-cols-6 gap-2">
+                      {EXTERIOR_FACILITY_TYPES.filter(t => !t.required).map((type) => {
+                        const itemCount = items.filter(i => i.category_name === type.id).length;
+                        return (
+                          <button
+                            key={type.id}
+                            onClick={() => setSelectedMaterialType(type.id)}
+                            className="group bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-blue-300 hover:shadow-md transition-all"
+                          >
+                            {/* 画像エリア（正方形） */}
+                            <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col items-center justify-center relative">
+                              <span className="text-3xl">🔧</span>
+                              <span className="text-[10px] text-gray-400 mt-1">オプション</span>
+                            </div>
+                            {/* 情報エリア */}
+                            <div className="p-2">
+                              <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
+                                {type.name}
+                              </h3>
+                              <p className="text-[10px] text-blue-600 mt-1">
+                                {itemCount > 0 ? `${itemCount}種類から選択` : '準備中'}
+                              </p>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
                 </div>
               ) : currentCategoryName === '外部建材' && !selectedMaterialType ? (

@@ -154,9 +154,19 @@
 - 状態表示（選択済み、エラー等）以外で色を増やさない
 - 基本は白/グレー/青の3色系統で統一
 
+### 9. 選択カードは必ずSelectionCardを使用する（重要）
+
+**選択カードを新規作成する際は、必ず `SelectionCard.tsx` コンポーネントを使用すること。**
+
+- カスタムボタンやカードの新規作成は禁止
+- 既存のセレクター（StairSelector, EntranceDoorSelector等）を参考にする
+- SelectionCardのpropsで対応できない場合は、SelectionCard自体を拡張する
+
+**理由:** カードのデザイン統一を維持するため。SelectionCardを唯一の選択カードコンポーネントとする。
+
 ### アイテムカードのデザイン統一（重要）
 
-すべてのアイテム選択カード（ItemCard, SelectionCard, ProductCard, NotNeededCard, TileButton等）は以下のデザインに統一すること。
+**SelectionCard.tsx が唯一の選択カードコンポーネント。** 以下のデザインに統一されている。
 
 **基本構造:**
 ```
@@ -174,18 +184,22 @@
 ```
 
 **必須スタイル:**
-- コンテナ: `border-2 rounded-2xl overflow-hidden`
+- コンテナ: `border border-gray-200 rounded-lg overflow-hidden`
 - 画像エリア: `aspect-square` (正方形を厳守)
-- パディング: `p-3` (コンパクト)
-- メーカー名: `text-xs text-gray-500 mb-0.5 truncate`
-- タイトル: `font-bold text-sm line-clamp-2 mb-1`
-- 価格: `text-lg font-black`
-- 角丸: `rounded-2xl` (16px)
+- 情報エリア: `p-2`
+- タイトル: `font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem]`
+- 角丸: `rounded-lg`
 
-**バッジ色:**
+**バッジ:**
+- 位置: `absolute top-1 left-1`
+- スタイル: `px-1.5 py-0.5 rounded text-[10px] font-bold`
 - 標準: `bg-emerald-500 text-white`
-- オプション: `bg-orange-500 text-white`
 - なし/不要: `bg-gray-500 text-white`
+- ※「オプション」バッジは表示しない（標準のみ表示）
+
+**チェックマーク（選択時）:**
+- 位置: `absolute top-1 right-1`
+- スタイル: `bg-blue-500 rounded-full p-1` + `w-3 h-3` アイコン
 
 **価格表示:**
 - 0円 → `標準` (text-emerald-600)
@@ -193,8 +207,8 @@
 - ※「差額なし」「標準仕様」「¥0」等の表記ゆれは禁止
 
 **選択状態:**
-- 選択中: `border-4 border-blue-500 shadow-xl shadow-blue-200 scale-[1.02]`
-- ホバー: `hover:shadow-xl hover:border-blue-300 hover:scale-[1.02]`
+- 選択中: `border-2 border-blue-500 shadow-lg`
+- ホバー: `hover:border-blue-300 hover:shadow-md`
 
 **サムネイル画像:**
 - すべてのカードに画像を表示する（プレースホルダーでも可）
