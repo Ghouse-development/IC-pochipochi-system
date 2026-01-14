@@ -1749,6 +1749,10 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
               ) : activeTab === 'exterior' && currentCategoryName?.includes('ガレージシャッター') && !hasGarageShutter ? (
                 /* 外装タブ: ガレージシャッター未設定メッセージ */
                 <div className="max-w-6xl mx-auto px-4">
+                  <PageHeader
+                    title="ガレージシャッターを選択"
+                    subtitle="設計タブで設定してください"
+                  />
                   <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-center">
                     <span className="text-2xl mb-2 block">🚗</span>
                     <h2 className="text-lg font-medium text-gray-900 mb-2">
@@ -1768,6 +1772,10 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
               ) : activeTab === 'exterior' && currentCategoryName === '庇' && !hasAwning ? (
                 /* 外装タブ: 庇未設定メッセージ */
                 <div className="max-w-6xl mx-auto px-4">
+                  <PageHeader
+                    title="庇（ひさし）を選択"
+                    subtitle="設計タブで設定してください"
+                  />
                   <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-center">
                     <span className="text-2xl mb-2 block">🏠</span>
                     <h2 className="text-lg font-medium text-gray-900 mb-2">
@@ -2566,7 +2574,12 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 </div>
               ) : activeTab === 'furniture' && currentCategoryName === 'ガス乾燥機' && !hasGasSupply ? (
                 /* 家具・家電タブ: ガス乾燥機カテゴリでガス未選択時のプロンプト */
-                <div className="max-w-2xl mx-auto px-4 py-12">
+                <div className="max-w-6xl mx-auto px-4">
+                  <PageHeader
+                    title="ガス乾燥機を選択"
+                    subtitle="ガス引込みが必要です"
+                  />
+                  <div className="max-w-2xl mx-auto py-8">
                   <div className="bg-gradient-to-br from-orange-50 to-amber-50 border border-orange-200 rounded-2xl p-8 text-center">
                     <div className="text-5xl mb-4">🔥</div>
                     <h2 className="text-xl font-bold text-gray-900 mb-3">
@@ -2603,10 +2616,15 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                       ※設計タブでガス引込みの有無を選択できます
                     </p>
                   </div>
+                  </div>
                 </div>
               ) : activeTab === 'furniture' && currentCategoryName === 'ガス乾燥機' && hasGasSupply ? (
                 /* 家具・家電タブ: ガス乾燥機カテゴリでガス引込み済みの場合、カード選択UI */
-                <div className="max-w-6xl mx-auto px-4 py-6">
+                <div className="max-w-6xl mx-auto px-4">
+                  <PageHeader
+                    title="ガス乾燥機を選択"
+                    subtitle="乾太くんの本体とアクセサリを選んでください"
+                  />
                   {/* 乾太くんのメリットバナー */}
                   <div className="bg-gradient-to-r from-orange-100 to-amber-100 border border-orange-200 rounded-lg p-3 mb-4">
                     <div className="flex items-center gap-3 mb-2">
