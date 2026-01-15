@@ -38,6 +38,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  // 初期管理者メールアドレスリスト（ブートストラップ用）
+  const BOOTSTRAP_ADMIN_EMAILS = ['hn@g-house.osaka.jp'];
+
   // Fetch app user data from users table (via API to bypass RLS)
   const fetchUserData = async (_authId: string): Promise<User | null> => {
     try {
@@ -56,7 +59,45 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         .single();
 
       if (!error && data) {
+        // ブートストラップ管理者の場合、権限を自動修正
+        const email = session.user.email?.toLowerCase() || '';
+        if (BOOTSTRAP_ADMIN_EMAILS.includes(email) && data.role !== 'admin' && !data.is_super_admin) {
+          logger.info('Upgrading bootstrap admin:', email);
+          const { data: updatedData } = await supabase
+            .from('users')
+            .update({ role: 'admin', is_super_admin: true })
+            .eq('id', data.id)
+            .select()
+            .single();
+          return updatedData || data;
+        }
         return data;
+      }
+
+      // User not found in users table - create record
+      if (error?.code === 'PGRST116') { // No rows found
+        logger.info('User not in users table, creating record...');
+        const email = session.user.email || '';
+        const isBootstrapAdmin = BOOTSTRAP_ADMIN_EMAILS.includes(email.toLowerCase());
+
+        const { data: newUser, error: insertError } = await supabase
+          .from('users')
+          .insert({
+            auth_id: session.user.id,
+            email: email,
+            full_name: isBootstrapAdmin ? '管理者' : 'ユーザー',
+            role: isBootstrapAdmin ? 'admin' : 'user',
+            is_super_admin: isBootstrapAdmin,
+          })
+          .select()
+          .single();
+
+        if (insertError) {
+          logger.error('Error creating user record:', insertError);
+        } else if (newUser) {
+          logger.info('User record created:', newUser.email, 'role:', newUser.role);
+          return newUser;
+        }
       }
 
       // If RLS blocks, use API endpoint
@@ -89,13 +130,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     fullName: string,
     role: UserRole = 'user'
   ): Promise<User | null> => {
+    // ブートストラップ: 特定のメールアドレスは自動的に管理者として登録
+    const isBootstrapAdmin = BOOTSTRAP_ADMIN_EMAILS.includes(email.toLowerCase());
+    const finalRole = isBootstrapAdmin ? 'admin' : role;
+    const isSuperAdmin = isBootstrapAdmin;
+
     const { data, error } = await supabase
       .from('users')
       .insert({
         auth_id: authId,
         email,
         full_name: fullName,
-        role,
+        role: finalRole,
+        is_super_admin: isSuperAdmin,
       })
       .select()
       .single();
@@ -103,6 +150,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (error) {
       logger.error('Error creating user record:', error);
       return null;
+    }
+
+    if (isBootstrapAdmin) {
+      logger.info('Bootstrap admin created:', email);
     }
 
     return data;
