@@ -21,54 +21,52 @@ export const EXTERIOR_FACILITY_TYPES = [
 
 // 外部建材カテゴリ
 export const EXTERIOR_MATERIAL_TYPES = [
-  { id: '軒樋', name: '軒樋' },
-  { id: '竪樋', name: '竪樋' },
-  { id: '土台水切', name: '土台水切' },
-  { id: 'パラペット笠木', name: 'パラペット笠木' },
-  { id: 'バルコニー笠木', name: 'バルコニー笠木' },
-  { id: '破風', name: '破風' },
+  { id: '軒樋', name: '軒樋', description: '横に走る樋（雨どい）' },
+  { id: '竪樋', name: '竪樋', description: '縦に走る樋（雨どい）' },
+  { id: '土台水切', name: '土台水切', description: '基礎と外壁の境目' },
+  { id: 'パラペット笠木', name: 'パラペット笠木', description: '陸屋根の立ち上がり部分' },
+  { id: 'バルコニー笠木', name: 'バルコニー笠木', description: 'バルコニー手すり上部' },
+  { id: '破風', name: '破風', description: '屋根の妻側部分' },
 ] as const;
 
 // ベース床タイプ
 export const BASE_FLOOR_TYPES = [
-  { id: 'フローリング', name: 'フローリング' },
-  { id: 'フロアタイル', name: 'フロアタイル' },
-  { id: '畳', name: '畳' },
+  { id: 'フローリング', name: 'フローリング', description: '木目調の床材' },
+  { id: 'フロアタイル', name: 'フロアタイル', description: '水回り対応' },
+  { id: 'カーペットタイル', name: 'カーペットタイル', description: 'クッション性あり' },
+  { id: '磁器タイル', name: '磁器タイル', description: '玄関・土間用' },
 ] as const;
 
 // 周辺部材タイプ
 export const PERIPHERAL_PARTS_TYPES = [
-  { id: '巾木', name: '巾木' },
-  { id: '廻り縁', name: '廻り縁', optional: true },
-  { id: '見切り材', name: '見切り材' },
+  { id: '窓台', name: '窓台', description: '窓枠部材' },
+  { id: '巾木', name: '巾木', description: '床と壁の境目' },
+  { id: '腰壁笠木', name: '腰壁笠木', description: '腰壁がある場合のみ', optional: true },
 ] as const;
 
 // ガレージシャッターオプション
 export const GARAGE_SHUTTER_OPTIONS = [
-  { id: 'garage-shutter-no', name: 'ガレージシャッターなし', productId: 'design-garage-shutter-no', description: 'シャッターを設置しない' },
-  { id: 'garage-shutter-sunauto', name: 'スナオート', productId: 'design-garage-shutter-sunauto', description: '電動シャッター（三和シャッター）' },
-  { id: 'garage-shutter-famio', name: 'ファミオ', productId: 'design-garage-shutter-famio', description: '電動シャッター（YKK AP）' },
+  { id: 'garage-shutter-no', name: 'なし', description: 'ガレージシャッター不要', productId: 'ext-garage-shutter-none' },
+  { id: 'garage-shutter-sunauto', name: 'サンオートハイスピード', description: '静かでスピーディ（開閉約12秒）', productId: 'ext-garage-shutter-sunauto' },
+  { id: 'garage-shutter-ifudo', name: '威風堂々', description: '重厚感のある木目調デザイン', productId: 'ext-garage-shutter-ifudo' },
 ] as const;
 
 // 庇オプション
 export const AWNING_OPTIONS = [
-  { id: 'awning-no', name: '庇なし', productId: 'design-awning-no', description: '庇を設置しない' },
-  { id: 'awning-ad2s', name: 'アルミ庇 AD2S', productId: 'design-awning-ad2s', description: 'LIXIL AD2Sシリーズ' },
-  { id: 'awning-modern', name: 'モダンアート庇', productId: 'design-awning-modern', description: 'モダンスタイル庇' },
+  { id: 'awning-no', name: 'なし', description: '庇不要', productId: 'ext-awning-none' },
+  { id: 'awning-ad2s', name: 'アルフィン庇 AD2S', description: 'シンプルなアルミ庇', productId: 'ext-awning-alfin-ad2s' },
+  { id: 'awning-af95', name: 'アルフィン庇 AF95', description: '木目調仕上げ', productId: 'ext-awning-alfin-af95' },
 ] as const;
 
-// ガス乾燥機オプション
-export const GAS_DRYER_OPTIONS = [
-  { id: 'gas-dryer-no', name: '乾太くんなし', productId: 'design-gas-dryer-no', price: 0 },
-  { id: 'gas-dryer-5kg', name: '乾太くん 5kg', productId: 'design-gas-dryer-5kg', price: 150000 },
-  { id: 'gas-dryer-8kg', name: '乾太くん 8kg', productId: 'design-gas-dryer-8kg', price: 200000 },
-] as const;
-
-// ガス乾燥機アクセサリー
-export const GAS_DRYER_ACCESSORIES = [
-  { id: 'gas-dryer-stand', name: '専用台', productId: 'design-gas-dryer-stand', price: 25000 },
-  { id: 'gas-dryer-shelf', name: '棚板セット', productId: 'design-gas-dryer-shelf', price: 15000 },
-] as const;
+// 複数色選択カテゴリ名
+export const MULTI_COLOR_CATEGORY_NAMES: readonly string[] = [
+  '外壁',           // 外装 - 素材タイプ選択後
+  '軒天',           // 外装
+  'ベース床',       // 内装 - 素材タイプ選択後
+  'ベースクロス（壁）',   // 内装
+  'ベースクロス（天井）', // 内装
+  '壁材',           // 内装
+];
 
 // カテゴリ絵文字マッピング
 export const CATEGORY_EMOJI_MAP: Record<string, string> = {
@@ -111,11 +109,9 @@ export const CATEGORY_EMOJI_MAP: Record<string, string> = {
  * カテゴリ名から絵文字を取得
  */
 export const getCategoryEmoji = (categoryName: string): string => {
-  // 完全一致
   if (CATEGORY_EMOJI_MAP[categoryName]) {
     return CATEGORY_EMOJI_MAP[categoryName];
   }
-  // 部分一致
   for (const [key, emoji] of Object.entries(CATEGORY_EMOJI_MAP)) {
     if (categoryName.includes(key) || key.includes(categoryName)) {
       return emoji;
@@ -135,31 +131,3 @@ export const getMaterialTypeEmoji = (material: string): string => {
   if (material.includes('畳')) return '🟩';
   return '🧱';
 };
-
-// 専用セレクタを使用するカテゴリ
-export const SPECIAL_SELECTOR_CATEGORIES = [
-  '玄関ドア',
-  'オリジナルダイニングテーブル',
-  '階段',
-  'ベース建具',
-  'ポーチ',
-  'カーテン',
-  '家具',
-] as const;
-
-// サブカテゴリ選択が必要なカテゴリ
-export const SUBCATEGORY_SELECTION_CATEGORIES = [
-  '外壁',
-  '外部設備',
-  '外部建材',
-  'ベース床',
-  '周辺部材',
-] as const;
-
-// 複数色選択が必要なカテゴリ
-export const MULTI_COLOR_CATEGORIES = [
-  '外壁',
-  '軒天',
-  '壁クロス',
-  '天井クロス',
-] as const;

@@ -58,6 +58,16 @@ import { PageHeader } from './PageHeader';
 import { Pagination, ITEMS_PER_PAGE } from './Pagination';
 import { CategorySelectionCard } from './CategorySelectionCard';
 import { SelectionStatusBar } from './SelectionStatusBar';
+import {
+  EXTERIOR_WALL_MATERIAL_TYPES,
+  EXTERIOR_FACILITY_TYPES,
+  EXTERIOR_MATERIAL_TYPES,
+  BASE_FLOOR_TYPES,
+  PERIPHERAL_PARTS_TYPES,
+  GARAGE_SHUTTER_OPTIONS,
+  AWNING_OPTIONS,
+  MULTI_COLOR_CATEGORY_NAMES,
+} from '../../config/categorySelectorConfig';
 
 interface CatalogWithTabsProps {
   onCartClick?: () => void;
@@ -680,9 +690,6 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     return true;
   }, [needsManufacturerSelection, selectedManufacturer, selectedSeries]);
 
-  // 外壁の固定素材タイプリスト（常に3つ表示）
-  const EXTERIOR_WALL_MATERIAL_TYPES = ['窯業系サイディング', 'ガルバリウム鋼板', '塗り壁'];
-
   // noteカラムから素材タイプを判定するヘルパー関数
   const getMaterialTypeFromNote = (note: string | null | undefined): string => {
     if (!note) return '窯業系サイディング'; // デフォルトは窯業系
@@ -693,71 +700,8 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     if (lowerNote.includes('塗り壁') || lowerNote.includes('漆喰') || lowerNote.includes('ジョリパット') || lowerNote.includes('塗装仕上げ')) {
       return '塗り壁';
     }
-    // 窯業系サイディングのキーワード、または不明な場合はデフォルトで窯業系
     return '窯業系サイディング';
   };
-
-  // ㎡指定で複数色選択が必要なカテゴリ名（1〜3色選択、各色の面積を指定）
-  const MULTI_COLOR_CATEGORY_NAMES = [
-    '外壁',           // 外装 - 素材タイプ選択後
-    '軒天',           // 外装
-    'ベース床',       // 内装 - 素材タイプ選択後
-    'ベースクロス（壁）',   // 内装
-    'ベースクロス（天井）', // 内装
-    '壁材',           // 内装
-  ];
-
-  // 外部設備の必須カテゴリ（8項目）+ その他オプション
-  const EXTERIOR_FACILITY_TYPES = [
-    { id: '電気メーター', name: '電気メーター', required: true },
-    { id: 'TV視聴', name: 'TV視聴', required: true },
-    { id: 'エアコンスリーブキャップ', name: 'エアコンスリーブキャップ', required: true },
-    { id: '外部配管', name: '外部配管', required: true },
-    { id: '外部LAN用空配管', name: '外部LAN用空配管', required: true },
-    { id: '換気フード', name: '換気フード', required: true },
-    { id: '換気ガラリ', name: '換気ガラリ', required: true },
-    { id: '外部水栓', name: '外部水栓', required: true },
-    { id: 'その他オプション', name: 'その他オプション', required: false },
-  ];
-
-  // ベース床の種類（内装用）
-  const BASE_FLOOR_TYPES = [
-    { id: 'フローリング', name: 'フローリング', description: '木目調の床材' },
-    { id: 'フロアタイル', name: 'フロアタイル', description: '水回り対応' },
-    { id: 'カーペットタイル', name: 'カーペットタイル', description: 'クッション性あり' },
-    { id: '磁器タイル', name: '磁器タイル', description: '玄関・土間用' },
-  ];
-
-  // 周辺部材の種類（内装用）
-  const PERIPHERAL_PARTS_TYPES = [
-    { id: '窓台', name: '窓台', description: '窓枠部材' },
-    { id: '巾木', name: '巾木', description: '床と壁の境目' },
-    { id: '腰壁笠木', name: '腰壁笠木', description: '腰壁がある場合のみ', optional: true },
-  ];
-
-  // 外部建材の種類（外装用）
-  const EXTERIOR_MATERIAL_TYPES = [
-    { id: '軒樋', name: '軒樋', description: '横に走る樋（雨どい）' },
-    { id: '竪樋', name: '竪樋', description: '縦に走る樋（雨どい）' },
-    { id: '土台水切', name: '土台水切', description: '基礎と外壁の境目' },
-    { id: 'パラペット笠木', name: 'パラペット笠木', description: '陸屋根の立ち上がり部分' },
-    { id: 'バルコニー笠木', name: 'バルコニー笠木', description: 'バルコニー手すり上部' },
-    { id: '破風', name: '破風', description: '屋根の妻側部分' },
-  ];
-
-  // 設計タブ用: ガレージシャッター種類選択
-  const GARAGE_SHUTTER_OPTIONS = [
-    { id: 'garage-shutter-no', name: 'なし', description: 'ガレージシャッター不要', productId: 'ext-garage-shutter-none' },
-    { id: 'garage-shutter-sunauto', name: 'サンオートハイスピード', description: '静かでスピーディ（開閉約12秒）', productId: 'ext-garage-shutter-sunauto' },
-    { id: 'garage-shutter-ifudo', name: '威風堂々', description: '重厚感のある木目調デザイン', productId: 'ext-garage-shutter-ifudo' },
-  ];
-
-  // 設計タブ用: 庇種類選択
-  const AWNING_OPTIONS = [
-    { id: 'awning-no', name: 'なし', description: '庇不要', productId: 'ext-awning-none' },
-    { id: 'awning-ad2s', name: 'アルフィン庇 AD2S', description: 'シンプルなアルミ庇', productId: 'ext-awning-alfin-ad2s' },
-    { id: 'awning-af95', name: 'アルフィン庇 AF95', description: '木目調仕上げ', productId: 'ext-awning-alfin-af95' },
-  ];
 
   // 設計タブ用: 窓タイプ選択
   const WINDOW_TYPE_OPTIONS = [
