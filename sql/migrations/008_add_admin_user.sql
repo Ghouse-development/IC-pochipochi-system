@@ -12,12 +12,12 @@ SELECT
   id as auth_id,
   email,
   '管理者' as full_name,
-  'super_admin'::user_role as role,
+  'admin'::user_role as role,
   true as is_active
 FROM auth.users
 WHERE email = 'hn@g-house.osaka.jp'
 ON CONFLICT (auth_id) DO UPDATE SET
-  role = 'super_admin'::user_role,
+  role = 'admin'::user_role,
   is_active = true,
   updated_at = NOW();
 
@@ -26,7 +26,7 @@ ON CONFLICT (auth_id) DO UPDATE SET
 -- （auth_idがすでに設定されている場合）
 -- ===============================
 UPDATE users SET
-  role = 'super_admin'::user_role,
+  role = 'admin'::user_role,
   is_active = true,
   updated_at = NOW()
 WHERE email = 'hn@g-house.osaka.jp';
