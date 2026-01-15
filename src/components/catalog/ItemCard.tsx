@@ -82,7 +82,7 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
   item,
   index,
   getPrice,
-  isStandard,
+  isStandard: _isStandard,
   cartItemIds,
   addedItemId,
   hoveredItem,
@@ -90,10 +90,11 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
   handleOpenDetail,
   searchTerm,
 }) => {
+  // isStandard is received but not used in simplified UI (badge removed)
+  void _isStandard;
   const [imageError, setImageError] = useState(false);
 
   const price = getPrice(item);
-  const standard = isStandard(item);
   const variants = item.variants || [];
   const selectedVariant = variants[0];
   const inCart = cartItemIds.has(item.id);
@@ -149,15 +150,6 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
               </div>
             );
           })()
-        )}
-
-        {/* バッジ（標準のみ表示） */}
-        {standard && (
-          <div className="absolute top-1 left-1">
-            <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-500 text-white">
-              標準
-            </span>
-          </div>
         )}
 
         {/* 選択済みマーク */}

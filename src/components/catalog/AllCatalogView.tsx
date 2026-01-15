@@ -1,14 +1,15 @@
 import React, { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useProductStore } from '../../stores/useProductStore';
 import { ProductCard } from './ProductCard';
-import { ProductDetailModal } from './ProductDetailModal';
+// ProductDetailModal removed - モーダル不使用、詳細ページへ遷移
 import { FilterSidebarNew as FilterSidebar } from './FilterSidebarNew';
 import { ChevronRight, ChevronDown } from 'lucide-react';
 import type { Product } from '../../types/product';
 import { getProductPrice } from '../../lib/utils';
 
 export const AllCatalogView: React.FC = () => {
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const navigate = useNavigate();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
   const [searchTerm, setSearchTerm] = useState('');
@@ -101,8 +102,9 @@ export const AllCatalogView: React.FC = () => {
     setExpandedCategories(newExpanded);
   };
 
+  // 商品詳細ページへ遷移
   const handleProductSelect = (product: Product) => {
-    setSelectedProduct(product);
+    navigate(`/item/${product.id}`);
   };
 
   return (
@@ -227,12 +229,6 @@ export const AllCatalogView: React.FC = () => {
         </div>
       )}
 
-      {/* 商品詳細モーダル */}
-      <ProductDetailModal
-        product={selectedProduct}
-        isOpen={!!selectedProduct}
-        onClose={() => setSelectedProduct(null)}
-      />
     </div>
   );
 };

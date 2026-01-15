@@ -147,6 +147,26 @@ export const isHiddenCategory = (categoryName: string): boolean => {
   );
 };
 
+// アイテムの重複を除去（同じカテゴリ内で同じ名前のアイテムは1つだけ表示）
+export const deduplicateItems = <T extends { id: string; name: string; category?: { name?: string } | null }>(
+  items: T[]
+): T[] => {
+  const seen = new Map<string, T>();
+
+  for (const item of items) {
+    // カテゴリ名 + アイテム名でユニークキーを生成
+    const categoryName = item.category?.name || '';
+    const key = `${categoryName}:${item.name}`;
+
+    // まだ見ていないアイテムのみ追加
+    if (!seen.has(key)) {
+      seen.set(key, item);
+    }
+  }
+
+  return Array.from(seen.values());
+};
+
 // 「設計」に属するカテゴリ名（間取りによって決まる項目）
 // ※外装タブのサイドバーから除外される（任意・未選択項目）
 export const DESIGN_CATEGORIES = [

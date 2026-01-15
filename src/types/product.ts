@@ -62,6 +62,7 @@ export interface Product {
   modelNumber: string;
   unit: UnitType;
   isOption: boolean;
+  isHit?: boolean; // オススメ商品フラグ
   variants: ProductVariant[];
   pricing: PricingInfo[];
   description?: string;

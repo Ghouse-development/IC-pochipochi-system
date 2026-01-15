@@ -1,9 +1,10 @@
 import React, { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import type { Product } from '../../types/product';
 import type { FilterOptions } from '../../types/filter';
 import { ProductCard } from './ProductCard';
 import { FilterSidebar } from './FilterSidebar';
-import { ProductSelectionModal } from './ProductSelectionModal';
+// ProductSelectionModal removed - モーダル不使用、詳細ページへ遷移
 import { categories } from '../../data/mockData';
 import { useProductStore } from '../../stores/useProductStore';
 import { Search, Filter, X } from 'lucide-react';
@@ -13,8 +14,7 @@ interface CatalogViewProps {
 }
 
 export const CatalogView: React.FC<CatalogViewProps> = ({ catalogType = 'interior' }) => {
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [filters, setFilters] = useState<FilterOptions>({
@@ -84,19 +84,9 @@ export const CatalogView: React.FC<CatalogViewProps> = ({ catalogType = 'interio
     return filtered;
   }, [filters, searchQuery, products]);
   
+  // 商品詳細ページへ遷移
   const handleProductSelect = (product: Product) => {
-    // If product has color variants, show selection modal
-    if (product.variants && product.variants.length > 0) {
-      setSelectedProduct(product);
-      setIsModalOpen(true);
-    }
-  };
-
-  const handleProductVariantSelect = () => {
-    // NOTE: 製品選択時の見積追加処理はProductDetailModal内で実装済み
-    // このコールバックはモーダルを閉じる役割のみ
-    setIsModalOpen(false);
-    setSelectedProduct(null);
+    navigate(`/item/${product.id}`);
   };
   
   const handleResetFilters = () => {
@@ -215,17 +205,6 @@ export const CatalogView: React.FC<CatalogViewProps> = ({ catalogType = 'interio
         </div>
       )}
       
-      {/* 商品選択モーダル */}
-      {selectedProduct && isModalOpen && (
-        <ProductSelectionModal
-          product={selectedProduct}
-          onClose={() => {
-            setIsModalOpen(false);
-            setSelectedProduct(null);
-          }}
-          onSelect={handleProductVariantSelect}
-        />
-      )}
     </div>
   );
 };

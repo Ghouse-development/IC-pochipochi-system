@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, memo, useCallback } from 'react';
+import { Star } from 'lucide-react';
 import type { Product } from '../../types/product';
 import { UNIT_SYMBOLS } from '../../types/product';
 import { formatPrice, getProductPrice } from '../../lib/utils';
@@ -87,12 +88,11 @@ const ProductCardComponent: React.FC<ProductCardProps> = ({ product, onSelect })
           />
         )}
 
-        {/* バッジ（標準のみ表示） */}
-        {!product.isOption && (
-          <div className="absolute top-1 left-1">
-            <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-500 text-white">
-              標準
-            </span>
+        {/* オススメバッジ */}
+        {product.isHit && (
+          <div className="absolute top-2 left-2 bg-yellow-400 text-yellow-900 px-2 py-0.5 rounded text-xs font-medium flex items-center gap-1 shadow-sm">
+            <Star className="w-3 h-3 fill-current" />
+            オススメ
           </div>
         )}
       </div>
@@ -134,6 +134,7 @@ export const ProductCard = memo(ProductCardComponent, (prevProps, nextProps) => 
   if (prevProduct.id !== nextProduct.id) return false;
   if (prevProduct.name !== nextProduct.name) return false;
   if (prevProduct.isOption !== nextProduct.isOption) return false;
+  if (prevProduct.isHit !== nextProduct.isHit) return false;
 
   // 価格の比較
   const prevPrice = getProductPrice(prevProduct.pricing);

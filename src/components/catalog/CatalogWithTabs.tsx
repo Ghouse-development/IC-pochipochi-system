@@ -38,6 +38,7 @@ import {
   getRecommendBadge,
   getNotNeededOption,
   isHiddenCategory,
+  deduplicateItems,
 } from './catalogUtils';
 import { NotNeededCard } from './NotNeededCard';
 import { RoomSelectionModal } from './RoomSelectionModal';
@@ -189,6 +190,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     setProductSelection,
     clearSelection,
     getSelectionStatus,
+    canEdit,
   } = useSelectionStore();
 
   // 部屋選択モーダル用
@@ -624,7 +626,8 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
           }
 
           if (filteredItems.length > 0) {
-            setItems(filteredItems);
+            // 重複を除去して設定
+            setItems(deduplicateItems(filteredItems));
             setIsLoading(false);
             return;
           }
@@ -645,13 +648,14 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
           }
         }
 
-        setItems(filteredStaticItems);
+        // 重複を除去して設定
+        setItems(deduplicateItems(filteredStaticItems));
       } catch (err) {
         logger.error('Error fetching items:', err);
         setError('データの取得に失敗しました');
         // エラー時も静的データにフォールバック
         const staticItems = getStaticItems(activeTab);
-        setItems(staticItems);
+        setItems(deduplicateItems(staticItems));
       } finally {
         setIsLoading(false);
       }
@@ -1024,6 +1028,12 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
   // カートに追加（部屋選択が必要な場合はモーダルを表示）
   const handleAddToCart = useCallback((item: ItemWithDetails, variantOrSkip?: ItemVariant | boolean) => {
+    // 仕様確定済みの場合は編集不可
+    if (!canEdit()) {
+      toast.error('編集不可', '仕様が確定されているため、変更できません');
+      return;
+    }
+
     // 第2引数がbooleanの場合はskipRoomSelection、それ以外はvariant
     const isSkipRoomSelection = typeof variantOrSkip === 'boolean';
     const skipRoomSelection = isSkipRoomSelection ? variantOrSkip : false;
@@ -1079,7 +1089,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
       setTimeout(() => setShowConfetti(false), ANIMATION_DURATIONS.CONFETTI);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [addItem, cartItems.length, selectedPlanId, toast, setProductSelection]); // setTimeoutはグローバル関数
+  }, [addItem, cartItems.length, selectedPlanId, toast, setProductSelection, canEdit]); // setTimeoutはグローバル関数
 
   // 部屋選択完了時のハンドラー
   const handleRoomSelectionConfirm = useCallback((selectedRooms: string[]) => {
@@ -1108,6 +1118,12 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   }, [roomSelectionModal, items, addItem, selectedPlanId, setProductSelection, toast]); // setTimeoutはグローバル関数
 
   const handleRemoveFromCart = useCallback(async (itemId: string) => {
+    // 仕様確定済みの場合は編集不可
+    if (!canEdit()) {
+      toast.error('編集不可', '仕様が確定されているため、変更できません');
+      return;
+    }
+
     const item = cartItems.find(i => i.product.id === itemId);
     if (!item) return;
 
@@ -1123,7 +1139,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
       removeItem(itemId);
       toast.info('解除しました', item.product.name);
     }
-  }, [removeItem, cartItems, toast, confirmRemoval]);
+  }, [removeItem, cartItems, toast, confirmRemoval, canEdit]);
 
   // 商品詳細ページへ遷移
   const handleOpenDetail = useCallback((item: ItemWithDetails) => {

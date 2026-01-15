@@ -361,7 +361,7 @@ export function SelectionPage({ projectId, onBack }: SelectionPageProps) {
                     {item.is_hit && (
                       <div className="absolute top-2 left-2 bg-yellow-400 text-yellow-900 px-2 py-0.5 rounded text-xs font-medium flex items-center gap-1">
                         <Star className="w-3 h-3 fill-current" />
-                        HIT
+                        オススメ
                       </div>
                     )}
                     {isSelected && (

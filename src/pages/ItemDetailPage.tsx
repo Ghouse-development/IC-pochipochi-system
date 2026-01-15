@@ -135,39 +135,62 @@ export const ItemDetailPage: React.FC = () => {
           </div>
         </div>
 
-        {/* カラー選択 */}
+        {/* カラー選択（画像付きカード形式） */}
         {product.variants.length > 1 && (
           <div className="bg-white rounded-xl shadow-sm p-4">
             <h2 className="text-sm font-bold text-gray-800 mb-3">
               カラー選択 <span className="text-gray-400 font-normal">（{product.variants.length}色）</span>
             </h2>
-            <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
               {product.variants.map((v: ProductVariant) => {
                 const hexColor = getHexColor(v.colorCode) !== '#CCCCCC'
                   ? getHexColor(v.colorCode)
                   : getHexColor(v.color);
                 const isSelected = selectedVariant?.id === v.id;
+                const variantImageUrl = v.imageUrl || v.thumbnailUrl;
 
                 return (
                   <button
                     key={v.id}
                     onClick={() => setSelectedVariant(v)}
-                    className={`flex items-center gap-2 p-3 rounded-lg border-2 transition-all text-left ${
+                    className={`group rounded-lg border-2 overflow-hidden transition-all ${
                       isSelected
-                        ? 'border-blue-500 bg-blue-50'
-                        : 'border-gray-200 hover:border-gray-300'
+                        ? 'border-blue-500 shadow-lg shadow-blue-200'
+                        : 'border-gray-200 hover:border-blue-300 hover:shadow-md'
                     }`}
                   >
-                    <div
-                      className="w-6 h-6 rounded-full border border-gray-300 flex-shrink-0"
-                      style={{ backgroundColor: hexColor }}
-                    />
-                    <span className={`text-xs truncate ${isSelected ? 'font-medium text-blue-700' : 'text-gray-700'}`}>
-                      {v.color}
-                    </span>
-                    {isSelected && (
-                      <Check className="w-3 h-3 text-blue-500 ml-auto flex-shrink-0" />
-                    )}
+                    {/* 画像エリア（正方形） */}
+                    <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
+                      {variantImageUrl ? (
+                        <img
+                          src={variantImageUrl}
+                          alt={v.color}
+                          loading="lazy"
+                          className={`w-full h-full object-cover transition-transform duration-300 ${
+                            isSelected ? 'scale-105' : 'group-hover:scale-105'
+                          }`}
+                        />
+                      ) : (
+                        <div className="w-full h-full flex flex-col items-center justify-center">
+                          <div
+                            className="w-12 h-12 rounded-full border-2 border-white shadow-lg"
+                            style={{ backgroundColor: hexColor }}
+                          />
+                        </div>
+                      )}
+                      {/* 選択済みマーク */}
+                      {isSelected && (
+                        <div className="absolute top-1 right-1 bg-blue-500 rounded-full p-1">
+                          <Check className="w-3 h-3 text-white" strokeWidth={3} />
+                        </div>
+                      )}
+                    </div>
+                    {/* カラー名 */}
+                    <div className="p-2">
+                      <span className={`text-xs font-medium block truncate ${isSelected ? 'text-blue-700' : 'text-gray-700'}`}>
+                        {v.color}
+                      </span>
+                    </div>
                   </button>
                 );
               })}

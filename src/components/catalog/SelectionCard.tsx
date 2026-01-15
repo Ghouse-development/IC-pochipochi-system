@@ -32,7 +32,7 @@ export const SelectionCard: React.FC<SelectionCardProps> = ({
   imageUrl,
   placeholderEmoji = '📦',
   placeholderBgColor = 'from-gray-100 to-gray-200',
-  isStandard,
+  isStandard: _isStandard,
   price,
   isSelected,
   onClick,
@@ -40,6 +40,8 @@ export const SelectionCard: React.FC<SelectionCardProps> = ({
   variantCount,
   unit,
 }) => {
+  // isStandard is received but not used in simplified UI (badge removed)
+  void _isStandard;
   const [imageError, setImageError] = React.useState(false);
 
   return (
@@ -88,15 +90,6 @@ export const SelectionCard: React.FC<SelectionCardProps> = ({
               <ImageIcon className="w-3 h-3" />
               <span className="text-[10px]">画像準備中</span>
             </div>
-          </div>
-        )}
-
-        {/* バッジ（標準のみ表示） */}
-        {isStandard && (
-          <div className="absolute top-1 left-1">
-            <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-500 text-white">
-              標準
-            </span>
           </div>
         )}
 
