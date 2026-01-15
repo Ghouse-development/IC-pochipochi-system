@@ -38,20 +38,48 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch app user data from users table
-  const fetchUserData = async (authId: string): Promise<User | null> => {
-    const { data, error } = await supabase
-      .from('users')
-      .select('*')
-      .eq('auth_id', authId)
-      .single();
+  // Fetch app user data from users table (via API to bypass RLS)
+  const fetchUserData = async (_authId: string): Promise<User | null> => {
+    try {
+      // Get current session
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) {
+        logger.error('No session token available');
+        return null;
+      }
 
-    if (error) {
-      logger.error('Error fetching user data:', error);
+      // First try direct Supabase query
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('auth_id', session.user.id)
+        .single();
+
+      if (!error && data) {
+        return data;
+      }
+
+      // If RLS blocks, use API endpoint
+      logger.info('Direct query failed, trying API endpoint');
+      const response = await fetch('/api/auth/get-user', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`,
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        logger.error('API error:', errorData);
+        return null;
+      }
+
+      const result = await response.json();
+      return result.user;
+    } catch (err) {
+      logger.error('Error fetching user data:', err);
       return null;
     }
-
-    return data;
   };
 
   // Create user record in users table if not exists
@@ -288,20 +316,48 @@ export function DemoAuthProvider({ children }: { children: ReactNode }) {
     updated_at: new Date().toISOString(),
   };
 
-  // Fetch app user data from users table
-  const fetchUserData = async (authId: string): Promise<User | null> => {
-    const { data, error } = await supabase
-      .from('users')
-      .select('*')
-      .eq('auth_id', authId)
-      .single();
+  // Fetch app user data from users table (via API to bypass RLS)
+  const fetchUserData = async (_authId: string): Promise<User | null> => {
+    try {
+      // Get current session
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) {
+        logger.error('No session token available');
+        return null;
+      }
 
-    if (error) {
-      logger.error('Error fetching user data:', error);
+      // First try direct Supabase query
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('auth_id', session.user.id)
+        .single();
+
+      if (!error && data) {
+        return data;
+      }
+
+      // If RLS blocks, use API endpoint
+      logger.info('Direct query failed, trying API endpoint');
+      const response = await fetch('/api/auth/get-user', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`,
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        logger.error('API error:', errorData);
+        return null;
+      }
+
+      const result = await response.json();
+      return result.user;
+    } catch (err) {
+      logger.error('Error fetching user data:', err);
       return null;
     }
-
-    return data;
   };
 
   useEffect(() => {

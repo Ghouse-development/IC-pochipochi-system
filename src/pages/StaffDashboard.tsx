@@ -23,7 +23,7 @@ import {
   ClipboardCheck,
   Eye,
 } from 'lucide-react';
-import { ProjectCreateForm } from '../components/project/ProjectCreateForm';
+import { ProjectRegistrationForm } from '../components/project/ProjectRegistrationForm';
 import { ProjectStatusPanel } from '../components/project/ProjectStatusPanel';
 import { ProjectList } from '../components/project/ProjectList';
 import { CustomerInvitation } from '../components/project/CustomerInvitation';
@@ -275,8 +275,8 @@ export const StaffDashboard: React.FC<StaffDashboardProps> = ({ onBack }) => {
         );
       case 'create':
         return (
-          <ProjectCreateForm
-            onComplete={() => setProjectSubTab('invite')}
+          <ProjectRegistrationForm
+            onComplete={() => setProjectSubTab('list')}
             onCancel={() => setProjectSubTab('list')}
           />
         );
