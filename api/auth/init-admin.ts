@@ -88,7 +88,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         .update({
           auth_id: authUserId,
           role: 'admin',
-          is_super_admin: true,
           is_active: true,
         })
         .eq('id', existingUserRecord.id);
@@ -117,7 +116,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           email: ADMIN_EMAIL,
           full_name: ADMIN_NAME,
           role: 'admin',
-          is_super_admin: true,
           is_active: true,
         })
         .select()

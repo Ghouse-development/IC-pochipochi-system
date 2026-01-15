@@ -43,7 +43,9 @@
       "Bash(dir /s /b \"%LOCALAPPDATA%\\\\com.vercel.cli\\\\*\")",
       "Bash(dir /s /b \"%USERPROFILE%\\\\.config\\\\com.vercel.cli\\\\*\")",
       "Bash(powershell -Command \"Get-ChildItem -Path $env:USERPROFILE -Recurse -Filter ''auth.json'' -ErrorAction SilentlyContinue | Where-Object { $_FullName -like ''*vercel*'' } | Select-Object -First 1 -ExpandProperty FullName\")",
-      "Bash(powershell -Command:*)"
+      "Bash(powershell -Command:*)",
+      "Bash(vercel ls:*)",
+      "Bash(vercel --prod:*)"
     ],
     "deny": [],
     "ask": []
