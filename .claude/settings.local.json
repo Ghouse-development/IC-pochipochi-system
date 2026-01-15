@@ -33,7 +33,17 @@
       "Bash(cat:*)",
       "Bash(unzip:*)",
       "Bash(for i in 1 2 3 4 5 6 7 8 9 10 11)",
-      "Bash(do echo \"=== Slide $i ===\" cat \"/tmp/pptx_extract/ppt/slides/slide$i.xml\")"
+      "Bash(do echo \"=== Slide $i ===\" cat \"/tmp/pptx_extract/ppt/slides/slide$i.xml\")",
+      "Bash(vercel --version:*)",
+      "Bash(vercel inspect:*)",
+      "Bash(vercel project:*)",
+      "Bash(vercel link:*)",
+      "Bash(vercel whoami:*)",
+      "Bash(dir /s /b \"%APPDATA%\\\\com.vercel.cli\\\\*\")",
+      "Bash(dir /s /b \"%LOCALAPPDATA%\\\\com.vercel.cli\\\\*\")",
+      "Bash(dir /s /b \"%USERPROFILE%\\\\.config\\\\com.vercel.cli\\\\*\")",
+      "Bash(powershell -Command \"Get-ChildItem -Path $env:USERPROFILE -Recurse -Filter ''auth.json'' -ErrorAction SilentlyContinue | Where-Object { $_FullName -like ''*vercel*'' } | Select-Object -First 1 -ExpandProperty FullName\")",
+      "Bash(powershell -Command:*)"
     ],
     "deny": [],
     "ask": []
