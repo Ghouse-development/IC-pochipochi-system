@@ -61,11 +61,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!error && data) {
         // ブートストラップ管理者の場合、権限を自動修正
         const email = session.user.email?.toLowerCase() || '';
-        if (BOOTSTRAP_ADMIN_EMAILS.includes(email) && data.role !== 'admin' && !data.is_super_admin) {
+        if (BOOTSTRAP_ADMIN_EMAILS.includes(email) && data.role !== 'super_admin' && data.role !== 'admin') {
           logger.info('Upgrading bootstrap admin:', email);
           const { data: updatedData } = await supabase
             .from('users')
-            .update({ role: 'admin', is_super_admin: true })
+            .update({ role: 'super_admin' })
             .eq('id', data.id)
             .select()
             .single();
@@ -86,8 +86,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             auth_id: session.user.id,
             email: email,
             full_name: isBootstrapAdmin ? '管理者' : 'ユーザー',
-            role: isBootstrapAdmin ? 'admin' : 'user',
-            is_super_admin: isBootstrapAdmin,
+            role: isBootstrapAdmin ? 'super_admin' : 'user',
           })
           .select()
           .single();
@@ -132,8 +131,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   ): Promise<User | null> => {
     // ブートストラップ: 特定のメールアドレスは自動的に管理者として登録
     const isBootstrapAdmin = BOOTSTRAP_ADMIN_EMAILS.includes(email.toLowerCase());
-    const finalRole = isBootstrapAdmin ? 'admin' : role;
-    const isSuperAdmin = isBootstrapAdmin;
+    const finalRole = isBootstrapAdmin ? 'super_admin' : role;
 
     const { data, error } = await supabase
       .from('users')
@@ -142,7 +140,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         email,
         full_name: fullName,
         role: finalRole,
-        is_super_admin: isSuperAdmin,
       })
       .select()
       .single();
@@ -300,7 +297,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   // Role checks
-  const isSuperAdmin = user?.is_super_admin === true || user?.role === 'super_admin';
+  const isSuperAdmin = user?.role === 'super_admin';
   const isAdmin = user?.role === 'admin' || isSuperAdmin;
   const isCoordinator = user?.role === 'coordinator';
   const isCustomer = user?.role === 'user';
@@ -504,8 +501,8 @@ export function DemoAuthProvider({ children }: { children: ReactNode }) {
     resetPassword: async () => ({ error: new Error('Password reset not available in demo mode') }),
     sendMagicLink: async () => ({ error: new Error('Magic link not available in demo mode') }),
     // 実際にログインしている場合のみ権限を付与
-    isSuperAdmin: isLoggedIn && (role === 'super_admin' || user?.is_super_admin === true),
-    isAdmin: isLoggedIn && (role === 'super_admin' || role === 'admin' || user?.is_super_admin === true),
+    isSuperAdmin: isLoggedIn && role === 'super_admin',
+    isAdmin: isLoggedIn && (role === 'super_admin' || role === 'admin'),
     isCoordinator: isLoggedIn && role === 'coordinator',
     isCustomer: !isLoggedIn || role === 'user',
     canManageItems: isLoggedIn && (role === 'super_admin' || role === 'admin'),

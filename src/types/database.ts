@@ -83,7 +83,7 @@ export interface User {
   phone: string | null;
   company_name: string | null;
   organization_id: string | null;
-  is_super_admin: boolean;
+  is_super_admin?: boolean; // Note: Column may not exist in all environments
   is_active: boolean;
   last_login_at: string | null;
   created_at: string;

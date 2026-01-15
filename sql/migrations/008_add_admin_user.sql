@@ -7,19 +7,17 @@
 -- ===============================
 -- 方法1: auth.usersから直接取得（推奨）
 -- ===============================
-INSERT INTO users (auth_id, email, full_name, role, is_super_admin, is_active)
+INSERT INTO users (auth_id, email, full_name, role, is_active)
 SELECT
   id as auth_id,
   email,
   '管理者' as full_name,
-  'admin'::user_role as role,
-  true as is_super_admin,
+  'super_admin'::user_role as role,
   true as is_active
 FROM auth.users
 WHERE email = 'hn@g-house.osaka.jp'
 ON CONFLICT (auth_id) DO UPDATE SET
-  role = 'admin'::user_role,
-  is_super_admin = true,
+  role = 'super_admin'::user_role,
   is_active = true,
   updated_at = NOW();
 
@@ -28,8 +26,7 @@ ON CONFLICT (auth_id) DO UPDATE SET
 -- （auth_idがすでに設定されている場合）
 -- ===============================
 UPDATE users SET
-  role = 'admin'::user_role,
-  is_super_admin = true,
+  role = 'super_admin'::user_role,
   is_active = true,
   updated_at = NOW()
 WHERE email = 'hn@g-house.osaka.jp';
@@ -37,7 +34,7 @@ WHERE email = 'hn@g-house.osaka.jp';
 -- ===============================
 -- 確認用クエリ
 -- ===============================
--- SELECT id, auth_id, email, role, is_super_admin, is_active FROM users WHERE email = 'hn@g-house.osaka.jp';
+-- SELECT id, auth_id, email, role, is_active FROM users WHERE email = 'hn@g-house.osaka.jp';
 
 -- ===============================
 -- auth.usersの状態確認（管理者のみ実行可能）
