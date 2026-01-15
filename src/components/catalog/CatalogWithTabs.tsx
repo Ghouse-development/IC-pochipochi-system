@@ -57,8 +57,7 @@ import { PorchTileSelector } from './PorchTileSelector';
 import { PageHeader } from './PageHeader';
 import { Pagination, ITEMS_PER_PAGE } from './Pagination';
 import { CategorySelectionCard } from './CategorySelectionCard';
-
-// ユーティリティ関数とコンポーネント (ItemCard, SkeletonCard, EmptyState, Confetti) はインポート済み
+import { SelectionStatusBar } from './SelectionStatusBar';
 
 interface CatalogWithTabsProps {
   onCartClick?: () => void;
@@ -2777,132 +2776,21 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 <div className="max-w-6xl mx-auto px-4">
                   {/* PageHeaderはグローバル位置で表示済み */}
 
-                  {/* 素材タイプ選択状態バー（外壁用）- シンプルモダン */}
-                  {currentCategoryName === '外壁' && selectedMaterialType && (
-                    <div className="mb-4 flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="text-gray-900 font-medium">
-                          {selectedMaterialType}
-                        </span>
-                        <span className="text-sm text-gray-500">
-                          {filteredItems.length}件
-                        </span>
-                      </div>
-                      <button
-                        onClick={() => setSelectedMaterialType('')}
-                        className="flex items-center gap-1 px-2 py-1 text-sm text-gray-600 hover:text-gray-900:text-gray-200 transition-colors"
-                      >
-                        <ChevronLeft className="w-4 h-4" />
-                        戻る
-                      </button>
-                    </div>
-                  )}
-
-                  {/* ドアデザイン選択状態バー（玄関ドア用） */}
-                  {currentCategoryName === '玄関ドア' && selectedMaterialType && (
-                    <div className="mb-4 flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="text-gray-900 font-medium">
-                          {selectedMaterialType === 'ハンドル' ? 'ハンドル形状' :
-                           selectedMaterialType === 'オプション' ? '追加オプション' :
-                           `デザイン: ${selectedMaterialType}`}
-                        </span>
-                        <span className="text-sm text-gray-500">
-                          {filteredItems.length}件
-                        </span>
-                      </div>
-                      <button
-                        onClick={() => setSelectedMaterialType('')}
-                        className="flex items-center gap-1 px-2 py-1 text-sm text-gray-600 hover:text-gray-900:text-gray-200 transition-colors"
-                      >
-                        <ChevronLeft className="w-4 h-4" />
-                        戻る
-                      </button>
-                    </div>
-                  )}
-
-                  {/* 外部設備選択状態バー */}
-                  {currentCategoryName === '外部設備' && selectedMaterialType && (
-                    <div className="mb-4 flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="text-gray-900 font-medium">
-                          {selectedMaterialType}
-                        </span>
-                        <span className="text-sm text-gray-500">
-                          {filteredItems.length}件
-                        </span>
-                      </div>
-                      <button
-                        onClick={() => setSelectedMaterialType('')}
-                        className="flex items-center gap-1 px-2 py-1 text-sm text-gray-600 hover:text-gray-900:text-gray-200 transition-colors"
-                      >
-                        <ChevronLeft className="w-4 h-4" />
-                        戻る
-                      </button>
-                    </div>
-                  )}
-
-                  {/* 外部建材選択状態バー */}
-                  {currentCategoryName === '外部建材' && selectedMaterialType && (
-                    <div className="mb-4 flex items-center justify-between bg-gray-50 p-3 rounded-lg">
-                      <div className="flex items-center gap-2">
-                        <span className="text-gray-900 font-bold text-lg">
-                          {selectedMaterialType}
-                        </span>
-                        <span className="text-sm text-gray-500">
-                          {filteredItems.length}件
-                        </span>
-                      </div>
-                      <button
-                        onClick={() => setSelectedMaterialType('')}
-                        className="flex items-center gap-1 px-3 py-1.5 text-sm bg-white text-gray-600 hover:bg-gray-100:bg-gray-600 rounded-lg transition-colors border border-gray-200"
-                      >
-                        <ChevronLeft className="w-4 h-4" />
-                        他の建材を選ぶ
-                      </button>
-                    </div>
-                  )}
-
-                  {/* ベース床選択状態バー */}
-                  {currentCategoryName === 'ベース床' && selectedMaterialType && (
-                    <div className="mb-4 flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="text-gray-900 font-medium">
-                          {selectedMaterialType}
-                        </span>
-                        <span className="text-sm text-gray-500">
-                          {filteredItems.length}件
-                        </span>
-                      </div>
-                      <button
-                        onClick={() => setSelectedMaterialType('')}
-                        className="flex items-center gap-1 px-2 py-1 text-sm text-gray-600 hover:text-gray-900:text-gray-200 transition-colors"
-                      >
-                        <ChevronLeft className="w-4 h-4" />
-                        戻る
-                      </button>
-                    </div>
-                  )}
-
-                  {/* 周辺部材選択状態バー */}
-                  {currentCategoryName === '周辺部材' && selectedMaterialType && (
-                    <div className="mb-4 flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="text-gray-900 font-medium">
-                          {selectedMaterialType}
-                        </span>
-                        <span className="text-sm text-gray-500">
-                          {filteredItems.length}件
-                        </span>
-                      </div>
-                      <button
-                        onClick={() => setSelectedMaterialType('')}
-                        className="flex items-center gap-1 px-2 py-1 text-sm text-gray-600 hover:text-gray-900:text-gray-200 transition-colors"
-                      >
-                        <ChevronLeft className="w-4 h-4" />
-                        戻る
-                      </button>
-                    </div>
+                  {/* 選択状態バー（サブカテゴリ選択時に表示） */}
+                  {selectedMaterialType && ['外壁', '玄関ドア', '外部設備', '外部建材', 'ベース床', '周辺部材'].includes(currentCategoryName || '') && (
+                    <SelectionStatusBar
+                      label={
+                        currentCategoryName === '玄関ドア'
+                          ? (selectedMaterialType === 'ハンドル' ? 'ハンドル形状' :
+                             selectedMaterialType === 'オプション' ? '追加オプション' :
+                             `デザイン: ${selectedMaterialType}`)
+                          : selectedMaterialType
+                      }
+                      itemCount={filteredItems.length}
+                      onBack={() => setSelectedMaterialType('')}
+                      backLabel={currentCategoryName === '外部建材' ? '他の建材を選ぶ' : '戻る'}
+                      variant={currentCategoryName === '外部建材' ? 'highlighted' : 'default'}
+                    />
                   )}
 
                   {/* メーカー選択状態バー（水回り設備用） */}

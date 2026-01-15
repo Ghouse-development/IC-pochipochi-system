@@ -24,7 +24,11 @@
       "Bash(git commit:*)",
       "Bash(git push:*)",
       "Bash(git checkout:*)",
-      "Bash(xargs sed:*)"
+      "Bash(xargs sed:*)",
+      "WebFetch(domain:ic-pochipochi-system.vercel.app)",
+      "Bash(curl:*)",
+      "Bash(npx vercel:*)",
+      "Bash(git fetch:*)"
     ],
     "deny": [],
     "ask": []
