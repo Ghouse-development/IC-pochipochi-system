@@ -227,14 +227,6 @@ export const MultiColorAreaSelector: React.FC<MultiColorAreaSelectorProps> = ({
   const currentSelection = selections.find(s => s.colorIndex === currentColorIndex);
   const allSelected = selections.every(s => s.product && s.variant && s.area > 0);
 
-  // 製品をサブカテゴリでグループ化
-  const groupedProducts = products.reduce((acc, product) => {
-    const subcategory = product.subcategory || 'その他';
-    if (!acc[subcategory]) acc[subcategory] = [];
-    acc[subcategory].push(product);
-    return acc;
-  }, {} as Record<string, Product[]>);
-
   return (
     <div className="max-w-6xl mx-auto px-4">
       {/* ヘッダー */}
@@ -331,23 +323,16 @@ export const MultiColorAreaSelector: React.FC<MultiColorAreaSelectorProps> = ({
             </div>
           )}
 
-          {/* 製品選択 - 1商品1カード */}
-          <div className="space-y-6">
-            {Object.entries(groupedProducts).map(([subcategory, subcategoryProducts]) => (
-              <div key={subcategory}>
-                <h5 className="text-sm font-medium text-gray-500 mb-3">{subcategory}</h5>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
-                  {subcategoryProducts.map(product => (
-                    <ProductCard
-                      key={product.id}
-                      product={product}
-                      isSelected={currentSelection?.product?.id === product.id}
-                      selectedVariantId={currentSelection?.variant?.id}
-                      onSelect={handleProductSelect}
-                    />
-                  ))}
-                </div>
-              </div>
+          {/* 製品選択 - 全商品を1つのグリッドに表示 */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+            {products.map(product => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                isSelected={currentSelection?.product?.id === product.id}
+                selectedVariantId={currentSelection?.variant?.id}
+                onSelect={handleProductSelect}
+              />
             ))}
           </div>
 
