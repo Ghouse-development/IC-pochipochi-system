@@ -1043,6 +1043,40 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     return filteredItems.map(convertToCatalogProduct);
   }, [needsMultiColorSelector, filteredItems]);
 
+  // 特殊セレクター（独自のPageHeaderを持つ）を使用するかを判定
+  const usesSpecialSelector = useMemo(() => {
+    if (!currentCategoryName) return false;
+
+    // 特殊セレクターを持つカテゴリ
+    const specialSelectorCategories = ['エアコン', 'カーテン', '家具', '玄関ドア', 'オリジナルダイニングテーブル', '階段', 'ベース建具'];
+    if (specialSelectorCategories.includes(currentCategoryName)) return true;
+
+    // ポーチ（ただし目地・サイズは除く）
+    if (activeTab === 'exterior' && currentCategoryName === 'ポーチ') return true;
+    if (activeTab === 'exterior' && currentCategoryName?.includes('ポーチ') && !currentCategoryName?.includes('サイズ') && !currentCategoryName?.includes('目地')) return true;
+
+    // MultiColorAreaSelector
+    if (needsMultiColorSelector) return true;
+
+    // ManufacturerSelector（水回り設備のメーカー選択）
+    if (needsManufacturerSelection && !isManufacturerSelectionComplete) return true;
+
+    // 素材タイプ選択画面（外壁、外部設備、外部建材、ベース床、周辺部材）
+    if (['外壁', '外部設備', '外部建材', 'ベース床', '周辺部材'].includes(currentCategoryName) && !selectedMaterialType) return true;
+
+    // 設計タブの各カテゴリ
+    if (activeTab === 'design') return true;
+
+    // ガス乾燥機
+    if (activeTab === 'furniture' && currentCategoryName === 'ガス乾燥機') return true;
+
+    // 外装タブでガレージシャッター・庇未設定の場合
+    if (activeTab === 'exterior' && currentCategoryName?.includes('ガレージシャッター') && !hasGarageShutter) return true;
+    if (activeTab === 'exterior' && currentCategoryName === '庇' && !hasAwning) return true;
+
+    return false;
+  }, [currentCategoryName, activeTab, needsMultiColorSelector, needsManufacturerSelection, isManufacturerSelectionComplete, selectedMaterialType, hasGarageShutter, hasAwning]);
+
   // カートに追加（部屋選択が必要な場合はモーダルを表示）
   const handleAddToCart = useCallback((item: ItemWithDetails, variantOrSkip?: ItemVariant | boolean) => {
     // 第2引数がbooleanの場合はskipRoomSelection、それ以外はvariant
@@ -1680,6 +1714,16 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
             {/* 商品グリッド */}
             <div className="flex-1 overflow-y-auto p-3 sm:p-4 pb-24 lg:pb-4" data-tutorial="product-grid">
+              {/* グローバルPageHeader - 特殊セレクター以外のカテゴリ用（常に最初に表示） */}
+              {!isLoading && !error && !usesSpecialSelector && currentCategoryName && (
+                <div className="max-w-6xl mx-auto px-4">
+                  <PageHeader
+                    title={selectedMaterialType ? `${selectedMaterialType}を選択` : `${currentCategoryName}を選択`}
+                    subtitle={filteredItems.length > 0 ? `${filteredItems.length}件の商品から選んでください` : '該当する商品がありません'}
+                  />
+                </div>
+              )}
+
               {isLoading ? (
                 <div className="grid grid-cols-6 gap-2">
                   {[...Array(12)].map((_, i) => <SkeletonCard key={i} />)}
@@ -2767,23 +2811,12 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 />
               ) : filteredItems.length === 0 ? (
                 <div className="max-w-6xl mx-auto px-4">
-                  {currentCategoryName && (
-                    <PageHeader
-                      title={selectedMaterialType ? `${selectedMaterialType}を選択` : `${currentCategoryName}を選択`}
-                      subtitle="該当する商品がありません"
-                    />
-                  )}
+                  {/* PageHeaderはグローバル位置で表示済み */}
                   <EmptyState searchTerm={searchTerm} onClear={() => setSearchTerm('')} />
                 </div>
               ) : (
                 <div className="max-w-6xl mx-auto px-4">
-                  {/* カテゴリヘッダー（全カテゴリ共通） */}
-                  {currentCategoryName && (
-                    <PageHeader
-                      title={selectedMaterialType ? `${selectedMaterialType}を選択` : `${currentCategoryName}を選択`}
-                      subtitle={`${filteredItems.length}件の商品から選んでください`}
-                    />
-                  )}
+                  {/* PageHeaderはグローバル位置で表示済み */}
 
                   {/* 素材タイプ選択状態バー（外壁用）- シンプルモダン */}
                   {currentCategoryName === '外壁' && selectedMaterialType && (
