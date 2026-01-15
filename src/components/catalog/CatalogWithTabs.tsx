@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { Search, ClipboardCheck, Check, Star, ChevronRight, ChevronLeft, Home, X, FileDown, HelpCircle, Eye, Flame, Image as ImageIcon } from 'lucide-react';
+import { Search, ClipboardCheck, Check, Star, ChevronRight, ChevronLeft, Home, X, FileDown, HelpCircle, Eye, Flame } from 'lucide-react';
 import { useToast } from '../common/Toast';
 import { useTimeout } from '../../hooks/useTimeout';
 import { useDebounce } from '../../hooks/useDebounce';
@@ -56,6 +56,7 @@ import { BaseBuildingSelector } from './BaseBuildingSelector';
 import { PorchTileSelector } from './PorchTileSelector';
 import { PageHeader } from './PageHeader';
 import { Pagination, ITEMS_PER_PAGE } from './Pagination';
+import { CategorySelectionCard } from './CategorySelectionCard';
 
 // ユーティリティ関数とコンポーネント (ItemCard, SkeletonCard, EmptyState, Confetti) はインポート済み
 
@@ -1845,32 +1846,15 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                       const itemCount = items.filter(i => getMaterialTypeFromNote(i.note) === material).length;
                       const categoryEmoji = material.includes('タイル') ? '🪨' : material.includes('塗り') ? '🖌️' : material.includes('サイディング') ? '🏠' : '🧱';
                       return (
-                        <button
+                        <CategorySelectionCard
                           key={material}
+                          id={material}
+                          name={material}
+                          emoji={categoryEmoji}
+                          badgeType="category"
+                          itemCount={itemCount}
                           onClick={() => setSelectedMaterialType(material)}
-                          className="group bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-blue-300 hover:shadow-md transition-all"
-                        >
-                          {/* 画像エリア（正方形） */}
-                          <div className="aspect-square bg-gradient-to-br from-amber-50 to-orange-100 flex flex-col items-center justify-center">
-                            <span className="text-2xl">{categoryEmoji}</span>
-                            <div className="mt-1 flex items-center gap-1 text-gray-400">
-                              <ImageIcon className="w-3 h-3" />
-                              <span className="text-[10px]">画像準備中</span>
-                            </div>
-                          </div>
-                          {/* 情報エリア */}
-                          <div className="p-2">
-                            <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
-                              {material}
-                            </h3>
-                            <div className="flex items-baseline gap-1 mt-1">
-                              <span className="text-sm font-bold text-gray-400">カテゴリ</span>
-                            </div>
-                            <span className="text-[10px] text-gray-400">
-                              {itemCount > 0 ? `${itemCount}種類から選択` : '準備中'}
-                            </span>
-                          </div>
-                        </button>
+                        />
                       );
                     })}
                   </div>
@@ -1945,32 +1929,15 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                       const itemCount = items.filter(i => i.category_name === type.id).length;
                       const categoryEmoji = type.id.includes('アンテナ') || type.id.includes('TV') ? '📡' : type.id.includes('給湯') ? '🔥' : type.id.includes('ポスト') ? '📮' : type.id.includes('表札') ? '🏠' : type.id.includes('インターホン') ? '🔔' : type.id.includes('散水') ? '💧' : type.id.includes('立水栓') ? '🚰' : '⚡';
                       return (
-                        <button
+                        <CategorySelectionCard
                           key={type.id}
+                          id={type.id}
+                          name={type.name}
+                          emoji={categoryEmoji}
+                          badgeType="required"
+                          itemCount={itemCount}
                           onClick={() => setSelectedMaterialType(type.id)}
-                          className="group bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-blue-300 hover:shadow-md transition-all"
-                        >
-                          {/* 画像エリア（正方形） */}
-                          <div className="aspect-square bg-gradient-to-br from-blue-50 to-cyan-100 flex flex-col items-center justify-center relative">
-                            <span className="text-2xl">{categoryEmoji}</span>
-                            <div className="mt-1 flex items-center gap-1 text-gray-400">
-                              <ImageIcon className="w-3 h-3" />
-                              <span className="text-[10px]">画像準備中</span>
-                            </div>
-                          </div>
-                          {/* 情報エリア */}
-                          <div className="p-2">
-                            <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
-                              {type.name}
-                            </h3>
-                            <div className="flex items-baseline gap-1 mt-1">
-                              <span className="text-sm font-bold text-gray-400">必須</span>
-                            </div>
-                            <span className="text-[10px] text-gray-400">
-                              {itemCount > 0 ? `${itemCount}種類から選択` : '準備中'}
-                            </span>
-                          </div>
-                        </button>
+                        />
                       );
                     })}
                   </div>
@@ -1981,32 +1948,15 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                       {EXTERIOR_FACILITY_TYPES.filter(t => !t.required).map((type) => {
                         const itemCount = items.filter(i => i.category_name === type.id).length;
                         return (
-                          <button
+                          <CategorySelectionCard
                             key={type.id}
+                            id={type.id}
+                            name={type.name}
+                            emoji="🔧"
+                            badgeType="optional"
+                            itemCount={itemCount}
                             onClick={() => setSelectedMaterialType(type.id)}
-                            className="group bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-blue-300 hover:shadow-md transition-all"
-                          >
-                            {/* 画像エリア（正方形） */}
-                            <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col items-center justify-center relative">
-                              <span className="text-2xl">🔧</span>
-                              <div className="mt-1 flex items-center gap-1 text-gray-400">
-                                <ImageIcon className="w-3 h-3" />
-                                <span className="text-[10px]">画像準備中</span>
-                              </div>
-                            </div>
-                            {/* 情報エリア */}
-                            <div className="p-2">
-                              <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
-                                {type.name}
-                              </h3>
-                              <div className="flex items-baseline gap-1 mt-1">
-                                <span className="text-sm font-bold text-gray-400">オプション</span>
-                              </div>
-                              <span className="text-[10px] text-gray-400">
-                                {itemCount > 0 ? `${itemCount}種類から選択` : '準備中'}
-                              </span>
-                            </div>
-                          </button>
+                          />
                         );
                       })}
                     </div>
@@ -2024,32 +1974,15 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                       const itemCount = items.filter(i => i.category_name === type.id).length;
                       const categoryEmoji = type.id === '軒樋' ? '🏠' : type.id === '竪樋' ? '📐' : type.id === '土台水切' ? '💧' : type.id === 'パラペット笠木' ? '🏗️' : type.id === 'バルコニー笠木' ? '🏠' : '🔧';
                       return (
-                        <button
+                        <CategorySelectionCard
                           key={type.id}
+                          id={type.id}
+                          name={type.name}
+                          emoji={categoryEmoji}
+                          badgeType="category"
+                          itemCount={itemCount}
                           onClick={() => setSelectedMaterialType(type.id)}
-                          className="group bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-blue-300 hover:shadow-md transition-all"
-                        >
-                          {/* 画像エリア（正方形） */}
-                          <div className="aspect-square bg-gradient-to-br from-amber-50 to-orange-100 flex flex-col items-center justify-center">
-                            <span className="text-2xl">{categoryEmoji}</span>
-                            <div className="mt-1 flex items-center gap-1 text-gray-400">
-                              <ImageIcon className="w-3 h-3" />
-                              <span className="text-[10px]">画像準備中</span>
-                            </div>
-                          </div>
-                          {/* 情報エリア */}
-                          <div className="p-2">
-                            <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
-                              {type.name}
-                            </h3>
-                            <div className="flex items-baseline gap-1 mt-1">
-                              <span className="text-sm font-bold text-gray-400">カテゴリ</span>
-                            </div>
-                            <span className="text-[10px] text-gray-400">
-                              {itemCount > 0 ? `${itemCount}種類から選択` : '準備中'}
-                            </span>
-                          </div>
-                        </button>
+                        />
                       );
                     })}
                   </div>
@@ -2066,32 +1999,15 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                       const itemCount = items.filter(i => i.category_name === type.id).length;
                       const categoryEmoji = type.name.includes('フローリング') ? '🪵' : type.name.includes('タイル') ? '🪨' : type.name.includes('畳') ? '🟩' : '🔲';
                       return (
-                        <button
+                        <CategorySelectionCard
                           key={type.id}
+                          id={type.id}
+                          name={type.name}
+                          emoji={categoryEmoji}
+                          badgeType="category"
+                          itemCount={itemCount}
                           onClick={() => setSelectedMaterialType(type.id)}
-                          className="group bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-blue-300 hover:shadow-md transition-all"
-                        >
-                          {/* 画像エリア（正方形） */}
-                          <div className="aspect-square bg-gradient-to-br from-amber-50 to-orange-100 flex flex-col items-center justify-center">
-                            <span className="text-2xl">{categoryEmoji}</span>
-                            <div className="mt-1 flex items-center gap-1 text-gray-400">
-                              <ImageIcon className="w-3 h-3" />
-                              <span className="text-[10px]">画像準備中</span>
-                            </div>
-                          </div>
-                          {/* 情報エリア */}
-                          <div className="p-2">
-                            <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
-                              {type.name}
-                            </h3>
-                            <div className="flex items-baseline gap-1 mt-1">
-                              <span className="text-sm font-bold text-gray-400">カテゴリ</span>
-                            </div>
-                            <span className="text-[10px] text-gray-400">
-                              {itemCount > 0 ? `${itemCount}種類から選択` : '準備中'}
-                            </span>
-                          </div>
-                        </button>
+                        />
                       );
                     })}
                   </div>
@@ -2106,38 +2022,17 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   <div className="grid grid-cols-6 gap-2">
                     {PERIPHERAL_PARTS_TYPES.map((type) => {
                       const itemCount = items.filter(i => i.category_name === type.id).length;
+                      const isOptional = 'optional' in type && type.optional;
                       return (
-                        <button
+                        <CategorySelectionCard
                           key={type.id}
+                          id={type.id}
+                          name={type.name}
+                          emoji="🔧"
+                          badgeType={isOptional ? 'optional' : 'category'}
+                          itemCount={itemCount}
                           onClick={() => setSelectedMaterialType(type.id)}
-                          className="group bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-blue-300 hover:shadow-md transition-all"
-                        >
-                          {/* 画像エリア（正方形） */}
-                          <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col items-center justify-center relative">
-                            <span className="text-2xl">🔧</span>
-                            <div className="mt-1 flex items-center gap-1 text-gray-400">
-                              <ImageIcon className="w-3 h-3" />
-                              <span className="text-[10px]">画像準備中</span>
-                            </div>
-                            {'optional' in type && type.optional && (
-                              <span className="absolute top-1 left-1 text-[10px] px-1.5 py-0.5 bg-gray-500 text-white rounded font-bold">
-                                任意
-                              </span>
-                            )}
-                          </div>
-                          {/* 情報エリア */}
-                          <div className="p-2">
-                            <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
-                              {type.name}
-                            </h3>
-                            <div className="flex items-baseline gap-1 mt-1">
-                              <span className="text-sm font-bold text-gray-400">{'optional' in type && type.optional ? '任意' : 'カテゴリ'}</span>
-                            </div>
-                            <span className="text-[10px] text-gray-400">
-                              {itemCount > 0 ? `${itemCount}種類から選択` : '準備中'}
-                            </span>
-                          </div>
-                        </button>
+                        />
                       );
                     })}
                   </div>
@@ -2200,20 +2095,31 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                             // 次のカテゴリへ移動
                             goToNextCategory();
                           }}
-                          className={`relative flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all ${
+                          className={`group bg-white rounded-lg overflow-hidden transition-all duration-200 text-left w-full ${
                             isSelected
-                              ? 'border-blue-500 bg-blue-50'
-                              : 'border-gray-200'
-                          } ${isDesignReadOnly ? 'cursor-default opacity-75' : 'hover:border-blue-300:border-blue-600'}`}
+                              ? 'border-2 border-blue-500 shadow-lg'
+                              : 'border border-gray-200 hover:border-blue-300 hover:shadow-md'
+                          } ${isDesignReadOnly ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                         >
-                          {isSelected && (
-                            <div className="absolute top-2 right-2">
-                              <Check className="w-5 h-5 text-blue-500" />
-                            </div>
-                          )}
-                          <span className="text-2xl mb-2">{emoji}</span>
-                          <span className="font-medium text-gray-900 text-sm text-center">{option.name}</span>
-                          <span className="text-xs text-gray-500 mt-1 text-center">{option.description}</span>
+                          {/* 画像エリア（正方形） */}
+                          <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden flex flex-col items-center justify-center">
+                            <span className="text-2xl transition-transform duration-200 group-hover:scale-110">
+                              {emoji}
+                            </span>
+                            {/* 選択済みマーク */}
+                            {isSelected && (
+                              <div className="absolute top-1 right-1 bg-blue-500 rounded-full p-1">
+                                <Check className="w-3 h-3 text-white" strokeWidth={3} />
+                              </div>
+                            )}
+                          </div>
+                          {/* 情報エリア */}
+                          <div className="p-2">
+                            <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
+                              {option.name}
+                            </h3>
+                            <span className="text-[10px] text-gray-400 line-clamp-2">{option.description}</span>
+                          </div>
                         </button>
                       );
                     })}
@@ -2282,20 +2188,31 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                             // 次のカテゴリへ移動
                             goToNextCategory();
                           }}
-                          className={`relative flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all ${
+                          className={`group bg-white rounded-lg overflow-hidden transition-all duration-200 text-left w-full ${
                             isSelected
-                              ? 'border-blue-500 bg-blue-50'
-                              : 'border-gray-200'
-                          } ${isDesignReadOnly ? 'cursor-default opacity-75' : 'hover:border-blue-300:border-blue-600'}`}
+                              ? 'border-2 border-blue-500 shadow-lg'
+                              : 'border border-gray-200 hover:border-blue-300 hover:shadow-md'
+                          } ${isDesignReadOnly ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                         >
-                          {isSelected && (
-                            <div className="absolute top-2 right-2">
-                              <Check className="w-5 h-5 text-blue-500" />
-                            </div>
-                          )}
-                          <span className="text-2xl mb-2">{emoji}</span>
-                          <span className="font-medium text-gray-900 text-sm text-center">{option.name}</span>
-                          <span className="text-xs text-gray-500 mt-1 text-center">{option.description}</span>
+                          {/* 画像エリア（正方形） */}
+                          <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden flex flex-col items-center justify-center">
+                            <span className="text-2xl transition-transform duration-200 group-hover:scale-110">
+                              {emoji}
+                            </span>
+                            {/* 選択済みマーク */}
+                            {isSelected && (
+                              <div className="absolute top-1 right-1 bg-blue-500 rounded-full p-1">
+                                <Check className="w-3 h-3 text-white" strokeWidth={3} />
+                              </div>
+                            )}
+                          </div>
+                          {/* 情報エリア */}
+                          <div className="p-2">
+                            <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
+                              {option.name}
+                            </h3>
+                            <span className="text-[10px] text-gray-400 line-clamp-2">{option.description}</span>
+                          </div>
                         </button>
                       );
                     })}
@@ -2346,25 +2263,37 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                             }
                             goToNextCategory();
                           }}
-                          className={`relative flex flex-col items-center justify-center p-6 rounded-xl border-2 transition-all ${
+                          className={`group bg-white rounded-lg overflow-hidden transition-all duration-200 text-left w-full ${
                             isSelected
-                              ? 'border-blue-500 bg-blue-50'
-                              : 'border-gray-200'
-                          } ${isDesignReadOnly ? 'cursor-default opacity-75' : 'hover:border-blue-300:border-blue-600'}`}
+                              ? 'border-2 border-blue-500 shadow-lg'
+                              : 'border border-gray-200 hover:border-blue-300 hover:shadow-md'
+                          } ${isDesignReadOnly ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                         >
-                          {isSelected && (
-                            <div className="absolute top-2 right-2">
-                              <Check className="w-5 h-5 text-blue-500" />
-                            </div>
-                          )}
-                          {'isOption' in option && option.isOption && (
-                            <span className="absolute top-2 left-2 text-[10px] px-1.5 py-0.5 bg-orange-100 text-orange-600 rounded">
-                              オプション
-                            </span>
-                          )}
-                          <span className="text-2xl mb-2">🪟</span>
-                          <span className="font-medium text-gray-900">{option.name}</span>
-                          <span className="text-xs text-gray-500 mt-1">{option.description}</span>
+                          {/* 画像エリア（正方形） */}
+                          <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden flex flex-col items-center justify-center">
+                            <span className="text-2xl transition-transform duration-200 group-hover:scale-110">🪟</span>
+                            {/* バッジ */}
+                            {'isOption' in option && option.isOption && (
+                              <div className="absolute top-1 left-1">
+                                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-orange-500 text-white">
+                                  オプション
+                                </span>
+                              </div>
+                            )}
+                            {/* 選択済みマーク */}
+                            {isSelected && (
+                              <div className="absolute top-1 right-1 bg-blue-500 rounded-full p-1">
+                                <Check className="w-3 h-3 text-white" strokeWidth={3} />
+                              </div>
+                            )}
+                          </div>
+                          {/* 情報エリア */}
+                          <div className="p-2">
+                            <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
+                              {option.name}
+                            </h3>
+                            <span className="text-[10px] text-gray-400 line-clamp-2">{option.description}</span>
+                          </div>
                         </button>
                       );
                     })}
@@ -2424,20 +2353,31 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                             // 次のカテゴリへ移動
                             goToNextCategory();
                           }}
-                          className={`relative flex flex-col items-center justify-center p-6 rounded-xl border-2 transition-all ${
+                          className={`group bg-white rounded-lg overflow-hidden transition-all duration-200 text-left w-full ${
                             isSelected
-                              ? 'border-blue-500 bg-blue-50'
-                              : 'border-gray-200'
-                          } ${isDesignReadOnly ? 'cursor-default opacity-75' : 'hover:border-blue-300:border-blue-600'}`}
+                              ? 'border-2 border-blue-500 shadow-lg'
+                              : 'border border-gray-200 hover:border-blue-300 hover:shadow-md'
+                          } ${isDesignReadOnly ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                         >
-                          {isSelected && (
-                            <div className="absolute top-2 right-2">
-                              <Check className="w-5 h-5 text-blue-500" />
-                            </div>
-                          )}
-                          <span className="text-2xl mb-2">{option.id === 'gas-supply-yes' ? '🔥' : '⚡'}</span>
-                          <span className="font-medium text-gray-900">{option.name}</span>
-                          <span className="text-xs text-gray-500 mt-1">{option.description}</span>
+                          {/* 画像エリア（正方形） */}
+                          <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden flex flex-col items-center justify-center">
+                            <span className="text-2xl transition-transform duration-200 group-hover:scale-110">
+                              {option.id === 'gas-supply-yes' ? '🔥' : '⚡'}
+                            </span>
+                            {/* 選択済みマーク */}
+                            {isSelected && (
+                              <div className="absolute top-1 right-1 bg-blue-500 rounded-full p-1">
+                                <Check className="w-3 h-3 text-white" strokeWidth={3} />
+                              </div>
+                            )}
+                          </div>
+                          {/* 情報エリア */}
+                          <div className="p-2">
+                            <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
+                              {option.name}
+                            </h3>
+                            <span className="text-[10px] text-gray-400 line-clamp-2">{option.description}</span>
+                          </div>
                         </button>
                       );
                     })}
@@ -2489,20 +2429,31 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                             // 次のカテゴリへ移動
                             goToNextCategory();
                           }}
-                          className={`relative flex flex-col items-center justify-center p-6 rounded-xl border-2 transition-all ${
+                          className={`group bg-white rounded-lg overflow-hidden transition-all duration-200 text-left w-full ${
                             isSelected
-                              ? 'border-blue-500 bg-blue-50'
-                              : 'border-gray-200'
-                          } ${isDesignReadOnly ? 'cursor-default opacity-75' : 'hover:border-blue-300:border-blue-600'}`}
+                              ? 'border-2 border-blue-500 shadow-lg'
+                              : 'border border-gray-200 hover:border-blue-300 hover:shadow-md'
+                          } ${isDesignReadOnly ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                         >
-                          {isSelected && (
-                            <div className="absolute top-2 right-2">
-                              <Check className="w-5 h-5 text-blue-500" />
-                            </div>
-                          )}
-                          <span className="text-2xl mb-2">{option.id === 'interior-window-yes' ? '🪟' : '🚫'}</span>
-                          <span className="font-medium text-gray-900">{option.name}</span>
-                          <span className="text-xs text-gray-500 mt-1">{option.description}</span>
+                          {/* 画像エリア（正方形） */}
+                          <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden flex flex-col items-center justify-center">
+                            <span className="text-2xl transition-transform duration-200 group-hover:scale-110">
+                              {option.id === 'interior-window-yes' ? '🪟' : '🚫'}
+                            </span>
+                            {/* 選択済みマーク */}
+                            {isSelected && (
+                              <div className="absolute top-1 right-1 bg-blue-500 rounded-full p-1">
+                                <Check className="w-3 h-3 text-white" strokeWidth={3} />
+                              </div>
+                            )}
+                          </div>
+                          {/* 情報エリア */}
+                          <div className="p-2">
+                            <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
+                              {option.name}
+                            </h3>
+                            <span className="text-[10px] text-gray-400 line-clamp-2">{option.description}</span>
+                          </div>
                         </button>
                       );
                     })}
@@ -2577,20 +2528,31 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                             // 次のカテゴリへ移動
                             goToNextCategory();
                           }}
-                          className={`relative flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all ${
+                          className={`group bg-white rounded-lg overflow-hidden transition-all duration-200 text-left w-full ${
                             isSelected
-                              ? 'border-blue-500 bg-blue-50'
-                              : 'border-gray-200'
-                          } ${isDesignReadOnly ? 'cursor-default opacity-75' : 'hover:border-blue-300:border-blue-600'}`}
+                              ? 'border-2 border-blue-500 shadow-lg'
+                              : 'border border-gray-200 hover:border-blue-300 hover:shadow-md'
+                          } ${isDesignReadOnly ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                         >
-                          {isSelected && (
-                            <div className="absolute top-2 right-2">
-                              <Check className="w-5 h-5 text-blue-500" />
-                            </div>
-                          )}
-                          <span className="text-2xl mb-2">{emoji}</span>
-                          <span className="font-medium text-gray-900 text-sm text-center">{option.name}</span>
-                          <span className="text-xs text-gray-500 mt-1 text-center">{option.description}</span>
+                          {/* 画像エリア（正方形） */}
+                          <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden flex flex-col items-center justify-center">
+                            <span className="text-2xl transition-transform duration-200 group-hover:scale-110">
+                              {emoji}
+                            </span>
+                            {/* 選択済みマーク */}
+                            {isSelected && (
+                              <div className="absolute top-1 right-1 bg-blue-500 rounded-full p-1">
+                                <Check className="w-3 h-3 text-white" strokeWidth={3} />
+                              </div>
+                            )}
+                          </div>
+                          {/* 情報エリア */}
+                          <div className="p-2">
+                            <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
+                              {option.name}
+                            </h3>
+                            <span className="text-[10px] text-gray-400 line-clamp-2">{option.description}</span>
+                          </div>
                         </button>
                       );
                     })}
@@ -2711,26 +2673,34 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                                 toast.info('乾太くんを選択解除しました');
                               }
                             }}
-                            className={`relative p-4 rounded-xl border-2 transition-all text-left ${
+                            className={`group bg-white rounded-lg overflow-hidden transition-all duration-200 text-left w-full ${
                               isSelected
-                                ? 'border-orange-500 bg-orange-50'
-                                : 'border-gray-200 hover:border-orange-300:border-orange-600'
+                                ? 'border-2 border-blue-500 shadow-lg'
+                                : 'border border-gray-200 hover:border-blue-300 hover:shadow-md'
                             }`}
                           >
-                            {isSelected && (
-                              <div className="absolute top-2 right-2">
-                                <Check className="w-5 h-5 text-orange-500" />
+                            {/* 画像エリア（正方形） */}
+                            <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden flex flex-col items-center justify-center">
+                              <span className="text-2xl transition-transform duration-200 group-hover:scale-110">
+                                {option.icon}
+                              </span>
+                              {/* 選択済みマーク */}
+                              {isSelected && (
+                                <div className="absolute top-1 right-1 bg-blue-500 rounded-full p-1">
+                                  <Check className="w-3 h-3 text-white" strokeWidth={3} />
+                                </div>
+                              )}
+                            </div>
+                            {/* 情報エリア */}
+                            <div className="p-2">
+                              <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
+                                {option.name}
+                              </h3>
+                              <div className="flex items-baseline gap-1 mt-1">
+                                <span className={`text-sm font-bold ${option.price === 0 ? 'text-blue-600' : 'text-gray-900'}`}>
+                                  {option.price === 0 ? '標準' : `+¥${option.price.toLocaleString()}`}
+                                </span>
                               </div>
-                            )}
-                            <div className="text-2xl mb-2">{option.icon}</div>
-                            <div className="font-medium text-gray-900 text-sm">
-                              {option.name}
-                            </div>
-                            <div className="text-xs text-gray-500 mt-1">
-                              {option.description}
-                            </div>
-                            <div className="text-sm font-semibold text-orange-600 mt-2">
-                              {option.price === 0 ? '¥0' : `+¥${option.price.toLocaleString()}`}
                             </div>
                           </button>
                         );
@@ -2764,25 +2734,32 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                                   }
                                 }
                               }}
-                              className={`relative p-4 rounded-xl border-2 transition-all text-left ${
+                              className={`group bg-white rounded-lg overflow-hidden transition-all duration-200 text-left w-full ${
                                 isSelected
-                                  ? 'border-orange-500 bg-orange-50'
-                                  : 'border-gray-200 hover:border-orange-300:border-orange-600'
+                                  ? 'border-2 border-blue-500 shadow-lg'
+                                  : 'border border-gray-200 hover:border-blue-300 hover:shadow-md'
                               }`}
                             >
-                              {isSelected && (
-                                <div className="absolute top-2 right-2">
-                                  <Check className="w-5 h-5 text-orange-500" />
+                              {/* 画像エリア（正方形） */}
+                              <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden flex flex-col items-center justify-center">
+                                <span className="text-2xl transition-transform duration-200 group-hover:scale-110">🔧</span>
+                                {/* 選択済みマーク */}
+                                {isSelected && (
+                                  <div className="absolute top-1 right-1 bg-blue-500 rounded-full p-1">
+                                    <Check className="w-3 h-3 text-white" strokeWidth={3} />
+                                  </div>
+                                )}
+                              </div>
+                              {/* 情報エリア */}
+                              <div className="p-2">
+                                <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
+                                  {option.name}
+                                </h3>
+                                <div className="flex items-baseline gap-1 mt-1">
+                                  <span className="text-sm font-bold text-gray-900">
+                                    +¥{option.price.toLocaleString()}
+                                  </span>
                                 </div>
-                              )}
-                              <div className="font-medium text-gray-900">
-                                {option.name}
-                              </div>
-                              <div className="text-xs text-gray-500 mt-1">
-                                {option.description}
-                              </div>
-                              <div className="text-sm font-semibold text-orange-600 mt-2">
-                                +¥{option.price.toLocaleString()}
                               </div>
                             </button>
                           );
