@@ -165,7 +165,7 @@ export const BaseBuildingSelector: React.FC<BaseBuildingSelectorProps> = ({
 
       {/* ステップ1: カラータイプ選択 */}
       {step === 'color-category' && (
-        <div className="grid grid-cols-6 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
           <SelectionCard
             id="standard"
             name="標準カラー"
@@ -218,7 +218,7 @@ export const BaseBuildingSelector: React.FC<BaseBuildingSelectorProps> = ({
              'ソリッドカラー'}を選択
           </h4>
 
-          <div className="grid grid-cols-6 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
             {availableColors.map(color => (
               <SelectionCard
                 key={color.id}
@@ -255,7 +255,7 @@ export const BaseBuildingSelector: React.FC<BaseBuildingSelectorProps> = ({
             )}
           </div>
 
-          <div className="grid grid-cols-6 gap-2 mb-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 mb-4">
             {DESIGN_OPTIONS.map(design => (
               <SelectionCard
                 key={design.id}

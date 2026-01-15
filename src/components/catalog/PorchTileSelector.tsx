@@ -185,7 +185,7 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
 
       {/* タイル選択 */}
       {step === 'tile' && (
-        <div className="grid grid-cols-6 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
           {/* 標準を先に、オプションを後に表示 */}
           {[...standardTiles, ...optionTiles].map(tile => (
             <SelectionCard
@@ -217,7 +217,7 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
             <ChevronLeft className="w-4 h-4" /> 戻る
           </button>
 
-          <div className="grid grid-cols-6 gap-2 mb-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 mb-4">
             {selectedTile.colorVariants.map(color => (
               <SelectionCard
                 key={color.id}
@@ -245,7 +245,7 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
             <ChevronLeft className="w-4 h-4" /> 戻る
           </button>
 
-          <div className="grid grid-cols-6 gap-2 mb-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 mb-4">
             {groutColors.map(grout => (
               <SelectionCard
                 key={grout.id}

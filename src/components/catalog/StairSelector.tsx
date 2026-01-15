@@ -281,7 +281,7 @@ export const StairSelector: React.FC<StairSelectorProps> = ({
           <h4 className="font-medium text-gray-800 mb-4">
             階段タイプを選んでください
           </h4>
-          <div className="grid grid-cols-6 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
             {STAIR_TYPES.map((type) => {
               const price = type.productId ? getPlanPrice(type.productId) : 0;
               return (
@@ -323,7 +323,7 @@ export const StairSelector: React.FC<StairSelectorProps> = ({
           <h4 className="font-medium text-gray-800 mb-4">
             メーカーを選んでください
           </h4>
-          <div className="grid grid-cols-6 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
             {WOOD_MANUFACTURERS.map((mfr) => {
               const price = getPlanPrice(mfr.productId);
               return (
@@ -368,7 +368,7 @@ export const StairSelector: React.FC<StairSelectorProps> = ({
             {selectedType === 'iron' && '選択中: アイアン階段'}
             {selectedType === 'carpet' && '選択中: カーペット階段'}
           </p>
-          <div className="grid grid-cols-6 gap-2 max-h-96 overflow-y-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 max-h-96 overflow-y-auto">
             {getColorVariants().map((variant) => (
               <SelectionCard
                 key={variant.id}
@@ -399,7 +399,7 @@ export const StairSelector: React.FC<StairSelectorProps> = ({
           <h4 className="font-medium text-gray-800 mb-4">
             手摺を選んでください
           </h4>
-          <div className="grid grid-cols-6 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
             {HANDRAIL_TYPES.map((handrail) => {
               const price = handrail.productId ? getPlanPrice(handrail.productId) : 0;
               return (
@@ -437,7 +437,7 @@ export const StairSelector: React.FC<StairSelectorProps> = ({
           <h4 className="font-medium text-gray-800 mb-4">
             オプションを選択（複数選択可）
           </h4>
-          <div className="grid grid-cols-6 gap-2 mb-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 mb-4">
             {getAvailableOptions().map((option) => {
               const price = getPlanPrice(option.productId);
               return (

@@ -268,7 +268,7 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
 
       {/* ドアデザイン選択 */}
       {currentStep === 'design' && (
-        <div className="grid grid-cols-6 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
           {DOOR_DESIGNS.map((design) => (
             <SelectionCard
               key={design.id}
@@ -297,7 +297,7 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
           >
             <ChevronLeft className="w-4 h-4" /> 戻る
           </button>
-          <div className="grid grid-cols-6 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
             {getDoorColors().map((variant) => (
               <SelectionCard
                 key={variant.id}
@@ -327,7 +327,7 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
           >
             <ChevronLeft className="w-4 h-4" /> 戻る
           </button>
-          <div className="grid grid-cols-6 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
             {KEY_TYPES.map((keyType) => {
               const isStandard = keyType.standardFor.includes(selectedPlan);
               return (
@@ -364,7 +364,7 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
           >
             <ChevronLeft className="w-4 h-4" /> 戻る
           </button>
-          <div className="grid grid-cols-6 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
             {getHandleColorCombos().map((combo) => (
               <SelectionCard
                 key={combo.id}
@@ -396,7 +396,7 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
           >
             <ChevronLeft className="w-4 h-4" /> 戻る
           </button>
-          <div className="grid grid-cols-6 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
             <SelectionCard
               id="interface-yes"
               name="あり"

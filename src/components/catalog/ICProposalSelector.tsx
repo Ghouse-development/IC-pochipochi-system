@@ -89,7 +89,7 @@ export const ICProposalSelector: React.FC<ICProposalSelectorProps> = ({
             : 'インテリアコーディネーターに家具の提案を希望しますか？'}
         />
 
-        <div className="grid grid-cols-6 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
           {/* 提案希望する */}
           <SelectionCard
             id="want-proposal"
@@ -136,7 +136,7 @@ export const ICProposalSelector: React.FC<ICProposalSelectorProps> = ({
         subtitle="複数選択できます"
       />
 
-      <div className="grid grid-cols-6 gap-2 mb-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 mb-4">
         {items.map((item) => {
           const isSelected = selectedItems.includes(item.id);
 

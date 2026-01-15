@@ -306,7 +306,7 @@ export const AirconSelector: React.FC<AirconSelectorProps> = ({
             <Thermometer className="w-5 h-5 text-blue-500" />
             シリーズを選んでください
           </h4>
-          <div className="grid grid-cols-6 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
             {AIRCON_SERIES.map((series) => (
               <SelectionCard
                 key={series.id}
@@ -341,7 +341,7 @@ export const AirconSelector: React.FC<AirconSelectorProps> = ({
           <p className="text-sm text-gray-500 mb-4">
             選択中: {AIRCON_SERIES.find(s => s.id === activeUnit.series)?.manufacturer} {AIRCON_SERIES.find(s => s.id === activeUnit.series)?.name}
           </p>
-          <div className="grid grid-cols-6 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
             {ROOM_SIZES.map((size) => {
               const seriesInfo = AIRCON_SERIES.find(s => s.id === activeUnit.series);
               const productId = seriesInfo ? `${seriesInfo.productPrefix}${size.id}` : '';
@@ -378,7 +378,7 @@ export const AirconSelector: React.FC<AirconSelectorProps> = ({
             <Building2 className="w-5 h-5 text-blue-500" />
             設置する階を選んでください
           </h4>
-          <div className="grid grid-cols-6 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
             {FLOOR_OPTIONS.map((floor) => (
               <SelectionCard
                 key={floor.id}
@@ -407,7 +407,7 @@ export const AirconSelector: React.FC<AirconSelectorProps> = ({
             <Wind className="w-5 h-5 text-blue-500" />
             風向調整板の有無
           </h4>
-          <div className="grid grid-cols-6 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
             {WIND_PLATE_OPTIONS.map((option) => {
               const price = option.productId ? getPlanPrice(option.productId) : 0;
               return (

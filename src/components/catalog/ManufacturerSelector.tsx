@@ -44,7 +44,7 @@ export const ManufacturerSelector: React.FC<ManufacturerSelectorProps> = ({
           subtitle="ご希望のシリーズを選択してください"
         />
 
-        <div className="grid grid-cols-6 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
           {selectedManufacturer.series.map((series) => (
             <SelectionCard
               key={series.id}
@@ -69,7 +69,7 @@ export const ManufacturerSelector: React.FC<ManufacturerSelectorProps> = ({
         subtitle="ご希望のメーカーを選択してください"
       />
 
-      <div className="grid grid-cols-6 gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
         {manufacturers.map((manufacturer) => (
           <SelectionCard
             key={manufacturer.id}

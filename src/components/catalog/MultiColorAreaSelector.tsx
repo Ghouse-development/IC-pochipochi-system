@@ -245,7 +245,7 @@ export const MultiColorAreaSelector: React.FC<MultiColorAreaSelectorProps> = ({
 
       {/* ステップ1: 色数選択 */}
       {step === 'count' && (
-        <div className="grid grid-cols-6 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
           {[1, 2, 3].filter(n => n <= maxColors).map(count => (
             <SelectionCard
               key={count}
@@ -336,7 +336,7 @@ export const MultiColorAreaSelector: React.FC<MultiColorAreaSelectorProps> = ({
             {Object.entries(groupedProducts).map(([subcategory, subcategoryProducts]) => (
               <div key={subcategory}>
                 <h5 className="text-sm font-medium text-gray-500 mb-3">{subcategory}</h5>
-                <div className="grid grid-cols-6 gap-2">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
                   {subcategoryProducts.map(product => (
                     <ProductCard
                       key={product.id}
