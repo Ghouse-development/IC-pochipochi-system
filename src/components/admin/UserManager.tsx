@@ -95,34 +95,36 @@ export function UserManager({ onBack }: UserManagerProps) {
     try {
       setError(null);
 
-      // Create user in Supabase Auth
-      const { data: authData, error: authError } = await supabase.auth.signUp({
-        email: newUserForm.email,
-        password: newUserForm.password,
-        options: {
-          data: {
-            full_name: newUserForm.full_name,
-            role: newUserForm.role,
-          },
+      // Get current user's session token for authorization
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        setError('ログインが必要です');
+        return;
+      }
+
+      // Call Admin API endpoint to create user
+      const response = await fetch('/api/admin/create-user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`,
         },
-      });
-
-      if (authError) throw authError;
-
-      // The trigger should create the user in our users table
-      // But we can also manually create if needed
-      if (authData.user) {
-        await supabase.from('users').upsert({
-          id: authData.user.id,
+        body: JSON.stringify({
           email: newUserForm.email,
+          password: newUserForm.password,
           full_name: newUserForm.full_name,
           role: newUserForm.role,
           phone: newUserForm.phone || null,
-          is_active: true,
-        });
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'ユーザーの作成に失敗しました');
       }
 
-      setSuccess('ユーザーを作成しました');
+      setSuccess('ユーザーを作成しました（メール確認なしでログイン可能）');
       setIsCreating(false);
       setNewUserForm({
         email: '',

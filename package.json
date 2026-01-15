@@ -66,6 +66,7 @@
     "@types/pdf-parse": "^1.1.5",
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
+    "@vercel/node": "^5.5.20",
     "@vitejs/plugin-react": "^5.0.0",
     "autoprefixer": "^10.4.21",
     "dotenv": "^17.2.3",
