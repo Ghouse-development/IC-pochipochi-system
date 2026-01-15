@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { BarChart3, Package, Bell, TrendingUp, Upload, Settings, Users, FolderTree, Briefcase, Wrench, Truck, Database, Building2, ShieldAlert, DollarSign, Activity, RefreshCw, CloudOff, Cloud } from 'lucide-react';
 import { Button } from '../common/Button';
 import { Card } from '../common/Card';
@@ -140,6 +141,7 @@ const DBSyncPanel: React.FC = () => {
 };
 
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
+  const navigate = useNavigate();
   const { isAdmin, isCoordinator, isLoading: authLoading } = useAuth();
 
   // メインタブ
@@ -150,6 +152,19 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
   const [statsSubTab, setStatsSubTab] = useState<StatsSubTab>('dashboard');
   const [dataSubTab, setDataSubTab] = useState<DataSubTab>('backup');
   const [systemSubTab, setSystemSubTab] = useState<SystemSubTab>('settings');
+
+  // ユーザーからプロジェクト作成への遷移
+  const handleCreateProjectForUser = useCallback((user: { id: string; email: string; full_name: string; phone?: string | null }) => {
+    // StaffDashboardにユーザー情報を渡して遷移
+    const params = new URLSearchParams({
+      createProject: 'true',
+      userId: user.id,
+      email: user.email,
+      name: user.full_name || '',
+      ...(user.phone ? { phone: user.phone } : {}),
+    });
+    navigate(`/staff?${params.toString()}`);
+  }, [navigate]);
 
   // すべてのフックを早期リターンの前に配置（React Hooks のルール遵守）
   const currentVersion = useVersionStore((state) => state.currentVersion);
@@ -1007,7 +1022,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
             )}
             {systemSubTab === 'users' && (
               <SectionErrorBoundary sectionName="ユーザー管理">
-                <UserManager />
+                <UserManager onCreateProject={handleCreateProjectForUser} />
               </SectionErrorBoundary>
             )}
             {systemSubTab === 'organizations' && (

@@ -7,6 +7,7 @@ const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 interface CreateProjectRequest {
   // Customer info
   customer: {
+    id?: string; // 既存ユーザーの場合はIDを指定
     name: string;
     furigana?: string;
     email: string;
@@ -91,38 +92,54 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ error: 'Customer name and email are required' });
     }
 
-    // 1. Create or find customer user
+    // 1. Get or create customer user
     let customerId: string | null = null;
 
-    // Check if user already exists by email
-    const { data: existingUser } = await supabase
-      .from('users')
-      .select('id')
-      .eq('email', body.customer.email)
-      .single();
-
-    if (existingUser) {
-      customerId = existingUser.id;
-    } else {
-      // Create new user (customer)
-      const { data: newUser, error: userError } = await supabase
+    // 既存ユーザーIDが指定されている場合はそれを使用
+    if (body.customer.id) {
+      // Verify the user exists
+      const { data: existingUser, error: verifyError } = await supabase
         .from('users')
-        .insert({
-          email: body.customer.email,
-          full_name: body.customer.name,
-          full_name_kana: body.customer.furigana || null,
-          phone: body.customer.phone || null,
-          role: 'user',
-          is_active: true,
-        })
-        .select()
+        .select('id')
+        .eq('id', body.customer.id)
         .single();
 
-      if (userError) {
-        console.error('Error creating customer:', userError);
-        return res.status(500).json({ error: 'Failed to create customer' });
+      if (verifyError || !existingUser) {
+        console.error('Specified user not found:', body.customer.id);
+        return res.status(400).json({ error: 'Specified user not found' });
       }
-      customerId = newUser.id;
+      customerId = existingUser.id;
+    } else {
+      // Check if user already exists by email
+      const { data: existingUser } = await supabase
+        .from('users')
+        .select('id')
+        .eq('email', body.customer.email)
+        .single();
+
+      if (existingUser) {
+        customerId = existingUser.id;
+      } else {
+        // Create new user (customer)
+        const { data: newUser, error: userError } = await supabase
+          .from('users')
+          .insert({
+            email: body.customer.email,
+            full_name: body.customer.name,
+            full_name_kana: body.customer.furigana || null,
+            phone: body.customer.phone || null,
+            role: 'user',
+            is_active: true,
+          })
+          .select()
+          .single();
+
+        if (userError) {
+          console.error('Error creating customer:', userError);
+          return res.status(500).json({ error: 'Failed to create customer' });
+        }
+        customerId = newUser.id;
+      }
     }
 
     // 2. Generate project code if not provided

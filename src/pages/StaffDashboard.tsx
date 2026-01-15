@@ -6,8 +6,8 @@
  * - 利用状況確認
  * - お客様招待
  */
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   ArrowLeft,
   FolderPlus,
@@ -47,13 +47,45 @@ interface StaffDashboardProps {
   onBack?: () => void;
 }
 
+// 初期ユーザーデータの型
+interface InitialUserData {
+  id: string;
+  email: string;
+  name: string;
+  phone?: string;
+}
+
 export const StaffDashboard: React.FC<StaffDashboardProps> = ({ onBack }) => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState<MainTabType>('overview');
   const [projectSubTab, setProjectSubTab] = useState<ProjectSubTab>('list');
   const [reviewSubTab, setReviewSubTab] = useState<ReviewSubTab>('status');
+  const [initialUserData, setInitialUserData] = useState<InitialUserData | undefined>(undefined);
   const { projects, currentProject } = useProjectStore();
   const { customerName, projectName, projectStatus } = useSelectionStore();
+
+  // URLパラメータからユーザー情報を取得し、状態に保存
+  useEffect(() => {
+    const createProject = searchParams.get('createProject');
+    const userId = searchParams.get('userId');
+    const email = searchParams.get('email');
+    const name = searchParams.get('name');
+    const phone = searchParams.get('phone');
+
+    if (createProject === 'true' && userId && email) {
+      setInitialUserData({
+        id: userId,
+        email,
+        name: name || '',
+        phone: phone || undefined,
+      });
+      setActiveTab('projects');
+      setProjectSubTab('create');
+      // URLパラメータをクリア
+      setSearchParams({});
+    }
+  }, [searchParams, setSearchParams]);
 
   // 6つのメインタブ
   const mainTabs = [
@@ -276,8 +308,15 @@ export const StaffDashboard: React.FC<StaffDashboardProps> = ({ onBack }) => {
       case 'create':
         return (
           <ProjectRegistrationForm
-            onComplete={() => setProjectSubTab('list')}
-            onCancel={() => setProjectSubTab('list')}
+            onComplete={() => {
+              setInitialUserData(undefined);
+              setProjectSubTab('list');
+            }}
+            onCancel={() => {
+              setInitialUserData(undefined);
+              setProjectSubTab('list');
+            }}
+            initialUser={initialUserData}
           />
         );
       case 'invite':

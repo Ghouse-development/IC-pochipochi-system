@@ -34,9 +34,17 @@ interface CustomerInfo {
   address: string;
 }
 
+interface InitialUserData {
+  id: string;
+  email: string;
+  name: string;
+  phone?: string;
+}
+
 interface ProjectRegistrationFormProps {
   onComplete?: (projectId: string, customerUrl: string) => void;
   onCancel?: () => void;
+  initialUser?: InitialUserData;
 }
 
 const STEPS = [
@@ -58,6 +66,7 @@ const PLAN_OPTIONS = [
 export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = ({
   onComplete,
   onCancel,
+  initialUser,
 }) => {
   const { sendMagicLink } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
@@ -67,12 +76,16 @@ export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = (
   const [magicLinkSent, setMagicLinkSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // フォームデータ
+  // 既存ユーザーが指定されているか
+  const isExistingUser = !!initialUser;
+  const [existingUserId] = useState<string | undefined>(initialUser?.id);
+
+  // フォームデータ（initialUserがあれば初期値として使用）
   const [customer, setCustomer] = useState<CustomerInfo>({
-    name: '',
+    name: initialUser?.name || '',
     furigana: '',
-    email: '',
-    phone: '',
+    email: initialUser?.email || '',
+    phone: initialUser?.phone || '',
     postalCode: '',
     address: '',
   });
@@ -130,6 +143,7 @@ export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = (
         },
         body: JSON.stringify({
           customer: {
+            id: existingUserId, // 既存ユーザーの場合はIDを渡す
             name: customer.name,
             furigana: customer.furigana,
             email: customer.email,
@@ -251,6 +265,19 @@ export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = (
         {currentStep === 1 && (
           <div className="space-y-4">
             <h2 className="text-lg font-bold text-gray-900 mb-4">お客様情報</h2>
+
+            {/* 既存ユーザー表示 */}
+            {isExistingUser && (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                <p className="text-blue-700 text-sm font-medium">
+                  既存のお客様情報を使用しています
+                </p>
+                <p className="text-blue-600 text-xs mt-1">
+                  お名前とメールアドレスは変更できません
+                </p>
+              </div>
+            )}
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -262,8 +289,9 @@ export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = (
                   value={customer.name}
                   onChange={handleCustomerChange}
                   placeholder="山田 太郎"
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${isExistingUser ? 'bg-gray-100' : ''}`}
                   required
+                  readOnly={isExistingUser}
                 />
               </div>
               <div>
@@ -289,8 +317,9 @@ export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = (
                   value={customer.email}
                   onChange={handleCustomerChange}
                   placeholder="yamada@example.com"
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${isExistingUser ? 'bg-gray-100' : ''}`}
                   required
+                  readOnly={isExistingUser}
                 />
                 <p className="text-xs text-gray-500 mt-1">
                   このメールアドレスにログイン用リンクを送信します

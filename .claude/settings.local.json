@@ -28,7 +28,12 @@
       "WebFetch(domain:ic-pochipochi-system.vercel.app)",
       "Bash(curl:*)",
       "Bash(npx vercel:*)",
-      "Bash(git fetch:*)"
+      "Bash(git fetch:*)",
+      "Bash(npx supabase:*)",
+      "Bash(cat:*)",
+      "Bash(unzip:*)",
+      "Bash(for i in 1 2 3 4 5 6 7 8 9 10 11)",
+      "Bash(do echo \"=== Slide $i ===\" cat \"/tmp/pptx_extract/ppt/slides/slide$i.xml\")"
     ],
     "deny": [],
     "ask": []

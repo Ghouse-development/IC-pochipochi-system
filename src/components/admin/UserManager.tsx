@@ -11,7 +11,8 @@ import {
   UserX,
   Save,
   X,
-  RefreshCw
+  RefreshCw,
+  FolderPlus
 } from 'lucide-react';
 import { usersApi } from '../../services/api';
 import type { User, UserRole } from '../../types/database';
@@ -24,6 +25,7 @@ const logger = createLogger('UserManager');
 
 interface UserManagerProps {
   onBack?: () => void;
+  onCreateProject?: (user: User) => void;
 }
 
 const ROLE_OPTIONS: { value: UserRole; label: string; description: string }[] = [
@@ -49,7 +51,7 @@ const getRoleLabel = (role: UserRole) => {
   return ROLE_OPTIONS.find(r => r.value === role)?.label || role;
 };
 
-export function UserManager({ onBack }: UserManagerProps) {
+export function UserManager({ onBack, onCreateProject }: UserManagerProps) {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -386,6 +388,16 @@ export function UserManager({ onBack }: UserManagerProps) {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
+                    {/* プロジェクト作成ボタン（顧客ユーザーのみ） */}
+                    {onCreateProject && user.role === 'user' && user.is_active && (
+                      <button
+                        onClick={() => onCreateProject(user)}
+                        className="p-2 hover:bg-blue-100 rounded-lg text-blue-600"
+                        title="このユーザーでプロジェクト作成"
+                      >
+                        <FolderPlus className="w-4 h-4" />
+                      </button>
+                    )}
                     <button
                       onClick={() => handleResetPassword(user)}
                       className="p-2 hover:bg-gray-200 rounded-lg text-gray-600"
