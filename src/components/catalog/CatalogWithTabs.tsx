@@ -15,7 +15,7 @@ import { sanitizeSearchQuery } from '../../lib/sanitize';
 import { ANIMATION_DURATIONS, CART_MILESTONES, CATEGORY_GROUPS } from '../../lib/constants';
 import type { ItemWithDetails, Category, Product, ItemVariant } from '../../types/database';
 // RecommendationPanel removed - 不要
-import { ProductDetailModal } from './ProductDetailModal';
+// ProductDetailModal removed - モーダル不使用
 import { RoomInteriorSelector } from '../interior/RoomInteriorSelector';
 import { useCustomerMode } from '../customer/CustomerModeWrapper';
 import * as Dialog from '@radix-ui/react-dialog';
@@ -158,10 +158,6 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   const [showConfetti, setShowConfetti] = useState(false);
   const [showGuide, setShowGuide] = useState(false);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
-
-  // 商品詳細モーダル用
-  const [selectedProductForDetail, setSelectedProductForDetail] = useState<CatalogProduct | null>(null);
-  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
 
   // 選択解除確認ダイアログ
   const { confirm: confirmRemoval, ConfirmDialogComponent: RemovalConfirmDialog } = useConfirmDialog();
@@ -918,6 +914,11 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
       if (filterType === 'option' && pricing?.is_standard) return false;
       // 素材タイプフィルター（外部建材はcategory_nameも考慮）
       if (selectedMaterialType) {
+        // 外壁カテゴリの素材タイプフィルターは、外壁カテゴリのアイテムのみ対象
+        // これにより、別カテゴリのアイテムが誤って表示されるのを防ぐ
+        if (currentCategoryName === '外壁' && item.category?.name !== '外壁') {
+          return false;
+        }
         const materialType = getMaterialTypeFromNote(item.note);
         const matchesMaterialType = materialType === selectedMaterialType;
         const matchesCategoryName = item.category_name === selectedMaterialType;
@@ -1007,7 +1008,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
       // 4. 商品名順
       return (a.name || '').localeCompare(b.name || '', 'ja');
     });
-  }, [items, debouncedSearchTerm, filterType, selectedPlanId, selectedMaterialType, selectedSubcategory, selectedColor, priceMax, showFavoritesOnly, favorites, hideDiscontinued, needsManufacturerSelection, selectedManufacturer, selectedSeries, activeTab, hasGasSupply, hasNoGas]);
+  }, [items, debouncedSearchTerm, filterType, selectedPlanId, selectedMaterialType, selectedSubcategory, selectedColor, priceMax, showFavoritesOnly, favorites, hideDiscontinued, needsManufacturerSelection, selectedManufacturer, selectedSeries, activeTab, hasGasSupply, hasNoGas, currentCategoryName]);
 
   // ページネーション計算
   const paginatedItems = useMemo(() => {
@@ -1257,32 +1258,13 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     }
   }, [urlProductId, items, navigate]);
 
-  // モーダルを閉じる（URLから商品IDを削除）
-  const handleCloseDetailModal = useCallback(() => {
-    setIsDetailModalOpen(false);
-    setSelectedProductForDetail(null);
-    // URLから商品IDを削除 - slugベースで
-    if (selectedCategorySlug) {
-      navigate(`/catalog/${activeTab}/${selectedCategorySlug}`);
-    } else {
-      navigate(`/catalog/${activeTab}`);
-    }
-  }, [navigate, activeTab, selectedCategorySlug]);
-
-  // レコメンドから商品を選択した時の処理
-  const handleRecommendedProductSelect = useCallback((product: CatalogProduct) => {
-    setSelectedProductForDetail(product);
-    setIsDetailModalOpen(true);
-  }, []);
-
   // キーボードショートカット
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // モーダルが開いている場合はEscでのみ閉じる
-      if (isDetailModalOpen || isRoomPlannerOpen) {
+      // 部屋プランナーが開いている場合はEscでのみ閉じる
+      if (isRoomPlannerOpen) {
         if (e.key === 'Escape') {
-          if (isDetailModalOpen) handleCloseDetailModal();
-          if (isRoomPlannerOpen) setIsRoomPlannerOpen(false);
+          setIsRoomPlannerOpen(false);
         }
         return;
       }
@@ -1327,7 +1309,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isDetailModalOpen, isRoomPlannerOpen, handleCloseDetailModal, searchTerm, setSearchTerm, undecidedCategories, goToNextCategory]);
+  }, [isRoomPlannerOpen, searchTerm, setSearchTerm, undecidedCategories, goToNextCategory]);
 
   return (
     <>
@@ -3091,15 +3073,6 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
         </div>
 
       </div>
-
-      {/* 商品詳細モーダル */}
-      <ProductDetailModal
-        product={selectedProductForDetail}
-        isOpen={isDetailModalOpen}
-        onClose={handleCloseDetailModal}
-        allProducts={catalogProducts}
-        onProductSelect={handleRecommendedProductSelect}
-      />
 
       {/* 見積書出力ダイアログ */}
       <EstimateExportDialog
