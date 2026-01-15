@@ -23,6 +23,7 @@ import {
   type BuildingInfo as BuildingInfoConfig,
 } from '../../config/buildingInfoConfig';
 import { useAuth } from '../../contexts/AuthContext';
+import { supabase } from '../../lib/supabase';
 
 interface CustomerInfo {
   name: string;
@@ -64,6 +65,7 @@ export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = (
   const [customerUrl, setCustomerUrl] = useState<string | null>(null);
   const [urlCopied, setUrlCopied] = useState(false);
   const [magicLinkSent, setMagicLinkSent] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // フォームデータ
   const [customer, setCustomer] = useState<CustomerInfo>({
@@ -109,35 +111,60 @@ export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = (
 
   const handleSubmit = useCallback(async () => {
     setIsSubmitting(true);
+    setError(null);
+
     try {
-      const code = projectCode || `PRJ-${Date.now().toString(36).toUpperCase()}`;
-      const name = projectName || `${customer.name}様邸`;
+      // Get session token
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) {
+        setError('ログインセッションが無効です。再度ログインしてください。');
+        return;
+      }
 
-      // TODO: Supabaseにプロジェクトを保存
-      // const { data: project, error } = await supabase.from('projects').insert({
-      //   code,
-      //   name,
-      //   customer_email: customer.email,
-      //   ...
-      // }).select().single();
+      // Call API to create project
+      const response = await fetch('/api/projects/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({
+          customer: {
+            name: customer.name,
+            furigana: customer.furigana,
+            email: customer.email,
+            phone: customer.phone,
+            postalCode: customer.postalCode,
+            address: customer.address,
+          },
+          planType,
+          projectCode: projectCode || undefined,
+          projectName: projectName || undefined,
+          buildingInfo,
+          rooms,
+        }),
+      });
 
-      // 仮のプロジェクトID生成（本番では上記Supabaseの戻り値を使用）
-      const projectId = `${code}-${Date.now()}`;
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'プロジェクトの作成に失敗しました');
+      }
 
-      // お客様用URL生成
-      const baseUrl = window.location.origin;
-      const url = `${baseUrl}/customer?project=${projectId}&name=${encodeURIComponent(name)}&email=${encodeURIComponent(customer.email)}`;
-      setCustomerUrl(url);
+      const result = await response.json();
+
+      // Set customer URL from API response
+      setCustomerUrl(result.customerUrl);
 
       // 次のステップ（URL発行画面）へ
       setCurrentStep(5);
-      onComplete?.(projectId, url);
-    } catch (error) {
-      console.error('Project creation error:', error);
+      onComplete?.(result.project.id, result.customerUrl);
+    } catch (err) {
+      console.error('Project creation error:', err);
+      setError(err instanceof Error ? err.message : 'プロジェクトの作成に失敗しました');
     } finally {
       setIsSubmitting(false);
     }
-  }, [projectCode, projectName, customer, onComplete]);
+  }, [customer, planType, projectCode, projectName, buildingInfo, rooms, onComplete]);
 
   const handleCopyUrl = useCallback(() => {
     if (customerUrl) {
@@ -505,6 +532,13 @@ export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = (
           </div>
         )}
       </div>
+
+      {/* エラー表示 */}
+      {error && (
+        <div className="mx-6 mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+          <p className="text-red-700 text-sm">{error}</p>
+        </div>
+      )}
 
       {/* フッター */}
       {currentStep < 5 && (
