@@ -60,7 +60,7 @@ const ProductCardComponent: React.FC<ProductCardProps> = ({ product, onSelect })
   return (
     <div
       onClick={handleSelect}
-      className="bg-white border border-gray-200 rounded-lg overflow-hidden cursor-pointer transition-all duration-200 hover:shadow-md hover:border-blue-300"
+      className="bg-white border-2 border-gray-200 rounded-2xl overflow-hidden cursor-pointer transition-all duration-200 hover:shadow-xl hover:border-blue-300 hover:scale-[1.02]"
       role="button"
       tabIndex={0}
       onKeyDown={handleKeyDown}
@@ -97,20 +97,24 @@ const ProductCardComponent: React.FC<ProductCardProps> = ({ product, onSelect })
         )}
       </div>
 
-      {/* 情報エリア - シンプル化 */}
-      <div className="p-2">
+      {/* 情報エリア */}
+      <div className="p-3">
+        {/* メーカー名 */}
+        {product.manufacturer && (
+          <p className="text-xs text-gray-500 mb-0.5 truncate">{product.manufacturer}</p>
+        )}
         {/* アイテム名 */}
-        <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
+        <h3 className="font-bold text-sm text-gray-800 line-clamp-2 mb-1">
           {product.name}
         </h3>
 
         {/* 価格・単位 */}
-        <div className="flex items-baseline gap-1 mt-1">
-          <span className={`text-sm font-bold ${price === 0 ? 'text-blue-600' : 'text-gray-900'}`}>
+        <div className="flex items-baseline gap-1">
+          <span className={`text-lg font-black ${price === 0 ? 'text-emerald-600' : 'text-gray-900'}`}>
             {price === 0 ? '標準' : formatPrice(price)}
           </span>
           {price > 0 && product.unit && (
-            <span className="text-xs text-gray-500">
+            <span className="text-sm text-gray-500">
               /{UNIT_SYMBOLS[product.unit] || product.unit}
             </span>
           )}
@@ -118,7 +122,7 @@ const ProductCardComponent: React.FC<ProductCardProps> = ({ product, onSelect })
 
         {/* 選べるアイテム数 */}
         {product.variants.length > 1 && (
-          <span className="text-[10px] text-gray-400">{product.variants.length}色から選択</span>
+          <span className="text-xs text-gray-400">{product.variants.length}色から選択</span>
         )}
       </div>
     </div>

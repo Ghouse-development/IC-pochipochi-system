@@ -29,10 +29,10 @@ const NotNeededCardComponent: React.FC<NotNeededCardProps> = ({
   return (
     <div
       onClick={handleSelect}
-      className={`bg-white rounded-lg overflow-hidden cursor-pointer transition-all duration-200 ${
+      className={`bg-white rounded-2xl overflow-hidden cursor-pointer transition-all duration-200 ${
         isSelected
-          ? 'border-2 border-blue-500 shadow-lg'
-          : 'border border-gray-200 hover:border-blue-300 hover:shadow-md'
+          ? 'border-4 border-blue-500 shadow-xl shadow-blue-200 scale-[1.02]'
+          : 'border-2 border-gray-200 hover:border-blue-300 hover:shadow-xl hover:scale-[1.02]'
       }`}
       role="button"
       tabIndex={0}
@@ -63,14 +63,14 @@ const NotNeededCardComponent: React.FC<NotNeededCardProps> = ({
       </div>
 
       {/* 情報エリア */}
-      <div className="p-2">
-        <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
+      <div className="p-3">
+        <h3 className="font-bold text-sm text-gray-800 line-clamp-2 mb-1">
           {title}
         </h3>
 
         {/* 価格 */}
-        <div className="flex items-baseline gap-1 mt-1">
-          <span className="text-sm font-bold text-blue-600">
+        <div className="flex items-baseline gap-1">
+          <span className="text-lg font-black text-emerald-600">
             標準
           </span>
         </div>

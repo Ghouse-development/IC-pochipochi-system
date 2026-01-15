@@ -325,7 +325,7 @@ export function SelectionPage({ projectId, onBack }: SelectionPageProps) {
             このカテゴリにはアイテムがありません
           </div>
         ) : (
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
             {items.map((item) => {
               const selection = getSelectionForItem(item.id);
               const isSelected = !!selection;
@@ -340,9 +340,10 @@ export function SelectionPage({ projectId, onBack }: SelectionPageProps) {
                   key={item.id}
                   onClick={() => setSelectedItem(item)}
                   className={`
-                    bg-white rounded-xl overflow-hidden shadow-sm border-2 cursor-pointer
-                    transition-all hover:shadow-md
-                    ${isSelected ? 'border-blue-500 ring-2 ring-blue-100' : 'border-transparent'}
+                    bg-white rounded-2xl overflow-hidden cursor-pointer transition-all duration-200
+                    ${isSelected
+                      ? 'border-4 border-blue-500 shadow-xl shadow-blue-200 scale-[1.02]'
+                      : 'border-2 border-gray-200 hover:border-blue-300 hover:shadow-xl hover:scale-[1.02]'}
                   `}
                 >
                   {/* Image */}
@@ -378,35 +379,36 @@ export function SelectionPage({ projectId, onBack }: SelectionPageProps) {
 
                   {/* Info */}
                   <div className="p-3">
-                    <div className="text-xs text-gray-500 mb-1">
-                      {item.manufacturer}
-                    </div>
-                    <h3 className="font-medium text-gray-900 text-sm line-clamp-2">
+                    {item.manufacturer && (
+                      <p className="text-xs text-gray-500 mb-0.5 truncate">{item.manufacturer}</p>
+                    )}
+                    <h3 className="font-bold text-sm text-gray-800 line-clamp-2 mb-1">
                       {item.name}
                     </h3>
                     {pricing && (
-                      <div className="mt-2">
+                      <div className="flex items-baseline gap-1">
                         <span
-                          className={`text-sm font-bold ${
+                          className={`text-lg font-black ${
                             pricing.is_standard
-                              ? 'text-green-600'
+                              ? 'text-emerald-600'
                               : 'text-gray-900'
                           }`}
                         >
                           {pricing.is_standard ? (
                             '標準'
                           ) : (
-                            <>
-                              {formatPrice(pricing.price)}
-                              {getUnitSymbol(item) && (
-                                <span className="text-xs font-normal text-gray-500">
-                                  /{getUnitSymbol(item)}
-                                </span>
-                              )}
-                            </>
+                            formatPrice(pricing.price)
                           )}
                         </span>
+                        {!pricing.is_standard && getUnitSymbol(item) && (
+                          <span className="text-sm text-gray-500">
+                            /{getUnitSymbol(item)}
+                          </span>
+                        )}
                       </div>
+                    )}
+                    {item.variants && item.variants.length > 1 && (
+                      <span className="text-xs text-gray-400">{item.variants.length}色から選択</span>
                     )}
                   </div>
                 </div>
