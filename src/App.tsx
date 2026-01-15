@@ -38,20 +38,46 @@ const CustomerPage = lazy(() => import('./pages/CustomerPage').then(m => ({ defa
 const CustomerLoginPage = lazy(() => import('./pages/CustomerLoginPage').then(m => ({ default: m.CustomerLoginPage })));
 const ItemDetailPage = lazy(() => import('./pages/ItemDetailPage').then(m => ({ default: m.ItemDetailPage })));
 
-// 管理者専用ルートガード - 管理者以外はアクセス不可（リダイレクトなし、404表示）
+// 管理者専用ルートガード - 管理者以外はログインページへリダイレクト
 const AdminRouteGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // TODO: 開発中は認証チェックを無効化（本番リリース時に有効化する）
-  // const { isAdmin } = useAuth();
-  // if (!isAdmin) {
-  //   return (
-  //     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-  //       <div className="text-center">
-  //         <h1 className="text-6xl font-bold text-gray-300 mb-4">404</h1>
-  //         <p className="text-gray-500">ページが見つかりません</p>
-  //       </div>
-  //     </div>
-  //   );
-  // }
+  const { isAdmin, isLoading, user } = useAuth();
+  const navigate = useNavigate();
+
+  // ローディング中は待機
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-gray-600">認証確認中...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // 未ログインの場合はログインページへ
+  if (!user) {
+    return <LoginPage onDemoLogin={() => navigate('/catalog')} />;
+  }
+
+  // 管理者でない場合は404表示
+  if (!isAdmin) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-6xl font-bold text-gray-300 mb-4">403</h1>
+          <p className="text-gray-500 mb-4">アクセス権限がありません</p>
+          <button
+            onClick={() => navigate('/catalog')}
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+          >
+            カタログに戻る
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return <>{children}</>;
 };
 
