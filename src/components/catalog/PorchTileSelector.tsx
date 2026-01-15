@@ -135,6 +135,56 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
       addItem(groutProduct, 1, groutVariant);
     }
 
+    // ======================================
+    // ポーチタイル → 玄関床・シューズクローク連動
+    // タイルを選択した場合、玄関床とシューズクローク床も同じタイルをプリセット
+    // ======================================
+    if (!isMortar(selectedTile)) {
+      // 既存の連動アイテムをクリア
+      clearCategoryItems('entrance-floor-linked');
+      clearCategoryItems('shoes-closet-floor-linked');
+
+      // 玄関床用アイテムを作成（ポーチタイル連動）
+      const entranceFloorProduct: Product = {
+        id: `int-entrance-floor-${selectedTile.id}-linked`,
+        categoryId: 'entrance-floor-linked',
+        categoryName: '玄関床',
+        subcategory: `${selectedTile.name}（ポーチ連動）`,
+        name: `${selectedTile.name}${selectedColor ? ` (${colorName})` : ''} ※ポーチ連動`,
+        manufacturer: selectedTile.manufacturer,
+        modelNumber: `ENT-FLOOR-${selectedTile.id.toUpperCase()}`,
+        unit: '㎡',
+        isOption: !selectedTile.isStandard,
+        variants: [
+          { id: selectedColor?.id || 'v1', color: colorName, imageUrl: colorImageUrl }
+        ],
+        pricing: [
+          { plan: selectedPlan as PlanType, price: selectedTile.price }
+        ],
+      };
+      addItem(entranceFloorProduct, 1, tileVariant);
+
+      // シューズクローク床用アイテムを作成（ポーチタイル連動）
+      const shoesClosetFloorProduct: Product = {
+        id: `int-shoes-closet-floor-${selectedTile.id}-linked`,
+        categoryId: 'shoes-closet-floor-linked',
+        categoryName: 'シューズクローク床',
+        subcategory: `${selectedTile.name}（ポーチ連動）`,
+        name: `${selectedTile.name}${selectedColor ? ` (${colorName})` : ''} ※ポーチ連動`,
+        manufacturer: selectedTile.manufacturer,
+        modelNumber: `SC-FLOOR-${selectedTile.id.toUpperCase()}`,
+        unit: '㎡',
+        isOption: !selectedTile.isStandard,
+        variants: [
+          { id: selectedColor?.id || 'v1', color: colorName, imageUrl: colorImageUrl }
+        ],
+        pricing: [
+          { plan: selectedPlan as PlanType, price: selectedTile.price }
+        ],
+      };
+      addItem(shoesClosetFloorProduct, 1, tileVariant);
+    }
+
     setStep('complete');
   };
 
@@ -298,6 +348,14 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
               )}
               <p>{selectedTile.name}</p>
               {selectedGrout && <p>目地色: {selectedGrout.name}</p>}
+              {/* 連動した項目を表示（タイル選択時のみ） */}
+              {!isMortar(selectedTile) && (
+                <div className="mt-3 pt-3 border-t border-green-200">
+                  <p className="text-xs text-green-700 font-medium mb-1">🔗 以下も自動でプリセットされました</p>
+                  <p className="text-xs text-gray-500">• 玄関床: {selectedTile.name}</p>
+                  <p className="text-xs text-gray-500">• シューズクローク床: {selectedTile.name}</p>
+                </div>
+              )}
             </div>
           )}
           {/* 既存選択（カートから）時 */}

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Folder,
   FolderOpen,
@@ -8,12 +8,16 @@ import {
   ChevronRight,
   ChevronDown,
   Save,
-  X
+  X,
+  GripVertical
 } from 'lucide-react';
+import { DragDropContext, Droppable, Draggable, type DropResult } from '@hello-pangea/dnd';
 import { CategoryService, type Category } from '../../services/databaseService';
 import { ConfirmDialog } from '../common/ConfirmDialog';
+import { useToast } from '../common/Toast';
 
 export function CategoryManager() {
+  const toast = useToast();
   const [categories, setCategories] = useState<Category[]>([]);
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
@@ -71,6 +75,7 @@ export function CategoryManager() {
         parent_id: parentId
       });
       if (newCategory) {
+        toast.success('作成完了', 'カテゴリを作成しました');
         await loadCategories();
       }
     } else {
@@ -79,6 +84,7 @@ export function CategoryManager() {
         editingCategory
       );
       if (updated) {
+        toast.success('更新完了', 'カテゴリを更新しました');
         await loadCategories();
       }
     }
@@ -96,79 +102,169 @@ export function CategoryManager() {
 
     const success = await CategoryService.deleteCategory(deleteTarget.id);
     if (success) {
+      toast.success('削除完了', 'カテゴリを削除しました');
       await loadCategories();
     }
     setDeleteTarget(null);
   };
 
-  const renderCategory = (category: Category, level: number = 0) => {
+  // ドラッグ&ドロップ処理
+  const handleDragEnd = useCallback(async (result: DropResult) => {
+    const { destination, source } = result;
+
+    if (!destination) return;
+    if (destination.droppableId === source.droppableId && destination.index === source.index) {
+      return;
+    }
+
+    // 同じレベル内での並べ替え
+    const sourceParentId = source.droppableId === 'root' ? null : source.droppableId;
+    const destParentId = destination.droppableId === 'root' ? null : destination.droppableId;
+
+    // 異なる親への移動は今回はサポートしない
+    if (sourceParentId !== destParentId) {
+      toast.error('エラー', '異なる階層への移動はできません');
+      return;
+    }
+
+    // カテゴリリストを更新
+    const findCategoriesAtLevel = (cats: Category[], parentId: string | null): Category[] => {
+      if (parentId === null) {
+        return cats;
+      }
+      for (const cat of cats) {
+        if (cat.id === parentId) {
+          return cat.children || [];
+        }
+        if (cat.children) {
+          const found = findCategoriesAtLevel(cat.children, parentId);
+          if (found.length > 0) return found;
+        }
+      }
+      return [];
+    };
+
+    const levelCategories = findCategoriesAtLevel(categories, sourceParentId);
+    const reorderedCategories = Array.from(levelCategories);
+    const [removed] = reorderedCategories.splice(source.index, 1);
+    reorderedCategories.splice(destination.index, 0, removed);
+
+    // 表示順を更新してDBに保存
+    const updates = reorderedCategories.map((cat, index) => ({
+      id: cat.id,
+      display_order: index
+    }));
+
+    try {
+      await Promise.all(
+        updates.map(update =>
+          CategoryService.updateCategory(update.id, { display_order: update.display_order })
+        )
+      );
+      toast.success('並べ替え完了', 'カテゴリの順序を更新しました');
+      await loadCategories();
+    } catch (error) {
+      toast.error('エラー', '並べ替えの保存に失敗しました');
+    }
+  }, [categories, toast]);
+
+  const renderCategory = (category: Category, level: number = 0, index: number = 0) => {
     const hasChildren = category.children && category.children.length > 0;
     const isExpanded = expandedIds.has(category.id);
 
     return (
-      <div key={category.id}>
-        <div
-          className={`flex items-center gap-2 p-2 hover:bg-gray-50 rounded-lg group`}
-          style={{ paddingLeft: `${level * 24 + 8}px` }}
-        >
-          {hasChildren && (
-            <button
-              onClick={() => toggleExpand(category.id)}
-              className="p-1 hover:bg-gray-200 rounded"
+      <Draggable key={category.id} draggableId={category.id} index={index}>
+        {(provided, snapshot) => (
+          <div
+            ref={provided.innerRef}
+            {...provided.draggableProps}
+          >
+            <div
+              className={`flex items-center gap-2 p-2 rounded-lg group transition-colors ${
+                snapshot.isDragging ? 'bg-blue-50 shadow-lg' : 'hover:bg-gray-50'
+              }`}
+              style={{ paddingLeft: `${level * 24 + 8}px` }}
             >
-              {isExpanded ? (
-                <ChevronDown className="w-4 h-4" />
-              ) : (
-                <ChevronRight className="w-4 h-4" />
+              {/* ドラッグハンドル */}
+              <div
+                {...provided.dragHandleProps}
+                className="cursor-grab active:cursor-grabbing p-1 hover:bg-gray-200 rounded text-gray-400 hover:text-gray-600"
+              >
+                <GripVertical className="w-4 h-4" />
+              </div>
+
+              {hasChildren && (
+                <button
+                  onClick={() => toggleExpand(category.id)}
+                  className="p-1 hover:bg-gray-200 rounded"
+                >
+                  {isExpanded ? (
+                    <ChevronDown className="w-4 h-4" />
+                  ) : (
+                    <ChevronRight className="w-4 h-4" />
+                  )}
+                </button>
               )}
-            </button>
-          )}
 
-          {!hasChildren && <div className="w-6" />}
+              {!hasChildren && <div className="w-6" />}
 
-          {isExpanded || !hasChildren ? (
-            <FolderOpen className="w-5 h-5 text-blue-500" />
-          ) : (
-            <Folder className="w-5 h-5 text-blue-500" />
-          )}
+              {isExpanded || !hasChildren ? (
+                <FolderOpen className="w-5 h-5 text-blue-500" />
+              ) : (
+                <Folder className="w-5 h-5 text-blue-500" />
+              )}
 
-          <span className="flex-1 font-medium">{category.name}</span>
+              <span className="flex-1 font-medium">{category.name}</span>
 
-          {!category.is_active && (
-            <span className="text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded">非表示</span>
-          )}
+              <span className="text-xs text-gray-400 mr-2">#{category.display_order}</span>
 
-          <div className="opacity-0 group-hover:opacity-100 flex gap-1 transition-opacity">
-            <button
-              onClick={() => handleCreate(category)}
-              className="p-1 hover:bg-gray-200 rounded"
-              title="サブカテゴリを追加"
-            >
-              <Plus className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => handleEdit(category)}
-              className="p-1 hover:bg-gray-200 rounded"
-              title="編集"
-            >
-              <Edit2 className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => handleDelete(category)}
-              className="p-1 hover:bg-red-100 text-red-600 rounded"
-              title="削除"
-            >
-              <Trash2 className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
+              {!category.is_active && (
+                <span className="text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded">非表示</span>
+              )}
 
-        {hasChildren && isExpanded && category.children && (
-          <div>
-            {category.children.map(child => renderCategory(child, level + 1))}
+              <div className="opacity-0 group-hover:opacity-100 flex gap-1 transition-opacity">
+                <button
+                  onClick={() => handleCreate(category)}
+                  className="p-1 hover:bg-gray-200 rounded"
+                  title="サブカテゴリを追加"
+                >
+                  <Plus className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => handleEdit(category)}
+                  className="p-1 hover:bg-gray-200 rounded"
+                  title="編集"
+                >
+                  <Edit2 className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => handleDelete(category)}
+                  className="p-1 hover:bg-red-100 text-red-600 rounded"
+                  title="削除"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            {hasChildren && isExpanded && category.children && (
+              <Droppable droppableId={category.id} type={`level-${level + 1}`}>
+                {(droppableProvided) => (
+                  <div
+                    ref={droppableProvided.innerRef}
+                    {...droppableProvided.droppableProps}
+                  >
+                    {category.children!.map((child, childIndex) =>
+                      renderCategory(child, level + 1, childIndex)
+                    )}
+                    {droppableProvided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            )}
           </div>
         )}
-      </div>
+      </Draggable>
     );
   };
 
@@ -176,7 +272,10 @@ export function CategoryManager() {
     <div className="bg-white rounded-lg shadow-sm">
       <div className="border-b p-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold">カテゴリ管理</h2>
+          <div>
+            <h2 className="text-lg font-semibold">カテゴリ管理</h2>
+            <p className="text-sm text-gray-500 mt-1">ドラッグ&ドロップで並べ替えできます</p>
+          </div>
           <button
             onClick={() => handleCreate()}
             className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
@@ -198,9 +297,20 @@ export function CategoryManager() {
             カテゴリがありません
           </div>
         ) : (
-          <div className="space-y-1">
-            {categories.map(category => renderCategory(category))}
-          </div>
+          <DragDropContext onDragEnd={handleDragEnd}>
+            <Droppable droppableId="root" type="level-0">
+              {(provided) => (
+                <div
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  className="space-y-1"
+                >
+                  {categories.map((category, index) => renderCategory(category, 0, index))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
         )}
       </div>
 

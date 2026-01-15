@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ClipboardCheck, User, Settings, Menu, X, FileText, Upload, Share2, Search, LogOut, Briefcase } from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { ClipboardCheck, User, Settings, Menu, X, FileText, Upload, Share2, Search, LogOut, Briefcase, Home, ShieldCheck } from 'lucide-react';
 import { useCartStore } from '../../stores/useCartStore';
 import { formatPrice } from '../../lib/utils';
 import { useAuth } from '../../contexts/AuthContext';
@@ -29,12 +29,19 @@ export const Header: React.FC<HeaderProps> = ({
   onStaffDashboardClick,
 }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { items, getTotalPrice } = useCartStore();
   const { user, signOut } = useAuth();
   const totalPrice = getTotalPrice();
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+
+  // 現在のページが管理画面かどうかを判定
+  const isAdminPage = location.pathname.startsWith('/admin') ||
+    location.pathname.startsWith('/staff') ||
+    location.pathname.startsWith('/hierarchy') ||
+    location.pathname.startsWith('/image-test');
 
   // ロゴ長押しで管理画面ログインへ（3秒）
   const longPressTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -123,7 +130,38 @@ export const Header: React.FC<HeaderProps> = ({
               >
                 STYLEBOOK
               </h1>
+              {/* 管理モードインジケーター */}
+              {isAdmin && isAdminPage && (
+                <span className="hidden sm:inline-flex items-center gap-1 px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-medium">
+                  <ShieldCheck className="w-3 h-3" />
+                  管理モード
+                </span>
+              )}
             </div>
+
+            {/* 管理画面からカタログへの戻りボタン（管理画面表示時のみ） */}
+            {isAdmin && isAdminPage && (
+              <button
+                onClick={() => navigate('/catalog')}
+                className="hidden sm:flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                aria-label="カタログに戻る"
+              >
+                <Home className="w-4 h-4" />
+                <span className="text-sm font-medium">カタログへ</span>
+              </button>
+            )}
+
+            {/* カタログから管理画面へのクイックアクセス（カタログ表示時のみ） */}
+            {isAdmin && !isAdminPage && (
+              <button
+                onClick={() => navigate('/admin')}
+                className="hidden sm:flex items-center gap-2 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                aria-label="管理画面を開く"
+              >
+                <Settings className="w-4 h-4" />
+                <span className="text-sm font-medium">管理</span>
+              </button>
+            )}
 
             {/* 検索バー */}
             {onSearchChange && (
@@ -300,6 +338,36 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
             <div className="p-4">
               <ul className="space-y-2" role="menu">
+                {/* クイックナビゲーション - カタログと管理画面の切り替え */}
+                {isAdmin && (
+                  <li className="mb-4" role="none">
+                    {isAdminPage ? (
+                      <button
+                        role="menuitem"
+                        onClick={() => {
+                          navigate('/catalog');
+                          setIsMobileMenuOpen(false);
+                        }}
+                        className="w-full flex items-center gap-3 px-4 py-3 bg-blue-600 text-white rounded-lg font-medium"
+                      >
+                        <Home className="w-5 h-5" />
+                        カタログに戻る
+                      </button>
+                    ) : (
+                      <button
+                        role="menuitem"
+                        onClick={() => {
+                          navigate('/admin');
+                          setIsMobileMenuOpen(false);
+                        }}
+                        className="w-full flex items-center gap-3 px-4 py-3 bg-purple-600 text-white rounded-lg font-medium"
+                      >
+                        <Settings className="w-5 h-5" />
+                        管理画面を開く
+                      </button>
+                    )}
+                  </li>
+                )}
                 {isAdmin && (
                   <>
                     <li className="pt-4 border-t" role="none">

@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import {
   Plus,
   Search,
@@ -13,9 +13,9 @@ import {
   AlertTriangle,
   Palette,
   DollarSign,
-  ChevronUp,
-  ChevronDown,
+  GripVertical,
 } from 'lucide-react';
+import { DragDropContext, Droppable, Draggable, type DropResult } from '@hello-pangea/dnd';
 import { itemsApi, categoriesApi, productsApi, unitsApi } from '../../services/api';
 import { ItemVariantManager } from './ItemVariantManager';
 import { ItemPricingManager } from './ItemPricingManager';
@@ -274,45 +274,53 @@ export function ItemManager() {
     }
   };
 
-  // アイテム並び替え（同じカテゴリ内のみ）
-  const handleMoveItem = async (itemId: string, direction: 'up' | 'down') => {
-    // 同じカテゴリ内のアイテムのみを対象にする
-    const item = filteredItems.find(i => i.id === itemId);
-    if (!item) return;
+  // ドラッグ&ドロップによる並べ替え（同じカテゴリ内のみ）
+  const handleDragEnd = useCallback(async (result: DropResult) => {
+    const { destination, source } = result;
 
-    const sameCategoryItems = filteredItems.filter(i => i.category_id === item.category_id);
-    const currentIndex = sameCategoryItems.findIndex(i => i.id === itemId);
-    if (currentIndex === -1) return;
+    if (!destination) return;
+    if (destination.index === source.index) return;
 
-    const newIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
-    if (newIndex < 0 || newIndex >= sameCategoryItems.length) return;
+    // 表示中のアイテムリストから移動処理
+    const reorderedItems = Array.from(filteredItems);
+    const [removed] = reorderedItems.splice(source.index, 1);
+    reorderedItems.splice(destination.index, 0, removed);
 
-    const targetItem = sameCategoryItems[newIndex];
+    // 移動元と移動先が同じカテゴリかチェック
+    const movedItem = filteredItems[source.index];
+    const destItem = filteredItems[destination.index > source.index ? destination.index : Math.max(0, destination.index)];
 
-    // DBに保存
+    if (movedItem.category_id !== destItem?.category_id && destItem) {
+      toast.error('エラー', '異なるカテゴリ間での移動はできません');
+      return;
+    }
+
+    // 同じカテゴリ内のアイテムのdisplay_orderを更新
+    const categoryId = movedItem.category_id;
+    const sameCategoryItems = reorderedItems.filter(i => i.category_id === categoryId);
+
+    const updates = sameCategoryItems.map((item, index) => ({
+      id: item.id,
+      display_order: index
+    }));
+
     try {
-      const currentOrder = item.display_order ?? currentIndex;
-      const targetOrder = targetItem.display_order ?? newIndex;
+      await Promise.all(
+        updates.map(update =>
+          supabase
+            .from('items')
+            .update({ display_order: update.display_order, updated_at: new Date().toISOString() })
+            .eq('id', update.id)
+        )
+      );
 
-      await Promise.all([
-        supabase
-          .from('items')
-          .update({ display_order: targetOrder, updated_at: new Date().toISOString() })
-          .eq('id', item.id),
-        supabase
-          .from('items')
-          .update({ display_order: currentOrder, updated_at: new Date().toISOString() })
-          .eq('id', targetItem.id),
-      ]);
-
-      // リロード
+      toast.success('並べ替え完了', 'アイテムの順序を更新しました');
       await loadItems(categoryFilter === 'all' ? undefined : categoryFilter);
-      toast.success('並び替え完了', 'アイテムの順序を変更しました');
     } catch (err) {
       logger.error('Failed to reorder items:', err);
       toast.error('エラー', '並び替えの保存に失敗しました');
     }
-  };
+  }, [filteredItems, categoryFilter, toast]);
 
   const handleExportItems = () => {
     // Export items as CSV
@@ -438,181 +446,178 @@ export function ItemManager() {
       {/* Item List */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-16">
-                  順序
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  アイテム
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  メーカー
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  カテゴリ
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  バリエーション
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  価格
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  ステータス
-                </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  操作
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {filteredItems.length === 0 ? (
+          <DragDropContext onDragEnd={handleDragEnd}>
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
                 <tr>
-                  <td colSpan={8} className="px-6 py-12 text-center text-gray-500">
-                    アイテムが見つかりません
-                  </td>
-                </tr>
-              ) : (
-                filteredItems.map((item) => {
-                  // 同じカテゴリ内での位置を計算
-                  const sameCategoryItems = filteredItems.filter(i => i.category_id === item.category_id);
-                  const categoryIndex = sameCategoryItems.findIndex(i => i.id === item.id);
-                  const isFirstInCategory = categoryIndex === 0;
-                  const isLastInCategory = categoryIndex === sameCategoryItems.length - 1;
+                  <th className="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-12">
 
-                  return (
-                  <tr key={item.id} className="hover:bg-gray-50">
-                    {/* 並び替えボタン */}
-                    <td className="px-3 py-4">
-                      <div className="flex flex-col items-center gap-0.5">
-                        <button
-                          onClick={() => handleMoveItem(item.id, 'up')}
-                          disabled={isFirstInCategory}
-                          className={`p-1 rounded transition-all ${
-                            isFirstInCategory
-                              ? 'text-gray-300 cursor-not-allowed'
-                              : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'
-                          }`}
-                          title="上に移動"
-                        >
-                          <ChevronUp className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => handleMoveItem(item.id, 'down')}
-                          disabled={isLastInCategory}
-                          className={`p-1 rounded transition-all ${
-                            isLastInCategory
-                              ? 'text-gray-300 cursor-not-allowed'
-                              : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'
-                          }`}
-                          title="下に移動"
-                        >
-                          <ChevronDown className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                          {item.variants?.[0]?.images?.[0] ? (
-                            <img
-                              src={item.variants[0].images[0].thumbnail_url || item.variants[0].images[0].image_url}
-                              alt={item.name}
-                              className="w-full h-full object-cover rounded-lg"
-                            />
-                          ) : (
-                            <ImageIcon className="w-6 h-6 text-gray-400" />
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    アイテム
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    メーカー
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    カテゴリ
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    バリエーション
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    価格
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    ステータス
+                  </th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    操作
+                  </th>
+                </tr>
+              </thead>
+              <Droppable droppableId="items">
+                {(provided) => (
+                  <tbody
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    className="bg-white divide-y divide-gray-200"
+                  >
+                    {filteredItems.length === 0 ? (
+                      <tr>
+                        <td colSpan={8} className="px-6 py-12 text-center text-gray-500">
+                          アイテムが見つかりません
+                        </td>
+                      </tr>
+                    ) : (
+                      filteredItems.map((item, index) => (
+                        <Draggable key={item.id} draggableId={item.id} index={index}>
+                          {(dragProvided, snapshot) => (
+                            <tr
+                              ref={dragProvided.innerRef}
+                              {...dragProvided.draggableProps}
+                              className={`${
+                                snapshot.isDragging
+                                  ? 'bg-blue-50 shadow-lg'
+                                  : 'hover:bg-gray-50'
+                              }`}
+                              style={dragProvided.draggableProps.style}
+                            >
+                              {/* ドラッグハンドル */}
+                              <td className="px-3 py-4">
+                                <div
+                                  {...dragProvided.dragHandleProps}
+                                  className="cursor-grab active:cursor-grabbing p-1 hover:bg-gray-200 rounded text-gray-400 hover:text-gray-600 inline-flex"
+                                  title="ドラッグして並べ替え"
+                                >
+                                  <GripVertical className="w-4 h-4" />
+                                </div>
+                              </td>
+                              <td className="px-6 py-4">
+                                <div className="flex items-center gap-3">
+                                  <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                                    {item.variants?.[0]?.images?.[0] ? (
+                                      <img
+                                        src={item.variants[0].images[0].thumbnail_url || item.variants[0].images[0].image_url}
+                                        alt={item.name}
+                                        className="w-full h-full object-cover rounded-lg"
+                                      />
+                                    ) : (
+                                      <ImageIcon className="w-6 h-6 text-gray-400" />
+                                    )}
+                                  </div>
+                                  <div>
+                                    <div className="flex items-center gap-2">
+                                      <span className="font-medium text-gray-900">{item.name}</span>
+                                      {item.is_hit && (
+                                        <Star className="w-4 h-4 text-yellow-500 fill-current" />
+                                      )}
+                                    </div>
+                                    <div className="text-sm text-gray-500">{item.item_code}</div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="px-6 py-4 text-gray-900">{item.manufacturer || '-'}</td>
+                              <td className="px-6 py-4">
+                                <div className="flex items-center gap-1 text-sm text-gray-600">
+                                  <Tag className="w-4 h-4" />
+                                  {getCategoryName(item.category_id)}
+                                </div>
+                              </td>
+                              <td className="px-6 py-4">
+                                <span className="text-gray-900">{item.variants?.length || 0}色</span>
+                              </td>
+                              <td className="px-6 py-4">
+                                <div className="text-gray-900">
+                                  {item.pricing && item.pricing.length > 0 ? (
+                                    <div className="flex flex-col gap-1">
+                                      {item.pricing.slice(0, 2).map((p, idx) => (
+                                        <div key={idx} className="text-sm">
+                                          <span className="text-gray-500">{p.product?.name || ''}:</span>{' '}
+                                          <span className="font-medium">{formatPriceWithUnit(p.price, item.unit_id)}</span>
+                                          {p.is_standard && (
+                                            <span className="ml-1 text-xs text-green-600">(標準)</span>
+                                          )}
+                                        </div>
+                                      ))}
+                                      {item.pricing.length > 2 && (
+                                        <span className="text-xs text-gray-500">他{item.pricing.length - 2}件</span>
+                                      )}
+                                    </div>
+                                  ) : (
+                                    <span className="text-gray-400">-</span>
+                                  )}
+                                </div>
+                              </td>
+                              <td className="px-6 py-4">
+                                <div className="flex flex-col gap-1">
+                                  {item.is_discontinued && (
+                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-red-100 text-red-700 rounded text-xs">
+                                      <AlertTriangle className="w-3 h-3" />
+                                      廃番
+                                    </span>
+                                  )}
+                                  {!item.is_active && (
+                                    <span className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-xs">
+                                      非表示
+                                    </span>
+                                  )}
+                                  {item.is_active && !item.is_discontinued && (
+                                    <span className="px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs">
+                                      有効
+                                    </span>
+                                  )}
+                                </div>
+                              </td>
+                              <td className="px-6 py-4">
+                                <div className="flex items-center justify-end gap-2">
+                                  <button
+                                    onClick={() => setSelectedItem(item)}
+                                    className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg"
+                                    title="編集"
+                                  >
+                                    <Edit className="w-4 h-4" />
+                                  </button>
+                                  <button
+                                    onClick={() => handleDeleteItem(item.id)}
+                                    className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg"
+                                    title="削除"
+                                  >
+                                    <Trash2 className="w-4 h-4" />
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
                           )}
-                        </div>
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <span className="font-medium text-gray-900">{item.name}</span>
-                            {item.is_hit && (
-                              <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                            )}
-                          </div>
-                          <div className="text-sm text-gray-500">{item.item_code}</div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-gray-900">{item.manufacturer || '-'}</td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-1 text-sm text-gray-600">
-                        <Tag className="w-4 h-4" />
-                        {getCategoryName(item.category_id)}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className="text-gray-900">{item.variants?.length || 0}色</span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="text-gray-900">
-                        {item.pricing && item.pricing.length > 0 ? (
-                          <div className="flex flex-col gap-1">
-                            {item.pricing.slice(0, 2).map((p, idx) => (
-                              <div key={idx} className="text-sm">
-                                <span className="text-gray-500">{p.product?.name || ''}:</span>{' '}
-                                <span className="font-medium">{formatPriceWithUnit(p.price, item.unit_id)}</span>
-                                {p.is_standard && (
-                                  <span className="ml-1 text-xs text-green-600">(標準)</span>
-                                )}
-                              </div>
-                            ))}
-                            {item.pricing.length > 2 && (
-                              <span className="text-xs text-gray-500">他{item.pricing.length - 2}件</span>
-                            )}
-                          </div>
-                        ) : (
-                          <span className="text-gray-400">-</span>
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex flex-col gap-1">
-                        {item.is_discontinued && (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-red-100 text-red-700 rounded text-xs">
-                            <AlertTriangle className="w-3 h-3" />
-                            廃番
-                          </span>
-                        )}
-                        {!item.is_active && (
-                          <span className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-xs">
-                            非表示
-                          </span>
-                        )}
-                        {item.is_active && !item.is_discontinued && (
-                          <span className="px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs">
-                            有効
-                          </span>
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center justify-end gap-2">
-                        <button
-                          onClick={() => setSelectedItem(item)}
-                          className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg"
-                          title="編集"
-                        >
-                          <Edit className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => handleDeleteItem(item.id)}
-                          className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg"
-                          title="削除"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                  );
-                })
-              )}
-            </tbody>
-          </table>
+                        </Draggable>
+                      ))
+                    )}
+                    {provided.placeholder}
+                  </tbody>
+                )}
+              </Droppable>
+            </table>
+          </DragDropContext>
         </div>
 
         {/* Pagination placeholder */}
