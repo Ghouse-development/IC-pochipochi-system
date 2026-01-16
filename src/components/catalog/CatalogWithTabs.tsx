@@ -1400,8 +1400,8 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
 
         <div className="flex flex-1 overflow-hidden">
-          {/* 左サイドバー - アクションチェックリスト - コンパクト */}
-          <div className={`flex flex-col bg-white border-r border-gray-200 h-[calc(100vh-140px)] transition-all duration-300 flex-shrink-0 ${
+          {/* 左サイドバー - アクションチェックリスト - コンパクト（モバイルでは非表示） */}
+          <div className={`hidden lg:flex flex-col bg-white border-r border-gray-200 h-[calc(100vh-140px)] transition-all duration-300 flex-shrink-0 ${
             showActionChecklist ? 'w-64' : 'w-12'
           }`}>
             {showActionChecklist ? (
