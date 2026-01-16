@@ -115,7 +115,7 @@ export const SelectionCard: React.FC<SelectionCardProps> = ({
 
         {/* 価格・単位 */}
         <div className="flex items-baseline gap-1">
-          <span className={`text-lg font-black ${price === 0 || price === undefined ? 'text-emerald-600' : 'text-gray-900'}`}>
+          <span className={`text-lg font-black ${price === 0 || price === undefined ? 'text-blue-600' : 'text-gray-900'}`}>
             {price === 0 || price === undefined ? '標準' : formatPrice(price)}
           </span>
           {unit && price !== 0 && price !== undefined && (
