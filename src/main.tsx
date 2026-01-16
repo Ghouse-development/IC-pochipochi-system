@@ -7,7 +7,7 @@ import { initWebVitals } from './lib/webVitals'
 import { getCsrfToken } from './lib/csrf'
 
 // キャッシュバージョン管理（破壊的変更時にインクリメント）
-const CACHE_VERSION = 'v2';
+const CACHE_VERSION = 'v3';
 const CACHE_VERSION_KEY = 'ic-cache-version';
 
 // 古いキャッシュをクリア
