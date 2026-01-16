@@ -1,9 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { Product } from '../types/product';
-// DB連携用（将来のSupabaseデータ移行時に使用）
-// import type { ProductVariant, PricingInfo } from '../types/product';
-// import { supabase, isSupabaseConfigured } from '../lib/supabase';
+import type { Product, ProductVariant, PricingInfo, PlanType } from '../types/product';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { createLogger } from '../lib/logger';
 
 const logger = createLogger('ProductStore');
@@ -34,24 +32,162 @@ const loadStaticData = async (): Promise<{
   };
 };
 
-/*
- * =============================================================================
- * DB連携用のヘルパー関数（将来のSupabaseデータ移行時に使用）
- * 現在は静的データを優先しているため、すべてコメントアウト
- * =============================================================================
- *
-let unitCache: Map<string, string> | null = null;
-let categoryCache: Map<string, { id: string; type: string }> | null = null;
-let productCodeCache: Map<string, string> | null = null;
+// プランコードマッピング（DB → TypeScript）
+const DB_PLAN_CODE_MAP: Record<string, PlanType> = {
+  'lacie': 'LACIE',
+  'hours': 'HOURS',
+  'life-plus': 'LIFE+',
+  'life': 'LIFE',
+  'life-x': 'LIFE_X',
+};
 
-const initializeCaches = async () => { ... };
-const convertProductToDBItem = async (product: Product, _categoryType: string) => { ... };
-const convertVariantToDBFormat = (variant: ProductVariant, itemId: string) => { ... };
-const convertPricingToDBFormat = async (pricing: PricingInfo, itemId: string) => { ... };
-const PLAN_CODE_MAP = { ... };
-interface DBItem { ... }
-const convertDBItemToProduct = (item: DBItem, _categoryType: string): Product => { ... };
-*/
+// DBアイテム型定義
+interface DBItem {
+  id: string;
+  item_code: string;
+  name: string;
+  manufacturer: string | null;
+  model_number: string | null;
+  material_type: string | null;
+  note: string | null;
+  catalog_url: string | null;
+  is_hit: boolean;
+  is_active: boolean;
+  display_order: number;
+  tags: string[] | null;
+  category: {
+    id: string;
+    slug: string;
+    name: string;
+    category_type: string;
+  } | null;
+  variants: Array<{
+    id: string;
+    variant_code: string;
+    color_name: string;
+    color_code: string | null;
+    is_active: boolean;
+    display_order: number;
+    is_hit: boolean;
+    images: Array<{
+      id: string;
+      image_url: string;
+      thumbnail_url: string | null;
+      is_primary: boolean;
+      display_order: number;
+    }>;
+  }>;
+  pricing: Array<{
+    id: string;
+    price: number;
+    is_standard: boolean;
+    is_available: boolean;
+    product: {
+      id: string;
+      code: string;
+      name: string;
+    } | null;
+  }>;
+}
+
+// DBアイテムをProduct型に変換
+const convertDBItemToProduct = (item: DBItem): Product => {
+  // カテゴリ情報
+  const categorySlug = item.category?.slug || (item.tags?.[0] || 'unknown');
+  const categoryName = item.category?.name || item.tags?.[0] || 'その他';
+
+  // バリアント変換
+  const variants: ProductVariant[] = item.variants
+    .filter(v => v.is_active)
+    .sort((a, b) => a.display_order - b.display_order)
+    .map(v => ({
+      id: v.variant_code.replace(`${item.item_code}-`, ''),
+      color: v.color_name,
+      colorCode: v.color_code || '',
+      images: v.images
+        .sort((a, b) => a.display_order - b.display_order)
+        .map(img => img.image_url),
+      thumbnailUrl: v.images.find(img => img.is_primary)?.thumbnail_url || v.images[0]?.image_url,
+    }));
+
+  // 価格変換
+  const pricing: PricingInfo[] = item.pricing
+    .filter(p => p.is_available && p.product)
+    .map(p => ({
+      plan: DB_PLAN_CODE_MAP[p.product!.code] || (p.product!.name as PlanType),
+      price: Number(p.price),
+    }));
+
+  // is_standardから判定
+  const isOption = !item.pricing.some(p => p.is_standard && p.price === 0);
+
+  return {
+    id: item.item_code,
+    categoryId: categorySlug,
+    categoryName: categoryName,
+    subcategory: '',
+    name: item.name,
+    manufacturer: item.manufacturer || '',
+    modelNumber: item.model_number || '',
+    unit: '㎡', // デフォルト、必要に応じてDB拡張
+    isOption,
+    isHit: item.is_hit,
+    variants,
+    pricing,
+    description: item.note || undefined,
+    materialType: item.material_type || undefined,
+  };
+};
+
+// カテゴリタイプでアイテムを取得
+const fetchItemsByCategory = async (categoryType: string): Promise<Product[]> => {
+  if (!isSupabaseConfigured) {
+    logger.debug(`Supabase not configured, skipping ${categoryType} fetch`);
+    return [];
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('items')
+      .select(`
+        *,
+        category:categories(*),
+        variants:item_variants(
+          *,
+          images:item_variant_images(*)
+        ),
+        pricing:item_pricing(
+          *,
+          product:products(*)
+        )
+      `)
+      .eq('is_active', true)
+      .order('display_order');
+
+    if (error) {
+      logger.error(`Error fetching ${categoryType} items:`, error);
+      return [];
+    }
+
+    if (!data || data.length === 0) {
+      logger.debug(`No ${categoryType} items found in DB`);
+      return [];
+    }
+
+    // カテゴリタイプでフィルタ
+    const filteredItems = data.filter(item =>
+      item.category?.category_type === categoryType ||
+      (item.tags && item.tags.some((tag: string) => tag.startsWith(categoryType)))
+    );
+
+    logger.info(`Fetched ${filteredItems.length} ${categoryType} items from Supabase`);
+
+    return filteredItems.map(item => convertDBItemToProduct(item as DBItem));
+  } catch (err) {
+    logger.error(`Error fetching ${categoryType} items:`, err);
+    return [];
+  }
+};
 
 interface ProductStore {
   exteriorProducts: Product[];
@@ -87,60 +223,6 @@ interface ProductStore {
   getAllProducts: () => Product[];
 }
 
-/*
- * カテゴリタイプでアイテムを取得するヘルパー（将来のDB連携用）
- * 現在は静的データを優先しているため未使用
- * DBにデータを移行したら、この関数を有効化する
- *
-const fetchItemsByCategory = async (categoryType: string): Promise<Product[]> => {
-  if (!isSupabaseConfigured) {
-    return [];
-  }
-
-  try {
-    const { data, error } = await supabase
-      .from('items')
-      .select(`
-        *,
-        category:categories(*),
-        unit:units(*),
-        variants:item_variants(
-          *,
-          images:item_variant_images(*)
-        ),
-        pricing:item_pricing(
-          *,
-          product:products(*)
-        )
-      `)
-      .eq('is_active', true)
-      .order('display_order');
-
-    if (error) {
-      logger.error(`Error fetching ${categoryType} items:`, error);
-      return [];
-    }
-
-    if (!data || data.length === 0) {
-      return [];
-    }
-
-    const filteredItems = data.filter(item =>
-      item.category?.category_type === categoryType
-    );
-
-    const hasVariants = filteredItems.some(item => item.variants && item.variants.length > 0);
-    if (!hasVariants) {
-      logger.warn(`No variants found for ${categoryType} items, may need DB import`);
-    }
-
-    return filteredItems.map(item => convertDBItemToProduct(item as DBItem, categoryType));
-  } catch (err) {
-    logger.error(`Error fetching ${categoryType} items:`, err);
-    return [];
-  }
-};
-*/
 
 export const useProductStore = create<ProductStore>()(
   persist(
@@ -153,12 +235,43 @@ export const useProductStore = create<ProductStore>()(
       isDBConnected: false,
       lastFetchedAt: null,
 
-      // 静的データ優先で即座に表示（DBは後でバックグラウンド同期）
+      // Supabase優先、静的データフォールバック
       fetchProducts: async () => {
         set({ isLoading: true });
 
         try {
-          // 1. まず静的データを即座に読み込み（高速）
+          // 1. まずSupabaseから取得を試みる
+          if (isSupabaseConfigured) {
+            logger.info('Fetching products from Supabase...');
+
+            const [exterior, interior, equipment, other] = await Promise.all([
+              fetchItemsByCategory('exterior'),
+              fetchItemsByCategory('interior'),
+              fetchItemsByCategory('equipment'),
+              fetchItemsByCategory('other'),
+            ]);
+
+            const totalFromDB = exterior.length + interior.length + equipment.length + other.length;
+
+            if (totalFromDB > 0) {
+              set({
+                exteriorProducts: exterior,
+                interiorProducts: interior,
+                waterProducts: equipment,
+                furnitureProducts: other,
+                isLoading: false,
+                isDBConnected: true,
+                lastFetchedAt: new Date(),
+              });
+
+              logger.info(`Products loaded from Supabase: ${totalFromDB} items (exterior: ${exterior.length}, interior: ${interior.length}, equipment: ${equipment.length}, other: ${other.length})`);
+              return;
+            }
+
+            logger.warn('Supabase returned no products, falling back to static data');
+          }
+
+          // 2. Supabaseが空または未設定の場合は静的データにフォールバック
           const staticData = await loadStaticData();
 
           set({
@@ -171,15 +284,28 @@ export const useProductStore = create<ProductStore>()(
             lastFetchedAt: new Date(),
           });
 
-          logger.info('Products loaded from static files (instant)');
-
-          // 2. バックグラウンドでDBをチェック（将来的にDB優先に切り替え時用）
-          // 現在はDBにデータがないため、静的データのみ使用
-          // DBにデータが入ったら、ここでマージ処理を追加可能
+          logger.info('Products loaded from static files (fallback)');
 
         } catch (err) {
           logger.error('Error loading products:', err);
-          set({ isLoading: false, isDBConnected: false });
+
+          // エラー時も静的データにフォールバック
+          try {
+            const staticData = await loadStaticData();
+            set({
+              exteriorProducts: staticData.exterior,
+              interiorProducts: staticData.interior,
+              waterProducts: staticData.water,
+              furnitureProducts: staticData.furniture,
+              isLoading: false,
+              isDBConnected: false,
+              lastFetchedAt: new Date(),
+            });
+            logger.info('Products loaded from static files (error fallback)');
+          } catch (staticErr) {
+            logger.error('Failed to load static data:', staticErr);
+            set({ isLoading: false, isDBConnected: false });
+          }
         }
       },
 
@@ -187,7 +313,7 @@ export const useProductStore = create<ProductStore>()(
         await get().fetchProducts();
       },
 
-      // エクステリア商品管理（ローカルのみ、DB同期は将来対応）
+      // エクステリア商品管理（ローカルステート更新、再フェッチでDB同期）
       addExteriorProduct: async (product) => {
         set((state) => ({
           exteriorProducts: [...state.exteriorProducts, product]
@@ -211,7 +337,7 @@ export const useProductStore = create<ProductStore>()(
         logger.info(`Product ${id} deleted locally`);
       },
 
-      // インテリア商品管理（ローカルのみ、DB同期は将来対応）
+      // インテリア商品管理（ローカルステート更新、再フェッチでDB同期）
       addInteriorProduct: async (product) => {
         set((state) => ({
           interiorProducts: [...state.interiorProducts, product]
@@ -235,7 +361,7 @@ export const useProductStore = create<ProductStore>()(
         logger.info(`Interior product ${id} deleted locally`);
       },
 
-      // 水廻り商品管理（ローカルのみ、DB同期は将来対応）
+      // 水廻り商品管理（ローカルステート更新、再フェッチでDB同期）
       addWaterProduct: async (product) => {
         set((state) => ({
           waterProducts: [...state.waterProducts, product]
