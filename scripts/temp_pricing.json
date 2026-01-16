@@ -1,0 +1,38 @@
+[
+  {
+    "item_id": "e6db7894-40a5-4a2d-9fee-10ed6b038c5e",
+    "product_id": "6341d160-0108-409b-8676-8f703e3d7a83",
+    "is_available": true,
+    "is_standard": true,
+    "price": 0,
+    "installation_cost": 0,
+    "effective_date": "2026-01-16"
+  },
+  {
+    "item_id": "e6db7894-40a5-4a2d-9fee-10ed6b038c5e",
+    "product_id": "7dbf777a-a985-4315-b3ee-d170268597bd",
+    "is_available": true,
+    "is_standard": true,
+    "price": 0,
+    "installation_cost": 0,
+    "effective_date": "2026-01-16"
+  },
+  {
+    "item_id": "e6db7894-40a5-4a2d-9fee-10ed6b038c5e",
+    "product_id": "eaefec09-69d6-4e5b-b679-7afabe28fe24",
+    "is_available": true,
+    "is_standard": true,
+    "price": 0,
+    "installation_cost": 0,
+    "effective_date": "2026-01-16"
+  },
+  {
+    "item_id": "e6db7894-40a5-4a2d-9fee-10ed6b038c5e",
+    "product_id": "2a10c4e4-1da3-4212-ae5e-b5dcfd8325e5",
+    "is_available": true,
+    "is_standard": true,
+    "price": 0,
+    "installation_cost": 0,
+    "effective_date": "2026-01-16"
+  }
+]

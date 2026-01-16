@@ -1,59 +1,153 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ChevronLeft, Check, ExternalLink, Image as ImageIcon } from 'lucide-react';
-import { useProductStore } from '../stores/useProductStore';
+import { ChevronLeft, Check, ExternalLink, Image as ImageIcon, Loader2 } from 'lucide-react';
 import { useCartStore } from '../stores/useCartStore';
 import { useToast } from '../components/common/Toast';
-import { formatPrice, getProductPrice } from '../lib/utils';
+import { formatPrice } from '../lib/utils';
 import { UNIT_SYMBOLS } from '../types/product';
 import { getHexColor } from '../utils/colorMapping';
-import type { ProductVariant } from '../types/product';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
+import type { ItemWithDetails } from '../types/database';
+
+interface DisplayVariant {
+  id: string;
+  color: string;
+  colorCode: string;
+  imageUrl: string | null;
+  thumbnailUrl: string | null;
+}
+
+interface DisplayProduct {
+  id: string;
+  itemCode: string;
+  name: string;
+  categoryName: string;
+  manufacturer: string;
+  unit: string;
+  description: string | null;
+  productUrl: string | null;
+  variants: DisplayVariant[];
+  price: number;
+  isStandard: boolean;
+}
 
 export const ItemDetailPage: React.FC = () => {
   const { itemId } = useParams<{ itemId: string }>();
   const navigate = useNavigate();
   const toast = useToast();
 
-  const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
+  const [product, setProduct] = useState<DisplayProduct | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedVariant, setSelectedVariant] = useState<DisplayVariant | null>(null);
   const [isAdded, setIsAdded] = useState(false);
 
-  // 全商品から該当アイテムを検索
-  const getAllProducts = useProductStore((state) => state.getAllProducts);
-  const allProducts = getAllProducts();
-
-  const product = useMemo(() => {
-    return allProducts.find(p => p.id === itemId) || null;
-  }, [allProducts, itemId]);
-
-  const { addItem, items } = useCartStore();
-
-  // 初期バリアント設定
+  // Supabaseからアイテムを取得
   useEffect(() => {
-    if (product && product.variants.length > 0) {
-      setSelectedVariant(product.variants[0]);
-    }
-  }, [product]);
+    const fetchItem = async () => {
+      if (!itemId || !isSupabaseConfigured) {
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from('items')
+          .select(`
+            *,
+            category:categories(*),
+            variants:item_variants(
+              *,
+              images:item_variant_images(*)
+            ),
+            pricing:item_pricing(
+              *,
+              product:products(*)
+            )
+          `)
+          .eq('id', itemId)
+          .single();
+
+        if (error || !data) {
+          console.error('Error fetching item:', error);
+          setIsLoading(false);
+          return;
+        }
+
+        const item = data as unknown as ItemWithDetails;
+
+        // バリアントを変換
+        const variants: DisplayVariant[] = (item.variants || [])
+          .filter(v => v.is_active)
+          .sort((a, b) => a.display_order - b.display_order)
+          .map(v => ({
+            id: v.id,
+            color: v.color_name,
+            colorCode: v.color_code || '',
+            imageUrl: v.images?.find(img => img.is_primary)?.image_url || v.images?.[0]?.image_url || null,
+            thumbnailUrl: v.images?.find(img => img.is_primary)?.thumbnail_url || v.images?.[0]?.thumbnail_url || null,
+          }));
+
+        // 価格を取得（LIFE+を基準）
+        const pricing = item.pricing?.find(p => p.product?.code === 'LIFE_PLUS') || item.pricing?.[0];
+        const price = pricing ? Number(pricing.price) : 0;
+        const isStandard = pricing?.is_standard ?? false;
+
+        setProduct({
+          id: item.id,
+          itemCode: item.item_code,
+          name: item.name,
+          categoryName: item.category?.name || 'その他',
+          manufacturer: item.manufacturer || '',
+          unit: item.unit?.symbol || '式',
+          description: item.note || null,
+          productUrl: item.catalog_url || null,
+          variants,
+          price,
+          isStandard,
+        });
+
+        if (variants.length > 0) {
+          setSelectedVariant(variants[0]);
+        }
+      } catch (err) {
+        console.error('Error fetching item:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchItem();
+  }, [itemId]);
+
+  const { items } = useCartStore();
 
   // カートに同じ商品があるかチェック
-  const isInCart = useMemo(() => {
-    if (!product) return false;
-    return items.some(item => item.product.id === product.id);
-  }, [items, product]);
-
-  const price = product ? getProductPrice(product.pricing) : 0;
+  const isInCart = product ? items.some(item => item.product.id === product.id || item.product.id === product.itemCode) : false;
 
   const handleSelect = useCallback(() => {
     if (!product || !selectedVariant) return;
 
-    addItem(product, 1, selectedVariant);
-    toast.success('選択完了', `「${product.name}」を選択しました`);
+    // カート追加の処理（現時点ではトースト表示のみ）
+    toast.success('選択完了', `「${product.name}」の「${selectedVariant.color}」を選択しました`);
     setIsAdded(true);
 
     // 1秒後に戻る
     setTimeout(() => {
       navigate(-1);
     }, 1000);
-  }, [product, selectedVariant, addItem, toast, navigate]);
+  }, [product, selectedVariant, toast, navigate]);
+
+  // ローディング中
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 animate-spin text-blue-500 mx-auto mb-2" />
+          <p className="text-gray-500">読み込み中...</p>
+        </div>
+      </div>
+    );
+  }
 
   // 商品が見つからない場合
   if (!product) {
@@ -74,6 +168,7 @@ export const ItemDetailPage: React.FC = () => {
 
   const currentVariant = selectedVariant || product.variants[0];
   const imageUrl = currentVariant?.imageUrl || currentVariant?.thumbnailUrl;
+  const price = product.price;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -142,7 +237,7 @@ export const ItemDetailPage: React.FC = () => {
               カラー選択 <span className="text-gray-400 font-normal">（{product.variants.length}色）</span>
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-              {product.variants.map((v: ProductVariant) => {
+              {product.variants.map((v: DisplayVariant) => {
                 const hexColor = getHexColor(v.colorCode) !== '#CCCCCC'
                   ? getHexColor(v.colorCode)
                   : getHexColor(v.color);
@@ -205,23 +300,6 @@ export const ItemDetailPage: React.FC = () => {
             <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
               {product.description}
             </p>
-          </div>
-        )}
-
-        {/* メーカー施工写真 */}
-        {product.installationImages && product.installationImages.length > 0 && (
-          <div className="bg-white rounded-xl shadow-sm p-4">
-            <h2 className="text-sm font-bold text-gray-800 mb-3">メーカー施工写真</h2>
-            <div className="grid grid-cols-2 gap-2">
-              {product.installationImages.map((img: string, idx: number) => (
-                <img
-                  key={idx}
-                  src={img}
-                  alt={`施工写真 ${idx + 1}`}
-                  className="w-full aspect-video object-cover rounded-lg"
-                />
-              ))}
-            </div>
           </div>
         )}
 

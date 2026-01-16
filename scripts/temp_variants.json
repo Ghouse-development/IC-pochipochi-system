@@ -1,0 +1,29 @@
+[
+  {
+    "item_id": "e6db7894-40a5-4a2d-9fee-10ed6b038c5e",
+    "variant_code": "ext-wall-polpstone-v-v1",
+    "color_name": "エアルMGスノー",
+    "color_code": "EFX3151FK",
+    "munsell_value": "5Y 7/1",
+    "is_active": true,
+    "display_order": 0
+  },
+  {
+    "item_id": "e6db7894-40a5-4a2d-9fee-10ed6b038c5e",
+    "variant_code": "ext-wall-polpstone-v-v2",
+    "color_name": "エアルMGラテ",
+    "color_code": "EFX3152FK",
+    "munsell_value": "7.5YR 5/3",
+    "is_active": true,
+    "display_order": 1
+  },
+  {
+    "item_id": "e6db7894-40a5-4a2d-9fee-10ed6b038c5e",
+    "variant_code": "ext-wall-polpstone-v-v3",
+    "color_name": "エアルMGトリュフ",
+    "color_code": "EFX3153LK",
+    "munsell_value": "2.5Y 3/2",
+    "is_active": true,
+    "display_order": 2
+  }
+]

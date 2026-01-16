@@ -1,0 +1,520 @@
+[
+  {
+    "item_code": "ext-tv-antenna-only",
+    "name": "地上波TVアンテナのみ",
+    "manufacturer": "標準",
+    "variant_count": 2,
+    "first_variant_id": "19b1f05a-dc6f-4d67-8dca-9eba824b7d22"
+  },
+  {
+    "item_code": "ext-tv-fiber-ghouse",
+    "name": "光ケーブル（Gハウス提携会社紹介）",
+    "manufacturer": "Gハウス提携",
+    "variant_count": 2,
+    "first_variant_id": "448a9324-f819-4e34-b507-b7566afa9243"
+  },
+  {
+    "item_code": "ext-tv-fiber-self",
+    "name": "光ケーブル（自分で業者を探す）",
+    "manufacturer": "お客様手配",
+    "variant_count": 2,
+    "first_variant_id": "6d2baeb6-3bf5-4f41-b880-e3cb84be55c8"
+  },
+  {
+    "item_code": "ext-tv-not-needed",
+    "name": "TV視聴不要",
+    "manufacturer": "不要",
+    "variant_count": 2,
+    "first_variant_id": "355f505a-4849-49f1-90c5-b594e2bd6608"
+  },
+  {
+    "item_code": "ext-v2h-none",
+    "name": "V2Hなし（標準）",
+    "manufacturer": "不要",
+    "variant_count": 2,
+    "first_variant_id": "78f20113-4ece-440a-b7f2-ac12f9899608"
+  },
+  {
+    "item_code": "ext-v2h-yes",
+    "name": "V2Hあり",
+    "manufacturer": "別途",
+    "variant_count": 2,
+    "first_variant_id": "4f703ab7-57d1-4c32-8cc2-1ef38e1883d9"
+  },
+  {
+    "item_code": "ext-ventilation-dsdd",
+    "name": "DSDD換気システム",
+    "manufacturer": "DSDD",
+    "variant_count": 2,
+    "first_variant_id": "811df8e9-56ff-48b9-a2b5-49cc537786fb"
+  },
+  {
+    "item_code": "ext-ventilation-panasonic",
+    "name": "Panasonic第一種換気システム",
+    "manufacturer": "Panasonic",
+    "variant_count": 2,
+    "first_variant_id": "8cc32d72-b5aa-4037-b437-a1fb79e70bae"
+  },
+  {
+    "item_code": "ext-window-add-22",
+    "name": "窓追加（22条地域）",
+    "manufacturer": "YKKAP",
+    "variant_count": 2,
+    "first_variant_id": "76eb6c98-9554-4af4-bcd9-0fabed53d340"
+  },
+  {
+    "item_code": "ext-window-add-fire",
+    "name": "窓追加（準防火・防火地域）",
+    "manufacturer": "YKKAP",
+    "variant_count": 2,
+    "first_variant_id": "abeb9cb0-59a8-4084-8630-00e71abaa32e"
+  },
+  {
+    "item_code": "ext-window-add-sliding-22-w1650",
+    "name": "掃出し窓追加（22条地域）W1650まで",
+    "manufacturer": "YKKAP",
+    "variant_count": 2,
+    "first_variant_id": "6cec01ab-bc05-44dd-b06a-f4676f7e7bd4"
+  },
+  {
+    "item_code": "ext-window-add-sliding-22-w2560",
+    "name": "掃出し窓追加（22条地域）W2560まで",
+    "manufacturer": "YKKAP",
+    "variant_count": 2,
+    "first_variant_id": "a003754d-7b3f-46c6-99d9-43a17610245b"
+  },
+  {
+    "item_code": "ext-window-add-sliding-fire-w1650",
+    "name": "掃出し窓追加（準防火・防火地域）W1650まで",
+    "manufacturer": "YKKAP",
+    "variant_count": 2,
+    "first_variant_id": "7d70dab1-2a63-4c92-9ea1-28dbad8f96b0"
+  },
+  {
+    "item_code": "ext-window-add-sliding-fire-w2560",
+    "name": "掃出し窓追加（準防火・防火地域）W2560まで",
+    "manufacturer": "YKKAP",
+    "variant_count": 2,
+    "first_variant_id": "70c7f144-5bbc-49ef-beb6-b2ffa6600050"
+  },
+  {
+    "item_code": "ext-window-apw430-add-22",
+    "name": "APW430 窓追加（22条地域）",
+    "manufacturer": "YKKAP",
+    "variant_count": 2,
+    "first_variant_id": "a6f674c7-0526-4651-a98e-69383f60d019"
+  },
+  {
+    "item_code": "ext-window-apw430-add-fire",
+    "name": "APW430 窓追加（準防火・防火地域）",
+    "manufacturer": "YKKAP",
+    "variant_count": 2,
+    "first_variant_id": "39fd1ede-4afc-48ec-a954-8eba00e497b4"
+  },
+  {
+    "item_code": "ext-window-apw430-safety-glass",
+    "name": "APW430 安全合わせガラス（30mil）",
+    "manufacturer": "YKKAP",
+    "variant_count": 2,
+    "first_variant_id": "111e61a3-1993-40da-a9c9-d2f794f60b64"
+  },
+  {
+    "item_code": "ext-window-apw430-sliding-22-w1650",
+    "name": "APW430 掃出し窓追加（22条地域）W1650まで",
+    "manufacturer": "YKKAP",
+    "variant_count": 2,
+    "first_variant_id": "6d3c140f-99b1-4393-9f17-4b68766fdbc7"
+  },
+  {
+    "item_code": "ext-window-apw430-sliding-22-w2560",
+    "name": "APW430 掃出し窓追加（22条地域）W2560まで",
+    "manufacturer": "YKKAP",
+    "variant_count": 2,
+    "first_variant_id": "919e1aae-7eff-4025-9377-63e1d2ebd6a2"
+  },
+  {
+    "item_code": "ext-window-apw430-sliding-fire-w1650",
+    "name": "APW430 掃出し窓追加（準防火・防火地域）W1650まで",
+    "manufacturer": "YKKAP",
+    "variant_count": 2,
+    "first_variant_id": "2043e411-8628-43d9-8496-22a1da406655"
+  },
+  {
+    "item_code": "ext-window-apw430-sliding-fire-w2560",
+    "name": "APW430 掃出し窓追加（準防火・防火地域）W2560まで",
+    "manufacturer": "YKKAP",
+    "variant_count": 2,
+    "first_variant_id": "2b0fb952-33b9-4786-aef2-3c408c4d1fbb"
+  },
+  {
+    "item_code": "ext-window-heatproof-w1650",
+    "name": "耐熱強化複層ガラス（網なし） W1650まで",
+    "manufacturer": "YKKAP",
+    "variant_count": 2,
+    "first_variant_id": "25b6e4d2-f53e-4312-91fa-81cc1b3daee6"
+  },
+  {
+    "item_code": "ext-window-heatproof-w2560",
+    "name": "耐熱強化複層ガラス（網なし） W2560まで",
+    "manufacturer": "YKKAP",
+    "variant_count": 2,
+    "first_variant_id": "6661333c-0084-4e17-b7ed-85ed4210a629"
+  },
+  {
+    "item_code": "ext-window-safety-glass",
+    "name": "安全合わせガラス（30mil）",
+    "manufacturer": "YKKAP",
+    "variant_count": 2,
+    "first_variant_id": "2ea437b7-3d23-40bd-8040-570899915bcd"
+  },
+  {
+    "item_code": "ext-window-shutter-w1650",
+    "name": "電動シャッター W1650まで",
+    "manufacturer": "YKKAP",
+    "variant_count": 2,
+    "first_variant_id": "f91e5365-973a-4bf1-894d-49b35e3398a6"
+  },
+  {
+    "item_code": "ext-window-shutter-w2560",
+    "name": "電動シャッター W2560まで",
+    "manufacturer": "YKKAP",
+    "variant_count": 2,
+    "first_variant_id": "56323882-34cc-43dc-96ac-42add511a7ed"
+  },
+  {
+    "item_code": "ext-window-type-apw330",
+    "name": "APW330（樹脂サッシ・ペアガラス）",
+    "manufacturer": "YKKAP",
+    "variant_count": 2,
+    "first_variant_id": "46e08e52-8e4d-414d-8fcd-263270804ef5"
+  },
+  {
+    "item_code": "ext-window-type-apw430",
+    "name": "APW430（樹脂サッシ・トリプルガラス）",
+    "manufacturer": "YKKAP",
+    "variant_count": 2,
+    "first_variant_id": "e70eac51-8617-4a86-ae23-7abf79da654b"
+  },
+  {
+    "item_code": "exterior-tarp-hook",
+    "name": "タープフック アイプレートIP-12",
+    "manufacturer": "フジワラ",
+    "variant_count": 2,
+    "first_variant_id": "e84182fc-063f-485b-8807-8833551ac83d"
+  },
+  {
+    "item_code": "exterior-wireless-camera-cx500x",
+    "name": "センサーライト付屋外ワイヤレスカメラ VL-CX500X",
+    "manufacturer": "Panasonic",
+    "variant_count": 2,
+    "first_variant_id": "4b917156-34dd-4fe5-98e8-0e437d241980"
+  },
+  {
+    "item_code": "furn-aircon-daikin-e10",
+    "name": "ダイキン Eシリーズ 10畳用",
+    "manufacturer": "ダイキン",
+    "variant_count": 2,
+    "first_variant_id": "82d2d483-0b9c-452c-a873-c51ee36c48c1"
+  },
+  {
+    "item_code": "furn-aircon-daikin-e14",
+    "name": "ダイキン Eシリーズ 14畳用",
+    "manufacturer": "ダイキン",
+    "variant_count": 2,
+    "first_variant_id": "0fc89912-44a6-4fcd-bc77-9800247ffbd0"
+  },
+  {
+    "item_code": "furn-aircon-daikin-e6",
+    "name": "ダイキン Eシリーズ 6畳用",
+    "manufacturer": "ダイキン",
+    "variant_count": 2,
+    "first_variant_id": "c0a417df-130b-4cbd-9f36-1224cfc70342"
+  },
+  {
+    "item_code": "furn-aircon-daikin-gx10",
+    "name": "ダイキン GXシリーズ 10畳用",
+    "manufacturer": "ダイキン",
+    "variant_count": 2,
+    "first_variant_id": "d0f8ecc5-f8ed-4d96-87bf-c13721a6b5ec"
+  },
+  {
+    "item_code": "furn-aircon-daikin-gx14",
+    "name": "ダイキン GXシリーズ 14畳用",
+    "manufacturer": "ダイキン",
+    "variant_count": 2,
+    "first_variant_id": "1f449998-d18d-407d-99a9-bd1ab977bc8f"
+  },
+  {
+    "item_code": "furn-aircon-daikin-gx6",
+    "name": "ダイキン GXシリーズ 6畳用",
+    "manufacturer": "ダイキン",
+    "variant_count": 2,
+    "first_variant_id": "02437592-2123-4bf7-ac79-f24b75fa84e1"
+  },
+  {
+    "item_code": "furn-aircon-mitsubishi-z10",
+    "name": "三菱電機 霧ヶ峰 Zシリーズ 10畳用",
+    "manufacturer": "三菱電機",
+    "variant_count": 2,
+    "first_variant_id": "69eebc8d-c307-42c5-892a-d9eaddfd3536"
+  },
+  {
+    "item_code": "furn-aircon-mitsubishi-z14",
+    "name": "三菱電機 霧ヶ峰 Zシリーズ 14畳用",
+    "manufacturer": "三菱電機",
+    "variant_count": 2,
+    "first_variant_id": "c1375e84-79f4-42eb-b150-cae50353b2f9"
+  },
+  {
+    "item_code": "furn-aircon-mitsubishi-z6",
+    "name": "三菱電機 霧ヶ峰 Zシリーズ 6畳用",
+    "manufacturer": "三菱電機",
+    "variant_count": 2,
+    "first_variant_id": "7fb3d35f-16d0-42f4-9869-79443306931d"
+  },
+  {
+    "item_code": "furn-aircon-wind-plate",
+    "name": "風向調整板",
+    "manufacturer": "共通",
+    "variant_count": 2,
+    "first_variant_id": "87ec91da-b5fc-4346-9905-2688fbbdab3f"
+  },
+  {
+    "item_code": "furn-bed-ic",
+    "name": "ベッド（IC提案）",
+    "manufacturer": "IC提案",
+    "variant_count": 2,
+    "first_variant_id": "d7bc2a2b-2bda-4272-ac7a-5c23001d63ee"
+  },
+  {
+    "item_code": "furn-centertable-ic",
+    "name": "センターテーブル（IC提案）",
+    "manufacturer": "IC提案",
+    "variant_count": 2,
+    "first_variant_id": "775f15b8-8fbc-4ed9-8422-8b97f975c3ab"
+  },
+  {
+    "item_code": "furn-curtain-ic",
+    "name": "カーテン（IC提案）",
+    "manufacturer": "IC提案",
+    "variant_count": 2,
+    "first_variant_id": "943e3ed6-ea71-41e9-a5fd-da64997ede0c"
+  },
+  {
+    "item_code": "furn-diningchair-ic",
+    "name": "ダイニングチェア（IC提案）",
+    "manufacturer": "IC提案",
+    "variant_count": 2,
+    "first_variant_id": "4a6b4f64-675e-470d-9603-87f75df4aa65"
+  },
+  {
+    "item_code": "furn-diningtable-ic",
+    "name": "ダイニングテーブル（IC提案）",
+    "manufacturer": "IC提案",
+    "variant_count": 2,
+    "first_variant_id": "67beb342-4de5-4803-9c04-cff3a40ea67e"
+  },
+  {
+    "item_code": "furn-other-ic",
+    "name": "その他家具（IC提案）",
+    "manufacturer": "IC提案",
+    "variant_count": 2,
+    "first_variant_id": "5e2f13b2-30ef-4dda-8d05-4b413a408b14"
+  },
+  {
+    "item_code": "furn-rug-ic",
+    "name": "ラグ（IC提案）",
+    "manufacturer": "IC提案",
+    "variant_count": 2,
+    "first_variant_id": "29c1f1f6-b218-4147-9d67-f915f530035c"
+  },
+  {
+    "item_code": "furn-sofa-ic",
+    "name": "ソファ（IC提案）",
+    "manufacturer": "IC提案",
+    "variant_count": 2,
+    "first_variant_id": "c5572444-57fb-4f92-82cc-ce5063ecc26b"
+  },
+  {
+    "item_code": "furn-tvboard-ic",
+    "name": "TVボード（IC提案）",
+    "manufacturer": "IC提案",
+    "variant_count": 2,
+    "first_variant_id": "94b93e90-dfb0-4d3b-a736-bad793a4aa8e"
+  },
+  {
+    "item_code": "int-shoebox-004",
+    "name": "コンポリア ミラー追加",
+    "manufacturer": "Panasonic",
+    "variant_count": 2,
+    "first_variant_id": "48b87789-098e-4bac-9246-dcd7cbd02f40"
+  },
+  {
+    "item_code": "laundry-sink-001",
+    "name": "マルチシンク 600mm",
+    "manufacturer": "TOTO",
+    "variant_count": 2,
+    "first_variant_id": "5f871d3a-cf1f-415f-9607-d801727125c5"
+  },
+  {
+    "item_code": "second-washroom-001",
+    "name": "コンパクト洗面台 600mm",
+    "manufacturer": "TOTO",
+    "variant_count": 2,
+    "first_variant_id": "9e436ac0-5f24-472c-8bd6-6a6662c6f100"
+  },
+  {
+    "item_code": "water-heater-eco-cute-370l-001",
+    "name": "パナソニック エコキュート 370L フルオート",
+    "manufacturer": "Panasonic",
+    "variant_count": 2,
+    "first_variant_id": "ad7733b2-9d2e-4869-b0ca-9724ceb79918"
+  },
+  {
+    "item_code": "water-heater-eco-cute-460l-001",
+    "name": "パナソニック エコキュート 460L フルオート",
+    "manufacturer": "Panasonic",
+    "variant_count": 2,
+    "first_variant_id": "4b3f847c-1033-43ad-984d-00748821bf78"
+  },
+  {
+    "item_code": "window-option-electric-shutter",
+    "name": "電動シャッターへ変更",
+    "manufacturer": "YKKAP",
+    "variant_count": 2,
+    "first_variant_id": "91854fae-92d8-4d1b-9765-c2be0b634209"
+  },
+  {
+    "item_code": "window-option-fireproof-glass",
+    "name": "耐熱強化複層ガラス（網なし）",
+    "manufacturer": "YKKAP",
+    "variant_count": 2,
+    "first_variant_id": "c51c2852-80c6-4d22-8b24-348c307d687c"
+  },
+  {
+    "item_code": "window-option-sliding-door-22",
+    "name": "掃出し窓追加（22条地域）",
+    "manufacturer": "YKKAP",
+    "variant_count": 2,
+    "first_variant_id": "e9de0d5e-fe1b-4ae1-9b37-b9e6b5a488d9"
+  },
+  {
+    "item_code": "window-option-sliding-door-fireproof",
+    "name": "掃出し窓追加（準防火・防火地域）",
+    "manufacturer": "YKKAP",
+    "variant_count": 2,
+    "first_variant_id": "a94c8d50-0e9d-4a0d-87a0-e3d27c876bc1"
+  },
+  {
+    "item_code": "eco-cute-garage",
+    "name": "エコキュートインナーガレージ設置に変更",
+    "manufacturer": "Panasonic",
+    "variant_count": 1,
+    "first_variant_id": "48828118-9839-48e0-872c-11c6c62d609c"
+  },
+  {
+    "item_code": "eco-cute-indoor",
+    "name": "エコキュート室内設置に変更",
+    "manufacturer": "Panasonic",
+    "variant_count": 1,
+    "first_variant_id": "51aff77c-b62b-4c35-a503-35ecaf580a4c"
+  },
+  {
+    "item_code": "eco-cute-salt",
+    "name": "塩害用エコキュートに変更",
+    "manufacturer": "Panasonic",
+    "variant_count": 1,
+    "first_variant_id": "44f97f67-4834-466f-8659-5ef5503bc322"
+  },
+  {
+    "item_code": "entrance-door-face-recognition",
+    "name": "顔認証キー",
+    "manufacturer": "YKKAP",
+    "variant_count": 1,
+    "first_variant_id": "1e87bc47-853a-4cca-8733-d3d0b5d6c91c"
+  },
+  {
+    "item_code": "entrance-door-pocket-key",
+    "name": "ポケットキー（電子錠）",
+    "manufacturer": "YKKAP",
+    "variant_count": 1,
+    "first_variant_id": "a15f352e-3ad6-46e2-8374-dcaa50181a00"
+  },
+  {
+    "item_code": "exterior-ac-sleeve-add",
+    "name": "エアコンスリーブキャップ追加",
+    "manufacturer": "G-HOUSE",
+    "variant_count": 1,
+    "first_variant_id": "7b856327-1d1d-4d25-bf9f-44818c665121"
+  },
+  {
+    "item_code": "exterior-bs-antenna",
+    "name": "BSアンテナ",
+    "manufacturer": "G-HOUSE",
+    "variant_count": 1,
+    "first_variant_id": "cf956f28-d7c5-40d4-af06-e03d876ac86d"
+  },
+  {
+    "item_code": "exterior-ev-outlet",
+    "name": "EV用コンセント",
+    "manufacturer": "G-HOUSE",
+    "variant_count": 1,
+    "first_variant_id": "9113fff9-be8e-404f-897a-994f27fcd57b"
+  },
+  {
+    "item_code": "exterior-faucet-add",
+    "name": "散水栓/立水栓追加",
+    "manufacturer": "G-HOUSE",
+    "variant_count": 1,
+    "first_variant_id": "845d9d8d-b95e-458e-8932-195131b1a69f"
+  },
+  {
+    "item_code": "exterior-faucet-drain",
+    "name": "散水栓/立水栓 排水仕込み追加",
+    "manufacturer": "G-HOUSE",
+    "variant_count": 1,
+    "first_variant_id": "193ad9a9-47d7-4df3-99d0-7006b3095fec"
+  },
+  {
+    "item_code": "exterior-lan-conduit",
+    "name": "外部LAN用空配管",
+    "manufacturer": "G-HOUSE",
+    "variant_count": 1,
+    "first_variant_id": "a2f01365-ba87-4ce4-9fb6-ba5f2bd4e04b"
+  },
+  {
+    "item_code": "exterior-outlet-add",
+    "name": "外部コンセント追加",
+    "manufacturer": "G-HOUSE",
+    "variant_count": 1,
+    "first_variant_id": "45587399-bd03-46d0-8512-b6911450ea9d"
+  },
+  {
+    "item_code": "external-piping-gray",
+    "name": "外部配管",
+    "manufacturer": null,
+    "variant_count": 1,
+    "first_variant_id": "fe7b1008-ab67-409f-ac5c-122eb56539c0"
+  },
+  {
+    "item_code": "window-option-add-22",
+    "name": "窓追加（22条地域）",
+    "manufacturer": "YKKAP",
+    "variant_count": 1,
+    "first_variant_id": "e3b24b13-9214-4ba5-813b-71f91191e8d3"
+  },
+  {
+    "item_code": "window-option-add-fireproof",
+    "name": "窓追加（準防火・防火地域）",
+    "manufacturer": "YKKAP",
+    "variant_count": 1,
+    "first_variant_id": "e5073be9-c8e4-464c-bf6f-7443a082221e"
+  },
+  {
+    "item_code": "window-option-safety-glass",
+    "name": "安全合わせガラス（30mil）",
+    "manufacturer": "YKKAP",
+    "variant_count": 1,
+    "first_variant_id": "d1261414-48ff-477e-b470-5bec5432b1a0"
+  }
+]
