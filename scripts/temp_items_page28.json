@@ -1,0 +1,17 @@
+[
+  {"item_code":"exterior-outlet-add","name":"外部コンセント追加","manufacturer":"G-HOUSE","note":"1カ所標準、追加分","catalog_url":null,"tags":["exterior-equipment"],"material_type":"外部設備","is_active":true,"display_order":1},
+  {"item_code":"exterior-ev-outlet","name":"EV用コンセント","manufacturer":"G-HOUSE","note":"電気自動車充電用","catalog_url":null,"tags":["exterior-equipment"],"material_type":"外部設備","is_active":true,"display_order":2},
+  {"item_code":"exterior-ac-sleeve-add","name":"エアコンスリーブキャップ追加","manufacturer":"G-HOUSE","note":"5カ所標準、追加分","catalog_url":null,"tags":["exterior-equipment"],"material_type":"外部設備","is_active":true,"display_order":3},
+  {"item_code":"exterior-lan-conduit","name":"外部LAN用空配管","manufacturer":"G-HOUSE","note":"外部設備オプション","catalog_url":null,"tags":["exterior-equipment"],"material_type":"外部設備","is_active":true,"display_order":4},
+  {"item_code":"exterior-wireless-camera-wd813k","name":"センサーライト付屋外ワイヤレスカメラ VL-WD813K","manufacturer":"Panasonic","note":"インターホンに最大4台まで接続可","catalog_url":null,"tags":["exterior-equipment"],"material_type":"外部設備","is_active":true,"display_order":5},
+  {"item_code":"exterior-wireless-camera-cx500x","name":"センサーライト付屋外ワイヤレスカメラ VL-CX500X","manufacturer":"Panasonic","note":"SVD505（外でもドアホン）採用時のみ選択可能/最大2台まで接続可","catalog_url":null,"tags":["exterior-equipment"],"material_type":"外部設備","is_active":true,"display_order":6},
+  {"item_code":"exterior-tarp-hook","name":"タープフック アイプレートIP-12","manufacturer":"フジワラ","note":"2個セット/下地込み","catalog_url":null,"tags":["exterior-equipment"],"material_type":"外部設備","is_active":true,"display_order":7},
+  {"item_code":"exterior-multi-hook","name":"玄関用マルチフック VIK","manufacturer":"森田アルミ","note":"下地込み","catalog_url":null,"tags":["exterior-equipment"],"material_type":"外部設備","is_active":true,"display_order":8},
+  {"item_code":"exterior-camera-box","name":"露出用四角ボックス（将来防犯カメラ用）","manufacturer":"未来工業","note":"LAN空配管+電源仕込み含む","catalog_url":null,"tags":["exterior-equipment"],"material_type":"外部設備","is_active":true,"display_order":9},
+  {"item_code":"exterior-faucet-add","name":"散水栓/立水栓追加","manufacturer":"G-HOUSE","note":"標準1カ所、追加分/排水なし","catalog_url":null,"tags":["exterior-faucet"],"material_type":"外部水栓","is_active":true,"display_order":10},
+  {"item_code":"exterior-faucet-drain","name":"散水栓/立水栓 排水仕込み追加","manufacturer":"G-HOUSE","note":"排水配管工事","catalog_url":null,"tags":["exterior-faucet"],"material_type":"外部水栓","is_active":true,"display_order":11},
+  {"item_code":"exterior-faucet-aluminum","name":"アルミ立水栓","manufacturer":"オンリーワン","note":"標準形状変更差額/5色展開","catalog_url":null,"tags":["exterior-faucet"],"material_type":"外部水栓","is_active":true,"display_order":12},
+  {"item_code":"exterior-faucet-stainless","name":"ステンレス混合立水栓 624-202","manufacturer":"カクダイ","note":"標準形状変更差額/別途給湯工事費用必要","catalog_url":null,"tags":["exterior-faucet"],"material_type":"外部水栓","is_active":true,"display_order":13},
+  {"item_code":"exterior-tv-antenna","name":"地上波TVアンテナ","manufacturer":"G-HOUSE","note":"ブースター含む/4色展開","catalog_url":null,"tags":["antenna"],"material_type":"アンテナ","is_active":true,"display_order":14},
+  {"item_code":"exterior-bs-antenna","name":"BSアンテナ","manufacturer":"G-HOUSE","note":"TVアンテナとセットで採用","catalog_url":null,"tags":["antenna"],"material_type":"アンテナ","is_active":true,"display_order":15}
+]
