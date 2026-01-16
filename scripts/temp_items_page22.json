@@ -1,0 +1,101 @@
+[
+  {
+    "item_code": "roof-nisuku-sgl",
+    "name": "ニスクカラーSGL",
+    "manufacturer": "日鉄鋼板",
+    "note": "材料標準保証規格10年/国土交通大臣認定不燃材料NM-8697/海岸500m以遠原板の穴あき25年保証",
+    "catalog_url": null,
+    "tags": ["roof"],
+    "material_type": "屋根材",
+    "is_active": true,
+    "display_order": 1
+  },
+  {
+    "item_code": "external-piping-gray",
+    "name": "外部配管",
+    "manufacturer": null,
+    "note": "単色グレーのみ",
+    "catalog_url": null,
+    "tags": ["external-piping"],
+    "material_type": "配管",
+    "is_active": true,
+    "display_order": 1
+  },
+  {
+    "item_code": "fascia-ep-paint",
+    "name": "破風EP塗装",
+    "manufacturer": null,
+    "note": "軒を延長する場合、取り付けが必要になります",
+    "catalog_url": null,
+    "tags": ["fascia"],
+    "material_type": "破風",
+    "is_active": true,
+    "display_order": 1
+  },
+  {
+    "item_code": "gutter-horizontal-finescare",
+    "name": "ファインスケアNF-Ⅰ型",
+    "manufacturer": "Panasonic",
+    "note": "横樋",
+    "catalog_url": null,
+    "tags": ["gutter-horizontal"],
+    "material_type": "樋",
+    "is_active": true,
+    "display_order": 1
+  },
+  {
+    "item_code": "gutter-vertical-s30",
+    "name": "S30",
+    "manufacturer": "Panasonic",
+    "note": "縦樋",
+    "catalog_url": null,
+    "tags": ["gutter-vertical"],
+    "material_type": "樋",
+    "is_active": true,
+    "display_order": 1
+  },
+  {
+    "item_code": "soffit-emboss",
+    "name": "エンボス",
+    "manufacturer": "神島化学",
+    "note": "軒天",
+    "catalog_url": null,
+    "tags": ["soffit"],
+    "material_type": "軒天",
+    "is_active": true,
+    "display_order": 1
+  },
+  {
+    "item_code": "soffit-artezart",
+    "name": "アルテザート",
+    "manufacturer": "KONOSHIMA",
+    "note": "軒天/準耐火仕様の場合、上階に居室が乗っている箇所は採用不可/5㎡までは80,000円/式",
+    "catalog_url": null,
+    "tags": ["soffit"],
+    "material_type": "軒天",
+    "is_active": true,
+    "display_order": 2
+  },
+  {
+    "item_code": "soffit-laforet-soleil",
+    "name": "ラフォーレソレイユ",
+    "manufacturer": "神島化学",
+    "note": "軒天/準耐火仕様の場合、上階に居室が乗っている箇所は採用不可",
+    "catalog_url": null,
+    "tags": ["soffit"],
+    "material_type": "軒天",
+    "is_active": true,
+    "display_order": 3
+  },
+  {
+    "item_code": "soffit-laforet-timber",
+    "name": "ラフォーレティンバー",
+    "manufacturer": "神島化学",
+    "note": "軒天/準耐火仕様の場合、上階に居室が乗っている箇所は採用不可",
+    "catalog_url": null,
+    "tags": ["soffit"],
+    "material_type": "軒天",
+    "is_active": true,
+    "display_order": 4
+  }
+]
