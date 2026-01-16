@@ -93,6 +93,25 @@ export const EXTERIOR_CATEGORY_ORDER: CategoryOrderConfig[] = [
     ]
   },
   {
+    name: 'ポーチタイル',
+    icon: '🚶',
+    subcategoryOrder: [
+      'モルタル金鏝抑え',  // 標準（目地不要）
+      'メンフィス',
+      'ネイチャーII',
+      'ベスパ',
+      'ランドストン',
+      'ピエトラソーニ',
+    ]
+  },
+  {
+    name: 'ポーチタイル目地',
+    icon: '🎨',
+    subcategoryOrder: [
+      'ポーチタイル目地色',
+    ]
+  },
+  {
     name: '外部建材',
     icon: '🔧',
     subcategoryOrder: [
