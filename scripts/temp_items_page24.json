@@ -1,0 +1,24 @@
+[
+  {
+    "item_code": "garage-shutter-sunautohighspeed",
+    "name": "サンオートハイスピード",
+    "manufacturer": "三和シャッター",
+    "note": "巻き取り式/W2550×H2200/シャッター開放約13秒/障害物検知装置付き/防火仕様+¥60,000",
+    "catalog_url": null,
+    "tags": ["garage-shutter"],
+    "material_type": "電動ガレージシャッター",
+    "is_active": true,
+    "display_order": 1
+  },
+  {
+    "item_code": "garage-shutter-ifudoudou",
+    "name": "威風堂々",
+    "manufacturer": "三和シャッター",
+    "note": "オーバースライダー/W2550×H2200/シャッター開放約10秒/ピンチレスパネル採用/防火仕様+¥60,000",
+    "catalog_url": null,
+    "tags": ["garage-shutter"],
+    "material_type": "電動ガレージシャッター",
+    "is_active": true,
+    "display_order": 2
+  }
+]

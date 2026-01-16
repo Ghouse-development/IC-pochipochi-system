@@ -1,0 +1,14 @@
+[
+  {"item_id":"2680c3cc-4c4a-440c-9357-6c11d57d3436","variant_code":"garage-sunauto-sand","color_name":"サンド","color_code":"SAND","description":"カラー鋼板/板厚0.8mm","is_active":true,"display_order":1,"is_hit":false},
+  {"item_id":"2680c3cc-4c4a-440c-9357-6c11d57d3436","variant_code":"garage-sunauto-lightgray","color_name":"ライトグレー","color_code":"LIGHTGRAY","description":"カラー鋼板/板厚0.8mm","is_active":true,"display_order":2,"is_hit":false},
+  {"item_id":"2680c3cc-4c4a-440c-9357-6c11d57d3436","variant_code":"garage-sunauto-white","color_name":"ホワイト","color_code":"WHITE","description":"カラー鋼板/板厚0.8mm","is_active":true,"display_order":3,"is_hit":false},
+  {"item_id":"2680c3cc-4c4a-440c-9357-6c11d57d3436","variant_code":"garage-sunauto-coolsilver","color_name":"クールシルバー","color_code":"COOLSILVER","description":"高耐食カラー鋼板/板厚0.8mm/防火未対応","is_active":true,"display_order":4,"is_hit":false},
+  {"item_id":"2680c3cc-4c4a-440c-9357-6c11d57d3436","variant_code":"garage-sunauto-vintagewalnut","color_name":"ビンテージウォールナット","color_code":"VINTAGEWALNUT","description":"樹脂フィルム化粧鋼板/板厚0.6mm/防火未対応","is_active":true,"display_order":5,"is_hit":false},
+  {"item_id":"2680c3cc-4c4a-440c-9357-6c11d57d3436","variant_code":"garage-sunauto-black","color_name":"ブラック","color_code":"BLACK","description":"別途塗装/傷が目立ちやすい/+¥60,000","is_active":true,"display_order":6,"is_hit":false},
+  {"item_id":"847ac564-b259-4b0a-81fc-98aa56ecb4d5","variant_code":"garage-ifudoudou-sten","color_name":"ステンカラー","color_code":"STEN","description":"パネルカラー","is_active":true,"display_order":1,"is_hit":false},
+  {"item_id":"847ac564-b259-4b0a-81fc-98aa56ecb4d5","variant_code":"garage-ifudoudou-silver","color_name":"シルバー","color_code":"SILVER","description":"パネルカラー","is_active":true,"display_order":2,"is_hit":false},
+  {"item_id":"847ac564-b259-4b0a-81fc-98aa56ecb4d5","variant_code":"garage-ifudoudou-walnut","color_name":"ウォールナット","color_code":"WALNUT","description":"木目調/塗装で木目を表現/内部面シルバー/防火未対応/+¥660,000","is_active":true,"display_order":3,"is_hit":false},
+  {"item_id":"847ac564-b259-4b0a-81fc-98aa56ecb4d5","variant_code":"garage-ifudoudou-oceanchat","color_name":"オーシャンチャット","color_code":"OCEANCHAT","description":"木目調/塗装で木目を表現/内部面シルバー/防火未対応/+¥660,000","is_active":true,"display_order":4,"is_hit":false},
+  {"item_id":"847ac564-b259-4b0a-81fc-98aa56ecb4d5","variant_code":"garage-ifudoudou-swingnut","color_name":"スイングナット","color_code":"SWINGNUT","description":"木目調/塗装で木目を表現/内部面シルバー/防火未対応/+¥660,000","is_active":true,"display_order":5,"is_hit":false},
+  {"item_id":"847ac564-b259-4b0a-81fc-98aa56ecb4d5","variant_code":"garage-ifudoudou-cinnamonmaple","color_name":"シナモンメープル","color_code":"CINNAMONMAPLE","description":"木目調/塗装で木目を表現/内部面シルバー/防火未対応/+¥660,000","is_active":true,"display_order":6,"is_hit":false}
+]
