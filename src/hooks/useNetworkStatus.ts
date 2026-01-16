@@ -46,7 +46,7 @@ export function useNetworkStatus(options: UseNetworkStatusOptions = {}) {
     onOnline,
     onOffline,
     onReconnect,
-    pingUrl = '/api/health',
+    pingUrl = '', // 空の場合はnavigator.onLineのみを使用
     pingInterval = 30000,
   } = options;
 
@@ -85,6 +85,11 @@ export function useNetworkStatus(options: UseNetworkStatusOptions = {}) {
 
   // 実際の接続確認（ping）
   const checkConnection = useCallback(async (): Promise<boolean> => {
+    // pingUrlが空の場合はnavigator.onLineのみを使用
+    if (!pingUrl) {
+      return navigator.onLine;
+    }
+
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000);
