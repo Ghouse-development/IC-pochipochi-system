@@ -361,4 +361,143 @@ export class ImageService {
 
     return uploadedImages;
   }
+
+  /**
+   * Download image from external URL and upload to storage
+   * Note: Requires CORS-friendly URLs or a proxy
+   */
+  static async downloadFromUrl(
+    imageUrl: string,
+    productCode: string,
+    productName?: string,
+    category?: string,
+    subcategory?: string,
+    isPrimary: boolean = false
+  ): Promise<ProductImage | null> {
+    try {
+      // Validate URL
+      let url: URL;
+      try {
+        url = new URL(imageUrl);
+      } catch {
+        logger.error('Invalid URL:', imageUrl);
+        return null;
+      }
+
+      // Only allow https URLs for security
+      if (url.protocol !== 'https:') {
+        logger.error('Only HTTPS URLs are allowed');
+        return null;
+      }
+
+      logger.info(`Downloading image from: ${imageUrl}`);
+
+      // Fetch the image
+      const response = await fetch(imageUrl, {
+        mode: 'cors',
+        headers: {
+          'Accept': 'image/*'
+        }
+      });
+
+      if (!response.ok) {
+        logger.error(`Failed to fetch image: ${response.status} ${response.statusText}`);
+        return null;
+      }
+
+      // Check content type
+      const contentType = response.headers.get('content-type') || '';
+      const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+      const isValidType = validTypes.some(type => contentType.includes(type));
+
+      if (!isValidType) {
+        logger.error(`Invalid content type: ${contentType}`);
+        return null;
+      }
+
+      // Get the blob
+      const blob = await response.blob();
+
+      // Check file size (5MB limit)
+      const maxSize = 5 * 1024 * 1024;
+      if (blob.size > maxSize) {
+        logger.error('Downloaded image exceeds 5MB limit');
+        return null;
+      }
+
+      // Determine file extension from content type
+      const extMap: Record<string, string> = {
+        'image/jpeg': 'jpg',
+        'image/png': 'png',
+        'image/gif': 'gif',
+        'image/webp': 'webp'
+      };
+      const ext = Object.entries(extMap).find(([type]) => contentType.includes(type))?.[1] || 'jpg';
+
+      // Create a File object
+      const fileName = `${productCode}_${Date.now()}.${ext}`;
+      const file = new File([blob], fileName, { type: blob.type || 'image/jpeg' });
+
+      // Upload using existing method
+      return await this.uploadProductImage(
+        file,
+        productCode,
+        productName,
+        category,
+        subcategory,
+        isPrimary
+      );
+    } catch (error) {
+      logger.error('Error downloading from URL:', error);
+
+      // Check for CORS errors
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        logger.error('This may be a CORS error. The image server may not allow cross-origin requests.');
+      }
+
+      return null;
+    }
+  }
+
+  /**
+   * Batch download images from URLs
+   */
+  static async batchDownloadFromUrls(
+    imageUrls: string[],
+    productCode: string,
+    productName?: string,
+    category?: string,
+    subcategory?: string
+  ): Promise<{ success: ProductImage[]; failed: string[] }> {
+    const success: ProductImage[] = [];
+    const failed: string[] = [];
+
+    for (let i = 0; i < imageUrls.length; i++) {
+      const url = imageUrls[i].trim();
+      if (!url) continue;
+
+      const isPrimary = i === 0 && success.length === 0;
+      const result = await this.downloadFromUrl(
+        url,
+        productCode,
+        productName,
+        category,
+        subcategory,
+        isPrimary
+      );
+
+      if (result) {
+        success.push(result);
+      } else {
+        failed.push(url);
+      }
+
+      // Small delay to avoid rate limiting
+      if (i < imageUrls.length - 1) {
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
+    }
+
+    return { success, failed };
+  }
 }

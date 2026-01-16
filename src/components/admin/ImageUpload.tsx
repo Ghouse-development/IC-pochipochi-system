@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Upload, X, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { Upload, X, Image as ImageIcon, Loader2, Link, AlertCircle } from 'lucide-react';
 import { ImageService } from '../../services/imageService';
 import type { ProductImage } from '../../lib/supabase';
 import { createLogger } from '../../lib/logger';
@@ -24,8 +24,12 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
   existingImages = []
 }) => {
   const [uploading, setUploading] = useState(false);
+  const [downloading, setDownloading] = useState(false);
   const [images, setImages] = useState<ProductImage[]>(existingImages);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+  const [urlInput, setUrlInput] = useState('');
+  const [urlError, setUrlError] = useState<string | null>(null);
+  const [showUrlInput, setShowUrlInput] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // 許可する画像形式（SVGを除外してXSSリスクを回避）
@@ -107,6 +111,78 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
     }
   };
 
+  const handleUrlDownload = async () => {
+    if (!urlInput.trim()) {
+      setUrlError('URLを入力してください');
+      return;
+    }
+
+    // Validate URL
+    try {
+      const url = new URL(urlInput.trim());
+      if (url.protocol !== 'https:') {
+        setUrlError('HTTPSのURLのみ対応しています');
+        return;
+      }
+    } catch {
+      setUrlError('有効なURLを入力してください');
+      return;
+    }
+
+    setUrlError(null);
+    setDownloading(true);
+
+    try {
+      // Support multiple URLs separated by newlines
+      const urls = urlInput.split('\n').map(u => u.trim()).filter(u => u);
+
+      if (urls.length === 1) {
+        const result = await ImageService.downloadFromUrl(
+          urls[0],
+          productCode,
+          productName,
+          category,
+          subcategory,
+          images.length === 0
+        );
+
+        if (result) {
+          setImages([...images, result]);
+          onUploadComplete?.([result]);
+          setUrlInput('');
+          setShowUrlInput(false);
+        } else {
+          setUrlError('画像のダウンロードに失敗しました。CORSエラーの可能性があります。');
+        }
+      } else {
+        const { success, failed } = await ImageService.batchDownloadFromUrls(
+          urls,
+          productCode,
+          productName,
+          category,
+          subcategory
+        );
+
+        if (success.length > 0) {
+          setImages([...images, ...success]);
+          onUploadComplete?.(success);
+        }
+
+        if (failed.length > 0) {
+          setUrlError(`${failed.length}件の画像がダウンロードできませんでした`);
+        } else {
+          setUrlInput('');
+          setShowUrlInput(false);
+        }
+      }
+    } catch (error) {
+      logger.error('Error downloading from URL:', error);
+      setUrlError('ダウンロード中にエラーが発生しました');
+    } finally {
+      setDownloading(false);
+    }
+  };
+
   return (
     <div className="space-y-4">
       <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
@@ -124,7 +200,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
 
         <button
           onClick={() => fileInputRef.current?.click()}
-          disabled={uploading}
+          disabled={uploading || downloading}
           className="w-full flex flex-col items-center justify-center space-y-2 text-gray-600 hover:text-gray-800 disabled:opacity-50"
         >
           {uploading ? (
@@ -142,6 +218,64 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
             </>
           )}
         </button>
+      </div>
+
+      {/* URL Download Section */}
+      <div className="border border-gray-200 rounded-lg">
+        <button
+          onClick={() => setShowUrlInput(!showUrlInput)}
+          className="w-full px-4 py-3 flex items-center justify-between text-gray-700 hover:bg-gray-50"
+        >
+          <span className="flex items-center gap-2">
+            <Link className="h-5 w-5" />
+            <span>URLから画像を取得</span>
+          </span>
+          <span className="text-gray-400">{showUrlInput ? '▲' : '▼'}</span>
+        </button>
+
+        {showUrlInput && (
+          <div className="px-4 pb-4 space-y-3">
+            <textarea
+              value={urlInput}
+              onChange={(e) => {
+                setUrlInput(e.target.value);
+                setUrlError(null);
+              }}
+              placeholder="https://example.com/image.jpg&#10;複数URLは改行で区切って入力"
+              className="w-full h-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              disabled={downloading}
+            />
+
+            {urlError && (
+              <div className="flex items-center gap-2 text-red-600 text-sm">
+                <AlertCircle className="h-4 w-4" />
+                <span>{urlError}</span>
+              </div>
+            )}
+
+            <button
+              onClick={handleUrlDownload}
+              disabled={downloading || !urlInput.trim()}
+              className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              {downloading ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span>ダウンロード中...</span>
+                </>
+              ) : (
+                <>
+                  <Link className="h-4 w-4" />
+                  <span>URLから取得</span>
+                </>
+              )}
+            </button>
+
+            <p className="text-xs text-gray-500">
+              ※ CORSが有効なサーバーの画像のみダウンロード可能です
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Preview URLs */}
