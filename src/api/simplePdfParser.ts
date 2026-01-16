@@ -2,11 +2,33 @@ import type { Request, Response } from 'express';
 import multer from 'multer';
 import { PDFDocument } from 'pdf-lib';
 
+// ファイルタイプバリデーション
+const fileFilter = (
+  _req: Request,
+  file: Express.Multer.File,
+  callback: multer.FileFilterCallback
+) => {
+  // PDFファイルのみ許可
+  const allowedMimes = ['application/pdf'];
+  const allowedExtensions = ['.pdf'];
+
+  const fileExtension = file.originalname.toLowerCase().slice(-4);
+  const isMimeAllowed = allowedMimes.includes(file.mimetype);
+  const isExtensionAllowed = allowedExtensions.includes(fileExtension);
+
+  if (isMimeAllowed && isExtensionAllowed) {
+    callback(null, true);
+  } else {
+    callback(new Error('PDFファイルのみアップロード可能です'));
+  }
+};
+
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
-    fileSize: 50 * 1024 * 1024, // 50MB
-  }
+    fileSize: 10 * 1024 * 1024, // 10MB（50MBから削減）
+  },
+  fileFilter,
 });
 
 interface ProductData {

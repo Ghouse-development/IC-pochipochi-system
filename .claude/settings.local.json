@@ -47,7 +47,9 @@
       "Bash(vercel ls:*)",
       "Bash(vercel --prod:*)",
       "Bash(wc:*)",
-      "Bash(npx tsx:*)"
+      "Bash(npx tsx:*)",
+      "Bash(find:*)",
+      "Bash(xargs:*)"
     ],
     "deny": [],
     "ask": []
