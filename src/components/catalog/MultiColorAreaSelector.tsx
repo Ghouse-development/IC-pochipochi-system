@@ -92,12 +92,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
           </div>
         )}
 
-        {/* バッジ（標準） */}
-        <div className="absolute top-1 left-1">
-          <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-500 text-white">
-            標準
-          </span>
-        </div>
 
         {/* 選択済みマーク */}
         {isSelected && (
@@ -115,14 +109,57 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
         {/* 価格・単位 */}
         <div className="flex items-baseline gap-1 mt-1">
-          <span className="text-sm font-bold text-blue-600">
+          <span className="text-sm font-bold text-emerald-600">
             標準
           </span>
         </div>
 
-        {/* 選べる色数表示 */}
+        {/* バリアント（色）選択サムネイル */}
         {hasMultipleVariants && (
-          <span className="text-[10px] text-gray-400">{variants.length}色から選択</span>
+          <div className="mt-2">
+            <div className="flex flex-wrap gap-1">
+              {variants.slice(0, 6).map((variant, idx) => {
+                const variantImage = getVariantImage(variant);
+                const isCurrentVariant = idx === selectedVariantIndex;
+                return (
+                  <button
+                    key={variant.id}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedVariantIndex(idx);
+                    }}
+                    className={`w-6 h-6 rounded border-2 overflow-hidden transition-all ${
+                      isCurrentVariant
+                        ? 'border-blue-500 ring-1 ring-blue-300'
+                        : 'border-gray-200 hover:border-blue-300'
+                    }`}
+                    title={variant.color}
+                  >
+                    {variantImage ? (
+                      <img
+                        src={variantImage}
+                        alt={variant.color}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div
+                        className="w-full h-full"
+                        style={{ backgroundColor: variant.colorCode || '#ccc' }}
+                      />
+                    )}
+                  </button>
+                );
+              })}
+              {variants.length > 6 && (
+                <span className="text-[10px] text-gray-400 self-center ml-1">
+                  +{variants.length - 6}
+                </span>
+              )}
+            </div>
+            <p className="text-[10px] text-gray-500 mt-1">
+              {currentVariant?.color || '色を選択'}
+            </p>
+          </div>
         )}
       </div>
     </div>

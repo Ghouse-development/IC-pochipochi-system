@@ -218,7 +218,7 @@ export const Header: React.FC<HeaderProps> = ({
               <div className="relative">
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                  className="hidden sm:flex items-center gap-2 p-2 hover:bg-gray-50:bg-gray-700 rounded-lg transition-colors"
+                  className="hidden sm:flex items-center gap-2 p-2 hover:bg-gray-50 rounded-lg transition-colors"
                   aria-label="ユーザーメニュー"
                   aria-expanded={isUserMenuOpen}
                   aria-haspopup="menu"
@@ -260,7 +260,7 @@ export const Header: React.FC<HeaderProps> = ({
                               setIsUserMenuOpen(false);
                               onStaffDashboardClick?.();
                             }}
-                            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100:bg-gray-700"
+                            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                           >
                             <Briefcase className="w-4 h-4" />
                             スタッフダッシュボード
@@ -271,7 +271,7 @@ export const Header: React.FC<HeaderProps> = ({
                               setIsUserMenuOpen(false);
                               onHierarchyClick?.();
                             }}
-                            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100:bg-gray-700"
+                            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                           >
                             <FileText className="w-4 h-4" />
                             階層表示
@@ -282,7 +282,7 @@ export const Header: React.FC<HeaderProps> = ({
                               setIsUserMenuOpen(false);
                               onImageTestClick?.();
                             }}
-                            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100:bg-gray-700"
+                            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                           >
                             <Upload className="w-4 h-4" />
                             画像テスト
@@ -293,7 +293,7 @@ export const Header: React.FC<HeaderProps> = ({
                               setIsUserMenuOpen(false);
                               onAdminClick?.();
                             }}
-                            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100:bg-gray-700"
+                            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                           >
                             <Settings className="w-4 h-4" />
                             アイテムのメンテナンス
@@ -302,11 +302,12 @@ export const Header: React.FC<HeaderProps> = ({
                       )}
                       <button
                         role="menuitem"
-                        onClick={() => {
+                        onClick={async () => {
                           setIsUserMenuOpen(false);
-                          signOut?.();
+                          await signOut?.();
+                          navigate('/login');
                         }}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50:bg-red-900/20"
+                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50"
                       >
                         <LogOut className="w-4 h-4" />
                         ログアウト
