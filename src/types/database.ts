@@ -178,6 +178,7 @@ export interface ItemVariant {
   variant_code: string;
   color_name: string;
   color_code: string | null;
+  munsell_value: string | null; // マンセル値（例: 5Y 8/1, N 7）
   description: string | null;
   is_active: boolean;
   is_hit: boolean;

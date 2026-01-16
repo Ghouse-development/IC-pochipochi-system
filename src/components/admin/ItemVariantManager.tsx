@@ -147,6 +147,7 @@ export function ItemVariantManager({
       variant_code: '',
       color_name: '',
       color_code: '',
+      munsell_value: null,
       description: '',
       is_active: true,
       is_hit: false,
