@@ -1,0 +1,24 @@
+[
+  {
+    "item_code": "porch-tile-landstone",
+    "name": "ランドストン",
+    "manufacturer": "Nagoya mozaic",
+    "note": "600×600 / 300×600サイズ / 岩面",
+    "catalog_url": "https://www.nagoya-mosaic.com/products/series/s1508",
+    "tags": ["porch-tile"],
+    "material_type": "タイル",
+    "is_active": true,
+    "display_order": 5
+  },
+  {
+    "item_code": "porch-tile-pietra-soni",
+    "name": "ピエトラソーニ",
+    "manufacturer": "Nagoya mozaic",
+    "note": "600×600 / 300×600サイズ / 粗目",
+    "catalog_url": "https://www.nagoya-mosaic.com/products/series/s1509",
+    "tags": ["porch-tile"],
+    "material_type": "タイル",
+    "is_active": true,
+    "display_order": 6
+  }
+]

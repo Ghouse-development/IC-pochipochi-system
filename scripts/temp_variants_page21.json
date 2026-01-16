@@ -1,0 +1,11 @@
+[
+  {"item_id":"66fac48d-b6eb-4cc9-a5ac-f8d2c6022b5b","variant_code":"porch-tile-landstone-v1","color_name":"CRD-X3910G","color_code":"CRD-X3910G","description":null,"is_active":true,"display_order":1,"is_hit":false},
+  {"item_id":"66fac48d-b6eb-4cc9-a5ac-f8d2c6022b5b","variant_code":"porch-tile-landstone-v2","color_name":"CRD-X3920G","color_code":"CRD-X3920G","description":null,"is_active":true,"display_order":2,"is_hit":false},
+  {"item_id":"66fac48d-b6eb-4cc9-a5ac-f8d2c6022b5b","variant_code":"porch-tile-landstone-v3","color_name":"CRD-X3930G","color_code":"CRD-X3930G","description":null,"is_active":true,"display_order":3,"is_hit":false},
+  {"item_id":"66fac48d-b6eb-4cc9-a5ac-f8d2c6022b5b","variant_code":"porch-tile-landstone-v4","color_name":"CRD-X3940G","color_code":"CRD-X3940G","description":null,"is_active":true,"display_order":4,"is_hit":false},
+  {"item_id":"693ab653-3fd7-46d9-81fa-135a0422c06a","variant_code":"porch-tile-pietra-soni-v1","color_name":"PAN-X8110G","color_code":"PAN-X8110G","description":null,"is_active":true,"display_order":1,"is_hit":false},
+  {"item_id":"693ab653-3fd7-46d9-81fa-135a0422c06a","variant_code":"porch-tile-pietra-soni-v2","color_name":"PAN-X8120G","color_code":"PAN-X8120G","description":null,"is_active":true,"display_order":2,"is_hit":false},
+  {"item_id":"693ab653-3fd7-46d9-81fa-135a0422c06a","variant_code":"porch-tile-pietra-soni-v3","color_name":"PAN-X8130G","color_code":"PAN-X8130G","description":null,"is_active":true,"display_order":3,"is_hit":false},
+  {"item_id":"693ab653-3fd7-46d9-81fa-135a0422c06a","variant_code":"porch-tile-pietra-soni-v4","color_name":"PAN-X8140G","color_code":"PAN-X8140G","description":null,"is_active":true,"display_order":4,"is_hit":false},
+  {"item_id":"693ab653-3fd7-46d9-81fa-135a0422c06a","variant_code":"porch-tile-pietra-soni-v5","color_name":"PAN-X8150G","color_code":"PAN-X8150G","description":null,"is_active":true,"display_order":5,"is_hit":false}
+]
