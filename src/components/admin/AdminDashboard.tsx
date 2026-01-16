@@ -22,6 +22,7 @@ import { PdfImport } from './PdfImport';
 import { StaffOptionDashboard } from './StaffOptionDashboard';
 import { UserBehaviorAnalytics } from './UserBehaviorAnalytics';
 import { useAuth } from '../../contexts/AuthContext';
+import { LivePreview } from './LivePreview';
 
 interface AdminDashboardProps {
   onBack?: () => void;
@@ -582,6 +583,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
               <SectionErrorBoundary sectionName="カテゴリ管理">
                 <CategoryManager />
               </SectionErrorBoundary>
+            )}
+            {/* カタログプレビュー（アイテム・カテゴリ編集時） */}
+            {(productSubTab === 'items' || productSubTab === 'categories') && (
+              <LivePreview
+                previewPath="/catalog/exterior"
+                targetName="カタログ"
+              />
             )}
           </div>
         )}
