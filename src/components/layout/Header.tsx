@@ -103,7 +103,7 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <>
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-[60]">
         <div className="px-4 sm:px-6 py-2">
           <div className="flex items-center justify-between">
             {/* ロゴとメニューボタン */}
@@ -234,7 +234,7 @@ export const Header: React.FC<HeaderProps> = ({
                 {isUserMenuOpen && (
                   <>
                     <div
-                      className="fixed inset-0 z-40"
+                      className="fixed inset-0 z-[55]"
                       onClick={() => setIsUserMenuOpen(false)}
                       aria-hidden="true"
                     />
@@ -242,7 +242,7 @@ export const Header: React.FC<HeaderProps> = ({
                       id="user-menu"
                       role="menu"
                       aria-label="ユーザーメニュー"
-                      className="absolute right-0 top-full mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-200 z-50 py-2"
+                      className="absolute right-0 top-full mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-200 z-[65] py-2"
                     >
                       <div className="px-4 py-2 border-b border-gray-100">
                         <p className="text-sm font-medium text-gray-900">
