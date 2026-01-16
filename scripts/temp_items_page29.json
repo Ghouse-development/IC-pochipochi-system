@@ -1,0 +1,20 @@
+[
+  {"item_code":"ventilation-grill","name":"換気ガラリ","manufacturer":"G-HOUSE","note":"換気システム用/6色展開","catalog_url":null,"tags":["ventilation"],"material_type":"換気システム","is_active":true,"display_order":1},
+  {"item_code":"ventilation-cyclone-hood","name":"サイクロン給気フード","manufacturer":"Panasonic","note":"換気システム用/計算値・地域により適正のものを採用","catalog_url":null,"tags":["ventilation"],"material_type":"換気システム","is_active":true,"display_order":2},
+  {"item_code":"ventilation-dsdd-color","name":"DSDD給気口カラー変更","manufacturer":"G-HOUSE","note":"DSSDオプション換気システム採用者向け","catalog_url":null,"tags":["ventilation"],"material_type":"換気システム","is_active":true,"display_order":3},
+  {"item_code":"solar-relay-pole","name":"中継ポール","manufacturer":"G-HOUSE","note":"太陽光設置用","catalog_url":null,"tags":["solar"],"material_type":"太陽光・蓄電池","is_active":true,"display_order":4},
+  {"item_code":"eco-cute-add","name":"エコキュート追加","manufacturer":"Panasonic","note":"標準370L/Sシリーズ HE-S37LQS","catalog_url":null,"tags":["eco-cute"],"material_type":"エコキュート","is_active":true,"display_order":5},
+  {"item_code":"eco-cute-indoor","name":"エコキュート室内設置に変更","manufacturer":"Panasonic","note":"標準外部設置から室内設置に変更","catalog_url":null,"tags":["eco-cute-option"],"material_type":"エコキュートオプション","is_active":true,"display_order":6},
+  {"item_code":"eco-cute-garage","name":"エコキュートインナーガレージ設置に変更","manufacturer":"Panasonic","note":"インナーガレージ内に設置","catalog_url":null,"tags":["eco-cute-option"],"material_type":"エコキュートオプション","is_active":true,"display_order":7},
+  {"item_code":"eco-cute-salt","name":"塩害用エコキュートに変更","manufacturer":"Panasonic","note":"パワフル高圧薄型は対象外","catalog_url":null,"tags":["eco-cute-option"],"material_type":"エコキュートオプション","is_active":true,"display_order":8},
+  {"item_code":"eco-cute-460l","name":"エコキュート460Lに変更","manufacturer":"Panasonic","note":"Sシリーズ HE-S46LQS/2,170×600×680","catalog_url":null,"tags":["eco-cute-option"],"material_type":"エコキュートオプション","is_active":true,"display_order":9},
+  {"item_code":"eco-cute-ultra-370l","name":"ウルトラ高圧エコキュート370Lに変更","manufacturer":"Panasonic","note":"Sシリーズ HE-SU37LQS","catalog_url":null,"tags":["eco-cute-option"],"material_type":"エコキュートオプション","is_active":true,"display_order":10},
+  {"item_code":"eco-cute-ultra-460l","name":"ウルトラ高圧エコキュート460Lに変更","manufacturer":"Panasonic","note":"Sシリーズ HE-SU46LQS/2,170×600×680","catalog_url":null,"tags":["eco-cute-option"],"material_type":"エコキュートオプション","is_active":true,"display_order":11},
+  {"item_code":"eco-cute-slim-370l","name":"370L薄型タイプに変更","manufacturer":"Panasonic","note":"Hシリーズ HE-H37LQS","catalog_url":null,"tags":["eco-cute-option"],"material_type":"エコキュートオプション","is_active":true,"display_order":12},
+  {"item_code":"eco-cute-slim-460l","name":"460L薄型タイプに変更","manufacturer":"Panasonic","note":"Hシリーズ HE-H46LQS","catalog_url":null,"tags":["eco-cute-option"],"material_type":"エコキュートオプション","is_active":true,"display_order":13},
+  {"item_code":"eco-cute-powerful-slim-370l","name":"370Lパワフル高圧薄型タイプに変更","manufacturer":"Panasonic","note":"Wシリーズ HE-WU37LQS","catalog_url":null,"tags":["eco-cute-option"],"material_type":"エコキュートオプション","is_active":true,"display_order":14},
+  {"item_code":"eco-cute-powerful-slim-460l","name":"460Lパワフル高圧薄型タイプに変更","manufacturer":"Panasonic","note":"Wシリーズ HE-WU46LQS","catalog_url":null,"tags":["eco-cute-option"],"material_type":"エコキュートオプション","is_active":true,"display_order":15},
+  {"item_code":"eco-cute-daikin-370l","name":"おひさまエコキュート パワフル高圧370L","manufacturer":"DAIKIN","note":"EQA37YFPV/1,825×630×730/お掃除浴槽採用時必須","catalog_url":null,"tags":["eco-cute"],"material_type":"エコキュート","is_active":true,"display_order":16},
+  {"item_code":"eco-cute-daikin-460l","name":"おひさまエコキュート パワフル高圧460L","manufacturer":"DAIKIN","note":"EQA46YFPV/2,175×630×730/お掃除浴槽採用時必須","catalog_url":null,"tags":["eco-cute"],"material_type":"エコキュート","is_active":true,"display_order":17},
+  {"item_code":"eco-cute-hitachi-370l","name":"ナイアガラ出湯 エコキュート370L","manufacturer":"日立","note":"BHP-FV37WD/1,771×850×730","catalog_url":null,"tags":["eco-cute"],"material_type":"エコキュート","is_active":true,"display_order":18}
+]
