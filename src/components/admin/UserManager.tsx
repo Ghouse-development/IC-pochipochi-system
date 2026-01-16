@@ -97,36 +97,55 @@ export function UserManager({ onBack, onCreateProject }: UserManagerProps) {
     try {
       setError(null);
 
-      // Get current user's session token for authorization
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        setError('ログインが必要です');
+      // バリデーション
+      if (!newUserForm.email || !newUserForm.password || !newUserForm.full_name) {
+        setError('メールアドレス、パスワード、名前は必須です');
         return;
       }
 
-      // Call Admin API endpoint to create user
-      const response = await fetch('/api/admin/create-user', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`,
+      if (newUserForm.password.length < 6) {
+        setError('パスワードは6文字以上にしてください');
+        return;
+      }
+
+      // Supabase Auth でユーザーを作成（メール確認が必要）
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email: newUserForm.email,
+        password: newUserForm.password,
+        options: {
+          data: {
+            full_name: newUserForm.full_name,
+          },
         },
-        body: JSON.stringify({
+      });
+
+      if (authError) {
+        throw new Error(authError.message);
+      }
+
+      if (!authData.user) {
+        throw new Error('ユーザーの作成に失敗しました');
+      }
+
+      // usersテーブルにレコードを作成
+      const { error: insertError } = await supabase
+        .from('users')
+        .insert({
+          auth_id: authData.user.id,
           email: newUserForm.email,
-          password: newUserForm.password,
           full_name: newUserForm.full_name,
           role: newUserForm.role,
           phone: newUserForm.phone || null,
-        }),
-      });
+          is_active: true,
+        });
 
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.error || 'ユーザーの作成に失敗しました');
+      if (insertError) {
+        logger.error('Error inserting user record:', insertError);
+        // auth.usersには作成されたが、usersテーブルへの挿入に失敗
+        // 次回ログイン時にAuthContextが自動的にレコードを作成する
       }
 
-      setSuccess('ユーザーを作成しました（メール確認なしでログイン可能）');
+      setSuccess('ユーザーを作成しました（確認メールが送信されました）');
       setIsCreating(false);
       setNewUserForm({
         email: '',

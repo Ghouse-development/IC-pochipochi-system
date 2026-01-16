@@ -78,7 +78,6 @@ export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = (
 
   // 既存ユーザーが指定されているか
   const isExistingUser = !!initialUser;
-  const [existingUserId] = useState<string | undefined>(initialUser?.id);
 
   // フォームデータ（initialUserがあれば初期値として使用）
   const [customer, setCustomer] = useState<CustomerInfo>({
@@ -134,44 +133,39 @@ export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = (
         return;
       }
 
-      // Call API to create project
-      const response = await fetch('/api/projects/create', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`,
-        },
-        body: JSON.stringify({
-          customer: {
-            id: existingUserId, // 既存ユーザーの場合はIDを渡す
-            name: customer.name,
-            furigana: customer.furigana,
-            email: customer.email,
-            phone: customer.phone,
-            postalCode: customer.postalCode,
-            address: customer.address,
-          },
-          planType,
-          projectCode: projectCode || undefined,
-          projectName: projectName || undefined,
-          buildingInfo,
-          rooms,
-        }),
-      });
+      // プロジェクトコード生成（指定がなければ自動生成）
+      const code = projectCode || `PRJ-${Date.now().toString(36).toUpperCase()}`;
+      const name = projectName || `${customer.name}様邸`;
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'プロジェクトの作成に失敗しました');
+      // プロジェクトを直接Supabaseに作成
+      const { data: project, error: projectError } = await supabase
+        .from('projects')
+        .insert({
+          code,
+          name,
+          plan_type: planType,
+          status: 'draft',
+          customer_name: customer.name,
+          customer_email: customer.email,
+          customer_phone: customer.phone || null,
+          building_info: buildingInfo,
+          rooms: rooms,
+          created_by: session.user.id,
+        })
+        .select()
+        .single();
+
+      if (projectError) {
+        throw new Error(projectError.message || 'プロジェクトの作成に失敗しました');
       }
 
-      const result = await response.json();
-
-      // Set customer URL from API response
-      setCustomerUrl(result.customerUrl);
+      // お客様用URLを生成
+      const generatedUrl = `${window.location.origin}/customer?project=${project.id}`;
+      setCustomerUrl(generatedUrl);
 
       // 次のステップ（URL発行画面）へ
       setCurrentStep(5);
-      onComplete?.(result.project.id, result.customerUrl);
+      onComplete?.(project.id, generatedUrl);
     } catch (err) {
       console.error('Project creation error:', err);
       setError(err instanceof Error ? err.message : 'プロジェクトの作成に失敗しました');
