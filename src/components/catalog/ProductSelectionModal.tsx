@@ -191,7 +191,7 @@ export const ProductSelectionModal: React.FC<ProductSelectionModalProps> = ({
                   オプション製品
                 </span>
               ) : (
-                <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full">
+                <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full">
                   標準仕様
                 </span>
               )}

@@ -531,7 +531,7 @@ export function SelectionPage({ projectId, onBack }: SelectionPageProps) {
                     <span className="text-gray-500">価格</span>
                     <span className="text-gray-900 font-bold">
                       {selectedItem.pricing[0].is_standard ? (
-                        <span className="text-green-600">標準仕様</span>
+                        <span className="text-blue-600">標準仕様</span>
                       ) : (
                         <>
                           {formatPrice(selectedItem.pricing[0].price)}

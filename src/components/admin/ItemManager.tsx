@@ -556,7 +556,7 @@ export function ItemManager() {
                                           <span className="text-gray-500">{p.product?.name || ''}:</span>{' '}
                                           <span className="font-medium">{formatPriceWithUnit(p.price, item.unit_id)}</span>
                                           {p.is_standard && (
-                                            <span className="ml-1 text-xs text-green-600">(標準)</span>
+                                            <span className="ml-1 text-xs text-blue-600">(標準)</span>
                                           )}
                                         </div>
                                       ))}
