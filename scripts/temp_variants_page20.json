@@ -1,0 +1,23 @@
+[
+  {"item_id":"d39290b8-170c-452a-9a7d-e721e91ad341","variant_code":"porch-tile-nature2-v1","color_name":"MSY-R3010","color_code":"MSY-R3010","description":null,"is_active":true,"display_order":1,"is_hit":false},
+  {"item_id":"d39290b8-170c-452a-9a7d-e721e91ad341","variant_code":"porch-tile-nature2-v2","color_name":"MSY-R3020","color_code":"MSY-R3020","description":null,"is_active":true,"display_order":2,"is_hit":false},
+  {"item_id":"d39290b8-170c-452a-9a7d-e721e91ad341","variant_code":"porch-tile-nature2-v3","color_name":"MSY-R3030","color_code":"MSY-R3030","description":null,"is_active":true,"display_order":3,"is_hit":false},
+  {"item_id":"d39290b8-170c-452a-9a7d-e721e91ad341","variant_code":"porch-tile-nature2-v4","color_name":"MSY-R3040","color_code":"MSY-R3040","description":"メーカー生産停止商品欠品中","is_active":false,"display_order":4,"is_hit":false},
+  {"item_id":"d39290b8-170c-452a-9a7d-e721e91ad341","variant_code":"porch-tile-nature2-v5","color_name":"MSY-R3050","color_code":"MSY-R3050","description":null,"is_active":true,"display_order":5,"is_hit":false},
+  {"item_id":"d39290b8-170c-452a-9a7d-e721e91ad341","variant_code":"porch-tile-nature2-v6","color_name":"MSY-R3070","color_code":"MSY-R3070","description":null,"is_active":true,"display_order":6,"is_hit":false},
+  {"item_id":"d39290b8-170c-452a-9a7d-e721e91ad341","variant_code":"porch-tile-nature2-v7","color_name":"MSY-R3080","color_code":"MSY-R3080","description":null,"is_active":true,"display_order":7,"is_hit":false},
+  {"item_id":"d39290b8-170c-452a-9a7d-e721e91ad341","variant_code":"porch-tile-nature2-v8","color_name":"MSY-R3090","color_code":"MSY-R3090","description":null,"is_active":true,"display_order":8,"is_hit":true},
+  {"item_id":"445a940d-d111-40a0-a481-22b341479a93","variant_code":"porch-tile-vespa-v1","color_name":"IPF-300/VSP-SA1","color_code":"VSP-SA1","description":null,"is_active":true,"display_order":1,"is_hit":false},
+  {"item_id":"445a940d-d111-40a0-a481-22b341479a93","variant_code":"porch-tile-vespa-v2","color_name":"IPF-300/VSP-SA2","color_code":"VSP-SA2","description":null,"is_active":true,"display_order":2,"is_hit":false},
+  {"item_id":"445a940d-d111-40a0-a481-22b341479a93","variant_code":"porch-tile-vespa-v3","color_name":"IPF-300/VSP-SA3","color_code":"VSP-SA3","description":null,"is_active":true,"display_order":3,"is_hit":true},
+  {"item_id":"445a940d-d111-40a0-a481-22b341479a93","variant_code":"porch-tile-vespa-v4","color_name":"IPF-300/VSP-SL1","color_code":"VSP-SL1","description":null,"is_active":true,"display_order":4,"is_hit":false},
+  {"item_id":"445a940d-d111-40a0-a481-22b341479a93","variant_code":"porch-tile-vespa-v5","color_name":"IPF-300/VSP-SL2","color_code":"VSP-SL2","description":null,"is_active":true,"display_order":5,"is_hit":false},
+  {"item_id":"445a940d-d111-40a0-a481-22b341479a93","variant_code":"porch-tile-vespa-v6","color_name":"IPF-300/VSP-SL3","color_code":"VSP-SL3","description":null,"is_active":true,"display_order":6,"is_hit":false},
+  {"item_id":"445a940d-d111-40a0-a481-22b341479a93","variant_code":"porch-tile-vespa-v7","color_name":"IPF-300/VSP-SL4","color_code":"VSP-SL4","description":null,"is_active":true,"display_order":7,"is_hit":false},
+  {"item_id":"445a940d-d111-40a0-a481-22b341479a93","variant_code":"porch-tile-vespa-v8","color_name":"IPF-300/VSP-SL5","color_code":"VSP-SL5","description":null,"is_active":true,"display_order":8,"is_hit":false},
+  {"item_id":"95d26468-9805-4f6f-86cb-87d4da9ae34c","variant_code":"porch-tile-memphis-v1","color_name":"MMP-11","color_code":"MMP-11","description":null,"is_active":true,"display_order":1,"is_hit":true},
+  {"item_id":"95d26468-9805-4f6f-86cb-87d4da9ae34c","variant_code":"porch-tile-memphis-v2","color_name":"MMP-12","color_code":"MMP-12","description":null,"is_active":true,"display_order":2,"is_hit":true},
+  {"item_id":"95d26468-9805-4f6f-86cb-87d4da9ae34c","variant_code":"porch-tile-memphis-v3","color_name":"MMP-13","color_code":"MMP-13","description":null,"is_active":true,"display_order":3,"is_hit":false},
+  {"item_id":"95d26468-9805-4f6f-86cb-87d4da9ae34c","variant_code":"porch-tile-memphis-v4","color_name":"MMP-14","color_code":"MMP-14","description":null,"is_active":true,"display_order":4,"is_hit":false},
+  {"item_id":"95d26468-9805-4f6f-86cb-87d4da9ae34c","variant_code":"porch-tile-memphis-v5","color_name":"MMP-15","color_code":"MMP-15","description":null,"is_active":true,"display_order":5,"is_hit":false}
+]

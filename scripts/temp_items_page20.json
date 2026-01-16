@@ -1,0 +1,35 @@
+[
+  {
+    "item_code": "porch-tile-nature2",
+    "name": "ネイチャーⅡ",
+    "manufacturer": "Nagoya mozaic",
+    "note": "300×300サイズ",
+    "catalog_url": "https://www.nagoya-mosaic.co.jp/",
+    "tags": ["porch-tile"],
+    "material_type": "タイル",
+    "is_active": true,
+    "display_order": 2
+  },
+  {
+    "item_code": "porch-tile-vespa",
+    "name": "ベスパ",
+    "manufacturer": "LIXIL",
+    "note": "300×300サイズ",
+    "catalog_url": "https://www.lixil.co.jp/lineup/tile/vespa/",
+    "tags": ["porch-tile"],
+    "material_type": "タイル",
+    "is_active": true,
+    "display_order": 3
+  },
+  {
+    "item_code": "porch-tile-memphis",
+    "name": "メンフィス",
+    "manufacturer": "LIXIL",
+    "note": "600×600 / 600×300サイズ",
+    "catalog_url": "https://www.lixil.co.jp/lineup/tile/memphis/",
+    "tags": ["porch-tile"],
+    "material_type": "タイル",
+    "is_active": true,
+    "display_order": 4
+  }
+]
