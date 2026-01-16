@@ -1,0 +1,35 @@
+[
+  {
+    "item_code": "window-apw430",
+    "name": "APW430",
+    "manufacturer": "YKKAP",
+    "note": "樹脂サッシ/トリプルガラス/アルゴンガス/熱貫流率0.90W/(㎡・K)/防火・非防火対応/全室カラー統一/LIFE・LIFE+は¥20,000×施工坪数",
+    "catalog_url": null,
+    "tags": ["window"],
+    "material_type": "窓",
+    "is_active": true,
+    "display_order": 2
+  },
+  {
+    "item_code": "window-option-sliding-door-22",
+    "name": "掃出し窓追加（22条地域）",
+    "manufacturer": "YKKAP",
+    "note": "窓オプション/~W1650:¥300,000、~W2560:¥400,000",
+    "catalog_url": null,
+    "tags": ["window-option"],
+    "material_type": "窓オプション",
+    "is_active": true,
+    "display_order": 7
+  },
+  {
+    "item_code": "window-option-sliding-door-fireproof",
+    "name": "掃出し窓追加（準防火・防火地域）",
+    "manufacturer": "YKKAP",
+    "note": "窓オプション/~W1650:¥400,000、~W2560:¥600,000",
+    "catalog_url": null,
+    "tags": ["window-option"],
+    "material_type": "窓オプション",
+    "is_active": true,
+    "display_order": 8
+  }
+]

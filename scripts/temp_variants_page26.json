@@ -1,0 +1,11 @@
+[
+  {"item_id":"b72e954f-d282-43c5-afb1-375d4aecb1a0","variant_code":"apw430-yw","color_name":"ホワイト×ホワイト","color_code":"YW","description":"外観:ホワイト/内観:ホワイト","is_active":true,"display_order":1,"is_hit":false},
+  {"item_id":"b72e954f-d282-43c5-afb1-375d4aecb1a0","variant_code":"apw430-j5","color_name":"ブラウン×ホワイト","color_code":"J5","description":"外観:ブラウン/内観:ホワイト","is_active":true,"display_order":2,"is_hit":false},
+  {"item_id":"b72e954f-d282-43c5-afb1-375d4aecb1a0","variant_code":"apw430-jo","color_name":"プラチナステン×ホワイト","color_code":"JO","description":"外観:プラチナステン/内観:ホワイト","is_active":true,"display_order":3,"is_hit":false},
+  {"item_id":"b72e954f-d282-43c5-afb1-375d4aecb1a0","variant_code":"apw430-3a","color_name":"ブラック×ホワイト","color_code":"3A","description":"外観:ブラック/内観:ホワイト","is_active":true,"display_order":4,"is_hit":false},
+  {"item_id":"b72e954f-d282-43c5-afb1-375d4aecb1a0","variant_code":"apw430-oc","color_name":"ブラック×ブラック","color_code":"OC","description":"外観:ブラック/内観:ブラック","is_active":true,"display_order":5,"is_hit":false},
+  {"item_id":"1817cb0a-095b-4538-a8ea-24b14395f2e8","variant_code":"window-opt-sliding-22-small","color_name":"~W1650","color_code":"SMALL","description":"幅1650mm以下","is_active":true,"display_order":1,"is_hit":false},
+  {"item_id":"1817cb0a-095b-4538-a8ea-24b14395f2e8","variant_code":"window-opt-sliding-22-large","color_name":"~W2560","color_code":"LARGE","description":"幅2560mm以下","is_active":true,"display_order":2,"is_hit":false},
+  {"item_id":"9a912bbc-0a2b-429e-9fab-f4251a789cd7","variant_code":"window-opt-sliding-fireproof-small","color_name":"~W1650","color_code":"SMALL","description":"幅1650mm以下","is_active":true,"display_order":1,"is_hit":false},
+  {"item_id":"9a912bbc-0a2b-429e-9fab-f4251a789cd7","variant_code":"window-opt-sliding-fireproof-large","color_name":"~W2560","color_code":"LARGE","description":"幅2560mm以下","is_active":true,"display_order":2,"is_hit":false}
+]
