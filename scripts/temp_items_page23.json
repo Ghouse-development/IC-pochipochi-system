@@ -1,0 +1,24 @@
+[
+  {
+    "item_code": "awning-alfin-ad2s",
+    "name": "アルフィン庇 AD2S",
+    "manufacturer": "アルフィン",
+    "note": "W1800×D900",
+    "catalog_url": null,
+    "tags": ["awning"],
+    "material_type": "庇",
+    "is_active": true,
+    "display_order": 1
+  },
+  {
+    "item_code": "awning-alfin-af95",
+    "name": "アルフィン庇 AF95シリーズ 木目調仕上げ",
+    "manufacturer": "アルフィン",
+    "note": "W1800×D950/屋根部と軒天面の2色選択",
+    "catalog_url": null,
+    "tags": ["awning"],
+    "material_type": "庇",
+    "is_active": true,
+    "display_order": 2
+  }
+]

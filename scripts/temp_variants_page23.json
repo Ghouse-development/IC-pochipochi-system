@@ -1,0 +1,21 @@
+[
+  {"item_id":"4bd2d341-a1ba-425b-9735-791aaa505746","variant_code":"awning-ad2s-sten","color_name":"ステンカラー","color_code":"STEN","description":null,"is_active":true,"display_order":1,"is_hit":false},
+  {"item_id":"4bd2d341-a1ba-425b-9735-791aaa505746","variant_code":"awning-ad2s-silver","color_name":"シルバー","color_code":"SILVER","description":null,"is_active":true,"display_order":2,"is_hit":false},
+  {"item_id":"4bd2d341-a1ba-425b-9735-791aaa505746","variant_code":"awning-ad2s-black","color_name":"ブラック","color_code":"BLACK","description":null,"is_active":true,"display_order":3,"is_hit":false},
+  {"item_id":"8557afab-fdb4-4fc2-9001-09e43b2b2f69","variant_code":"awning-af95-sten-hickory","color_name":"ステンカラー×ヒッコリー","color_code":"STEN-HICKORY","description":"屋根:ステンカラー/軒天:ヒッコリー","is_active":true,"display_order":1,"is_hit":false},
+  {"item_id":"8557afab-fdb4-4fc2-9001-09e43b2b2f69","variant_code":"awning-af95-sten-walnut","color_name":"ステンカラー×ウォルナット","color_code":"STEN-WALNUT","description":"屋根:ステンカラー/軒天:ウォルナット","is_active":true,"display_order":2,"is_hit":false},
+  {"item_id":"8557afab-fdb4-4fc2-9001-09e43b2b2f69","variant_code":"awning-af95-sten-teak","color_name":"ステンカラー×チーク","color_code":"STEN-TEAK","description":"屋根:ステンカラー/軒天:チーク","is_active":true,"display_order":3,"is_hit":false},
+  {"item_id":"8557afab-fdb4-4fc2-9001-09e43b2b2f69","variant_code":"awning-af95-sten-nara","color_name":"ステンカラー×ナラ","color_code":"STEN-NARA","description":"屋根:ステンカラー/軒天:ナラ","is_active":true,"display_order":4,"is_hit":false},
+  {"item_id":"8557afab-fdb4-4fc2-9001-09e43b2b2f69","variant_code":"awning-af95-silver-hickory","color_name":"シルバー×ヒッコリー","color_code":"SILVER-HICKORY","description":"屋根:シルバー/軒天:ヒッコリー","is_active":true,"display_order":5,"is_hit":false},
+  {"item_id":"8557afab-fdb4-4fc2-9001-09e43b2b2f69","variant_code":"awning-af95-silver-walnut","color_name":"シルバー×ウォルナット","color_code":"SILVER-WALNUT","description":"屋根:シルバー/軒天:ウォルナット","is_active":true,"display_order":6,"is_hit":false},
+  {"item_id":"8557afab-fdb4-4fc2-9001-09e43b2b2f69","variant_code":"awning-af95-silver-teak","color_name":"シルバー×チーク","color_code":"SILVER-TEAK","description":"屋根:シルバー/軒天:チーク","is_active":true,"display_order":7,"is_hit":false},
+  {"item_id":"8557afab-fdb4-4fc2-9001-09e43b2b2f69","variant_code":"awning-af95-silver-nara","color_name":"シルバー×ナラ","color_code":"SILVER-NARA","description":"屋根:シルバー/軒天:ナラ","is_active":true,"display_order":8,"is_hit":false},
+  {"item_id":"8557afab-fdb4-4fc2-9001-09e43b2b2f69","variant_code":"awning-af95-bronze-hickory","color_name":"ブロンズ×ヒッコリー","color_code":"BRONZE-HICKORY","description":"屋根:ブロンズ/軒天:ヒッコリー","is_active":true,"display_order":9,"is_hit":false},
+  {"item_id":"8557afab-fdb4-4fc2-9001-09e43b2b2f69","variant_code":"awning-af95-bronze-walnut","color_name":"ブロンズ×ウォルナット","color_code":"BRONZE-WALNUT","description":"屋根:ブロンズ/軒天:ウォルナット","is_active":true,"display_order":10,"is_hit":false},
+  {"item_id":"8557afab-fdb4-4fc2-9001-09e43b2b2f69","variant_code":"awning-af95-bronze-teak","color_name":"ブロンズ×チーク","color_code":"BRONZE-TEAK","description":"屋根:ブロンズ/軒天:チーク","is_active":true,"display_order":11,"is_hit":false},
+  {"item_id":"8557afab-fdb4-4fc2-9001-09e43b2b2f69","variant_code":"awning-af95-bronze-nara","color_name":"ブロンズ×ナラ","color_code":"BRONZE-NARA","description":"屋根:ブロンズ/軒天:ナラ","is_active":true,"display_order":12,"is_hit":false},
+  {"item_id":"8557afab-fdb4-4fc2-9001-09e43b2b2f69","variant_code":"awning-af95-black-hickory","color_name":"ブラック×ヒッコリー","color_code":"BLACK-HICKORY","description":"屋根:ブラック/軒天:ヒッコリー","is_active":true,"display_order":13,"is_hit":false},
+  {"item_id":"8557afab-fdb4-4fc2-9001-09e43b2b2f69","variant_code":"awning-af95-black-walnut","color_name":"ブラック×ウォルナット","color_code":"BLACK-WALNUT","description":"屋根:ブラック/軒天:ウォルナット","is_active":true,"display_order":14,"is_hit":false},
+  {"item_id":"8557afab-fdb4-4fc2-9001-09e43b2b2f69","variant_code":"awning-af95-black-teak","color_name":"ブラック×チーク","color_code":"BLACK-TEAK","description":"屋根:ブラック/軒天:チーク","is_active":true,"display_order":15,"is_hit":false},
+  {"item_id":"8557afab-fdb4-4fc2-9001-09e43b2b2f69","variant_code":"awning-af95-black-nara","color_name":"ブラック×ナラ","color_code":"BLACK-NARA","description":"屋根:ブラック/軒天:ナラ","is_active":true,"display_order":16,"is_hit":false}
+]
