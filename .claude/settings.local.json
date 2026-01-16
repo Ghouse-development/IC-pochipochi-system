@@ -45,7 +45,9 @@
       "Bash(powershell -Command \"Get-ChildItem -Path $env:USERPROFILE -Recurse -Filter ''auth.json'' -ErrorAction SilentlyContinue | Where-Object { $_FullName -like ''*vercel*'' } | Select-Object -First 1 -ExpandProperty FullName\")",
       "Bash(powershell -Command:*)",
       "Bash(vercel ls:*)",
-      "Bash(vercel --prod:*)"
+      "Bash(vercel --prod:*)",
+      "Bash(wc:*)",
+      "Bash(npx tsx:*)"
     ],
     "deny": [],
     "ask": []
