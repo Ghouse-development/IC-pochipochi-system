@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Check, ChevronLeft, Image as ImageIcon } from 'lucide-react';
+import { Check, ChevronLeft, Image as ImageIcon, X } from 'lucide-react';
 import { PageHeader } from './PageHeader';
 import { SelectionCard } from './SelectionCard';
 import { useCartStore } from '../../stores/useCartStore';
@@ -21,7 +21,120 @@ interface MultiColorAreaSelectorProps {
   onCancel: () => void;
 }
 
-// 商品カード（色選択内蔵）
+// 色選択モーダル
+interface ColorSelectModalProps {
+  product: Product;
+  onSelect: (variant: ProductVariant) => void;
+  onClose: () => void;
+}
+
+const ColorSelectModal: React.FC<ColorSelectModalProps> = ({ product, onSelect, onClose }) => {
+  const variants = product.variants || [];
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const getVariantImage = (variant: ProductVariant | undefined): string | null => {
+    if (!variant) return null;
+    return variant.images?.[0] || variant.imageUrl || null;
+  };
+
+  const currentVariant = variants[selectedIndex];
+  const currentImage = getVariantImage(currentVariant);
+
+  return (
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={onClose}>
+      <div
+        className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
+        onClick={e => e.stopPropagation()}
+      >
+        {/* ヘッダー */}
+        <div className="flex items-center justify-between p-4 border-b">
+          <h3 className="text-lg font-bold text-gray-800">{product.name} - 色を選択</h3>
+          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <div className="flex flex-col md:flex-row">
+          {/* メイン画像 */}
+          <div className="md:w-1/2 p-4">
+            <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl overflow-hidden">
+              {currentImage ? (
+                <img
+                  src={currentImage}
+                  alt={currentVariant?.color || ''}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center">
+                  <span className="text-4xl">🎨</span>
+                  <span className="text-sm text-gray-500 mt-2">{currentVariant?.color}</span>
+                </div>
+              )}
+            </div>
+            <p className="text-center mt-3 font-medium text-gray-800">
+              {currentVariant?.color || '色を選択してください'}
+            </p>
+          </div>
+
+          {/* 色一覧 */}
+          <div className="md:w-1/2 p-4 border-t md:border-t-0 md:border-l">
+            <p className="text-sm text-gray-600 mb-3">{variants.length}色から選択</p>
+            <div className="grid grid-cols-4 gap-2 max-h-[50vh] overflow-y-auto">
+              {variants.map((variant, idx) => {
+                const variantImage = getVariantImage(variant);
+                const isSelected = idx === selectedIndex;
+                return (
+                  <button
+                    key={variant.id}
+                    onClick={() => setSelectedIndex(idx)}
+                    className={`aspect-square rounded-lg border-2 overflow-hidden transition-all ${
+                      isSelected
+                        ? 'border-blue-500 ring-2 ring-blue-300'
+                        : 'border-gray-200 hover:border-blue-300'
+                    }`}
+                  >
+                    {variantImage ? (
+                      <img
+                        src={variantImage}
+                        alt={variant.color}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div
+                        className="w-full h-full flex items-center justify-center text-[10px] text-gray-500 p-1"
+                        style={{ backgroundColor: variant.colorCode || '#eee' }}
+                      >
+                        {variant.color}
+                      </div>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* フッター */}
+        <div className="p-4 border-t flex gap-3">
+          <button
+            onClick={onClose}
+            className="flex-1 py-3 px-4 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50"
+          >
+            キャンセル
+          </button>
+          <button
+            onClick={() => currentVariant && onSelect(currentVariant)}
+            className="flex-1 py-3 px-4 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700"
+          >
+            この色を選択
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// 商品カード（クリックで色選択モーダルを開く）
 interface ProductCardProps {
   product: Product;
   isSelected: boolean;
@@ -35,16 +148,17 @@ const ProductCard: React.FC<ProductCardProps> = ({
   selectedVariantId,
   onSelect,
 }) => {
-  const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
+  const [showColorModal, setShowColorModal] = useState(false);
+  const [displayVariantIndex, setDisplayVariantIndex] = useState(0);
 
   const variants = product.variants || [];
-  const currentVariant = variants[selectedVariantIndex] || variants[0];
+  const displayVariant = variants[displayVariantIndex] || variants[0];
 
   // 選択済みの場合、該当バリアントを表示
   useEffect(() => {
     if (isSelected && selectedVariantId) {
       const idx = variants.findIndex(v => v.id === selectedVariantId);
-      if (idx >= 0) setSelectedVariantIndex(idx);
+      if (idx >= 0) setDisplayVariantIndex(idx);
     }
   }, [isSelected, selectedVariantId, variants]);
 
@@ -53,116 +167,94 @@ const ProductCard: React.FC<ProductCardProps> = ({
     return variant.images?.[0] || variant.imageUrl || null;
   };
 
-  const currentImage = getVariantImage(currentVariant);
+  const currentImage = getVariantImage(displayVariant);
   const hasMultipleVariants = variants.length > 1;
 
-  const handleSelect = () => {
-    if (currentVariant) {
-      onSelect(product, currentVariant);
+  const handleCardClick = () => {
+    if (hasMultipleVariants) {
+      setShowColorModal(true);
+    } else if (displayVariant) {
+      onSelect(product, displayVariant);
     }
   };
 
+  const handleColorSelect = (variant: ProductVariant) => {
+    onSelect(product, variant);
+    setShowColorModal(false);
+    const idx = variants.findIndex(v => v.id === variant.id);
+    if (idx >= 0) setDisplayVariantIndex(idx);
+  };
+
   return (
-    <div
-      className={`bg-white rounded-lg overflow-hidden transition-all cursor-pointer ${
-        isSelected
-          ? 'border-2 border-blue-500 shadow-lg'
-          : 'border border-gray-200 hover:border-blue-300 hover:shadow-md'
-      }`}
-      onClick={handleSelect}
-    >
-      {/* 画像エリア */}
-      <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 relative">
-        {currentImage ? (
-          <img
-            src={currentImage}
-            alt={`${product.name} - ${currentVariant?.color || ''}`}
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center">
-            <span className="text-2xl">🎨</span>
-            {currentVariant?.color && (
-              <span className="text-xs text-gray-500">{currentVariant.color}</span>
-            )}
-            <div className="mt-1 flex items-center gap-1 text-gray-400">
-              <ImageIcon className="w-3 h-3" />
-              <span className="text-[10px]">画像準備中</span>
+    <>
+      <div
+        className={`bg-white rounded-lg overflow-hidden transition-all cursor-pointer ${
+          isSelected
+            ? 'border-2 border-blue-500 shadow-lg'
+            : 'border border-gray-200 hover:border-blue-300 hover:shadow-md'
+        }`}
+        onClick={handleCardClick}
+      >
+        {/* 画像エリア */}
+        <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 relative">
+          {currentImage ? (
+            <img
+              src={currentImage}
+              alt={`${product.name} - ${displayVariant?.color || ''}`}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full flex flex-col items-center justify-center">
+              <span className="text-2xl">🎨</span>
+              {displayVariant?.color && (
+                <span className="text-xs text-gray-500">{displayVariant.color}</span>
+              )}
+              <div className="mt-1 flex items-center gap-1 text-gray-400">
+                <ImageIcon className="w-3 h-3" />
+                <span className="text-[10px]">画像準備中</span>
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-
-        {/* 選択済みマーク */}
-        {isSelected && (
-          <div className="absolute top-1 right-1 bg-blue-500 rounded-full p-1">
-            <Check className="w-3 h-3 text-white" strokeWidth={3} />
-          </div>
-        )}
-      </div>
-
-      {/* 情報エリア */}
-      <div className="p-2">
-        <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
-          {product.name}
-        </h3>
-
-        {/* 価格・単位 */}
-        <div className="flex items-baseline gap-1 mt-1">
-          <span className="text-sm font-bold text-emerald-600">
-            標準
-          </span>
+          {/* 選択済みマーク */}
+          {isSelected && (
+            <div className="absolute top-1 right-1 bg-blue-500 rounded-full p-1">
+              <Check className="w-3 h-3 text-white" strokeWidth={3} />
+            </div>
+          )}
         </div>
 
-        {/* バリアント（色）選択サムネイル */}
-        {hasMultipleVariants && (
-          <div className="mt-2">
-            <div className="flex flex-wrap gap-1">
-              {variants.slice(0, 6).map((variant, idx) => {
-                const variantImage = getVariantImage(variant);
-                const isCurrentVariant = idx === selectedVariantIndex;
-                return (
-                  <button
-                    key={variant.id}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedVariantIndex(idx);
-                    }}
-                    className={`w-6 h-6 rounded border-2 overflow-hidden transition-all ${
-                      isCurrentVariant
-                        ? 'border-blue-500 ring-1 ring-blue-300'
-                        : 'border-gray-200 hover:border-blue-300'
-                    }`}
-                    title={variant.color}
-                  >
-                    {variantImage ? (
-                      <img
-                        src={variantImage}
-                        alt={variant.color}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div
-                        className="w-full h-full"
-                        style={{ backgroundColor: variant.colorCode || '#ccc' }}
-                      />
-                    )}
-                  </button>
-                );
-              })}
-              {variants.length > 6 && (
-                <span className="text-[10px] text-gray-400 self-center ml-1">
-                  +{variants.length - 6}
-                </span>
-              )}
-            </div>
-            <p className="text-[10px] text-gray-500 mt-1">
-              {currentVariant?.color || '色を選択'}
-            </p>
+        {/* 情報エリア */}
+        <div className="p-2">
+          <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
+            {product.name}
+          </h3>
+
+          {/* 価格・単位 */}
+          <div className="flex items-baseline gap-1 mt-1">
+            <span className="text-sm font-bold text-emerald-600">
+              標準
+            </span>
           </div>
-        )}
+
+          {/* 色数表示 */}
+          {hasMultipleVariants && (
+            <p className="text-[10px] text-blue-600 mt-1">
+              タップで{variants.length}色から選択 →
+            </p>
+          )}
+        </div>
       </div>
-    </div>
+
+      {/* 色選択モーダル */}
+      {showColorModal && (
+        <ColorSelectModal
+          product={product}
+          onSelect={handleColorSelect}
+          onClose={() => setShowColorModal(false)}
+        />
+      )}
+    </>
   );
 };
 
