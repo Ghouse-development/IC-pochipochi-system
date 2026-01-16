@@ -135,7 +135,6 @@ export function usePorchItems(selectedPlan: string) {
         console.error('Tile fetch error:', tileError);
         throw tileError;
       }
-      console.log('Fetched tiles:', tileItems?.length, tileItems);
 
       const convertedTiles = (tileItems as ItemWithDetails[] || []).map(item =>
         itemToTileOption(item, selectedPlan)
@@ -166,7 +165,6 @@ export function usePorchItems(selectedPlan: string) {
         console.error('Grout fetch error:', groutError);
         throw groutError;
       }
-      console.log('Fetched grout:', groutItems?.length, groutItems);
 
       const convertedGrout = (groutItems as ItemWithDetails[] || []).map(itemToGroutOption);
       setGroutColors(convertedGrout);

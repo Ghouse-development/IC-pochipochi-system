@@ -163,7 +163,8 @@ export function CategoryManager() {
       );
       toast.success('並べ替え完了', 'カテゴリの順序を更新しました');
       await loadCategories();
-    } catch (error) {
+    } catch (err) {
+      console.error('並べ替えの保存に失敗:', err);
       toast.error('エラー', '並べ替えの保存に失敗しました');
     }
   }, [categories, toast]);
