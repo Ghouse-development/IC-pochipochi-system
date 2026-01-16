@@ -1,0 +1,68 @@
+[
+  {
+    "item_code": "window-apw330",
+    "name": "APW330",
+    "manufacturer": "YKKAP",
+    "note": "樹脂サッシ/ペアガラス/アルゴンガス/熱貫流率1.31W/(㎡・K)/防火・非防火対応/全室カラー統一",
+    "catalog_url": null,
+    "tags": ["window"],
+    "material_type": "窓",
+    "is_active": true,
+    "display_order": 1
+  },
+  {
+    "item_code": "window-option-electric-shutter",
+    "name": "電動シャッターへ変更",
+    "manufacturer": "YKKAP",
+    "note": "窓オプション/~W1650:¥36,000、~W2560:¥120,000",
+    "catalog_url": null,
+    "tags": ["window-option"],
+    "material_type": "窓オプション",
+    "is_active": true,
+    "display_order": 2
+  },
+  {
+    "item_code": "window-option-fireproof-glass",
+    "name": "耐熱強化複層ガラス（網なし）",
+    "manufacturer": "YKKAP",
+    "note": "防火地域用/~W1650:¥18,000、~W2560:¥36,000",
+    "catalog_url": null,
+    "tags": ["window-option"],
+    "material_type": "窓オプション",
+    "is_active": true,
+    "display_order": 3
+  },
+  {
+    "item_code": "window-option-safety-glass",
+    "name": "安全合わせガラス（30mil）",
+    "manufacturer": "YKKAP",
+    "note": "窓オプション",
+    "catalog_url": null,
+    "tags": ["window-option"],
+    "material_type": "窓オプション",
+    "is_active": true,
+    "display_order": 4
+  },
+  {
+    "item_code": "window-option-add-22",
+    "name": "窓追加（22条地域）",
+    "manufacturer": "YKKAP",
+    "note": "窓オプション",
+    "catalog_url": null,
+    "tags": ["window-option"],
+    "material_type": "窓オプション",
+    "is_active": true,
+    "display_order": 5
+  },
+  {
+    "item_code": "window-option-add-fireproof",
+    "name": "窓追加（準防火・防火地域）",
+    "manufacturer": "YKKAP",
+    "note": "窓オプション",
+    "catalog_url": null,
+    "tags": ["window-option"],
+    "material_type": "窓オプション",
+    "is_active": true,
+    "display_order": 6
+  }
+]
