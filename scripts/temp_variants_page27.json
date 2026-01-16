@@ -1,0 +1,8 @@
+[
+  {"item_id":"65f5f256-f98a-43f1-830e-3acc0a112678","variant_code":"venato-d30-n08","color_name":"N08","color_code":"N08","description":"シンプルでモダンなデザイン/木調/4色展開","is_active":true,"display_order":1,"is_hit":false},
+  {"item_id":"65f5f256-f98a-43f1-830e-3acc0a112678","variant_code":"venato-d30-n18","color_name":"N18","color_code":"N18","description":"スタイリッシュデザイン/木調/12色展開","is_active":true,"display_order":2,"is_hit":false},
+  {"item_id":"65f5f256-f98a-43f1-830e-3acc0a112678","variant_code":"venato-d30-n15","color_name":"N15","color_code":"N15","description":"シンプルでナチュラルなデザイン/木調/8色展開","is_active":true,"display_order":3,"is_hit":false},
+  {"item_id":"65f5f256-f98a-43f1-830e-3acc0a112678","variant_code":"venato-d30-c10","color_name":"C10","color_code":"C10","description":"シンプルデザイン/多彩なカラー展開/20色以上","is_active":true,"display_order":4,"is_hit":false},
+  {"item_id":"3578d0dd-dc15-4c08-a6ce-76975bd18a7a","variant_code":"pocket-key-v1","color_name":"標準","color_code":"STD","description":"リモコンキー・タグキー付属","is_active":true,"display_order":1,"is_hit":false},
+  {"item_id":"2315aa9e-6c75-4f89-8072-9042248ed8e1","variant_code":"face-recognition-v1","color_name":"標準","color_code":"STD","description":"非防火地域のみ使用可能","is_active":true,"display_order":1,"is_hit":false}
+]

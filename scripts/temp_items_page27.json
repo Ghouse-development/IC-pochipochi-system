@@ -1,0 +1,35 @@
+[
+  {
+    "item_code": "entrance-door-venato-d30",
+    "name": "ヴェナートD30",
+    "manufacturer": "YKKAP",
+    "note": "防火・非防火対応/100V電気錠/機密性能・断熱性能の観点から窓無しの扉を標準設定・推奨",
+    "catalog_url": null,
+    "tags": ["entrance-door"],
+    "material_type": "玄関ドア",
+    "is_active": true,
+    "display_order": 1
+  },
+  {
+    "item_code": "entrance-door-pocket-key",
+    "name": "ポケットキー（電子錠）",
+    "manufacturer": "YKKAP",
+    "note": "リモコンキー・タグキーに非常用回転鎌錠カギが内蔵/ディンプルキータイプ/LIFE+・LACIE・HOURSは標準、LIFEはオプション",
+    "catalog_url": null,
+    "tags": ["entrance-door-option"],
+    "material_type": "玄関ドアオプション",
+    "is_active": true,
+    "display_order": 2
+  },
+  {
+    "item_code": "entrance-door-face-recognition",
+    "name": "顔認証キー",
+    "manufacturer": "YKKAP",
+    "note": "非防火地域のみ使用可能/音声ガイド付き/顔データの登録も簡単",
+    "catalog_url": null,
+    "tags": ["entrance-door-option"],
+    "material_type": "玄関ドアオプション",
+    "is_active": true,
+    "display_order": 3
+  }
+]
