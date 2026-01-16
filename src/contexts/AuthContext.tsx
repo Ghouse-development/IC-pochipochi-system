@@ -99,23 +99,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
       }
 
-      // If RLS blocks, use API endpoint
-      logger.info('Direct query failed, trying API endpoint');
-      const response = await fetch('/api/auth/get-user', {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${session.access_token}`,
-        },
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        logger.error('API error:', errorData);
-        return null;
-      }
-
-      const result = await response.json();
-      return result.user;
+      // RLSブロック - エラー詳細をログ
+      logger.error('User fetch failed with error:', error);
+      return null;
     } catch (err) {
       logger.error('Error fetching user data:', err);
       return null;
@@ -385,23 +371,9 @@ export function DemoAuthProvider({ children }: { children: ReactNode }) {
         return data;
       }
 
-      // If RLS blocks, use API endpoint
-      logger.info('Direct query failed, trying API endpoint');
-      const response = await fetch('/api/auth/get-user', {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${session.access_token}`,
-        },
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        logger.error('API error:', errorData);
-        return null;
-      }
-
-      const result = await response.json();
-      return result.user;
+      // RLSブロック - エラー詳細をログ
+      logger.error('User fetch failed in demo mode with error:', error);
+      return null;
     } catch (err) {
       logger.error('Error fetching user data:', err);
       return null;
