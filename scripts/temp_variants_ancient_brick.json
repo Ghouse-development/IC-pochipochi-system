@@ -1,0 +1,14 @@
+[
+  {"item_id":"692a7a26-7815-40f2-966f-32b556600f9b","variant_code":"ext-wall-ancient-brick-v1","color_name":"T1010","color_code":"T1010","munsell_value":"3.81Y 8.48/0.71","is_active":true,"display_order":1,"is_hit":false},
+  {"item_id":"692a7a26-7815-40f2-966f-32b556600f9b","variant_code":"ext-wall-ancient-brick-v2","color_name":"T3001","color_code":"T3001","munsell_value":"3.72GY 7.03/0.35","is_active":true,"display_order":2,"is_hit":false},
+  {"item_id":"692a7a26-7815-40f2-966f-32b556600f9b","variant_code":"ext-wall-ancient-brick-v3","color_name":"T3005","color_code":"T3005","munsell_value":"4.22Y 6.99/0.88","is_active":true,"display_order":3,"is_hit":false},
+  {"item_id":"692a7a26-7815-40f2-966f-32b556600f9b","variant_code":"ext-wall-ancient-brick-v4","color_name":"T3009","color_code":"T3009","munsell_value":"9.18YR 6.96/1.29","is_active":true,"display_order":4,"is_hit":false},
+  {"item_id":"692a7a26-7815-40f2-966f-32b556600f9b","variant_code":"ext-wall-ancient-brick-v5","color_name":"T3010","color_code":"T3010","munsell_value":"4.41Y 6.94/1.17","is_active":true,"display_order":5,"is_hit":true},
+  {"item_id":"692a7a26-7815-40f2-966f-32b556600f9b","variant_code":"ext-wall-ancient-brick-v6","color_name":"T3400","color_code":"T3400","munsell_value":"8.82Y 7.64/0.22","is_active":true,"display_order":6,"is_hit":false},
+  {"item_id":"692a7a26-7815-40f2-966f-32b556600f9b","variant_code":"ext-wall-ancient-brick-v7","color_name":"T4001","color_code":"T4001","munsell_value":"5.96GY 5.66/0.31","is_active":true,"display_order":7,"is_hit":false},
+  {"item_id":"692a7a26-7815-40f2-966f-32b556600f9b","variant_code":"ext-wall-ancient-brick-v8","color_name":"T4024","color_code":"T4024","munsell_value":"2.36Y 5.55/2.86","is_active":true,"display_order":8,"is_hit":false},
+  {"item_id":"692a7a26-7815-40f2-966f-32b556600f9b","variant_code":"ext-wall-ancient-brick-v9","color_name":"T4403","color_code":"T4403","munsell_value":"0.23G 5.50/0.17","is_active":true,"display_order":9,"is_hit":false},
+  {"item_id":"692a7a26-7815-40f2-966f-32b556600f9b","variant_code":"ext-wall-ancient-brick-v10","color_name":"T5009","color_code":"T5009","munsell_value":"9.12YR 4.62/0.83","is_active":true,"display_order":10,"is_hit":false},
+  {"item_id":"692a7a26-7815-40f2-966f-32b556600f9b","variant_code":"ext-wall-ancient-brick-v11","color_name":"T5403","color_code":"T5403","munsell_value":"4.60BG 4.44/0.2","is_active":true,"display_order":11,"is_hit":false},
+  {"item_id":"692a7a26-7815-40f2-966f-32b556600f9b","variant_code":"ext-wall-ancient-brick-v12","color_name":"T6013","color_code":"T6013","munsell_value":"1.68PB 3.49/0.23","is_active":true,"display_order":12,"is_hit":false}
+]

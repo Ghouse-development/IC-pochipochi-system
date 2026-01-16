@@ -1,0 +1,11 @@
+{
+  "item_code": "ext-wall-meteor",
+  "name": "ミーティア",
+  "manufacturer": "AICA",
+  "note": "ジョリパットネオJQ-620 / 筋が出やすく目立つことがあります",
+  "catalog_url": "https://www.aica.co.jp/products/wall-material/jolypate/",
+  "tags": ["exterior-wall", "jolypate", "aica"],
+  "material_type": "塗り壁",
+  "is_active": true,
+  "display_order": 21
+}
