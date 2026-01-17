@@ -82,59 +82,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         logger.warn('API not available, trying direct query:', apiError);
       }
 
-      // フォールバック: 直接Supabaseクエリ（開発環境用）
-      const { data, error } = await supabase
-        .from('users')
-        .select('*')
-        .eq('auth_id', session.user.id)
-        .single();
+      // フォールバック削除 - API失敗時はユーザー作成を試みる
+      console.log('[AuthContext] API failed, trying to create user via init-admin...');
+      try {
+        const createResponse = await fetch('/api/auth/init-admin', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: session.user.email,
+            auth_id: session.user.id,
+          }),
+        });
 
-      if (!error && data) {
-        // ブートストラップ管理者の場合、権限を自動修正
-        const email = session.user.email?.toLowerCase() || '';
-        if (BOOTSTRAP_ADMIN_EMAILS.includes(email) && data.role !== 'admin') {
-          logger.info('Upgrading bootstrap admin:', email);
-          const { data: updatedData } = await supabase
-            .from('users')
-            .update({ role: 'admin' })
-            .eq('id', data.id)
-            .select()
-            .single();
-          return updatedData || data;
-        }
-        return data;
-      }
-
-      // User not found in users table - create record via API
-      if (error?.code === 'PGRST116') { // No rows found
-        logger.info('User not in users table, creating via API...');
-        try {
-          const createResponse = await fetch('/api/auth/init-admin', {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${session.access_token}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              email: session.user.email,
-              auth_id: session.user.id,
-            }),
-          });
-
-          if (createResponse.ok) {
-            const { user: newUser } = await createResponse.json();
-            if (newUser) {
-              logger.info('User record created via API:', newUser.email, 'role:', newUser.role);
-              return newUser;
-            }
+        console.log('[AuthContext] init-admin response:', createResponse.status);
+        if (createResponse.ok) {
+          const { user: newUser } = await createResponse.json();
+          if (newUser) {
+            console.log('[AuthContext] User created/fetched via init-admin:', newUser.email);
+            logger.info('User record created via API:', newUser.email, 'role:', newUser.role);
+            return newUser;
           }
-        } catch (createError) {
-          logger.error('Error creating user via API:', createError);
         }
+      } catch (createError) {
+        console.log('[AuthContext] init-admin error:', createError);
+        logger.error('Error creating user via API:', createError);
       }
 
-      // RLSブロック - エラー詳細をログ
-      logger.error('User fetch failed with error:', error);
+      // API完全失敗
+      logger.error('User fetch completely failed - API not available');
       return null;
     } catch (err) {
       logger.error('Error fetching user data:', err);
@@ -415,19 +393,33 @@ export function DemoAuthProvider({ children }: { children: ReactNode }) {
         logger.warn('API not available in demo mode, trying direct query');
       }
 
-      // フォールバック: 直接Supabaseクエリ（開発環境用）
-      const { data, error } = await supabase
-        .from('users')
-        .select('*')
-        .eq('auth_id', session.user.id)
-        .single();
+      // フォールバック削除 - API失敗時はユーザー作成を試みる
+      console.log('[AuthContext Demo] API failed, trying init-admin...');
+      try {
+        const createResponse = await fetch('/api/auth/init-admin', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: session.user.email,
+            auth_id: session.user.id,
+          }),
+        });
 
-      if (!error && data) {
-        return data;
+        if (createResponse.ok) {
+          const { user: newUser } = await createResponse.json();
+          if (newUser) {
+            console.log('[AuthContext Demo] User via init-admin:', newUser.email);
+            return newUser;
+          }
+        }
+      } catch (createError) {
+        logger.error('Error in demo init-admin:', createError);
       }
 
-      // RLSブロック - エラー詳細をログ
-      logger.error('User fetch failed in demo mode with error:', error);
+      logger.error('User fetch failed in demo mode - API not available');
       return null;
     } catch (err) {
       logger.error('Error fetching user data:', err);
