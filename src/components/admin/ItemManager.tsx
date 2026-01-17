@@ -1153,7 +1153,21 @@ function ImportItemsModal({
             <p className="text-sm text-gray-700 mb-2">
               テンプレートファイルをダウンロードして、アイテム情報を入力してください。
             </p>
-            <button className="text-blue-600 hover:text-blue-700 text-sm font-medium">
+            <button
+              className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+              onClick={() => {
+                // CSVテンプレートをダウンロード
+                const template = 'data:text/csv;charset=utf-8,' +
+                  'name,category_id,subcategory,manufacturer,product_code,description,unit,is_standard\n' +
+                  '商品名,カテゴリID,サブカテゴリ,メーカー,製品コード,説明,単位,標準（true/false）\n';
+                const link = document.createElement('a');
+                link.setAttribute('href', encodeURI(template));
+                link.setAttribute('download', 'item_import_template.csv');
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+              }}
+            >
               <Download className="w-4 h-4 inline mr-1" />
               テンプレートをダウンロード
             </button>

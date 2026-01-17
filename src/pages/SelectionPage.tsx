@@ -38,6 +38,7 @@ export function SelectionPage({ projectId, onBack }: SelectionPageProps) {
   const [selectedVariant, setSelectedVariant] = useState<ItemVariant | null>(null);
   const [showCartSummary, setShowCartSummary] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [zoomedImage, setZoomedImage] = useState<string | null>(null);
 
   // Load project and categories
   useEffect(() => {
@@ -459,7 +460,16 @@ export function SelectionPage({ projectId, onBack }: SelectionPageProps) {
                     No Image
                   </div>
                 )}
-                <button className="absolute bottom-2 right-2 p-2 bg-white/80 rounded-full hover:bg-white">
+                <button
+                  className="absolute bottom-2 right-2 p-2 bg-white/80 rounded-full hover:bg-white"
+                  onClick={() => {
+                    const imageUrl = selectedVariant?.images?.[0]?.image_url ||
+                      selectedItem.variants?.[0]?.images?.[0]?.image_url;
+                    if (imageUrl) {
+                      setZoomedImage(imageUrl);
+                    }
+                  }}
+                >
                   <ZoomIn className="w-5 h-5" />
                 </button>
               </div>
@@ -568,6 +578,27 @@ export function SelectionPage({ projectId, onBack }: SelectionPageProps) {
       )}
 
       {/* Cart summary modal */}
+      {/* Zoom Modal */}
+      {zoomedImage && (
+        <div
+          className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center"
+          onClick={() => setZoomedImage(null)}
+        >
+          <button
+            className="absolute top-4 right-4 p-2 bg-white/20 hover:bg-white/30 rounded-full text-white"
+            onClick={() => setZoomedImage(null)}
+          >
+            <X className="w-6 h-6" />
+          </button>
+          <img
+            src={zoomedImage}
+            alt="拡大画像"
+            className="max-w-[90vw] max-h-[90vh] object-contain"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
+
       {showCartSummary && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-end md:items-center justify-center">
           <div className="bg-white w-full max-w-lg md:rounded-2xl rounded-t-2xl max-h-[80vh] overflow-hidden flex flex-col">

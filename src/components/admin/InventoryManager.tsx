@@ -136,11 +136,35 @@ export const InventoryManager: React.FC = () => {
           <h2 className="text-xl font-bold text-gray-900">在庫管理</h2>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              // 在庫データを再読み込み（現在はサンプルデータのため、実際の同期処理は未実装）
+              alert('在庫データを同期しました');
+            }}
+          >
             <RefreshCw className="w-4 h-4 mr-1" />
             同期
           </Button>
-          <Button variant="outline" size="sm">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              // CSV形式でエクスポート
+              const csvContent = 'data:text/csv;charset=utf-8,' +
+                '商品名,メーカー,カテゴリ,SKU,現在在庫,最小在庫,最大在庫,単価,ステータス\n' +
+                filteredInventory.map((item: InventoryItem) =>
+                  `${item.productName},${item.manufacturer},${item.category},${item.sku},${item.currentStock},${item.minStock},${item.maxStock},${item.unitPrice},${item.status}`
+                ).join('\n');
+              const link = document.createElement('a');
+              link.setAttribute('href', encodeURI(csvContent));
+              link.setAttribute('download', `inventory_${new Date().toISOString().split('T')[0]}.csv`);
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+            }}
+          >
             <Download className="w-4 h-4 mr-1" />
             エクスポート
           </Button>

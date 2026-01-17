@@ -67,6 +67,7 @@ const generateMockData = (): { companyStats: CompanyStats; staffData: StaffSales
 export const StaffOptionDashboard: React.FC = () => {
   const [selectedPeriod, setSelectedPeriod] = useState<'month' | 'quarter' | 'year'>('month');
   const [selectedStaff, setSelectedStaff] = useState<string | null>(null);
+  const [showFilterMenu, setShowFilterMenu] = useState(false);
 
   const { companyStats, staffData } = useMemo(() => generateMockData(), []);
 
@@ -199,10 +200,36 @@ export const StaffOptionDashboard: React.FC = () => {
               <Users className="w-5 h-5 text-gray-600" />
               <h3 className="text-lg font-bold text-gray-900">担当者別実績</h3>
             </div>
-            <button className="flex items-center gap-2 px-3 py-1.5 text-sm bg-gray-100 rounded-lg hover:bg-gray-200:bg-gray-600 transition-colors">
-              <Filter className="w-4 h-4" />
-              フィルター
-            </button>
+            <div className="relative">
+              <button
+                className="flex items-center gap-2 px-3 py-1.5 text-sm bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                onClick={() => setShowFilterMenu(!showFilterMenu)}
+              >
+                <Filter className="w-4 h-4" />
+                フィルター
+              </button>
+              {showFilterMenu && (
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-10">
+                  <button
+                    className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50"
+                    onClick={() => { setSelectedStaff(null); setShowFilterMenu(false); }}
+                  >
+                    すべて表示
+                  </button>
+                  {staffData.map((staff) => (
+                    <button
+                      key={staff.staffId}
+                      className={`w-full px-4 py-2 text-left text-sm hover:bg-gray-50 ${
+                        selectedStaff === staff.staffId ? 'bg-blue-50 text-blue-600' : ''
+                      }`}
+                      onClick={() => { setSelectedStaff(staff.staffId); setShowFilterMenu(false); }}
+                    >
+                      {staff.staffName}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
@@ -219,11 +246,13 @@ export const StaffOptionDashboard: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {staffData.map((staff) => (
+              {staffData
+                .filter(staff => !selectedStaff || staff.staffId === selectedStaff)
+                .map((staff) => (
                   <tr
                     key={staff.staffId}
                     onClick={() => setSelectedStaff(selectedStaff === staff.staffId ? null : staff.staffId)}
-                    className={`hover:bg-gray-50:bg-gray-900/30 cursor-pointer transition-colors ${
+                    className={`hover:bg-gray-50 cursor-pointer transition-colors ${
                       selectedStaff === staff.staffId ? 'bg-blue-50' : ''
                     }`}
                   >
