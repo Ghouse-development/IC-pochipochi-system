@@ -40,7 +40,7 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
     id: 'cart',
     title: 'カートと商品選択',
     description: '右上のカートアイコンをクリックすると、選択した商品の一覧が表示されます。数量変更や削除も可能です。',
-    icon: <ShoppingCart className="w-8 h-8 text-green-500" />,
+    icon: <ShoppingCart className="w-8 h-8 text-blue-500" />,
     tips: [
       '商品を追加すると右上にバッジ数が増えます',
       'カート内で数量を調整できます',

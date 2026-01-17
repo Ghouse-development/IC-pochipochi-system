@@ -400,7 +400,7 @@ export const ShowroomEstimateManager: React.FC<ShowroomEstimateManagerProps> = (
 
               <button
                 onClick={handleImportFromText}
-                className="w-full py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:from-green-600 hover:to-emerald-600 transition-all"
+                className="w-full py-3 bg-gradient-to-r from-blue-500 to-blue-500 text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:from-blue-600 hover:to-blue-600 transition-all"
               >
                 <Upload className="w-5 h-5" />
                 インポート実行

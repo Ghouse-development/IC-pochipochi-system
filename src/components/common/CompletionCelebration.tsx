@@ -155,9 +155,9 @@ export const CompletionCelebration: React.FC<CompletionCelebrationProps> = ({
 
   return (
     <div className="fixed inset-x-0 top-16 z-50 flex justify-center px-4 animate-slide-down">
-      <div className="max-w-lg w-full bg-white rounded-2xl shadow-2xl border-2 border-green-200 overflow-hidden">
+      <div className="max-w-lg w-full bg-white rounded-2xl shadow-2xl border-2 border-blue-200 overflow-hidden">
         {/* ヘッダー */}
-        <div className="bg-gradient-to-r from-green-400 to-emerald-500 px-6 py-4 text-white">
+        <div className="bg-gradient-to-r from-blue-400 to-blue-500 px-6 py-4 text-white">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="bg-white/20 rounded-full p-2">
@@ -167,7 +167,7 @@ export const CompletionCelebration: React.FC<CompletionCelebrationProps> = ({
                 <h3 className="font-bold text-lg">
                   {allComplete ? 'すべて完了！' : `${currentConfig.name}の選択が完了しました！`}
                 </h3>
-                <p className="text-green-100 text-sm">
+                <p className="text-blue-100 text-sm">
                   {allComplete
                     ? 'すべてのカテゴリの選択が終わりました'
                     : 'お疲れ様でした。次へ進みましょう'}
@@ -209,8 +209,8 @@ export const CompletionCelebration: React.FC<CompletionCelebrationProps> = ({
           ) : (
             <>
               <div className="flex items-center gap-4 mb-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                  <CheckCircle2 className="w-6 h-6 text-green-600" />
+                <div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                  <CheckCircle2 className="w-6 h-6 text-blue-600" />
                 </div>
                 <div className="flex-1">
                   <p className="text-gray-600">

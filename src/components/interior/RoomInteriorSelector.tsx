@@ -461,7 +461,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
           </div>
           <div className="h-2 bg-white/20 rounded-full overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-yellow-400 to-green-400 transition-all duration-300"
+              className="h-full bg-gradient-to-r from-yellow-400 to-blue-400 transition-all duration-300"
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -490,7 +490,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
 
           <button
             onClick={applyStandardItems}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-white text-green-600 rounded-full text-xs font-medium hover:bg-green-100:bg-gray-600 transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-white text-blue-600 rounded-full text-xs font-medium hover:bg-blue-100:bg-gray-600 transition-colors"
           >
             <Wand2 className="w-3.5 h-3.5" />
             標準仕様で自動設定
@@ -698,7 +698,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
                       key={room.roomId}
                       className={`border rounded-xl overflow-hidden transition-colors ${
                         isComplete
-                          ? 'border-green-300 bg-green-50/50'
+                          ? 'border-blue-300 bg-blue-50/50'
                           : 'border-gray-200'
                       }`}
                     >
@@ -712,7 +712,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
                           <span className="font-medium text-gray-900">{room.roomName}</span>
                           <span className={`text-xs px-2 py-0.5 rounded-full ${
                             isComplete
-                              ? 'bg-green-100 text-green-700'
+                              ? 'bg-blue-100 text-blue-700'
                               : 'bg-gray-100 text-gray-500'
                           }`}>
                             {isComplete ? (
@@ -900,7 +900,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
         <div className="p-4 bg-gray-50 border-t border-gray-200">
           <button
             onClick={() => setShowConfirmAddToCart(true)}
-            className="w-full py-3 bg-gradient-to-r from-blue-500 to-emerald-500 text-white rounded-xl font-bold hover:from-blue-600 hover:to-emerald-600 transition-colors flex items-center justify-center gap-2"
+            className="w-full py-3 bg-gradient-to-r from-blue-500 to-blue-500 text-white rounded-xl font-bold hover:from-blue-600 hover:to-blue-600 transition-colors flex items-center justify-center gap-2"
           >
             <Check className="w-5 h-5" />
             内装設定をカートに追加
@@ -1024,7 +1024,7 @@ export const RoomInteriorSelector: React.FC<RoomInteriorSelectorProps> = ({
                           const price = product.pricing.find(
                             p => p.plan === 'LACIE' || p.planId === 'LACIE'
                           )?.price ?? 0;
-                          return price === 0 ? 'text-green-600' : 'text-gray-900';
+                          return price === 0 ? 'text-blue-600' : 'text-gray-900';
                         })()
                       }`}>
                         {(() => {

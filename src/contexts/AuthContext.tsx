@@ -1,10 +1,20 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
-import { supabase } from '../lib/supabase';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import type { User as SupabaseUser, Session } from '@supabase/supabase-js';
 import type { User, UserRole } from '../types/database';
 import { createLogger } from '../lib/logger';
 
 const logger = createLogger('AuthContext');
+
+// タイムアウト付きPromise
+const withTimeout = <T,>(promise: Promise<T>, ms: number, errorMessage: string): Promise<T> => {
+  return Promise.race([
+    promise,
+    new Promise<T>((_, reject) =>
+      setTimeout(() => reject(new Error(errorMessage)), ms)
+    ),
+  ]);
+};
 
 interface AuthContextType {
   // Supabase Auth
@@ -52,15 +62,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return null;
       }
 
-      // API経由でユーザーデータを取得（サービスロールでRLSをバイパス）
+      // API経由でユーザーデータを取得（サービスロールでRLSをバイパス）- 8秒タイムアウト
       try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 8000);
+
         const response = await fetch('/api/auth/get-user', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${session.access_token}`,
             'Content-Type': 'application/json',
           },
+          signal: controller.signal,
         });
+
+        clearTimeout(timeoutId);
 
         if (response.ok) {
           const { user } = await response.json();
@@ -70,14 +86,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           }
         } else {
           const errorText = await response.text();
-          logger.warn('API fetch failed, trying direct query:', errorText);
+          logger.warn('API fetch failed:', errorText);
         }
       } catch (apiError) {
-        logger.warn('API not available, trying direct query:', apiError);
+        if (apiError instanceof Error && apiError.name === 'AbortError') {
+          logger.warn('API fetch timed out after 8 seconds');
+        } else {
+          logger.warn('API not available:', apiError);
+        }
       }
 
-      // フォールバック削除 - API失敗時はユーザー作成を試みる
+      // フォールバック: ユーザー作成を試みる（5秒タイムアウト）
       try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+
         const createResponse = await fetch('/api/auth/init-admin', {
           method: 'POST',
           headers: {
@@ -88,7 +111,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             email: session.user.email,
             auth_id: session.user.id,
           }),
+          signal: controller.signal,
         });
+
+        clearTimeout(timeoutId);
 
         if (createResponse.ok) {
           const { user: newUser } = await createResponse.json();
@@ -98,12 +124,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           }
         }
       } catch (createError) {
-        logger.error('Error creating user via API:', createError);
+        if (createError instanceof Error && createError.name === 'AbortError') {
+          logger.warn('User creation timed out');
+        } else {
+          logger.error('Error creating user via API:', createError);
+        }
       }
 
-      // API完全失敗
-      logger.error('User fetch completely failed - API not available');
-      return null;
+      // API完全失敗 - 仮のユーザーオブジェクトを返す（ログインは許可）
+      logger.warn('User fetch failed - creating minimal user object for login');
+      return {
+        id: session.user.id,
+        auth_id: session.user.id,
+        email: session.user.email || '',
+        full_name: session.user.email?.split('@')[0] || 'User',
+        role: BOOTSTRAP_ADMIN_EMAILS.includes((session.user.email || '').toLowerCase()) ? 'admin' : 'user',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      } as User;
     } catch (err) {
       logger.error('Error fetching user data:', err);
       return null;
@@ -236,12 +274,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    // Supabaseが設定されていない場合は即座にエラー
+    if (!isSupabaseConfigured) {
+      logger.error('Supabase is not configured - cannot sign in');
+      return { error: new Error('認証サーバーに接続できません。システム管理者に連絡してください。') };
+    }
 
-    return { error: error ? new Error(error.message) : null };
+    try {
+      logger.info('Attempting sign in for:', email);
+
+      // 10秒のタイムアウト付きでログイン試行
+      const { error, data } = await withTimeout(
+        supabase.auth.signInWithPassword({ email, password }),
+        10000,
+        'ログインがタイムアウトしました。ネットワーク接続を確認してください。'
+      );
+
+      if (error) {
+        logger.error('Sign in error:', error.message);
+        return { error: new Error(error.message) };
+      }
+
+      logger.info('Sign in successful, session:', data.session ? 'obtained' : 'null');
+      return { error: null };
+    } catch (err) {
+      logger.error('Sign in exception:', err);
+      return { error: err instanceof Error ? err : new Error('ログインに失敗しました') };
+    }
   };
 
   const signUp = async (email: string, password: string, fullName: string) => {

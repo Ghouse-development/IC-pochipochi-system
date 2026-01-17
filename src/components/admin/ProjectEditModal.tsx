@@ -618,7 +618,7 @@ export function ProjectEditModal({ projectId, isOpen, onClose, onSave }: Project
                     }`}
                   >
                     {isCompleted ? (
-                      <Check className="w-5 h-5 text-green-500" />
+                      <Check className="w-5 h-5 text-blue-500" />
                     ) : (
                       <Icon className="w-5 h-5" />
                     )}

@@ -81,7 +81,7 @@ export function ProjectManager({ onSelectProject }: ProjectManagerProps) {
     const styles: Record<string, string> = {
       draft: 'bg-gray-100 text-gray-700',
       active: 'bg-blue-100 text-blue-700',
-      confirmed: 'bg-green-100 text-green-700',
+      confirmed: 'bg-blue-100 text-blue-700',
       completed: 'bg-purple-100 text-purple-700',
       cancelled: 'bg-red-100 text-red-700',
     };
@@ -405,7 +405,7 @@ function StatCard({
   const colors: Record<string, string> = {
     gray: 'bg-gray-50 text-gray-600',
     blue: 'bg-blue-50 text-blue-600',
-    green: 'bg-green-50 text-green-600',
+    green: 'bg-blue-50 text-blue-600',
     purple: 'bg-purple-50 text-purple-600',
     red: 'bg-red-50 text-red-600',
   };

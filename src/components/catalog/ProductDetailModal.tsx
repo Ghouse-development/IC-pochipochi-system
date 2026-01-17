@@ -299,7 +299,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
               </div>
 
               {/* 価格 */}
-              <div className="bg-gradient-to-r from-blue-50 to-emerald-50 rounded-xl p-4">
+              <div className="bg-gradient-to-r from-blue-50 to-blue-50 rounded-xl p-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs text-gray-500 mb-1">単価（税別）</p>

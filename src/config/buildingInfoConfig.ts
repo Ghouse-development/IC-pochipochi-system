@@ -472,6 +472,10 @@ export interface BuildingInfo {
   gas_work?: string;
   iron_stairs_1f_2f?: string;
   iron_stairs_2f_3f?: string;
+  // 面積情報（数値入力）
+  exterior_wall_area?: number; // 外壁面積（㎡）
+  eaves_area?: number; // 軒裏面積（㎡）
+  total_floor_area?: number; // 延床面積（㎡）
 }
 
 // デフォルト値

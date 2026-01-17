@@ -39,9 +39,9 @@ const variantConfig = {
   },
   success: {
     icon: CheckCircle,
-    iconBg: 'bg-green-100',
-    iconColor: 'text-green-600',
-    confirmBg: 'bg-green-600 hover:bg-green-700 focus:ring-green-500',
+    iconBg: 'bg-blue-100',
+    iconColor: 'text-blue-600',
+    confirmBg: 'bg-blue-600 hover:bg-blue-700 focus:ring-blue-500',
   },
 };
 

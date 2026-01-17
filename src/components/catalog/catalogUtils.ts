@@ -518,8 +518,8 @@ export const RECOMMEND_BADGES: Record<Exclude<RecommendBadgeType, null>, Recomme
   beginner: {
     type: 'beginner',
     label: '初心者向け',
-    color: 'text-green-700',
-    bgColor: 'bg-green-100 border-green-300',
+    color: 'text-blue-700',
+    bgColor: 'bg-blue-100 border-blue-300',
   },
   'cost-effective': {
     type: 'cost-effective',

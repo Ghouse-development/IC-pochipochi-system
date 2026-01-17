@@ -77,7 +77,7 @@ export function AuditLogViewer() {
   const getActionIcon = (action: string) => {
     switch (action) {
       case 'INSERT':
-        return <Plus className="w-4 h-4 text-green-600" />;
+        return <Plus className="w-4 h-4 text-blue-600" />;
       case 'UPDATE':
         return <Edit className="w-4 h-4 text-blue-600" />;
       case 'DELETE':
@@ -90,7 +90,7 @@ export function AuditLogViewer() {
   const getActionColor = (action: string) => {
     switch (action) {
       case 'INSERT':
-        return 'bg-green-100 text-green-800';
+        return 'bg-blue-100 text-blue-800';
       case 'UPDATE':
         return 'bg-blue-100 text-blue-800';
       case 'DELETE':
@@ -301,9 +301,9 @@ export function AuditLogViewer() {
                   </div>
 
                   <div className="grid grid-cols-3 gap-4 mb-3">
-                    <div className="text-center p-2 bg-green-50 rounded">
-                      <Plus className="w-4 h-4 text-green-600 mx-auto mb-1" />
-                      <div className="text-2xl font-bold text-green-600">{summary.inserts}</div>
+                    <div className="text-center p-2 bg-blue-50 rounded">
+                      <Plus className="w-4 h-4 text-blue-600 mx-auto mb-1" />
+                      <div className="text-2xl font-bold text-blue-600">{summary.inserts}</div>
                       <div className="text-xs text-gray-600">追加</div>
                     </div>
                     <div className="text-center p-2 bg-blue-50 rounded">

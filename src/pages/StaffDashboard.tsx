@@ -123,8 +123,8 @@ export const StaffDashboard: React.FC<StaffDashboardProps> = ({ onBack }) => {
 
         <div className="bg-white rounded-xl shadow-sm border p-6">
           <div className="flex items-center gap-4">
-            <div className="p-3 bg-green-100 rounded-lg">
-              <CheckCircle className="w-6 h-6 text-green-600" />
+            <div className="p-3 bg-blue-100 rounded-lg">
+              <CheckCircle className="w-6 h-6 text-blue-600" />
             </div>
             <div>
               <p className="text-3xl font-bold text-gray-900">
@@ -162,7 +162,7 @@ export const StaffDashboard: React.FC<StaffDashboardProps> = ({ onBack }) => {
                 projectStatus === 'draft' ? 'bg-gray-100 text-gray-600' :
                 projectStatus === 'customer_selecting' ? 'bg-blue-100 text-blue-600' :
                 projectStatus === 'ic_review' ? 'bg-orange-100 text-orange-600' :
-                projectStatus === 'confirmed' ? 'bg-green-100 text-green-600' :
+                projectStatus === 'confirmed' ? 'bg-blue-100 text-blue-600' :
                 'bg-purple-100 text-purple-600'
               }`}>
                 {projectStatus === 'draft' ? '下書き' :
@@ -235,8 +235,8 @@ export const StaffDashboard: React.FC<StaffDashboardProps> = ({ onBack }) => {
             }}
             className="p-4 text-center hover:bg-gray-50 rounded-lg transition-colors group"
           >
-            <div className="p-3 bg-green-100 rounded-lg inline-block mb-2 group-hover:bg-green-200 transition-colors">
-              <CheckCircle className="w-6 h-6 text-green-600" />
+            <div className="p-3 bg-blue-100 rounded-lg inline-block mb-2 group-hover:bg-blue-200 transition-colors">
+              <CheckCircle className="w-6 h-6 text-blue-600" />
             </div>
             <p className="text-sm font-medium text-gray-900">確定フロー</p>
           </button>
@@ -397,7 +397,7 @@ export const StaffDashboard: React.FC<StaffDashboardProps> = ({ onBack }) => {
                     onClick={() => setReviewSubTab(tab.id)}
                     className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${
                       reviewSubTab === tab.id
-                        ? 'bg-green-100 text-green-700'
+                        ? 'bg-blue-100 text-blue-700'
                         : 'text-gray-600 hover:bg-gray-100'
                     }`}
                     title={tab.label}
@@ -449,7 +449,7 @@ export const StaffDashboard: React.FC<StaffDashboardProps> = ({ onBack }) => {
                 projectStatus === 'draft' ? 'bg-gray-100 text-gray-600' :
                 projectStatus === 'customer_selecting' ? 'bg-blue-100 text-blue-600' :
                 projectStatus === 'ic_review' ? 'bg-orange-100 text-orange-600' :
-                projectStatus === 'confirmed' ? 'bg-green-100 text-green-600' :
+                projectStatus === 'confirmed' ? 'bg-blue-100 text-blue-600' :
                 'bg-purple-100 text-purple-600'
               }`}>
                 {projectStatus === 'draft' ? '下書き' :

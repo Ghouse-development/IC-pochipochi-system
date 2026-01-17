@@ -118,6 +118,10 @@ interface CreateProjectRequest {
     gas_work?: string;
     iron_stairs_1f_2f?: string;
     iron_stairs_2f_3f?: string;
+    // 面積情報
+    exterior_wall_area?: number;
+    eaves_area?: number;
+    total_floor_area?: number;
   };
   // Rooms
   rooms: Array<{
@@ -125,6 +129,7 @@ interface CreateProjectRequest {
     name: string;
     floor: number;
     type: string;
+    floorArea?: number; // 床面積（㎡）
   }>;
 }
 
@@ -268,6 +273,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         construction_method: body.buildingInfo.construction_method,
         floors: floorsNum,
         ceiling_height: parseInt(body.buildingInfo.ceiling_height_1f) || null,
+        floor_area: body.buildingInfo.total_floor_area || null,
         // Store all building info in a JSON note field
         note: JSON.stringify({
           // 建築情報
@@ -304,6 +310,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           gas_work: body.buildingInfo.gas_work,
           iron_stairs_1f_2f: body.buildingInfo.iron_stairs_1f_2f,
           iron_stairs_2f_3f: body.buildingInfo.iron_stairs_2f_3f,
+          // 面積情報
+          exterior_wall_area: body.buildingInfo.exterior_wall_area,
+          eaves_area: body.buildingInfo.eaves_area,
+          total_floor_area: body.buildingInfo.total_floor_area,
           // 顧客情報
           customer_phone: body.customer.phone,
           customer_postal_code: body.customer.postalCode,

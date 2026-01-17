@@ -429,7 +429,7 @@ export const DataBackup: React.FC = () => {
       {message && (
         <div className={`p-4 rounded-lg flex items-center gap-3 ${
           message.type === 'success'
-            ? 'bg-green-50 text-green-700'
+            ? 'bg-blue-50 text-blue-700'
             : 'bg-red-50 text-red-700'
         }`}>
           {message.type === 'success' ? (

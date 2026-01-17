@@ -92,7 +92,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose }) => {
                 onClick={handleCopy}
                 className={`px-4 py-2 rounded-lg font-medium transition-all ${
                   copied
-                    ? 'bg-green-500 text-white'
+                    ? 'bg-blue-500 text-white'
                     : 'bg-blue-500 text-white hover:bg-blue-600'
                 }`}
               >
@@ -104,7 +104,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose }) => {
               </button>
             </div>
             {copied && (
-              <p className="text-sm text-green-600 flex items-center gap-1">
+              <p className="text-sm text-blue-600 flex items-center gap-1">
                 <Check className="w-4 h-4" />
                 コピーしました
               </p>

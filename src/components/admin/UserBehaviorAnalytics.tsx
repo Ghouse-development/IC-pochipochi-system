@@ -70,7 +70,7 @@ export const UserBehaviorAnalytics: React.FC = () => {
             <TrendingUp className="w-4 h-4" />
             <span className="text-sm">総売上</span>
           </div>
-          <div className="text-2xl font-bold text-green-600">{formatPrice(stats.totalRevenue)}</div>
+          <div className="text-2xl font-bold text-blue-600">{formatPrice(stats.totalRevenue)}</div>
         </div>
       </div>
 
@@ -99,7 +99,7 @@ export const UserBehaviorAnalytics: React.FC = () => {
         {/* 人気商品TOP10 */}
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
           <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-green-600" />
+            <TrendingUp className="w-5 h-5 text-blue-600" />
             人気商品TOP10
           </h3>
           {topProducts.length === 0 ? (

@@ -238,7 +238,7 @@ export function BuildingDetailsForm({ projectId, onUpdate }: BuildingDetailsForm
         <div className="bg-red-50 text-red-700 p-4 rounded-lg">{error}</div>
       )}
       {success && (
-        <div className="bg-green-50 text-green-700 p-4 rounded-lg">{success}</div>
+        <div className="bg-blue-50 text-blue-700 p-4 rounded-lg">{success}</div>
       )}
 
       {/* Basic Info Section */}

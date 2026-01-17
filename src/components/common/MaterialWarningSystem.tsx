@@ -157,7 +157,7 @@ export const MaterialWarningModal: React.FC<MaterialWarningModalProps> = ({
                         </button>
                       )}
                       {isAcknowledged && (
-                        <div className="mt-3 flex items-center gap-2 text-green-600">
+                        <div className="mt-3 flex items-center gap-2 text-blue-600">
                           <CheckCircle className="w-4 h-4" />
                           <span className="text-sm font-medium">確認済み</span>
                         </div>
@@ -195,7 +195,7 @@ export const MaterialWarningModal: React.FC<MaterialWarningModalProps> = ({
                 disabled={!canConfirm}
                 className={`flex-[2] py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${
                   canConfirm
-                    ? 'bg-gradient-to-r from-blue-500 to-emerald-500 text-white hover:from-blue-600 hover:to-emerald-600'
+                    ? 'bg-gradient-to-r from-blue-500 to-blue-500 text-white hover:from-blue-600 hover:to-blue-600'
                     : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 }`}
               >

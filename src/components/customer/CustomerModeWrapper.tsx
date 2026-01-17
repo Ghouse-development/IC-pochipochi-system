@@ -141,7 +141,7 @@ export const CustomerWelcomeBanner: React.FC = () => {
         </p>
         <div className="mt-4 flex justify-center gap-4 text-sm">
           <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full">
-            <span className="w-3 h-3 bg-green-400 rounded-full"></span>
+            <span className="w-3 h-3 bg-blue-400 rounded-full"></span>
             標準仕様
           </div>
           <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full">
@@ -219,7 +219,7 @@ export const PriceComparison: React.FC<{
           </div>
         )}
         {diff !== 0 && (
-          <div className={`flex justify-between items-center pt-2 border-t ${isUpgrade ? 'text-orange-600' : 'text-green-600'}`}>
+          <div className={`flex justify-between items-center pt-2 border-t ${isUpgrade ? 'text-orange-600' : 'text-blue-600'}`}>
             <span className="font-bold">
               {isUpgrade ? '追加料金' : isSaving ? '割引額' : '差額'}
             </span>

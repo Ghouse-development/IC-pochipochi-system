@@ -167,14 +167,14 @@ export const CustomerInvitation: React.FC<CustomerInvitationProps> = ({
       {/* メールアドレス入力 & マジックリンク送信 */}
       <div className="bg-white rounded-xl shadow-sm border p-6">
         <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
-          <Mail className="w-5 h-5 text-green-500" />
+          <Mail className="w-5 h-5 text-blue-500" />
           マジックリンク送信
         </h3>
 
         {emailSent ? (
           <div className="text-center py-6">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <CheckCircle2 className="w-8 h-8 text-green-600" />
+            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <CheckCircle2 className="w-8 h-8 text-blue-600" />
             </div>
             <h4 className="text-lg font-medium text-gray-900 mb-2">
               メールを送信しました
@@ -248,7 +248,7 @@ export const CustomerInvitation: React.FC<CustomerInvitationProps> = ({
             onClick={handleCopyUrl}
             className={`p-2 rounded-lg transition-colors ${
               copied
-                ? 'bg-green-100 text-green-600'
+                ? 'bg-blue-100 text-blue-600'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
             title="URLをコピー"

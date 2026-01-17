@@ -115,7 +115,7 @@ export const SelectionProgressPanel: React.FC<SelectionProgressPanelProps> = ({
   const getStatusIcon = (status: SelectionStatus) => {
     switch (status) {
       case 'selected':
-        return <CheckCircle className="w-4 h-4 text-green-500" />;
+        return <CheckCircle className="w-4 h-4 text-blue-500" />;
       case 'not_needed':
         return <XCircle className="w-4 h-4 text-gray-400" />;
       default:
@@ -128,7 +128,7 @@ export const SelectionProgressPanel: React.FC<SelectionProgressPanelProps> = ({
       case 'blue':
         return { bg: 'bg-blue-100', text: 'text-blue-600', progress: 'bg-blue-500' };
       case 'green':
-        return { bg: 'bg-green-100', text: 'text-green-600', progress: 'bg-green-500' };
+        return { bg: 'bg-blue-100', text: 'text-blue-600', progress: 'bg-blue-500' };
       case 'orange':
         return { bg: 'bg-orange-100', text: 'text-orange-600', progress: 'bg-orange-500' };
       default:
@@ -145,7 +145,7 @@ export const SelectionProgressPanel: React.FC<SelectionProgressPanelProps> = ({
         </div>
         <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-blue-500 to-green-500 transition-all"
+            className="h-full bg-gradient-to-r from-blue-500 to-blue-500 transition-all"
             style={{ width: `${totalStats.percentage}%` }}
           />
         </div>
@@ -174,7 +174,7 @@ export const SelectionProgressPanel: React.FC<SelectionProgressPanelProps> = ({
         <div className="w-full h-4 bg-gray-200 rounded-full overflow-hidden mb-4">
           <div className="h-full flex">
             <div
-              className="bg-green-500 transition-all"
+              className="bg-blue-500 transition-all"
               style={{ width: `${(totalStats.completed / totalStats.total) * 100}%` }}
             />
             <div
@@ -186,7 +186,7 @@ export const SelectionProgressPanel: React.FC<SelectionProgressPanelProps> = ({
 
         <div className="flex gap-6 text-sm">
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 bg-green-500 rounded-full" />
+            <div className="w-3 h-3 bg-blue-500 rounded-full" />
             <span className="text-gray-600">選択済み: {totalStats.completed}件</span>
           </div>
           <div className="flex items-center gap-2">
@@ -268,7 +268,7 @@ export const SelectionProgressPanel: React.FC<SelectionProgressPanelProps> = ({
                         onClick={() => onCategoryClick?.(category)}
                         className={`flex items-center gap-2 p-2 rounded-lg text-left transition-colors ${
                           status === 'selected'
-                            ? 'bg-green-50 hover:bg-green-100'
+                            ? 'bg-blue-50 hover:bg-blue-100'
                             : status === 'not_needed'
                             ? 'bg-gray-50 hover:bg-gray-100'
                             : 'bg-white hover:bg-gray-50 border'

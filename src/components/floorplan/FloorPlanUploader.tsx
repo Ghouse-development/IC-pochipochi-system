@@ -273,7 +273,7 @@ export const FloorPlanUploader: React.FC = () => {
                       />
                       <button
                         onClick={handleSaveEdit}
-                        className="p-1 text-green-600 hover:bg-green-100:bg-green-900/30 rounded"
+                        className="p-1 text-blue-600 hover:bg-blue-100:bg-blue-900/30 rounded"
                       >
                         <Check className="w-4 h-4" />
                       </button>

@@ -286,7 +286,7 @@ export function ProductManagement({ products, onProductsChange }: ProductManagem
                   <div className="flex items-center gap-2">
                     {productImages[product.modelNumber]?.length > 0 ? (
                       <>
-                        <ImageIcon className="w-4 h-4 text-green-600" />
+                        <ImageIcon className="w-4 h-4 text-blue-600" />
                         <span className="text-sm text-gray-600">
                           {productImages[product.modelNumber].length}枚
                         </span>
@@ -317,7 +317,7 @@ export function ProductManagement({ products, onProductsChange }: ProductManagem
                     </button>
                     <button
                       onClick={() => handleCopy(product)}
-                      className="p-1 text-green-600 hover:bg-green-50 rounded"
+                      className="p-1 text-blue-600 hover:bg-blue-50 rounded"
                       title="コピー"
                     >
                       <Copy className="w-4 h-4" />

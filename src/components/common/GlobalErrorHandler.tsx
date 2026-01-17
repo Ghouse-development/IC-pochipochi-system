@@ -186,7 +186,7 @@ URL: ${window.location.href}
               <div className="flex gap-3">
                 <button
                   onClick={this.handleRetry}
-                  className="flex-1 py-3 bg-gradient-to-r from-blue-500 to-emerald-500 text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:from-blue-600 hover:to-emerald-600 transition-all shadow-lg"
+                  className="flex-1 py-3 bg-gradient-to-r from-blue-500 to-blue-500 text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:from-blue-600 hover:to-blue-600 transition-all shadow-lg"
                 >
                   <RefreshCw className="w-5 h-5" />
                   再試行
@@ -205,7 +205,7 @@ URL: ${window.location.href}
               >
                 {copied ? (
                   <>
-                    <Check className="w-4 h-4 text-green-500" />
+                    <Check className="w-4 h-4 text-blue-500" />
                     コピーしました
                   </>
                 ) : (

@@ -369,7 +369,7 @@ export const ItemDetailPage: React.FC = () => {
             disabled={isAdded || isInCart}
             className={`flex-[2] py-3 px-4 rounded-xl font-medium flex items-center justify-center gap-2 ${
               isAdded
-                ? 'bg-green-500 text-white'
+                ? 'bg-blue-500 text-white'
                 : isInCart
                 ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 : 'bg-blue-500 hover:bg-blue-600 text-white'

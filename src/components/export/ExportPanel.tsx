@@ -151,7 +151,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({ compact = false }) => 
       case 'loading':
         return <Loader2 className="w-5 h-5 animate-spin" />;
       case 'success':
-        return <CheckCircle className="w-5 h-5 text-green-500" />;
+        return <CheckCircle className="w-5 h-5 text-blue-500" />;
       case 'error':
         return <AlertCircle className="w-5 h-5 text-red-500" />;
       default:
@@ -173,7 +173,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({ compact = false }) => 
         <button
           onClick={handleExportEstimate}
           disabled={!canExport || exportState.estimate === 'loading'}
-          className="flex items-center gap-2 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+          className="flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
         >
           {getStatusIcon(exportState.estimate)}
           見積書
@@ -207,7 +207,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({ compact = false }) => 
           <p className="text-gray-500">見積書・仕様書・プレゼン資料を出力します</p>
         </div>
         {isConfirmed && (
-          <span className="px-3 py-1 bg-green-100 text-green-600 text-sm rounded-full flex items-center gap-1">
+          <span className="px-3 py-1 bg-blue-100 text-blue-600 text-sm rounded-full flex items-center gap-1">
             <CheckCircle className="w-4 h-4" />
             確定済み
           </span>
@@ -270,8 +270,8 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({ compact = false }) => 
         {/* 見積書 */}
         <div className="bg-white rounded-xl shadow-sm border p-6">
           <div className="flex items-center gap-3 mb-4">
-            <div className="p-3 bg-green-100 rounded-lg">
-              <FileSpreadsheet className="w-6 h-6 text-green-600" />
+            <div className="p-3 bg-blue-100 rounded-lg">
+              <FileSpreadsheet className="w-6 h-6 text-blue-600" />
             </div>
             <div>
               <h3 className="font-bold text-gray-900">見積書</h3>
@@ -284,7 +284,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({ compact = false }) => 
           <button
             onClick={handleExportEstimate}
             disabled={!canExport || exportState.estimate === 'loading'}
-            className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {getStatusIcon(exportState.estimate)}
             {exportState.estimate === 'loading' ? '出力中...' :
@@ -370,7 +370,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({ compact = false }) => 
 
       {/* 出力履歴 */}
       {lastExported && (
-        <div className="flex items-center gap-2 text-sm text-green-600 bg-green-50 px-4 py-2 rounded-lg">
+        <div className="flex items-center gap-2 text-sm text-blue-600 bg-blue-50 px-4 py-2 rounded-lg">
           <CheckCircle className="w-4 h-4" />
           <span>{lastExported}を出力しました</span>
         </div>

@@ -100,7 +100,7 @@ export const BeginnerGuide: React.FC<BeginnerGuideProps> = ({ onComplete, isOpen
     <div className="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 animate-fade-in">
       <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden">
         {/* ヘッダー */}
-        <div className="bg-gradient-to-r from-blue-500 to-emerald-500 p-4 text-white">
+        <div className="bg-gradient-to-r from-blue-500 to-blue-500 p-4 text-white">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="text-2xl">👋</span>

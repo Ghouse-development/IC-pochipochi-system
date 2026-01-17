@@ -121,12 +121,12 @@ export const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
                   disabled={isInCart}
                   className={`relative text-left p-3 rounded-lg border-2 transition-all ${
                     isInCart
-                      ? 'bg-green-50 border-green-300 cursor-default'
+                      ? 'bg-blue-50 border-blue-300 cursor-default'
                       : 'bg-white border-amber-200 hover:border-amber-400 hover:shadow-md'
                   }`}
                 >
                   {isInCart && (
-                    <div className="absolute top-2 right-2 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                    <div className="absolute top-2 right-2 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
                       <Check className="w-4 h-4 text-white" />
                     </div>
                   )}
@@ -147,7 +147,7 @@ export const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
                     </div>
                   )}
                   <div className={`text-sm font-bold ${
-                    product.isOption ? 'text-orange-600' : 'text-green-600'
+                    product.isOption ? 'text-orange-600' : 'text-blue-600'
                   }`}>
                     {formatPrice(product)}
                   </div>
@@ -176,12 +176,12 @@ export const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
                   disabled={isInCart}
                   className={`flex-shrink-0 w-40 text-left p-3 rounded-lg border-2 transition-all ${
                     isInCart
-                      ? 'bg-green-50 border-green-300'
+                      ? 'bg-blue-50 border-blue-300'
                       : 'bg-white border-gray-200 hover:border-amber-400'
                   }`}
                 >
                   {isInCart && (
-                    <div className="flex items-center gap-1 text-xs text-green-600 mb-1">
+                    <div className="flex items-center gap-1 text-xs text-blue-600 mb-1">
                       <Check className="w-3 h-3" />
                       選択済み
                     </div>
@@ -193,7 +193,7 @@ export const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
                     {product.name}
                   </div>
                   <div className={`text-sm font-bold ${
-                    product.isOption ? 'text-orange-600' : 'text-green-600'
+                    product.isOption ? 'text-orange-600' : 'text-blue-600'
                   }`}>
                     {formatPrice(product)}
                   </div>
@@ -324,13 +324,13 @@ export const BudgetRecommendation: React.FC<BudgetRecommendationProps> = ({
         <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
           <div
             className={`h-full rounded-full transition-all ${
-              percentage > 100 ? 'bg-red-500' : percentage > 80 ? 'bg-orange-500' : 'bg-green-500'
+              percentage > 100 ? 'bg-red-500' : percentage > 80 ? 'bg-orange-500' : 'bg-blue-500'
             }`}
             style={{ width: `${Math.min(percentage, 100)}%` }}
           />
         </div>
         <div className="text-right text-sm mt-1">
-          残り: <span className={remaining >= 0 ? 'text-green-600' : 'text-red-600'}>
+          残り: <span className={remaining >= 0 ? 'text-blue-600' : 'text-red-600'}>
             ¥{remaining.toLocaleString()}
           </span>
         </div>
@@ -349,13 +349,13 @@ export const BudgetRecommendation: React.FC<BudgetRecommendationProps> = ({
                 <button
                   key={product.id}
                   onClick={() => onProductSelect(product)}
-                  className="w-full flex items-center justify-between p-2 bg-green-50 rounded-lg hover:bg-green-100 transition-colors"
+                  className="w-full flex items-center justify-between p-2 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
                 >
                   <div className="text-left">
                     <div className="text-sm font-medium text-gray-900">{product.name}</div>
                     <div className="text-xs text-gray-500">{product.categoryName}</div>
                   </div>
-                  <span className="text-green-600 font-bold">
+                  <span className="text-blue-600 font-bold">
                     +¥{price.toLocaleString()}
                   </span>
                 </button>

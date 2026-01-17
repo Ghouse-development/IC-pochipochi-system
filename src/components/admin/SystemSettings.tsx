@@ -100,7 +100,7 @@ export function SystemSettings() {
         <div className="bg-red-50 text-red-600 p-4 rounded-lg">{error}</div>
       )}
       {successMessage && (
-        <div className="bg-green-50 text-green-600 p-4 rounded-lg">{successMessage}</div>
+        <div className="bg-blue-50 text-blue-600 p-4 rounded-lg">{successMessage}</div>
       )}
 
       {/* Company Info */}

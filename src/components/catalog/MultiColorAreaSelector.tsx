@@ -462,12 +462,12 @@ export const MultiColorAreaSelector: React.FC<MultiColorAreaSelectorProps> = ({
               >
                 <span className={`inline-block w-3 h-3 rounded-full mr-2 ${
                   selection.colorIndex === 1 ? 'bg-blue-500' :
-                  selection.colorIndex === 2 ? 'bg-green-500' :
+                  selection.colorIndex === 2 ? 'bg-blue-500' :
                   'bg-orange-500'
                 }`} />
                 {selection.colorIndex}色目
                 {selection.product && selection.area > 0 && (
-                  <Check className="w-4 h-4 inline ml-1 text-green-500" />
+                  <Check className="w-4 h-4 inline ml-1 text-blue-500" />
                 )}
               </button>
             ))}
@@ -480,7 +480,7 @@ export const MultiColorAreaSelector: React.FC<MultiColorAreaSelectorProps> = ({
                 <h5 className="font-medium text-gray-800">
                   <span className={`inline-block w-3 h-3 rounded-full mr-2 ${
                     currentColorIndex === 1 ? 'bg-blue-500' :
-                    currentColorIndex === 2 ? 'bg-green-500' :
+                    currentColorIndex === 2 ? 'bg-blue-500' :
                     'bg-orange-500'
                   }`} />
                   {currentColorIndex}色目の設定
@@ -542,8 +542,8 @@ export const MultiColorAreaSelector: React.FC<MultiColorAreaSelectorProps> = ({
 
       {/* 完了画面 */}
       {step === 'complete' && (
-        <div className="bg-green-50 rounded-xl p-6 text-center">
-          <Check className="w-12 h-12 text-green-500 mx-auto mb-3" />
+        <div className="bg-blue-50 rounded-xl p-6 text-center">
+          <Check className="w-12 h-12 text-blue-500 mx-auto mb-3" />
           <h4 className="font-bold text-gray-800 mb-2">
             {categoryName}の選択が完了しました
           </h4>

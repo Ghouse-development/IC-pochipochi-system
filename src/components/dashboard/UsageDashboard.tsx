@@ -116,7 +116,7 @@ export const UsageDashboard: React.FC<UsageDashboardProps> = ({
       case 'view':
         return <Eye className="w-4 h-4 text-blue-500" />;
       case 'select':
-        return <ShoppingCart className="w-4 h-4 text-green-500" />;
+        return <ShoppingCart className="w-4 h-4 text-blue-500" />;
       case 'remove':
         return <AlertCircle className="w-4 h-4 text-red-500" />;
       case 'login':
@@ -178,7 +178,7 @@ export const UsageDashboard: React.FC<UsageDashboardProps> = ({
         </div>
         {stats.lastActivity && (
           <div className="text-sm text-gray-500 flex items-center gap-2 bg-white px-3 py-2 rounded-lg shadow-sm border">
-            <Activity className="w-4 h-4 text-green-500" />
+            <Activity className="w-4 h-4 text-blue-500" />
             最終アクティビティ: {formatFullDate(stats.lastActivity)}
           </div>
         )}
@@ -200,8 +200,8 @@ export const UsageDashboard: React.FC<UsageDashboardProps> = ({
 
         <div className="bg-white rounded-xl shadow-sm border p-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-green-100 rounded-lg">
-              <ShoppingCart className="w-5 h-5 text-green-600" />
+            <div className="p-2 bg-blue-100 rounded-lg">
+              <ShoppingCart className="w-5 h-5 text-blue-600" />
             </div>
             <div>
               <p className="text-2xl font-bold text-gray-900">{stats.totalSelects}</p>
@@ -238,7 +238,7 @@ export const UsageDashboard: React.FC<UsageDashboardProps> = ({
       {/* 進捗状況 */}
       <div className="bg-white rounded-xl shadow-sm border p-6">
         <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
-          <CheckCircle className="w-5 h-5 text-green-500" />
+          <CheckCircle className="w-5 h-5 text-blue-500" />
           選択進捗
         </h3>
         <div className="mb-4">
@@ -250,7 +250,7 @@ export const UsageDashboard: React.FC<UsageDashboardProps> = ({
           </div>
           <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-blue-500 to-green-500 transition-all"
+              className="h-full bg-gradient-to-r from-blue-500 to-blue-500 transition-all"
               style={{ width: `${stats.completionRate}%` }}
             />
           </div>
@@ -281,7 +281,7 @@ export const UsageDashboard: React.FC<UsageDashboardProps> = ({
         )}
 
         {stats.unconfirmedCategories.length === 0 && stats.confirmedCount > 0 && (
-          <div className="flex items-center gap-2 text-green-600">
+          <div className="flex items-center gap-2 text-blue-600">
             <CheckCircle className="w-5 h-5" />
             <span className="font-medium">すべてのカテゴリが選択済みです</span>
           </div>
@@ -390,7 +390,7 @@ export const UsageDashboard: React.FC<UsageDashboardProps> = ({
               <p className="text-xs text-gray-500">閲覧回数</p>
             </div>
             <div>
-              <p className="text-2xl font-bold text-green-600">
+              <p className="text-2xl font-bold text-blue-600">
                 {stats.customerStats.totalSelects}
               </p>
               <p className="text-xs text-gray-500">選択回数</p>

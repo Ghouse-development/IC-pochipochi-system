@@ -180,12 +180,12 @@ export const AutoNotificationSystem: React.FC<AutoNotificationSystemProps> = ({
                 <div className="flex items-center gap-3">
                   <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
                     dept.autoNotify
-                      ? 'bg-green-100'
+                      ? 'bg-blue-100'
                       : 'bg-gray-200'
                   }`}>
                     <dept.icon className={`w-4 h-4 ${
                       dept.autoNotify
-                        ? 'text-green-600'
+                        ? 'text-blue-600'
                         : 'text-gray-400'
                     }`} />
                   </div>
@@ -206,7 +206,7 @@ export const AutoNotificationSystem: React.FC<AutoNotificationSystemProps> = ({
                     }}
                     className={`relative w-12 h-6 rounded-full transition-colors ${
                       dept.autoNotify
-                        ? 'bg-green-500'
+                        ? 'bg-blue-500'
                         : 'bg-gray-300'
                     }`}
                   >
@@ -260,7 +260,7 @@ export const AutoNotificationSystem: React.FC<AutoNotificationSystemProps> = ({
                     className="flex items-center justify-between text-sm p-2 bg-white rounded border border-gray-200"
                   >
                     <div className="flex items-center gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-500" />
+                      <CheckCircle className="w-4 h-4 text-blue-500" />
                       <span className="text-gray-600">
                         {log.department}
                       </span>

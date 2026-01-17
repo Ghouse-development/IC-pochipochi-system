@@ -65,8 +65,8 @@ const DBSyncPanel: React.FC = () => {
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             {isDBConnected ? (
-              <div className="p-2 bg-green-100 rounded-full">
-                <Cloud className="w-6 h-6 text-green-600" />
+              <div className="p-2 bg-blue-100 rounded-full">
+                <Cloud className="w-6 h-6 text-blue-600" />
               </div>
             ) : (
               <div className="p-2 bg-amber-100 rounded-full">
@@ -322,7 +322,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
             onClick={() => setActiveTab('data')}
             className={`px-3 py-2 rounded-t-lg font-medium transition-colors ${
               activeTab === 'data'
-                ? 'bg-emerald-500 text-white'
+                ? 'bg-blue-500 text-white'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
@@ -456,7 +456,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
               onClick={() => setDataSubTab('backup')}
               className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
                 dataSubTab === 'backup'
-                  ? 'bg-emerald-100 text-emerald-700 font-medium'
+                  ? 'bg-blue-100 text-blue-700 font-medium'
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
@@ -469,7 +469,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
               onClick={() => setDataSubTab('pdf')}
               className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
                 dataSubTab === 'pdf'
-                  ? 'bg-emerald-100 text-emerald-700 font-medium'
+                  ? 'bg-blue-100 text-blue-700 font-medium'
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
@@ -482,7 +482,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
               onClick={() => setDataSubTab('versions')}
               className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
                 dataSubTab === 'versions'
-                  ? 'bg-emerald-100 text-emerald-700 font-medium'
+                  ? 'bg-blue-100 text-blue-700 font-medium'
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
@@ -495,7 +495,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
               onClick={() => setDataSubTab('sync')}
               className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
                 dataSubTab === 'sync'
-                  ? 'bg-emerald-100 text-emerald-700 font-medium'
+                  ? 'bg-blue-100 text-blue-700 font-medium'
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
@@ -599,7 +599,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
                 <Card className="p-6">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-lg font-semibold text-gray-900">年間売上</h3>
-                    <BarChart3 className="w-5 h-5 text-green-500" />
+                    <BarChart3 className="w-5 h-5 text-blue-500" />
                   </div>
                   <p className="text-3xl font-bold text-gray-900">
                     {formatPrice(statistics.yearlyTotal)}
@@ -654,9 +654,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
                     <h4 className="text-sm font-medium text-blue-800">総閲覧商品数</h4>
                     <p className="text-2xl font-bold text-blue-900 mt-1">{adoptionRates.length}件</p>
                   </Card>
-                  <Card className="p-4 bg-gradient-to-br from-green-50 to-green-100 border-green-200">
-                    <h4 className="text-sm font-medium text-green-800">採用商品数</h4>
-                    <p className="text-2xl font-bold text-green-900 mt-1">{adoptionRates.filter(a => a.adoptionCount > 0).length}件</p>
+                  <Card className="p-4 bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+                    <h4 className="text-sm font-medium text-blue-800">採用商品数</h4>
+                    <p className="text-2xl font-bold text-blue-900 mt-1">{adoptionRates.filter(a => a.adoptionCount > 0).length}件</p>
                   </Card>
                   <Card className="p-4 bg-gradient-to-br from-amber-50 to-amber-100 border-amber-200">
                     <h4 className="text-sm font-medium text-amber-800">未採用商品数</h4>
@@ -678,7 +678,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
                         <div className="flex items-center justify-between mb-2">
                           <h4 className="font-medium text-gray-900">{cat.category}</h4>
                           <span className={`text-lg font-bold ${
-                            cat.adoptionRate >= 50 ? 'text-green-600' :
+                            cat.adoptionRate >= 50 ? 'text-blue-600' :
                             cat.adoptionRate >= 20 ? 'text-amber-600' : 'text-red-600'
                           }`}>
                             {cat.adoptionRate}%
@@ -687,7 +687,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
                         <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
                           <div
                             className={`h-2 rounded-full ${
-                              cat.adoptionRate >= 50 ? 'bg-green-500' :
+                              cat.adoptionRate >= 50 ? 'bg-blue-500' :
                               cat.adoptionRate >= 20 ? 'bg-amber-500' : 'bg-red-500'
                             }`}
                             style={{ width: `${Math.min(cat.adoptionRate, 100)}%` }}
@@ -829,26 +829,26 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
                 {/* TOP採用商品 */}
                 <div className="mb-8">
                   <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                    <span className="w-3 h-3 bg-green-500 rounded-full"></span>
+                    <span className="w-3 h-3 bg-blue-500 rounded-full"></span>
                     人気商品TOP10
                   </h3>
                   <Card className="overflow-hidden">
                     <table className="w-full">
-                      <thead className="bg-green-50 border-b border-green-200">
+                      <thead className="bg-blue-50 border-b border-blue-200">
                         <tr>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
+                          <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
                             順位
                           </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
+                          <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
                             商品名
                           </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
+                          <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
                             カテゴリ
                           </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
+                          <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
                             採用回数
                           </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
+                          <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
                             売上合計
                           </th>
                         </tr>
@@ -862,7 +862,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
                           </tr>
                         ) : (
                           topProducts.map((product, index) => (
-                            <tr key={product.productId} className="hover:bg-green-50">
+                            <tr key={product.productId} className="hover:bg-blue-50">
                               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                 <span className={`${
                                   index === 0 ? 'text-yellow-500' :
@@ -899,7 +899,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
                     {monthlyStats.map((data) => (
                       <div key={data.month} className="flex-1 flex flex-col items-center">
                         <div
-                          className="w-full bg-green-500 rounded-t"
+                          className="w-full bg-blue-500 rounded-t"
                           style={{
                             height: `${data.count > 0 ? (data.count / Math.max(...monthlyStats.map(d => d.count), 1)) * 100 : 0}%`
                           }}
@@ -970,7 +970,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
                           </p>
                         </div>
                         {version.isActive && (
-                          <span className="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                          <span className="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
                             現在のバージョン
                           </span>
                         )}

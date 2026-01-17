@@ -218,8 +218,8 @@ export const ProjectBulkImport: React.FC = () => {
     <div className="bg-white rounded-xl shadow-sm border p-6">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-green-100 rounded-lg">
-            <FileSpreadsheet className="w-6 h-6 text-green-600" />
+          <div className="p-2 bg-blue-100 rounded-lg">
+            <FileSpreadsheet className="w-6 h-6 text-blue-600" />
           </div>
           <div>
             <h2 className="text-lg font-bold text-gray-900">プロジェクト一括登録</h2>
@@ -228,7 +228,7 @@ export const ProjectBulkImport: React.FC = () => {
         </div>
         <button
           onClick={handleDownloadTemplate}
-          className="flex items-center gap-2 px-4 py-2 text-sm text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+          className="flex items-center gap-2 px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
         >
           <Download className="w-4 h-4" />
           テンプレート
@@ -242,7 +242,7 @@ export const ProjectBulkImport: React.FC = () => {
         onDrop={handleDrop}
         className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-colors ${
           isDragging
-            ? 'border-green-500 bg-green-50'
+            ? 'border-blue-500 bg-blue-50'
             : 'border-gray-300 hover:border-gray-400'
         }`}
       >
@@ -253,7 +253,7 @@ export const ProjectBulkImport: React.FC = () => {
           onChange={handleFileSelect}
           className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
         />
-        <Upload className={`w-12 h-12 mx-auto mb-4 ${isDragging ? 'text-green-500' : 'text-gray-400'}`} />
+        <Upload className={`w-12 h-12 mx-auto mb-4 ${isDragging ? 'text-blue-500' : 'text-gray-400'}`} />
         <p className="text-gray-600 mb-2">
           ファイルをドラッグ&ドロップ、またはクリックして選択
         </p>
@@ -287,7 +287,7 @@ export const ProjectBulkImport: React.FC = () => {
               <button
                 onClick={handleImport}
                 disabled={isProcessing}
-                className="flex items-center gap-2 px-4 py-1.5 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
+                className="flex items-center gap-2 px-4 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
               >
                 <CheckCircle className="w-4 h-4" />
                 インポート実行
@@ -333,10 +333,10 @@ export const ProjectBulkImport: React.FC = () => {
       {result && (
         <div className="mt-6 space-y-4">
           <div className={`flex items-center gap-3 p-4 rounded-lg ${
-            result.failed === 0 ? 'bg-green-50' : 'bg-yellow-50'
+            result.failed === 0 ? 'bg-blue-50' : 'bg-yellow-50'
           }`}>
             {result.failed === 0 ? (
-              <CheckCircle className="w-5 h-5 text-green-600" />
+              <CheckCircle className="w-5 h-5 text-blue-600" />
             ) : (
               <AlertCircle className="w-5 h-5 text-yellow-600" />
             )}

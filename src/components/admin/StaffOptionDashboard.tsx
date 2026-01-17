@@ -81,7 +81,7 @@ export const StaffOptionDashboard: React.FC = () => {
       {/* ヘッダー */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
+          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
             <DollarSign className="w-6 h-6 text-white" />
           </div>
           <div>
@@ -114,7 +114,7 @@ export const StaffOptionDashboard: React.FC = () => {
 
       {/* 会社全体サマリー */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl p-5 text-white">
+        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-5 text-white">
           <div className="flex items-center gap-2 mb-2 opacity-90">
             <DollarSign className="w-5 h-5" />
             <span className="text-sm font-medium">オプション総額</span>
@@ -182,7 +182,7 @@ export const StaffOptionDashboard: React.FC = () => {
                   <p className="text-xs text-gray-500">{staff.projectCount}件担当</p>
                 </div>
               </div>
-              <div className="text-xl font-bold text-green-600">{formatPrice(staff.totalOptionAmount)}</div>
+              <div className="text-xl font-bold text-blue-600">{formatPrice(staff.totalOptionAmount)}</div>
               <p className="text-xs text-gray-500 mt-1">
                 平均 {formatPrice(staff.avgOptionPerProject)}/件
               </p>
@@ -229,14 +229,14 @@ export const StaffOptionDashboard: React.FC = () => {
                   >
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-emerald-600 rounded-full flex items-center justify-center text-white font-medium text-sm">
+                        <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-medium text-sm">
                           {staff.staffName.charAt(0)}
                         </div>
                         <span className="font-medium text-gray-900">{staff.staffName}</span>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
-                      <span className="font-bold text-green-600">{formatPrice(staff.totalOptionAmount)}</span>
+                      <span className="font-bold text-blue-600">{formatPrice(staff.totalOptionAmount)}</span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-gray-600">
                       {formatPrice(staff.totalStandardAmount)}
@@ -258,7 +258,7 @@ export const StaffOptionDashboard: React.FC = () => {
                           return (
                             <div
                               key={idx}
-                              className="w-2 bg-gradient-to-t from-blue-500 to-emerald-400 rounded-t"
+                              className="w-2 bg-gradient-to-t from-blue-500 to-blue-400 rounded-t"
                               style={{ height: `${height}%`, minHeight: '2px' }}
                               title={`${m.month}: ${formatPrice(m.amount)}`}
                             />
@@ -279,7 +279,7 @@ export const StaffOptionDashboard: React.FC = () => {
             <div className="flex gap-8">
               <div>
                 <span className="text-sm text-gray-500 mr-2">オプション:</span>
-                <span className="font-bold text-green-600">{formatPrice(companyStats.totalOptionAmount)}</span>
+                <span className="font-bold text-blue-600">{formatPrice(companyStats.totalOptionAmount)}</span>
               </div>
               <div>
                 <span className="text-sm text-gray-500 mr-2">標準:</span>

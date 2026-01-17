@@ -34,9 +34,9 @@ export const colors = {
     undecidedBorder: '#fed7aa', // orange-200
 
     // 決定・選択済み（成功）
-    decided: '#10b981', // emerald-500
-    decidedBg: '#ecfdf5', // emerald-50
-    decidedBorder: '#a7f3d0', // emerald-200
+    decided: '#10b981', // blue-500
+    decidedBg: '#ecfdf5', // blue-50
+    decidedBorder: '#a7f3d0', // blue-200
 
     // 標準品
     standard: '#14b8a6', // blue-500
@@ -82,7 +82,7 @@ export const colors = {
 export const gradients = {
   primary: 'from-blue-500 to-blue-600',
   header: 'from-blue-600 to-blue-700',
-  success: 'from-emerald-500 to-emerald-600',
+  success: 'from-blue-500 to-blue-600',
   warning: 'from-amber-400 to-amber-500',
 };
 

@@ -277,7 +277,7 @@ export const RoomFinishSelector: React.FC<RoomFinishSelectorProps> = ({
                                   />
                                 ) : (
                                   <div className="w-full h-full flex items-center justify-center">
-                                    <Check className="w-4 h-4 text-green-500" />
+                                    <Check className="w-4 h-4 text-blue-500" />
                                   </div>
                                 );
                               })()}

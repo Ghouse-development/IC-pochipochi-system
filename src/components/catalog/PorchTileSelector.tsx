@@ -350,8 +350,8 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
 
       {/* 完了画面 */}
       {step === 'complete' && (
-        <div className="bg-green-50 rounded-xl p-6 text-center">
-          <Check className="w-12 h-12 text-green-500 mx-auto mb-3" />
+        <div className="bg-blue-50 rounded-xl p-6 text-center">
+          <Check className="w-12 h-12 text-blue-500 mx-auto mb-3" />
           <h4 className="font-bold text-gray-800 mb-2">
             ポーチの選択が完了しました
           </h4>
@@ -369,8 +369,8 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
               {selectedGrout && <p>目地色: {selectedGrout.name}</p>}
               {/* 連動した項目を表示（タイル選択時のみ） */}
               {!isMortar(selectedTile) && (
-                <div className="mt-3 pt-3 border-t border-green-200">
-                  <p className="text-xs text-green-700 font-medium mb-1">🔗 以下も自動でプリセットされました</p>
+                <div className="mt-3 pt-3 border-t border-blue-200">
+                  <p className="text-xs text-blue-700 font-medium mb-1">🔗 以下も自動でプリセットされました</p>
                   <p className="text-xs text-gray-500">• 玄関床: {selectedTile.name}</p>
                   <p className="text-xs text-gray-500">• シューズクローク床: {selectedTile.name}</p>
                 </div>

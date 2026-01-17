@@ -206,14 +206,14 @@ export const QuickSelectPanel: React.FC<QuickSelectPanelProps> = ({
               <div className="flex items-center gap-3">
                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
                   set.id === 'standard-all'
-                    ? 'bg-green-100'
+                    ? 'bg-blue-100'
                     : set.id === 'popular'
                     ? 'bg-amber-100'
                     : 'bg-blue-100'
                 }`}>
                   <set.icon className={`w-6 h-6 ${
                     set.id === 'standard-all'
-                      ? 'text-green-600'
+                      ? 'text-blue-600'
                       : set.id === 'popular'
                       ? 'text-amber-600'
                       : 'text-blue-600'
@@ -237,7 +237,7 @@ export const QuickSelectPanel: React.FC<QuickSelectPanelProps> = ({
                       </span>
                     )}
                     {set.savings && set.savings > 0 && (
-                      <span className="text-xs px-2 py-0.5 bg-green-100 rounded-full text-green-700">
+                      <span className="text-xs px-2 py-0.5 bg-blue-100 rounded-full text-blue-700">
                         {formatPrice(set.savings)}お得
                       </span>
                     )}

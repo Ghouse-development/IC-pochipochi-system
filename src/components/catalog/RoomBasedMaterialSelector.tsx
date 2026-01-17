@@ -369,12 +369,12 @@ export const RoomBasedMaterialSelector: React.FC<RoomBasedMaterialSelectorProps>
       {/* ステップ2: 部屋選択後の確認 */}
       {step === 'complete' && selectedProduct && selectedVariant && (
         <div>
-          <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-4">
+          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4">
             <div className="flex items-center gap-2 mb-2">
-              <Check className="w-5 h-5 text-green-600" />
-              <h3 className="font-bold text-green-800">選択完了</h3>
+              <Check className="w-5 h-5 text-blue-600" />
+              <h3 className="font-bold text-blue-800">選択完了</h3>
             </div>
-            <div className="space-y-2 text-sm text-green-700">
+            <div className="space-y-2 text-sm text-blue-700">
               <p><span className="font-medium">商品:</span> {selectedProduct.name}</p>
               <p><span className="font-medium">色:</span> {selectedVariant.color}</p>
               <p className="flex items-start gap-1">

@@ -1,37 +1,62 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 export function LoginPage() {
-  const { signIn, resetPassword } = useAuth();
+  const { signIn, resetPassword, user, isLoading: authLoading } = useAuth();
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showResetPassword, setShowResetPassword] = useState(false);
   const [resetSent, setResetSent] = useState(false);
+  const [loginSuccess, setLoginSuccess] = useState(false);
+
+  // ログイン成功後、userが設定されたらリダイレクト
+  useEffect(() => {
+    if (loginSuccess && user && !authLoading) {
+      navigate('/admin', { replace: true });
+    }
+  }, [loginSuccess, user, authLoading, navigate]);
+
+  // ログイン成功後、5秒経ってもuserがセットされない場合は強制リダイレクト
+  useEffect(() => {
+    if (loginSuccess && !user) {
+      const forceRedirectTimeout = setTimeout(() => {
+        console.warn('User data fetch taking too long, forcing redirect');
+        navigate('/admin', { replace: true });
+      }, 5000);
+      return () => clearTimeout(forceRedirectTimeout);
+    }
+  }, [loginSuccess, user, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setIsLoading(true);
 
-    // タイムアウト設定（10秒）
+    // タイムアウト設定（15秒に延長）
     const timeoutId = setTimeout(() => {
       setError('ログインがタイムアウトしました。ネットワーク接続を確認してください。');
       setIsLoading(false);
-    }, 10000);
+    }, 15000);
 
     try {
       const { error } = await signIn(email, password);
       clearTimeout(timeoutId);
       if (error) {
         setError(error.message);
+        setIsLoading(false);
+      } else {
+        // ログイン成功フラグを立てる（userが設定されるのを待つ）
+        setLoginSuccess(true);
+        // ローディング状態は維持（リダイレクトまで）
       }
     } catch (err) {
       clearTimeout(timeoutId);
       console.error('Login error:', err);
       setError('ログインに失敗しました: ' + (err instanceof Error ? err.message : '不明なエラー'));
-    } finally {
       setIsLoading(false);
     }
   };
@@ -68,7 +93,7 @@ export function LoginPage() {
 
           {resetSent ? (
             <div className="text-center">
-              <div className="bg-green-50 text-green-700 p-4 rounded-lg mb-4">
+              <div className="bg-blue-50 text-blue-700 p-4 rounded-lg mb-4">
                 パスワードリセットのメールを送信しました。メールをご確認ください。
               </div>
               <button
@@ -188,10 +213,10 @@ export function LoginPage() {
 
           <button
             type="submit"
-            disabled={isLoading}
+            disabled={isLoading || loginSuccess}
             className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
-            {isLoading ? 'ログイン中...' : 'ログイン'}
+            {loginSuccess ? '認証中...' : isLoading ? 'ログイン中...' : 'ログイン'}
           </button>
 
           <div className="flex items-center justify-center text-sm">

@@ -46,7 +46,7 @@ export const OperationLogViewer: React.FC = () => {
   const getTypeColor = (type: OperationType) => {
     switch (type) {
       case 'cart_add':
-        return 'bg-green-100 text-green-700';
+        return 'bg-blue-100 text-blue-700';
       case 'cart_remove':
       case 'cart_clear':
         return 'bg-red-100 text-red-700';

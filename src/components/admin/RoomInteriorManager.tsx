@@ -256,9 +256,9 @@ export function RoomInteriorManager({ projectId, onUpdate }: RoomInteriorManager
         </div>
       )}
       {success && (
-        <div className="bg-green-50 text-green-700 p-4 rounded-lg flex items-center justify-between">
+        <div className="bg-blue-50 text-blue-700 p-4 rounded-lg flex items-center justify-between">
           <span>{success}</span>
-          <button onClick={() => setSuccess(null)} className="text-green-900">
+          <button onClick={() => setSuccess(null)} className="text-blue-900">
             <X className="w-4 h-4" />
           </button>
         </div>

@@ -21,7 +21,7 @@ const CATEGORY_PLACEHOLDERS: Record<string, { emoji: string; bgColor: string }> 
   '照明': { emoji: '💡', bgColor: 'from-yellow-100 to-amber-100' },
   'エコキュート': { emoji: '♨️', bgColor: 'from-orange-100 to-red-100' },
   '太陽光': { emoji: '☀️', bgColor: 'from-yellow-100 to-orange-100' },
-  '蓄電池': { emoji: '🔋', bgColor: 'from-green-100 to-emerald-100' },
+  '蓄電池': { emoji: '🔋', bgColor: 'from-blue-100 to-blue-100' },
 };
 
 const getPlaceholder = (categoryName: string | undefined): { emoji: string; bgColor: string } => {

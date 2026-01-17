@@ -124,7 +124,7 @@ export const SelectionValidator: React.FC<SelectionValidatorProps> = ({
     return (
       <div className="flex items-center gap-2">
         {validation.isComplete ? (
-          <div className="flex items-center gap-1 text-green-600">
+          <div className="flex items-center gap-1 text-blue-600">
             <CheckCircle className="w-4 h-4" />
             <span className="text-sm font-medium">必須項目完了</span>
           </div>
@@ -155,7 +155,7 @@ export const SelectionValidator: React.FC<SelectionValidatorProps> = ({
         </div>
         <div className={`px-3 py-1 rounded-full text-sm font-bold ${
           validation.isComplete
-            ? 'bg-green-100 text-green-700'
+            ? 'bg-blue-100 text-blue-700'
             : validation.completionRate >= 50
             ? 'bg-amber-100 text-amber-700'
             : 'bg-red-100 text-red-700'
@@ -169,7 +169,7 @@ export const SelectionValidator: React.FC<SelectionValidatorProps> = ({
         <div
           className={`h-full transition-all duration-500 ${
             validation.isComplete
-              ? 'bg-green-500'
+              ? 'bg-blue-500'
               : validation.completionRate >= 50
               ? 'bg-amber-500'
               : 'bg-red-500'
@@ -180,9 +180,9 @@ export const SelectionValidator: React.FC<SelectionValidatorProps> = ({
 
       {/* ステータス */}
       {validation.isComplete ? (
-        <div className="flex items-center gap-2 p-3 bg-green-50 rounded-lg">
-          <CheckCircle className="w-5 h-5 text-green-600" />
-          <span className="text-green-700 font-medium">
+        <div className="flex items-center gap-2 p-3 bg-blue-50 rounded-lg">
+          <CheckCircle className="w-5 h-5 text-blue-600" />
+          <span className="text-blue-700 font-medium">
             全ての必須項目が選択されています
           </span>
         </div>

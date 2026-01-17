@@ -90,7 +90,7 @@ export const DeliveryCalendar: React.FC = () => {
   const getStatusColor = (status: DeliveryItem['status']) => {
     switch (status) {
       case 'confirmed':
-        return 'bg-green-100 text-green-700';
+        return 'bg-blue-100 text-blue-700';
       case 'pending':
         return 'bg-yellow-100 text-yellow-700';
       case 'delivered':
@@ -220,7 +220,7 @@ export const DeliveryCalendar: React.FC = () => {
                           d.status === 'delayed'
                             ? 'bg-red-500'
                             : d.status === 'confirmed'
-                            ? 'bg-green-500'
+                            ? 'bg-blue-500'
                             : 'bg-yellow-500'
                         }`}
                       />
@@ -282,7 +282,7 @@ export const DeliveryCalendar: React.FC = () => {
       <div className="p-4 border-t border-gray-200 bg-gray-50">
         <div className="flex flex-wrap gap-4 text-xs">
           <div className="flex items-center gap-1">
-            <div className="w-3 h-3 rounded-full bg-green-500" />
+            <div className="w-3 h-3 rounded-full bg-blue-500" />
             <span className="text-gray-600">確定</span>
           </div>
           <div className="flex items-center gap-1">

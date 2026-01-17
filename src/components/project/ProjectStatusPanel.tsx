@@ -53,8 +53,8 @@ const STATUS_CONFIG: Record<ProjectStatus, {
   confirmed: {
     label: '確定済み',
     icon: CheckCircle,
-    color: 'text-green-600',
-    bgColor: 'bg-green-100',
+    color: 'text-blue-600',
+    bgColor: 'bg-blue-100',
     description: '仕様が確定されました',
   },
   finalized: {

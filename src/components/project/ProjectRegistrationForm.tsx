@@ -232,7 +232,7 @@ export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = (
                 isActive
                   ? 'border-blue-600 text-blue-600 bg-blue-50'
                   : isCompleted
-                  ? 'border-green-500 text-green-600'
+                  ? 'border-blue-500 text-blue-600'
                   : 'border-transparent text-gray-400'
               }`}
             >
@@ -241,7 +241,7 @@ export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = (
                   isActive
                     ? 'bg-blue-600 text-white'
                     : isCompleted
-                    ? 'bg-green-500 text-white'
+                    ? 'bg-blue-500 text-white'
                     : 'bg-gray-200'
                 }`}
               >
@@ -416,6 +416,75 @@ export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = (
               </div>
             </div>
 
+            {/* 面積情報入力 */}
+            <div className="bg-orange-50 rounded-xl p-4 mb-6">
+              <h3 className="font-bold text-orange-800 mb-3 flex items-center gap-2">
+                <Building2 className="w-5 h-5" /> 面積情報
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    延床面積
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      value={buildingInfo.total_floor_area || ''}
+                      onChange={(e) => setBuildingInfo(prev => ({
+                        ...prev,
+                        total_floor_area: e.target.value ? parseFloat(e.target.value) : undefined
+                      }))}
+                      placeholder="100.00"
+                      className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                    />
+                    <span className="text-gray-500 text-sm whitespace-nowrap">㎡</span>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    外壁面積
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      value={buildingInfo.exterior_wall_area || ''}
+                      onChange={(e) => setBuildingInfo(prev => ({
+                        ...prev,
+                        exterior_wall_area: e.target.value ? parseFloat(e.target.value) : undefined
+                      }))}
+                      placeholder="150.00"
+                      className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                    />
+                    <span className="text-gray-500 text-sm whitespace-nowrap">㎡</span>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    軒裏面積
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      value={buildingInfo.eaves_area || ''}
+                      onChange={(e) => setBuildingInfo(prev => ({
+                        ...prev,
+                        eaves_area: e.target.value ? parseFloat(e.target.value) : undefined
+                      }))}
+                      placeholder="30.00"
+                      className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                    />
+                    <span className="text-gray-500 text-sm whitespace-nowrap">㎡</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* お客様情報サマリー */}
             <div className="bg-blue-50 rounded-xl p-4">
               <h3 className="font-bold text-blue-800 mb-3 flex items-center gap-2">
@@ -453,13 +522,23 @@ export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = (
             <div className="bg-purple-50 rounded-xl p-4">
               <h3 className="font-bold text-purple-800 mb-3 flex items-center gap-2">
                 <Home className="w-5 h-5" /> 登録部屋 ({rooms.length}部屋)
+                {rooms.some(r => r.floorArea) && (
+                  <span className="text-sm font-normal text-purple-600 ml-2">
+                    合計: {rooms.reduce((sum, r) => sum + (r.floorArea || 0), 0).toFixed(1)}㎡
+                  </span>
+                )}
               </h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
                 {rooms.map((room) => (
                   <div key={room.id} className="bg-white rounded-lg px-3 py-2 text-sm">
-                    <span className="text-purple-600 font-medium">{room.floor}F</span>
-                    <span className="mx-1">-</span>
-                    <span>{room.name}</span>
+                    <div>
+                      <span className="text-purple-600 font-medium">{room.floor}F</span>
+                      <span className="mx-1">-</span>
+                      <span>{room.name}</span>
+                    </div>
+                    {room.floorArea && (
+                      <div className="text-xs text-gray-500">{room.floorArea}㎡</div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -470,8 +549,8 @@ export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = (
         {/* ステップ5: URL発行 */}
         {currentStep === 5 && (
           <div className="space-y-6 text-center">
-            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto">
-              <Check className="w-10 h-10 text-green-600" />
+            <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
+              <Check className="w-10 h-10 text-blue-600" />
             </div>
 
             <div>
@@ -497,7 +576,7 @@ export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = (
                     onClick={handleCopyUrl}
                     className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-colors ${
                       urlCopied
-                        ? 'bg-green-500 text-white'
+                        ? 'bg-blue-500 text-white'
                         : 'bg-blue-500 text-white hover:bg-blue-600'
                     }`}
                   >
@@ -516,7 +595,7 @@ export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = (
                     disabled={magicLinkSent}
                     className={`px-6 py-3 rounded-lg flex items-center gap-2 transition-colors w-full justify-center ${
                       magicLinkSent
-                        ? 'bg-green-100 text-green-700'
+                        ? 'bg-blue-100 text-blue-700'
                         : 'bg-indigo-500 text-white hover:bg-indigo-600'
                     }`}
                   >
@@ -573,7 +652,7 @@ export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = (
               <button
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className="flex items-center gap-2 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
+                className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
               >
                 {isSubmitting ? (
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />

@@ -211,7 +211,7 @@ export const SelectionSummary: React.FC<SelectionSummaryProps> = ({
                       </td>
                       <td className="px-4 py-3 text-gray-600">-</td>
                       <td className="px-4 py-3 text-right">
-                        <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full">
+                        <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full">
                           <CheckCircle className="w-3 h-3" />
                           選択済み
                         </span>
@@ -259,7 +259,7 @@ export const SelectionSummary: React.FC<SelectionSummaryProps> = ({
                               不要
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full">
+                            <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full">
                               <CheckCircle className="w-3 h-3" />
                               選択済み
                             </span>

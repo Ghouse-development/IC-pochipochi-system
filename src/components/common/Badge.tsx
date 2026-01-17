@@ -13,7 +13,7 @@ export const Badge = memo<BadgeProps>(({
   className,
 }) => {
   const variants = {
-    standard: 'bg-green-500 text-white',
+    standard: 'bg-blue-500 text-white',
     option: 'bg-red-500 text-white',
     plan: 'bg-gray-700 text-white',
   };

@@ -258,7 +258,7 @@ export function SelectionPage({ projectId, onBack }: SelectionPageProps) {
                             ${isActive
                               ? 'bg-blue-600 text-white'
                               : isComplete
-                              ? 'bg-green-100 text-green-700 hover:bg-green-200'
+                              ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
                               : 'bg-white text-gray-700 hover:bg-gray-100'
                             }
                             ${child.is_required && !isComplete ? 'ring-2 ring-red-200' : ''}
@@ -390,7 +390,7 @@ export function SelectionPage({ projectId, onBack }: SelectionPageProps) {
                         <span
                           className={`text-lg font-black ${
                             pricing.is_standard
-                              ? 'text-emerald-600'
+                              ? 'text-blue-600'
                               : 'text-gray-900'
                           }`}
                         >

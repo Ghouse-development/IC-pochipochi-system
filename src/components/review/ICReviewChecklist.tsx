@@ -249,7 +249,7 @@ export const ICReviewChecklist: React.FC<ICReviewChecklistProps> = ({
           </div>
           <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-blue-500 to-green-500 transition-all"
+              className="h-full bg-gradient-to-r from-blue-500 to-blue-500 transition-all"
               style={{ width: `${progress.percentage}%` }}
             />
           </div>
@@ -258,7 +258,7 @@ export const ICReviewChecklist: React.FC<ICReviewChecklistProps> = ({
         {/* 必須項目の状態 */}
         <div className="mt-4 flex items-center gap-2">
           {allRequiredChecked ? (
-            <span className="flex items-center gap-2 text-green-600 bg-green-50 px-3 py-1.5 rounded-lg text-sm">
+            <span className="flex items-center gap-2 text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg text-sm">
               <CheckCircle className="w-4 h-4" />
               すべての必須項目を確認済み
             </span>
@@ -296,7 +296,7 @@ export const ICReviewChecklist: React.FC<ICReviewChecklistProps> = ({
               <div className="flex items-center gap-3">
                 <div className="w-20 h-2 bg-gray-200 rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-green-500 transition-all"
+                    className="h-full bg-blue-500 transition-all"
                     style={{
                       width: `${
                         categoryItems.length > 0
@@ -325,7 +325,7 @@ export const ICReviewChecklist: React.FC<ICReviewChecklistProps> = ({
                         className="mt-0.5 flex-shrink-0"
                       >
                         {item.checked ? (
-                          <CheckCircle className="w-5 h-5 text-green-500" />
+                          <CheckCircle className="w-5 h-5 text-blue-500" />
                         ) : (
                           <Circle className="w-5 h-5 text-gray-300 hover:text-gray-400" />
                         )}
@@ -395,7 +395,7 @@ export const ICReviewChecklist: React.FC<ICReviewChecklistProps> = ({
           <button
             onClick={handleComplete}
             disabled={!allRequiredChecked}
-            className="flex items-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             <CheckCircle className="w-5 h-5" />
             確認完了

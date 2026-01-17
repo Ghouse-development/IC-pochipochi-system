@@ -277,9 +277,9 @@ export function UserManager({ onBack, onCreateProject }: UserManagerProps) {
         </div>
       )}
       {success && (
-        <div className="m-4 p-4 bg-green-100 text-green-700 rounded-lg flex items-center justify-between">
+        <div className="m-4 p-4 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-between">
           <span>{success}</span>
-          <button onClick={() => setSuccess(null)} className="text-green-900 font-bold">×</button>
+          <button onClick={() => setSuccess(null)} className="text-blue-900 font-bold">×</button>
         </div>
       )}
 
@@ -301,9 +301,9 @@ export function UserManager({ onBack, onCreateProject }: UserManagerProps) {
           <div className="text-2xl font-bold text-gray-700">{stats.users}</div>
           <div className="text-sm text-gray-600">ユーザー</div>
         </div>
-        <div className="bg-green-50 p-4 rounded-lg text-center">
-          <div className="text-2xl font-bold text-green-700">{stats.active}</div>
-          <div className="text-sm text-green-600">アクティブ</div>
+        <div className="bg-blue-50 p-4 rounded-lg text-center">
+          <div className="text-2xl font-bold text-blue-700">{stats.active}</div>
+          <div className="text-sm text-blue-600">アクティブ</div>
         </div>
       </div>
 
@@ -425,7 +425,7 @@ export function UserManager({ onBack, onCreateProject }: UserManagerProps) {
                     </button>
                     <button
                       onClick={() => handleToggleActive(user)}
-                      className={`p-2 rounded-lg ${user.is_active ? 'hover:bg-red-100 text-red-600' : 'hover:bg-green-100 text-green-600'}`}
+                      className={`p-2 rounded-lg ${user.is_active ? 'hover:bg-red-100 text-red-600' : 'hover:bg-blue-100 text-blue-600'}`}
                       title={user.is_active ? '無効化' : '有効化'}
                     >
                       {user.is_active ? <UserX className="w-4 h-4" /> : <UserCheck className="w-4 h-4" />}

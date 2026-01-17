@@ -131,7 +131,7 @@ export const DevToolbar: React.FC<DevToolbarProps> = ({
           {/* 現在のパス */}
           <div className="flex items-center gap-2 flex-shrink-0">
             <span className="text-xs text-gray-400 font-medium">パス:</span>
-            <code className="text-xs bg-gray-800 px-2 py-1 rounded font-mono text-green-400">
+            <code className="text-xs bg-gray-800 px-2 py-1 rounded font-mono text-blue-400">
               {location.pathname}
             </code>
           </div>

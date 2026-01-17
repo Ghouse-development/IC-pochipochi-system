@@ -30,7 +30,7 @@ const STATUS_LABELS: Record<string, { label: string; color: string; bgColor: str
   draft: { label: '下書き', color: 'text-gray-600', bgColor: 'bg-gray-100' },
   customer_selecting: { label: 'お客様選択中', color: 'text-blue-600', bgColor: 'bg-blue-100' },
   ic_review: { label: 'IC確認中', color: 'text-orange-600', bgColor: 'bg-orange-100' },
-  confirmed: { label: '確定済み', color: 'text-green-600', bgColor: 'bg-green-100' },
+  confirmed: { label: '確定済み', color: 'text-blue-600', bgColor: 'bg-blue-100' },
   finalized: { label: '最終確定', color: 'text-purple-600', bgColor: 'bg-purple-100' },
 };
 
@@ -221,7 +221,7 @@ export const ProjectList: React.FC<ProjectListProps> = ({
           <span>{projects.length}件のプロジェクト</span>
           {currentProject && (
             <span className="flex items-center gap-1">
-              <CheckCircle className="w-4 h-4 text-green-500" />
+              <CheckCircle className="w-4 h-4 text-blue-500" />
               選択中: {currentProject.name}
             </span>
           )}

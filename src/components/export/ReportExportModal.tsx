@@ -224,11 +224,11 @@ export const ReportExportModal: React.FC<ReportExportModalProps> = ({
                   onClick={() => setExportFormat('excel')}
                   className={`p-4 rounded-xl border-2 transition-all flex items-center gap-3 ${
                     exportFormat === 'excel'
-                      ? 'border-green-500 bg-green-50'
-                      : 'border-gray-200 hover:border-green-300'
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-200 hover:border-blue-300'
                   }`}
                 >
-                  <FileSpreadsheet className={`w-6 h-6 ${exportFormat === 'excel' ? 'text-green-500' : 'text-gray-400'}`} />
+                  <FileSpreadsheet className={`w-6 h-6 ${exportFormat === 'excel' ? 'text-blue-500' : 'text-gray-400'}`} />
                   <span className="font-medium">Excel</span>
                 </button>
               </div>

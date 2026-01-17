@@ -69,14 +69,14 @@ export const NetworkStatusBanner: React.FC<NetworkStatusBannerProps> = ({
   if (showReconnected && isOnline) {
     return (
       <div className={`fixed ${positionClasses} z-50 p-2`}>
-        <div className="max-w-md mx-auto bg-green-500 text-white px-4 py-3 rounded-lg shadow-lg flex items-center justify-between animate-slide-up">
+        <div className="max-w-md mx-auto bg-blue-500 text-white px-4 py-3 rounded-lg shadow-lg flex items-center justify-between animate-slide-up">
           <div className="flex items-center gap-3">
             <Wifi className="w-5 h-5" />
             <span className="font-medium">オンラインに復帰しました</span>
           </div>
           <button
             onClick={() => setShowReconnected(false)}
-            className="p-1 hover:bg-green-600 rounded transition-colors"
+            className="p-1 hover:bg-blue-600 rounded transition-colors"
             aria-label="閉じる"
           >
             <X className="w-4 h-4" />

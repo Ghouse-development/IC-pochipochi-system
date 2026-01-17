@@ -216,7 +216,7 @@ export const VendorOrderManager: React.FC = () => {
     const styles = {
       draft: 'bg-gray-100 text-gray-700',
       sent: 'bg-blue-100 text-blue-700',
-      confirmed: 'bg-green-100 text-green-700',
+      confirmed: 'bg-blue-100 text-blue-700',
       delivered: 'bg-purple-100 text-purple-700',
     };
     const labels = {
@@ -266,8 +266,8 @@ export const VendorOrderManager: React.FC = () => {
           <p className="text-2xl font-bold text-blue-600">{orderStats.sent}</p>
           <p className="text-xs text-gray-500">送信済</p>
         </Card>
-        <Card className="p-4 text-center bg-green-50">
-          <p className="text-2xl font-bold text-green-600">{orderStats.confirmed}</p>
+        <Card className="p-4 text-center bg-blue-50">
+          <p className="text-2xl font-bold text-blue-600">{orderStats.confirmed}</p>
           <p className="text-xs text-gray-500">確認済</p>
         </Card>
         <Card className="p-4 text-center bg-purple-50">

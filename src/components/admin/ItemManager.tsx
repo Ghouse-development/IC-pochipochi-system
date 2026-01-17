@@ -583,7 +583,7 @@ export function ItemManager() {
                                     </span>
                                   )}
                                   {item.is_active && !item.is_discontinued && (
-                                    <span className="px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs">
+                                    <span className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-xs">
                                       有効
                                     </span>
                                   )}

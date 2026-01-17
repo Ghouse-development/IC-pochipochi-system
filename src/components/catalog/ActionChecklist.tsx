@@ -188,8 +188,8 @@ export const ActionChecklist: React.FC<ActionChecklistProps> = ({
         {selectedCategories.length > 0 && (
           <div className="p-3 border-t border-gray-100">
             <div className="flex items-center gap-2 mb-3 pb-2 border-b border-gray-100">
-              <Check className="w-4 h-4 text-emerald-500" />
-              <span className="text-xs font-bold text-emerald-600 uppercase tracking-wide">
+              <Check className="w-4 h-4 text-blue-500" />
+              <span className="text-xs font-bold text-blue-600 uppercase tracking-wide">
                 選択済み ({selectedCategories.length})
               </span>
             </div>
@@ -209,20 +209,20 @@ export const ActionChecklist: React.FC<ActionChecklistProps> = ({
                     onClick={() => onCategorySelect(cat.id)}
                     className={`w-full rounded-xl text-left transition-all overflow-hidden ${
                       isSelected
-                        ? 'bg-emerald-50 ring-2 ring-emerald-400 shadow-md'
-                        : 'bg-white border border-emerald-200 hover:border-emerald-300:border-emerald-800'
+                        ? 'bg-blue-50 ring-2 ring-blue-400 shadow-md'
+                        : 'bg-white border border-blue-200 hover:border-blue-300:border-blue-800'
                     }`}
                   >
                     {/* カテゴリヘッダー */}
                     <div className="flex items-center gap-2 p-3">
-                      <div className="w-7 h-7 rounded-lg bg-emerald-500 flex items-center justify-center flex-shrink-0">
+                      <div className="w-7 h-7 rounded-lg bg-blue-500 flex items-center justify-center flex-shrink-0">
                         <Check className="w-4 h-4 text-white" strokeWidth={3} />
                       </div>
                       <div className="flex-1 min-w-0">
                         <span className="font-medium text-sm text-gray-800 block truncate">
                           {cat.name}
                         </span>
-                        <span className="text-[10px] text-emerald-600 font-medium">
+                        <span className="text-[10px] text-blue-600 font-medium">
                           {items.length}件選択
                         </span>
                       </div>

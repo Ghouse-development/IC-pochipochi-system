@@ -243,7 +243,7 @@ export const AirconSelector: React.FC<AirconSelectorProps> = ({
                 isActive
                   ? 'bg-blue-500 text-white'
                   : isComplete
-                    ? 'bg-green-100 text-green-700 border border-green-300'
+                    ? 'bg-blue-100 text-blue-700 border border-blue-300'
                     : 'bg-gray-100 text-gray-600 border border-gray-200'
               }`}
             >
@@ -285,7 +285,7 @@ export const AirconSelector: React.FC<AirconSelectorProps> = ({
             <React.Fragment key={step}>
               <span className={`px-3 py-1 rounded-full ${
                 isCompleted
-                  ? 'bg-green-100 text-green-700'
+                  ? 'bg-blue-100 text-blue-700'
                   : isCurrent
                     ? 'bg-blue-500 text-white'
                     : 'bg-gray-100 text-gray-400'
@@ -353,7 +353,7 @@ export const AirconSelector: React.FC<AirconSelectorProps> = ({
                   name={size.name}
                   description={size.description}
                   placeholderEmoji="🏠"
-                  placeholderBgColor="from-green-100 to-emerald-100"
+                  placeholderBgColor="from-blue-100 to-blue-100"
                   price={price}
                   isOption={price > 0}
                   isSelected={activeUnit.roomSize === size.id}
@@ -431,8 +431,8 @@ export const AirconSelector: React.FC<AirconSelectorProps> = ({
 
       {/* ステップ完了 */}
       {currentStep === 'complete' && (
-        <div className="bg-green-50 rounded-xl p-6 text-center">
-          <Check className="w-12 h-12 text-green-500 mx-auto mb-3" />
+        <div className="bg-blue-50 rounded-xl p-6 text-center">
+          <Check className="w-12 h-12 text-blue-500 mx-auto mb-3" />
           <h4 className="font-bold text-gray-800 mb-2">
             {activeUnitIndex + 1}台目の設定完了
           </h4>

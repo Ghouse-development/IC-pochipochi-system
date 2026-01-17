@@ -179,7 +179,7 @@ export function ItemPricingManager({
                       onClick={() => handlePricingChange(product.id, 'is_available', !data.is_available)}
                       className={`p-2 rounded-lg transition-colors ${
                         data.is_available
-                          ? 'bg-green-100 text-green-600 hover:bg-green-200'
+                          ? 'bg-blue-100 text-blue-600 hover:bg-blue-200'
                           : 'bg-red-100 text-red-600 hover:bg-red-200'
                       }`}
                     >

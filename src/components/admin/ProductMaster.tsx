@@ -356,7 +356,7 @@ export function ProductMaster() {
                         <span
                           className={`px-2 py-1 rounded text-xs font-medium ${
                             plan.is_active
-                              ? 'bg-green-100 text-green-700'
+                              ? 'bg-blue-100 text-blue-700'
                               : 'bg-gray-100 text-gray-600'
                           }`}
                         >
@@ -370,7 +370,7 @@ export function ProductMaster() {
                           <>
                             <button
                               onClick={handleUpdate}
-                              className="p-2 text-green-600 hover:bg-green-50 rounded-lg"
+                              className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
                               title="保存"
                             >
                               <Save className="w-4 h-4" />

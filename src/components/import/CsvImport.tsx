@@ -512,7 +512,7 @@ export function CsvImport({ onImportComplete, mode = 'preview' }: CsvImportProps
                 />
               </div>
               <div className="flex gap-4 text-sm">
-                <span className="text-green-600">成功: {progress.success}</span>
+                <span className="text-blue-600">成功: {progress.success}</span>
                 {progress.failed > 0 && (
                   <span className="text-red-600">失敗: {progress.failed}</span>
                 )}
@@ -529,11 +529,11 @@ export function CsvImport({ onImportComplete, mode = 'preview' }: CsvImportProps
 
           {/* Import Complete */}
           {importComplete && (
-            <div className="bg-green-50 p-4 rounded-lg flex items-center gap-3">
-              <CheckCircle className="w-5 h-5 text-green-600" />
+            <div className="bg-blue-50 p-4 rounded-lg flex items-center gap-3">
+              <CheckCircle className="w-5 h-5 text-blue-600" />
               <div>
-                <p className="font-medium text-green-800">インポート完了</p>
-                <p className="text-sm text-green-600">
+                <p className="font-medium text-blue-800">インポート完了</p>
+                <p className="text-sm text-blue-600">
                   {progress?.success}件のデータをインポートしました
                 </p>
               </div>

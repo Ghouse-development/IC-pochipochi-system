@@ -427,8 +427,8 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
 
       {/* 完了画面 */}
       {currentStep === 'complete' && (
-        <div className="bg-green-50 rounded-xl p-6 text-center">
-          <Check className="w-12 h-12 text-green-500 mx-auto mb-3" />
+        <div className="bg-blue-50 rounded-xl p-6 text-center">
+          <Check className="w-12 h-12 text-blue-500 mx-auto mb-3" />
           <h4 className="font-bold text-gray-800 mb-2">
             玄関ドアの選択が完了しました
           </h4>

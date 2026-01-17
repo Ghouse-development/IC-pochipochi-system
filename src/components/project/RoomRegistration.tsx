@@ -13,6 +13,7 @@ export interface Room {
   name: string;
   floor: number;
   type: string;
+  floorArea?: number; // 床面積（㎡）
 }
 
 interface RoomRegistrationProps {
@@ -42,9 +43,10 @@ const ROOM_TYPES = [
 interface RoomCardProps {
   room: Room;
   onRemove: () => void;
+  onUpdateFloorArea: (area: number | undefined) => void;
 }
 
-const RoomCard: React.FC<RoomCardProps> = ({ room, onRemove }) => {
+const RoomCard: React.FC<RoomCardProps> = ({ room, onRemove, onUpdateFloorArea }) => {
   const roomType = ROOM_TYPES.find(t => t.id === room.type);
   const Icon = roomType?.icon || Home;
 
@@ -55,6 +57,18 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onRemove }) => {
       </div>
       <div className="flex-1 min-w-0">
         <div className="font-medium text-gray-800 text-sm truncate">{room.name}</div>
+        <div className="flex items-center gap-1 mt-1">
+          <input
+            type="number"
+            step="0.1"
+            min="0"
+            value={room.floorArea || ''}
+            onChange={(e) => onUpdateFloorArea(e.target.value ? parseFloat(e.target.value) : undefined)}
+            placeholder="面積"
+            className="w-16 px-1.5 py-0.5 text-xs border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+          />
+          <span className="text-xs text-gray-400">㎡</span>
+        </div>
       </div>
       <button
         type="button"
@@ -203,6 +217,11 @@ export const RoomRegistration: React.FC<RoomRegistrationProps> = ({
     onChange(rooms.filter(r => r.id !== roomId));
   };
 
+  // 部屋の床面積を更新
+  const handleUpdateFloorArea = (roomId: string, area: number | undefined) => {
+    onChange(rooms.map(r => r.id === roomId ? { ...r, floorArea: area } : r));
+  };
+
   // 特定の階の特定タイプの部屋数を取得
   const getRoomCount = (floor: number, typeId: string): number => {
     return rooms.filter(r => r.floor === floor && r.type === typeId).length;
@@ -262,6 +281,7 @@ export const RoomRegistration: React.FC<RoomRegistrationProps> = ({
                       key={room.id}
                       room={room}
                       onRemove={() => handleRemoveRoom(room.id)}
+                      onUpdateFloorArea={(area) => handleUpdateFloorArea(room.id, area)}
                     />
                   ))}
                 </div>

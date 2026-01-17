@@ -56,20 +56,20 @@ export const SpecificationConfirmation: React.FC<SpecificationConfirmationProps>
   // 確定済み表示
   if (isFinalized) {
     return (
-      <div className="bg-green-50 border border-green-200 rounded-xl p-6">
+      <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
         <div className="flex items-center gap-3 mb-4">
-          <div className="p-2 bg-green-100 rounded-full">
-            <Lock className="w-6 h-6 text-green-600" />
+          <div className="p-2 bg-blue-100 rounded-full">
+            <Lock className="w-6 h-6 text-blue-600" />
           </div>
           <div>
-            <h3 className="font-bold text-green-900">仕様確定済み</h3>
-            <p className="text-sm text-green-600">
+            <h3 className="font-bold text-blue-900">仕様確定済み</h3>
+            <p className="text-sm text-blue-600">
               {statusInfo.confirmedAt && new Date(statusInfo.confirmedAt).toLocaleDateString('ja-JP')} に確定されました
             </p>
           </div>
         </div>
 
-        <p className="text-sm text-green-700 mb-4">
+        <p className="text-sm text-blue-700 mb-4">
           仕様が確定されているため、変更はできません。<br />
           変更が必要な場合は担当スタッフにご連絡ください。
         </p>

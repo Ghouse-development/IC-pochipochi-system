@@ -214,7 +214,7 @@ export const ProjectCreateForm: React.FC<ProjectCreateFormProps> = ({
                 isActive
                   ? 'border-blue-600 text-blue-600 bg-blue-50'
                   : isCompleted
-                  ? 'border-green-500 text-green-600'
+                  ? 'border-blue-500 text-blue-600'
                   : 'border-transparent text-gray-400'
               }`}
             >
@@ -223,7 +223,7 @@ export const ProjectCreateForm: React.FC<ProjectCreateFormProps> = ({
                   isActive
                     ? 'bg-blue-600 text-white'
                     : isCompleted
-                    ? 'bg-green-500 text-white'
+                    ? 'bg-blue-500 text-white'
                     : 'bg-gray-200'
                 }`}
               >
@@ -570,8 +570,8 @@ export const ProjectCreateForm: React.FC<ProjectCreateFormProps> = ({
                   {customer.phone && <div><dt className="text-gray-500 inline">電話:</dt> <dd className="inline">{customer.phone}</dd></div>}
                 </dl>
               </div>
-              <div className="bg-green-50 rounded-lg p-4">
-                <h3 className="font-medium text-green-800 mb-2 flex items-center gap-2">
+              <div className="bg-blue-50 rounded-lg p-4">
+                <h3 className="font-medium text-blue-800 mb-2 flex items-center gap-2">
                   <MapPin className="w-4 h-4" /> 土地情報
                 </h3>
                 <dl className="text-sm space-y-1">
@@ -629,7 +629,7 @@ export const ProjectCreateForm: React.FC<ProjectCreateFormProps> = ({
           ) : (
             <button
               onClick={handleSubmit}
-              className="flex items-center gap-2 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+              className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
             >
               <Check className="w-4 h-4" />
               プロジェクト作成

@@ -98,7 +98,7 @@ export const InventoryManager: React.FC = () => {
 
   const getStatusBadge = (status: InventoryItem['status']) => {
     const configs = {
-      in_stock: { color: 'bg-green-100 text-green-700', label: '在庫あり' },
+      in_stock: { color: 'bg-blue-100 text-blue-700', label: '在庫あり' },
       low_stock: { color: 'bg-yellow-100 text-yellow-700', label: '在庫少' },
       out_of_stock: { color: 'bg-red-100 text-red-700', label: '在庫切れ' },
       overstocked: { color: 'bg-blue-100 text-blue-700', label: '過剰在庫' },
@@ -118,7 +118,7 @@ export const InventoryManager: React.FC = () => {
         ? 'bg-red-500'
         : item.status === 'low_stock'
         ? 'bg-yellow-500'
-        : 'bg-green-500';
+        : 'bg-blue-500';
 
     return (
       <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
@@ -157,11 +157,11 @@ export const InventoryManager: React.FC = () => {
           <div className="text-2xl font-bold text-gray-900">{stats.total}</div>
         </div>
         <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-          <div className="flex items-center gap-2 text-green-600 mb-1">
+          <div className="flex items-center gap-2 text-blue-600 mb-1">
             <TrendingUp className="w-4 h-4" />
             <span className="text-sm">在庫あり</span>
           </div>
-          <div className="text-2xl font-bold text-green-600">{stats.inStock}</div>
+          <div className="text-2xl font-bold text-blue-600">{stats.inStock}</div>
         </div>
         <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
           <div className="flex items-center gap-2 text-yellow-600 mb-1">
