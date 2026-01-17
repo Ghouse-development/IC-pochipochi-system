@@ -7,13 +7,15 @@ import { initWebVitals } from './lib/webVitals'
 import { getCsrfToken } from './lib/csrf'
 
 // キャッシュバージョン管理（破壊的変更時にインクリメント）
-const CACHE_VERSION = 'v3';
+const CACHE_VERSION = 'v4';  // v4: Supabase認証キャッシュクリア追加
 const CACHE_VERSION_KEY = 'ic-cache-version';
 
 // 古いキャッシュをクリア
 const clearOldCache = () => {
   const storedVersion = localStorage.getItem(CACHE_VERSION_KEY);
   if (storedVersion !== CACHE_VERSION) {
+    console.log('[Cache] Clearing old cache, upgrading from', storedVersion, 'to', CACHE_VERSION);
+
     // 全てのアプリ関連キャッシュをクリア
     const keysToRemove = [
       'lifex-products-storage',
@@ -26,7 +28,18 @@ const clearOldCache = () => {
       'ic-operation-log-storage',
     ];
     keysToRemove.forEach(key => localStorage.removeItem(key));
+
+    // Supabase認証キャッシュもクリア（古いセッション問題の解決）
+    const supabaseKeys = Object.keys(localStorage).filter(key =>
+      key.startsWith('sb-') || key.includes('supabase')
+    );
+    supabaseKeys.forEach(key => {
+      console.log('[Cache] Removing Supabase key:', key);
+      localStorage.removeItem(key);
+    });
+
     localStorage.setItem(CACHE_VERSION_KEY, CACHE_VERSION);
+    console.log('[Cache] Cache cleared, version updated to', CACHE_VERSION);
   }
 };
 

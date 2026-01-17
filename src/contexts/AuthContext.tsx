@@ -131,17 +131,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
       }
 
-      // API完全失敗 - 仮のユーザーオブジェクトを返す（ログインは許可）
-      logger.warn('User fetch failed - creating minimal user object for login');
-      return {
-        id: session.user.id,
-        auth_id: session.user.id,
-        email: session.user.email || '',
-        full_name: session.user.email?.split('@')[0] || 'User',
-        role: BOOTSTRAP_ADMIN_EMAILS.includes((session.user.email || '').toLowerCase()) ? 'admin' : 'user',
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      } as User;
+      // API完全失敗 - nullを返してセッションをクリアさせる
+      // （古いセッションで無限ループになるのを防ぐ）
+      logger.error('User fetch completely failed - returning null to force re-login');
+      return null;
     } catch (err) {
       logger.error('Error fetching user data:', err);
       return null;
@@ -220,8 +213,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         if (error) {
           logger.error('Error getting session:', error);
+          // セッションエラーの場合、古いセッションをクリア
+          logger.warn('Clearing stale session due to error');
+          await supabase.auth.signOut();
           setIsLoading(false);
           return;
+        }
+
+        // セッションがあるが期限切れの場合をチェック
+        if (session) {
+          const expiresAt = session.expires_at;
+          const now = Math.floor(Date.now() / 1000);
+          if (expiresAt && expiresAt < now) {
+            logger.warn('Session expired, clearing stale session');
+            await supabase.auth.signOut();
+            setSession(null);
+            setSupabaseUser(null);
+            setIsLoading(false);
+            return;
+          }
         }
 
         setSession(session);
@@ -230,17 +240,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (session?.user) {
           try {
             const userData = await fetchUserData(session.user.id);
-            setUser(userData);
             if (userData) {
+              setUser(userData);
               await updateLastLogin(userData.id);
+            } else {
+              // ユーザーデータ取得失敗 - セッションをクリアして再ログインを促す
+              logger.warn('Failed to fetch user data, clearing session');
+              await supabase.auth.signOut();
+              setSession(null);
+              setSupabaseUser(null);
             }
           } catch (fetchError) {
             logger.error('Error fetching user data:', fetchError);
+            // フェッチエラー時もセッションをクリア
+            await supabase.auth.signOut();
+            setSession(null);
+            setSupabaseUser(null);
           }
         }
       } catch (error) {
         clearTimeout(timeoutId);
         logger.error('Error initializing auth:', error);
+        // 初期化エラー時はセッションをクリア
+        try {
+          await supabase.auth.signOut();
+        } catch {
+          // サインアウトエラーは無視
+        }
       } finally {
         setIsLoading(false);
       }
