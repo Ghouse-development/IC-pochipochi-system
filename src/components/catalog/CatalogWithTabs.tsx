@@ -1184,6 +1184,15 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   );
   const isCurrentStepComplete = undecidedCategories.length === 0 && categories.length > 0;
 
+  // サイドバー用カテゴリ（ポーチタイル・ポーチタイル目地は非表示）
+  const sidebarCategories = useMemo(() =>
+    categories.filter(cat =>
+      cat.name !== 'ポーチタイル' &&
+      cat.name !== 'ポーチタイル目地'
+    ),
+    [categories]
+  );
+
   // 次のカテゴリへ進む
   const goToNextCategory = useCallback(() => {
     const currentIndex = categories.findIndex(c => c.id === selectedCategoryId);
@@ -1435,7 +1444,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
                 {/* アクションチェックリスト */}
                 <ActionChecklist
-                  categories={categories}
+                  categories={sidebarCategories}
                   cartItems={cartItems}
                   totalPrice={totalPrice}
                   selectedCategoryId={selectedCategoryId}

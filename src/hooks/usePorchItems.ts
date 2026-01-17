@@ -78,19 +78,21 @@ function itemToTileOption(item: ItemWithDetails, selectedPlan: string): TileOpti
   };
 }
 
-// ItemWithDetailsからGroutOptionへ変換
-function itemToGroutOption(item: ItemWithDetails): GroutOption {
-  // 色コードを取得（バリアントのcolor_code）
-  const variant = item.variants?.[0];
-  const colorCode = variant?.color_code || '#CCCCCC';
+// ItemWithDetailsからGroutOptionへ変換（バリアントごとに変換）
+function itemToGroutOptions(item: ItemWithDetails): GroutOption[] {
+  // バリアントがない場合は空配列
+  if (!item.variants || item.variants.length === 0) {
+    return [];
+  }
 
-  return {
-    id: item.id,
-    name: item.name,
-    colorCode,
-    isRecommended: item.is_recommended ?? false,
-    displayOrder: item.display_order,
-  };
+  // 各バリアントを目地オプションに変換
+  return item.variants.map((variant, index) => ({
+    id: variant.id,
+    name: variant.color_name || item.name,
+    colorCode: variant.color_code || '#CCCCCC',
+    isRecommended: variant.color_name?.includes('オススメ') ?? false,
+    displayOrder: variant.display_order ?? index,
+  }));
 }
 
 export function usePorchItems(selectedPlan: string) {
@@ -166,7 +168,10 @@ export function usePorchItems(selectedPlan: string) {
         throw groutError;
       }
 
-      const convertedGrout = (groutItems as ItemWithDetails[] || []).map(itemToGroutOption);
+      // 目地アイテムの各バリアントを個別のGroutOptionに変換
+      const convertedGrout = (groutItems as ItemWithDetails[] || [])
+        .flatMap(itemToGroutOptions)
+        .sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
       setGroutColors(convertedGrout);
 
     } catch (err) {
