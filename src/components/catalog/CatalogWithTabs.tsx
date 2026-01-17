@@ -89,7 +89,8 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
   // URLからactiveTabを設定
   // お客様モードでは設計タブにアクセスできない
-  const activeTab = (['design', 'exterior', 'interior', 'equipment', 'electrical', 'furniture'].includes(step) ? step : 'exterior') as 'design' | 'exterior' | 'interior' | 'equipment' | 'electrical' | 'furniture';
+  // 'other'タブ（カーテン・家具のIC提案）も許可
+  const activeTab = (['design', 'exterior', 'interior', 'equipment', 'electrical', 'furniture', 'other'].includes(step) ? step : 'exterior') as 'design' | 'exterior' | 'interior' | 'equipment' | 'electrical' | 'furniture' | 'other';
   const selectedCategorySlug = urlCategorySlug || null;
 
   // お客様モードで設計タブの閲覧専用フラグ
@@ -247,7 +248,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   const [_quickSelectMode, setQuickSelectMode] = useState(false);
 
   // タブ切替（URL遷移）
-  const setActiveTab = useCallback((newTab: 'design' | 'exterior' | 'interior' | 'equipment' | 'electrical' | 'furniture') => {
+  const setActiveTab = useCallback((newTab: 'design' | 'exterior' | 'interior' | 'equipment' | 'electrical' | 'furniture' | 'other') => {
     navigate(`/catalog/${newTab}`);
   }, [navigate]);
 
@@ -321,7 +322,8 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
           const firstUndecided = uniqueDesignCategories.find(cat =>
             !cartItems.some(item => item.product.categoryName === cat.name)
           );
-          if (!selectedCategoryId) {
+          // URLでカテゴリが指定されていない場合のみ自動選択
+          if (!selectedCategoryId && !selectedCategorySlug) {
             setSelectedCategoryId(firstUndecided?.id || uniqueDesignCategories[0]?.id || null);
           }
         } else {
@@ -349,7 +351,8 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
           });
           const generatedCategories = Array.from(categoryMap.values());
           setCategories(generatedCategories);
-          if (!selectedCategoryId && generatedCategories.length > 0) {
+          // URLでカテゴリが指定されていない場合のみ自動選択
+          if (!selectedCategoryId && !selectedCategorySlug && generatedCategories.length > 0) {
             setSelectedCategoryId(generatedCategories[0]?.id || null);
           }
         }
@@ -400,11 +403,11 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
           return a.name.localeCompare(b.name, 'ja');
         });
         setCategories(sortedCategories);
-        // 最初の未決カテゴリを自動選択
+        // 最初の未決カテゴリを自動選択（URLでカテゴリが指定されていない場合のみ）
         const firstUndecided = uniqueCategories.find(cat =>
           !cartItems.some(item => item.product.categoryName === cat.name)
         );
-        if (!selectedCategoryId) {
+        if (!selectedCategoryId && !selectedCategorySlug) {
           setSelectedCategoryId(firstUndecided?.id || uniqueCategories[0]?.id || null);
         }
       } else {
@@ -471,10 +474,11 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
         });
         setCategories(sortedCategories);
 
+        // URLでカテゴリが指定されていない場合のみ自動選択
         const firstUndecided = sortedCategories.find(cat =>
           !cartItems.some(item => item.product.categoryName === cat.name)
         );
-        if (!selectedCategoryId) {
+        if (!selectedCategoryId && !selectedCategorySlug) {
           setSelectedCategoryId(firstUndecided?.id || sortedCategories[0]?.id || null);
         }
       }
@@ -482,7 +486,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
     fetchCategories();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeTab, exteriorProducts, interiorProducts, waterProducts, furnitureProducts, cartItems]); // selectedCategorySlugは初期設定時のみ使用
+  }, [activeTab, exteriorProducts, interiorProducts, waterProducts, furnitureProducts, cartItems, selectedCategorySlug]); // selectedCategorySlugも依存配列に追加
 
   // slugからカテゴリIDを導出
   const selectedCategoryId = useMemo(() => {
