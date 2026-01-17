@@ -1173,14 +1173,52 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     }).length;
   };
 
-  // 未決・決定カテゴリ
+  // 外部設備の全必須サブカテゴリがカートにあるかチェック
+  const isExteriorFacilityComplete = useMemo(() => {
+    const requiredFacilities = EXTERIOR_FACILITY_TYPES.filter(t => t.required).map(t => t.id);
+    return requiredFacilities.every(facility =>
+      cartItems.some(item =>
+        item.product.subcategory === facility ||
+        item.product.categoryName === facility ||
+        item.product.name?.includes(facility)
+      )
+    );
+  }, [cartItems]);
+
+  // 外部建材の全サブカテゴリがカートにあるかチェック
+  const isExteriorMaterialComplete = useMemo(() => {
+    const requiredMaterials = EXTERIOR_MATERIAL_TYPES.map(t => t.id);
+    return requiredMaterials.every(material =>
+      cartItems.some(item =>
+        item.product.subcategory === material ||
+        item.product.categoryName === material ||
+        item.product.name?.includes(material)
+      )
+    );
+  }, [cartItems]);
+
+  // 未決・決定カテゴリ（外部設備・外部建材は全サブカテゴリ選択で決定）
   const decidedCategories = useMemo(() =>
-    categories.filter(cat => cartItems.some(item => item.product.categoryName === cat.name)),
-    [categories, cartItems]
+    categories.filter(cat => {
+      // 外部設備は全必須サブカテゴリが選択されたら決定
+      if (cat.name === '外部設備') return isExteriorFacilityComplete;
+      // 外部建材は全サブカテゴリが選択されたら決定
+      if (cat.name === '外部建材') return isExteriorMaterialComplete;
+      // その他は従来通り（1つでも選択されたら決定）
+      return cartItems.some(item => item.product.categoryName === cat.name);
+    }),
+    [categories, cartItems, isExteriorFacilityComplete, isExteriorMaterialComplete]
   );
   const undecidedCategories = useMemo(() =>
-    categories.filter(cat => !cartItems.some(item => item.product.categoryName === cat.name)),
-    [categories, cartItems]
+    categories.filter(cat => {
+      // 外部設備は全必須サブカテゴリが選択されていなければ未決
+      if (cat.name === '外部設備') return !isExteriorFacilityComplete;
+      // 外部建材は全サブカテゴリが選択されていなければ未決
+      if (cat.name === '外部建材') return !isExteriorMaterialComplete;
+      // その他は従来通り
+      return !cartItems.some(item => item.product.categoryName === cat.name);
+    }),
+    [categories, cartItems, isExteriorFacilityComplete, isExteriorMaterialComplete]
   );
   const isCurrentStepComplete = undecidedCategories.length === 0 && categories.length > 0;
 
