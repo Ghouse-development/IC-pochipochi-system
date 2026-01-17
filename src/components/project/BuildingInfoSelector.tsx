@@ -64,11 +64,36 @@ const SelectionCard: React.FC<SelectionCardProps> = ({ option, isSelected, onCli
 // カテゴリ選択コンポーネント
 interface CategorySelectorProps {
   category: BuildingInfoCategory;
-  value: string | undefined;
-  onChange: (value: string) => void;
+  value: string | string[] | undefined;
+  onChange: (value: string | string[]) => void;
 }
 
 const CategorySelector: React.FC<CategorySelectorProps> = ({ category, value, onChange }) => {
+  // 複数選択の場合の選択状態チェック
+  const isSelected = (optionId: string): boolean => {
+    if (category.multiple) {
+      const values = Array.isArray(value) ? value : [];
+      return values.includes(optionId);
+    }
+    return value === optionId;
+  };
+
+  // 複数選択の場合のクリック処理
+  const handleClick = (optionId: string) => {
+    if (category.multiple) {
+      const currentValues = Array.isArray(value) ? value : [];
+      if (currentValues.includes(optionId)) {
+        // 既に選択されている場合は削除
+        onChange(currentValues.filter(v => v !== optionId));
+      } else {
+        // 未選択の場合は追加
+        onChange([...currentValues, optionId]);
+      }
+    } else {
+      onChange(optionId);
+    }
+  };
+
   return (
     <div className="mb-6">
       <h4 className="text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
@@ -80,8 +105,8 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({ category, value, on
           <SelectionCard
             key={option.id}
             option={option}
-            isSelected={value === option.id}
-            onClick={() => onChange(option.id)}
+            isSelected={isSelected(option.id)}
+            onClick={() => handleClick(option.id)}
           />
         ))}
       </div>
@@ -93,7 +118,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({ category, value, on
 interface SectionViewProps {
   section: BuildingInfoSection;
   values: BuildingInfo;
-  onChange: (categoryId: string, value: string) => void;
+  onChange: (categoryId: string, value: string | string[]) => void;
 }
 
 const SectionView: React.FC<SectionViewProps> = ({ section, values, onChange }) => {
@@ -106,7 +131,7 @@ const SectionView: React.FC<SectionViewProps> = ({ section, values, onChange }) 
         <CategorySelector
           key={category.id}
           category={category}
-          value={values[category.id as keyof BuildingInfo]}
+          value={values[category.id as keyof BuildingInfo] as string | string[] | undefined}
           onChange={(value) => onChange(category.id, value)}
         />
       ))}
@@ -124,7 +149,7 @@ export const BuildingInfoSelector: React.FC<BuildingInfoSelectorProps> = ({
   const isFirstSection = currentSectionIndex === 0;
   const isLastSection = currentSectionIndex === BUILDING_INFO_SECTIONS.length - 1;
 
-  const handleCategoryChange = (categoryId: string, optionValue: string) => {
+  const handleCategoryChange = (categoryId: string, optionValue: string | string[]) => {
     onChange({
       ...value,
       [categoryId]: optionValue,
@@ -242,6 +267,19 @@ export const BuildingInfoSummary: React.FC<{ value: BuildingInfo }> = ({ value }
           <div className="grid grid-cols-2 gap-2 text-sm">
             {section.categories.map(category => {
               const selectedValue = value[category.id as keyof BuildingInfo];
+              // 複数選択の場合の表示
+              if (category.multiple && Array.isArray(selectedValue)) {
+                const labels = selectedValue
+                  .map(v => category.options.find(o => o.id === v)?.label)
+                  .filter(Boolean)
+                  .join('、');
+                return (
+                  <div key={category.id} className="flex justify-between col-span-2">
+                    <span className="text-gray-600">{category.name}:</span>
+                    <span className="font-medium text-gray-800">{labels || '選択なし'}</span>
+                  </div>
+                );
+              }
               const option = category.options.find(o => o.id === selectedValue);
               return (
                 <div key={category.id} className="flex justify-between">

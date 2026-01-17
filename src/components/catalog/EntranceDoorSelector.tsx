@@ -140,7 +140,7 @@ export const EntranceDoorSelector: React.FC<EntranceDoorSelectorProps> = ({
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [selectedKeyType, setSelectedKeyType] = useState<string | null>(null);
   const [selectedHandleCombo, setSelectedHandleCombo] = useState<HandleColorCombo | null>(null);
-  const [wantsInterfaceUnit, setWantsInterfaceUnit] = useState<boolean | null>(null);
+  const [wantsInterfaceUnit, setWantsInterfaceUnit] = useState<boolean | null>(false); // デフォルトで「なし」を選択
 
   // 製品を取得
   const getProduct = (productId: string): Product | undefined => {

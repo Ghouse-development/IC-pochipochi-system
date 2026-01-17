@@ -30,8 +30,6 @@ interface CustomerInfo {
   furigana: string;
   email: string;
   phone: string;
-  postalCode: string;
-  address: string;
 }
 
 interface InitialUserData {
@@ -85,8 +83,6 @@ export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = (
     furigana: '',
     email: initialUser?.email || '',
     phone: initialUser?.phone || '',
-    postalCode: '',
-    address: '',
   });
 
   const [planType, setPlanType] = useState<string>('LACIE');
@@ -329,32 +325,6 @@ export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = (
                   value={customer.phone || ''}
                   onChange={handleCustomerChange}
                   placeholder="090-1234-5678"
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  郵便番号
-                </label>
-                <input
-                  type="text"
-                  name="postalCode"
-                  value={customer.postalCode || ''}
-                  onChange={handleCustomerChange}
-                  placeholder="123-4567"
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  現住所
-                </label>
-                <input
-                  type="text"
-                  name="address"
-                  value={customer.address || ''}
-                  onChange={handleCustomerChange}
-                  placeholder="東京都渋谷区..."
                   className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
               </div>

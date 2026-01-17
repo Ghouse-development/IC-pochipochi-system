@@ -251,24 +251,33 @@ export const useProductStore = create<ProductStore>()(
               fetchItemsByCategory('other'),
             ]);
 
-            const totalFromDB = exterior.length + interior.length + equipment.length + other.length;
+            // 静的データをロード（部分的なフォールバック用）
+            const staticData = await loadStaticData();
 
-            if (totalFromDB > 0) {
+            // 各カテゴリで、DBにデータがなければ静的データにフォールバック
+            const finalExterior = exterior.length > 0 ? exterior : staticData.exterior;
+            const finalInterior = interior.length > 0 ? interior : staticData.interior;
+            const finalWater = equipment.length > 0 ? equipment : staticData.water;
+            const finalFurniture = other.length > 0 ? other : staticData.furniture;
+
+            const totalItems = finalExterior.length + finalInterior.length + finalWater.length + finalFurniture.length;
+
+            if (totalItems > 0) {
               set({
-                exteriorProducts: exterior,
-                interiorProducts: interior,
-                waterProducts: equipment,
-                furnitureProducts: other,
+                exteriorProducts: finalExterior,
+                interiorProducts: finalInterior,
+                waterProducts: finalWater,
+                furnitureProducts: finalFurniture,
                 isLoading: false,
-                isDBConnected: true,
+                isDBConnected: exterior.length > 0 || interior.length > 0 || equipment.length > 0,
                 lastFetchedAt: new Date(),
               });
 
-              logger.info(`Products loaded from Supabase: ${totalFromDB} items (exterior: ${exterior.length}, interior: ${interior.length}, equipment: ${equipment.length}, other: ${other.length})`);
+              logger.info(`Products loaded: ${totalItems} items (exterior: ${finalExterior.length} [DB: ${exterior.length}], interior: ${finalInterior.length} [DB: ${interior.length}], equipment: ${finalWater.length} [DB: ${equipment.length}], furniture: ${finalFurniture.length} [DB: ${other.length}])`);
               return;
             }
 
-            logger.warn('Supabase returned no products, falling back to static data');
+            logger.warn('No products found, falling back to full static data');
           }
 
           // 2. Supabaseが空または未設定の場合は静的データにフォールバック

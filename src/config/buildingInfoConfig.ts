@@ -13,6 +13,7 @@ export interface BuildingInfoCategory {
   id: string;
   name: string;
   required: boolean;
+  multiple?: boolean; // 複数選択可能かどうか
   options: BuildingInfoOption[];
 }
 
@@ -155,21 +156,252 @@ const STRUCTURE_SECTION: BuildingInfoSection = {
   ],
 };
 
-// 各種申請セクション
+// 各種申請セクション（複数選択可能）
 const APPLICATION_SECTION: BuildingInfoSection = {
   id: 'application',
   title: '各種申請',
   categories: [
     {
       id: 'certifications',
-      name: '各種申請',
+      name: '各種申請（複数選択可）',
       required: false,
+      multiple: true, // 複数選択可能
       options: [
         { id: 'long_term', label: '長期優良住宅', description: '長期優良住宅認定' },
         { id: 'bels', label: 'BELS', description: '建築物省エネルギー性能表示制度' },
         { id: 'jio', label: '住宅性能証明（JIO）', description: 'JIO住宅性能証明' },
         { id: 'flat', label: 'フラット', description: 'フラット35適合' },
-        { id: 'none', label: '未選択', description: '特に申請なし' },
+      ],
+    },
+  ],
+};
+
+// 外構・ポーチセクション
+const EXTERIOR_SECTION: BuildingInfoSection = {
+  id: 'exterior',
+  title: '外構・ポーチ',
+  categories: [
+    {
+      id: 'porch_extension',
+      name: 'ポーチ拡張',
+      required: false,
+      options: [
+        { id: 'no', label: '無' },
+        { id: 'yes', label: '有' },
+      ],
+    },
+    {
+      id: 'parapet',
+      name: 'パラペット',
+      required: false,
+      options: [
+        { id: 'no', label: '無' },
+        { id: 'yes', label: '有' },
+      ],
+    },
+    {
+      id: 'balcony',
+      name: 'バルコニー',
+      required: false,
+      options: [
+        { id: 'no', label: '無' },
+        { id: 'yes', label: '有' },
+        { id: 'koshikabe', label: '腰壁' },
+      ],
+    },
+    {
+      id: 'eaves_ceiling',
+      name: '軒天',
+      required: false,
+      options: [
+        { id: 'no', label: '無' },
+        { id: 'yes', label: '有' },
+      ],
+    },
+    {
+      id: 'canopy',
+      name: '庇',
+      required: false,
+      options: [
+        { id: 'no', label: '無' },
+        { id: 'yes', label: '有' },
+      ],
+    },
+    {
+      id: 'garage_shutter',
+      name: 'ガレージシャッター',
+      required: false,
+      options: [
+        { id: 'no', label: '無' },
+        { id: 'yes', label: '有' },
+      ],
+    },
+  ],
+};
+
+// 玄関・窓セクション
+const ENTRANCE_WINDOW_SECTION: BuildingInfoSection = {
+  id: 'entrance_window',
+  title: '玄関・窓',
+  categories: [
+    {
+      id: 'entrance_door_count',
+      name: '玄関ドア個数',
+      required: false,
+      options: [
+        { id: '1', label: '1個' },
+        { id: '2', label: '2個' },
+      ],
+    },
+    {
+      id: 'window_type',
+      name: '窓種類',
+      required: false,
+      options: [
+        { id: 'standard', label: '標準窓' },
+        { id: 'high_insulation', label: '高断熱窓' },
+        { id: 'triple', label: 'トリプルガラス' },
+      ],
+    },
+    {
+      id: 'interior_window',
+      name: '室内窓',
+      required: false,
+      options: [
+        { id: 'no', label: '無' },
+        { id: 'yes', label: '有' },
+      ],
+    },
+  ],
+};
+
+// 設備セクション
+const EQUIPMENT_SECTION: BuildingInfoSection = {
+  id: 'equipment',
+  title: '設備',
+  categories: [
+    {
+      id: 'inspection_hatch',
+      name: '点検口',
+      required: false,
+      options: [
+        { id: 'japanese', label: '和室' },
+        { id: 'western', label: '洋室' },
+      ],
+    },
+    {
+      id: 'air_inlet',
+      name: '給気口',
+      required: false,
+      options: [
+        { id: 'japanese', label: '和室' },
+        { id: 'western', label: '洋室' },
+      ],
+    },
+    {
+      id: 'relay_pole',
+      name: '中継ポール',
+      required: false,
+      options: [
+        { id: 'no', label: '無' },
+        { id: 'yes', label: '有' },
+      ],
+    },
+    {
+      id: 'entrance_sink',
+      name: '玄関手洗い',
+      required: false,
+      options: [
+        { id: 'no', label: '無' },
+        { id: 'yes', label: '有' },
+      ],
+    },
+  ],
+};
+
+// 電気・エネルギーセクション
+const ENERGY_SECTION: BuildingInfoSection = {
+  id: 'energy',
+  title: '電気・エネルギー',
+  categories: [
+    {
+      id: 'water_heater',
+      name: '給湯器',
+      required: false,
+      options: [
+        { id: 'ecojoz', label: 'エコジョーズ', description: 'ガス給湯器' },
+        { id: 'ecocute', label: 'エコキュート', description: '電気給湯器' },
+      ],
+    },
+    {
+      id: 'ventilation',
+      name: '換気システム',
+      required: false,
+      options: [
+        { id: 'type1', label: '1種換気', description: '機械給気・機械排気' },
+        { id: 'type3', label: '3種換気', description: '自然給気・機械排気' },
+      ],
+    },
+    {
+      id: 'intercom',
+      name: 'インターホン',
+      required: false,
+      options: [
+        { id: 'parent1_child0', label: '親機1子機0' },
+        { id: 'parent1_child1', label: '親機1子機1' },
+      ],
+    },
+    {
+      id: 'solar',
+      name: '太陽光',
+      required: false,
+      options: [
+        { id: 'no', label: '無' },
+        { id: 'yes', label: '有' },
+      ],
+    },
+    {
+      id: 'battery',
+      name: '蓄電池',
+      required: false,
+      options: [
+        { id: 'no', label: '無' },
+        { id: 'yes', label: '有' },
+      ],
+    },
+    {
+      id: 'v2h',
+      name: 'V2H',
+      required: false,
+      options: [
+        { id: 'no', label: '無' },
+        { id: 'yes', label: '有' },
+      ],
+    },
+  ],
+};
+
+// その他セクション
+const OTHER_SECTION: BuildingInfoSection = {
+  id: 'other',
+  title: 'その他',
+  categories: [
+    {
+      id: 'gas_work',
+      name: 'ガス工事',
+      required: false,
+      options: [
+        { id: 'no', label: '無' },
+        { id: 'yes', label: '有' },
+      ],
+    },
+    {
+      id: 'iron_stairs',
+      name: 'アイアン階段',
+      required: false,
+      options: [
+        { id: 'no', label: '無' },
+        { id: 'yes', label: '有' },
       ],
     },
   ],
@@ -182,6 +414,11 @@ export const BUILDING_INFO_SECTIONS: BuildingInfoSection[] = [
   BUILDING_DETAIL_SECTION,
   STRUCTURE_SECTION,
   APPLICATION_SECTION,
+  EXTERIOR_SECTION,
+  ENTRANCE_WINDOW_SECTION,
+  EQUIPMENT_SECTION,
+  ENERGY_SECTION,
+  OTHER_SECTION,
 ];
 
 // 建築情報の型定義
@@ -196,7 +433,33 @@ export interface BuildingInfo {
   ground_improvement?: string;
   damper: string;
   module: string;
-  certifications?: string;
+  certifications?: string | string[]; // 複数選択対応
+  // 外構・ポーチ
+  porch_extension?: string;
+  parapet?: string;
+  balcony?: string;
+  eaves_ceiling?: string;
+  canopy?: string;
+  garage_shutter?: string;
+  // 玄関・窓
+  entrance_door_count?: string;
+  window_type?: string;
+  interior_window?: string;
+  // 設備
+  inspection_hatch?: string;
+  air_inlet?: string;
+  relay_pole?: string;
+  entrance_sink?: string;
+  // 電気・エネルギー
+  water_heater?: string;
+  ventilation?: string;
+  intercom?: string;
+  solar?: string;
+  battery?: string;
+  v2h?: string;
+  // その他
+  gas_work?: string;
+  iron_stairs?: string;
 }
 
 // デフォルト値
@@ -211,7 +474,33 @@ export const DEFAULT_BUILDING_INFO: BuildingInfo = {
   ground_improvement: 'no',
   damper: 'evoltz',
   module: '910',
-  certifications: 'none',
+  certifications: [],
+  // 外構・ポーチ
+  porch_extension: 'no',
+  parapet: 'no',
+  balcony: 'no',
+  eaves_ceiling: 'yes',
+  canopy: 'no',
+  garage_shutter: 'no',
+  // 玄関・窓
+  entrance_door_count: '1',
+  window_type: 'standard',
+  interior_window: 'no',
+  // 設備
+  inspection_hatch: 'western',
+  air_inlet: 'western',
+  relay_pole: 'no',
+  entrance_sink: 'no',
+  // 電気・エネルギー
+  water_heater: 'ecojoz',
+  ventilation: 'type3',
+  intercom: 'parent1_child0',
+  solar: 'no',
+  battery: 'no',
+  v2h: 'no',
+  // その他
+  gas_work: 'no',
+  iron_stairs: 'no',
 };
 
 // カテゴリIDからセクションを取得
