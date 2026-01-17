@@ -201,6 +201,10 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
 
   // スタッフログインページ（DEMOモードでもアクセス可能）
   if (location.pathname === '/login') {
+    // ログイン済みの場合は管理者ページにリダイレクト
+    if (user) {
+      return <Navigate to="/admin" replace />;
+    }
     return <LoginPage onDemoLogin={() => navigate('/catalog')} />;
   }
 
