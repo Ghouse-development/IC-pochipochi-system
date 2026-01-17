@@ -1718,10 +1718,18 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                           ? `部屋: ${selection.selectedRooms?.join(', ') || '未選択'}`
                           : `家具: ${selection.selectedFurnitureTypes?.join(', ') || '未選択'}${selection.otherText ? ` (その他: ${selection.otherText})` : ''}`;
                         toast.success(`${currentCategoryName}: IC提案を希望 - ${details}`);
-                        // カートに追加するか、選択状態を保存
-                        // TODO: IC提案の選択状態をストアに保存
+                        // IC提案の選択状態をストアに保存
+                        setProductSelection(
+                          currentCategoryName,
+                          'ic-proposal',
+                          `IC提案希望 - ${details}`,
+                          undefined,
+                          undefined,
+                          selection.selectedRooms
+                        );
                       } else {
                         // IC提案を希望しない場合
+                        setNotNeeded(currentCategoryName, '提案不要');
                         toast.info(`${currentCategoryName}: 提案不要`);
                       }
                       // 次のカテゴリへ移動
