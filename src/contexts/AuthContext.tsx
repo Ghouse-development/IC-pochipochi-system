@@ -43,15 +43,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Fetch app user data from users table (via API to bypass RLS)
   const fetchUserData = async (_authId: string): Promise<User | null> => {
+    console.log('[AuthContext] fetchUserData called');
     try {
       // Get current session
       const { data: { session } } = await supabase.auth.getSession();
+      console.log('[AuthContext] session:', session ? 'exists' : 'null', 'token:', session?.access_token ? 'exists' : 'null');
       if (!session?.access_token) {
         logger.error('No session token available');
         return null;
       }
 
       // API経由でユーザーデータを取得（サービスロールでRLSをバイパス）
+      console.log('[AuthContext] Calling /api/auth/get-user...');
       try {
         const response = await fetch('/api/auth/get-user', {
           method: 'GET',
@@ -61,17 +64,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           },
         });
 
+        console.log('[AuthContext] API response status:', response.status);
         if (response.ok) {
           const { user } = await response.json();
           if (user) {
+            console.log('[AuthContext] User fetched via API:', user.email);
             logger.info('User fetched via API:', user.email, 'role:', user.role);
             return user;
           }
         } else {
           const errorText = await response.text();
+          console.log('[AuthContext] API error:', errorText);
           logger.warn('API fetch failed, trying direct query:', errorText);
         }
       } catch (apiError) {
+        console.log('[AuthContext] API call exception:', apiError);
         logger.warn('API not available, trying direct query:', apiError);
       }
 
