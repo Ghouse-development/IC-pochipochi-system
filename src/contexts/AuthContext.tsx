@@ -43,18 +43,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Fetch app user data from users table (via API to bypass RLS)
   const fetchUserData = async (_authId: string): Promise<User | null> => {
-    console.log('[AuthContext] fetchUserData called');
     try {
       // Get current session
       const { data: { session } } = await supabase.auth.getSession();
-      console.log('[AuthContext] session:', session ? 'exists' : 'null', 'token:', session?.access_token ? 'exists' : 'null');
       if (!session?.access_token) {
         logger.error('No session token available');
         return null;
       }
 
       // API経由でユーザーデータを取得（サービスロールでRLSをバイパス）
-      console.log('[AuthContext] Calling /api/auth/get-user...');
       try {
         const response = await fetch('/api/auth/get-user', {
           method: 'GET',
@@ -64,26 +61,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           },
         });
 
-        console.log('[AuthContext] API response status:', response.status);
         if (response.ok) {
           const { user } = await response.json();
           if (user) {
-            console.log('[AuthContext] User fetched via API:', user.email);
             logger.info('User fetched via API:', user.email, 'role:', user.role);
             return user;
           }
         } else {
           const errorText = await response.text();
-          console.log('[AuthContext] API error:', errorText);
           logger.warn('API fetch failed, trying direct query:', errorText);
         }
       } catch (apiError) {
-        console.log('[AuthContext] API call exception:', apiError);
         logger.warn('API not available, trying direct query:', apiError);
       }
 
       // フォールバック削除 - API失敗時はユーザー作成を試みる
-      console.log('[AuthContext] API failed, trying to create user via init-admin...');
       try {
         const createResponse = await fetch('/api/auth/init-admin', {
           method: 'POST',
@@ -97,17 +89,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           }),
         });
 
-        console.log('[AuthContext] init-admin response:', createResponse.status);
         if (createResponse.ok) {
           const { user: newUser } = await createResponse.json();
           if (newUser) {
-            console.log('[AuthContext] User created/fetched via init-admin:', newUser.email);
             logger.info('User record created via API:', newUser.email, 'role:', newUser.role);
             return newUser;
           }
         }
       } catch (createError) {
-        console.log('[AuthContext] init-admin error:', createError);
         logger.error('Error creating user via API:', createError);
       }
 
@@ -179,19 +168,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     // Get initial session with timeout
     const initializeAuth = async () => {
-      console.log('[AuthContext] initializeAuth started');
-
       // タイムアウト設定（5秒）
       const timeoutId = setTimeout(() => {
-        console.log('[AuthContext] Timeout reached');
         logger.warn('Auth initialization timeout, proceeding without session');
         setIsLoading(false);
       }, 5000);
 
       try {
-        console.log('[AuthContext] Calling getSession...');
         const { data: { session }, error } = await supabase.auth.getSession();
-        console.log('[AuthContext] getSession result:', session ? 'session exists' : 'no session', error ? `error: ${error.message}` : '');
 
         clearTimeout(timeoutId);
 
@@ -205,27 +189,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setSupabaseUser(session?.user ?? null);
 
         if (session?.user) {
-          console.log('[AuthContext] Session user found, fetching user data...');
           try {
             const userData = await fetchUserData(session.user.id);
-            console.log('[AuthContext] User data fetched:', userData ? userData.email : 'null');
             setUser(userData);
             if (userData) {
               await updateLastLogin(userData.id);
             }
           } catch (fetchError) {
-            console.log('[AuthContext] Error fetching user:', fetchError);
             logger.error('Error fetching user data:', fetchError);
           }
-        } else {
-          console.log('[AuthContext] No session user');
         }
       } catch (error) {
         clearTimeout(timeoutId);
-        console.log('[AuthContext] initializeAuth error:', error);
         logger.error('Error initializing auth:', error);
       } finally {
-        console.log('[AuthContext] initializeAuth complete, setting isLoading=false');
         setIsLoading(false);
       }
     };
@@ -420,7 +397,6 @@ export function DemoAuthProvider({ children }: { children: ReactNode }) {
       }
 
       // フォールバック削除 - API失敗時はユーザー作成を試みる
-      console.log('[AuthContext Demo] API failed, trying init-admin...');
       try {
         const createResponse = await fetch('/api/auth/init-admin', {
           method: 'POST',
@@ -437,7 +413,7 @@ export function DemoAuthProvider({ children }: { children: ReactNode }) {
         if (createResponse.ok) {
           const { user: newUser } = await createResponse.json();
           if (newUser) {
-            console.log('[AuthContext Demo] User via init-admin:', newUser.email);
+            logger.info('User created via init-admin in demo mode:', newUser.email);
             return newUser;
           }
         }
