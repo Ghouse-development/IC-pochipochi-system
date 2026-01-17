@@ -1,11 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 
-interface LoginPageProps {
-  onDemoLogin?: () => void;
-}
-
-export function LoginPage({ onDemoLogin }: LoginPageProps) {
+export function LoginPage() {
   const { signIn, resetPassword } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -189,7 +185,7 @@ export function LoginPage({ onDemoLogin }: LoginPageProps) {
             {isLoading ? 'ログイン中...' : 'ログイン'}
           </button>
 
-          <div className="flex items-center justify-between text-sm">
+          <div className="flex items-center justify-center text-sm">
             <button
               type="button"
               onClick={() => setShowResetPassword(true)}
@@ -199,20 +195,6 @@ export function LoginPage({ onDemoLogin }: LoginPageProps) {
             </button>
           </div>
         </form>
-
-        {onDemoLogin && (
-          <div className="mt-8 pt-6 border-t border-gray-200">
-            <button
-              onClick={onDemoLogin}
-              className="w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors"
-            >
-              デモモードで開始
-            </button>
-            <p className="text-xs text-gray-500 text-center mt-2">
-              ※デモモードは管理者権限で動作します
-            </p>
-          </div>
-        )}
       </div>
     </div>
   );

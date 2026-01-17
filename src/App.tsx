@@ -1,6 +1,6 @@
 import { useState, lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
-import { AuthProvider, DemoAuthProvider, useAuth } from './contexts/AuthContext';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { CustomerModeProvider } from './components/customer/CustomerModeWrapper';
 import { createLogger } from './lib/logger';
 import { DevToolbar } from './components/dev/DevToolbar';
@@ -15,10 +15,6 @@ import { SelectedItemsBar } from './components/catalog/SelectedItemsBar';
 import { ConfirmOrderModal } from './components/catalog/ConfirmOrderModal';
 import { ShareModal } from './components/common/ShareModal';
 import { GlobalErrorBoundary } from './components/common/GlobalErrorHandler';
-// チュートリアル関連は無効化
-// import { HelpButton } from './components/common/OnboardingGuide';
-// import { InteractiveTutorial, DEFAULT_TUTORIAL_STEPS } from './components/common/InteractiveTutorial';
-// import { useTutorialStore } from './stores/useTutorialStore';
 import { ToastProvider } from './components/common/Toast';
 import { AnnouncerProvider } from './components/common/ScreenReaderAnnouncer';
 import { HelpProvider } from './components/common/InAppHelp';
@@ -57,10 +53,10 @@ const AdminRouteGuard: React.FC<{ children: React.ReactNode }> = ({ children }) 
 
   // 未ログインの場合はログインページへ
   if (!user) {
-    return <LoginPage onDemoLogin={() => navigate('/catalog')} />;
+    return <LoginPage />;
   }
 
-  // 管理者でない場合は404表示
+  // 管理者でない場合は403表示
   if (!isAdmin) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -91,16 +87,8 @@ const PageLoader = () => (
   </div>
 );
 
-// Environment check for demo mode
-const isDemoMode = import.meta.env.VITE_DEMO_MODE === 'true' || !import.meta.env.VITE_SUPABASE_URL;
-
 // メインアプリケーションコンテンツ
-interface MainContentProps {
-  onDemoSwitch?: () => void;
-  isDemoMode?: boolean;
-}
-
-function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
+function MainContent() {
   const { user, isLoading, isAdmin } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -158,19 +146,6 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
     onHelp: () => setIsShortcutHelpOpen(true),
   });
 
-  // オンボーディングガイド - 無効化済み
-
-  // インタラクティブチュートリアルは無効化
-  // const {
-  //   isOpen: isTutorialOpen,
-  //   isFirstVisit,
-  //   hasCompletedTutorial,
-  //   openTutorial,
-  //   closeTutorial,
-  //   completeTutorial,
-  //   markAsVisited,
-  // } = useTutorialStore();
-
   const handleCartClose = () => {
     setIsCartOpen(false);
     if (items.length > 0) {
@@ -179,7 +154,7 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
   };
 
   // Show loading while checking auth
-  if (isLoading && !isDemo) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <div className="text-center">
@@ -199,18 +174,18 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
     );
   }
 
-  // スタッフログインページ（DEMOモードでもアクセス可能）
+  // スタッフログインページ
   if (location.pathname === '/login') {
     // ログイン済みの場合は管理者ページにリダイレクト
     if (user) {
       return <Navigate to="/admin" replace />;
     }
-    return <LoginPage onDemoLogin={() => navigate('/catalog')} />;
+    return <LoginPage />;
   }
 
-  // Show login if not authenticated (非DEMOモードのみ)
-  if (!user && !isDemo) {
-    return <LoginPage onDemoLogin={onDemoSwitch} />;
+  // 未認証の場合はログインページを表示
+  if (!user) {
+    return <LoginPage />;
   }
 
   return (
@@ -241,7 +216,7 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
             </Suspense>
           } />
 
-          {/* 管理画面 - Lazy loaded + AdminRouteGuard（管理者以外は404表示） */}
+          {/* 管理画面 - Lazy loaded + AdminRouteGuard（管理者以外は403表示） */}
           <Route path="/admin" element={
             <AdminRouteGuard>
               <Suspense fallback={<PageLoader />}>
@@ -314,15 +289,6 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
         onClose={() => setIsShareModalOpen(false)}
       />
 
-      {/* ヘルプボタン・チュートリアルは無効化 */}
-
-      {/* オンボーディングガイド - 無効化済み */}
-      {/* <OnboardingGuide
-        isOpen={showOnboarding}
-        onClose={closeOnboarding}
-        onComplete={completeOnboarding}
-      /> */}
-
       {/* キーボードショートカットヘルプ */}
       <ShortcutHelpModal
         isOpen={isShortcutHelpOpen}
@@ -331,7 +297,6 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
 
       {/* ネットワーク状態バナー */}
       <NetworkStatusBanner />
-
 
       {/* カテゴリ完了時の祝福 */}
       {currentCatalogStep && (
@@ -353,49 +318,24 @@ function MainContent({ onDemoSwitch, isDemoMode: isDemo }: MainContentProps) {
 }
 
 function App() {
-  const [useDemoMode, setUseDemoMode] = useState(isDemoMode);
-
-  // GlobalErrorBoundaryでラップしたコンテンツ（強化版エラーハンドリング）
-  const wrappedContent = (isDemoMode: boolean, onDemoSwitch?: () => void) => (
-    <GlobalErrorBoundary
-      onError={(error, errorInfo) => {
-        logger.error('App error caught:', error.message);
-        logger.error('Component stack:', errorInfo.componentStack);
-      }}
-    >
-      <BrowserRouter>
-        <CustomerModeProvider>
-          <MainContent isDemoMode={isDemoMode} onDemoSwitch={onDemoSwitch} />
-        </CustomerModeProvider>
-      </BrowserRouter>
-    </GlobalErrorBoundary>
-  );
-
-  // Use Demo provider if in demo mode
-  if (useDemoMode) {
-    return (
-      <QueryProvider>
-        <AnnouncerProvider>
-          <ToastProvider>
-            <HelpProvider>
-              <DemoAuthProvider>
-                {wrappedContent(true)}
-              </DemoAuthProvider>
-            </HelpProvider>
-          </ToastProvider>
-        </AnnouncerProvider>
-      </QueryProvider>
-    );
-  }
-
-  // Use real auth provider
   return (
     <QueryProvider>
       <AnnouncerProvider>
         <ToastProvider>
           <HelpProvider>
             <AuthProvider>
-              {wrappedContent(false, () => setUseDemoMode(true))}
+              <GlobalErrorBoundary
+                onError={(error, errorInfo) => {
+                  logger.error('App error caught:', error.message);
+                  logger.error('Component stack:', errorInfo.componentStack);
+                }}
+              >
+                <BrowserRouter>
+                  <CustomerModeProvider>
+                    <MainContent />
+                  </CustomerModeProvider>
+                </BrowserRouter>
+              </GlobalErrorBoundary>
             </AuthProvider>
           </HelpProvider>
         </ToastProvider>
