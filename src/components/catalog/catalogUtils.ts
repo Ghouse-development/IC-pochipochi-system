@@ -83,6 +83,8 @@ export const convertStaticToItemWithDetails = (product: CatalogProduct, category
 // DBアイテムをRecommendation用のCatalogProductに変換
 export const convertToCatalogProduct = (item: ItemWithDetails): CatalogProduct => {
   const pricing = item.pricing?.find(p => p.product?.code === 'LACIE');
+  // catalog_urlをバリアント画像のフォールバックとして使用
+  const fallbackImageUrl = item.catalog_url || undefined;
 
   return {
     id: item.id,
@@ -105,8 +107,9 @@ export const convertToCatalogProduct = (item: ItemWithDetails): CatalogProduct =
       id: v.id,
       color: v.color_name,
       colorCode: v.color_code || undefined,
-      imageUrl: v.images?.[0]?.image_url,
-      thumbnailUrl: v.images?.[0]?.thumbnail_url || undefined,
+      // バリアント画像がない場合はcatalog_urlをフォールバックとして使用
+      imageUrl: v.images?.[0]?.image_url || fallbackImageUrl,
+      thumbnailUrl: v.images?.[0]?.thumbnail_url || fallbackImageUrl,
     })) || [],
   };
 };
