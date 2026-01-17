@@ -131,46 +131,48 @@ export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = (
         return;
       }
 
-      // プロジェクトコード生成（指定がなければ自動生成）
-      const code = projectCode || `PRJ-${Date.now().toString(36).toUpperCase()}`;
-      const name = projectName || `${customer.name}様邸`;
-
-      // プロジェクトを直接Supabaseに作成
-      const { data: project, error: projectError } = await supabase
-        .from('projects')
-        .insert({
-          code,
-          name,
-          plan_type: planType,
-          status: 'draft',
-          customer_name: customer.name,
-          customer_email: customer.email,
-          customer_phone: customer.phone || null,
-          building_info: buildingInfo,
+      // API経由でプロジェクトを作成（RLSをバイパス）
+      const response = await fetch('/api/projects/create', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          customer: {
+            id: initialUser?.id || undefined,
+            name: customer.name,
+            furigana: customer.furigana || undefined,
+            email: customer.email,
+            phone: customer.phone || undefined,
+          },
+          planType: planType,
+          projectCode: projectCode || undefined,
+          projectName: projectName || undefined,
+          buildingInfo: buildingInfo,
           rooms: rooms,
-          created_by: session.user.id,
-        })
-        .select()
-        .single();
+        }),
+      });
 
-      if (projectError) {
-        throw new Error(projectError.message || 'プロジェクトの作成に失敗しました');
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || result.details || 'プロジェクトの作成に失敗しました');
       }
 
-      // お客様用URLを生成
-      const generatedUrl = `${window.location.origin}/customer?project=${project.id}`;
-      setCustomerUrl(generatedUrl);
+      // お客様用URLを取得
+      setCustomerUrl(result.customerUrl);
 
       // 次のステップ（URL発行画面）へ
       setCurrentStep(5);
-      onComplete?.(project.id, generatedUrl);
+      onComplete?.(result.project.id, result.customerUrl);
     } catch (err) {
       console.error('Project creation error:', err);
       setError(err instanceof Error ? err.message : 'プロジェクトの作成に失敗しました');
     } finally {
       setIsSubmitting(false);
     }
-  }, [customer, planType, projectCode, projectName, buildingInfo, rooms, onComplete]);
+  }, [customer, planType, projectCode, projectName, buildingInfo, rooms, onComplete, initialUser]);
 
   const handleCopyUrl = useCallback(() => {
     if (customerUrl) {
