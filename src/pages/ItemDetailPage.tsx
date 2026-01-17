@@ -119,7 +119,7 @@ export const ItemDetailPage: React.FC = () => {
     fetchItem();
   }, [itemId]);
 
-  const { items } = useCartStore();
+  const { items, addItem } = useCartStore();
 
   // カートに同じ商品があるかチェック
   const isInCart = product ? items.some(item => item.product.id === product.id || item.product.id === product.itemCode) : false;
@@ -127,7 +127,41 @@ export const ItemDetailPage: React.FC = () => {
   const handleSelect = useCallback(() => {
     if (!product || !selectedVariant) return;
 
-    // カート追加の処理（現時点ではトースト表示のみ）
+    // DisplayProduct を Product 型に変換
+    const cartProduct = {
+      id: product.id,
+      categoryId: '', // カテゴリIDは不明なので空文字
+      categoryName: product.categoryName,
+      subcategory: product.categoryName,
+      name: product.name,
+      manufacturer: product.manufacturer,
+      modelNumber: product.itemCode,
+      unit: product.unit as any,
+      isOption: !product.isStandard,
+      variants: product.variants.map(v => ({
+        id: v.id,
+        color: v.color,
+        colorCode: v.colorCode,
+        imageUrl: v.imageUrl || undefined,
+        thumbnailUrl: v.thumbnailUrl || undefined,
+      })),
+      pricing: [{ price: product.price }],
+      description: product.description || undefined,
+      productUrl: product.productUrl || undefined,
+    };
+
+    // DisplayVariant を ProductVariant 型に変換
+    const cartVariant = {
+      id: selectedVariant.id,
+      color: selectedVariant.color,
+      colorCode: selectedVariant.colorCode,
+      imageUrl: selectedVariant.imageUrl || undefined,
+      thumbnailUrl: selectedVariant.thumbnailUrl || undefined,
+    };
+
+    // カートに追加
+    addItem(cartProduct, 1, cartVariant);
+
     toast.success('選択完了', `「${product.name}」の「${selectedVariant.color}」を選択しました`);
     setIsAdded(true);
 
@@ -135,7 +169,7 @@ export const ItemDetailPage: React.FC = () => {
     setTimeout(() => {
       navigate(-1);
     }, 1000);
-  }, [product, selectedVariant, toast, navigate]);
+  }, [product, selectedVariant, toast, navigate, addItem]);
 
   // ローディング中
   if (isLoading) {
