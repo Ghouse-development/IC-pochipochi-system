@@ -154,25 +154,44 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return data;
   };
 
-  // Update last login
+  // Update last login (API経由でRLSをバイパス)
   const updateLastLogin = async (userId: string) => {
-    await supabase
-      .from('users')
-      .update({ last_login_at: new Date().toISOString() })
-      .eq('id', userId);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) return;
+
+      // API経由で更新（エラーは無視）
+      await fetch('/api/auth/update-last-login', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId }),
+      }).catch(() => {
+        // 更新失敗しても続行（last_loginは必須ではない）
+      });
+    } catch {
+      // エラーは無視
+    }
   };
 
   useEffect(() => {
     // Get initial session with timeout
     const initializeAuth = async () => {
+      console.log('[AuthContext] initializeAuth started');
+
       // タイムアウト設定（5秒）
       const timeoutId = setTimeout(() => {
+        console.log('[AuthContext] Timeout reached');
         logger.warn('Auth initialization timeout, proceeding without session');
         setIsLoading(false);
       }, 5000);
 
       try {
+        console.log('[AuthContext] Calling getSession...');
         const { data: { session }, error } = await supabase.auth.getSession();
+        console.log('[AuthContext] getSession result:', session ? 'session exists' : 'no session', error ? `error: ${error.message}` : '');
 
         clearTimeout(timeoutId);
 
@@ -186,20 +205,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setSupabaseUser(session?.user ?? null);
 
         if (session?.user) {
+          console.log('[AuthContext] Session user found, fetching user data...');
           try {
             const userData = await fetchUserData(session.user.id);
+            console.log('[AuthContext] User data fetched:', userData ? userData.email : 'null');
             setUser(userData);
             if (userData) {
               await updateLastLogin(userData.id);
             }
           } catch (fetchError) {
+            console.log('[AuthContext] Error fetching user:', fetchError);
             logger.error('Error fetching user data:', fetchError);
           }
+        } else {
+          console.log('[AuthContext] No session user');
         }
       } catch (error) {
         clearTimeout(timeoutId);
+        console.log('[AuthContext] initializeAuth error:', error);
         logger.error('Error initializing auth:', error);
       } finally {
+        console.log('[AuthContext] initializeAuth complete, setting isLoading=false');
         setIsLoading(false);
       }
     };
