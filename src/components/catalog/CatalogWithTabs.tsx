@@ -1174,11 +1174,13 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   };
 
   // 外部設備の全必須サブカテゴリがカートにあるかチェック
+  // マッチング: subcategory, materialType, categoryName, nameのいずれかで判定
   const isExteriorFacilityComplete = useMemo(() => {
     const requiredFacilities = EXTERIOR_FACILITY_TYPES.filter(t => t.required).map(t => t.id);
     return requiredFacilities.every(facility =>
       cartItems.some(item =>
         item.product.subcategory === facility ||
+        item.product.materialType === facility ||
         item.product.categoryName === facility ||
         item.product.name?.includes(facility)
       )
@@ -1186,11 +1188,13 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   }, [cartItems]);
 
   // 外部建材の全サブカテゴリがカートにあるかチェック
+  // マッチング: subcategory, materialType, categoryName, nameのいずれかで判定
   const isExteriorMaterialComplete = useMemo(() => {
     const requiredMaterials = EXTERIOR_MATERIAL_TYPES.map(t => t.id);
     return requiredMaterials.every(material =>
       cartItems.some(item =>
         item.product.subcategory === material ||
+        item.product.materialType === material ||
         item.product.categoryName === material ||
         item.product.name?.includes(material)
       )
