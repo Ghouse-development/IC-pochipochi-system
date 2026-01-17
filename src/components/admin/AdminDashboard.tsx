@@ -1,11 +1,10 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BarChart3, Package, Bell, TrendingUp, Upload, Settings, Users, FolderTree, Briefcase, Wrench, Truck, Database, Building2, ShieldAlert, DollarSign, Activity, RefreshCw, CloudOff, Cloud } from 'lucide-react';
+import { BarChart3, Package, Bell, TrendingUp, Upload, Settings, Users, FolderTree, Wrench, Truck, Database, Building2, ShieldAlert, DollarSign, Activity, RefreshCw, CloudOff, Cloud } from 'lucide-react';
 import { Button } from '../common/Button';
 import { Card } from '../common/Card';
 import { SectionErrorBoundary } from '../common/ErrorBoundary';
 import { SystemSettings } from './SystemSettings';
-import { ProjectManager } from './ProjectManager';
 import { ItemManager } from './ItemManager';
 import { CategoryManager } from './CategoryManager';
 import { ProductMaster } from './ProductMaster';
@@ -28,8 +27,8 @@ interface AdminDashboardProps {
   onBack?: () => void;
 }
 
-// メインタブ（6グループ）
-type MainTab = 'products' | 'statistics' | 'projects' | 'vendors' | 'data' | 'system';
+// メインタブ（5グループ）- プロジェクトはスタッフダッシュボードで管理
+type MainTab = 'products' | 'statistics' | 'vendors' | 'data' | 'system';
 
 // 商品マスタのサブタブ
 type ProductSubTab = 'plans' | 'items' | 'categories';
@@ -303,20 +302,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
               <BarChart3 className="w-4 h-4" />
               <span className="hidden sm:inline">統計・分析</span>
               <span className="sm:hidden">統計</span>
-            </div>
-          </button>
-          <button
-            onClick={() => setActiveTab('projects')}
-            className={`px-3 py-2 rounded-t-lg font-medium transition-colors ${
-              activeTab === 'projects'
-                ? 'bg-purple-500 text-white'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }`}
-          >
-            <div className="flex items-center gap-2">
-              <Briefcase className="w-4 h-4" />
-              <span className="hidden sm:inline">プロジェクト</span>
-              <span className="sm:hidden">案件</span>
             </div>
           </button>
           <button
@@ -943,15 +928,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
           </div>
         )}
         
-        {/* プロジェクト管理 */}
-        {activeTab === 'projects' && (
-          <div className="space-y-6">
-            <SectionErrorBoundary sectionName="プロジェクト管理">
-              <ProjectManager />
-            </SectionErrorBoundary>
-          </div>
-        )}
-
         {/* 発注管理 */}
         {activeTab === 'vendors' && (
           <div className="space-y-6">
