@@ -95,6 +95,7 @@ export const convertToCatalogProduct = (item: ItemWithDetails): CatalogProduct =
     unit: (item.unit?.symbol || '式') as CatalogProduct['unit'],
     isOption: pricing ? !pricing.is_standard : false,
     description: item.note || '',
+    productUrl: item.catalog_url || undefined,
     pricing: item.pricing?.map(p => ({
       plan: (p.product?.code || 'LACIE') as 'LACIE' | 'HOURS' | 'LIFE',
       planId: (p.product?.code || undefined) as 'LACIE' | 'HOURS' | 'LIFE' | undefined,

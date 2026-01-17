@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Check, ChevronLeft, Image as ImageIcon, X } from 'lucide-react';
+import { Check, ChevronLeft, Image as ImageIcon, X, ExternalLink } from 'lucide-react';
 import { PageHeader } from './PageHeader';
 import { SelectionCard } from './SelectionCard';
 import { useCartStore } from '../../stores/useCartStore';
@@ -76,10 +76,10 @@ const ColorSelectModal: React.FC<ColorSelectModalProps> = ({ product, onSelect, 
             </p>
           </div>
 
-          {/* 色一覧 */}
-          <div className="md:w-1/2 p-4 border-t md:border-t-0 md:border-l">
+          {/* 色一覧 + 商品情報 */}
+          <div className="md:w-1/2 p-4 border-t md:border-t-0 md:border-l overflow-y-auto max-h-[70vh]">
             <p className="text-sm text-gray-600 mb-3">{variants.length}色から選択</p>
-            <div className="grid grid-cols-4 gap-2 max-h-[50vh] overflow-y-auto">
+            <div className="grid grid-cols-4 gap-2 mb-4">
               {variants.map((variant, idx) => {
                 const variantImage = getVariantImage(variant);
                 const isSelected = idx === selectedIndex;
@@ -111,6 +111,27 @@ const ColorSelectModal: React.FC<ColorSelectModalProps> = ({ product, onSelect, 
                 );
               })}
             </div>
+
+            {/* 商品特徴・メモ */}
+            {product.description && (
+              <div className="bg-blue-50 rounded-lg p-3 mb-3">
+                <p className="text-xs font-bold text-blue-800 mb-1">商品特徴・メモ</p>
+                <p className="text-sm text-blue-700">{product.description}</p>
+              </div>
+            )}
+
+            {/* メーカーURL */}
+            {product.productUrl && (
+              <a
+                href={product.productUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-blue-600 hover:text-blue-800 text-sm bg-gray-50 rounded-lg p-3"
+              >
+                <ExternalLink className="w-4 h-4" />
+                <span className="underline">メーカーサイトで詳細を見る</span>
+              </a>
+            )}
           </div>
         </div>
 
