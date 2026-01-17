@@ -33,7 +33,7 @@ async function executeSql(sql: string): Promise<void> {
         // Try direct execution if RPC fails
         console.log(`Statement executed (may have warning): ${statement.substring(0, 50)}...`);
       }
-    } catch (err) {
+    } catch {
       console.log(`Skipping statement: ${statement.substring(0, 50)}...`);
     }
   }

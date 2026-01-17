@@ -45,9 +45,9 @@ if (!supabaseUrl || !supabaseKey) {
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // キャッシュ用
-let categoryCache: Map<string, string> = new Map();
-let unitCache: Map<string, string> = new Map();
-let productCache: Map<string, string> = new Map();
+const categoryCache: Map<string, string> = new Map();
+const unitCache: Map<string, string> = new Map();
+const productCache: Map<string, string> = new Map();
 
 // 単位コードマッピング
 const UNIT_CODE_MAP: Record<string, string> = {
@@ -178,7 +178,7 @@ function getProductId(plan: string): string | null {
   return productCache.get(planCode) || null;
 }
 
-async function migrateProduct(product: Product, categoryType: string): Promise<boolean> {
+async function migrateProduct(product: Product, _categoryType: string): Promise<boolean> {
   try {
     // 既存チェック
     const { data: existing } = await supabase

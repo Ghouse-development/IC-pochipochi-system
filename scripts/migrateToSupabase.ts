@@ -57,7 +57,7 @@ interface Product {
 }
 
 // カテゴリタイプマッピング
-const CATEGORY_TYPE_MAP: Record<string, string> = {
+const _CATEGORY_TYPE_MAP: Record<string, string> = {
   'exterior': 'exterior',
   'interior': 'interior',
   'equipment': 'equipment',

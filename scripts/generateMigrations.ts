@@ -97,7 +97,7 @@ function escapeSQL(str: string | undefined | null): string {
   return `'${str.replace(/'/g, "''")}'`;
 }
 
-function generateItemSQL(product: Product, index: number, categoryType: string): string {
+function generateItemSQL(product: Product, index: number, _categoryType: string): string {
   const itemCode = product.id;
   const categorySlug = categoryMapping[product.categoryId] || product.categoryId;
 
