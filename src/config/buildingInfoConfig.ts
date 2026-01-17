@@ -258,9 +258,8 @@ const ENTRANCE_WINDOW_SECTION: BuildingInfoSection = {
       name: '窓種類',
       required: false,
       options: [
-        { id: 'standard', label: '標準窓' },
-        { id: 'high_insulation', label: '高断熱窓' },
-        { id: 'triple', label: 'トリプルガラス' },
+        { id: 'apw330', label: 'APW330', description: '樹脂窓（標準）' },
+        { id: 'apw430', label: 'APW430', description: 'トリプルガラス樹脂窓' },
       ],
     },
     {
@@ -329,8 +328,10 @@ const ENERGY_SECTION: BuildingInfoSection = {
       name: '給湯器',
       required: false,
       options: [
-        { id: 'ecojoz', label: 'エコジョーズ', description: 'ガス給湯器' },
-        { id: 'ecocute', label: 'エコキュート', description: '電気給湯器' },
+        { id: 'ecojoz', label: 'エコジョーズ', description: 'ガス給湯器（従来型）' },
+        { id: 'ecojoz_hybrid', label: 'エコジョーズハイブリッド', description: 'ガス+ヒートポンプ' },
+        { id: 'ecocute', label: 'エコキュート', description: '電気給湯器（ヒートポンプ）' },
+        { id: 'ecocute_thin', label: 'エコキュート薄型', description: '電気給湯器（省スペース）' },
       ],
     },
     {
@@ -338,8 +339,8 @@ const ENERGY_SECTION: BuildingInfoSection = {
       name: '換気システム',
       required: false,
       options: [
-        { id: 'type1', label: '1種換気', description: '機械給気・機械排気' },
-        { id: 'type3', label: '3種換気', description: '自然給気・機械排気' },
+        { id: 'panasonic', label: 'Panasonic', description: 'パナソニック製換気システム' },
+        { id: 'dsdd', label: 'DSDD', description: 'DSDD製換気システム' },
       ],
     },
     {
@@ -479,12 +480,12 @@ export const DEFAULT_BUILDING_INFO: BuildingInfo = {
   porch_extension: 'no',
   parapet: 'no',
   balcony: 'no',
-  eaves_ceiling: 'yes',
+  eaves_ceiling: 'no',
   canopy: 'no',
   garage_shutter: 'no',
   // 玄関・窓
   entrance_door_count: '1',
-  window_type: 'standard',
+  window_type: 'apw330',
   interior_window: 'no',
   // 設備
   inspection_hatch: 'western',
@@ -493,7 +494,7 @@ export const DEFAULT_BUILDING_INFO: BuildingInfo = {
   entrance_sink: 'no',
   // 電気・エネルギー
   water_heater: 'ecojoz',
-  ventilation: 'type3',
+  ventilation: 'panasonic',
   intercom: 'parent1_child0',
   solar: 'no',
   battery: 'no',
