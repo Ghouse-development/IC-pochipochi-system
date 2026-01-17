@@ -544,7 +544,7 @@ export const projectsApi = {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.access_token) {
-        const response = await fetch('/api/projects/list', {
+        const response = await fetch('/api/projects/create', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${session.access_token}`,
