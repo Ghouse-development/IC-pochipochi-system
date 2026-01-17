@@ -182,8 +182,8 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   // お気に入りフィルター
   const [showFavoritesOnly] = useState(false);
 
-  // 廃番商品を非表示（デフォルトで非表示）
-  const [hideDiscontinued, setHideDiscontinued] = useState(true);
+  // 廃番商品を常に非表示
+  const hideDiscontinued = true;
 
   // 選択状態ストア（永続化対応）
   const {
@@ -1626,16 +1626,6 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                       <option value="200000">20万円以下</option>
                     </select>
                   </div>
-                  {/* 廃番表示切替 */}
-                  <label className="flex items-center gap-1.5 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={!hideDiscontinued}
-                      onChange={(e) => setHideDiscontinued(!e.target.checked)}
-                      className="w-3.5 h-3.5 rounded border-gray-300 text-blue-500 focus:ring-blue-500"
-                    />
-                    <span className="text-xs text-gray-500">廃番も表示</span>
-                  </label>
                   {/* フィルタークリア */}
                   {(selectedMaterialType || selectedSubcategory || selectedColor || priceMax > 0) && (
                     <button

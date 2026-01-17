@@ -314,10 +314,10 @@ export const ItemDetailPage: React.FC = () => {
                         </div>
                       )}
                     </div>
-                    {/* カラー名 */}
+                    {/* カラー名（色名がない場合は商品名を表示） */}
                     <div className="p-2">
                       <span className={`text-xs font-medium block truncate ${isSelected ? 'text-blue-700' : 'text-gray-700'}`}>
-                        {v.color}
+                        {v.color || product.name}
                       </span>
                     </div>
                   </button>
