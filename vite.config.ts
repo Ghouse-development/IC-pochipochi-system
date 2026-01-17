@@ -19,13 +19,15 @@ export default defineConfig(({ mode }) => {
     rollupOptions: {
       output: {
         manualChunks(id) {
-          // Reactコア
-          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom') || id.includes('node_modules/react-router')) {
+          // Reactコア + UI/アイコン（依存関係があるため一緒にバンドル）
+          if (
+            id.includes('node_modules/react') ||
+            id.includes('node_modules/react-dom') ||
+            id.includes('node_modules/react-router') ||
+            id.includes('lucide-react') ||
+            id.includes('@radix-ui')
+          ) {
             return 'react-vendor';
-          }
-          // UI/アイコン
-          if (id.includes('lucide-react') || id.includes('@radix-ui')) {
-            return 'ui-vendor';
           }
           // Supabase
           if (id.includes('@supabase')) {
