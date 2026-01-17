@@ -108,44 +108,36 @@ export function UserManager({ onBack, onCreateProject }: UserManagerProps) {
         return;
       }
 
-      // Supabase Auth でユーザーを作成（メール確認が必要）
-      const { data: authData, error: authError } = await supabase.auth.signUp({
-        email: newUserForm.email,
-        password: newUserForm.password,
-        options: {
-          data: {
-            full_name: newUserForm.full_name,
-          },
+      // 現在のセッションを取得
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) {
+        setError('ログインセッションが無効です。再ログインしてください。');
+        return;
+      }
+
+      // API経由でユーザーを作成（メール確認不要で即ログイン可能）
+      const response = await fetch('/api/admin/create-user', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json',
         },
-      });
-
-      if (authError) {
-        throw new Error(authError.message);
-      }
-
-      if (!authData.user) {
-        throw new Error('ユーザーの作成に失敗しました');
-      }
-
-      // usersテーブルにレコードを作成
-      const { error: insertError } = await supabase
-        .from('users')
-        .insert({
-          auth_id: authData.user.id,
+        body: JSON.stringify({
           email: newUserForm.email,
+          password: newUserForm.password,
           full_name: newUserForm.full_name,
           role: newUserForm.role,
           phone: newUserForm.phone || null,
-          is_active: true,
-        });
+        }),
+      });
 
-      if (insertError) {
-        logger.error('Error inserting user record:', insertError);
-        // auth.usersには作成されたが、usersテーブルへの挿入に失敗
-        // 次回ログイン時にAuthContextが自動的にレコードを作成する
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'ユーザーの作成に失敗しました');
       }
 
-      setSuccess('ユーザーを作成しました（確認メールが送信されました）');
+      setSuccess('ユーザーを作成しました（すぐにログイン可能です）');
       setIsCreating(false);
       setNewUserForm({
         email: '',
