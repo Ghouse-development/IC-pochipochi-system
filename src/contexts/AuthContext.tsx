@@ -23,7 +23,8 @@ interface AuthContextType {
   // Role checks
   isSuperAdmin: boolean;
   isAdmin: boolean;
-  isCoordinator: boolean;
+  isCoordinator: boolean;  // alias: isStaff
+  isStaff: boolean;        // スタッフ（ICコーディネーター）
   isCustomer: boolean;
   canManageItems: boolean;
   canManageProjects: boolean;
@@ -301,6 +302,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const isSuperAdmin = user?.role === 'admin'; // admin is the highest role
   const isAdmin = user?.role === 'admin';
   const isCoordinator = user?.role === 'coordinator';
+  const isStaff = user?.role === 'coordinator'; // スタッフ = coordinator
   const isCustomer = user?.role === 'user';
   const canManageItems = isAdmin;
   const canManageProjects = isAdmin || isCoordinator;
@@ -321,6 +323,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isSuperAdmin,
         isAdmin,
         isCoordinator,
+        isStaff,
         isCustomer,
         canManageItems,
         canManageProjects,

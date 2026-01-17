@@ -38,6 +38,8 @@ const PLAN_OPTIONS = [
   { value: 'LIFE+', label: 'LIFE+' },
   { value: 'LIFE', label: 'LIFE' },
   { value: 'LIFE_X', label: 'LIFE X' },
+  { value: 'LIFE_LIMITED', label: 'LIFE Limited' },
+  { value: 'LIFE_PLUS_LIMITED', label: 'LIFE+ Limited' },
 ];
 
 const FIRE_ZONE_OPTIONS = [
@@ -81,8 +83,6 @@ export const ProjectCreateForm: React.FC<ProjectCreateFormProps> = ({
     furigana: '',
     email: '',
     phone: '',
-    postalCode: '',
-    address: '',
   });
 
   const [land, setLand] = useState<LandInfo>({
@@ -293,32 +293,6 @@ export const ProjectCreateForm: React.FC<ProjectCreateFormProps> = ({
                   value={customer.phone || ''}
                   onChange={handleCustomerChange}
                   placeholder="090-1234-5678"
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  郵便番号
-                </label>
-                <input
-                  type="text"
-                  name="postalCode"
-                  value={customer.postalCode || ''}
-                  onChange={handleCustomerChange}
-                  placeholder="123-4567"
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  現住所
-                </label>
-                <input
-                  type="text"
-                  name="address"
-                  value={customer.address || ''}
-                  onChange={handleCustomerChange}
-                  placeholder="東京都渋谷区..."
                   className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
               </div>

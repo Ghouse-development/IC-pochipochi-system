@@ -1,4 +1,15 @@
-export type PlanType = 'LIFE' | 'LIFE+' | 'HOURS' | 'LACIE' | 'LIFE_X';
+export type PlanType = 'LIFE' | 'LIFE+' | 'HOURS' | 'LACIE' | 'LIFE_X' | 'LIFE_LIMITED' | 'LIFE_PLUS_LIMITED';
+
+// プラン価格マッピング（Limited版は対応するプランと同価格）
+export const PLAN_PRICE_MAP: Record<PlanType, PlanType> = {
+  'LIFE': 'LIFE',
+  'LIFE+': 'LIFE+',
+  'HOURS': 'HOURS',
+  'LACIE': 'LACIE',
+  'LIFE_X': 'LIFE',           // LIFE Xは LIFEと同価格
+  'LIFE_LIMITED': 'LIFE',     // LIFE Limitedは LIFEと同価格
+  'LIFE_PLUS_LIMITED': 'LIFE+', // LIFE+ Limitedは LIFE+と同価格
+};
 
 // UnitType: DBコード + 日本語表示両方サポート（後方互換性維持）
 export type UnitTypeCode = 'sqm' | 'piece' | 'location' | 'set' | 'package' | 'sheet' | 'meter' | 'unit' | 'pair';
@@ -87,7 +98,34 @@ export interface CartItem {
   // ㎡指定アイテム用
   area?: number;           // 面積（㎡）
   colorIndex?: number;     // 色番号（1, 2, 3...）複数色選択時の識別用
+  // 部屋適用情報（ベース床・壁・天井用）
+  appliedRooms?: string[]; // 適用する部屋ID配列
 }
+
+// 部屋タイプ定義（ベース床・壁・天井選択用）
+export interface RoomType {
+  id: string;
+  name: string;
+  icon: string;
+  floor: number;
+  group: 'main' | 'bedroom' | 'water' | 'common' | 'storage';
+}
+
+// 標準部屋リスト
+export const STANDARD_ROOMS: RoomType[] = [
+  { id: 'living', name: 'リビング', icon: '🛋️', floor: 1, group: 'main' },
+  { id: 'dining', name: 'ダイニング', icon: '🍽️', floor: 1, group: 'main' },
+  { id: 'kitchen', name: 'キッチン', icon: '🍳', floor: 1, group: 'main' },
+  { id: 'entrance', name: '玄関', icon: '🚪', floor: 1, group: 'common' },
+  { id: 'toilet1', name: 'トイレ（1階）', icon: '🚽', floor: 1, group: 'water' },
+  { id: 'washroom', name: '洗面室', icon: '🪥', floor: 1, group: 'water' },
+  { id: 'master', name: '主寝室', icon: '🛏️', floor: 2, group: 'bedroom' },
+  { id: 'child1', name: '子供部屋1', icon: '👶', floor: 2, group: 'bedroom' },
+  { id: 'child2', name: '子供部屋2', icon: '👶', floor: 2, group: 'bedroom' },
+  { id: 'toilet2', name: 'トイレ（2階）', icon: '🚽', floor: 2, group: 'water' },
+  { id: 'corridor', name: '廊下・階段', icon: '🚶', floor: 0, group: 'common' },
+  { id: 'closet', name: 'クローゼット', icon: '👔', floor: 0, group: 'storage' },
+];
 
 // ㎡指定が必要なカテゴリID
 export const AREA_BASED_CATEGORIES = [

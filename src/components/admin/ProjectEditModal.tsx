@@ -252,10 +252,13 @@ const FIRE_RESISTANCE_OPTIONS = [
 ];
 
 const PRODUCT_PLAN_OPTIONS = [
-  { value: 'LIFE', label: 'LIFE' },
-  { value: 'LIFE+', label: 'LIFE+ リミテッド' },
-  { value: 'HOURS', label: 'HOURS' },
   { value: 'LACIE', label: 'LACIE' },
+  { value: 'HOURS', label: 'HOURS' },
+  { value: 'LIFE+', label: 'LIFE+' },
+  { value: 'LIFE', label: 'LIFE' },
+  { value: 'LIFE_X', label: 'LIFE X' },
+  { value: 'LIFE_LIMITED', label: 'LIFE Limited' },
+  { value: 'LIFE_PLUS_LIMITED', label: 'LIFE+ Limited' },
 ];
 
 const CONSTRUCTION_METHOD_OPTIONS = [

@@ -14,8 +14,6 @@ export interface CustomerInfo {
   furigana?: string;
   email: string;
   phone?: string;
-  postalCode?: string;
-  address?: string;
 }
 
 // 土地情報
@@ -30,7 +28,7 @@ export interface LandInfo {
 
 // 建物情報
 export interface BuildingInfo {
-  planType: 'LACIE' | 'HOURS' | 'LIFE+' | 'LIFE' | 'LIFE_X';
+  planType: 'LACIE' | 'HOURS' | 'LIFE+' | 'LIFE' | 'LIFE_X' | 'LIFE_LIMITED' | 'LIFE_PLUS_LIMITED';
   floors: number;
   totalFloorArea: number; // 延床面積 ㎡
   buildingArea?: number; // 建築面積 ㎡

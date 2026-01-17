@@ -295,6 +295,21 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
             <ChevronLeft className="w-4 h-4" /> 戻る
           </button>
 
+          {/* 選択中のタイル情報 */}
+          <div className="bg-blue-50 rounded-lg p-3 mb-4">
+            <p className="text-sm text-blue-800">
+              選択中: <span className="font-bold">{selectedTile.name}</span>
+              {selectedColor && <span> / {selectedColor.colorName}</span>}
+            </p>
+          </div>
+
+          {/* 目地色の種類数を表示 */}
+          <div className="mb-3">
+            <p className="text-sm text-gray-600">
+              目地色を選択してください（<span className="font-bold">{groutColors.length}色</span>から選択）
+            </p>
+          </div>
+
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 mb-4">
             {groutColors.map(grout => (
               <SelectionCard
@@ -313,7 +328,11 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
           {/* 完了ボタン */}
           <div className="flex gap-4">
             <button
-              onClick={onCancel}
+              onClick={() => {
+                // キャンセル = 選択をクリアして前のステップへ
+                setSelectedGrout(null);
+                needsColorSelection(selectedTile) ? setStep('color') : setStep('tile');
+              }}
               className="flex-1 py-3 px-4 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50"
             >
               キャンセル
@@ -323,7 +342,7 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
               disabled={!selectedGrout}
               className="flex-1 py-3 px-4 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              選択を確定
+              {selectedGrout ? `「${selectedGrout.name}」に決定` : '目地色を選択してください'}
             </button>
           </div>
         </div>

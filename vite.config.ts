@@ -55,6 +55,29 @@ export default defineConfig(({ mode }) => {
           if (id.includes('src/data/interiorProducts') || id.includes('src/data/exteriorProducts')) {
             return 'product-data';
           }
+          // カタログセレクター（遅延読み込み）
+          if (
+            id.includes('src/components/catalog/AirconSelector') ||
+            id.includes('src/components/catalog/EntranceDoorSelector') ||
+            id.includes('src/components/catalog/DiningTableSelector') ||
+            id.includes('src/components/catalog/StairSelector') ||
+            id.includes('src/components/catalog/BaseBuildingSelector') ||
+            id.includes('src/components/catalog/PorchTileSelector') ||
+            id.includes('src/components/catalog/MultiColorAreaSelector') ||
+            id.includes('src/components/catalog/RoomBasedMaterialSelector') ||
+            id.includes('src/components/catalog/ICProposalSelector') ||
+            id.includes('src/components/interior/RoomInteriorSelector')
+          ) {
+            return 'selectors';
+          }
+          // カタログメインコンポーネント
+          if (id.includes('src/components/catalog/CatalogWithTabs')) {
+            return 'catalog';
+          }
+          // 水回り製品データ
+          if (id.includes('src/data/waterEquipmentProducts') || id.includes('src/data/furnitureProducts')) {
+            return 'furniture-data';
+          }
         },
       },
     },

@@ -20,10 +20,12 @@ interface CartStore {
   setSelectedPlanId: (planId: string) => void;
   addItem: (product: Product, quantity?: number, variant?: ProductVariant) => void;
   addItemWithArea: (product: Product, variant: ProductVariant, area: number, colorIndex: number) => void;
+  addItemWithRooms: (product: Product, variant: ProductVariant, rooms: string[]) => void;
   removeItem: (productId: string) => void;
   removeItemByColorIndex: (productId: string, colorIndex: number) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   updateItemArea: (productId: string, colorIndex: number, area: number) => void;
+  updateItemRooms: (productId: string, rooms: string[]) => void;
   reorderItems: (items: CartItem[]) => void;
   clearCart: () => void;
   clearCategoryItems: (categoryId: string) => void;
@@ -164,6 +166,48 @@ export const useCartStore = create<CartStore>()(
     });
   },
 
+  addItemWithRooms: (product, variant, rooms) => {
+    set((state) => {
+      // 既存の同じ商品+バリアントを探す
+      const existingItem = state.items.find(
+        (i) => i.product.id === product.id &&
+               i.selectedVariant?.id === variant.id
+      );
+
+      addOperationLog('cart_add', 'select', {
+        productId: product.id,
+        productName: product.name,
+        itemName: `${product.name}を${rooms.length}室に適用`,
+        rooms,
+        variant: variant.color,
+        isUpdate: !!existingItem,
+      });
+
+      if (existingItem) {
+        // 既存アイテムの部屋を更新
+        return {
+          items: state.items.map((i) =>
+            i.product.id === product.id &&
+            i.selectedVariant?.id === variant.id
+              ? { ...i, appliedRooms: rooms }
+              : i
+          ),
+          lastUpdated: new Date().toISOString(),
+        };
+      }
+
+      const newItem: CartItem = {
+        product,
+        selectedVariant: variant,
+        quantity: 1,
+        plan: state.selectedPlanId as PlanType,
+        appliedRooms: rooms,
+      };
+
+      return { items: [...state.items, newItem], lastUpdated: new Date().toISOString() };
+    });
+  },
+
   removeItem: (productId) => {
     const state = get();
     const item = state.items.find((i) => i.product.id === productId);
@@ -262,6 +306,29 @@ export const useCartStore = create<CartStore>()(
       items: state.items.map((i) =>
         i.product.id === productId && i.colorIndex === colorIndex
           ? { ...i, area }
+          : i
+      ),
+      lastUpdated: new Date().toISOString(),
+    }));
+  },
+
+  updateItemRooms: (productId, rooms) => {
+    const state = get();
+    const item = state.items.find((i) => i.product.id === productId);
+    if (item) {
+      addOperationLog('cart_update', 'other', {
+        productId,
+        productName: item.product.name,
+        itemName: `${item.product.name}の適用部屋を${rooms.length}室に変更`,
+        oldRooms: item.appliedRooms,
+        newRooms: rooms,
+      });
+    }
+
+    set((state) => ({
+      items: state.items.map((i) =>
+        i.product.id === productId
+          ? { ...i, appliedRooms: rooms }
           : i
       ),
       lastUpdated: new Date().toISOString(),

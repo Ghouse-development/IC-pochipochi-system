@@ -25,6 +25,8 @@ const PLAN_NAMES: Record<PlanType, string> = {
   'LIFE+': 'LIFE+',
   LIFE: 'LIFE',
   LIFE_X: 'LIFE X',
+  LIFE_LIMITED: 'LIFE Limited',
+  LIFE_PLUS_LIMITED: 'LIFE+ Limited',
 };
 
 export const EstimateExportDialog = ({ isOpen, onClose }: EstimateExportDialogProps) => {

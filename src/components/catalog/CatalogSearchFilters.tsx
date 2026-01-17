@@ -15,8 +15,6 @@ interface CatalogSearchFiltersProps {
   setFilterType: (type: FilterTypeValue) => void;
   showFavoritesOnly: boolean;
   setShowFavoritesOnly: (show: boolean) => void;
-  hideDiscontinued: boolean;
-  setHideDiscontinued: (hide: boolean) => void;
   favoritesCount: number;
   // 素材・色フィルター
   selectedMaterialType?: string;
@@ -40,8 +38,6 @@ export const CatalogSearchFilters: React.FC<CatalogSearchFiltersProps> = ({
   setFilterType,
   showFavoritesOnly,
   setShowFavoritesOnly,
-  hideDiscontinued,
-  setHideDiscontinued,
   favoritesCount,
   selectedMaterialType,
   setSelectedMaterialType,
@@ -129,17 +125,6 @@ export const CatalogSearchFilters: React.FC<CatalogSearchFiltersProps> = ({
             </button>
           ))}
         </div>
-
-        {/* 廃番非表示トグル */}
-        <label className="flex items-center gap-1.5 text-sm text-gray-600 cursor-pointer">
-          <input
-            type="checkbox"
-            checked={hideDiscontinued}
-            onChange={(e) => setHideDiscontinued(e.target.checked)}
-            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-          />
-          <span>廃番を非表示</span>
-        </label>
 
         {/* 素材タイプフィルター */}
         {availableMaterialTypes.length > 0 && setSelectedMaterialType && (

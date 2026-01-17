@@ -219,7 +219,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
 
   const monthlyStats = yearlyAdoptions;
 
-  // 認可チェック: 管理者またはコーディネーターのみアクセス可能
+  // 認可チェック: 管理者またはスタッフのみアクセス可能
   if (authLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -238,7 +238,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
           <ShieldAlert className="w-16 h-16 text-red-500 mx-auto mb-4" />
           <h2 className="text-xl font-bold text-gray-900 mb-2">アクセス権限がありません</h2>
           <p className="text-gray-600 mb-6">
-            この画面は管理者またはコーディネーターのみアクセスできます。
+            この画面は管理者またはスタッフのみアクセスできます。
           </p>
           <Button
             variant="primary"

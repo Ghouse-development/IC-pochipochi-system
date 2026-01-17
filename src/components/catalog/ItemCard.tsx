@@ -180,7 +180,32 @@ const ItemCardComponent: React.FC<ItemCardProps> = ({
             <span className="text-sm text-gray-500">/{item.unit.symbol}</span>
           )}
         </div>
-        {variants.length > 1 && (
+        {/* 色パターン表示（外部建材カテゴリなど） */}
+        {variants.length > 1 && (item.category?.name === '外部建材' || item.category_name?.includes('樋')) && (
+          <div className="mt-1">
+            <div className="flex items-center gap-1 flex-wrap">
+              {variants.slice(0, 6).map((variant, idx) => (
+                <div
+                  key={idx}
+                  className="w-4 h-4 rounded-full border border-gray-300 shadow-sm"
+                  style={{
+                    backgroundColor: variant.color_code ||
+                      (variant.color_name?.includes('ホワイト') || variant.color_name?.includes('しろ') ? '#FFFFFF' :
+                       variant.color_name?.includes('ブラック') || variant.color_name?.includes('黒') ? '#1a1a1a' :
+                       variant.color_name?.includes('グレー') ? '#808080' :
+                       variant.color_name?.includes('しんちゃ') || variant.color_name?.includes('茶') ? '#8B4513' :
+                       '#CCCCCC')
+                  }}
+                  title={variant.color_name || ''}
+                />
+              ))}
+            </div>
+            <p className="text-[10px] text-gray-500 mt-0.5">{variants.length}色対応</p>
+          </div>
+        )}
+
+        {/* 選べるアイテム数（外部建材以外） */}
+        {variants.length > 1 && !(item.category?.name === '外部建材' || item.category_name?.includes('樋')) && (
           <span className="text-xs text-gray-400">{variants.length}色から選択</span>
         )}
       </div>

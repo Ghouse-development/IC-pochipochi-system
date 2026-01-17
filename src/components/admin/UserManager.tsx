@@ -29,9 +29,9 @@ interface UserManagerProps {
 }
 
 const ROLE_OPTIONS: { value: UserRole; label: string; description: string }[] = [
-  { value: 'admin', label: '管理者', description: 'すべての機能にアクセス可能' },
-  { value: 'coordinator', label: 'コーディネーター', description: 'プロジェクト管理・編集が可能' },
-  { value: 'user', label: 'ユーザー', description: '閲覧・選択のみ可能' },
+  { value: 'admin', label: '管理者', description: 'すべての機能にアクセス可能（商品管理・ユーザー管理）' },
+  { value: 'coordinator', label: 'スタッフ', description: 'プロジェクト管理・編集が可能（ICコーディネーター）' },
+  { value: 'user', label: 'ユーザー', description: 'お客様：選択・閲覧のみ可能' },
 ];
 
 const getRoleColor = (role: UserRole) => {
@@ -295,7 +295,7 @@ export function UserManager({ onBack, onCreateProject }: UserManagerProps) {
         </div>
         <div className="bg-blue-50 p-4 rounded-lg text-center">
           <div className="text-2xl font-bold text-blue-700">{stats.coordinators}</div>
-          <div className="text-sm text-blue-600">コーディネーター</div>
+          <div className="text-sm text-blue-600">スタッフ</div>
         </div>
         <div className="bg-gray-50 p-4 rounded-lg text-center">
           <div className="text-2xl font-bold text-gray-700">{stats.users}</div>

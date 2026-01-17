@@ -9,7 +9,6 @@ const logger = createLogger('App');
 import { QueryProvider } from './lib/QueryProvider';
 import { LoginPage } from './pages/LoginPage';
 import { Header } from './components/layout/Header';
-import { CatalogWithTabs } from './components/catalog/CatalogWithTabs';
 import { CartSidebarEnhanced } from './components/cart/CartSidebarEnhanced';
 import { SelectedItemsBar } from './components/catalog/SelectedItemsBar';
 import { ConfirmOrderModal } from './components/catalog/ConfirmOrderModal';
@@ -26,6 +25,7 @@ import { useCartStore } from './stores/useCartStore';
 import { CompletionCelebration } from './components/common/CompletionCelebration';
 
 // Lazy loaded components for code splitting
+const CatalogWithTabs = lazy(() => import('./components/catalog/CatalogWithTabs').then(m => ({ default: m.CatalogWithTabs })));
 const AdminDashboard = lazy(() => import('./components/admin/AdminDashboard').then(m => ({ default: m.AdminDashboard })));
 const HierarchyPage = lazy(() => import('./pages/HierarchyPage').then(m => ({ default: m.HierarchyPage })));
 const ImageTestPage = lazy(() => import('./pages/ImageTestPage').then(m => ({ default: m.ImageTestPage })));
@@ -202,12 +202,24 @@ function MainContent() {
 
       <main className="flex-1 overflow-hidden">
         <Routes>
-          {/* カタログルート */}
+          {/* カタログルート - Lazy loaded for better initial load */}
           <Route path="/" element={<Navigate to="/catalog/exterior" replace />} />
           <Route path="/catalog" element={<Navigate to="/catalog/exterior" replace />} />
-          <Route path="/catalog/:step" element={<CatalogWithTabs onCartClick={() => setIsCartOpen(true)} />} />
-          <Route path="/catalog/:step/:categoryId" element={<CatalogWithTabs onCartClick={() => setIsCartOpen(true)} />} />
-          <Route path="/catalog/:step/:categoryId/:productId" element={<CatalogWithTabs onCartClick={() => setIsCartOpen(true)} />} />
+          <Route path="/catalog/:step" element={
+            <Suspense fallback={<PageLoader />}>
+              <CatalogWithTabs onCartClick={() => setIsCartOpen(true)} />
+            </Suspense>
+          } />
+          <Route path="/catalog/:step/:categoryId" element={
+            <Suspense fallback={<PageLoader />}>
+              <CatalogWithTabs onCartClick={() => setIsCartOpen(true)} />
+            </Suspense>
+          } />
+          <Route path="/catalog/:step/:categoryId/:productId" element={
+            <Suspense fallback={<PageLoader />}>
+              <CatalogWithTabs onCartClick={() => setIsCartOpen(true)} />
+            </Suspense>
+          } />
 
           {/* アイテム詳細ページ */}
           <Route path="/item/:itemId" element={

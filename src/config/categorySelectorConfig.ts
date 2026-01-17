@@ -58,14 +58,21 @@ export const AWNING_OPTIONS = [
   { id: 'awning-af95', name: 'アルフィン庇 AF95', description: '木目調仕上げ', productId: 'ext-awning-alfin-af95' },
 ] as const;
 
-// 複数色選択カテゴリ名
+// 複数色選択カテゴリ名（面積指定）
 export const MULTI_COLOR_CATEGORY_NAMES: readonly string[] = [
   '外壁',           // 外装 - 素材タイプ選択後
   '軒天',           // 外装
-  'ベース床',       // 内装 - 素材タイプ選択後
+  '壁材',           // 内装
+];
+
+// 部屋適用選択カテゴリ名
+export const ROOM_BASED_CATEGORY_NAMES: readonly string[] = [
+  'ベース床',             // 内装 - 素材タイプ選択後
   'ベースクロス（壁）',   // 内装
   'ベースクロス（天井）', // 内装
-  '壁材',           // 内装
+  '床下点検口',           // 内装 - どの部屋に設置するか
+  '天井点検口',           // 内装 - どの部屋に設置するか
+  '換気',                 // 内装 - どの部屋に設置するか
 ];
 
 // カテゴリ絵文字マッピング

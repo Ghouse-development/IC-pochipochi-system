@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, lazy, Suspense } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { Search, ClipboardCheck, Check, Star, ChevronRight, ChevronLeft, Home, X, FileDown, HelpCircle, Eye, Flame } from 'lucide-react';
 import { useToast } from '../common/Toast';
@@ -16,7 +16,7 @@ import { ANIMATION_DURATIONS, CART_MILESTONES, CATEGORY_GROUPS } from '../../lib
 import type { ItemWithDetails, Category, Product, ItemVariant } from '../../types/database';
 // RecommendationPanel removed - 不要
 // ProductDetailModal removed - モーダル不使用
-import { RoomInteriorSelector } from '../interior/RoomInteriorSelector';
+const RoomInteriorSelector = lazy(() => import('../interior/RoomInteriorSelector').then(m => ({ default: m.RoomInteriorSelector })));
 import { useCustomerMode } from '../customer/CustomerModeWrapper';
 import * as Dialog from '@radix-ui/react-dialog';
 import type { Product as CatalogProduct } from '../../types/product';
@@ -47,14 +47,17 @@ import { BeginnerGuide } from './BeginnerGuide';
 import { EstimateExportDialog } from '../estimate/EstimateExportDialog';
 import { useConfirmDialog } from '../common/ConfirmDialog';
 import { useSelectionStore } from '../../stores/useSelectionStore';
-import { ICProposalSelector, type ICProposalSelection } from './ICProposalSelector';
-import { AirconSelector } from './AirconSelector';
-import { EntranceDoorSelector } from './EntranceDoorSelector';
-import { DiningTableSelector } from './DiningTableSelector';
-import { StairSelector } from './StairSelector';
-import { MultiColorAreaSelector } from './MultiColorAreaSelector';
-import { BaseBuildingSelector } from './BaseBuildingSelector';
-import { PorchTileSelector } from './PorchTileSelector';
+// 遅延読み込みセレクター（パフォーマンス最適化）
+const ICProposalSelector = lazy(() => import('./ICProposalSelector').then(m => ({ default: m.ICProposalSelector })));
+const AirconSelector = lazy(() => import('./AirconSelector').then(m => ({ default: m.AirconSelector })));
+const EntranceDoorSelector = lazy(() => import('./EntranceDoorSelector').then(m => ({ default: m.EntranceDoorSelector })));
+const DiningTableSelector = lazy(() => import('./DiningTableSelector').then(m => ({ default: m.DiningTableSelector })));
+const StairSelector = lazy(() => import('./StairSelector').then(m => ({ default: m.StairSelector })));
+const MultiColorAreaSelector = lazy(() => import('./MultiColorAreaSelector').then(m => ({ default: m.MultiColorAreaSelector })));
+const RoomBasedMaterialSelector = lazy(() => import('./RoomBasedMaterialSelector').then(m => ({ default: m.RoomBasedMaterialSelector })));
+const BaseBuildingSelector = lazy(() => import('./BaseBuildingSelector').then(m => ({ default: m.BaseBuildingSelector })));
+const PorchTileSelector = lazy(() => import('./PorchTileSelector').then(m => ({ default: m.PorchTileSelector })));
+import type { ICProposalSelection } from './ICProposalSelector';
 import { PageHeader } from './PageHeader';
 import { Pagination, ITEMS_PER_PAGE } from './Pagination';
 import { CategorySelectionCard } from './CategorySelectionCard';
@@ -68,7 +71,15 @@ import {
   GARAGE_SHUTTER_OPTIONS,
   AWNING_OPTIONS,
   MULTI_COLOR_CATEGORY_NAMES,
+  ROOM_BASED_CATEGORY_NAMES,
 } from '../../config/categorySelectorConfig';
+
+// 遅延読み込みセレクター用ローディングコンポーネント
+const SelectorLoader: React.FC = () => (
+  <div className="flex items-center justify-center py-12">
+    <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+  </div>
+);
 
 interface CatalogWithTabsProps {
   onCartClick?: () => void;
@@ -996,6 +1007,23 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     return filteredItems.map(convertToCatalogProduct);
   }, [needsMultiColorSelector, filteredItems]);
 
+  // 部屋適用選択が必要なカテゴリかどうか判定
+  const needsRoomBasedSelector = useMemo(() => {
+    if (!currentCategoryName) return false;
+    if (!ROOM_BASED_CATEGORY_NAMES.includes(currentCategoryName)) return false;
+
+    // ベース床は素材タイプ選択後のみ表示
+    if (currentCategoryName === 'ベース床' && !selectedMaterialType) return false;
+
+    return true;
+  }, [currentCategoryName, selectedMaterialType]);
+
+  // 部屋適用選択用の商品リスト（CatalogProduct形式）
+  const roomBasedProducts = useMemo(() => {
+    if (!needsRoomBasedSelector) return [];
+    return filteredItems.map(convertToCatalogProduct);
+  }, [needsRoomBasedSelector, filteredItems]);
+
   // 特殊セレクター（独自のPageHeaderを持つ）を使用するかを判定
   const usesSpecialSelector = useMemo(() => {
     if (!currentCategoryName) return false;
@@ -1010,6 +1038,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
     // MultiColorAreaSelector
     if (needsMultiColorSelector) return true;
+
+    // RoomBasedMaterialSelector
+    if (needsRoomBasedSelector) return true;
 
     // ManufacturerSelector（水回り設備のメーカー選択）
     if (needsManufacturerSelection && !isManufacturerSelectionComplete) return true;
@@ -1028,7 +1059,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     if (activeTab === 'exterior' && currentCategoryName === '庇' && !hasAwning) return true;
 
     return false;
-  }, [currentCategoryName, activeTab, needsMultiColorSelector, needsManufacturerSelection, isManufacturerSelectionComplete, selectedMaterialType, hasGarageShutter, hasAwning]);
+  }, [currentCategoryName, activeTab, needsMultiColorSelector, needsRoomBasedSelector, needsManufacturerSelection, isManufacturerSelectionComplete, selectedMaterialType, hasGarageShutter, hasAwning]);
 
   // カートに追加（部屋選択が必要な場合はモーダルを表示）
   const handleAddToCart = useCallback((item: ItemWithDetails, variantOrSkip?: ItemVariant | boolean) => {
@@ -1741,49 +1772,53 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 </div>
               ) : currentCategoryName === 'エアコン' ? (
                 /* エアコン選択UI */
-                <AirconSelector
-                  selectedPlan={selectedPlanId}
-                  onComplete={() => {
-                    toast.success('エアコンをカートに追加しました');
-                    goToNextCategory();
-                  }}
-                  onCancel={() => {
-                    // 前のカテゴリに戻るか、サイドバーで別のカテゴリを選択可能
-                  }}
-                />
-              ) : (currentCategoryName === 'カーテン' || currentCategoryName === '家具') ? (
-                /* IC提案選択UI（カーテン・家具用） */
-                <div className="max-w-2xl mx-auto">
-                  <ICProposalSelector
-                    categoryName={currentCategoryName as 'カーテン' | '家具'}
-                    onSelect={(selection: ICProposalSelection) => {
-                      if (selection.wantsProposal) {
-                        // IC提案を希望する場合
-                        const details = currentCategoryName === 'カーテン'
-                          ? `部屋: ${selection.selectedRooms?.join(', ') || '未選択'}`
-                          : `家具: ${selection.selectedFurnitureTypes?.join(', ') || '未選択'}${selection.otherText ? ` (その他: ${selection.otherText})` : ''}`;
-                        toast.success(`${currentCategoryName}: IC提案を希望 - ${details}`);
-                        // IC提案の選択状態をストアに保存
-                        setProductSelection(
-                          currentCategoryName,
-                          'ic-proposal',
-                          `IC提案希望 - ${details}`,
-                          undefined,
-                          undefined,
-                          selection.selectedRooms
-                        );
-                      } else {
-                        // IC提案を希望しない場合
-                        setNotNeeded(currentCategoryName, '提案不要');
-                        toast.info(`${currentCategoryName}: 提案不要`);
-                      }
-                      // 次のカテゴリへ移動
+                <Suspense fallback={<SelectorLoader />}>
+                  <AirconSelector
+                    selectedPlan={selectedPlanId}
+                    onComplete={() => {
+                      toast.success('エアコンをカートに追加しました');
                       goToNextCategory();
                     }}
                     onCancel={() => {
                       // 前のカテゴリに戻るか、サイドバーで別のカテゴリを選択可能
                     }}
                   />
+                </Suspense>
+              ) : (currentCategoryName === 'カーテン' || currentCategoryName === '家具') ? (
+                /* IC提案選択UI（カーテン・家具用） */
+                <div className="max-w-2xl mx-auto">
+                  <Suspense fallback={<SelectorLoader />}>
+                    <ICProposalSelector
+                      categoryName={currentCategoryName as 'カーテン' | '家具'}
+                      onSelect={(selection: ICProposalSelection) => {
+                        if (selection.wantsProposal) {
+                          // IC提案を希望する場合
+                          const details = currentCategoryName === 'カーテン'
+                            ? `部屋: ${selection.selectedRooms?.join(', ') || '未選択'}`
+                            : `家具: ${selection.selectedFurnitureTypes?.join(', ') || '未選択'}${selection.otherText ? ` (その他: ${selection.otherText})` : ''}`;
+                          toast.success(`${currentCategoryName}: IC提案を希望 - ${details}`);
+                          // IC提案の選択状態をストアに保存
+                          setProductSelection(
+                            currentCategoryName,
+                            'ic-proposal',
+                            `IC提案希望 - ${details}`,
+                            undefined,
+                            undefined,
+                            selection.selectedRooms
+                          );
+                        } else {
+                          // IC提案を希望しない場合
+                          setNotNeeded(currentCategoryName, '提案不要');
+                          toast.info(`${currentCategoryName}: 提案不要`);
+                        }
+                        // 次のカテゴリへ移動
+                        goToNextCategory();
+                      }}
+                      onCancel={() => {
+                        // 前のカテゴリに戻るか、サイドバーで別のカテゴリを選択可能
+                      }}
+                    />
+                  </Suspense>
                 </div>
               ) : activeTab === 'exterior' && currentCategoryName?.includes('ガレージシャッター') && !hasGarageShutter ? (
                 /* 外装タブ: ガレージシャッター未設定メッセージ */
@@ -1855,64 +1890,74 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                 </div>
               ) : currentCategoryName === '玄関ドア' ? (
                 /* 玄関ドア選択UI（5ステップ） */
-                <EntranceDoorSelector
-                  selectedPlan={selectedPlanId}
-                  onComplete={() => {
-                    toast.success('玄関ドアをカートに追加しました');
-                    goToNextCategory();
-                  }}
-                  onCancel={() => {
-                    // 前のカテゴリに戻るか、サイドバーで別のカテゴリを選択可能
-                  }}
-                />
+                <Suspense fallback={<SelectorLoader />}>
+                  <EntranceDoorSelector
+                    selectedPlan={selectedPlanId}
+                    onComplete={() => {
+                      toast.success('玄関ドアをカートに追加しました');
+                      goToNextCategory();
+                    }}
+                    onCancel={() => {
+                      // 前のカテゴリに戻るか、サイドバーで別のカテゴリを選択可能
+                    }}
+                  />
+                </Suspense>
               ) : currentCategoryName === 'オリジナルダイニングテーブル' ? (
                 /* オリジナルダイニングテーブル選択UI（段階選択） */
-                <DiningTableSelector
-                  selectedPlan={selectedPlanId}
-                  onComplete={() => {
-                    toast.success('ダイニングテーブルをカートに追加しました');
-                    goToNextCategory();
-                  }}
-                  onCancel={() => {
-                    // キャンセル処理
-                  }}
-                />
+                <Suspense fallback={<SelectorLoader />}>
+                  <DiningTableSelector
+                    selectedPlan={selectedPlanId}
+                    onComplete={() => {
+                      toast.success('ダイニングテーブルをカートに追加しました');
+                      goToNextCategory();
+                    }}
+                    onCancel={() => {
+                      // キャンセル処理
+                    }}
+                  />
+                </Suspense>
               ) : currentCategoryName === '階段' ? (
                 /* 階段選択UI（カード型ステップ選択） */
-                <StairSelector
-                  selectedPlan={selectedPlanId}
-                  onComplete={() => {
-                    toast.success('階段をカートに追加しました');
-                    goToNextCategory();
-                  }}
-                  onCancel={() => {
-                    // キャンセル処理
-                  }}
-                />
+                <Suspense fallback={<SelectorLoader />}>
+                  <StairSelector
+                    selectedPlan={selectedPlanId}
+                    onComplete={() => {
+                      toast.success('階段をカートに追加しました');
+                      goToNextCategory();
+                    }}
+                    onCancel={() => {
+                      // キャンセル処理
+                    }}
+                  />
+                </Suspense>
               ) : currentCategoryName === 'ベース建具' ? (
                 /* ベース建具選択UI（色→デザインの順） */
-                <BaseBuildingSelector
-                  selectedPlan={selectedPlanId}
-                  onComplete={() => {
-                    toast.success('ベース建具をカートに追加しました');
-                    goToNextCategory();
-                  }}
-                  onCancel={() => {
-                    // キャンセル処理
-                  }}
-                />
+                <Suspense fallback={<SelectorLoader />}>
+                  <BaseBuildingSelector
+                    selectedPlan={selectedPlanId}
+                    onComplete={() => {
+                      toast.success('ベース建具をカートに追加しました');
+                      goToNextCategory();
+                    }}
+                    onCancel={() => {
+                      // キャンセル処理
+                    }}
+                  />
+                </Suspense>
               ) : activeTab === 'exterior' && (currentCategoryName === 'ポーチ' || (currentCategoryName?.includes('ポーチ') && !currentCategoryName?.includes('サイズ') && !currentCategoryName?.includes('目地'))) ? (
                 /* ポーチタイル選択UI（タイル→目地色の順） */
-                <PorchTileSelector
-                  selectedPlan={selectedPlanId}
-                  onComplete={() => {
-                    toast.success('ポーチをカートに追加しました');
-                    goToNextCategory();
-                  }}
-                  onCancel={() => {
-                    // キャンセル処理
-                  }}
-                />
+                <Suspense fallback={<SelectorLoader />}>
+                  <PorchTileSelector
+                    selectedPlan={selectedPlanId}
+                    onComplete={() => {
+                      toast.success('ポーチをカートに追加しました');
+                      goToNextCategory();
+                    }}
+                    onCancel={() => {
+                      // キャンセル処理
+                    }}
+                  />
+                </Suspense>
               ) : currentCategoryName === '外部設備' && !selectedMaterialType ? (
                 /* 外部設備カテゴリ選択カード */
                 <div className="max-w-6xl mx-auto px-4">
@@ -2763,23 +2808,44 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   )}
                 </div>
               ) : needsMultiColorSelector ? (
-                /* 複数色・面積指定選択UI（外壁、軒天、ベース床、クロス等） */
-                <MultiColorAreaSelector
-                  categoryId={selectedCategoryId || ''}
-                  categoryName={currentCategoryName || ''}
-                  products={multiColorProducts}
-                  maxColors={3}
-                  onComplete={() => {
-                    toast.success(`${currentCategoryName}の選択が完了しました`);
-                    goToNextCategory();
-                  }}
-                  onCancel={() => {
-                    // 素材タイプ選択に戻る（該当する場合）
-                    if (['外壁', 'ベース床'].includes(currentCategoryName || '')) {
-                      setSelectedMaterialType('');
-                    }
-                  }}
-                />
+                /* 複数色・面積指定選択UI（外壁、軒天等） */
+                <Suspense fallback={<SelectorLoader />}>
+                  <MultiColorAreaSelector
+                    categoryId={selectedCategoryId || ''}
+                    categoryName={currentCategoryName || ''}
+                    products={multiColorProducts}
+                    maxColors={3}
+                    onComplete={() => {
+                      toast.success(`${currentCategoryName}の選択が完了しました`);
+                      goToNextCategory();
+                    }}
+                    onCancel={() => {
+                      // 素材タイプ選択に戻る（該当する場合）
+                      if (['外壁'].includes(currentCategoryName || '')) {
+                        setSelectedMaterialType('');
+                      }
+                    }}
+                  />
+                </Suspense>
+              ) : needsRoomBasedSelector ? (
+                /* 部屋適用選択UI（ベース床、ベースクロス等） */
+                <Suspense fallback={<SelectorLoader />}>
+                  <RoomBasedMaterialSelector
+                    categoryId={selectedCategoryId || ''}
+                    categoryName={currentCategoryName || ''}
+                    products={roomBasedProducts}
+                    onComplete={() => {
+                      toast.success(`${currentCategoryName}の選択が完了しました`);
+                      goToNextCategory();
+                    }}
+                    onCancel={() => {
+                      // 素材タイプ選択に戻る（ベース床の場合）
+                      if (currentCategoryName === 'ベース床') {
+                        setSelectedMaterialType('');
+                      }
+                    }}
+                  />
+                </Suspense>
               ) : filteredItems.length === 0 ? (
                 <div className="max-w-6xl mx-auto px-4">
                   {/* PageHeaderはグローバル位置で表示済み */}
@@ -3010,17 +3076,19 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
               </Dialog.Close>
             </div>
             <div className="overflow-y-auto max-h-[calc(90vh-60px)]">
-              <RoomInteriorSelector
-                interiorProducts={catalogProducts.filter(p =>
-                  ['床材', '壁クロス', '天井クロス', '巾木'].some(cat => p.categoryName.includes(cat))
-                )}
-                onSelectionsChange={(selections) => {
-                  // RoomInteriorSelector内部でカート追加処理あり
-                  if (selections.length > 0) {
-                    toast.info('内装設定', `${selections.length}件の部屋設定が変更されました`);
-                  }
-                }}
-              />
+              <Suspense fallback={<SelectorLoader />}>
+                <RoomInteriorSelector
+                  interiorProducts={catalogProducts.filter(p =>
+                    ['床材', '壁クロス', '天井クロス', '巾木'].some(cat => p.categoryName.includes(cat))
+                  )}
+                  onSelectionsChange={(selections) => {
+                    // RoomInteriorSelector内部でカート追加処理あり
+                    if (selections.length > 0) {
+                      toast.info('内装設定', `${selections.length}件の部屋設定が変更されました`);
+                    }
+                  }}
+                />
+              </Suspense>
             </div>
           </Dialog.Content>
         </Dialog.Portal>

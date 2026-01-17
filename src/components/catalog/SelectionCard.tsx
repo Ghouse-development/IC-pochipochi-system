@@ -7,6 +7,12 @@ import { formatPrice } from '../../lib/utils';
  *
  * 表示内容: サムネイル画像、バッジ、アイテム名、価格、単位、選べるアイテム数のみ
  */
+// カラーバリアント型
+export interface ColorVariantInfo {
+  color: string;
+  colorCode?: string;
+}
+
 export interface SelectionCardProps {
   id: string;
   name: string;
@@ -25,6 +31,9 @@ export interface SelectionCardProps {
   colorCode?: string;
   variantCount?: number;
   unit?: string;
+  // 色パターン表示用
+  colorVariants?: ColorVariantInfo[];
+  showColorPattern?: boolean;
 }
 
 export const SelectionCard: React.FC<SelectionCardProps> = ({
@@ -40,6 +49,8 @@ export const SelectionCard: React.FC<SelectionCardProps> = ({
   variantCount,
   unit,
   manufacturer,
+  colorVariants,
+  showColorPattern,
 }) => {
   // isStandard is received but not used in simplified UI (badge removed)
   void _isStandard;
@@ -123,8 +134,32 @@ export const SelectionCard: React.FC<SelectionCardProps> = ({
           )}
         </div>
 
-        {/* 選べるアイテム数 */}
-        {variantCount && variantCount > 1 && (
+        {/* 色パターン表示（樋など） */}
+        {showColorPattern && colorVariants && colorVariants.length > 0 && (
+          <div className="mt-1">
+            <div className="flex items-center gap-1 flex-wrap">
+              {colorVariants.slice(0, 6).map((variant, idx) => (
+                <div
+                  key={idx}
+                  className="w-4 h-4 rounded-full border border-gray-300 shadow-sm"
+                  style={{
+                    backgroundColor: variant.colorCode ||
+                      (variant.color.includes('ホワイト') || variant.color.includes('しろ') ? '#FFFFFF' :
+                       variant.color.includes('ブラック') || variant.color.includes('黒') ? '#1a1a1a' :
+                       variant.color.includes('グレー') ? '#808080' :
+                       variant.color.includes('しんちゃ') || variant.color.includes('茶') ? '#8B4513' :
+                       '#CCCCCC')
+                  }}
+                  title={variant.color}
+                />
+              ))}
+            </div>
+            <p className="text-[10px] text-gray-500 mt-0.5">{colorVariants.length}色対応</p>
+          </div>
+        )}
+
+        {/* 選べるアイテム数（色パターン非表示時のみ） */}
+        {!showColorPattern && variantCount && variantCount > 1 && (
           <span className="text-xs text-gray-400">{variantCount}色から選択</span>
         )}
       </div>
