@@ -344,12 +344,13 @@ const ENERGY_SECTION: BuildingInfoSection = {
       ],
     },
     {
-      id: 'intercom',
-      name: 'インターホン',
+      id: 'intercom_count',
+      name: 'インターホン個数',
       required: false,
       options: [
-        { id: 'parent1_child0', label: '親機1子機0' },
-        { id: 'parent1_child1', label: '親機1子機1' },
+        { id: '1', label: '1個' },
+        { id: '2', label: '2個' },
+        { id: '3', label: '3個' },
       ],
     },
     {
@@ -397,8 +398,17 @@ const OTHER_SECTION: BuildingInfoSection = {
       ],
     },
     {
-      id: 'iron_stairs',
-      name: 'アイアン階段',
+      id: 'iron_stairs_1f_2f',
+      name: 'アイアン階段（1F-2F間）',
+      required: false,
+      options: [
+        { id: 'no', label: '無' },
+        { id: 'yes', label: '有' },
+      ],
+    },
+    {
+      id: 'iron_stairs_2f_3f',
+      name: 'アイアン階段（2F-3F間）',
       required: false,
       options: [
         { id: 'no', label: '無' },
@@ -454,13 +464,14 @@ export interface BuildingInfo {
   // 電気・エネルギー
   water_heater?: string;
   ventilation?: string;
-  intercom?: string;
+  intercom_count?: string;
   solar?: string;
   battery?: string;
   v2h?: string;
   // その他
   gas_work?: string;
-  iron_stairs?: string;
+  iron_stairs_1f_2f?: string;
+  iron_stairs_2f_3f?: string;
 }
 
 // デフォルト値
@@ -495,13 +506,14 @@ export const DEFAULT_BUILDING_INFO: BuildingInfo = {
   // 電気・エネルギー
   water_heater: 'ecojoz',
   ventilation: 'panasonic',
-  intercom: 'parent1_child0',
+  intercom_count: '1',
   solar: 'no',
   battery: 'no',
   v2h: 'no',
   // その他
   gas_work: 'no',
-  iron_stairs: 'no',
+  iron_stairs_1f_2f: 'no',
+  iron_stairs_2f_3f: 'no',
 };
 
 // カテゴリIDからセクションを取得

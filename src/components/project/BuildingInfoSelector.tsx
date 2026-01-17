@@ -122,12 +122,25 @@ interface SectionViewProps {
 }
 
 const SectionView: React.FC<SectionViewProps> = ({ section, values, onChange }) => {
+  // 表示条件に基づいてカテゴリをフィルタリング
+  const visibleCategories = section.categories.filter(category => {
+    // 3階建て以外の場合、2F-3F間のアイアン階段を非表示
+    if (category.id === 'iron_stairs_2f_3f' && values.floors !== '3f') {
+      return false;
+    }
+    // 平屋の場合、1F-2F間のアイアン階段を非表示
+    if (category.id === 'iron_stairs_1f_2f' && values.floors === '1f') {
+      return false;
+    }
+    return true;
+  });
+
   return (
     <div className="mb-8">
       <h3 className="text-lg font-bold text-gray-900 mb-4 pb-2 border-b border-gray-200">
         {section.title}
       </h3>
-      {section.categories.map(category => (
+      {visibleCategories.map(category => (
         <CategorySelector
           key={category.id}
           category={category}
