@@ -14,13 +14,13 @@ import {
   Activity
 } from 'lucide-react';
 import { AuditService, type AuditLogSummary, type DailyChangeSummary } from '../../services/auditService';
-import { useUser } from '../../contexts/UserContext';
+import { useAuth } from '../../contexts/AuthContext';
 import { createLogger } from '../../lib/logger';
 
 const logger = createLogger('AuditLogViewer');
 
 export function AuditLogViewer() {
-  const { currentUser } = useUser();
+  const { user } = useAuth();
   const [logs, setLogs] = useState<AuditLogSummary[]>([]);
   const [dailySummary, setDailySummary] = useState<DailyChangeSummary[]>([]);
   const [loading, setLoading] = useState(true);
@@ -122,9 +122,9 @@ export function AuditLogViewer() {
           <div className="flex items-center gap-2">
             <History className="w-5 h-5 text-gray-600" />
             <h2 className="text-lg font-semibold">変更履歴</h2>
-            {currentUser && (
+            {user && (
               <span className="text-sm text-gray-500">
-                （ログインユーザー: {currentUser.name}）
+                （ログインユーザー: {user.full_name}）
               </span>
             )}
           </div>
