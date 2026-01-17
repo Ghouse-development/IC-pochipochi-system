@@ -51,7 +51,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return null;
       }
 
-      // First try direct Supabase query
+      // API経由でユーザーデータを取得（サービスロールでRLSをバイパス）
+      try {
+        const response = await fetch('/api/auth/get-user', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.ok) {
+          const { user } = await response.json();
+          if (user) {
+            logger.info('User fetched via API:', user.email, 'role:', user.role);
+            return user;
+          }
+        } else {
+          const errorText = await response.text();
+          logger.warn('API fetch failed, trying direct query:', errorText);
+        }
+      } catch (apiError) {
+        logger.warn('API not available, trying direct query:', apiError);
+      }
+
+      // フォールバック: 直接Supabaseクエリ（開発環境用）
       const { data, error } = await supabase
         .from('users')
         .select('*')
@@ -74,28 +98,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return data;
       }
 
-      // User not found in users table - create record
+      // User not found in users table - create record via API
       if (error?.code === 'PGRST116') { // No rows found
-        logger.info('User not in users table, creating record...');
-        const email = session.user.email || '';
-        const isBootstrapAdmin = BOOTSTRAP_ADMIN_EMAILS.includes(email.toLowerCase());
+        logger.info('User not in users table, creating via API...');
+        try {
+          const createResponse = await fetch('/api/auth/init-admin', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${session.access_token}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: session.user.email,
+              auth_id: session.user.id,
+            }),
+          });
 
-        const { data: newUser, error: insertError } = await supabase
-          .from('users')
-          .insert({
-            auth_id: session.user.id,
-            email: email,
-            full_name: isBootstrapAdmin ? '管理者' : 'ユーザー',
-            role: isBootstrapAdmin ? 'admin' : 'user',
-          })
-          .select()
-          .single();
-
-        if (insertError) {
-          logger.error('Error creating user record:', insertError);
-        } else if (newUser) {
-          logger.info('User record created:', newUser.email, 'role:', newUser.role);
-          return newUser;
+          if (createResponse.ok) {
+            const { user: newUser } = await createResponse.json();
+            if (newUser) {
+              logger.info('User record created via API:', newUser.email, 'role:', newUser.role);
+              return newUser;
+            }
+          }
+        } catch (createError) {
+          logger.error('Error creating user via API:', createError);
         }
       }
 
@@ -360,7 +387,28 @@ export function DemoAuthProvider({ children }: { children: ReactNode }) {
         return null;
       }
 
-      // First try direct Supabase query
+      // API経由でユーザーデータを取得（サービスロールでRLSをバイパス）
+      try {
+        const response = await fetch('/api/auth/get-user', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.ok) {
+          const { user } = await response.json();
+          if (user) {
+            logger.info('User fetched via API in demo mode:', user.email);
+            return user;
+          }
+        }
+      } catch (apiError) {
+        logger.warn('API not available in demo mode, trying direct query');
+      }
+
+      // フォールバック: 直接Supabaseクエリ（開発環境用）
       const { data, error } = await supabase
         .from('users')
         .select('*')
