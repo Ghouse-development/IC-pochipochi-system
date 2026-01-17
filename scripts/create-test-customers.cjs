@@ -29,7 +29,7 @@ const testProjects = [
     customer_name: '鈴木花子',
     construction_name: '鈴木花子様邸新築工事',
     construction_address: '大阪府堺市堺区三国ヶ丘1-1-1',
-    status: 'in_progress', // 半分決まっている
+    status: 'active', // 半分決まっている
     floors: 2,
     floor_area: 98.3,
   },
