@@ -15,13 +15,22 @@ export function LoginPage() {
     setError(null);
     setIsLoading(true);
 
+    // タイムアウト設定（10秒）
+    const timeoutId = setTimeout(() => {
+      setError('ログインがタイムアウトしました。ネットワーク接続を確認してください。');
+      setIsLoading(false);
+    }, 10000);
+
     try {
       const { error } = await signIn(email, password);
+      clearTimeout(timeoutId);
       if (error) {
         setError(error.message);
       }
-    } catch {
-      setError('ログインに失敗しました');
+    } catch (err) {
+      clearTimeout(timeoutId);
+      console.error('Login error:', err);
+      setError('ログインに失敗しました: ' + (err instanceof Error ? err.message : '不明なエラー'));
     } finally {
       setIsLoading(false);
     }
