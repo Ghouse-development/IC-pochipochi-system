@@ -360,7 +360,7 @@ export const CartSidebarEnhanced: React.FC<CartSidebarEnhancedProps> = ({ isOpen
               <h3 className="font-medium text-gray-900 mb-2">商品が選択されていません</h3>
               <p className="text-sm text-gray-500 mb-6">
                 カタログから商品を選んで、<br />
-                「選択する」ボタンを押してください
+                「決定」ボタンを押してください
               </p>
               <div className="bg-blue-50 rounded-lg p-4 text-left">
                 <p className="text-xs font-medium text-blue-800 mb-2">選び方のコツ</p>

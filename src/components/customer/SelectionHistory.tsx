@@ -18,7 +18,7 @@ const LOG_TYPE_LABELS: Record<string, string> = {
   cart_remove: '商品を削除',
   cart_update: '数量を変更',
   cart_clear: 'カートをクリア',
-  selection_confirm: '選択を確定',
+  selection_confirm: '決定',
   selection_cancel: '選択をキャンセル',
   room_apply: '部屋に適用',
   variant_change: 'バリエーション変更',

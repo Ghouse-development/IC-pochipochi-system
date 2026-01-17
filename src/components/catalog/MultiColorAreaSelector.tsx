@@ -534,7 +534,7 @@ export const MultiColorAreaSelector: React.FC<MultiColorAreaSelectorProps> = ({
               disabled={!allSelected}
               className="flex-1 py-3 px-4 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              選択を確定
+              決定
             </button>
           </div>
         </div>

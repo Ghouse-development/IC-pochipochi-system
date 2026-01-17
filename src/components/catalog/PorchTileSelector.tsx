@@ -331,7 +331,11 @@ export const PorchTileSelector: React.FC<PorchTileSelectorProps> = ({
               onClick={() => {
                 // キャンセル = 選択をクリアして前のステップへ
                 setSelectedGrout(null);
-                needsColorSelection(selectedTile) ? setStep('color') : setStep('tile');
+                if (needsColorSelection(selectedTile)) {
+                  setStep('color');
+                } else {
+                  setStep('tile');
+                }
               }}
               className="flex-1 py-3 px-4 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50"
             >

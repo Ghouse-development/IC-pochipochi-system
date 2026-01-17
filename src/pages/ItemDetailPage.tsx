@@ -378,14 +378,14 @@ export const ItemDetailPage: React.FC = () => {
             {isAdded ? (
               <>
                 <Check className="w-5 h-5" />
-                選択しました
+                決定しました
               </>
             ) : isInCart ? (
-              '選択済み'
+              '決定済み'
             ) : (
               <>
                 <Check className="w-5 h-5" />
-                {selectedVariant ? `「${selectedVariant.color}」を選択` : 'この仕様を選択'}
+                {selectedVariant ? `「${selectedVariant.color}」で決定` : 'この仕様で決定'}
               </>
             )}
           </button>

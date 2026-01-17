@@ -460,7 +460,7 @@ export const StairSelector: React.FC<StairSelectorProps> = ({
             onClick={handleComplete}
             className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium"
           >
-            選択を確定する
+            決定
           </button>
         </div>
       )}
