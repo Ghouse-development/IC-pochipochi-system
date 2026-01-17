@@ -47,8 +47,8 @@ interface ProjectRegistrationFormProps {
 
 const STEPS = [
   { id: 1, title: 'お客様情報', icon: User },
-  { id: 2, title: '建築情報', icon: Building2 },
-  { id: 3, title: '部屋登録', icon: DoorOpen },
+  { id: 2, title: '部屋登録', icon: DoorOpen },
+  { id: 3, title: '建築情報', icon: Building2 },
   { id: 4, title: '確認', icon: Check },
   { id: 5, title: 'URL発行', icon: Link2 },
 ];
@@ -196,11 +196,11 @@ export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = (
       case 1:
         return !!customer.name && !!customer.email;
       case 2:
-        // 必須の建築情報が入力されているか
-        return !!buildingInfo.fire_zone && !!buildingInfo.floors && !!buildingInfo.construction_method;
-      case 3:
         // 部屋が1つ以上登録されているか
         return rooms.length > 0;
+      case 3:
+        // 必須の建築情報が入力されているか
+        return !!buildingInfo.fire_zone && !!buildingInfo.floors && !!buildingInfo.construction_method;
       default:
         return true;
     }
@@ -357,20 +357,8 @@ export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = (
           </div>
         )}
 
-        {/* ステップ2: 建築情報（カード選択） */}
+        {/* ステップ2: 部屋登録 */}
         {currentStep === 2 && (
-          <div className="space-y-4">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">建築情報</h2>
-            <BuildingInfoSelector
-              value={buildingInfo}
-              onChange={setBuildingInfo}
-              onComplete={() => nextStep()}
-            />
-          </div>
-        )}
-
-        {/* ステップ3: 部屋登録 */}
-        {currentStep === 3 && (
           <div className="space-y-4">
             <h2 className="text-lg font-bold text-gray-900 mb-4">部屋登録</h2>
             <p className="text-gray-600 mb-4">
@@ -380,6 +368,18 @@ export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = (
               rooms={rooms}
               onChange={setRooms}
               floors={getFloorCount()}
+            />
+          </div>
+        )}
+
+        {/* ステップ3: 建築情報（カード選択） */}
+        {currentStep === 3 && (
+          <div className="space-y-4">
+            <h2 className="text-lg font-bold text-gray-900 mb-4">建築情報</h2>
+            <BuildingInfoSelector
+              value={buildingInfo}
+              onChange={setBuildingInfo}
+              onComplete={() => nextStep()}
             />
           </div>
         )}
