@@ -30,15 +30,15 @@ interface ColorSelectModalProps {
 
 const ColorSelectModal: React.FC<ColorSelectModalProps> = ({ product, onSelect, onClose }) => {
   const variants = product.variants || [];
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [previewIndex, setPreviewIndex] = useState(0);
 
   const getVariantImage = (variant: ProductVariant | undefined): string | null => {
     if (!variant) return null;
     return variant.images?.[0] || variant.imageUrl || null;
   };
 
-  const currentVariant = variants[selectedIndex];
-  const currentImage = getVariantImage(currentVariant);
+  const previewVariant = variants[previewIndex];
+  const previewImage = getVariantImage(previewVariant);
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={onClose}>
@@ -55,40 +55,42 @@ const ColorSelectModal: React.FC<ColorSelectModalProps> = ({ product, onSelect, 
         </div>
 
         <div className="flex flex-col md:flex-row">
-          {/* メイン画像 */}
+          {/* メイン画像プレビュー */}
           <div className="md:w-1/2 p-4">
             <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl overflow-hidden">
-              {currentImage ? (
+              {previewImage ? (
                 <img
-                  src={currentImage}
-                  alt={currentVariant?.color || ''}
+                  src={previewImage}
+                  alt={previewVariant?.color || ''}
                   className="w-full h-full object-cover"
                 />
               ) : (
                 <div className="w-full h-full flex flex-col items-center justify-center">
                   <span className="text-4xl">🎨</span>
-                  <span className="text-sm text-gray-500 mt-2">{currentVariant?.color}</span>
+                  <span className="text-sm text-gray-500 mt-2">{previewVariant?.color}</span>
                 </div>
               )}
             </div>
             <p className="text-center mt-3 font-medium text-gray-800">
-              {currentVariant?.color || '色を選択してください'}
+              {previewVariant?.color || '色を選択してください'}
             </p>
           </div>
 
           {/* 色一覧 + 商品情報 */}
           <div className="md:w-1/2 p-4 border-t md:border-t-0 md:border-l overflow-y-auto max-h-[70vh]">
             <p className="text-sm text-gray-600 mb-3">{variants.length}色から選択</p>
+            <p className="text-xs text-blue-600 mb-2">タップで選択完了</p>
             <div className="grid grid-cols-4 gap-2 mb-4">
               {variants.map((variant, idx) => {
                 const variantImage = getVariantImage(variant);
-                const isSelected = idx === selectedIndex;
+                const isPreviewing = idx === previewIndex;
                 return (
                   <button
                     key={variant.id}
-                    onClick={() => setSelectedIndex(idx)}
-                    className={`aspect-square rounded-lg border-2 overflow-hidden transition-all ${
-                      isSelected
+                    onClick={() => onSelect(variant)}
+                    onMouseEnter={() => setPreviewIndex(idx)}
+                    className={`aspect-square rounded-lg border-2 overflow-hidden transition-all hover:scale-105 hover:shadow-md ${
+                      isPreviewing
                         ? 'border-blue-500 ring-2 ring-blue-300'
                         : 'border-gray-200 hover:border-blue-300'
                     }`}
@@ -136,18 +138,12 @@ const ColorSelectModal: React.FC<ColorSelectModalProps> = ({ product, onSelect, 
         </div>
 
         {/* フッター */}
-        <div className="p-4 border-t flex gap-3">
+        <div className="p-4 border-t">
           <button
             onClick={onClose}
-            className="flex-1 py-3 px-4 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50"
+            className="w-full py-3 px-4 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50"
           >
             キャンセル
-          </button>
-          <button
-            onClick={() => currentVariant && onSelect(currentVariant)}
-            className="flex-1 py-3 px-4 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700"
-          >
-            この色を選択
           </button>
         </div>
       </div>
