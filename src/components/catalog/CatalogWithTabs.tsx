@@ -585,7 +585,14 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
           // カテゴリでフィルタ
           if (selectedCategoryId) {
-            query = query.eq('category_id', selectedCategoryId);
+            // ベースクロス（壁・天井）はタグでフィルタ（同じデータを共有）
+            const selectedCategory = categories.find(c => c.id === selectedCategoryId);
+            const categoryName = selectedCategory?.name || '';
+            if (categoryName === 'ベースクロス（壁）' || categoryName === 'ベースクロス（天井）') {
+              query = query.contains('tags', ['wallpaper']);
+            } else {
+              query = query.eq('category_id', selectedCategoryId);
+            }
           }
           // カテゴリ未選択時は全アイテムを取得し、後でJavaScriptでフィルタ
 
