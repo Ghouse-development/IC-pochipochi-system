@@ -991,6 +991,30 @@ export const usersApi = {
 
   async getCoordinators(): Promise<User[]> {
     if (!isSupabaseConfigured) return [];
+
+    // Try API endpoint first (bypasses RLS)
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.access_token) {
+        const response = await fetch('/api/users/coordinators', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          return result.users || [];
+        }
+        logger.warn('API endpoint failed, falling back to direct query');
+      }
+    } catch (err) {
+      logger.warn('API endpoint error, falling back to direct query:', err);
+    }
+
+    // Fallback to direct Supabase query
     const { data, error } = await supabase
       .from('users')
       .select('*')

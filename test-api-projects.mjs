@@ -31,10 +31,10 @@ async function test() {
   const token = authData.session.access_token;
   console.log('   トークン取得成功:', token.substring(0, 30) + '...');
 
-  // 2. /api/projects/list エンドポイントをテスト
-  console.log('\n2. /api/projects/list をテスト...');
+  // 2. /api/projects/create (GET) エンドポイントをテスト
+  console.log('\n2. /api/projects/create (GET) をテスト...');
   try {
-    const response = await fetch(`${BASE_URL}/api/projects/list`, {
+    const response = await fetch(`${BASE_URL}/api/projects/create`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
