@@ -19,66 +19,19 @@ export default defineConfig(({ mode }) => {
     rollupOptions: {
       output: {
         manualChunks(id) {
-          // Reactコア + UI/アイコン（依存関係があるため一緒にバンドル）
-          if (
-            id.includes('node_modules/react') ||
-            id.includes('node_modules/react-dom') ||
-            id.includes('node_modules/react-router') ||
-            id.includes('lucide-react') ||
-            id.includes('@radix-ui')
-          ) {
-            return 'react-vendor';
+          // node_modulesのライブラリをvendorチャンクに統合
+          // 初期化順序の問題を避けるため、細かく分割しない
+          if (id.includes('node_modules')) {
+            // 大きなエクスポート系ライブラリのみ分離
+            if (id.includes('xlsx') || id.includes('jspdf') || id.includes('html2canvas')) {
+              return 'export-vendor';
+            }
+            // その他のnode_modulesは1つのvendorチャンクに
+            return 'vendor';
           }
-          // Supabase
-          if (id.includes('@supabase')) {
-            return 'supabase';
-          }
-          // エクスポート関連
-          if (id.includes('xlsx') || id.includes('jspdf')) {
-            return 'export-vendor';
-          }
-          // 状態管理
-          if (id.includes('zustand')) {
-            return 'state';
-          }
-          // ユーティリティ
-          if (id.includes('html2canvas') || id.includes('dompurify')) {
-            return 'utils';
-          }
-          // 仮想スクロール
-          if (id.includes('@tanstack/react-virtual')) {
-            return 'virtual';
-          }
-          // QRコード
-          if (id.includes('qrcode')) {
-            return 'qrcode';
-          }
-          // 商品データ（大きなデータファイルを分離）
-          if (id.includes('src/data/interiorProducts') || id.includes('src/data/exteriorProducts')) {
-            return 'product-data';
-          }
-          // カタログセレクター（遅延読み込み）
-          if (
-            id.includes('src/components/catalog/AirconSelector') ||
-            id.includes('src/components/catalog/EntranceDoorSelector') ||
-            id.includes('src/components/catalog/DiningTableSelector') ||
-            id.includes('src/components/catalog/StairSelector') ||
-            id.includes('src/components/catalog/BaseBuildingSelector') ||
-            id.includes('src/components/catalog/PorchTileSelector') ||
-            id.includes('src/components/catalog/MultiColorAreaSelector') ||
-            id.includes('src/components/catalog/RoomBasedMaterialSelector') ||
-            id.includes('src/components/catalog/ICProposalSelector') ||
-            id.includes('src/components/interior/RoomInteriorSelector')
-          ) {
-            return 'selectors';
-          }
-          // カタログメインコンポーネント
-          if (id.includes('src/components/catalog/CatalogWithTabs')) {
-            return 'catalog';
-          }
-          // 水回り製品データ
-          if (id.includes('src/data/waterEquipmentProducts') || id.includes('src/data/furnitureProducts')) {
-            return 'furniture-data';
+          // アプリケーションコードの大きなファイルを分離
+          if (id.includes('src/data/')) {
+            return 'app-data';
           }
         },
       },
