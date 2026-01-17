@@ -78,7 +78,7 @@ interface CreateProjectRequest {
   planType: string;
   projectCode?: string;
   projectName?: string;
-  // Building info
+  // Building info - all fields from BuildingInfo type
   buildingInfo: {
     fire_zone: string;
     salt_zone?: string;
@@ -90,7 +90,34 @@ interface CreateProjectRequest {
     ground_improvement?: string;
     damper: string;
     module: string;
-    certifications?: string;
+    certifications?: string | string[];
+    // 外構・ポーチ
+    porch_extension?: string;
+    parapet?: string;
+    balcony?: string;
+    eaves_ceiling?: string;
+    canopy?: string;
+    garage_shutter?: string;
+    // 玄関・窓
+    entrance_door_count?: string;
+    window_type?: string;
+    interior_window?: string;
+    // 設備
+    inspection_hatch?: string;
+    air_inlet?: string;
+    relay_pole?: string;
+    entrance_sink?: string;
+    // 電気・エネルギー
+    water_heater?: string;
+    ventilation?: string;
+    intercom_count?: string;
+    solar?: string;
+    battery?: string;
+    v2h?: string;
+    // その他
+    gas_work?: string;
+    iron_stairs_1f_2f?: string;
+    iron_stairs_2f_3f?: string;
   };
   // Rooms
   rooms: Array<{
@@ -241,14 +268,43 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         construction_method: body.buildingInfo.construction_method,
         floors: floorsNum,
         ceiling_height: parseInt(body.buildingInfo.ceiling_height_1f) || null,
-        // Store additional building info in a JSON note field or we can add columns later
+        // Store all building info in a JSON note field
         note: JSON.stringify({
+          // 建築情報
           salt_zone: body.buildingInfo.salt_zone,
           snow_zone: body.buildingInfo.snow_zone,
           ground_improvement: body.buildingInfo.ground_improvement,
           damper: body.buildingInfo.damper,
           module: body.buildingInfo.module,
           certifications: body.buildingInfo.certifications,
+          // 外構・ポーチ
+          porch_extension: body.buildingInfo.porch_extension,
+          parapet: body.buildingInfo.parapet,
+          balcony: body.buildingInfo.balcony,
+          eaves_ceiling: body.buildingInfo.eaves_ceiling,
+          canopy: body.buildingInfo.canopy,
+          garage_shutter: body.buildingInfo.garage_shutter,
+          // 玄関・窓
+          entrance_door_count: body.buildingInfo.entrance_door_count,
+          window_type: body.buildingInfo.window_type,
+          interior_window: body.buildingInfo.interior_window,
+          // 設備
+          inspection_hatch: body.buildingInfo.inspection_hatch,
+          air_inlet: body.buildingInfo.air_inlet,
+          relay_pole: body.buildingInfo.relay_pole,
+          entrance_sink: body.buildingInfo.entrance_sink,
+          // 電気・エネルギー
+          water_heater: body.buildingInfo.water_heater,
+          ventilation: body.buildingInfo.ventilation,
+          intercom_count: body.buildingInfo.intercom_count,
+          solar: body.buildingInfo.solar,
+          battery: body.buildingInfo.battery,
+          v2h: body.buildingInfo.v2h,
+          // その他
+          gas_work: body.buildingInfo.gas_work,
+          iron_stairs_1f_2f: body.buildingInfo.iron_stairs_1f_2f,
+          iron_stairs_2f_3f: body.buildingInfo.iron_stairs_2f_3f,
+          // 顧客情報
           customer_phone: body.customer.phone,
           customer_postal_code: body.customer.postalCode,
           customer_furigana: body.customer.furigana,
