@@ -13,10 +13,36 @@ const addOperationLog = (
   useOperationLogStore.getState().addLog(type, action, details);
 };
 
+// プロジェクトごとのデータをLocalStorageに保存/読み込み
+const getProjectStorageKey = (projectId: string) => `ic-pochipochi-cart-${projectId}`;
+
+const saveCartData = (projectId: string, items: CartItem[]) => {
+  try {
+    localStorage.setItem(getProjectStorageKey(projectId), JSON.stringify(items));
+  } catch (e) {
+    console.error('Failed to save cart data:', e);
+  }
+};
+
+const loadCartData = (projectId: string): CartItem[] | null => {
+  try {
+    const data = localStorage.getItem(getProjectStorageKey(projectId));
+    if (data) {
+      return JSON.parse(data);
+    }
+  } catch (e) {
+    console.error('Failed to load cart data:', e);
+  }
+  return null;
+};
+
 interface CartStore {
+  currentProjectId: string | null;
   items: CartItem[];
   selectedPlanId: string;
   lastUpdated: string | null;
+  setCurrentProject: (projectId: string) => void;
+  getCurrentProjectId: () => string | null;
   setSelectedPlanId: (planId: string) => void;
   addItem: (product: Product, quantity?: number, variant?: ProductVariant) => void;
   addItemWithArea: (product: Product, variant: ProductVariant, area: number, colorIndex: number) => void;
@@ -35,9 +61,29 @@ interface CartStore {
 export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
+  currentProjectId: null,
   items: [],
   selectedPlanId: 'LACIE',
   lastUpdated: null,
+
+  setCurrentProject: (projectId) => {
+    const currentState = get();
+
+    // 現在のプロジェクトデータを保存
+    if (currentState.currentProjectId) {
+      saveCartData(currentState.currentProjectId, currentState.items);
+    }
+
+    // 新しいプロジェクトのデータを読み込み
+    const savedItems = loadCartData(projectId);
+
+    set({
+      currentProjectId: projectId,
+      items: savedItems || [],
+    });
+  },
+
+  getCurrentProjectId: () => get().currentProjectId,
 
   setSelectedPlanId: (planId) => {
     set({ selectedPlanId: planId, lastUpdated: new Date().toISOString() });

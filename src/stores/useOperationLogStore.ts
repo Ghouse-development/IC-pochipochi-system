@@ -43,10 +43,38 @@ export interface OperationLog {
   sessionId: string;
 }
 
+// プロジェクトごとのデータをLocalStorageに保存/読み込み
+const getProjectStorageKey = (projectId: string) => `ic-pochipochi-oplog-${projectId}`;
+
+const saveLogData = (projectId: string, logs: OperationLog[]) => {
+  try {
+    localStorage.setItem(getProjectStorageKey(projectId), JSON.stringify(logs));
+  } catch (e) {
+    console.error('Failed to save operation log data:', e);
+  }
+};
+
+const loadLogData = (projectId: string): OperationLog[] | null => {
+  try {
+    const data = localStorage.getItem(getProjectStorageKey(projectId));
+    if (data) {
+      return JSON.parse(data);
+    }
+  } catch (e) {
+    console.error('Failed to load operation log data:', e);
+  }
+  return null;
+};
+
 interface OperationLogStore {
+  currentProjectId: string | null;
   logs: OperationLog[];
   sessionId: string;
   currentUserType: UserType;
+
+  // プロジェクト切り替え
+  setCurrentProject: (projectId: string) => void;
+  getCurrentProjectId: () => string | null;
 
   // ログを追加
   addLog: (type: OperationType, action: ActionType, details?: Record<string, unknown>) => void;
@@ -85,9 +113,29 @@ const generateSessionId = () => {
 export const useOperationLogStore = create<OperationLogStore>()(
   persist(
     (set, get) => ({
+      currentProjectId: null,
       logs: [],
       sessionId: generateSessionId(),
       currentUserType: 'unknown' as UserType,
+
+      setCurrentProject: (projectId) => {
+        const currentState = get();
+
+        // 現在のプロジェクトデータを保存
+        if (currentState.currentProjectId) {
+          saveLogData(currentState.currentProjectId, currentState.logs);
+        }
+
+        // 新しいプロジェクトのデータを読み込み
+        const savedLogs = loadLogData(projectId);
+
+        set({
+          currentProjectId: projectId,
+          logs: savedLogs || [],
+        });
+      },
+
+      getCurrentProjectId: () => get().currentProjectId,
 
       addLog: (type, action, details) => {
         const newLog: OperationLog = {

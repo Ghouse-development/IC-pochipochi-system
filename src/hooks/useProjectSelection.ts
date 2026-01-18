@@ -1,24 +1,29 @@
 /**
  * プロジェクト選択フック
- * useProjectStore、useSelectionStore、useShowroomEstimateStoreを同期する
+ * useProjectStore、useSelectionStore、useShowroomEstimateStore、useCartStore、useOperationLogStoreを同期する
  */
 import { useCallback } from 'react';
 import { useProjectStore, type Project } from '../stores/useProjectStore';
 import { useSelectionStore } from '../stores/useSelectionStore';
 import { useShowroomEstimateStore } from '../stores/useShowroomEstimateStore';
+import { useCartStore } from '../stores/useCartStore';
+import { useOperationLogStore } from '../stores/useOperationLogStore';
 
 export const useProjectSelection = () => {
   const { currentProject, setCurrentProject: setProject, projects } = useProjectStore();
   const { setCurrentProject: setSelectionProject, currentProjectId } = useSelectionStore();
   const { setCurrentProject: setShowroomProject } = useShowroomEstimateStore();
+  const { setCurrentProject: setCartProject } = useCartStore();
+  const { setCurrentProject: setOperationLogProject } = useOperationLogStore();
 
   // プロジェクトを選択し、すべてのストアを更新
   const selectProject = useCallback((project: Project | null) => {
     // useProjectStoreを更新
     setProject(project);
 
-    // useSelectionStoreを更新
+    // 他のストアを更新
     if (project) {
+      // useSelectionStoreを更新
       setSelectionProject(
         project.id,
         project.name,
@@ -27,8 +32,12 @@ export const useProjectSelection = () => {
       );
       // useShowroomEstimateStoreを更新
       setShowroomProject(project.id);
+      // useCartStoreを更新
+      setCartProject(project.id);
+      // useOperationLogStoreを更新
+      setOperationLogProject(project.id);
     }
-  }, [setProject, setSelectionProject, setShowroomProject]);
+  }, [setProject, setSelectionProject, setShowroomProject, setCartProject, setOperationLogProject]);
 
   // IDでプロジェクトを選択
   const selectProjectById = useCallback((projectId: string) => {
