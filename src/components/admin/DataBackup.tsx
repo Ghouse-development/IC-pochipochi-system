@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Download, Upload, AlertTriangle, CheckCircle, Database, RefreshCw, HardDrive, Cloud, FileSpreadsheet } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Download, Upload, AlertTriangle, CheckCircle, Database, RefreshCw, HardDrive, Cloud, FileSpreadsheet, Clock, Power, PowerOff } from 'lucide-react';
 import { Button } from '../common/Button';
 import { Card } from '../common/Card';
 import { ConfirmDialog } from '../common/ConfirmDialog';
@@ -32,6 +32,16 @@ interface SupabaseStats {
   selections: number;
 }
 
+// 自動バックアップ設定
+interface AutoBackupSettings {
+  enabled: boolean;
+  interval: 'daily' | 'weekly' | 'monthly';
+  lastAutoBackup: string | null;
+  nextScheduledBackup: string | null;
+}
+
+const AUTO_BACKUP_SETTINGS_KEY = 'lifex-auto-backup-settings';
+
 export const DataBackup: React.FC = () => {
   const [isExporting, setIsExporting] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
@@ -43,6 +53,19 @@ export const DataBackup: React.FC = () => {
   const [supabaseStats, setSupabaseStats] = useState<SupabaseStats | null>(null);
   const [loadingStats, setLoadingStats] = useState(true);
   const { setTimeout } = useTimeout();
+
+  // 自動バックアップ設定
+  const [autoBackupSettings, setAutoBackupSettings] = useState<AutoBackupSettings>(() => {
+    const saved = localStorage.getItem(AUTO_BACKUP_SETTINGS_KEY);
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch {
+        return { enabled: false, interval: 'weekly', lastAutoBackup: null, nextScheduledBackup: null };
+      }
+    }
+    return { enabled: false, interval: 'weekly', lastAutoBackup: null, nextScheduledBackup: null };
+  });
 
   // Supabase統計を取得
   useEffect(() => {
@@ -87,6 +110,136 @@ export const DataBackup: React.FC = () => {
       mounted = false;
     };
   }, []);
+
+  // 次回バックアップ日時を計算
+  const calculateNextBackupDate = useCallback((interval: 'daily' | 'weekly' | 'monthly', fromDate: Date = new Date()): Date => {
+    const next = new Date(fromDate);
+    switch (interval) {
+      case 'daily':
+        next.setDate(next.getDate() + 1);
+        break;
+      case 'weekly':
+        next.setDate(next.getDate() + 7);
+        break;
+      case 'monthly':
+        next.setMonth(next.getMonth() + 1);
+        break;
+    }
+    next.setHours(3, 0, 0, 0); // AM 3:00に設定
+    return next;
+  }, []);
+
+  // 自動バックアップ設定を保存
+  const saveAutoBackupSettings = useCallback((settings: AutoBackupSettings) => {
+    localStorage.setItem(AUTO_BACKUP_SETTINGS_KEY, JSON.stringify(settings));
+    setAutoBackupSettings(settings);
+  }, []);
+
+  // 自動バックアップを実行（ページ読み込み時に確認）
+  const executeAutoBackup = useCallback(async () => {
+    if (!autoBackupSettings.enabled) return;
+
+    const now = new Date();
+    const nextScheduled = autoBackupSettings.nextScheduledBackup
+      ? new Date(autoBackupSettings.nextScheduledBackup)
+      : null;
+
+    // 次回バックアップ日時を過ぎていたら実行
+    if (nextScheduled && now >= nextScheduled) {
+      logger.info('Auto backup triggered');
+
+      try {
+        // Supabaseの全データをバックアップ
+        const [items, variants, pricing, categories, projects, selections] = await Promise.all([
+          supabase.from('items').select('*'),
+          supabase.from('item_variants').select('*'),
+          supabase.from('item_pricing').select('*'),
+          supabase.from('categories').select('*'),
+          supabase.from('projects').select('*'),
+          supabase.from('selections').select('*'),
+        ]);
+
+        const backupData = {
+          exportedAt: now.toISOString(),
+          version: '2.10.0',
+          autoBackup: true,
+          data: {
+            items: items.data || [],
+            item_variants: variants.data || [],
+            item_pricing: pricing.data || [],
+            categories: categories.data || [],
+            projects: projects.data || [],
+            selections: selections.data || [],
+          }
+        };
+
+        // 自動ダウンロード
+        const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `auto-backup-${now.toISOString().split('T')[0]}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        // 設定を更新
+        const nextDate = calculateNextBackupDate(autoBackupSettings.interval, now);
+        const updatedSettings: AutoBackupSettings = {
+          ...autoBackupSettings,
+          lastAutoBackup: now.toISOString(),
+          nextScheduledBackup: nextDate.toISOString(),
+        };
+        saveAutoBackupSettings(updatedSettings);
+
+        setMessage({ type: 'success', text: '自動バックアップが完了しました' });
+        logger.info('Auto backup completed');
+      } catch (error) {
+        logger.error('Auto backup failed:', error);
+      }
+    }
+  }, [autoBackupSettings, calculateNextBackupDate, saveAutoBackupSettings]);
+
+  // 自動バックアップのトリガー確認（ページ読み込み時）
+  useEffect(() => {
+    if (autoBackupSettings.enabled) {
+      executeAutoBackup();
+    }
+  }, [executeAutoBackup, autoBackupSettings.enabled]);
+
+  // 自動バックアップの有効/無効を切り替え
+  const toggleAutoBackup = useCallback(() => {
+    const newEnabled = !autoBackupSettings.enabled;
+    const now = new Date();
+    const nextDate = newEnabled ? calculateNextBackupDate(autoBackupSettings.interval, now) : null;
+
+    const updatedSettings: AutoBackupSettings = {
+      ...autoBackupSettings,
+      enabled: newEnabled,
+      nextScheduledBackup: nextDate?.toISOString() || null,
+    };
+    saveAutoBackupSettings(updatedSettings);
+
+    if (newEnabled) {
+      setMessage({ type: 'success', text: '自動バックアップを有効にしました' });
+    } else {
+      setMessage({ type: 'success', text: '自動バックアップを無効にしました' });
+    }
+  }, [autoBackupSettings, calculateNextBackupDate, saveAutoBackupSettings]);
+
+  // 自動バックアップの間隔を変更
+  const changeAutoBackupInterval = useCallback((interval: 'daily' | 'weekly' | 'monthly') => {
+    const now = new Date();
+    const nextDate = autoBackupSettings.enabled ? calculateNextBackupDate(interval, now) : null;
+
+    const updatedSettings: AutoBackupSettings = {
+      ...autoBackupSettings,
+      interval,
+      nextScheduledBackup: nextDate?.toISOString() || null,
+    };
+    saveAutoBackupSettings(updatedSettings);
+  }, [autoBackupSettings, calculateNextBackupDate, saveAutoBackupSettings]);
 
   // SupabaseデータをCSVエクスポート
   const handleExportSupabase = async (tableName: string) => {
@@ -432,6 +585,90 @@ export const DataBackup: React.FC = () => {
           {lastBackup && (
             <span>最終バックアップ: {new Date(lastBackup).toLocaleString('ja-JP')}</span>
           )}
+        </div>
+      </Card>
+
+      {/* 自動バックアップ設定 */}
+      <Card className="p-4">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <Clock className="w-5 h-5 text-blue-600" />
+            <h3 className="font-semibold text-gray-900">自動バックアップ設定</h3>
+          </div>
+          <button
+            onClick={toggleAutoBackup}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+              autoBackupSettings.enabled
+                ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
+          >
+            {autoBackupSettings.enabled ? (
+              <>
+                <Power className="w-4 h-4" />
+                有効
+              </>
+            ) : (
+              <>
+                <PowerOff className="w-4 h-4" />
+                無効
+              </>
+            )}
+          </button>
+        </div>
+
+        <div className="space-y-4">
+          {/* バックアップ間隔 */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">バックアップ間隔</label>
+            <div className="flex gap-2">
+              {[
+                { value: 'daily' as const, label: '毎日' },
+                { value: 'weekly' as const, label: '毎週' },
+                { value: 'monthly' as const, label: '毎月' },
+              ].map((option) => (
+                <button
+                  key={option.value}
+                  onClick={() => changeAutoBackupInterval(option.value)}
+                  className={`px-4 py-2 rounded-lg text-sm transition-colors ${
+                    autoBackupSettings.interval === option.value
+                      ? 'bg-blue-500 text-white'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* バックアップ情報 */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-gray-50 rounded-lg p-3">
+              <p className="text-xs text-gray-500 mb-1">前回の自動バックアップ</p>
+              <p className="text-sm font-medium text-gray-900">
+                {autoBackupSettings.lastAutoBackup
+                  ? new Date(autoBackupSettings.lastAutoBackup).toLocaleString('ja-JP')
+                  : '未実行'}
+              </p>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-3">
+              <p className="text-xs text-gray-500 mb-1">次回の予定</p>
+              <p className="text-sm font-medium text-gray-900">
+                {autoBackupSettings.enabled && autoBackupSettings.nextScheduledBackup
+                  ? new Date(autoBackupSettings.nextScheduledBackup).toLocaleString('ja-JP')
+                  : autoBackupSettings.enabled ? '設定中...' : '無効'}
+              </p>
+            </div>
+          </div>
+
+          {/* 説明 */}
+          <div className="text-sm text-gray-500">
+            <p>
+              自動バックアップを有効にすると、設定した間隔でSupabaseの全データがJSONファイルとして自動的にダウンロードされます。
+              ブラウザを開いているときにバックアップ時刻を過ぎると自動的に実行されます。
+            </p>
+          </div>
         </div>
       </Card>
 

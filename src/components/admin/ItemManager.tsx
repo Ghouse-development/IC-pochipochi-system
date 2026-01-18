@@ -516,9 +516,9 @@ export function ItemManager() {
                               <td className="px-6 py-4">
                                 <div className="flex items-center gap-3">
                                   <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                                    {item.variants?.[0]?.images?.[0] ? (
+                                    {item.thumbnail_url || item.variants?.[0]?.images?.[0] ? (
                                       <img
-                                        src={item.variants[0].images[0].thumbnail_url || item.variants[0].images[0].image_url}
+                                        src={item.thumbnail_url || item.variants?.[0]?.images?.[0]?.thumbnail_url || item.variants?.[0]?.images?.[0]?.image_url}
                                         alt={item.name}
                                         className="w-full h-full object-cover rounded-lg"
                                       />

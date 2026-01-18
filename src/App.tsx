@@ -28,14 +28,15 @@ import { CompletionCelebration } from './components/common/CompletionCelebration
 const CatalogWithTabs = lazy(() => import('./components/catalog/CatalogWithTabs').then(m => ({ default: m.CatalogWithTabs })));
 const AdminDashboard = lazy(() => import('./components/admin/AdminDashboard').then(m => ({ default: m.AdminDashboard })));
 const HierarchyPage = lazy(() => import('./pages/HierarchyPage').then(m => ({ default: m.HierarchyPage })));
-const StaffDashboard = lazy(() => import('./pages/StaffDashboard').then(m => ({ default: m.StaffDashboard })));
+// StaffDashboard は AdminDashboard に統合されたため不要
+// const StaffDashboard = lazy(() => import('./pages/StaffDashboard').then(m => ({ default: m.StaffDashboard })));
 const CustomerPage = lazy(() => import('./pages/CustomerPage').then(m => ({ default: m.CustomerPage })));
 const CustomerLoginPage = lazy(() => import('./pages/CustomerLoginPage').then(m => ({ default: m.CustomerLoginPage })));
 const ItemDetailPage = lazy(() => import('./pages/ItemDetailPage').then(m => ({ default: m.ItemDetailPage })));
 
-// 管理者専用ルートガード - 管理者以外はログインページへリダイレクト
+// 管理者/スタッフ専用ルートガード - 管理者またはコーディネーター以外は403表示
 const AdminRouteGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { isAdmin, isLoading, user } = useAuth();
+  const { isAdmin, isCoordinator, isLoading, user } = useAuth();
   const navigate = useNavigate();
 
   // ローディング中は待機
@@ -55,8 +56,8 @@ const AdminRouteGuard: React.FC<{ children: React.ReactNode }> = ({ children }) 
     return <LoginPage />;
   }
 
-  // 管理者でない場合は403表示
-  if (!isAdmin) {
+  // 管理者でもコーディネーターでもない場合は403表示
+  if (!isAdmin && !isCoordinator) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -195,7 +196,7 @@ function MainContent() {
         isAdmin={isAdmin}
         onAdminClick={() => navigate('/admin')}
         onHierarchyClick={() => navigate('/hierarchy')}
-        onStaffDashboardClick={() => navigate('/staff')}
+        onStaffDashboardClick={() => navigate('/admin/projects')}
       />
 
       <main className="flex-1 overflow-hidden">
@@ -241,13 +242,9 @@ function MainContent() {
               </Suspense>
             </AdminRouteGuard>
           } />
-          <Route path="/staff/*" element={
-            <AdminRouteGuard>
-              <Suspense fallback={<PageLoader />}>
-                <StaffDashboard onBack={() => navigate('/catalog')} />
-              </Suspense>
-            </AdminRouteGuard>
-          } />
+          {/* /staff/* は /admin/projects/* にリダイレクト（ダッシュボード統合） */}
+          <Route path="/staff" element={<Navigate to="/admin/projects/overview" replace />} />
+          <Route path="/staff/*" element={<Navigate to="/admin/projects/overview" replace />} />
           <Route path="/customer" element={
             <Suspense fallback={<PageLoader />}>
               <CustomerPage />

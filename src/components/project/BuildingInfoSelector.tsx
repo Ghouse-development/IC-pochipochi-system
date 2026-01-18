@@ -482,9 +482,14 @@ const AdditionalInputs: React.FC<AdditionalInputProps> = ({ categoryId, values, 
             <button
               type="button"
               onClick={() => {
-                onChangeExtra('solar_brand', 'nextenergy');
-                onChangeExtra('solar_other_brand', undefined);
-                onChangeExtra('solar_other', undefined);
+                // 同じボタンを再クリックで選択解除
+                if (values.solar_brand === 'nextenergy') {
+                  onChangeExtra('solar_brand', undefined);
+                } else {
+                  onChangeExtra('solar_brand', 'nextenergy');
+                  onChangeExtra('solar_other_brand', undefined);
+                  onChangeExtra('solar_other', undefined);
+                }
               }}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                 values.solar_brand === 'nextenergy'
@@ -496,7 +501,16 @@ const AdditionalInputs: React.FC<AdditionalInputProps> = ({ categoryId, values, 
             </button>
             <button
               type="button"
-              onClick={() => onChangeExtra('solar_brand', 'other')}
+              onClick={() => {
+                // 同じボタンを再クリックで選択解除
+                if (values.solar_brand === 'other') {
+                  onChangeExtra('solar_brand', undefined);
+                  onChangeExtra('solar_other_brand', undefined);
+                  onChangeExtra('solar_other', undefined);
+                } else {
+                  onChangeExtra('solar_brand', 'other');
+                }
+              }}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                 values.solar_brand === 'other'
                   ? 'bg-blue-500 text-white'
@@ -525,9 +539,15 @@ const AdditionalInputs: React.FC<AdditionalInputProps> = ({ categoryId, values, 
                   key={opt.id}
                   type="button"
                   onClick={() => {
-                    onChangeExtra('solar_other_brand', opt.id);
-                    if (opt.id !== 'other') {
+                    // 同じボタンを再クリックで選択解除
+                    if (values.solar_other_brand === opt.id) {
+                      onChangeExtra('solar_other_brand', undefined);
                       onChangeExtra('solar_other', undefined);
+                    } else {
+                      onChangeExtra('solar_other_brand', opt.id);
+                      if (opt.id !== 'other') {
+                        onChangeExtra('solar_other', undefined);
+                      }
                     }
                   }}
                   className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${

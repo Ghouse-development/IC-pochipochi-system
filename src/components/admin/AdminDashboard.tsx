@@ -1,6 +1,6 @@
-import React, { useMemo, useCallback, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { BarChart3, Package, Bell, TrendingUp, Upload, Settings, Users, FolderTree, Wrench, Truck, Database, Building2, ShieldAlert, DollarSign, Activity, RefreshCw, CloudOff, Cloud } from 'lucide-react';
+import React, { useMemo, useCallback, useEffect, useState } from 'react';
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
+import { BarChart3, Package, Bell, TrendingUp, Upload, Settings, Users, FolderTree, Wrench, Truck, Database, Building2, ShieldAlert, DollarSign, Activity, RefreshCw, CloudOff, Cloud, FolderOpen, FolderPlus, Mail, Calendar, CheckCircle, ChevronRight } from 'lucide-react';
 import { Button } from '../common/Button';
 import { Card } from '../common/Card';
 import { SectionErrorBoundary } from '../common/ErrorBoundary';
@@ -22,16 +22,24 @@ import { StaffOptionDashboard } from './StaffOptionDashboard';
 import { UserBehaviorAnalytics } from './UserBehaviorAnalytics';
 import { useAuth } from '../../contexts/AuthContext';
 import { LivePreview } from './LivePreview';
+import { ProjectRegistrationForm } from '../project/ProjectRegistrationForm';
+import { ProjectList } from '../project/ProjectList';
+import { CustomerInvitation } from '../project/CustomerInvitation';
+import { useProjectStore } from '../../stores/useProjectStore';
+import { useSelectionStore } from '../../stores/useSelectionStore';
 
 interface AdminDashboardProps {
   onBack?: () => void;
 }
 
-// メインタブ（5グループ）- プロジェクトはスタッフダッシュボードで管理
-type MainTab = 'products' | 'statistics' | 'vendors' | 'data' | 'system';
+// メインタブ（6グループ）- プロジェクト管理を統合
+type MainTab = 'projects' | 'products' | 'statistics' | 'vendors' | 'data' | 'system';
+
+// プロジェクト管理のサブタブ
+type ProjectSubTab = 'overview' | 'list' | 'create' | 'invite';
 
 // 商品マスタのサブタブ
-type ProductSubTab = 'plans' | 'items' | 'categories';
+type ProductMasterSubTab = 'plans' | 'items' | 'categories';
 
 // 統計のサブタブ
 type StatsSubTab = 'dashboard' | 'adoption' | 'staffOption' | 'behavior';
@@ -140,30 +148,47 @@ const DBSyncPanel: React.FC = () => {
   );
 };
 
+// 初期ユーザーデータの型
+interface InitialUserData {
+  id: string;
+  email: string;
+  name: string;
+  phone?: string;
+}
+
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
   const { isAdmin, isCoordinator, isLoading: authLoading } = useAuth();
+  const [initialUserData, setInitialUserData] = useState<InitialUserData | undefined>(undefined);
+  const { projects, currentProject } = useProjectStore();
+  const { customerName, projectName, projectStatus } = useSelectionStore();
 
   // URLパスからタブ状態を取得
   const getTabsFromPath = (): {
     activeTab: MainTab;
-    productSubTab: ProductSubTab;
+    projectSubTab: ProjectSubTab;
+    productMasterSubTab: ProductMasterSubTab;
     statsSubTab: StatsSubTab;
     dataSubTab: DataSubTab;
     systemSubTab: SystemSubTab;
   } => {
     const pathParts = location.pathname.replace('/admin', '').split('/').filter(Boolean);
-    const mainTab = (pathParts[0] as MainTab) || 'products';
+    const mainTab = (pathParts[0] as MainTab) || 'projects';
     const subTab = pathParts[1];
 
-    let productSub: ProductSubTab = 'plans';
+    let projectSub: ProjectSubTab = 'overview';
+    let productMasterSub: ProductMasterSubTab = 'plans';
     let statsSub: StatsSubTab = 'dashboard';
     let dataSub: DataSubTab = 'backup';
     let systemSub: SystemSubTab = 'settings';
 
+    if (mainTab === 'projects' && subTab) {
+      projectSub = (subTab as ProjectSubTab) || 'overview';
+    }
     if (mainTab === 'products' && subTab) {
-      productSub = (subTab as ProductSubTab) || 'plans';
+      productMasterSub = (subTab as ProductMasterSubTab) || 'plans';
     }
     if (mainTab === 'statistics' && subTab) {
       statsSub = (subTab as StatsSubTab) || 'dashboard';
@@ -177,14 +202,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
 
     return {
       activeTab: mainTab,
-      productSubTab: productSub,
+      projectSubTab: projectSub,
+      productMasterSubTab: productMasterSub,
       statsSubTab: statsSub,
       dataSubTab: dataSub,
       systemSubTab: systemSub,
     };
   };
 
-  const { activeTab, productSubTab, statsSubTab, dataSubTab, systemSubTab } = getTabsFromPath();
+  const { activeTab, projectSubTab, productMasterSubTab, statsSubTab, dataSubTab, systemSubTab } = getTabsFromPath();
 
   // 管理者専用タブかどうかを判定
   const isAdminOnlyTab = (tab: MainTab) => {
@@ -194,6 +220,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
   // タブ変更時にURLを更新
   const setActiveTab = useCallback((tab: MainTab) => {
     const subPaths: Record<MainTab, string> = {
+      projects: 'overview',
       products: 'plans',
       statistics: 'dashboard',
       vendors: '',
@@ -204,7 +231,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
     navigate(subPath ? `/admin/${tab}/${subPath}` : `/admin/${tab}`);
   }, [navigate]);
 
-  const setProductSubTab = useCallback((subTab: ProductSubTab) => {
+  const setProjectSubTab = useCallback((subTab: ProjectSubTab) => {
+    navigate(`/admin/projects/${subTab}`);
+  }, [navigate]);
+
+  const setProductMasterSubTab = useCallback((subTab: ProductMasterSubTab) => {
     navigate(`/admin/products/${subTab}`);
   }, [navigate]);
 
@@ -222,7 +253,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
 
   // ユーザーからプロジェクト作成への遷移
   const handleCreateProjectForUser = useCallback((user: { id: string; email: string; full_name: string; phone?: string | null }) => {
-    // StaffDashboardにユーザー情報を渡して遷移
+    // プロジェクト作成タブにユーザー情報を渡して遷移
     const params = new URLSearchParams({
       createProject: 'true',
       userId: user.id,
@@ -230,7 +261,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
       name: user.full_name || '',
       ...(user.phone ? { phone: user.phone } : {}),
     });
-    navigate(`/staff?${params.toString()}`);
+    navigate(`/admin?${params.toString()}`);
   }, [navigate]);
 
   // すべてのフックを早期リターンの前に配置（React Hooks のルール遵守）
@@ -277,10 +308,30 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
   const lowAdoptionProducts = useMemo(() => getLowAdoptionProducts(30), [getLowAdoptionProducts]);
   const categoryAdoptionRates = useMemo(() => getCategoryAdoptionRates(), [getCategoryAdoptionRates]);
 
-  // スタッフが管理者専用タブにアクセスした場合、統計タブにリダイレクト
+  // URLパラメータからユーザー情報を取得し、状態に保存
+  useEffect(() => {
+    const createProject = searchParams.get('createProject');
+    const userId = searchParams.get('userId');
+    const email = searchParams.get('email');
+    const name = searchParams.get('name');
+    const phone = searchParams.get('phone');
+
+    if (createProject === 'true' && userId && email) {
+      setInitialUserData({
+        id: userId,
+        email,
+        name: name || '',
+        phone: phone || undefined,
+      });
+      // URLパラメータをクリアしてプロジェクト作成ページへ
+      navigate('/admin/projects/create');
+    }
+  }, [searchParams, navigate]);
+
+  // スタッフが管理者専用タブにアクセスした場合、プロジェクトタブにリダイレクト
   useEffect(() => {
     if (!authLoading && isCoordinator && !isAdmin && isAdminOnlyTab(activeTab)) {
-      navigate('/admin/statistics/dashboard');
+      navigate('/admin/projects/overview');
     }
   }, [authLoading, isCoordinator, isAdmin, activeTab, navigate]);
 
@@ -350,6 +401,21 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
         
         {/* メインタブナビゲーション */}
         <div className="flex gap-1 sm:gap-2 mb-4 border-b border-gray-200 overflow-x-auto pb-1">
+          {/* プロジェクト - 全員 */}
+          <button
+            onClick={() => setActiveTab('projects')}
+            className={`px-3 py-2 rounded-t-lg font-medium transition-colors ${
+              activeTab === 'projects'
+                ? 'bg-blue-500 text-white'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              <FolderOpen className="w-4 h-4" />
+              <span className="hidden sm:inline">プロジェクト</span>
+              <span className="sm:hidden">PJ</span>
+            </div>
+          </button>
           {/* 商品マスタ - 管理者のみ */}
           {isAdmin && (
             <button
@@ -434,12 +500,69 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
         </div>
 
         {/* サブタブナビゲーション */}
+        {activeTab === 'projects' && (
+          <div className="flex gap-2 mb-4 overflow-x-auto pb-1">
+            <button
+              onClick={() => setProjectSubTab('overview')}
+              className={`px-3 py-1.5 text-sm rounded-lg transition-colors whitespace-nowrap ${
+                projectSubTab === 'overview'
+                  ? 'bg-blue-100 text-blue-700 font-medium'
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              <div className="flex items-center gap-1.5">
+                <BarChart3 className="w-3.5 h-3.5" />
+                概要
+              </div>
+            </button>
+            <button
+              onClick={() => setProjectSubTab('list')}
+              className={`px-3 py-1.5 text-sm rounded-lg transition-colors whitespace-nowrap ${
+                projectSubTab === 'list'
+                  ? 'bg-blue-100 text-blue-700 font-medium'
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              <div className="flex items-center gap-1.5">
+                <FolderOpen className="w-3.5 h-3.5" />
+                一覧
+              </div>
+            </button>
+            <button
+              onClick={() => setProjectSubTab('create')}
+              className={`px-3 py-1.5 text-sm rounded-lg transition-colors whitespace-nowrap ${
+                projectSubTab === 'create'
+                  ? 'bg-blue-100 text-blue-700 font-medium'
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              <div className="flex items-center gap-1.5">
+                <FolderPlus className="w-3.5 h-3.5" />
+                新規作成
+              </div>
+            </button>
+            <button
+              onClick={() => setProjectSubTab('invite')}
+              className={`px-3 py-1.5 text-sm rounded-lg transition-colors whitespace-nowrap ${
+                projectSubTab === 'invite'
+                  ? 'bg-blue-100 text-blue-700 font-medium'
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              <div className="flex items-center gap-1.5">
+                <Mail className="w-3.5 h-3.5" />
+                お客様招待
+              </div>
+            </button>
+          </div>
+        )}
+
         {activeTab === 'products' && isAdmin && (
           <div className="flex gap-2 mb-4">
             <button
-              onClick={() => setProductSubTab('plans')}
+              onClick={() => setProductMasterSubTab('plans')}
               className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
-                productSubTab === 'plans'
+                productMasterSubTab === 'plans'
                   ? 'bg-blue-100 text-blue-700 font-medium'
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
@@ -450,9 +573,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
               </div>
             </button>
             <button
-              onClick={() => setProductSubTab('items')}
+              onClick={() => setProductMasterSubTab('items')}
               className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
-                productSubTab === 'items'
+                productMasterSubTab === 'items'
                   ? 'bg-blue-100 text-blue-700 font-medium'
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
@@ -463,9 +586,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
               </div>
             </button>
             <button
-              onClick={() => setProductSubTab('categories')}
+              onClick={() => setProductMasterSubTab('categories')}
               className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
-                productSubTab === 'categories'
+                productMasterSubTab === 'categories'
                   ? 'bg-blue-100 text-blue-700 font-medium'
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
@@ -636,26 +759,210 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
           </div>
         )}
 
+        {/* プロジェクト管理 */}
+        {activeTab === 'projects' && (
+          <div>
+            {/* 概要 */}
+            {projectSubTab === 'overview' && (
+              <div className="space-y-6">
+                {/* サマリーカード */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <Card className="p-6">
+                    <div className="flex items-center gap-4">
+                      <div className="p-3 bg-blue-100 rounded-lg">
+                        <Users className="w-6 h-6 text-blue-600" />
+                      </div>
+                      <div>
+                        <p className="text-3xl font-bold text-gray-900">{projects.length}</p>
+                        <p className="text-sm text-gray-500">プロジェクト数</p>
+                      </div>
+                    </div>
+                  </Card>
+
+                  <Card className="p-6">
+                    <div className="flex items-center gap-4">
+                      <div className="p-3 bg-blue-100 rounded-lg">
+                        <CheckCircle className="w-6 h-6 text-blue-600" />
+                      </div>
+                      <div>
+                        <p className="text-3xl font-bold text-gray-900">
+                          {projects.filter(p => p.id === currentProject?.id).length > 0 ? 1 : 0}
+                        </p>
+                        <p className="text-sm text-gray-500">アクティブプロジェクト</p>
+                      </div>
+                    </div>
+                  </Card>
+
+                  <Card className="p-6">
+                    <div className="flex items-center gap-4">
+                      <div className="p-3 bg-purple-100 rounded-lg">
+                        <Calendar className="w-6 h-6 text-purple-600" />
+                      </div>
+                      <div>
+                        <p className="text-3xl font-bold text-gray-900">
+                          {new Date().toLocaleDateString('ja-JP', { month: 'long', day: 'numeric' })}
+                        </p>
+                        <p className="text-sm text-gray-500">今日の日付</p>
+                      </div>
+                    </div>
+                  </Card>
+                </div>
+
+                {/* 現在のプロジェクト */}
+                {(customerName || projectName) && (
+                  <Card className="p-6">
+                    <h3 className="font-bold text-gray-900 mb-4">現在のプロジェクト</h3>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-lg font-medium text-gray-900">{projectName || '未設定'}</p>
+                        <p className="text-gray-500">{customerName || '未設定'}様</p>
+                        <span className={`inline-block mt-2 px-3 py-1 text-sm rounded-full ${
+                          projectStatus === 'draft' ? 'bg-gray-100 text-gray-600' :
+                          projectStatus === 'customer_selecting' ? 'bg-blue-100 text-blue-600' :
+                          projectStatus === 'ic_review' ? 'bg-orange-100 text-orange-600' :
+                          projectStatus === 'confirmed' ? 'bg-blue-100 text-blue-600' :
+                          'bg-purple-100 text-purple-600'
+                        }`}>
+                          {projectStatus === 'draft' ? '下書き' :
+                           projectStatus === 'customer_selecting' ? 'お客様選択中' :
+                           projectStatus === 'ic_review' ? 'IC確認中' :
+                           projectStatus === 'confirmed' ? '確定済み' : '最終確定'}
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => setProjectSubTab('list')}
+                        className="flex items-center gap-2 px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                      >
+                        詳細を見る
+                        <ChevronRight className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </Card>
+                )}
+
+                {/* クイックアクション */}
+                <Card className="p-6">
+                  <h3 className="font-bold text-gray-900 mb-4">クイックアクション</h3>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <button
+                      onClick={() => setProjectSubTab('list')}
+                      className="p-4 text-center hover:bg-gray-50 rounded-lg transition-colors group"
+                    >
+                      <div className="p-3 bg-gray-100 rounded-lg inline-block mb-2 group-hover:bg-gray-200 transition-colors">
+                        <FolderOpen className="w-6 h-6 text-gray-600" />
+                      </div>
+                      <p className="text-sm font-medium text-gray-900">プロジェクト一覧</p>
+                    </button>
+
+                    <button
+                      onClick={() => setProjectSubTab('create')}
+                      className="p-4 text-center hover:bg-gray-50 rounded-lg transition-colors group"
+                    >
+                      <div className="p-3 bg-blue-100 rounded-lg inline-block mb-2 group-hover:bg-blue-200 transition-colors">
+                        <FolderPlus className="w-6 h-6 text-blue-600" />
+                      </div>
+                      <p className="text-sm font-medium text-gray-900">新規プロジェクト</p>
+                    </button>
+
+                    <button
+                      onClick={() => setProjectSubTab('invite')}
+                      className="p-4 text-center hover:bg-gray-50 rounded-lg transition-colors group"
+                    >
+                      <div className="p-3 bg-indigo-100 rounded-lg inline-block mb-2 group-hover:bg-indigo-200 transition-colors">
+                        <Mail className="w-6 h-6 text-indigo-600" />
+                      </div>
+                      <p className="text-sm font-medium text-gray-900">お客様招待</p>
+                    </button>
+                  </div>
+                </Card>
+
+                {/* 最近のプロジェクト */}
+                {projects.length > 0 && (
+                  <Card className="p-6">
+                    <h3 className="font-bold text-gray-900 mb-4">最近のプロジェクト</h3>
+                    <div className="space-y-3">
+                      {projects.slice(0, 5).map((project) => (
+                        <div
+                          key={project.id}
+                          className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors"
+                        >
+                          <div>
+                            <p className="font-medium text-gray-900">{project.name}</p>
+                            <p className="text-sm text-gray-500">
+                              {project.customer.name}様 / {project.building.planType}
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-xs text-gray-400">
+                              {new Date(project.updatedAt).toLocaleDateString('ja-JP')}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </Card>
+                )}
+              </div>
+            )}
+
+            {/* プロジェクト一覧 */}
+            {projectSubTab === 'list' && (
+              <SectionErrorBoundary sectionName="プロジェクト一覧">
+                <ProjectList
+                  onProjectSelect={() => {
+                    // プロジェクト選択後はプロジェクト一覧に留まる
+                  }}
+                  onCreateNew={() => setProjectSubTab('create')}
+                />
+              </SectionErrorBoundary>
+            )}
+
+            {/* 新規作成 */}
+            {projectSubTab === 'create' && (
+              <SectionErrorBoundary sectionName="プロジェクト作成">
+                <ProjectRegistrationForm
+                  onComplete={() => {
+                    setInitialUserData(undefined);
+                    setProjectSubTab('list');
+                  }}
+                  onCancel={() => {
+                    setInitialUserData(undefined);
+                    setProjectSubTab('list');
+                  }}
+                  initialUser={initialUserData}
+                />
+              </SectionErrorBoundary>
+            )}
+
+            {/* お客様招待 */}
+            {projectSubTab === 'invite' && (
+              <SectionErrorBoundary sectionName="お客様招待">
+                <CustomerInvitation />
+              </SectionErrorBoundary>
+            )}
+          </div>
+        )}
+
         {/* 商品マスタ（管理者専用） */}
         {activeTab === 'products' && isAdmin && (
           <div>
-            {productSubTab === 'plans' && (
+            {productMasterSubTab === 'plans' && (
               <SectionErrorBoundary sectionName="商品マスタ">
                 <ProductMaster />
               </SectionErrorBoundary>
             )}
-            {productSubTab === 'items' && (
+            {productMasterSubTab === 'items' && (
               <SectionErrorBoundary sectionName="アイテム管理">
                 <ItemManager />
               </SectionErrorBoundary>
             )}
-            {productSubTab === 'categories' && (
+            {productMasterSubTab === 'categories' && (
               <SectionErrorBoundary sectionName="カテゴリ管理">
                 <CategoryManager />
               </SectionErrorBoundary>
             )}
             {/* カタログプレビュー（アイテム・カテゴリ編集時） */}
-            {(productSubTab === 'items' || productSubTab === 'categories') && (
+            {(productMasterSubTab === 'items' || productMasterSubTab === 'categories') && (
               <LivePreview
                 previewPath="/catalog/exterior"
                 targetName="カタログ"

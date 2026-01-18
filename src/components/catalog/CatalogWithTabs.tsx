@@ -1379,6 +1379,11 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   };
 
   const getImageUrl = (item: ItemWithDetails) => {
+    // アイテムのサムネイル画像を優先使用（バリアント画像よりも上位）
+    if (item.thumbnail_url) {
+      return item.thumbnail_url;
+    }
+    // フォールバック: バリアント画像
     const variant = item.variants?.[0];
     return variant?.images?.[0]?.image_url || variant?.images?.[0]?.thumbnail_url || null;
   };
