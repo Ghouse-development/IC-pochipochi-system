@@ -702,8 +702,11 @@ function ItemFormModal({
     is_discontinued: item?.is_discontinued || false,
     discontinue_date: item?.discontinue_date || '',
     discontinue_note: item?.discontinue_note || '',
+    thumbnail_url: item?.thumbnail_url || '',
+    thumbnail_path: item?.thumbnail_path || '',
   });
   const [isSaving, setIsSaving] = useState(false);
+  const [isUploadingThumbnail, setIsUploadingThumbnail] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [variants, setVariants] = useState(item?.variants || []);
   const [pricing, setPricing] = useState(item?.pricing || []);
@@ -738,6 +741,64 @@ function ItemFormModal({
     }
   };
 
+  const handleThumbnailUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+      toast.error('エラー', 'ファイルサイズは5MB以下にしてください');
+      return;
+    }
+
+    setIsUploadingThumbnail(true);
+    try {
+      const fileExt = file.name.split('.').pop()?.toLowerCase() || 'jpg';
+      const fileName = `thumbnail_${Date.now()}.${fileExt}`;
+      const categorySlug = categories.find(c => c.id === formData.category_id)?.slug || 'general';
+      const storagePath = `items/${categorySlug}/${formData.item_code || 'new'}/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('product-images')
+        .upload(storagePath, file, { upsert: true });
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('product-images')
+        .getPublicUrl(storagePath);
+
+      setFormData(prev => ({
+        ...prev,
+        thumbnail_url: publicUrl,
+        thumbnail_path: storagePath,
+      }));
+      toast.success('アップロード完了', 'サムネイル画像をアップロードしました');
+    } catch (err) {
+      logger.error('Failed to upload thumbnail:', err);
+      toast.error('エラー', 'サムネイル画像のアップロードに失敗しました');
+    } finally {
+      setIsUploadingThumbnail(false);
+    }
+  };
+
+  const handleRemoveThumbnail = async () => {
+    if (formData.thumbnail_path) {
+      try {
+        await supabase.storage
+          .from('product-images')
+          .remove([formData.thumbnail_path]);
+      } catch (err) {
+        logger.error('Failed to remove thumbnail:', err);
+      }
+    }
+    setFormData(prev => ({
+      ...prev,
+      thumbnail_url: '',
+      thumbnail_path: '',
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.item_code || !formData.name || !formData.category_id) {
@@ -753,6 +814,8 @@ function ItemFormModal({
         await itemsApi.update(item.id, {
           ...formData,
           discontinue_date: formData.discontinue_date || null,
+          thumbnail_url: formData.thumbnail_url || null,
+          thumbnail_path: formData.thumbnail_path || null,
         });
       } else {
         await itemsApi.create({
@@ -765,6 +828,8 @@ function ItemFormModal({
           catalog_url: formData.catalog_url || undefined,
           unit_id: formData.unit_id || undefined,
           is_hit: formData.is_hit,
+          thumbnail_url: formData.thumbnail_url || undefined,
+          thumbnail_path: formData.thumbnail_path || undefined,
         });
       }
       toast.success('保存完了', item ? 'アイテムを更新しました' : 'アイテムを作成しました');
@@ -891,6 +956,64 @@ function ItemFormModal({
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   placeholder="例: モナビストーンV"
                 />
+              </div>
+
+              {/* サムネイル画像（一覧表示用） */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  サムネイル画像（一覧表示用）
+                </label>
+                <p className="text-xs text-gray-500 mb-2">
+                  アイテム一覧で表示される代表画像です。バリアント画像とは別に設定できます。
+                </p>
+                <div className="flex items-start gap-4">
+                  {formData.thumbnail_url ? (
+                    <div className="relative group">
+                      <img
+                        src={formData.thumbnail_url}
+                        alt="サムネイル"
+                        className="w-24 h-24 object-cover rounded-lg border border-gray-200"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleRemoveThumbnail}
+                        className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                      </button>
+                    </div>
+                  ) : (
+                    <label className="w-24 h-24 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition-colors">
+                      {isUploadingThumbnail ? (
+                        <RefreshCw className="w-6 h-6 text-gray-400 animate-spin" />
+                      ) : (
+                        <>
+                          <ImageIcon className="w-6 h-6 text-gray-400" />
+                          <span className="text-xs text-gray-500 mt-1">追加</span>
+                        </>
+                      )}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleThumbnailUpload}
+                        className="hidden"
+                        disabled={isUploadingThumbnail}
+                      />
+                    </label>
+                  )}
+                  {formData.thumbnail_url && (
+                    <label className="px-3 py-2 text-sm border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50">
+                      {isUploadingThumbnail ? '変更中...' : '変更'}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleThumbnailUpload}
+                        className="hidden"
+                        disabled={isUploadingThumbnail}
+                      />
+                    </label>
+                  )}
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">

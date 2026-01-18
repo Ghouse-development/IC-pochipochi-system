@@ -13,6 +13,7 @@ interface DisplayVariant {
   id: string;
   color: string;
   colorCode: string;
+  variantCode: string;
   imageUrl: string | null;
   thumbnailUrl: string | null;
 }
@@ -40,6 +41,15 @@ export const ItemDetailPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedVariant, setSelectedVariant] = useState<DisplayVariant | null>(null);
   const [isAdded, setIsAdded] = useState(false);
+
+  // 戻るボタンの処理：履歴がない場合はカタログに戻る
+  const handleGoBack = useCallback(() => {
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate('/catalog');
+    }
+  }, [navigate]);
 
   // Supabaseからアイテムを取得
   useEffect(() => {
@@ -83,6 +93,7 @@ export const ItemDetailPage: React.FC = () => {
             id: v.id,
             color: v.color_name,
             colorCode: v.color_code || '',
+            variantCode: v.variant_code || '',
             imageUrl: v.images?.find(img => img.is_primary)?.image_url || v.images?.[0]?.image_url || null,
             thumbnailUrl: v.images?.find(img => img.is_primary)?.thumbnail_url || v.images?.[0]?.thumbnail_url || null,
           }));
@@ -167,7 +178,7 @@ export const ItemDetailPage: React.FC = () => {
 
     // 1秒後に戻る
     setTimeout(() => {
-      navigate(-1);
+      handleGoBack();
     }, 1000);
   }, [product, selectedVariant, toast, navigate, addItem]);
 
@@ -190,7 +201,7 @@ export const ItemDetailPage: React.FC = () => {
         <div className="text-center">
           <p className="text-gray-500 mb-4">アイテムが見つかりません</p>
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => handleGoBack()}
             className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
           >
             戻る
@@ -210,7 +221,7 @@ export const ItemDetailPage: React.FC = () => {
       <div className="bg-white border-b sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 py-3 flex items-center gap-3">
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => handleGoBack()}
             className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
           >
             <ChevronLeft className="w-5 h-5" />
@@ -314,11 +325,16 @@ export const ItemDetailPage: React.FC = () => {
                         </div>
                       )}
                     </div>
-                    {/* カラー名（色名がない場合は商品名を表示） */}
+                    {/* カラー名と品番 */}
                     <div className="p-2">
                       <span className={`text-xs font-medium block truncate ${isSelected ? 'text-blue-700' : 'text-gray-700'}`}>
                         {v.color || product.name}
                       </span>
+                      {v.variantCode && (
+                        <span className="text-[10px] text-gray-500 block truncate">
+                          {v.variantCode}
+                        </span>
+                      )}
                     </div>
                   </button>
                 );
@@ -359,7 +375,7 @@ export const ItemDetailPage: React.FC = () => {
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t p-4">
         <div className="max-w-4xl mx-auto flex gap-3">
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => handleGoBack()}
             className="flex-1 py-3 px-4 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50 font-medium"
           >
             戻る

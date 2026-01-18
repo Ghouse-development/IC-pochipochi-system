@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Download, Upload, AlertTriangle, CheckCircle, Database, RefreshCw, Trash2, HardDrive, Cloud, FileSpreadsheet } from 'lucide-react';
+import { Download, Upload, AlertTriangle, CheckCircle, Database, RefreshCw, HardDrive, Cloud, FileSpreadsheet } from 'lucide-react';
 import { Button } from '../common/Button';
 import { Card } from '../common/Card';
 import { ConfirmDialog } from '../common/ConfirmDialog';
@@ -350,50 +350,6 @@ export const DataBackup: React.FC = () => {
     return (total / 1024).toFixed(2);
   };
 
-  // 全データをクリア - Step 1
-  const handleClearAll = () => {
-    setConfirmDialog({
-      isOpen: true,
-      title: '全データを削除',
-      message: 'すべてのデータを削除しますか？\n\nこの操作は取り消せません。\n先にバックアップを取ることをお勧めします。',
-      variant: 'danger',
-      confirmText: '削除する',
-      onConfirm: handleClearAllStep2,
-    });
-  };
-
-  // 全データをクリア - Step 2 (最終確認)
-  const handleClearAllStep2 = () => {
-    setConfirmDialog({
-      isOpen: true,
-      title: '最終確認',
-      message: '本当に削除しますか？\n\nこれが最後の確認です。この操作は元に戻せません。',
-      variant: 'danger',
-      confirmText: '完全に削除',
-      onConfirm: executeClearAll,
-    });
-  };
-
-  const executeClearAll = () => {
-    // LIFEX関連のデータのみ削除
-    const keysToRemove: string[] = [];
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (key && key.startsWith('lifex')) {
-        keysToRemove.push(key);
-      }
-    }
-
-    keysToRemove.forEach(key => localStorage.removeItem(key));
-    localStorage.removeItem(STORAGE_KEYS.USER);
-
-    setMessage({ type: 'success', text: 'データを削除しました。ページを再読み込みします。' });
-
-    setTimeout(() => {
-      window.location.reload();
-    }, ANIMATION_DURATIONS.CLEAR_RELOAD_DELAY);
-  };
-
   // データ項目数を取得
   const getDataCounts = () => {
     const cart = safeParseLocalStorage('lifex-cart-storage', {}) as Record<string, unknown>;
@@ -632,25 +588,6 @@ export const DataBackup: React.FC = () => {
           </label>
         </Card>
       </div>
-
-      {/* 危険な操作 */}
-      <Card className="p-6 border-red-200 bg-red-50">
-        <div className="flex items-center gap-3 mb-4">
-          <AlertTriangle className="w-6 h-6 text-red-600" />
-          <div>
-            <h3 className="font-semibold text-red-900">危険な操作</h3>
-            <p className="text-sm text-red-700">この操作は取り消せません</p>
-          </div>
-        </div>
-        <Button
-          variant="outline"
-          onClick={handleClearAll}
-          className="border-red-300 text-red-600 hover:bg-red-100:bg-red-900/30"
-        >
-          <Trash2 className="w-4 h-4 mr-2" />
-          全データを削除
-        </Button>
-      </Card>
 
       {/* 注意事項 */}
       <Card className="p-4 bg-amber-50 border-amber-200">

@@ -163,6 +163,8 @@ export interface Item {
   material_type: string | null; // 素材タイプ（外壁: 窯業系/金属/塗り壁、床材: 突板/シート等）
   tags: string[] | null; // タグ（複数カテゴリ所属用: porch-tile, porch-grout等）
   is_recommended: boolean | null; // おすすめフラグ
+  thumbnail_url: string | null; // サムネイル画像URL（一覧表示用）
+  thumbnail_path: string | null; // サムネイル画像Storageパス
   created_at: string;
   updated_at: string;
   // Joined data
@@ -213,7 +215,10 @@ export interface ItemPricing {
   is_available: boolean;
   is_standard: boolean;
   price: number;
-  installation_cost: number;
+  material_cost: number; // 材料費用
+  installation_cost: number; // 工事費用
+  gross_margin_rate: number; // 粗利益率（デフォルト0.30 = 30%）
+  selling_price: number; // 売価（1000円単位繰り上げ）
   effective_date: string;
   created_at: string;
   updated_at: string;
@@ -415,6 +420,8 @@ export interface CreateItemInput {
   catalog_url?: string;
   unit_id?: string;
   is_hit?: boolean;
+  thumbnail_url?: string;
+  thumbnail_path?: string;
 }
 
 export interface CreateItemVariantInput {
@@ -430,7 +437,9 @@ export interface CreateItemPricingInput {
   variant_id?: string;
   product_id: string;
   price: number;
+  material_cost?: number;
   installation_cost?: number;
+  gross_margin_rate?: number;
   is_standard?: boolean;
   is_available?: boolean;
 }

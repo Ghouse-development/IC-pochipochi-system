@@ -59,11 +59,11 @@ const STEPS = [
 const PLAN_OPTIONS = [
   { value: 'LACIE', label: 'LACIE' },
   { value: 'HOURS', label: 'HOURS' },
-  { value: 'LIFE+', label: 'LIFE+' },
-  { value: 'LIFE', label: 'LIFE' },
-  { value: 'LIFE_X', label: 'LIFE X' },
-  { value: 'LIFE_LIMITED', label: 'LIFE Limited' },
+  { value: 'LIFE_PLUS', label: 'LIFE+' },
   { value: 'LIFE_PLUS_LIMITED', label: 'LIFE+ Limited' },
+  { value: 'LIFE', label: 'LIFE' },
+  { value: 'LIFE_LIMITED', label: 'LIFE Limited' },
+  { value: 'LIFE_X', label: 'LIFE X' },
 ];
 
 export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = ({

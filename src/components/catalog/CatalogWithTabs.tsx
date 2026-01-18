@@ -1966,7 +1966,8 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                     selectedPlan={selectedPlanId}
                     onComplete={() => {
                       toast.success('玄関ドアをカートに追加しました');
-                      goToNextCategory();
+                      // カート更新後に次のカテゴリへ移動（状態更新を待つ）
+                      setTimeout(() => goToNextCategory(), 100);
                     }}
                     onCancel={() => {
                       // 前のカテゴリに戻るか、サイドバーで別のカテゴリを選択可能

@@ -44,6 +44,7 @@ export const CustomerInvitation: React.FC<CustomerInvitationProps> = ({
   const [isSending, setIsSending] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
   const [email, setEmail] = useState(propEmail || '');
+  const [showPreview, setShowPreview] = useState(false);
 
   // 対象プロジェクト
   const project = projectId
@@ -83,14 +84,40 @@ export const CustomerInvitation: React.FC<CustomerInvitationProps> = ({
     }
   };
 
-  // マジックリンク送信
-  const handleSendMagicLink = useCallback(async () => {
+  // メールプレビュー用のテキストを生成
+  const getEmailPreviewText = useCallback(() => {
+    const customerName = propName || project?.customer?.name || 'お客様';
+    const projectName = project?.name || 'プロジェクト';
+    return {
+      subject: `【Gハウス】${projectName} インテリア選択のご案内`,
+      body: `${customerName}様
+
+お世話になっております。
+Gハウスのインテリアコーディネートシステムへのご招待です。
+
+本メールに記載されているリンクをクリックすると、ログインページに移動します。
+※ リンクの有効期限は30分です。
+
+ご不明な点がございましたら、お気軽にお問い合わせください。
+
+よろしくお願いいたします。
+Gハウス インテリアコーディネート担当`,
+    };
+  }, [propName, project]);
+
+  // プレビューを表示
+  const handleShowPreview = useCallback(() => {
     if (!email) {
       toast.error('エラー', 'メールアドレスを入力してください');
       return;
     }
+    setShowPreview(true);
+  }, [email, toast]);
 
+  // マジックリンク送信（プレビュー確認後）
+  const handleConfirmSend = useCallback(async () => {
     setIsSending(true);
+    setShowPreview(false);
 
     try {
       // リダイレクト先にプロジェクトIDを含める
@@ -207,7 +234,7 @@ export const CustomerInvitation: React.FC<CustomerInvitationProps> = ({
                 />
               </div>
               <button
-                onClick={handleSendMagicLink}
+                onClick={handleShowPreview}
                 disabled={isSending || !email}
                 className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
@@ -322,6 +349,73 @@ export const CustomerInvitation: React.FC<CustomerInvitationProps> = ({
           </div>
         </div>
       </div>
+
+      {/* メールプレビューモーダル */}
+      {showPreview && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl max-w-lg w-full max-h-[90vh] overflow-hidden flex flex-col">
+            <div className="p-6 border-b border-gray-200">
+              <h3 className="text-xl font-bold text-gray-900">メール内容の確認</h3>
+              <p className="text-sm text-gray-500 mt-1">
+                以下の内容でメールを送信します
+              </p>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-6 space-y-4">
+              <div>
+                <p className="text-sm font-medium text-gray-700 mb-1">宛先</p>
+                <p className="px-3 py-2 bg-gray-100 rounded-lg text-gray-900">{email}</p>
+              </div>
+
+              <div>
+                <p className="text-sm font-medium text-gray-700 mb-1">件名</p>
+                <p className="px-3 py-2 bg-gray-100 rounded-lg text-gray-900">
+                  {getEmailPreviewText().subject}
+                </p>
+              </div>
+
+              <div>
+                <p className="text-sm font-medium text-gray-700 mb-1">本文</p>
+                <div className="px-3 py-2 bg-gray-100 rounded-lg text-gray-900 whitespace-pre-wrap text-sm">
+                  {getEmailPreviewText().body}
+                </div>
+              </div>
+
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                <p className="text-sm text-yellow-800">
+                  ※ 実際に送信されるメールには、ログイン用のマジックリンクが自動的に挿入されます。
+                </p>
+              </div>
+            </div>
+
+            <div className="p-6 border-t border-gray-200 flex gap-3">
+              <button
+                onClick={() => setShowPreview(false)}
+                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+              >
+                キャンセル
+              </button>
+              <button
+                onClick={handleConfirmSend}
+                disabled={isSending}
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+              >
+                {isSending ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    送信中...
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4" />
+                    送信する
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

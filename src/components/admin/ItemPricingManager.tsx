@@ -24,9 +24,20 @@ export function ItemPricingManager({
     is_available: boolean;
     is_standard: boolean;
     price: number;
+    material_cost: number;
     installation_cost: number;
+    gross_margin_rate: number;
+    selling_price: number;
     existingId?: string;
   }>>({});
+
+  // 売価を計算する関数（1000円単位切り上げ）
+  const calculateSellingPrice = (materialCost: number, installationCost: number, marginRate: number): number => {
+    const costPrice = materialCost + installationCost;
+    if (costPrice === 0) return 0;
+    const rawSellingPrice = costPrice / (1 - marginRate);
+    return Math.ceil(rawSellingPrice / 1000) * 1000;
+  };
   const [isSaving, setIsSaving] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -41,11 +52,17 @@ export function ItemPricingManager({
         const initialData: typeof pricingData = {};
         productsData.forEach(product => {
           const existingPricing = initialPricing.find(p => p.product_id === product.id);
+          const materialCost = existingPricing?.material_cost ?? 0;
+          const installationCost = existingPricing?.installation_cost ?? 0;
+          const marginRate = existingPricing?.gross_margin_rate ?? 0.30;
           initialData[product.id] = {
             is_available: existingPricing?.is_available ?? true,
             is_standard: existingPricing?.is_standard ?? false,
             price: existingPricing?.price ?? 0,
-            installation_cost: existingPricing?.installation_cost ?? 0,
+            material_cost: materialCost,
+            installation_cost: installationCost,
+            gross_margin_rate: marginRate,
+            selling_price: existingPricing?.selling_price ?? calculateSellingPrice(materialCost, installationCost, marginRate),
             existingId: existingPricing?.id,
           };
         });
@@ -63,18 +80,31 @@ export function ItemPricingManager({
 
   const handlePricingChange = (
     productId: string,
-    field: 'is_available' | 'is_standard' | 'price' | 'installation_cost',
+    field: 'is_available' | 'is_standard' | 'price' | 'material_cost' | 'installation_cost' | 'gross_margin_rate',
     value: boolean | number
   ) => {
-    setPricingData(prev => ({
-      ...prev,
-      [productId]: {
-        ...prev[productId],
+    setPricingData(prev => {
+      const currentData = prev[productId];
+      const newData = {
+        ...currentData,
         [field]: value,
         // If marking as standard, set price to 0
         ...(field === 'is_standard' && value === true ? { price: 0 } : {}),
-      },
-    }));
+      };
+
+      // 原価フィールドが変更されたら売価を再計算
+      if (field === 'material_cost' || field === 'installation_cost' || field === 'gross_margin_rate') {
+        const materialCost = field === 'material_cost' ? (value as number) : currentData.material_cost;
+        const installationCost = field === 'installation_cost' ? (value as number) : currentData.installation_cost;
+        const marginRate = field === 'gross_margin_rate' ? (value as number) : currentData.gross_margin_rate;
+        newData.selling_price = calculateSellingPrice(materialCost, installationCost, marginRate);
+      }
+
+      return {
+        ...prev,
+        [productId]: newData,
+      };
+    });
   };
 
   const handleSave = async () => {
@@ -87,7 +117,9 @@ export function ItemPricingManager({
             is_available: data.is_available,
             is_standard: data.is_standard,
             price: data.is_standard ? 0 : data.price,
+            material_cost: data.material_cost,
             installation_cost: data.installation_cost,
+            gross_margin_rate: data.gross_margin_rate,
           });
         } else {
           // Create new pricing
@@ -97,7 +129,9 @@ export function ItemPricingManager({
             is_available: data.is_available,
             is_standard: data.is_standard,
             price: data.is_standard ? 0 : data.price,
+            material_cost: data.material_cost,
             installation_cost: data.installation_cost,
+            gross_margin_rate: data.gross_margin_rate,
           });
         }
       }
@@ -153,7 +187,11 @@ export function ItemPricingManager({
               <th className="text-center px-4 py-3 text-sm font-medium text-gray-700">選択可</th>
               <th className="text-center px-4 py-3 text-sm font-medium text-gray-700">標準</th>
               <th className="text-right px-4 py-3 text-sm font-medium text-gray-700">価格（税抜）</th>
+              <th className="text-right px-4 py-3 text-sm font-medium text-gray-700">材料費</th>
               <th className="text-right px-4 py-3 text-sm font-medium text-gray-700">施工費</th>
+              <th className="text-right px-4 py-3 text-sm font-medium text-gray-700">粗利率</th>
+              <th className="text-right px-4 py-3 text-sm font-medium text-gray-700 bg-blue-50">原価</th>
+              <th className="text-right px-4 py-3 text-sm font-medium text-gray-700 bg-green-50">売価</th>
             </tr>
           </thead>
           <tbody>
@@ -162,8 +200,12 @@ export function ItemPricingManager({
                 is_available: true,
                 is_standard: false,
                 price: 0,
+                material_cost: 0,
                 installation_cost: 0,
+                gross_margin_rate: 0.30,
+                selling_price: 0,
               };
+              const costPrice = (data.material_cost || 0) + (data.installation_cost || 0);
 
               return (
                 <tr
@@ -212,11 +254,11 @@ export function ItemPricingManager({
                         value={data.is_standard ? 0 : data.price}
                         onChange={(e) => handlePricingChange(product.id, 'price', parseInt(e.target.value) || 0)}
                         disabled={!data.is_available || data.is_standard}
-                        className="w-24 px-2 py-1 text-right border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:text-gray-400"
+                        className="w-20 px-2 py-1 text-right border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:text-gray-400"
                       />
                     </div>
                     {data.is_standard && (
-                      <div className="text-xs text-blue-600 text-right mt-1">標準仕様（0円）</div>
+                      <div className="text-xs text-blue-600 text-right mt-1">標準</div>
                     )}
                   </td>
                   <td className="px-4 py-3">
@@ -224,11 +266,48 @@ export function ItemPricingManager({
                       <span className="text-gray-500">¥</span>
                       <input
                         type="number"
-                        value={data.installation_cost}
+                        value={data.material_cost || 0}
+                        onChange={(e) => handlePricingChange(product.id, 'material_cost', parseInt(e.target.value) || 0)}
+                        disabled={!data.is_available}
+                        className="w-20 px-2 py-1 text-right border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:text-gray-400"
+                      />
+                    </div>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center justify-end gap-1">
+                      <span className="text-gray-500">¥</span>
+                      <input
+                        type="number"
+                        value={data.installation_cost || 0}
                         onChange={(e) => handlePricingChange(product.id, 'installation_cost', parseInt(e.target.value) || 0)}
                         disabled={!data.is_available}
-                        className="w-24 px-2 py-1 text-right border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:text-gray-400"
+                        className="w-20 px-2 py-1 text-right border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:text-gray-400"
                       />
+                    </div>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center justify-end gap-1">
+                      <input
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        max="1"
+                        value={data.gross_margin_rate || 0.30}
+                        onChange={(e) => handlePricingChange(product.id, 'gross_margin_rate', parseFloat(e.target.value) || 0.30)}
+                        disabled={!data.is_available}
+                        className="w-16 px-2 py-1 text-right border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:text-gray-400"
+                      />
+                      <span className="text-xs text-gray-500">({Math.round((data.gross_margin_rate || 0.30) * 100)}%)</span>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3 bg-blue-50">
+                    <div className="text-right font-medium text-blue-800">
+                      ¥{costPrice.toLocaleString()}
+                    </div>
+                  </td>
+                  <td className="px-4 py-3 bg-green-50">
+                    <div className="text-right font-bold text-green-800">
+                      ¥{(data.selling_price || 0).toLocaleString()}
                     </div>
                   </td>
                 </tr>
@@ -244,7 +323,11 @@ export function ItemPricingManager({
           <li><strong>選択可</strong>：このプランでこのアイテムを選択できるかどうか</li>
           <li><strong>標準</strong>：ONにすると標準仕様（0円）として扱われます</li>
           <li><strong>価格</strong>：オプション価格（税抜）。標準の場合は0円固定</li>
-          <li><strong>施工費</strong>：別途かかる施工費用がある場合に入力</li>
+          <li><strong>材料費</strong>：材料の原価を入力</li>
+          <li><strong>施工費</strong>：施工にかかる費用を入力</li>
+          <li><strong>粗利率</strong>：粗利益率（デフォルト30%=0.30）</li>
+          <li><strong>原価</strong>：材料費＋施工費（自動計算）</li>
+          <li><strong>売価</strong>：原価÷(1-粗利率)を1000円単位で切り上げ（自動計算）</li>
         </ul>
       </div>
     </div>
