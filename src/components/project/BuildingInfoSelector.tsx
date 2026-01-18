@@ -577,6 +577,102 @@ const AdditionalInputs: React.FC<AdditionalInputProps> = ({ categoryId, values, 
     );
   }
 
+  // 天井高UP 1階 - 施工面積入力
+  if (categoryId === 'ceiling_height_up_1f' && values.ceiling_height_up_1f && values.ceiling_height_up_1f !== 'no') {
+    return (
+      <div className="mt-3 p-3 bg-blue-50 rounded-lg">
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          1階 天井高UP 施工面積（{values.ceiling_height_up_1f === '100' ? '+100mm' : '+200mm'}）
+        </label>
+        <div className="flex items-center gap-2">
+          <input
+            type="number"
+            step="0.1"
+            min="0"
+            value={values.ceiling_height_up_1f_area || ''}
+            onChange={(e) => onChangeExtra('ceiling_height_up_1f_area', e.target.value ? parseFloat(e.target.value) : undefined)}
+            placeholder="0.0"
+            className="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          />
+          <span className="text-gray-500 text-sm">㎡</span>
+          <span className="text-xs text-gray-400">（金額に反映されます）</span>
+        </div>
+      </div>
+    );
+  }
+
+  // 天井高UP 2階 - 施工面積入力
+  if (categoryId === 'ceiling_height_up_2f' && values.ceiling_height_up_2f && values.ceiling_height_up_2f !== 'no') {
+    return (
+      <div className="mt-3 p-3 bg-blue-50 rounded-lg">
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          2階 天井高UP 施工面積（{values.ceiling_height_up_2f === '100' ? '+100mm' : '+200mm'}）
+        </label>
+        <div className="flex items-center gap-2">
+          <input
+            type="number"
+            step="0.1"
+            min="0"
+            value={values.ceiling_height_up_2f_area || ''}
+            onChange={(e) => onChangeExtra('ceiling_height_up_2f_area', e.target.value ? parseFloat(e.target.value) : undefined)}
+            placeholder="0.0"
+            className="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          />
+          <span className="text-gray-500 text-sm">㎡</span>
+          <span className="text-xs text-gray-400">（金額に反映されます）</span>
+        </div>
+      </div>
+    );
+  }
+
+  // 天井高UP 3階 - 施工面積入力
+  if (categoryId === 'ceiling_height_up_3f' && values.ceiling_height_up_3f && values.ceiling_height_up_3f !== 'no') {
+    return (
+      <div className="mt-3 p-3 bg-blue-50 rounded-lg">
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          3階 天井高UP 施工面積（{values.ceiling_height_up_3f === '100' ? '+100mm' : '+200mm'}）
+        </label>
+        <div className="flex items-center gap-2">
+          <input
+            type="number"
+            step="0.1"
+            min="0"
+            value={values.ceiling_height_up_3f_area || ''}
+            onChange={(e) => onChangeExtra('ceiling_height_up_3f_area', e.target.value ? parseFloat(e.target.value) : undefined)}
+            placeholder="0.0"
+            className="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          />
+          <span className="text-gray-500 text-sm">㎡</span>
+          <span className="text-xs text-gray-400">（金額に反映されます）</span>
+        </div>
+      </div>
+    );
+  }
+
+  // 勾配天井 - 施工面積入力
+  if (categoryId === 'slope_ceiling' && values.slope_ceiling === 'yes') {
+    return (
+      <div className="mt-3 p-3 bg-blue-50 rounded-lg">
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          勾配天井 施工面積
+        </label>
+        <div className="flex items-center gap-2">
+          <input
+            type="number"
+            step="0.1"
+            min="0"
+            value={values.slope_ceiling_area || ''}
+            onChange={(e) => onChangeExtra('slope_ceiling_area', e.target.value ? parseFloat(e.target.value) : undefined)}
+            placeholder="0.0"
+            className="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          />
+          <span className="text-gray-500 text-sm">㎡</span>
+          <span className="text-xs text-gray-400">（金額に反映されます）</span>
+        </div>
+      </div>
+    );
+  }
+
   // 庇 - タイプ選択
   if (categoryId === 'canopy' && values.canopy && values.canopy !== 'no') {
     const count = parseInt(values.canopy, 10) || 0;
@@ -798,6 +894,22 @@ const SectionView: React.FC<SectionViewProps> = ({ section, values, onChange, on
     }
     // 平屋の場合、1F-2F間のアイアン階段を非表示
     if (category.id === 'iron_stairs_1f_2f' && values.floors === '1f') {
+      return false;
+    }
+    // 天井高2階: 2階建て以上でのみ表示
+    if (category.id === 'ceiling_height_2f' && values.floors === '1f') {
+      return false;
+    }
+    // 天井高3階: 3階建てでのみ表示
+    if (category.id === 'ceiling_height_3f' && values.floors !== '3f') {
+      return false;
+    }
+    // 天井高UP 2階: 2階建て以上でのみ表示
+    if (category.id === 'ceiling_height_up_2f' && values.floors === '1f') {
+      return false;
+    }
+    // 天井高UP 3階: 3階建てでのみ表示
+    if (category.id === 'ceiling_height_up_3f' && values.floors !== '3f') {
       return false;
     }
     return true;

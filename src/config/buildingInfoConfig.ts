@@ -132,6 +132,45 @@ const BUILDING_DETAIL_SECTION: BuildingInfoSection = {
       required: false,
       options: CEILING_HEIGHT_OPTIONS,
     },
+    {
+      id: 'ceiling_height_up_1f',
+      name: '天井高UP 1階',
+      required: false,
+      options: [
+        { id: 'no', label: '無し（標準 2400mm）' },
+        { id: '100', label: '+100mm UP（2500mm）', description: '施工面積に応じて金額加算' },
+        { id: '200', label: '+200mm UP（2600mm）', description: '施工面積に応じて金額加算' },
+      ],
+    },
+    {
+      id: 'ceiling_height_up_2f',
+      name: '天井高UP 2階',
+      required: false,
+      options: [
+        { id: 'no', label: '無し（標準 2400mm）' },
+        { id: '100', label: '+100mm UP（2500mm）', description: '施工面積に応じて金額加算' },
+        { id: '200', label: '+200mm UP（2600mm）', description: '施工面積に応じて金額加算' },
+      ],
+    },
+    {
+      id: 'ceiling_height_up_3f',
+      name: '天井高UP 3階',
+      required: false,
+      options: [
+        { id: 'no', label: '無し（標準 2400mm）' },
+        { id: '100', label: '+100mm UP（2500mm）', description: '施工面積に応じて金額加算' },
+        { id: '200', label: '+200mm UP（2600mm）', description: '施工面積に応じて金額加算' },
+      ],
+    },
+    {
+      id: 'slope_ceiling',
+      name: '勾配天井',
+      required: false,
+      options: [
+        { id: 'no', label: '無し' },
+        { id: 'yes', label: '有り', description: '施工面積を入力してください' },
+      ],
+    },
   ],
 };
 
@@ -576,6 +615,14 @@ export interface BuildingInfo {
   ceiling_height_1f: string;
   ceiling_height_2f?: string;
   ceiling_height_3f?: string;
+  ceiling_height_up_1f?: string; // 天井高UP 1階 (no/100/200)
+  ceiling_height_up_2f?: string; // 天井高UP 2階 (no/100/200)
+  ceiling_height_up_3f?: string; // 天井高UP 3階 (no/100/200)
+  ceiling_height_up_1f_area?: number; // 天井高UP 1階 施工面積（㎡）
+  ceiling_height_up_2f_area?: number; // 天井高UP 2階 施工面積（㎡）
+  ceiling_height_up_3f_area?: number; // 天井高UP 3階 施工面積（㎡）
+  slope_ceiling?: string; // 勾配天井 (no/yes)
+  slope_ceiling_area?: number; // 勾配天井 施工面積（㎡）
   ground_improvement?: string;
   damper: string;
   module: string;
@@ -642,6 +689,10 @@ export const DEFAULT_BUILDING_INFO: BuildingInfo = {
   ceiling_height_1f: '2400',
   ceiling_height_2f: '2400',
   ceiling_height_3f: '2400',
+  ceiling_height_up_1f: 'no', // 天井高UP 1階: 無し（標準）
+  ceiling_height_up_2f: 'no', // 天井高UP 2階: 無し（標準）
+  ceiling_height_up_3f: 'no', // 天井高UP 3階: 無し（標準）
+  slope_ceiling: 'no', // 勾配天井: 無し
   ground_improvement: 'no',
   damper: 'evoltz',
   module: '910',

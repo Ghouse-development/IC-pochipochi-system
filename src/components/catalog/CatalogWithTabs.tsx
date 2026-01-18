@@ -255,6 +255,125 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   // プロジェクト建物情報（外壁・軒天の箇所数など）
   const { buildingInfo } = useProjectBuildingInfo();
 
+  // buildingInfoに基づく設計アイテムの自動カート初期化
+  const designItemsInitializedRef = useRef(false);
+
+  useEffect(() => {
+    // 既に初期化済み、またはデータ未読み込みの場合はスキップ
+    if (designItemsInitializedRef.current || !buildingInfo || items.length === 0 || isLoading) return;
+
+    // お客様モードでない場合はスキップ（設計者は手動で選択）
+    if (!isCustomerMode) return;
+
+    designItemsInitializedRef.current = true;
+
+    // 設計アイテムの自動追加関数
+    const addDesignItem = (productId: string, quantity: number = 1) => {
+      // 既にカートにある場合はスキップ
+      if (cartItems.some(item => item.product.id === productId)) return;
+
+      const product = items.find(i => i.id === productId);
+      if (product) {
+        const catalogProduct = convertToCartItem(product);
+        addItem(catalogProduct, quantity);
+      }
+    };
+
+    // ① ポーチ拡張
+    if (buildingInfo.porch_extension === 'yes' && buildingInfo.porch_extension_area) {
+      addDesignItem('ext-porch-expansion', buildingInfo.porch_extension_area);
+    }
+
+    // ② 庇（種類と個数）
+    if (buildingInfo.canopy && buildingInfo.canopy !== 'no') {
+      // canopyには種類名が入っている場合がある
+      const awningProduct = items.find(i =>
+        i.category?.name === '庇' &&
+        (i.name?.includes(buildingInfo.canopy!) || buildingInfo.canopy === 'yes')
+      );
+      if (awningProduct) {
+        if (!cartItems.some(item => item.product.categoryName === '庇')) {
+          addItem(convertToCartItem(awningProduct), 1);
+        }
+      }
+    }
+
+    // ② ガレージシャッター（種類と個数）
+    if (buildingInfo.garage_shutter && buildingInfo.garage_shutter !== 'no') {
+      const shutterProduct = items.find(i =>
+        (i.category?.name?.includes('ガレージシャッター') || i.category?.name?.includes('電動ガレージシャッター')) &&
+        (i.name?.includes(buildingInfo.garage_shutter!) || buildingInfo.garage_shutter === 'yes')
+      );
+      if (shutterProduct) {
+        if (!cartItems.some(item =>
+          item.product.categoryName?.includes('ガレージシャッター')
+        )) {
+          addItem(convertToCartItem(shutterProduct), 1);
+        }
+      }
+    }
+
+    // ③ エコキュート・給湯器
+    if (buildingInfo.water_heater && buildingInfo.water_heater !== 'ecocute') {
+      // 標準以外の給湯器が選択されている場合
+      const heaterProduct = items.find(i =>
+        i.category?.name === '給湯器' || i.category?.name === 'エコキュート'
+      );
+      if (heaterProduct && !cartItems.some(item =>
+        item.product.categoryName === '給湯器' || item.product.categoryName === 'エコキュート'
+      )) {
+        addItem(convertToCartItem(heaterProduct), 1);
+      }
+    }
+
+    // ④ ガス引込工事
+    if (buildingInfo.gas_work === 'yes') {
+      addDesignItem('ext-gas-supply-yes', 1);
+    }
+
+    // ④ 中継ポール
+    if (buildingInfo.relay_pole === 'yes') {
+      addDesignItem('ext-solar-relay-pole', 1);
+    }
+
+    // 太陽光
+    if (buildingInfo.solar === 'yes') {
+      addDesignItem('ext-solar-yes', 1);
+    } else if (buildingInfo.solar === 'no') {
+      addDesignItem('ext-solar-none', 1);
+    }
+
+    // 蓄電池
+    if (buildingInfo.battery && buildingInfo.battery !== 'no') {
+      const batteryProductId = buildingInfo.battery === 'sumitomo' ? 'ext-battery-sumitomo' : 'ext-battery-other';
+      addDesignItem(batteryProductId, 1);
+    }
+
+    // V2H
+    if (buildingInfo.v2h === 'yes') {
+      addDesignItem('ext-v2h-yes', 1);
+    }
+
+    // ⑤ 天井高UP工事（各階）
+    if (buildingInfo.ceiling_height_up_1f && buildingInfo.ceiling_height_up_1f !== 'no' && buildingInfo.ceiling_height_up_1f_area) {
+      const productId = buildingInfo.ceiling_height_up_1f === '100' ? 'design-ceiling-up-100' : 'design-ceiling-up-200';
+      addDesignItem(productId, buildingInfo.ceiling_height_up_1f_area);
+    }
+    if (buildingInfo.ceiling_height_up_2f && buildingInfo.ceiling_height_up_2f !== 'no' && buildingInfo.ceiling_height_up_2f_area) {
+      const productId = buildingInfo.ceiling_height_up_2f === '100' ? 'design-ceiling-up-100' : 'design-ceiling-up-200';
+      addDesignItem(productId, buildingInfo.ceiling_height_up_2f_area);
+    }
+    if (buildingInfo.ceiling_height_up_3f && buildingInfo.ceiling_height_up_3f !== 'no' && buildingInfo.ceiling_height_up_3f_area) {
+      const productId = buildingInfo.ceiling_height_up_3f === '100' ? 'design-ceiling-up-100' : 'design-ceiling-up-200';
+      addDesignItem(productId, buildingInfo.ceiling_height_up_3f_area);
+    }
+
+    // ⑤ 勾配天井
+    if (buildingInfo.slope_ceiling === 'yes' && buildingInfo.slope_ceiling_area) {
+      addDesignItem('design-slope-ceiling', buildingInfo.slope_ceiling_area);
+    }
+  }, [buildingInfo, items, isLoading, cartItems, addItem, isCustomerMode]);
+
   // お気に入り・履歴
   const { favorites, toggleFavorite, isFavorite } = useFavoritesStore();
   const handleToggleFavorite = useCallback((itemId: string) => {
