@@ -87,6 +87,18 @@ const SPEC_SECTION: BuildingInfoSection = {
   ],
 };
 
+// 天井高のオプション（共通）
+const CEILING_HEIGHT_OPTIONS = [
+  { id: '2100', label: '2100mm' },
+  { id: '2150', label: '2150mm' },
+  { id: '2200', label: '2200mm' },
+  { id: '2250', label: '2250mm' },
+  { id: '2300', label: '2300mm' },
+  { id: '2400', label: '2400mm' },
+  { id: '2500', label: '2500mm' },
+  { id: '2600', label: '2600mm' },
+];
+
 // 建物詳細セクション
 const BUILDING_DETAIL_SECTION: BuildingInfoSection = {
   id: 'building_detail',
@@ -106,16 +118,19 @@ const BUILDING_DETAIL_SECTION: BuildingInfoSection = {
       id: 'ceiling_height_1f',
       name: '天井高 1階',
       required: true,
-      options: [
-        { id: '2100', label: '2100mm' },
-        { id: '2150', label: '2150mm' },
-        { id: '2200', label: '2200mm' },
-        { id: '2250', label: '2250mm' },
-        { id: '2300', label: '2300mm' },
-        { id: '2400', label: '2400mm' },
-        { id: '2500', label: '2500mm' },
-        { id: '2600', label: '2600mm' },
-      ],
+      options: CEILING_HEIGHT_OPTIONS,
+    },
+    {
+      id: 'ceiling_height_2f',
+      name: '天井高 2階',
+      required: false,
+      options: CEILING_HEIGHT_OPTIONS,
+    },
+    {
+      id: 'ceiling_height_3f',
+      name: '天井高 3階',
+      required: false,
+      options: CEILING_HEIGHT_OPTIONS,
     },
   ],
 };
@@ -322,10 +337,12 @@ const EQUIPMENT_SECTION: BuildingInfoSection = {
       name: '床下点検口',
       required: false,
       options: [
-        { id: 'no', label: '無' },
-        { id: '1', label: '1ヶ所' },
+        { id: '1', label: '1ヶ所', description: 'デフォルト' },
         { id: '2', label: '2ヶ所' },
         { id: '3', label: '3ヶ所' },
+        { id: '4', label: '4ヶ所' },
+        { id: '5', label: '5ヶ所' },
+        { id: '6', label: '6ヶ所以上' },
       ],
     },
     {
@@ -333,10 +350,12 @@ const EQUIPMENT_SECTION: BuildingInfoSection = {
       name: '天井点検口',
       required: false,
       options: [
-        { id: 'no', label: '無' },
         { id: '1', label: '1ヶ所' },
-        { id: '2', label: '2ヶ所' },
+        { id: '2', label: '2ヶ所', description: 'デフォルト' },
         { id: '3', label: '3ヶ所' },
+        { id: '4', label: '4ヶ所' },
+        { id: '5', label: '5ヶ所' },
+        { id: '6', label: '6ヶ所以上' },
       ],
     },
     {
@@ -344,10 +363,10 @@ const EQUIPMENT_SECTION: BuildingInfoSection = {
       name: '換気システム本体',
       required: false,
       options: [
-        { id: 'no', label: '無' },
-        { id: '1', label: '1台' },
-        { id: '2', label: '2台' },
-        { id: '3', label: '3台' },
+        { id: '1', label: '1台', description: '平屋デフォルト' },
+        { id: '2', label: '2台', description: '2階建てデフォルト' },
+        { id: '3', label: '3台', description: '3階建てデフォルト' },
+        { id: '4', label: '4台' },
       ],
     },
     {
@@ -355,12 +374,14 @@ const EQUIPMENT_SECTION: BuildingInfoSection = {
       name: '換気システム給気口',
       required: false,
       options: [
-        { id: 'no', label: '無' },
-        { id: '1', label: '1ヶ所' },
-        { id: '2', label: '2ヶ所' },
         { id: '3', label: '3ヶ所' },
         { id: '4', label: '4ヶ所' },
-        { id: '5', label: '5ヶ所' },
+        { id: '5', label: '5ヶ所', description: 'デフォルト' },
+        { id: '6', label: '6ヶ所' },
+        { id: '7', label: '7ヶ所' },
+        { id: '8', label: '8ヶ所' },
+        { id: '9', label: '9ヶ所' },
+        { id: '10', label: '10ヶ所以上' },
       ],
     },
     {
@@ -553,6 +574,8 @@ export interface BuildingInfo {
   construction_method: string;
   floors: string;
   ceiling_height_1f: string;
+  ceiling_height_2f?: string;
+  ceiling_height_3f?: string;
   ground_improvement?: string;
   damper: string;
   module: string;
@@ -617,6 +640,8 @@ export const DEFAULT_BUILDING_INFO: BuildingInfo = {
   construction_method: 'wood_frame',
   floors: '2f',
   ceiling_height_1f: '2400',
+  ceiling_height_2f: '2400',
+  ceiling_height_3f: '2400',
   ground_improvement: 'no',
   damper: 'evoltz',
   module: '910',
@@ -635,10 +660,10 @@ export const DEFAULT_BUILDING_INFO: BuildingInfo = {
   window_type: 'apw330',
   interior_window: 'no',
   // 設備
-  floor_inspection_hatch: 'no',
-  ceiling_inspection_hatch: 'no',
-  ventilation_unit: '1',
-  air_inlet: '1',
+  floor_inspection_hatch: '1', // デフォルト: 1ヶ所
+  ceiling_inspection_hatch: '2', // デフォルト: 2ヶ所
+  ventilation_unit: '2', // デフォルト: 2台（2階建て）
+  air_inlet: '5', // デフォルト: 5ヶ所
   relay_pole: 'no',
   entrance_sink: 'no',
   // 電気・エネルギー

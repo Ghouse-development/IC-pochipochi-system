@@ -39,6 +39,7 @@ const ROOM_TYPES = [
   { id: 'sanitary', name: 'サニタリー', icon: Bath },
   { id: 'bathroom', name: '浴室', icon: Bath },
   { id: 'closet', name: '収納', icon: DoorOpen },
+  { id: 'walk_in_closet', name: 'ウォークインクローゼット', icon: DoorOpen },
   { id: 'storage', name: '納戸', icon: Home },
   { id: 'wardrobe', name: '衣装部屋', icon: Home },
   { id: 'family_closet', name: 'ファミリークローク', icon: DoorOpen },
@@ -51,6 +52,12 @@ const ROOM_TYPES = [
   { id: 'bedroom3', name: '寝室③', icon: Bed },
   { id: 'other', name: 'その他', icon: Home },
 ];
+
+// デフォルトの部屋選択（階ごと）
+const DEFAULT_ROOMS_BY_FLOOR: Record<number, string[]> = {
+  1: ['entrance', 'ldk', 'toilet', 'bathroom'],
+  2: ['stairs', 'hall', 'master_bedroom', 'bedroom1', 'toilet'],
+};
 
 // 部屋カード
 interface RoomCardProps {
@@ -182,6 +189,33 @@ export const RoomRegistration: React.FC<RoomRegistrationProps> = ({
   floors,
 }) => {
   const [showOtherInput, setShowOtherInput] = useState<number | null>(null);
+  const [initialized, setInitialized] = useState(false);
+
+  // 初期化時にデフォルトの部屋を追加
+  React.useEffect(() => {
+    if (initialized || rooms.length > 0) return;
+
+    const defaultRooms: Room[] = [];
+    for (let floorNum = 1; floorNum <= floors; floorNum++) {
+      const defaultTypes = DEFAULT_ROOMS_BY_FLOOR[floorNum] || [];
+      defaultTypes.forEach(typeId => {
+        const roomType = ROOM_TYPES.find(t => t.id === typeId);
+        if (roomType) {
+          defaultRooms.push({
+            id: `room-${Date.now()}-${floorNum}-${typeId}-${Math.random().toString(36).substr(2, 9)}`,
+            name: roomType.name,
+            floor: floorNum,
+            type: typeId,
+          });
+        }
+      });
+    }
+
+    if (defaultRooms.length > 0) {
+      onChange(defaultRooms);
+    }
+    setInitialized(true);
+  }, [floors, initialized, rooms.length, onChange]);
 
   // 部屋を追加
   const handleAddRoom = (floor: number, type: string, customName?: string) => {
@@ -209,13 +243,25 @@ export const RoomRegistration: React.FC<RoomRegistrationProps> = ({
     onChange([...rooms, newRoom]);
   };
 
-  // 部屋タイプクリック時の処理
+  // 部屋タイプクリック時の処理（トグル機能付き）
   const handleRoomTypeClick = (floor: number, typeId: string) => {
     if (typeId === 'other') {
       // 「その他」の場合は入力欄を表示
       setShowOtherInput(floor);
+      return;
+    }
+
+    // 同じ階の同じタイプの部屋を取得
+    const existingRooms = rooms.filter(r => r.floor === floor && r.type === typeId);
+
+    if (existingRooms.length === 0) {
+      // 部屋がない場合は追加
+      handleAddRoom(floor, typeId);
+    } else if (existingRooms.length === 1) {
+      // 1つだけある場合はトグル（削除）
+      onChange(rooms.filter(r => !(r.floor === floor && r.type === typeId)));
     } else {
-      // それ以外は即追加
+      // 複数ある場合は追加（連番で増やす）
       handleAddRoom(floor, typeId);
     }
   };
