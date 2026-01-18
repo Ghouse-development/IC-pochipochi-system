@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo, useCallback, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { BarChart3, Package, Bell, TrendingUp, Upload, Settings, Users, FolderTree, Wrench, Truck, Database, Building2, ShieldAlert, DollarSign, Activity, RefreshCw, CloudOff, Cloud } from 'lucide-react';
 import { Button } from '../common/Button';
@@ -186,6 +186,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
 
   const { activeTab, productSubTab, statsSubTab, dataSubTab, systemSubTab } = getTabsFromPath();
 
+  // 管理者専用タブかどうかを判定
+  const isAdminOnlyTab = (tab: MainTab) => {
+    return tab === 'products' || tab === 'data' || tab === 'system';
+  };
+
   // タブ変更時にURLを更新
   const setActiveTab = useCallback((tab: MainTab) => {
     const subPaths: Record<MainTab, string> = {
@@ -272,6 +277,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
   const lowAdoptionProducts = useMemo(() => getLowAdoptionProducts(30), [getLowAdoptionProducts]);
   const categoryAdoptionRates = useMemo(() => getCategoryAdoptionRates(), [getCategoryAdoptionRates]);
 
+  // スタッフが管理者専用タブにアクセスした場合、統計タブにリダイレクト
+  useEffect(() => {
+    if (!authLoading && isCoordinator && !isAdmin && isAdminOnlyTab(activeTab)) {
+      navigate('/admin/statistics/dashboard');
+    }
+  }, [authLoading, isCoordinator, isAdmin, activeTab, navigate]);
+
   const topProducts = useMemo(() =>
     [...productStats]
       .sort((a, b) => b.adoptionCount - a.adoptionCount)
@@ -336,22 +348,26 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
           </div>
         </div>
         
-        {/* メインタブナビゲーション（6グループ） */}
+        {/* メインタブナビゲーション */}
         <div className="flex gap-1 sm:gap-2 mb-4 border-b border-gray-200 overflow-x-auto pb-1">
-          <button
-            onClick={() => setActiveTab('products')}
-            className={`px-3 py-2 rounded-t-lg font-medium transition-colors ${
-              activeTab === 'products'
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }`}
-          >
-            <div className="flex items-center gap-2">
-              <Package className="w-4 h-4" />
-              <span className="hidden sm:inline">商品マスタ</span>
-              <span className="sm:hidden">商品</span>
-            </div>
-          </button>
+          {/* 商品マスタ - 管理者のみ */}
+          {isAdmin && (
+            <button
+              onClick={() => setActiveTab('products')}
+              className={`px-3 py-2 rounded-t-lg font-medium transition-colors ${
+                activeTab === 'products'
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <Package className="w-4 h-4" />
+                <span className="hidden sm:inline">商品マスタ</span>
+                <span className="sm:hidden">商品</span>
+              </div>
+            </button>
+          )}
+          {/* 統計・分析 - 全員 */}
           <button
             onClick={() => setActiveTab('statistics')}
             className={`px-3 py-2 rounded-t-lg font-medium transition-colors ${
@@ -366,6 +382,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
               <span className="sm:hidden">統計</span>
             </div>
           </button>
+          {/* 発注管理 - 全員 */}
           <button
             onClick={() => setActiveTab('vendors')}
             className={`px-3 py-2 rounded-t-lg font-medium transition-colors ${
@@ -380,38 +397,44 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
               <span className="sm:hidden">発注</span>
             </div>
           </button>
-          <button
-            onClick={() => setActiveTab('data')}
-            className={`px-3 py-2 rounded-t-lg font-medium transition-colors ${
-              activeTab === 'data'
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }`}
-          >
-            <div className="flex items-center gap-2">
-              <Database className="w-4 h-4" />
-              <span className="hidden sm:inline">データ管理</span>
-              <span className="sm:hidden">データ</span>
-            </div>
-          </button>
-          <button
-            onClick={() => setActiveTab('system')}
-            className={`px-3 py-2 rounded-t-lg font-medium transition-colors ${
-              activeTab === 'system'
-                ? 'bg-gray-700 text-white'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }`}
-          >
-            <div className="flex items-center gap-2">
-              <Settings className="w-4 h-4" />
-              <span className="hidden sm:inline">システム</span>
-              <span className="sm:hidden">設定</span>
-            </div>
-          </button>
+          {/* データ管理 - 管理者のみ */}
+          {isAdmin && (
+            <button
+              onClick={() => setActiveTab('data')}
+              className={`px-3 py-2 rounded-t-lg font-medium transition-colors ${
+                activeTab === 'data'
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <Database className="w-4 h-4" />
+                <span className="hidden sm:inline">データ管理</span>
+                <span className="sm:hidden">データ</span>
+              </div>
+            </button>
+          )}
+          {/* システム - 管理者のみ */}
+          {isAdmin && (
+            <button
+              onClick={() => setActiveTab('system')}
+              className={`px-3 py-2 rounded-t-lg font-medium transition-colors ${
+                activeTab === 'system'
+                  ? 'bg-gray-700 text-white'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <Settings className="w-4 h-4" />
+                <span className="hidden sm:inline">システム</span>
+                <span className="sm:hidden">設定</span>
+              </div>
+            </button>
+          )}
         </div>
 
         {/* サブタブナビゲーション */}
-        {activeTab === 'products' && (
+        {activeTab === 'products' && isAdmin && (
           <div className="flex gap-2 mb-4">
             <button
               onClick={() => setProductSubTab('plans')}
@@ -512,7 +535,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
           </div>
         )}
 
-        {activeTab === 'data' && (
+        {activeTab === 'data' && isAdmin && (
           <div className="flex gap-2 mb-4">
             <button
               onClick={() => setDataSubTab('backup')}
@@ -569,7 +592,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
           </div>
         )}
 
-        {activeTab === 'system' && (
+        {activeTab === 'system' && isAdmin && (
           <div className="flex gap-2 mb-4">
             <button
               onClick={() => setSystemSubTab('settings')}
@@ -613,8 +636,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
           </div>
         )}
 
-        {/* 商品マスタ */}
-        {activeTab === 'products' && (
+        {/* 商品マスタ（管理者専用） */}
+        {activeTab === 'products' && isAdmin && (
           <div>
             {productSubTab === 'plans' && (
               <SectionErrorBoundary sectionName="商品マスタ">
@@ -999,8 +1022,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
           </div>
         )}
 
-        {/* データ管理 */}
-        {activeTab === 'data' && (
+        {/* データ管理（管理者専用） */}
+        {activeTab === 'data' && isAdmin && (
           <div>
             {dataSubTab === 'backup' && (
               <SectionErrorBoundary sectionName="バックアップ">
@@ -1058,8 +1081,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
           </div>
         )}
 
-        {/* システム */}
-        {activeTab === 'system' && (
+        {/* システム（管理者専用） */}
+        {activeTab === 'system' && isAdmin && (
           <div>
             {systemSubTab === 'settings' && (
               <SectionErrorBoundary sectionName="システム設定">

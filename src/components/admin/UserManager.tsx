@@ -52,11 +52,14 @@ const getRoleLabel = (role: UserRole) => {
   return ROLE_OPTIONS.find(r => r.value === role)?.label || role;
 };
 
+type UserTab = 'customers' | 'staff';
+
 export function UserManager({ onBack, onCreateProject }: UserManagerProps) {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
+  const [activeTab, setActiveTab] = useState<UserTab>('customers');
   const [filterRole, setFilterRole] = useState<UserRole | 'all'>('all');
   const [filterStatus, setFilterStatus] = useState<'all' | 'active' | 'inactive'>('all');
   const [editingUser, setEditingUser] = useState<User | null>(null);
@@ -265,20 +268,26 @@ export function UserManager({ onBack, onCreateProject }: UserManagerProps) {
   const filteredUsers = useMemo(() => {
     const searchLower = debouncedSearchTerm.toLowerCase();
     return users.filter(user => {
+      // タブによるフィルタリング
+      const matchesTab = activeTab === 'customers'
+        ? user.role === 'user'
+        : user.role === 'admin' || user.role === 'coordinator';
+
       const matchesSearch =
         user.full_name?.toLowerCase().includes(searchLower) ||
         user.email.toLowerCase().includes(searchLower) ||
         user.phone?.includes(debouncedSearchTerm);
 
-      const matchesRole = filterRole === 'all' || user.role === filterRole;
+      // タブが「スタッフ・管理者」の場合のみ、役割フィルターを適用
+      const matchesRole = activeTab === 'customers' || filterRole === 'all' || user.role === filterRole;
       const matchesStatus =
         filterStatus === 'all' ||
         (filterStatus === 'active' && user.is_active) ||
         (filterStatus === 'inactive' && !user.is_active);
 
-      return matchesSearch && matchesRole && matchesStatus;
+      return matchesTab && matchesSearch && matchesRole && matchesStatus;
     });
-  }, [users, debouncedSearchTerm, filterRole, filterStatus]);
+  }, [users, debouncedSearchTerm, activeTab, filterRole, filterStatus]);
 
   // Stats
   const stats = {
@@ -319,11 +328,20 @@ export function UserManager({ onBack, onCreateProject }: UserManagerProps) {
               {isSyncing ? '確認中...' : 'Auth同期'}
             </button>
             <button
-              onClick={() => setIsCreating(true)}
+              onClick={() => {
+                setNewUserForm({
+                  email: '',
+                  password: '',
+                  full_name: '',
+                  role: activeTab === 'customers' ? 'user' : 'coordinator',
+                  phone: '',
+                });
+                setIsCreating(true);
+              }}
               className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
             >
               <Plus className="w-4 h-4" />
-              新規ユーザー
+              {activeTab === 'customers' ? '新規ユーザー' : '新規スタッフ'}
             </button>
           </div>
         </div>
@@ -343,28 +361,81 @@ export function UserManager({ onBack, onCreateProject }: UserManagerProps) {
         </div>
       )}
 
+      {/* Tabs */}
+      <div className="border-b">
+        <div className="flex">
+          <button
+            onClick={() => {
+              setActiveTab('customers');
+              setFilterRole('all');
+            }}
+            className={`px-6 py-3 text-sm font-medium border-b-2 transition-colors ${
+              activeTab === 'customers'
+                ? 'border-blue-600 text-blue-600 bg-blue-50'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+            }`}
+          >
+            ユーザー（お客様）
+            <span className={`ml-2 px-2 py-0.5 text-xs rounded-full ${
+              activeTab === 'customers' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
+            }`}>
+              {stats.users}
+            </span>
+          </button>
+          <button
+            onClick={() => {
+              setActiveTab('staff');
+              setFilterRole('all');
+            }}
+            className={`px-6 py-3 text-sm font-medium border-b-2 transition-colors ${
+              activeTab === 'staff'
+                ? 'border-blue-600 text-blue-600 bg-blue-50'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+            }`}
+          >
+            スタッフ・管理者
+            <span className={`ml-2 px-2 py-0.5 text-xs rounded-full ${
+              activeTab === 'staff' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
+            }`}>
+              {stats.admins + stats.coordinators}
+            </span>
+          </button>
+        </div>
+      </div>
+
       {/* Stats */}
-      <div className="p-4 grid grid-cols-5 gap-4">
-        <div className="bg-gray-50 p-4 rounded-lg text-center">
-          <div className="text-2xl font-bold text-gray-900">{stats.total}</div>
-          <div className="text-sm text-gray-600">全ユーザー</div>
-        </div>
-        <div className="bg-purple-50 p-4 rounded-lg text-center">
-          <div className="text-2xl font-bold text-purple-700">{stats.admins}</div>
-          <div className="text-sm text-purple-600">管理者</div>
-        </div>
-        <div className="bg-blue-50 p-4 rounded-lg text-center">
-          <div className="text-2xl font-bold text-blue-700">{stats.coordinators}</div>
-          <div className="text-sm text-blue-600">スタッフ</div>
-        </div>
-        <div className="bg-gray-50 p-4 rounded-lg text-center">
-          <div className="text-2xl font-bold text-gray-700">{stats.users}</div>
-          <div className="text-sm text-gray-600">ユーザー</div>
-        </div>
-        <div className="bg-blue-50 p-4 rounded-lg text-center">
-          <div className="text-2xl font-bold text-blue-700">{stats.active}</div>
-          <div className="text-sm text-blue-600">アクティブ</div>
-        </div>
+      <div className="p-4 grid grid-cols-3 gap-4">
+        {activeTab === 'customers' ? (
+          <>
+            <div className="bg-gray-50 p-4 rounded-lg text-center">
+              <div className="text-2xl font-bold text-gray-900">{stats.users}</div>
+              <div className="text-sm text-gray-600">お客様</div>
+            </div>
+            <div className="bg-blue-50 p-4 rounded-lg text-center">
+              <div className="text-2xl font-bold text-blue-700">{users.filter(u => u.role === 'user' && u.is_active).length}</div>
+              <div className="text-sm text-blue-600">アクティブ</div>
+            </div>
+            <div className="bg-red-50 p-4 rounded-lg text-center">
+              <div className="text-2xl font-bold text-red-700">{users.filter(u => u.role === 'user' && !u.is_active).length}</div>
+              <div className="text-sm text-red-600">無効</div>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="bg-purple-50 p-4 rounded-lg text-center">
+              <div className="text-2xl font-bold text-purple-700">{stats.admins}</div>
+              <div className="text-sm text-purple-600">管理者</div>
+            </div>
+            <div className="bg-blue-50 p-4 rounded-lg text-center">
+              <div className="text-2xl font-bold text-blue-700">{stats.coordinators}</div>
+              <div className="text-sm text-blue-600">スタッフ</div>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg text-center">
+              <div className="text-2xl font-bold text-gray-700">{users.filter(u => (u.role === 'admin' || u.role === 'coordinator') && u.is_active).length}</div>
+              <div className="text-sm text-gray-600">アクティブ</div>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Filters */}
@@ -381,16 +452,17 @@ export function UserManager({ onBack, onCreateProject }: UserManagerProps) {
             />
           </div>
         </div>
-        <select
-          value={filterRole}
-          onChange={(e) => setFilterRole(e.target.value as UserRole | 'all')}
-          className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <option value="all">すべての権限</option>
-          {ROLE_OPTIONS.map(role => (
-            <option key={role.value} value={role.value}>{role.label}</option>
-          ))}
-        </select>
+        {activeTab === 'staff' && (
+          <select
+            value={filterRole}
+            onChange={(e) => setFilterRole(e.target.value as UserRole | 'all')}
+            className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="all">すべての権限</option>
+            <option value="admin">管理者</option>
+            <option value="coordinator">スタッフ</option>
+          </select>
+        )}
         <select
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value as 'all' | 'active' | 'inactive')}
@@ -418,7 +490,7 @@ export function UserManager({ onBack, onCreateProject }: UserManagerProps) {
           </div>
         ) : filteredUsers.length === 0 ? (
           <div className="text-center py-8 text-gray-500">
-            ユーザーが見つかりません
+            {activeTab === 'customers' ? 'お客様が見つかりません' : 'スタッフ・管理者が見つかりません'}
           </div>
         ) : (
           <div className="space-y-3">
@@ -503,7 +575,9 @@ export function UserManager({ onBack, onCreateProject }: UserManagerProps) {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg w-full max-w-md">
             <div className="border-b p-4 flex items-center justify-between">
-              <h3 className="text-lg font-semibold">新規ユーザー作成</h3>
+              <h3 className="text-lg font-semibold">
+                {activeTab === 'customers' ? '新規ユーザー作成' : '新規スタッフ作成'}
+              </h3>
               <button
                 onClick={() => setIsCreating(false)}
                 className="p-1 hover:bg-gray-100 rounded"
@@ -537,7 +611,7 @@ export function UserManager({ onBack, onCreateProject }: UserManagerProps) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1">氏名</label>
+                <label className="block text-sm font-medium mb-1">氏名 *</label>
                 <input
                   type="text"
                   value={newUserForm.full_name}
@@ -547,20 +621,23 @@ export function UserManager({ onBack, onCreateProject }: UserManagerProps) {
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium mb-1">権限 *</label>
-                <select
-                  value={newUserForm.role}
-                  onChange={(e) => setNewUserForm({ ...newUserForm, role: e.target.value as UserRole })}
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  {ROLE_OPTIONS.map(role => (
-                    <option key={role.value} value={role.value}>
-                      {role.label} - {role.description}
+              {activeTab === 'staff' && (
+                <div>
+                  <label className="block text-sm font-medium mb-1">権限 *</label>
+                  <select
+                    value={newUserForm.role}
+                    onChange={(e) => setNewUserForm({ ...newUserForm, role: e.target.value as UserRole })}
+                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="coordinator">
+                      スタッフ - プロジェクト管理・編集が可能（ICコーディネーター）
                     </option>
-                  ))}
-                </select>
-              </div>
+                    <option value="admin">
+                      管理者 - すべての機能にアクセス可能（商品管理・ユーザー管理）
+                    </option>
+                  </select>
+                </div>
+              )}
 
               <div>
                 <label className="block text-sm font-medium mb-1">電話番号</label>
@@ -583,7 +660,7 @@ export function UserManager({ onBack, onCreateProject }: UserManagerProps) {
               </button>
               <button
                 onClick={handleCreateUser}
-                disabled={!newUserForm.email || !newUserForm.password || newUserForm.password.length < 6}
+                disabled={!newUserForm.email || !newUserForm.password || newUserForm.password.length < 6 || !newUserForm.full_name}
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center gap-2"
               >
                 <Save className="w-4 h-4" />

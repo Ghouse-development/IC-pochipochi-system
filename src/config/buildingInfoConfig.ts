@@ -182,12 +182,22 @@ const EXTERIOR_SECTION: BuildingInfoSection = {
   title: '外構・ポーチ',
   categories: [
     {
+      id: 'wall_pattern_count',
+      name: '外壁貼り分け',
+      required: false,
+      options: [
+        { id: '1', label: '1色（貼り分けなし）', description: '統一カラー' },
+        { id: '2', label: '2色（貼り分けあり）', description: 'メイン・アクセントの2色' },
+        { id: '3', label: '3色（貼り分けあり）', description: '3色使い' },
+      ],
+    },
+    {
       id: 'porch_extension',
       name: 'ポーチ拡張',
       required: false,
       options: [
         { id: 'no', label: '無' },
-        { id: 'yes', label: '有' },
+        { id: 'yes', label: '有', description: '1.8m×1.8m以上の場合 ¥60,000/㎡UP' },
       ],
     },
     {
@@ -224,25 +234,42 @@ const EXTERIOR_SECTION: BuildingInfoSection = {
       ],
     },
     {
+      id: 'fascia',
+      name: '破風',
+      required: false,
+      options: [
+        { id: 'no', label: '無' },
+        { id: '1', label: '1ヶ所', description: 'EP塗装（ホワイト/ブラック）' },
+        { id: '2', label: '2ヶ所', description: 'EP塗装（ホワイト/ブラック）' },
+        { id: '3', label: '3ヶ所', description: 'EP塗装（ホワイト/ブラック）' },
+      ],
+    },
+    {
       id: 'canopy',
       name: '庇',
       required: false,
       options: [
         { id: 'no', label: '無' },
-        { id: '1', label: '1ヶ所' },
-        { id: '2', label: '2ヶ所' },
-        { id: '3', label: '3ヶ所' },
+        { id: 'ad2s_1', label: 'アルフィン庇 AD2S×1', description: 'W1800×D900 ¥258,000/式' },
+        { id: 'ad2s_2', label: 'アルフィン庇 AD2S×2', description: 'W1800×D900 ¥258,000/式×2' },
+        { id: 'ad2s_3', label: 'アルフィン庇 AD2S×3', description: 'W1800×D900 ¥258,000/式×3' },
+        { id: 'af95_1', label: 'アルフィン庇 AF95×1', description: '木目調仕上げ W1800×D950 ¥352,000/式' },
+        { id: 'af95_2', label: 'アルフィン庇 AF95×2', description: '木目調仕上げ W1800×D950 ¥352,000/式×2' },
+        { id: 'af95_3', label: 'アルフィン庇 AF95×3', description: '木目調仕上げ W1800×D950 ¥352,000/式×3' },
       ],
     },
     {
       id: 'garage_shutter',
-      name: 'ビルトインガレージ',
+      name: '電動ガレージシャッター',
       required: false,
       options: [
         { id: 'no', label: '無' },
-        { id: '1', label: '1ヶ所' },
-        { id: '2', label: '2ヶ所' },
-        { id: '3', label: '3ヶ所' },
+        { id: 'sunauto_1', label: 'サンオートハイスピード×1', description: '三和シャッター ¥540,000〜/式' },
+        { id: 'sunauto_2', label: 'サンオートハイスピード×2', description: '三和シャッター ¥540,000〜/式×2' },
+        { id: 'sunauto_3', label: 'サンオートハイスピード×3', description: '三和シャッター ¥540,000〜/式×3' },
+        { id: 'ifudo_1', label: '威風堂々×1', description: '三和シャッター ¥1,290,000〜/式' },
+        { id: 'ifudo_2', label: '威風堂々×2', description: '三和シャッター ¥1,290,000〜/式×2' },
+        { id: 'ifudo_3', label: '威風堂々×3', description: '三和シャッター ¥1,290,000〜/式×3' },
       ],
     },
   ],
@@ -531,16 +558,19 @@ export interface BuildingInfo {
   module: string;
   certifications?: string | string[]; // 複数選択対応
   // 外構・ポーチ
+  wall_pattern_count?: string; // 外壁貼り分け箇所数 (1-3)
   porch_extension?: string;
   porch_extension_area?: number; // ポーチ拡張面積（㎡）
   parapet?: string;
   balcony?: string;
   eaves_ceiling?: string;
   eaves_ceiling_areas?: number[]; // 軒天面積（各箇所）
-  canopy?: string;
-  canopy_types?: string[]; // 庇タイプ（各箇所）
-  garage_shutter?: string;
-  garage_types?: string[]; // ガレージタイプ（各箇所）
+  fascia?: string; // 破風の有無・箇所数
+  fascia_color?: string; // 破風の色（ホワイト/ブラック）
+  canopy?: string; // 庇の種類と台数
+  canopy_types?: string[]; // 庇タイプ（各箇所）- 色選択用
+  garage_shutter?: string; // ガレージシャッターの種類と台数
+  garage_types?: string[]; // ガレージタイプ（各箇所）- 色選択用
   // 玄関・窓
   entrance_door_count?: string;
   window_type?: string;
@@ -592,10 +622,12 @@ export const DEFAULT_BUILDING_INFO: BuildingInfo = {
   module: '910',
   certifications: [],
   // 外構・ポーチ
+  wall_pattern_count: '1', // デフォルト: 1色
   porch_extension: 'no',
   parapet: 'no',
   balcony: 'no',
   eaves_ceiling: 'no',
+  fascia: 'no',
   canopy: 'no',
   garage_shutter: 'no',
   // 玄関・窓

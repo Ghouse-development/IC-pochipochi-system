@@ -73,6 +73,12 @@ import {
   MULTI_COLOR_CATEGORY_NAMES,
   ROOM_BASED_CATEGORY_NAMES,
 } from '../../config/categorySelectorConfig';
+import {
+  useProjectBuildingInfo,
+  getWallPatternCount,
+  getEavesCeilingCount,
+  hasInteriorWindowEnabled,
+} from '../../hooks/useProjectBuildingInfo';
 
 // 遅延読み込みセレクター用ローディングコンポーネント
 const SelectorLoader: React.FC = () => (
@@ -242,6 +248,9 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
 
   // 静的データ（フォールバック用）
   const { exteriorProducts, interiorProducts, waterProducts, furnitureProducts } = useProductStore();
+
+  // プロジェクト建物情報（外壁・軒天の箇所数など）
+  const { buildingInfo } = useProjectBuildingInfo();
 
   // お気に入り・履歴
   const { favorites, toggleFavorite, isFavorite } = useFavoritesStore();
@@ -790,11 +799,12 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     item.product.id === 'ext-gas-supply-no' ||
     item.product.name?.includes('ガス引込みなし')
   );
-  // 室内窓選択状態をチェック
-  const hasInteriorWindow = cartItems.some(item =>
+  // 室内窓選択状態をチェック（プロジェクト設定 or カート選択）
+  const hasInteriorWindowFromCart = cartItems.some(item =>
     item.product.id === 'ext-interior-window-yes' ||
     item.product.name?.includes('室内窓あり')
   );
+  const hasInteriorWindow = hasInteriorWindowFromCart || hasInteriorWindowEnabled(buildingInfo);
   const hasNoInteriorWindow = cartItems.some(item =>
     item.product.id === 'ext-interior-window-no' ||
     item.product.name?.includes('室内窓なし')
@@ -1014,6 +1024,22 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     return filteredItems.map(convertToCatalogProduct);
   }, [needsMultiColorSelector, filteredItems]);
 
+  // 複数色選択の最大色数（プロジェクト設定から取得）
+  const multiColorMaxColors = useMemo(() => {
+    if (!currentCategoryName) return 3;
+    if (currentCategoryName === '外壁') {
+      // 外壁の貼り分け箇所数をプロジェクト設定から取得
+      return getWallPatternCount(buildingInfo);
+    }
+    if (currentCategoryName === '軒天') {
+      // 軒天の箇所数をプロジェクト設定から取得
+      const count = getEavesCeilingCount(buildingInfo);
+      // 軒天は0の場合もあるので、最低1を返す
+      return Math.max(count, 1);
+    }
+    return 3; // デフォルト
+  }, [currentCategoryName, buildingInfo]);
+
   // 部屋適用選択が必要なカテゴリかどうか判定
   const needsRoomBasedSelector = useMemo(() => {
     if (!currentCategoryName) return false;
@@ -1188,6 +1214,18 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     navigate(`/item/${item.id}`);
   }, [navigate]);
 
+  // 単一メーカー商品は直接詳細ページ（色選択）へ遷移
+  // 周辺部材（窓台・巾木等）でタイプ選択後、対象商品が1つしかない場合は自動遷移
+  useEffect(() => {
+    // 周辺部材カテゴリでタイプ選択済みの場合のみ処理
+    if (currentCategoryName !== '周辺部材' || !selectedMaterialType) return;
+    // filteredItemsが1つだけの場合、自動的に詳細ページへ遷移
+    if (filteredItems.length === 1) {
+      const singleItem = filteredItems[0];
+      navigate(`/item/${singleItem.id}`);
+    }
+  }, [currentCategoryName, selectedMaterialType, filteredItems, navigate]);
+
   const getPrice = (item: ItemWithDetails) => {
     return item.pricing?.find(p => p.product?.code === selectedPlanId)?.price || 0;
   };
@@ -1264,13 +1302,39 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
   );
   const isCurrentStepComplete = undecidedCategories.length === 0 && categories.length > 0;
 
-  // サイドバー用カテゴリ（ポーチタイル・ポーチタイル目地は非表示）
+  // サイドバー用カテゴリ（条件付きフィルタリング）
+  // - ポーチタイル・ポーチタイル目地は非表示
+  // - 内装タブで室内窓「なし」の場合、室内窓カテゴリを非表示
+  // - 設計タブでプロジェクト設定に基づく表示制御
   const sidebarCategories = useMemo(() =>
-    categories.filter(cat =>
-      cat.name !== 'ポーチタイル' &&
-      cat.name !== 'ポーチタイル目地'
-    ),
-    [categories]
+    categories.filter(cat => {
+      // ポーチタイル関連は常に非表示
+      if (cat.name === 'ポーチタイル' || cat.name === 'ポーチタイル目地') {
+        return false;
+      }
+      // 内装タブで室内窓「なし」または未選択の場合、室内窓詳細カテゴリを非表示
+      if (activeTab === 'interior' && (cat.name === '室内窓' || cat.name.includes('室内窓'))) {
+        // 設計タブで「室内窓あり」を選択した場合のみ表示
+        return hasInteriorWindow;
+      }
+      // 設計タブでのプロジェクト設定に基づくフィルタリング
+      if (activeTab === 'design') {
+        // ポーチサイズ拡張: porch_extension === 'yes' の場合のみ表示
+        if (cat.name === 'ポーチサイズ拡張') {
+          return buildingInfo?.porch_extension === 'yes';
+        }
+        // 庇: canopy !== 'no' の場合のみ表示
+        if (cat.name === '庇') {
+          return buildingInfo?.canopy && buildingInfo.canopy !== 'no';
+        }
+        // ガレージシャッター: garage_shutter !== 'no' の場合のみ表示
+        if (cat.name === 'ガレージシャッター' || cat.name === '電動ガレージシャッター') {
+          return buildingInfo?.garage_shutter && buildingInfo.garage_shutter !== 'no';
+        }
+      }
+      return true;
+    }),
+    [categories, activeTab, hasInteriorWindow, buildingInfo]
   );
 
   // 次のカテゴリへ進む
@@ -2821,7 +2885,7 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                     categoryId={selectedCategoryId || ''}
                     categoryName={currentCategoryName || ''}
                     products={multiColorProducts}
-                    maxColors={3}
+                    maxColors={multiColorMaxColors}
                     onComplete={() => {
                       toast.success(`${currentCategoryName}の選択が完了しました`);
                       goToNextCategory();

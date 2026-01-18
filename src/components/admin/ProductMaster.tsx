@@ -35,6 +35,9 @@ const DEFAULT_PLANS: ProductPlan[] = [
   { id: '2', code: 'HOURS', name: 'HOURS', description: 'アワーズ - スタンダードプラン', color_code: '#10b981', display_order: 2, is_active: true, created_at: '', updated_at: '' },
   { id: '3', code: 'LIFE_PLUS', name: 'LIFE+', description: 'ライフプラス - コストパフォーマンスプラン', color_code: '#f59e0b', display_order: 3, is_active: true, created_at: '', updated_at: '' },
   { id: '4', code: 'LIFE', name: 'LIFE', description: 'ライフ - エントリープラン', color_code: '#ef4444', display_order: 4, is_active: true, created_at: '', updated_at: '' },
+  { id: '5', code: 'LIFE_X', name: 'LIFE X', description: 'ライフエックス - 特別仕様（LIFEと同価格）', color_code: '#8b5cf6', display_order: 5, is_active: true, created_at: '', updated_at: '' },
+  { id: '6', code: 'LIFE_LIMITED', name: 'LIFE Limited', description: 'ライフリミテッド - 限定仕様（LIFEと同価格）', color_code: '#ec4899', display_order: 6, is_active: true, created_at: '', updated_at: '' },
+  { id: '7', code: 'LIFE_PLUS_LIMITED', name: 'LIFE+ Limited', description: 'ライフプラスリミテッド - 限定仕様（LIFE+と同価格）', color_code: '#14b8a6', display_order: 7, is_active: true, created_at: '', updated_at: '' },
 ];
 
 export function ProductMaster() {

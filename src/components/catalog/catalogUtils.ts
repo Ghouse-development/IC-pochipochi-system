@@ -198,11 +198,11 @@ export const DESIGN_CATEGORIES = [
 ];
 
 // 「家具・家電」に属するカテゴリ名
+// ※「オリジナルダイニングテーブル」「エアコン」「カーテン」「家具」の4カテゴリのみ
 export const FURNITURE_CATEGORIES = [
   'オリジナルダイニングテーブル',
   'エアコン',
   'カーテン',
-  'ブラインド',
   '家具',
 ];
 
@@ -626,6 +626,20 @@ export const NOT_NEEDED_OPTIONS: Record<string, NotNeededOption> = {
     title: '設置しない',
     description: '床暖房を設置しない場合',
     requiresRoomSelection: true,
+  },
+
+  // 収納オプション
+  '玄関収納': {
+    title: '無し',
+    description: '玄関収納を設置しない場合',
+  },
+  'トイレ収納': {
+    title: '無し',
+    description: 'トイレ収納を設置しない場合',
+  },
+  'その他収納': {
+    title: '無し',
+    description: '床下収納・ランドリー可動棚等を設置しない場合',
   },
 };
 

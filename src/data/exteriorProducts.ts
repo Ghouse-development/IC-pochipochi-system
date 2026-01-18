@@ -2798,14 +2798,18 @@ export const exteriorProducts: Product[] = [
     categoryName: '外部設備',
     subcategory: '外部水栓',
     materialType: '外部水栓',
-    name: 'アルミ立水栓追加',
+    name: 'アルミ立水栓',
     manufacturer: 'オンリーワン',
-    modelNumber: 'ALU-FAUCET-ADD',
+    modelNumber: 'GM3-ALxxx',
     unit: '個',
     isOption: true,
-    description: 'アルミ立水栓追加',
+    description: 'アルミ立水栓 標準形状変更差額',
     variants: [
-      { id: 'v1', color: 'シルバー', colorCode: 'シルバー', images: [] },
+      { id: 'v1', color: 'メタリックシルバー', colorCode: 'GM3-ALKCF', images: [] },
+      { id: 'v2', color: 'ブラック', colorCode: 'GM3-ALSCF', images: [] },
+      { id: 'v3', color: 'ホワイト', colorCode: 'GM3-ALWHF', images: [] },
+      { id: 'v4', color: 'ブロンズ', colorCode: 'GM3-ALDBF', images: [] },
+      { id: 'v5', color: 'メタリックグレー', colorCode: 'GM3-ALUCF', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 28000 },
@@ -3041,6 +3045,28 @@ export const exteriorProducts: Product[] = [
     pricing: [
       { plan: 'LACIE', price: 30000 },
       { plan: 'HOURS', price: 30000 }
+    ]
+  },
+
+  // ===== 外部設備 - バルコニー水栓 =====
+  {
+    id: 'ext-facility-balcony-faucet',
+    categoryId: 'exterior-facility',
+    categoryName: '外部設備',
+    subcategory: '外部水栓',
+    materialType: '外部水栓',
+    name: 'バルコニー水栓',
+    manufacturer: '標準',
+    modelNumber: 'BALCONY-FAUCET',
+    unit: '個',
+    isOption: true,
+    description: 'バルコニー水栓',
+    variants: [
+      { id: 'v1', color: '標準', colorCode: '標準', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 0 },
+      { plan: 'HOURS', price: 0 }
     ]
   },
 
@@ -4009,39 +4035,42 @@ export const exteriorProducts: Product[] = [
     categoryId: 'exterior-equipment',
     categoryName: '外部設備',
     subcategory: 'TV視聴',
-    name: '地上波TVアンテナのみ',
+    name: '地上波TVアンテナ',
     manufacturer: '標準',
-    modelNumber: 'TV-ANTENNA-ONLY',
+    modelNumber: 'TV-ANTENNA',
     unit: 'セット',
     isOption: true,
-    description: '地上波TVアンテナ設置工事一式',
+    description: '地上波TVアンテナ設置工事一式（ブースター含む）',
+    variants: [
+      { id: 'v1', color: 'オフホワイト', colorCode: 'オフホワイト', images: [] },
+      { id: 'v2', color: 'ライトブラウン', colorCode: 'ライトブラウン', images: [] },
+      { id: 'v3', color: 'ブラックブラウン', colorCode: 'ブラックブラウン', images: [] },
+      { id: 'v4', color: 'ブラック', colorCode: 'ブラック', images: [] },
+    ],
+    pricing: [
+      { plan: 'LACIE', price: 95000 },
+      { plan: 'HOURS', price: 95000 }
+    ]
+  },
+
+  // ===== TV視聴 - BSアンテナ追加 =====
+  {
+    id: 'ext-tv-antenna-bs',
+    categoryId: 'exterior-equipment',
+    categoryName: '外部設備',
+    subcategory: 'TV視聴',
+    name: 'BSアンテナ追加',
+    manufacturer: '標準',
+    modelNumber: 'TV-ANTENNA-BS',
+    unit: 'セット',
+    isOption: true,
+    description: 'BSアンテナ追加（TVアンテナ+￥80,000）',
     variants: [
       { id: 'v1', color: '標準', colorCode: '標準', images: [] },
     ],
     pricing: [
       { plan: 'LACIE', price: 80000 },
       { plan: 'HOURS', price: 80000 }
-    ]
-  },
-
-  // ===== TV視聴 - 地上波TVアンテナ＋BSアンテナ =====
-  {
-    id: 'ext-tv-antenna-bs',
-    categoryId: 'exterior-equipment',
-    categoryName: '外部設備',
-    subcategory: 'TV視聴',
-    name: '地上波TVアンテナ＋BSアンテナ',
-    manufacturer: '標準',
-    modelNumber: 'TV-ANTENNA-BS',
-    unit: 'セット',
-    isOption: true,
-    description: '地上波TVアンテナ＋BSアンテナ設置工事一式',
-    variants: [
-      { id: 'v1', color: '標準', colorCode: '標準', images: [] },
-    ],
-    pricing: [
-      { plan: 'LACIE', price: 95000 },
-      { plan: 'HOURS', price: 95000 }
     ]
   },
 
