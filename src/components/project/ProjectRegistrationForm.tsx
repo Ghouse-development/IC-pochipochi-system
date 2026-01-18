@@ -20,6 +20,8 @@ import { BuildingInfoSelector, BuildingInfoSummary } from './BuildingInfoSelecto
 import { RoomRegistration, type Room } from './RoomRegistration';
 import {
   DEFAULT_BUILDING_INFO,
+  BUILDING_INFO_SECTIONS_BASIC,
+  BUILDING_INFO_SECTIONS_FLOOR_PLAN,
   type BuildingInfo as BuildingInfoConfig,
 } from '../../config/buildingInfoConfig';
 import { useAuth } from '../../contexts/AuthContext';
@@ -47,10 +49,11 @@ interface ProjectRegistrationFormProps {
 
 const STEPS = [
   { id: 1, title: 'お客様情報', icon: User },
-  { id: 2, title: '部屋登録', icon: DoorOpen },
-  { id: 3, title: '建築情報', icon: Building2 },
-  { id: 4, title: '確認', icon: Check },
-  { id: 5, title: 'URL発行', icon: Link2 },
+  { id: 2, title: '建築情報', icon: Building2 },
+  { id: 3, title: '部屋登録', icon: DoorOpen },
+  { id: 4, title: '間取情報', icon: Home },
+  { id: 5, title: '確認', icon: Check },
+  { id: 6, title: 'URL発行', icon: Link2 },
 ];
 
 const PLAN_OPTIONS = [
@@ -112,7 +115,7 @@ export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = (
   );
 
   const nextStep = () => {
-    if (currentStep < 5) setCurrentStep(currentStep + 1);
+    if (currentStep < 6) setCurrentStep(currentStep + 1);
   };
 
   const prevStep = () => {
@@ -164,7 +167,7 @@ export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = (
       setCustomerUrl(result.customerUrl);
 
       // 次のステップ（URL発行画面）へ
-      setCurrentStep(5);
+      setCurrentStep(6);
       onComplete?.(result.project.id, result.customerUrl);
     } catch (err) {
       console.error('Project creation error:', err);
@@ -196,11 +199,14 @@ export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = (
       case 1:
         return !!customer.name && !!customer.email;
       case 2:
-        // 部屋が1つ以上登録されているか
-        return rooms.length > 0;
-      case 3:
         // 必須の建築情報が入力されているか
         return !!buildingInfo.fire_zone && !!buildingInfo.floors && !!buildingInfo.construction_method;
+      case 3:
+        // 部屋が1つ以上登録されているか
+        return rooms.length > 0;
+      case 4:
+        // 間取情報は任意項目が多いので常にtrue
+        return true;
       default:
         return true;
     }
@@ -357,8 +363,24 @@ export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = (
           </div>
         )}
 
-        {/* ステップ2: 部屋登録 */}
+        {/* ステップ2: 建築情報（地域・仕様・建物詳細・構造と規格・各種申請） */}
         {currentStep === 2 && (
+          <div className="space-y-4">
+            <h2 className="text-lg font-bold text-gray-900 mb-4">建築情報</h2>
+            <p className="text-gray-600 mb-4">
+              地域・仕様・建物詳細・構造と規格・各種申請の情報を選択してください。
+            </p>
+            <BuildingInfoSelector
+              value={buildingInfo}
+              onChange={setBuildingInfo}
+              onComplete={() => nextStep()}
+              sections={BUILDING_INFO_SECTIONS_BASIC}
+            />
+          </div>
+        )}
+
+        {/* ステップ3: 部屋登録 */}
+        {currentStep === 3 && (
           <div className="space-y-4">
             <h2 className="text-lg font-bold text-gray-900 mb-4">部屋登録</h2>
             <p className="text-gray-600 mb-4">
@@ -372,20 +394,24 @@ export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = (
           </div>
         )}
 
-        {/* ステップ3: 建築情報（カード選択） */}
-        {currentStep === 3 && (
+        {/* ステップ4: 間取情報（外構・ポーチ、玄関・窓、設備・電気・エネルギー・その他） */}
+        {currentStep === 4 && (
           <div className="space-y-4">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">建築情報</h2>
+            <h2 className="text-lg font-bold text-gray-900 mb-4">間取情報</h2>
+            <p className="text-gray-600 mb-4">
+              外構・ポーチ、玄関・窓、設備・電気・エネルギーなどの情報を選択してください。
+            </p>
             <BuildingInfoSelector
               value={buildingInfo}
               onChange={setBuildingInfo}
               onComplete={() => nextStep()}
+              sections={BUILDING_INFO_SECTIONS_FLOOR_PLAN}
             />
           </div>
         )}
 
-        {/* ステップ4: 確認 */}
-        {currentStep === 4 && (
+        {/* ステップ5: 確認 */}
+        {currentStep === 5 && (
           <div className="space-y-6">
             <h2 className="text-lg font-bold text-gray-900 mb-4">入力内容の確認</h2>
 
@@ -546,8 +572,8 @@ export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = (
           </div>
         )}
 
-        {/* ステップ5: URL発行 */}
-        {currentStep === 5 && (
+        {/* ステップ6: URL発行 */}
+        {currentStep === 6 && (
           <div className="space-y-6 text-center">
             <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
               <Check className="w-10 h-10 text-blue-600" />
@@ -617,7 +643,7 @@ export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = (
       )}
 
       {/* フッター */}
-      {currentStep < 5 && (
+      {currentStep < 6 && (
         <div className="flex items-center justify-between p-6 border-t bg-gray-50">
           <div>
             {onCancel && (
@@ -639,7 +665,7 @@ export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = (
                 戻る
               </button>
             )}
-            {currentStep < 4 ? (
+            {currentStep < 5 ? (
               <button
                 onClick={nextStep}
                 disabled={!isStepValid(currentStep)}
@@ -667,7 +693,7 @@ export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = (
       )}
 
       {/* URL発行後のフッター */}
-      {currentStep === 5 && (
+      {currentStep === 6 && (
         <div className="flex items-center justify-center p-6 border-t bg-gray-50">
           <button
             onClick={onCancel}

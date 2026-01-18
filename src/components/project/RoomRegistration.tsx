@@ -22,20 +22,33 @@ interface RoomRegistrationProps {
   floors: number; // 階数
 }
 
-// 部屋タイプと絵文字
+// 部屋タイプと絵文字（指定順）
 const ROOM_TYPES = [
+  { id: 'entrance', name: '玄関', icon: DoorOpen },
+  { id: 'shoes_cloak', name: 'シューズクローク', icon: DoorOpen },
+  { id: 'hall', name: 'ホール', icon: DoorOpen },
+  { id: 'stairs', name: '階段', icon: DoorOpen },
+  { id: 'ldk', name: 'LDK', icon: Sofa },
   { id: 'living', name: 'リビング', icon: Sofa },
   { id: 'dining', name: 'ダイニング', icon: Utensils },
   { id: 'kitchen', name: 'キッチン', icon: Utensils },
-  { id: 'bedroom', name: '寝室', icon: Bed },
-  { id: 'children', name: '子供部屋', icon: Home },
-  { id: 'japanese', name: '和室', icon: Home },
-  { id: 'bathroom', name: '浴室', icon: Bath },
+  { id: 'pantry', name: 'パントリー', icon: Home },
   { id: 'toilet', name: 'トイレ', icon: DoorOpen },
   { id: 'washroom', name: '洗面所', icon: Bath },
-  { id: 'entrance', name: '玄関', icon: DoorOpen },
-  { id: 'hallway', name: '廊下', icon: DoorOpen },
+  { id: 'laundry', name: '脱衣所', icon: Bath },
+  { id: 'sanitary', name: 'サニタリー', icon: Bath },
+  { id: 'bathroom', name: '浴室', icon: Bath },
   { id: 'closet', name: '収納', icon: DoorOpen },
+  { id: 'storage', name: '納戸', icon: Home },
+  { id: 'wardrobe', name: '衣装部屋', icon: Home },
+  { id: 'family_closet', name: 'ファミリークローク', icon: DoorOpen },
+  { id: 'study', name: '書斎', icon: Home },
+  { id: 'tatami_corner', name: '畳コーナー', icon: Home },
+  { id: 'japanese', name: '和室', icon: Home },
+  { id: 'master_bedroom', name: '主寝室', icon: Bed },
+  { id: 'bedroom1', name: '寝室①', icon: Bed },
+  { id: 'bedroom2', name: '寝室②', icon: Bed },
+  { id: 'bedroom3', name: '寝室③', icon: Bed },
   { id: 'other', name: 'その他', icon: Home },
 ];
 

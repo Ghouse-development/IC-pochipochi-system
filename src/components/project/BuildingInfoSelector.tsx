@@ -17,6 +17,7 @@ interface BuildingInfoSelectorProps {
   value: BuildingInfo;
   onChange: (value: BuildingInfo) => void;
   onComplete?: () => void;
+  sections?: BuildingInfoSection[]; // カスタムセクションリスト（指定しない場合は全セクション）
 }
 
 // 選択カードコンポーネント
@@ -114,14 +115,184 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({ category, value, on
   );
 };
 
+// 追加入力フィールドコンポーネント（ポーチ面積、軒天面積など）
+interface AdditionalInputProps {
+  categoryId: string;
+  values: BuildingInfo;
+  onChangeExtra: (field: string, value: number | string | string[] | number[] | undefined) => void;
+}
+
+const AdditionalInputs: React.FC<AdditionalInputProps> = ({ categoryId, values, onChangeExtra }) => {
+  // ポーチ拡張 - 面積入力
+  if (categoryId === 'porch_extension' && values.porch_extension === 'yes') {
+    return (
+      <div className="mt-3 p-3 bg-blue-50 rounded-lg">
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          ポーチ拡張面積
+        </label>
+        <div className="flex items-center gap-2">
+          <input
+            type="number"
+            step="0.1"
+            min="0"
+            value={values.porch_extension_area || ''}
+            onChange={(e) => onChangeExtra('porch_extension_area', e.target.value ? parseFloat(e.target.value) : undefined)}
+            placeholder="0.0"
+            className="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          />
+          <span className="text-gray-500 text-sm">㎡</span>
+          <span className="text-xs text-gray-400">（金額に反映されます）</span>
+        </div>
+      </div>
+    );
+  }
+
+  // 軒天 - 各箇所の面積入力
+  if (categoryId === 'eaves_ceiling' && values.eaves_ceiling && values.eaves_ceiling !== 'no') {
+    const count = parseInt(values.eaves_ceiling, 10) || 0;
+    const areas = values.eaves_ceiling_areas || [];
+    return (
+      <div className="mt-3 p-3 bg-blue-50 rounded-lg">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          軒天面積（各箇所）
+        </label>
+        <div className="flex flex-wrap gap-3">
+          {Array.from({ length: count }, (_, i) => (
+            <div key={i} className="flex items-center gap-1">
+              <span className="text-xs text-gray-500">{i + 1}ヶ所目:</span>
+              <input
+                type="number"
+                step="0.1"
+                min="0"
+                value={areas[i] || ''}
+                onChange={(e) => {
+                  const newAreas = [...areas];
+                  newAreas[i] = e.target.value ? parseFloat(e.target.value) : 0;
+                  onChangeExtra('eaves_ceiling_areas', newAreas);
+                }}
+                placeholder="0.0"
+                className="w-20 px-2 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 text-sm"
+              />
+              <span className="text-gray-500 text-xs">㎡</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // 太陽光 - その他の自由入力
+  if (categoryId === 'solar' && values.solar === 'other') {
+    return (
+      <div className="mt-3 p-3 bg-yellow-50 rounded-lg">
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          太陽光メーカー名（その他）
+        </label>
+        <input
+          type="text"
+          value={values.solar_other || ''}
+          onChange={(e) => onChangeExtra('solar_other', e.target.value)}
+          placeholder="メーカー名を入力"
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+    );
+  }
+
+  // 蓄電池 - その他の自由入力
+  if (categoryId === 'battery' && values.battery === 'other') {
+    return (
+      <div className="mt-3 p-3 bg-yellow-50 rounded-lg">
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          蓄電池メーカー名（その他）
+        </label>
+        <input
+          type="text"
+          value={values.battery_other || ''}
+          onChange={(e) => onChangeExtra('battery_other', e.target.value)}
+          placeholder="メーカー名を入力"
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+    );
+  }
+
+  // 庇 - タイプ選択
+  if (categoryId === 'canopy' && values.canopy && values.canopy !== 'no') {
+    const count = parseInt(values.canopy, 10) || 0;
+    const types = values.canopy_types || [];
+    return (
+      <div className="mt-3 p-3 bg-blue-50 rounded-lg">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          庇タイプ（各箇所）
+        </label>
+        <div className="space-y-2">
+          {Array.from({ length: count }, (_, i) => (
+            <div key={i} className="flex items-center gap-2">
+              <span className="text-xs text-gray-500 w-16">{i + 1}ヶ所目:</span>
+              <select
+                value={types[i] || 'type_a'}
+                onChange={(e) => {
+                  const newTypes = [...types];
+                  newTypes[i] = e.target.value;
+                  onChangeExtra('canopy_types', newTypes);
+                }}
+                className="px-3 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 text-sm"
+              >
+                <option value="type_a">タイプA（標準）</option>
+                <option value="type_b">タイプB（大型）</option>
+              </select>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // ビルトインガレージ - タイプ選択
+  if (categoryId === 'garage_shutter' && values.garage_shutter && values.garage_shutter !== 'no') {
+    const count = parseInt(values.garage_shutter, 10) || 0;
+    const types = values.garage_types || [];
+    return (
+      <div className="mt-3 p-3 bg-blue-50 rounded-lg">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          ガレージタイプ（各箇所）
+        </label>
+        <div className="space-y-2">
+          {Array.from({ length: count }, (_, i) => (
+            <div key={i} className="flex items-center gap-2">
+              <span className="text-xs text-gray-500 w-16">{i + 1}ヶ所目:</span>
+              <select
+                value={types[i] || 'type_a'}
+                onChange={(e) => {
+                  const newTypes = [...types];
+                  newTypes[i] = e.target.value;
+                  onChangeExtra('garage_types', newTypes);
+                }}
+                className="px-3 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 text-sm"
+              >
+                <option value="type_a">タイプA（標準）</option>
+                <option value="type_b">タイプB（大型）</option>
+              </select>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return null;
+};
+
 // セクションコンポーネント
 interface SectionViewProps {
   section: BuildingInfoSection;
   values: BuildingInfo;
   onChange: (categoryId: string, value: string | string[]) => void;
+  onChangeExtra: (field: string, value: number | string | string[] | number[] | undefined) => void;
 }
 
-const SectionView: React.FC<SectionViewProps> = ({ section, values, onChange }) => {
+const SectionView: React.FC<SectionViewProps> = ({ section, values, onChange, onChangeExtra }) => {
   // 表示条件に基づいてカテゴリをフィルタリング
   const visibleCategories = section.categories.filter(category => {
     // 3階建て以外の場合、2F-3F間のアイアン階段を非表示
@@ -141,12 +312,18 @@ const SectionView: React.FC<SectionViewProps> = ({ section, values, onChange }) 
         {section.title}
       </h3>
       {visibleCategories.map(category => (
-        <CategorySelector
-          key={category.id}
-          category={category}
-          value={values[category.id as keyof BuildingInfo] as string | string[] | undefined}
-          onChange={(value) => onChange(category.id, value)}
-        />
+        <div key={category.id}>
+          <CategorySelector
+            category={category}
+            value={values[category.id as keyof BuildingInfo] as string | string[] | undefined}
+            onChange={(value) => onChange(category.id, value)}
+          />
+          <AdditionalInputs
+            categoryId={category.id}
+            values={values}
+            onChangeExtra={onChangeExtra}
+          />
+        </div>
       ))}
     </div>
   );
@@ -156,16 +333,25 @@ export const BuildingInfoSelector: React.FC<BuildingInfoSelectorProps> = ({
   value,
   onChange,
   onComplete,
+  sections = BUILDING_INFO_SECTIONS,
 }) => {
   const [currentSectionIndex, setCurrentSectionIndex] = React.useState(0);
-  const currentSection = BUILDING_INFO_SECTIONS[currentSectionIndex];
+  const currentSection = sections[currentSectionIndex];
   const isFirstSection = currentSectionIndex === 0;
-  const isLastSection = currentSectionIndex === BUILDING_INFO_SECTIONS.length - 1;
+  const isLastSection = currentSectionIndex === sections.length - 1;
 
   const handleCategoryChange = (categoryId: string, optionValue: string | string[]) => {
     onChange({
       ...value,
       [categoryId]: optionValue,
+    });
+  };
+
+  // 追加フィールド（面積、自由入力など）の変更処理
+  const handleExtraChange = (field: string, fieldValue: number | string | string[] | number[] | undefined) => {
+    onChange({
+      ...value,
+      [field]: fieldValue,
     });
   };
 
@@ -194,19 +380,19 @@ export const BuildingInfoSelector: React.FC<BuildingInfoSelectorProps> = ({
       <div className="mb-6">
         <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
           <span>{currentSection.title}</span>
-          <span>{currentSectionIndex + 1} / {BUILDING_INFO_SECTIONS.length}</span>
+          <span>{currentSectionIndex + 1} / {sections.length}</span>
         </div>
         <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
           <div
             className="h-full bg-blue-500 transition-all duration-300"
-            style={{ width: `${((currentSectionIndex + 1) / BUILDING_INFO_SECTIONS.length) * 100}%` }}
+            style={{ width: `${((currentSectionIndex + 1) / sections.length) * 100}%` }}
           />
         </div>
       </div>
 
       {/* セクションステップ表示 */}
       <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
-        {BUILDING_INFO_SECTIONS.map((section, index) => (
+        {sections.map((section, index) => (
           <button
             key={section.id}
             onClick={() => setCurrentSectionIndex(index)}
@@ -230,6 +416,7 @@ export const BuildingInfoSelector: React.FC<BuildingInfoSelectorProps> = ({
         section={currentSection}
         values={value}
         onChange={handleCategoryChange}
+        onChangeExtra={handleExtraChange}
       />
 
       {/* ナビゲーション */}
