@@ -198,7 +198,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   // localStorageからセッションを読み取る（SDKバイパス用）
-  const STORAGE_KEY = 'sb-qqzqffkiyzeaampotgnn-auth-token';
+  // 注意: SDKが使用するキーとは別のキーを使用（SDKによる上書き/削除を防ぐ）
+  const STORAGE_KEY = 'ic-pochi-session';
 
   const getStoredSession = (): { session: Session | null; user: SupabaseUser | null } => {
     try {
@@ -382,15 +383,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } = supabase.auth.onAuthStateChange(async (event, session) => {
       logger.info('Auth state changed:', event);
 
-      // SDKからsessionがnullの場合、localStorageに保存されたセッションがあればそれを使う
-      if (!session) {
-        const storedData = getStoredSession();
-        if (storedData.session && storedData.user) {
-          logger.info('SDK session is null but we have stored session, keeping it');
-          return; // 既存のセッションを維持
+      // 我々独自のセッションがある場合、SDKのイベントは無視する（SIGNED_OUT以外）
+      const storedData = getStoredSession();
+      if (storedData.session && storedData.user) {
+        // ログアウトイベントの場合のみ処理（ユーザーが明示的にログアウトした場合）
+        if (event === 'SIGNED_OUT') {
+          logger.info('User signed out, clearing stored session');
+          localStorage.removeItem(STORAGE_KEY);
+          setSession(null);
+          setSupabaseUser(null);
+          setUser(null);
+          return;
         }
+        // その他のイベントは無視（我々のセッションを維持）
+        logger.info('Ignoring SDK auth event, using stored session');
+        return;
       }
 
+      // 独自セッションがない場合のみSDKのセッションを使用
       setSession(session);
       setSupabaseUser(session?.user ?? null);
 
