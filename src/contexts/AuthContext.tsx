@@ -401,20 +401,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signIn = async (email: string, password: string) => {
+    alert('AuthContext: isSupabaseConfigured = ' + isSupabaseConfigured);
     // Supabaseが設定されていない場合は即座にエラー
     if (!isSupabaseConfigured) {
       logger.error('Supabase is not configured - cannot sign in');
+      alert('AuthContext: Supabase未設定エラー');
       return { error: new Error('認証サーバーに接続できません。システム管理者に連絡してください。') };
     }
 
     try {
       logger.info('Attempting sign in for:', email);
-      console.log('[Login] Starting signIn for:', email);
+      alert('AuthContext: signIn開始');
 
       // 直接signInWithPasswordを呼び出し
+      alert('AuthContext: signInWithPassword呼び出し前');
       const { error, data } = await supabase.auth.signInWithPassword({ email, password });
-
-      console.log('[Login] signInWithPassword completed, error:', error?.message || 'none');
+      alert('AuthContext: signInWithPassword完了 - ' + (error ? error.message : '成功'));
 
       if (error) {
         logger.error('Sign in error:', error.message);
