@@ -6,16 +6,6 @@ import { createLogger } from '../lib/logger';
 
 const logger = createLogger('AuthContext');
 
-// タイムアウト付きPromise
-const withTimeout = <T,>(promise: Promise<T>, ms: number, errorMessage: string): Promise<T> => {
-  return Promise.race([
-    promise,
-    new Promise<T>((_, reject) =>
-      setTimeout(() => reject(new Error(errorMessage)), ms)
-    ),
-  ]);
-};
-
 interface AuthContextType {
   // Supabase Auth
   session: Session | null;
@@ -210,23 +200,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     // Get initial session with timeout
     const initializeAuth = async () => {
-      // タイムアウト設定（5秒）
+      // 全体のタイムアウト設定（8秒）- fetchUserDataを含む全処理
+      let hasTimedOut = false;
       const timeoutId = setTimeout(() => {
+        hasTimedOut = true;
         logger.warn('Auth initialization timeout, proceeding without session');
         setIsLoading(false);
-      }, 5000);
+      }, 8000);
 
       try {
         const { data: { session }, error } = await supabase.auth.getSession();
 
-        clearTimeout(timeoutId);
+        // タイムアウト済みなら以降の処理をスキップ
+        if (hasTimedOut) {
+          return;
+        }
 
         if (error) {
           logger.error('Error getting session:', error);
           // セッションエラーの場合、古いセッションをクリア
           logger.warn('Clearing stale session due to error');
           await supabase.auth.signOut();
-          setIsLoading(false);
+          // finally で isLoading = false にするので return
           return;
         }
 
@@ -239,7 +234,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             await supabase.auth.signOut();
             setSession(null);
             setSupabaseUser(null);
-            setIsLoading(false);
+            // finally で isLoading = false にする
             return;
           }
         }
@@ -248,6 +243,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setSupabaseUser(session?.user ?? null);
 
         if (session?.user) {
+          // タイムアウト済みならユーザーデータ取得をスキップ
+          if (hasTimedOut) {
+            return;
+          }
           try {
             const userData = await fetchUserData(session.user.id);
             if (userData) {
@@ -295,7 +294,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           }
         }
       } catch (error) {
-        clearTimeout(timeoutId);
         logger.error('Error initializing auth:', error);
         // 初期化エラー時はセッションをクリア
         try {
@@ -304,7 +302,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           // サインアウトエラーは無視
         }
       } finally {
-        setIsLoading(false);
+        clearTimeout(timeoutId);
+        if (!hasTimedOut) {
+          setIsLoading(false);
+        }
       }
     };
 
@@ -409,12 +410,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       logger.info('Attempting sign in for:', email);
 
-      // 10秒のタイムアウト付きでログイン試行
-      const { error, data } = await withTimeout(
-        supabase.auth.signInWithPassword({ email, password }),
-        10000,
-        'ログインがタイムアウトしました。ネットワーク接続を確認してください。'
-      );
+      // Promise.raceで確実にタイムアウト（10秒）
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        setTimeout(() => {
+          reject(new Error('ログインがタイムアウトしました。ネットワーク接続を確認してください。'));
+        }, 10000);
+      });
+
+      const authPromise = supabase.auth.signInWithPassword({ email, password });
+
+      const { error, data } = await Promise.race([authPromise, timeoutPromise]);
 
       if (error) {
         logger.error('Sign in error:', error.message);
