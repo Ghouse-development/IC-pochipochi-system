@@ -12,7 +12,8 @@ import {
   Save,
   X,
   RefreshCw,
-  FolderPlus
+  FolderPlus,
+  Download
 } from 'lucide-react';
 import { usersApi } from '../../services/api';
 import type { User, UserRole } from '../../types/database';
@@ -66,6 +67,10 @@ export function UserManager({ onBack, onCreateProject }: UserManagerProps) {
   // Password reset confirmation
   const [resetPasswordUser, setResetPasswordUser] = useState<User | null>(null);
 
+  // Sync auth users
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [syncPreview, setSyncPreview] = useState<{ email: string; id: string }[] | null>(null);
+
   // New user form state
   const [newUserForm, setNewUserForm] = useState({
     email: '',
@@ -90,6 +95,50 @@ export function UserManager({ onBack, onCreateProject }: UserManagerProps) {
       setError('ユーザーの読み込みに失敗しました');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSyncAuthUsers = async (execute = false) => {
+    try {
+      setIsSyncing(true);
+      setError(null);
+
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) {
+        setError('ログインセッションが無効です');
+        return;
+      }
+
+      const response = await fetch('/api/users/sync-auth', {
+        method: execute ? 'POST' : 'GET',
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || '同期に失敗しました');
+      }
+
+      if (execute) {
+        setSuccess(`${result.syncedCount}件のユーザーを同期しました`);
+        setSyncPreview(null);
+        await loadUsers();
+      } else {
+        if (result.usersToSync.length === 0) {
+          setSuccess('同期が必要なユーザーはいません');
+        } else {
+          setSyncPreview(result.usersToSync);
+        }
+      }
+    } catch (err) {
+      logger.error('Error syncing users:', err);
+      setError(err instanceof Error ? err.message : '同期に失敗しました');
+    } finally {
+      setIsSyncing(false);
     }
   };
 
@@ -259,13 +308,24 @@ export function UserManager({ onBack, onCreateProject }: UserManagerProps) {
               ユーザー管理
             </h2>
           </div>
-          <button
-            onClick={() => setIsCreating(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-          >
-            <Plus className="w-4 h-4" />
-            新規ユーザー
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => handleSyncAuthUsers(false)}
+              disabled={isSyncing}
+              className="flex items-center gap-2 px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 disabled:opacity-50"
+              title="Supabase Authに登録されているユーザーを同期"
+            >
+              <Download className="w-4 h-4" />
+              {isSyncing ? '確認中...' : 'Auth同期'}
+            </button>
+            <button
+              onClick={() => setIsCreating(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            >
+              <Plus className="w-4 h-4" />
+              新規ユーザー
+            </button>
+          </div>
         </div>
       </div>
 
@@ -640,6 +700,54 @@ export function UserManager({ onBack, onCreateProject }: UserManagerProps) {
         cancelText="キャンセル"
         variant="info"
       />
+
+      {/* Sync Preview Modal */}
+      {syncPreview && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg w-full max-w-md max-h-[80vh] overflow-hidden">
+            <div className="border-b p-4 flex items-center justify-between">
+              <h3 className="text-lg font-semibold">Auth同期プレビュー</h3>
+              <button
+                onClick={() => setSyncPreview(null)}
+                className="p-1 hover:bg-gray-100 rounded"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-4 overflow-y-auto max-h-[50vh]">
+              <p className="text-sm text-gray-600 mb-4">
+                以下の{syncPreview.length}件のユーザーがSupabase Authに登録されていますが、
+                ユーザーテーブルに存在しません。同期しますか？
+              </p>
+              <div className="space-y-2">
+                {syncPreview.map((user) => (
+                  <div key={user.id} className="p-2 bg-gray-50 rounded text-sm">
+                    {user.email}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="border-t p-4 flex justify-end gap-3">
+              <button
+                onClick={() => setSyncPreview(null)}
+                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+              >
+                キャンセル
+              </button>
+              <button
+                onClick={() => handleSyncAuthUsers(true)}
+                disabled={isSyncing}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center gap-2"
+              >
+                <Download className="w-4 h-4" />
+                {isSyncing ? '同期中...' : '同期実行'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

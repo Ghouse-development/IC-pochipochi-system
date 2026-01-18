@@ -13,11 +13,18 @@ import {
   type BuildingInfoOption,
 } from '../../config/buildingInfoConfig';
 
+interface RoomOption {
+  id: string;
+  name: string;
+  floor: number;
+}
+
 interface BuildingInfoSelectorProps {
   value: BuildingInfo;
   onChange: (value: BuildingInfo) => void;
   onComplete?: () => void;
   sections?: BuildingInfoSection[]; // カスタムセクションリスト（指定しない場合は全セクション）
+  rooms?: RoomOption[]; // 登録済み部屋リスト（部屋選択UI用）
 }
 
 // 選択カードコンポーネント

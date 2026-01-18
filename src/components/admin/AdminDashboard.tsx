@@ -1,5 +1,5 @@
-import React, { useState, useMemo, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useMemo, useCallback } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { BarChart3, Package, Bell, TrendingUp, Upload, Settings, Users, FolderTree, Wrench, Truck, Database, Building2, ShieldAlert, DollarSign, Activity, RefreshCw, CloudOff, Cloud } from 'lucide-react';
 import { Button } from '../common/Button';
 import { Card } from '../common/Card';
@@ -142,16 +142,78 @@ const DBSyncPanel: React.FC = () => {
 
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { isAdmin, isCoordinator, isLoading: authLoading } = useAuth();
 
-  // メインタブ
-  const [activeTab, setActiveTab] = useState<MainTab>('products');
+  // URLパスからタブ状態を取得
+  const getTabsFromPath = (): {
+    activeTab: MainTab;
+    productSubTab: ProductSubTab;
+    statsSubTab: StatsSubTab;
+    dataSubTab: DataSubTab;
+    systemSubTab: SystemSubTab;
+  } => {
+    const pathParts = location.pathname.replace('/admin', '').split('/').filter(Boolean);
+    const mainTab = (pathParts[0] as MainTab) || 'products';
+    const subTab = pathParts[1];
 
-  // サブタブ
-  const [productSubTab, setProductSubTab] = useState<ProductSubTab>('plans');
-  const [statsSubTab, setStatsSubTab] = useState<StatsSubTab>('dashboard');
-  const [dataSubTab, setDataSubTab] = useState<DataSubTab>('backup');
-  const [systemSubTab, setSystemSubTab] = useState<SystemSubTab>('settings');
+    let productSub: ProductSubTab = 'plans';
+    let statsSub: StatsSubTab = 'dashboard';
+    let dataSub: DataSubTab = 'backup';
+    let systemSub: SystemSubTab = 'settings';
+
+    if (mainTab === 'products' && subTab) {
+      productSub = (subTab as ProductSubTab) || 'plans';
+    }
+    if (mainTab === 'statistics' && subTab) {
+      statsSub = (subTab as StatsSubTab) || 'dashboard';
+    }
+    if (mainTab === 'data' && subTab) {
+      dataSub = (subTab as DataSubTab) || 'backup';
+    }
+    if (mainTab === 'system' && subTab) {
+      systemSub = (subTab as SystemSubTab) || 'settings';
+    }
+
+    return {
+      activeTab: mainTab,
+      productSubTab: productSub,
+      statsSubTab: statsSub,
+      dataSubTab: dataSub,
+      systemSubTab: systemSub,
+    };
+  };
+
+  const { activeTab, productSubTab, statsSubTab, dataSubTab, systemSubTab } = getTabsFromPath();
+
+  // タブ変更時にURLを更新
+  const setActiveTab = useCallback((tab: MainTab) => {
+    const subPaths: Record<MainTab, string> = {
+      products: 'plans',
+      statistics: 'dashboard',
+      vendors: '',
+      data: 'backup',
+      system: 'settings',
+    };
+    const subPath = subPaths[tab];
+    navigate(subPath ? `/admin/${tab}/${subPath}` : `/admin/${tab}`);
+  }, [navigate]);
+
+  const setProductSubTab = useCallback((subTab: ProductSubTab) => {
+    navigate(`/admin/products/${subTab}`);
+  }, [navigate]);
+
+  const setStatsSubTab = useCallback((subTab: StatsSubTab) => {
+    navigate(`/admin/statistics/${subTab}`);
+  }, [navigate]);
+
+  const setDataSubTab = useCallback((subTab: DataSubTab) => {
+    navigate(`/admin/data/${subTab}`);
+  }, [navigate]);
+
+  const setSystemSubTab = useCallback((subTab: SystemSubTab) => {
+    navigate(`/admin/system/${subTab}`);
+  }, [navigate]);
 
   // ユーザーからプロジェクト作成への遷移
   const handleCreateProjectForUser = useCallback((user: { id: string; email: string; full_name: string; phone?: string | null }) => {

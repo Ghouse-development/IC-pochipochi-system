@@ -7,7 +7,7 @@
  * - お客様招待
  */
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import {
   ArrowLeft,
   FolderPlus,
@@ -27,6 +27,7 @@ import { ProjectRegistrationForm } from '../components/project/ProjectRegistrati
 import { ProjectStatusPanel } from '../components/project/ProjectStatusPanel';
 import { ProjectList } from '../components/project/ProjectList';
 import { CustomerInvitation } from '../components/project/CustomerInvitation';
+import { ProjectRequiredWrapper } from '../components/project/ProjectRequiredWrapper';
 import { ShowroomEstimateForm } from '../components/showroom/ShowroomEstimateForm';
 import { UsageDashboard } from '../components/dashboard/UsageDashboard';
 import { ExportPanel } from '../components/export/ExportPanel';
@@ -57,13 +58,51 @@ interface InitialUserData {
 
 export const StaffDashboard: React.FC<StaffDashboardProps> = ({ onBack }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [activeTab, setActiveTab] = useState<MainTabType>('overview');
-  const [projectSubTab, setProjectSubTab] = useState<ProjectSubTab>('list');
-  const [reviewSubTab, setReviewSubTab] = useState<ReviewSubTab>('status');
   const [initialUserData, setInitialUserData] = useState<InitialUserData | undefined>(undefined);
   const { projects, currentProject } = useProjectStore();
   const { customerName, projectName, projectStatus } = useSelectionStore();
+
+  // URLパスからタブ状態を取得
+  const getTabsFromPath = (): { mainTab: MainTabType; projectSubTab: ProjectSubTab; reviewSubTab: ReviewSubTab } => {
+    const pathParts = location.pathname.replace('/staff', '').split('/').filter(Boolean);
+    const mainTab = (pathParts[0] as MainTabType) || 'overview';
+    const subTab = pathParts[1];
+
+    let projectSub: ProjectSubTab = 'list';
+    let reviewSub: ReviewSubTab = 'status';
+
+    if (mainTab === 'projects' && subTab) {
+      projectSub = (subTab as ProjectSubTab) || 'list';
+    }
+    if (mainTab === 'review' && subTab) {
+      reviewSub = (subTab as ReviewSubTab) || 'status';
+    }
+
+    return { mainTab, projectSubTab: projectSub, reviewSubTab: reviewSub };
+  };
+
+  const { mainTab: activeTab, projectSubTab, reviewSubTab } = getTabsFromPath();
+
+  // タブ変更時にURLを更新
+  const setActiveTab = (tab: MainTabType) => {
+    if (tab === 'projects') {
+      navigate('/staff/projects/list');
+    } else if (tab === 'review') {
+      navigate('/staff/review/status');
+    } else {
+      navigate(`/staff/${tab}`);
+    }
+  };
+
+  const setProjectSubTab = (subTab: ProjectSubTab) => {
+    navigate(`/staff/projects/${subTab}`);
+  };
+
+  const setReviewSubTab = (subTab: ReviewSubTab) => {
+    navigate(`/staff/review/${subTab}`);
+  };
 
   // URLパラメータからユーザー情報を取得し、状態に保存
   useEffect(() => {
@@ -80,12 +119,10 @@ export const StaffDashboard: React.FC<StaffDashboardProps> = ({ onBack }) => {
         name: name || '',
         phone: phone || undefined,
       });
-      setActiveTab('projects');
-      setProjectSubTab('create');
-      // URLパラメータをクリア
-      setSearchParams({});
+      // URLパラメータをクリアしてプロジェクト作成ページへ
+      navigate('/staff/projects/create');
     }
-  }, [searchParams, setSearchParams]);
+  }, [searchParams, navigate]);
 
   // 6つのメインタブ
   const mainTabs = [
@@ -381,43 +418,69 @@ export const StaffDashboard: React.FC<StaffDashboardProps> = ({ onBack }) => {
         );
       case 'review':
         return (
-          <div className="space-y-4">
-            {/* IC確認サブタブ */}
-            <div className="flex gap-1 sm:gap-2 bg-white rounded-lg p-1 shadow-sm border overflow-x-auto">
-              {[
-                { id: 'status' as ReviewSubTab, label: '確定フロー', shortLabel: '確定', icon: CheckCircle },
-                { id: 'progress' as ReviewSubTab, label: '選択進捗', shortLabel: '進捗', icon: BarChart3 },
-                { id: 'summary' as ReviewSubTab, label: 'サマリー', shortLabel: '要約', icon: ClipboardCheck },
-                { id: 'checklist' as ReviewSubTab, label: 'チェックリスト', shortLabel: 'CL', icon: ClipboardCheck },
-              ].map((tab) => {
-                const Icon = tab.icon;
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => setReviewSubTab(tab.id)}
-                    className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${
-                      reviewSubTab === tab.id
-                        ? 'bg-blue-100 text-blue-700'
-                        : 'text-gray-600 hover:bg-gray-100'
-                    }`}
-                    title={tab.label}
-                  >
-                    <Icon className="w-4 h-4" />
-                    <span className="hidden sm:inline">{tab.label}</span>
-                    <span className="sm:hidden">{tab.shortLabel}</span>
-                  </button>
-                );
-              })}
+          <ProjectRequiredWrapper
+            title="IC確認"
+            onSelectProject={() => setActiveTab('projects')}
+          >
+            <div className="space-y-4">
+              {/* IC確認サブタブ */}
+              <div className="flex gap-1 sm:gap-2 bg-white rounded-lg p-1 shadow-sm border overflow-x-auto">
+                {[
+                  { id: 'status' as ReviewSubTab, label: '確定フロー', shortLabel: '確定', icon: CheckCircle },
+                  { id: 'progress' as ReviewSubTab, label: '選択進捗', shortLabel: '進捗', icon: BarChart3 },
+                  { id: 'summary' as ReviewSubTab, label: 'サマリー', shortLabel: '要約', icon: ClipboardCheck },
+                  { id: 'checklist' as ReviewSubTab, label: 'チェックリスト', shortLabel: 'CL', icon: ClipboardCheck },
+                ].map((tab) => {
+                  const Icon = tab.icon;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => setReviewSubTab(tab.id)}
+                      className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${
+                        reviewSubTab === tab.id
+                          ? 'bg-blue-100 text-blue-700'
+                          : 'text-gray-600 hover:bg-gray-100'
+                      }`}
+                      title={tab.label}
+                    >
+                      <Icon className="w-4 h-4" />
+                      <span className="hidden sm:inline">{tab.label}</span>
+                      <span className="sm:hidden">{tab.shortLabel}</span>
+                    </button>
+                  );
+                })}
+              </div>
+              {renderReviewContent()}
             </div>
-            {renderReviewContent()}
-          </div>
+          </ProjectRequiredWrapper>
         );
       case 'showroom':
-        return <ShowroomEstimateForm />;
+        return (
+          <ProjectRequiredWrapper
+            title="SR見積"
+            onSelectProject={() => setActiveTab('projects')}
+          >
+            <ShowroomEstimateForm />
+          </ProjectRequiredWrapper>
+        );
       case 'export':
-        return <ExportPanel />;
+        return (
+          <ProjectRequiredWrapper
+            title="出力"
+            onSelectProject={() => setActiveTab('projects')}
+          >
+            <ExportPanel />
+          </ProjectRequiredWrapper>
+        );
       case 'usage':
-        return <UsageDashboard projectName={projectName} customerName={customerName} />;
+        return (
+          <ProjectRequiredWrapper
+            title="利用状況"
+            onSelectProject={() => setActiveTab('projects')}
+          >
+            <UsageDashboard projectName={projectName} customerName={customerName} />
+          </ProjectRequiredWrapper>
+        );
       default:
         return null;
     }
@@ -439,9 +502,13 @@ export const StaffDashboard: React.FC<StaffDashboardProps> = ({ onBack }) => {
               </button>
               <div>
                 <h1 className="text-xl font-bold text-gray-900">スタッフダッシュボード</h1>
-                {customerName && projectName && (
+                {currentProject ? (
+                  <p className="text-sm text-gray-500">
+                    {currentProject.customer?.name || currentProject.name}様 / {currentProject.name}
+                  </p>
+                ) : customerName && projectName ? (
                   <p className="text-sm text-gray-500">{customerName}様 / {projectName}</p>
-                )}
+                ) : null}
               </div>
             </div>
             {projectStatus && (

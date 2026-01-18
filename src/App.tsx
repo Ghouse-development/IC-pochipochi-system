@@ -28,7 +28,6 @@ import { CompletionCelebration } from './components/common/CompletionCelebration
 const CatalogWithTabs = lazy(() => import('./components/catalog/CatalogWithTabs').then(m => ({ default: m.CatalogWithTabs })));
 const AdminDashboard = lazy(() => import('./components/admin/AdminDashboard').then(m => ({ default: m.AdminDashboard })));
 const HierarchyPage = lazy(() => import('./pages/HierarchyPage').then(m => ({ default: m.HierarchyPage })));
-const ImageTestPage = lazy(() => import('./pages/ImageTestPage').then(m => ({ default: m.ImageTestPage })));
 const StaffDashboard = lazy(() => import('./pages/StaffDashboard').then(m => ({ default: m.StaffDashboard })));
 const CustomerPage = lazy(() => import('./pages/CustomerPage').then(m => ({ default: m.CustomerPage })));
 const CustomerLoginPage = lazy(() => import('./pages/CustomerLoginPage').then(m => ({ default: m.CustomerLoginPage })));
@@ -196,7 +195,6 @@ function MainContent() {
         isAdmin={isAdmin}
         onAdminClick={() => navigate('/admin')}
         onHierarchyClick={() => navigate('/hierarchy')}
-        onImageTestClick={() => navigate('/image-test')}
         onStaffDashboardClick={() => navigate('/staff')}
       />
 
@@ -229,7 +227,7 @@ function MainContent() {
           } />
 
           {/* 管理画面 - Lazy loaded + AdminRouteGuard（管理者以外は403表示） */}
-          <Route path="/admin" element={
+          <Route path="/admin/*" element={
             <AdminRouteGuard>
               <Suspense fallback={<PageLoader />}>
                 <AdminDashboard onBack={() => window.history.back()} />
@@ -243,14 +241,7 @@ function MainContent() {
               </Suspense>
             </AdminRouteGuard>
           } />
-          <Route path="/image-test" element={
-            <AdminRouteGuard>
-              <Suspense fallback={<PageLoader />}>
-                <ImageTestPage />
-              </Suspense>
-            </AdminRouteGuard>
-          } />
-          <Route path="/staff" element={
+          <Route path="/staff/*" element={
             <AdminRouteGuard>
               <Suspense fallback={<PageLoader />}>
                 <StaffDashboard onBack={() => navigate('/catalog')} />

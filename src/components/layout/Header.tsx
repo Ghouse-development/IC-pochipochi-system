@@ -13,7 +13,6 @@ interface HeaderProps {
   isAdmin?: boolean;
   onAdminClick?: () => void;
   onHierarchyClick?: () => void;
-  onImageTestClick?: () => void;
   onStaffDashboardClick?: () => void;
 }
 
@@ -25,7 +24,6 @@ export const Header: React.FC<HeaderProps> = ({
   isAdmin = false,
   onAdminClick,
   onHierarchyClick,
-  onImageTestClick,
   onStaffDashboardClick,
 }) => {
   const navigate = useNavigate();
@@ -40,8 +38,7 @@ export const Header: React.FC<HeaderProps> = ({
   // 現在のページが管理画面かどうかを判定
   const isAdminPage = location.pathname.startsWith('/admin') ||
     location.pathname.startsWith('/staff') ||
-    location.pathname.startsWith('/hierarchy') ||
-    location.pathname.startsWith('/image-test');
+    location.pathname.startsWith('/hierarchy');
 
   // ロゴ長押しで管理画面ログインへ（3秒）
   const longPressTimerRef = useRef<NodeJS.Timeout | null>(null);
