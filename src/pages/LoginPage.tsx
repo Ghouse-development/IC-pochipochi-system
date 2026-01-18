@@ -39,35 +39,29 @@ export function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('[LoginPage] handleSubmit called');
-    alert('ログイン処理開始');
     setError(null);
     setIsLoading(true);
 
-    // タイムアウト設定（15秒に延長）
+    // タイムアウト設定（15秒）
     const timeoutId = setTimeout(() => {
       setError('ログインがタイムアウトしました。ネットワーク接続を確認してください。');
       setIsLoading(false);
     }, 15000);
 
     try {
-      console.log('[LoginPage] Calling signIn...');
       const { error } = await signIn(email, password);
-      console.log('[LoginPage] signIn returned, error:', error?.message || 'none');
-      alert('signIn完了: ' + (error ? error.message : '成功'));
       clearTimeout(timeoutId);
       if (error) {
         setError(error.message);
         setIsLoading(false);
       } else {
-        // ログイン成功フラグを立てる（userが設定されるのを待つ）
+        // ログイン成功フラグを立てる（リダイレクトを待つ）
         setLoginSuccess(true);
         // ローディング状態は維持（リダイレクトまで）
       }
     } catch (err) {
       clearTimeout(timeoutId);
       console.error('Login error:', err);
-      alert('signIn例外: ' + (err instanceof Error ? err.message : '不明'));
       setError('ログインに失敗しました: ' + (err instanceof Error ? err.message : '不明なエラー'));
       setIsLoading(false);
     }

@@ -197,6 +197,42 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  // localStorageからセッションを読み取る（SDKバイパス用）
+  const STORAGE_KEY = 'sb-qqzqffkiyzeaampotgnn-auth-token';
+
+  const getStoredSession = (): { session: Session | null; user: SupabaseUser | null } => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (!stored) return { session: null, user: null };
+
+      const data = JSON.parse(stored);
+      if (!data.access_token) return { session: null, user: null };
+
+      // 期限切れチェック
+      const expiresAt = data.expires_at;
+      const now = Math.floor(Date.now() / 1000);
+      if (expiresAt && expiresAt < now) {
+        logger.warn('Stored session expired, clearing');
+        localStorage.removeItem(STORAGE_KEY);
+        return { session: null, user: null };
+      }
+
+      const session: Session = {
+        access_token: data.access_token,
+        refresh_token: data.refresh_token,
+        expires_at: data.expires_at,
+        expires_in: data.expires_in,
+        token_type: data.token_type || 'bearer',
+        user: data.user,
+      };
+
+      return { session, user: data.user };
+    } catch (err) {
+      logger.error('Error reading stored session:', err);
+      return { session: null, user: null };
+    }
+  };
+
   useEffect(() => {
     // Get initial session with timeout
     const initializeAuth = async () => {
@@ -209,6 +245,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }, 8000);
 
       try {
+        // まずlocalStorageから直接セッションを読み取る（SDKバイパス）
+        const storedData = getStoredSession();
+        if (storedData.session && storedData.user) {
+          logger.info('Found stored session, using directly');
+          setSession(storedData.session);
+          setSupabaseUser(storedData.user);
+
+          // ユーザーデータを作成
+          const fallbackUser: User = {
+            id: storedData.user.id,
+            auth_id: storedData.user.id,
+            email: storedData.user.email || '',
+            full_name: storedData.user.user_metadata?.full_name || storedData.user.email?.split('@')[0] || 'User',
+            full_name_kana: null,
+            role: BOOTSTRAP_ADMIN_EMAILS.includes(storedData.user.email?.toLowerCase() || '') ? 'admin' : 'coordinator',
+            phone: null,
+            company_name: null,
+            organization_id: null,
+            is_active: true,
+            last_login_at: new Date().toISOString(),
+            created_at: storedData.user.created_at || new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          };
+          setUser(fallbackUser);
+          clearTimeout(timeoutId);
+          setIsLoading(false);
+          return;
+        }
+
         const { data: { session }, error } = await supabase.auth.getSession();
 
         // タイムアウト済みなら以降の処理をスキップ
@@ -401,17 +466,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signIn = async (email: string, password: string) => {
-    alert('AuthContext: isSupabaseConfigured = ' + isSupabaseConfigured);
     // Supabaseが設定されていない場合は即座にエラー
     if (!isSupabaseConfigured) {
       logger.error('Supabase is not configured - cannot sign in');
-      alert('AuthContext: Supabase未設定エラー');
       return { error: new Error('認証サーバーに接続できません。システム管理者に連絡してください。') };
     }
 
     try {
       logger.info('Attempting sign in for:', email);
-      alert('AuthContext: 直接fetch認証を試行');
 
       // SDKをバイパスして直接fetch APIで認証
       const SUPABASE_URL = 'https://qqzqffkiyzeaampotgnn.supabase.co';
@@ -426,19 +488,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         body: JSON.stringify({ email, password }),
       });
 
-      alert('AuthContext: fetch完了 status=' + response.status);
-
       if (!response.ok) {
         const errorData = await response.json();
-        alert('AuthContext: 認証エラー - ' + (errorData.error_description || errorData.msg || 'Unknown'));
+        logger.error('Auth error:', errorData);
         return { error: new Error(errorData.error_description || errorData.msg || '認証に失敗しました') };
       }
 
       const data = await response.json();
-      alert('AuthContext: 認証成功、トークン保存中...');
+      logger.info('Auth successful, saving session...');
 
       // SDKのsetSessionもハングするため、localStorageに直接保存
-      const storageKey = 'sb-qqzqffkiyzeaampotgnn-auth-token';
       const sessionData = {
         access_token: data.access_token,
         refresh_token: data.refresh_token,
@@ -447,16 +506,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         token_type: data.token_type,
         user: data.user,
       };
-      localStorage.setItem(storageKey, JSON.stringify(sessionData));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(sessionData));
 
-      alert('AuthContext: 完了、リロードします');
-      logger.info('Sign in successful via direct fetch, reloading...');
+      logger.info('Sign in successful via direct fetch, redirecting...');
 
       // ページをリロードしてセッションを反映
       window.location.href = '/admin';
       return { error: null };
     } catch (err) {
-      console.log('[Login] Sign in exception:', err);
       logger.error('Sign in exception:', err);
       return { error: err instanceof Error ? err : new Error('ログインに失敗しました') };
     }
@@ -484,8 +541,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signOut = async () => {
+    // localStorageのセッションもクリア
+    localStorage.removeItem(STORAGE_KEY);
     await supabase.auth.signOut();
     setUser(null);
+    setSession(null);
+    setSupabaseUser(null);
   };
 
   const resetPassword = async (email: string) => {
