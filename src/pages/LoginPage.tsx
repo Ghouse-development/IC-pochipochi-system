@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 export function LoginPage() {
-  const { signIn, resetPassword } = useAuth();
+  const { signIn, resetPassword, user } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -12,17 +12,30 @@ export function LoginPage() {
   const [showResetPassword, setShowResetPassword] = useState(false);
   const [resetSent, setResetSent] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(false);
+  const redirectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // ログイン成功後、即座にリダイレクト（ユーザーデータは遷移先で取得）
+  // ログイン成功後、userが設定されたらリダイレクト
   useEffect(() => {
-    if (loginSuccess) {
-      // 少し待ってからリダイレクト（セッション確立のため）
-      const redirectTimeout = setTimeout(() => {
-        navigate('/admin', { replace: true });
-      }, 500);
-      return () => clearTimeout(redirectTimeout);
+    if (loginSuccess && user) {
+      // userが設定されたら即座にリダイレクト
+      navigate('/admin', { replace: true });
     }
-  }, [loginSuccess, navigate]);
+  }, [loginSuccess, user, navigate]);
+
+  // ログイン成功後、5秒経ってもuserが設定されない場合は強制リダイレクト
+  useEffect(() => {
+    if (loginSuccess && !user) {
+      redirectTimeoutRef.current = setTimeout(() => {
+        console.warn('User data not loaded after 5s, forcing redirect');
+        navigate('/admin', { replace: true });
+      }, 5000);
+      return () => {
+        if (redirectTimeoutRef.current) {
+          clearTimeout(redirectTimeoutRef.current);
+        }
+      };
+    }
+  }, [loginSuccess, user, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -209,7 +222,7 @@ export function LoginPage() {
             disabled={isLoading || loginSuccess}
             className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
-            {loginSuccess ? '認証中...' : isLoading ? 'ログイン中...' : 'ログイン'}
+            {loginSuccess ? (user ? 'リダイレクト中...' : 'ユーザー情報取得中...') : isLoading ? 'ログイン中...' : 'ログイン'}
           </button>
 
           <div className="flex items-center justify-center text-sm">
