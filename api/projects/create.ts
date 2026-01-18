@@ -181,6 +181,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(401).json({ error: 'Invalid token' });
     }
 
+    // Get the creator's public.users.id from auth_id
+    const { data: creatorUser } = await supabase
+      .from('users')
+      .select('id')
+      .eq('auth_id', authUser.id)
+      .single();
+
     const body: CreateProjectRequest = req.body;
 
     // Validate required fields
@@ -320,7 +327,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           customer_furigana: body.customer.furigana,
         }),
         rooms: body.rooms,
-        created_by: authUser.id,
+        created_by: creatorUser?.id || null,
       })
       .select()
       .single();
