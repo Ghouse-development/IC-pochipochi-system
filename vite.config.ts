@@ -1,10 +1,21 @@
 import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
+import { execSync } from 'child_process'
+
+// Git commit hashを取得
+function getGitHash() {
+  try {
+    return execSync('git rev-parse --short HEAD').toString().trim()
+  } catch {
+    return 'unknown'
+  }
+}
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   // 環境変数を読み込む
   const env = loadEnv(mode, process.cwd(), '')
+  const gitHash = getGitHash()
 
   return {
     plugins: [react()],
@@ -13,6 +24,8 @@ export default defineConfig(({ mode }) => {
       'import.meta.env.VITE_SUPABASE_URL': JSON.stringify(env.VITE_SUPABASE_URL || process.env.VITE_SUPABASE_URL),
       'import.meta.env.VITE_SUPABASE_ANON_KEY': JSON.stringify(env.VITE_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY),
       'import.meta.env.VITE_DEMO_MODE': JSON.stringify(env.VITE_DEMO_MODE || process.env.VITE_DEMO_MODE),
+      'import.meta.env.VITE_GIT_HASH': JSON.stringify(gitHash),
+      'import.meta.env.VITE_BUILD_TIME': JSON.stringify(new Date().toISOString()),
     },
   build: {
     // コード分割の最適化

@@ -272,9 +272,9 @@ function MainContent() {
         </Routes>
       </main>
 
-      {/* Version display */}
+      {/* Version display with build hash */}
       <div className="fixed bottom-4 left-4 bg-white px-3 py-1 rounded-lg shadow-md text-xs text-gray-600 z-30">
-        Ver. {currentVersion}
+        Ver. {currentVersion} | {import.meta.env.VITE_GIT_HASH || 'dev'}
       </div>
 
       {/* 選択済みアイテムバー（クイック解除用） */}
