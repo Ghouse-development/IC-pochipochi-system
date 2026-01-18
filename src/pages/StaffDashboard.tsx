@@ -1,48 +1,31 @@
 /**
  * スタッフダッシュボード
- * - プロジェクト管理
- * - 確定フロー
- * - ショールーム見積
- * - 利用状況確認
- * - お客様招待
+ * - プロジェクト管理（一覧、新規作成、お客様招待）
+ * - IC確認、SR見積、出力、利用状況は個別プロジェクト内で使用
  */
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import {
   ArrowLeft,
   FolderPlus,
-  CheckCircle,
-  Store,
   BarChart3,
   ChevronRight,
   Users,
   Calendar,
   FolderOpen,
   Mail,
-  Download,
-  ClipboardCheck,
-  Eye,
+  CheckCircle,
 } from 'lucide-react';
 import { ProjectRegistrationForm } from '../components/project/ProjectRegistrationForm';
-import { ProjectStatusPanel } from '../components/project/ProjectStatusPanel';
 import { ProjectList } from '../components/project/ProjectList';
 import { CustomerInvitation } from '../components/project/CustomerInvitation';
-import { ProjectRequiredWrapper } from '../components/project/ProjectRequiredWrapper';
-import { ShowroomEstimateForm } from '../components/showroom/ShowroomEstimateForm';
-import { UsageDashboard } from '../components/dashboard/UsageDashboard';
-import { ExportPanel } from '../components/export/ExportPanel';
-import { SelectionProgressPanel } from '../components/selection/SelectionProgressPanel';
-import { SelectionSummary } from '../components/selection/SelectionSummary';
-import { ICReviewChecklist } from '../components/review/ICReviewChecklist';
 import { useProjectStore } from '../stores/useProjectStore';
 import { useSelectionStore } from '../stores/useSelectionStore';
 
-// メインタブ（常に表示）
-type MainTabType = 'overview' | 'projects' | 'review' | 'showroom' | 'export' | 'usage';
+// メインタブ（シンプル化 - IC確認, SR見積, 出力, 利用状況は個別プロジェクト内で使用）
+type MainTabType = 'overview' | 'projects';
 // サブタブ（プロジェクト管理内）
 type ProjectSubTab = 'list' | 'create' | 'invite';
-// サブタブ（IC確認内）
-type ReviewSubTab = 'status' | 'progress' | 'summary' | 'checklist';
 
 interface StaffDashboardProps {
   onBack?: () => void;
@@ -65,32 +48,26 @@ export const StaffDashboard: React.FC<StaffDashboardProps> = ({ onBack }) => {
   const { customerName, projectName, projectStatus } = useSelectionStore();
 
   // URLパスからタブ状態を取得
-  const getTabsFromPath = (): { mainTab: MainTabType; projectSubTab: ProjectSubTab; reviewSubTab: ReviewSubTab } => {
+  const getTabsFromPath = (): { mainTab: MainTabType; projectSubTab: ProjectSubTab } => {
     const pathParts = location.pathname.replace('/staff', '').split('/').filter(Boolean);
     const mainTab = (pathParts[0] as MainTabType) || 'overview';
     const subTab = pathParts[1];
 
     let projectSub: ProjectSubTab = 'list';
-    let reviewSub: ReviewSubTab = 'status';
 
     if (mainTab === 'projects' && subTab) {
       projectSub = (subTab as ProjectSubTab) || 'list';
     }
-    if (mainTab === 'review' && subTab) {
-      reviewSub = (subTab as ReviewSubTab) || 'status';
-    }
 
-    return { mainTab, projectSubTab: projectSub, reviewSubTab: reviewSub };
+    return { mainTab, projectSubTab: projectSub };
   };
 
-  const { mainTab: activeTab, projectSubTab, reviewSubTab } = getTabsFromPath();
+  const { mainTab: activeTab, projectSubTab } = getTabsFromPath();
 
   // タブ変更時にURLを更新
   const setActiveTab = (tab: MainTabType) => {
     if (tab === 'projects') {
       navigate('/staff/projects/list');
-    } else if (tab === 'review') {
-      navigate('/staff/review/status');
     } else {
       navigate(`/staff/${tab}`);
     }
@@ -98,10 +75,6 @@ export const StaffDashboard: React.FC<StaffDashboardProps> = ({ onBack }) => {
 
   const setProjectSubTab = (subTab: ProjectSubTab) => {
     navigate(`/staff/projects/${subTab}`);
-  };
-
-  const setReviewSubTab = (subTab: ReviewSubTab) => {
-    navigate(`/staff/review/${subTab}`);
   };
 
   // URLパラメータからユーザー情報を取得し、状態に保存
@@ -124,14 +97,10 @@ export const StaffDashboard: React.FC<StaffDashboardProps> = ({ onBack }) => {
     }
   }, [searchParams, navigate]);
 
-  // 6つのメインタブ
+  // メインタブ（シンプル化）
   const mainTabs = [
     { id: 'overview' as MainTabType, label: '概要', icon: BarChart3 },
     { id: 'projects' as MainTabType, label: 'プロジェクト', icon: FolderOpen },
-    { id: 'review' as MainTabType, label: 'IC確認', icon: ClipboardCheck },
-    { id: 'showroom' as MainTabType, label: 'SR見積', icon: Store },
-    { id: 'export' as MainTabType, label: '出力', icon: Download },
-    { id: 'usage' as MainTabType, label: '利用状況', icon: Eye },
   ];
 
   const handleBack = () => {
@@ -210,8 +179,8 @@ export const StaffDashboard: React.FC<StaffDashboardProps> = ({ onBack }) => {
             </div>
             <button
               onClick={() => {
-                setActiveTab('review');
-                setReviewSubTab('status');
+                setActiveTab('projects');
+                setProjectSubTab('list');
               }}
               className="flex items-center gap-2 px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
             >
@@ -225,7 +194,7 @@ export const StaffDashboard: React.FC<StaffDashboardProps> = ({ onBack }) => {
       {/* クイックアクション */}
       <div className="bg-white rounded-xl shadow-sm border p-6">
         <h3 className="font-bold text-gray-900 mb-4">クイックアクション</h3>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           <button
             onClick={() => {
               setActiveTab('projects');
@@ -263,39 +232,6 @@ export const StaffDashboard: React.FC<StaffDashboardProps> = ({ onBack }) => {
               <Mail className="w-6 h-6 text-indigo-600" />
             </div>
             <p className="text-sm font-medium text-gray-900">お客様招待</p>
-          </button>
-
-          <button
-            onClick={() => {
-              setActiveTab('review');
-              setReviewSubTab('status');
-            }}
-            className="p-4 text-center hover:bg-gray-50 rounded-lg transition-colors group"
-          >
-            <div className="p-3 bg-blue-100 rounded-lg inline-block mb-2 group-hover:bg-blue-200 transition-colors">
-              <CheckCircle className="w-6 h-6 text-blue-600" />
-            </div>
-            <p className="text-sm font-medium text-gray-900">確定フロー</p>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('showroom')}
-            className="p-4 text-center hover:bg-gray-50 rounded-lg transition-colors group"
-          >
-            <div className="p-3 bg-orange-100 rounded-lg inline-block mb-2 group-hover:bg-orange-200 transition-colors">
-              <Store className="w-6 h-6 text-orange-600" />
-            </div>
-            <p className="text-sm font-medium text-gray-900">ショールーム見積</p>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('usage')}
-            className="p-4 text-center hover:bg-gray-50 rounded-lg transition-colors group"
-          >
-            <div className="p-3 bg-purple-100 rounded-lg inline-block mb-2 group-hover:bg-purple-200 transition-colors">
-              <BarChart3 className="w-6 h-6 text-purple-600" />
-            </div>
-            <p className="text-sm font-medium text-gray-900">お客様利用状況</p>
           </button>
         </div>
       </div>
@@ -336,8 +272,8 @@ export const StaffDashboard: React.FC<StaffDashboardProps> = ({ onBack }) => {
         return (
           <ProjectList
             onProjectSelect={() => {
-              setActiveTab('review');
-              setReviewSubTab('status');
+              // プロジェクト選択後はプロジェクト一覧に留まる
+              // IC確認などはプロジェクト詳細ページで行う
             }}
             onCreateNew={() => setProjectSubTab('create')}
           />
@@ -358,22 +294,6 @@ export const StaffDashboard: React.FC<StaffDashboardProps> = ({ onBack }) => {
         );
       case 'invite':
         return <CustomerInvitation />;
-      default:
-        return null;
-    }
-  };
-
-  // IC確認のサブタブコンテンツ
-  const renderReviewContent = () => {
-    switch (reviewSubTab) {
-      case 'status':
-        return <ProjectStatusPanel isStaff={true} userName="スタッフ" />;
-      case 'progress':
-        return <SelectionProgressPanel onCategoryClick={(cat) => navigate(`/catalog/interior/${cat}`)} />;
-      case 'summary':
-        return <SelectionSummary onExport={() => setActiveTab('export')} />;
-      case 'checklist':
-        return <ICReviewChecklist onComplete={() => setActiveTab('export')} />;
       default:
         return null;
     }
@@ -415,71 +335,6 @@ export const StaffDashboard: React.FC<StaffDashboardProps> = ({ onBack }) => {
             </div>
             {renderProjectContent()}
           </div>
-        );
-      case 'review':
-        return (
-          <ProjectRequiredWrapper
-            title="IC確認"
-            onSelectProject={() => setActiveTab('projects')}
-          >
-            <div className="space-y-4">
-              {/* IC確認サブタブ */}
-              <div className="flex gap-1 sm:gap-2 bg-white rounded-lg p-1 shadow-sm border overflow-x-auto">
-                {[
-                  { id: 'status' as ReviewSubTab, label: '確定フロー', shortLabel: '確定', icon: CheckCircle },
-                  { id: 'progress' as ReviewSubTab, label: '選択進捗', shortLabel: '進捗', icon: BarChart3 },
-                  { id: 'summary' as ReviewSubTab, label: 'サマリー', shortLabel: '要約', icon: ClipboardCheck },
-                  { id: 'checklist' as ReviewSubTab, label: 'チェックリスト', shortLabel: 'CL', icon: ClipboardCheck },
-                ].map((tab) => {
-                  const Icon = tab.icon;
-                  return (
-                    <button
-                      key={tab.id}
-                      onClick={() => setReviewSubTab(tab.id)}
-                      className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${
-                        reviewSubTab === tab.id
-                          ? 'bg-blue-100 text-blue-700'
-                          : 'text-gray-600 hover:bg-gray-100'
-                      }`}
-                      title={tab.label}
-                    >
-                      <Icon className="w-4 h-4" />
-                      <span className="hidden sm:inline">{tab.label}</span>
-                      <span className="sm:hidden">{tab.shortLabel}</span>
-                    </button>
-                  );
-                })}
-              </div>
-              {renderReviewContent()}
-            </div>
-          </ProjectRequiredWrapper>
-        );
-      case 'showroom':
-        return (
-          <ProjectRequiredWrapper
-            title="SR見積"
-            onSelectProject={() => setActiveTab('projects')}
-          >
-            <ShowroomEstimateForm />
-          </ProjectRequiredWrapper>
-        );
-      case 'export':
-        return (
-          <ProjectRequiredWrapper
-            title="出力"
-            onSelectProject={() => setActiveTab('projects')}
-          >
-            <ExportPanel />
-          </ProjectRequiredWrapper>
-        );
-      case 'usage':
-        return (
-          <ProjectRequiredWrapper
-            title="利用状況"
-            onSelectProject={() => setActiveTab('projects')}
-          >
-            <UsageDashboard projectName={projectName} customerName={customerName} />
-          </ProjectRequiredWrapper>
         );
       default:
         return null;
