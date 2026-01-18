@@ -59,7 +59,7 @@ interface InitialUserData {
 export const StaffDashboard: React.FC<StaffDashboardProps> = ({ onBack }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const [initialUserData, setInitialUserData] = useState<InitialUserData | undefined>(undefined);
   const { projects, currentProject } = useProjectStore();
   const { customerName, projectName, projectStatus } = useSelectionStore();

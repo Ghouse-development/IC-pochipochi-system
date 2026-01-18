@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { ClipboardCheck, User, Settings, Menu, X, FileText, Upload, Share2, Search, LogOut, Briefcase, Home, ShieldCheck } from 'lucide-react';
+import { ClipboardCheck, User, Settings, Menu, X, FileText, Share2, Search, LogOut, Briefcase, Home, ShieldCheck } from 'lucide-react';
 import { useCartStore } from '../../stores/useCartStore';
 import { formatPrice } from '../../lib/utils';
 import { useAuth } from '../../contexts/AuthContext';
@@ -272,17 +272,6 @@ export const Header: React.FC<HeaderProps> = ({
                           >
                             <FileText className="w-4 h-4" />
                             階層表示
-                          </button>
-                          <button
-                            role="menuitem"
-                            onClick={() => {
-                              setIsUserMenuOpen(false);
-                              onImageTestClick?.();
-                            }}
-                            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          >
-                            <Upload className="w-4 h-4" />
-                            画像テスト
                           </button>
                           <button
                             role="menuitem"

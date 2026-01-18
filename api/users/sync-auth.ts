@@ -133,7 +133,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const emailPrefix = email.split('@')[0];
       const fullName = au.user_metadata?.full_name ||
                        au.user_metadata?.name ||
-                       emailPrefix.replace(/[-_\.]/g, ' ');
+                       emailPrefix.replace(/[-_.]/g, ' ');
 
       try {
         const { data: newUser, error: insertError } = await supabaseAdmin
