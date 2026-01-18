@@ -411,35 +411,45 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     try {
       logger.info('Attempting sign in for:', email);
-      alert('AuthContext: signIn開始');
+      alert('AuthContext: 直接fetch認証を試行');
 
-      // タイムアウト付きでsignInWithPasswordを呼び出し
-      alert('AuthContext: signInWithPassword呼び出し前');
+      // SDKをバイパスして直接fetch APIで認証
+      const SUPABASE_URL = 'https://qqzqffkiyzeaampotgnn.supabase.co';
+      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxenFmZmtpeXplYWFtcG90Z25uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUyNTYxMDYsImV4cCI6MjA4MDgzMjEwNn0.wcCzxOTH14n4kIgXTrp1vZd3DPJzuim-Bz8fH-3U3bw';
 
-      const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error('5秒タイムアウト')), 5000);
+      const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
       });
 
-      const authPromise = supabase.auth.signInWithPassword({ email, password });
+      alert('AuthContext: fetch完了 status=' + response.status);
 
-      let result;
-      try {
-        result = await Promise.race([authPromise, timeoutPromise]) as { error: any; data: any };
-      } catch (timeoutErr) {
-        alert('AuthContext: タイムアウト発生');
-        throw timeoutErr;
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert('AuthContext: 認証エラー - ' + (errorData.error_description || errorData.msg || 'Unknown'));
+        return { error: new Error(errorData.error_description || errorData.msg || '認証に失敗しました') };
       }
 
-      const { error, data } = result;
-      alert('AuthContext: signInWithPassword完了 - ' + (error ? error.message : '成功'));
+      const data = await response.json();
+      alert('AuthContext: 認証成功、セッション設定中...');
 
-      if (error) {
-        logger.error('Sign in error:', error.message);
-        return { error: new Error(error.message) };
+      // セッションをSupabase SDKに設定
+      const { error: setError } = await supabase.auth.setSession({
+        access_token: data.access_token,
+        refresh_token: data.refresh_token,
+      });
+
+      if (setError) {
+        alert('AuthContext: セッション設定エラー - ' + setError.message);
+        return { error: new Error(setError.message) };
       }
 
-      console.log('[Login] Sign in successful, session:', data.session ? 'obtained' : 'null');
-      logger.info('Sign in successful, session:', data.session ? 'obtained' : 'null');
+      alert('AuthContext: 完了');
+      logger.info('Sign in successful via direct fetch');
       return { error: null };
     } catch (err) {
       console.log('[Login] Sign in exception:', err);
