@@ -52,6 +52,44 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // 初期管理者メールアドレスリスト（ブートストラップ用）
   const BOOTSTRAP_ADMIN_EMAILS = ['hn@g-house.osaka.jp'];
 
+  // リトライ付きfetch
+  const fetchWithRetry = async (url: string, options: RequestInit, retries = 2): Promise<Response | null> => {
+    for (let i = 0; i <= retries; i++) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 8000);
+
+        const response = await fetch(url, {
+          ...options,
+          signal: controller.signal,
+        });
+
+        clearTimeout(timeoutId);
+
+        if (response.ok) {
+          return response;
+        }
+
+        // 503や502はリトライ
+        if (response.status >= 500 && i < retries) {
+          logger.warn(`Server error ${response.status}, retrying... (${i + 1}/${retries})`);
+          await new Promise(r => setTimeout(r, 1000 * (i + 1))); // 指数バックオフ
+          continue;
+        }
+
+        return response;
+      } catch (err) {
+        if (err instanceof Error && err.name === 'AbortError') {
+          logger.warn(`Request timed out, retrying... (${i + 1}/${retries})`);
+        } else if (i < retries) {
+          logger.warn(`Network error, retrying... (${i + 1}/${retries})`);
+          await new Promise(r => setTimeout(r, 1000 * (i + 1)));
+        }
+      }
+    }
+    return null;
+  };
+
   // Fetch app user data from users table (via API to bypass RLS)
   const fetchUserData = async (_authId: string): Promise<User | null> => {
     try {
@@ -62,72 +100,44 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return null;
       }
 
-      // API経由でユーザーデータを取得（サービスロールでRLSをバイパス）- 8秒タイムアウト
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 8000);
+      // API経由でユーザーデータを取得（サービスロールでRLSをバイパス）- リトライ付き
+      const response = await fetchWithRetry('/api/auth/get-user', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json',
+        },
+      });
 
-        const response = await fetch('/api/auth/get-user', {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${session.access_token}`,
-            'Content-Type': 'application/json',
-          },
-          signal: controller.signal,
-        });
-
-        clearTimeout(timeoutId);
-
-        if (response.ok) {
-          const { user } = await response.json();
-          if (user) {
-            logger.info('User fetched via API:', user.email, 'role:', user.role);
-            return user;
-          }
-        } else {
-          const errorText = await response.text();
-          logger.warn('API fetch failed:', errorText);
+      if (response?.ok) {
+        const { user } = await response.json();
+        if (user) {
+          logger.info('User fetched via API:', user.email, 'role:', user.role);
+          return user;
         }
-      } catch (apiError) {
-        if (apiError instanceof Error && apiError.name === 'AbortError') {
-          logger.warn('API fetch timed out after 8 seconds');
-        } else {
-          logger.warn('API not available:', apiError);
-        }
+      } else if (response) {
+        const errorText = await response.text();
+        logger.warn('API fetch failed:', errorText);
       }
 
-      // フォールバック: ユーザー作成を試みる（5秒タイムアウト）
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000);
+      // フォールバック: ユーザー作成を試みる
+      const createResponse = await fetchWithRetry('/api/auth/init-admin', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: session.user.email,
+          auth_id: session.user.id,
+        }),
+      }, 1); // リトライ1回
 
-        const createResponse = await fetch('/api/auth/init-admin', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${session.access_token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            email: session.user.email,
-            auth_id: session.user.id,
-          }),
-          signal: controller.signal,
-        });
-
-        clearTimeout(timeoutId);
-
-        if (createResponse.ok) {
-          const { user: newUser } = await createResponse.json();
-          if (newUser) {
-            logger.info('User record created via API:', newUser.email, 'role:', newUser.role);
-            return newUser;
-          }
-        }
-      } catch (createError) {
-        if (createError instanceof Error && createError.name === 'AbortError') {
-          logger.warn('User creation timed out');
-        } else {
-          logger.error('Error creating user via API:', createError);
+      if (createResponse?.ok) {
+        const { user: newUser } = await createResponse.json();
+        if (newUser) {
+          logger.info('User record created via API:', newUser.email, 'role:', newUser.role);
+          return newUser;
         }
       }
 
@@ -277,7 +287,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Listen for auth changes
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      logger.info('Auth state changed:', event);
       setSession(session);
       setSupabaseUser(session?.user ?? null);
 
@@ -296,7 +307,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     });
 
-    return () => subscription.unsubscribe();
+    // 定期的なセッションリフレッシュ（10分ごと）
+    const refreshInterval = setInterval(async () => {
+      try {
+        const { data: { session: currentSession } } = await supabase.auth.getSession();
+        if (currentSession) {
+          // セッションの残り時間をチェック（5分以内なら更新）
+          const expiresAt = currentSession.expires_at;
+          const now = Math.floor(Date.now() / 1000);
+          const timeUntilExpiry = expiresAt ? expiresAt - now : 0;
+
+          if (timeUntilExpiry > 0 && timeUntilExpiry < 300) {
+            logger.info('Session expiring soon, refreshing...');
+            const { data, error } = await supabase.auth.refreshSession();
+            if (error) {
+              logger.warn('Session refresh failed:', error.message);
+            } else if (data.session) {
+              logger.info('Session refreshed successfully');
+            }
+          }
+        }
+      } catch (err) {
+        logger.warn('Session refresh check failed:', err);
+      }
+    }, 10 * 60 * 1000); // 10分ごと
+
+    return () => {
+      subscription.unsubscribe();
+      clearInterval(refreshInterval);
+    };
   }, []);
 
   const signIn = async (email: string, password: string) => {

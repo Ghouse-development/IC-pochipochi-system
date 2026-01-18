@@ -181,20 +181,92 @@ const AdditionalInputs: React.FC<AdditionalInputProps> = ({ categoryId, values, 
     );
   }
 
-  // 太陽光 - その他の自由入力
-  if (categoryId === 'solar' && values.solar === 'other') {
+  // 太陽光 - 階層選択UI
+  if (categoryId === 'solar' && values.solar === 'yes') {
     return (
-      <div className="mt-3 p-3 bg-yellow-50 rounded-lg">
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          太陽光メーカー名（その他）
-        </label>
-        <input
-          type="text"
-          value={values.solar_other || ''}
-          onChange={(e) => onChangeExtra('solar_other', e.target.value)}
-          placeholder="メーカー名を入力"
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-        />
+      <div className="mt-3 space-y-3">
+        {/* 第1階層: ネクストエナジー / その他 */}
+        <div className="p-3 bg-blue-50 rounded-lg">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            太陽光メーカー
+          </label>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                onChangeExtra('solar_brand', 'nextenergy');
+                onChangeExtra('solar_other_brand', undefined);
+                onChangeExtra('solar_other', undefined);
+              }}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                values.solar_brand === 'nextenergy'
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-white border border-gray-300 text-gray-700 hover:border-blue-300'
+              }`}
+            >
+              ネクストエナジー
+            </button>
+            <button
+              type="button"
+              onClick={() => onChangeExtra('solar_brand', 'other')}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                values.solar_brand === 'other'
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-white border border-gray-300 text-gray-700 hover:border-blue-300'
+              }`}
+            >
+              その他
+            </button>
+          </div>
+        </div>
+
+        {/* 第2階層: その他の場合のメーカー選択 */}
+        {values.solar_brand === 'other' && (
+          <div className="p-3 bg-yellow-50 rounded-lg">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              その他メーカー
+            </label>
+            <div className="flex flex-wrap gap-2 mb-2">
+              {[
+                { id: 'canadian', label: 'カナディアンソーラー' },
+                { id: 'maxeon', label: 'マキシオン' },
+                { id: 'choshu', label: '長州産業' },
+                { id: 'other', label: 'その他' },
+              ].map((opt) => (
+                <button
+                  key={opt.id}
+                  type="button"
+                  onClick={() => {
+                    onChangeExtra('solar_other_brand', opt.id);
+                    if (opt.id !== 'other') {
+                      onChangeExtra('solar_other', undefined);
+                    }
+                  }}
+                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                    values.solar_other_brand === opt.id
+                      ? 'bg-yellow-500 text-white'
+                      : 'bg-white border border-gray-300 text-gray-700 hover:border-yellow-300'
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+
+            {/* 第3階層: その他の場合の自由入力 */}
+            {values.solar_other_brand === 'other' && (
+              <div className="mt-2">
+                <input
+                  type="text"
+                  value={values.solar_other || ''}
+                  onChange={(e) => onChangeExtra('solar_other', e.target.value)}
+                  placeholder="メーカー名を入力"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500"
+                />
+              </div>
+            )}
+          </div>
+        )}
       </div>
     );
   }

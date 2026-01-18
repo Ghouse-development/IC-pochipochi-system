@@ -396,11 +396,7 @@ const ENERGY_SECTION: BuildingInfoSection = {
       required: false,
       options: [
         { id: 'no', label: '無' },
-        { id: 'nextenergy', label: 'ネクストエナジー' },
-        { id: 'canadian', label: 'カナディアンソーラー' },
-        { id: 'maxeon', label: 'マキシオン' },
-        { id: 'choshu', label: '長州産業' },
-        { id: 'other', label: 'その他' },
+        { id: 'yes', label: '有' },
       ],
     },
     {
@@ -527,7 +523,9 @@ export interface BuildingInfo {
   water_heater?: string;
   ventilation?: string;
   intercom_count?: string;
-  solar?: string;
+  solar?: string; // 無/有
+  solar_brand?: string; // ネクストエナジー/その他
+  solar_other_brand?: string; // カナディアンソーラー/マキシオン/長州産業/その他
   solar_other?: string; // 太陽光その他の自由入力
   battery?: string;
   battery_other?: string; // 蓄電池その他の自由入力
@@ -577,7 +575,8 @@ export const DEFAULT_BUILDING_INFO: BuildingInfo = {
   water_heater: 'ecocute', // デフォルト: エコキュート
   ventilation: 'panasonic',
   intercom_count: '1',
-  solar: 'nextenergy', // デフォルト: ネクストエナジー
+  solar: 'yes', // デフォルト: 有
+  solar_brand: 'nextenergy', // デフォルト: ネクストエナジー
   battery: 'no', // デフォルト: 無
   v2h: 'no',
   // その他
