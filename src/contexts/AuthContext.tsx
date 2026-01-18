@@ -413,9 +413,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       logger.info('Attempting sign in for:', email);
       alert('AuthContext: signIn開始');
 
-      // 直接signInWithPasswordを呼び出し
+      // タイムアウト付きでsignInWithPasswordを呼び出し
       alert('AuthContext: signInWithPassword呼び出し前');
-      const { error, data } = await supabase.auth.signInWithPassword({ email, password });
+
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('5秒タイムアウト')), 5000);
+      });
+
+      const authPromise = supabase.auth.signInWithPassword({ email, password });
+
+      let result;
+      try {
+        result = await Promise.race([authPromise, timeoutPromise]) as { error: any; data: any };
+      } catch (timeoutErr) {
+        alert('AuthContext: タイムアウト発生');
+        throw timeoutErr;
+      }
+
+      const { error, data } = result;
       alert('AuthContext: signInWithPassword完了 - ' + (error ? error.message : '成功'));
 
       if (error) {
