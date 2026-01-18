@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { useProjectStore, type Project } from '../../stores/useProjectStore';
 import { useSelectionStore } from '../../stores/useSelectionStore';
+import { useProjectSelection } from '../../hooks/useProjectSelection';
 
 interface ProjectListProps {
   onProjectSelect?: (project: Project) => void;
@@ -38,8 +39,9 @@ export const ProjectList: React.FC<ProjectListProps> = ({
   onProjectSelect,
   onCreateNew,
 }) => {
-  const { projects, currentProject, setCurrentProject, deleteProject } = useProjectStore();
-  const { setProjectInfo, projectStatus } = useSelectionStore();
+  const { deleteProject } = useProjectStore();
+  const { projectStatus } = useSelectionStore();
+  const { currentProject, projects, selectProject } = useProjectSelection();
   const [searchQuery, setSearchQuery] = useState('');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<string | null>(null);
 
@@ -55,8 +57,7 @@ export const ProjectList: React.FC<ProjectListProps> = ({
 
   // プロジェクト選択
   const handleSelectProject = (project: Project) => {
-    setCurrentProject(project);
-    setProjectInfo(project.name, project.customer.name, project.building.planType);
+    selectProject(project);
     onProjectSelect?.(project);
   };
 

@@ -36,7 +36,12 @@ export const SHOWROOM_CATEGORIES = {
 } as const;
 
 export interface ShowroomEstimateState {
+  currentProjectId: string | null;
   items: ShowroomEstimateItem[];
+
+  // プロジェクト切り替え
+  setCurrentProject: (projectId: string) => void;
+  getCurrentProjectId: () => string | null;
 
   // アクション
   addItem: (item: Omit<ShowroomEstimateItem, 'id' | 'addedAt'>) => void;
@@ -47,10 +52,53 @@ export interface ShowroomEstimateState {
   clearAll: () => void;
 }
 
+// プロジェクトごとのデータをLocalStorageに保存/読み込み
+const getProjectStorageKey = (projectId: string) => `ic-pochipochi-showroom-${projectId}`;
+
+const saveShowroomData = (projectId: string, items: ShowroomEstimateItem[]) => {
+  try {
+    localStorage.setItem(getProjectStorageKey(projectId), JSON.stringify(items));
+  } catch (e) {
+    console.error('Failed to save showroom data:', e);
+  }
+};
+
+const loadShowroomData = (projectId: string): ShowroomEstimateItem[] | null => {
+  try {
+    const data = localStorage.getItem(getProjectStorageKey(projectId));
+    if (data) {
+      return JSON.parse(data);
+    }
+  } catch (e) {
+    console.error('Failed to load showroom data:', e);
+  }
+  return null;
+};
+
 export const useShowroomEstimateStore = create<ShowroomEstimateState>()(
   persist(
     (set, get) => ({
+      currentProjectId: null,
       items: [],
+
+      setCurrentProject: (projectId) => {
+        const currentState = get();
+
+        // 現在のプロジェクトデータを保存
+        if (currentState.currentProjectId) {
+          saveShowroomData(currentState.currentProjectId, currentState.items);
+        }
+
+        // 新しいプロジェクトのデータを読み込み
+        const savedItems = loadShowroomData(projectId);
+
+        set({
+          currentProjectId: projectId,
+          items: savedItems || [],
+        });
+      },
+
+      getCurrentProjectId: () => get().currentProjectId,
 
       addItem: (item) => {
         const newItem: ShowroomEstimateItem = {

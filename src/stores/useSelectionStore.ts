@@ -42,6 +42,9 @@ export interface ProjectStatusInfo {
 
 // ストアの状態
 interface SelectionState {
+  // 現在のプロジェクトID
+  currentProjectId: string | null;
+
   // カテゴリごとの選択状態
   selections: Record<string, CategorySelection>;
 
@@ -58,6 +61,10 @@ interface SelectionState {
     by?: string;
     notes?: string;
   }>;
+
+  // プロジェクト切り替え
+  setCurrentProject: (projectId: string, projectName: string, customerName: string, planName?: string) => void;
+  getCurrentProjectId: () => string | null;
 
   // アクション
   setSelection: (categoryName: string, selection: CategorySelection) => void;
@@ -94,15 +101,75 @@ const PROJECT_STATUS_LABELS: Record<ProjectStatus, string> = {
   finalized: '最終確定',
 };
 
+// プロジェクトごとのデータをLocalStorageに保存/読み込み
+const getProjectStorageKey = (projectId: string) => `ic-pochipochi-project-${projectId}`;
+
+const saveProjectData = (projectId: string, data: {
+  selections: Record<string, CategorySelection>;
+  projectStatus: ProjectStatus;
+  statusHistory: Array<{ status: ProjectStatus; timestamp: string; by?: string; notes?: string }>;
+}) => {
+  try {
+    localStorage.setItem(getProjectStorageKey(projectId), JSON.stringify(data));
+  } catch (e) {
+    console.error('Failed to save project data:', e);
+  }
+};
+
+const loadProjectData = (projectId: string): {
+  selections: Record<string, CategorySelection>;
+  projectStatus: ProjectStatus;
+  statusHistory: Array<{ status: ProjectStatus; timestamp: string; by?: string; notes?: string }>;
+} | null => {
+  try {
+    const data = localStorage.getItem(getProjectStorageKey(projectId));
+    if (data) {
+      return JSON.parse(data);
+    }
+  } catch (e) {
+    console.error('Failed to load project data:', e);
+  }
+  return null;
+};
+
 export const useSelectionStore = create<SelectionState>()(
   persist(
     (set, get) => ({
+      currentProjectId: null,
       selections: {},
       projectName: '',
       customerName: '',
       planName: 'LACIE',
       projectStatus: 'draft' as ProjectStatus,
       statusHistory: [],
+
+      setCurrentProject: (projectId, projectName, customerName, planName = 'LACIE') => {
+        const currentState = get();
+
+        // 現在のプロジェクトデータを保存
+        if (currentState.currentProjectId) {
+          saveProjectData(currentState.currentProjectId, {
+            selections: currentState.selections,
+            projectStatus: currentState.projectStatus,
+            statusHistory: currentState.statusHistory,
+          });
+        }
+
+        // 新しいプロジェクトのデータを読み込み
+        const savedData = loadProjectData(projectId);
+
+        set({
+          currentProjectId: projectId,
+          projectName,
+          customerName,
+          planName,
+          selections: savedData?.selections || {},
+          projectStatus: savedData?.projectStatus || 'draft',
+          statusHistory: savedData?.statusHistory || [],
+        });
+      },
+
+      getCurrentProjectId: () => get().currentProjectId,
 
       setSelection: (categoryName, selection) => {
         set(state => ({
