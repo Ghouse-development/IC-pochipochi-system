@@ -357,21 +357,40 @@ const EQUIPMENT_SECTION: BuildingInfoSection = {
   ],
 };
 
-// 給湯器商品タイプ
+// 給湯器タイプ（カタログスタイル表示用）
+export const WATER_HEATER_TYPES = [
+  { id: 'ecocute', name: 'エコキュート', emoji: '♨️', description: '電気給湯器（標準）' },
+  { id: 'ohisama', name: 'おひさまエコキュート', emoji: '☀️', description: '太陽光連携型給湯器' },
+  { id: 'niagara', name: 'ナイアガラ出湯', emoji: '💧', description: '高圧給湯エコキュート' },
+  { id: 'ecojoz', name: 'エコジョーズ', emoji: '🔥', description: 'ガス給湯器（ガス引込み必要）' },
+] as const;
+
+// 給湯器商品タイプ（タイプ選択後のサブ選択肢）
 export const WATER_HEATER_PRODUCTS = {
   ecocute: [
-    { id: 'ecocute_370_standard', label: '370L 標準', description: '3〜4人家族向け' },
+    { id: 'ecocute_370_standard', label: '370L 普通', description: '3〜4人家族向け', isDefault: true },
     { id: 'ecocute_370_slim', label: '370L 薄型', description: '設置スペースが限られる場合' },
-    { id: 'ecocute_460_standard', label: '460L 標準', description: '4〜5人家族向け' },
+    { id: 'ecocute_460_standard', label: '460L 普通', description: '4〜5人家族向け' },
     { id: 'ecocute_460_slim', label: '460L 薄型', description: '大家族・設置スペース限定' },
-    { id: 'ecocute_550_standard', label: '550L 標準', description: '5人以上の大家族向け' },
+  ],
+  ohisama: [
+    { id: 'ohisama_370_standard', label: '370L 普通', description: '3〜4人家族向け', isDefault: true },
+    { id: 'ohisama_370_slim', label: '370L 薄型', description: '設置スペースが限られる場合' },
+    { id: 'ohisama_460_standard', label: '460L 普通', description: '4〜5人家族向け' },
+    { id: 'ohisama_460_slim', label: '460L 薄型', description: '大家族・設置スペース限定' },
+  ],
+  niagara: [
+    { id: 'niagara_370_standard', label: '370L 普通', description: '3〜4人家族向け', isDefault: true },
+    { id: 'niagara_370_slim', label: '370L 薄型', description: '設置スペースが限られる場合' },
+    { id: 'niagara_460_standard', label: '460L 普通', description: '4〜5人家族向け' },
+    { id: 'niagara_460_slim', label: '460L 薄型', description: '大家族・設置スペース限定' },
   ],
   ecojoz: [
-    { id: 'ecojoz_24', label: '24号', description: '2〜3人家族向け' },
+    { id: 'ecojoz_24', label: '24号', description: '2〜3人家族向け', isDefault: true },
     { id: 'ecojoz_20', label: '20号', description: '1〜2人家族向け' },
     { id: 'ecojoz_16', label: '16号', description: '単身向け' },
   ],
-};
+} as const;
 
 // 電気・エネルギーセクション
 const ENERGY_SECTION: BuildingInfoSection = {
@@ -383,8 +402,10 @@ const ENERGY_SECTION: BuildingInfoSection = {
       name: '給湯器',
       required: false,
       options: [
-        { id: 'ecocute', label: 'エコキュート', description: '電気給湯器（ヒートポンプ）' },
-        { id: 'ecojoz', label: 'エコジョーズ', description: 'ガス給湯器' },
+        { id: 'ecocute', label: 'エコキュート', description: '電気給湯器（標準）' },
+        { id: 'ohisama', label: 'おひさまエコキュート', description: '太陽光連携型給湯器' },
+        { id: 'niagara', label: 'ナイアガラ出湯', description: '高圧給湯エコキュート' },
+        { id: 'ecojoz', label: 'エコジョーズ', description: 'ガス給湯器（ガス引込み必要）' },
       ],
     },
     {

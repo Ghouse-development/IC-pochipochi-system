@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 import { Check, ChevronRight, ChevronLeft, Plus, X } from 'lucide-react';
 import {
   BUILDING_INFO_SECTIONS,
+  WATER_HEATER_TYPES,
   WATER_HEATER_PRODUCTS,
   type BuildingInfo,
   type BuildingInfoSection,
@@ -70,6 +71,12 @@ const SelectionCard: React.FC<SelectionCardProps> = ({ option, isSelected, onCli
   );
 };
 
+// 給湯器タイプのemoji取得
+const getWaterHeaterEmoji = (typeId: string): string | null => {
+  const type = WATER_HEATER_TYPES.find(t => t.id === typeId);
+  return type?.emoji || null;
+};
+
 // カテゴリ選択コンポーネント
 interface CategorySelectorProps {
   category: BuildingInfoCategory;
@@ -103,22 +110,70 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({ category, value, on
     }
   };
 
+  // 給湯器カテゴリの場合はカタログスタイルのカードを表示
+  const isWaterHeater = category.id === 'water_heater';
+
   return (
     <div className="mb-6">
       <h4 className="text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
         {category.name}
         {category.required && <span className="text-red-500 text-xs">*必須</span>}
       </h4>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-        {category.options.map(option => (
-          <SelectionCard
-            key={option.id}
-            option={option}
-            isSelected={isSelected(option.id)}
-            onClick={() => handleClick(option.id)}
-          />
-        ))}
-      </div>
+      {isWaterHeater ? (
+        // 給湯器: カタログスタイルのカード表示
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+          {category.options.map(option => {
+            const emoji = getWaterHeaterEmoji(option.id);
+            const selected = isSelected(option.id);
+            return (
+              <button
+                key={option.id}
+                type="button"
+                onClick={() => handleClick(option.id)}
+                className={`group bg-white rounded-lg overflow-hidden transition-all duration-200 text-left w-full ${
+                  selected
+                    ? 'border-2 border-blue-500 shadow-lg'
+                    : 'border border-gray-200 hover:border-blue-300 hover:shadow-md'
+                }`}
+              >
+                {/* 画像エリア（絵文字） */}
+                <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden flex flex-col items-center justify-center">
+                  <span className="text-3xl transition-transform duration-200 group-hover:scale-110">
+                    {emoji}
+                  </span>
+                  {/* 選択済みマーク */}
+                  {selected && (
+                    <div className="absolute top-1 right-1 bg-blue-500 rounded-full p-1">
+                      <Check className="w-3 h-3 text-white" strokeWidth={3} />
+                    </div>
+                  )}
+                </div>
+                {/* 情報エリア */}
+                <div className="p-2">
+                  <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
+                    {option.label}
+                  </h3>
+                  {option.description && (
+                    <span className="text-[10px] text-gray-400 line-clamp-2">{option.description}</span>
+                  )}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      ) : (
+        // 通常のカード表示
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+          {category.options.map(option => (
+            <SelectionCard
+              key={option.id}
+              option={option}
+              isSelected={isSelected(option.id)}
+              onClick={() => handleClick(option.id)}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
@@ -248,45 +303,112 @@ interface AdditionalInputProps {
   rooms?: RoomOption[];
 }
 
-const AdditionalInputs: React.FC<AdditionalInputProps> = ({ categoryId, values, onChangeExtra, rooms = [] }) => {
-  // 給湯器 - 商品タイプ選択
-  if (categoryId === 'water_heater' && values.water_heater) {
-    const products = values.water_heater === 'ecocute'
-      ? WATER_HEATER_PRODUCTS.ecocute
-      : values.water_heater === 'ecojoz'
-        ? WATER_HEATER_PRODUCTS.ecojoz
-        : [];
+// 給湯器タイプ別商品選択コンポーネント
+interface WaterHeaterProductSelectorProps {
+  waterHeaterType: string;
+  selectedProduct: string | undefined;
+  onSelectProduct: (productId: string) => void;
+}
 
-    if (products.length > 0) {
-      return (
-        <div className="mt-3 p-3 bg-blue-50 rounded-lg">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            {values.water_heater === 'ecocute' ? 'エコキュート' : 'エコジョーズ'}タイプ選択
-          </label>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-            {products.map((product) => (
-              <button
-                key={product.id}
-                type="button"
-                onClick={() => onChangeExtra('water_heater_product', product.id)}
-                className={`p-3 rounded-lg text-left transition-all ${
-                  values.water_heater_product === product.id
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-white border border-gray-300 text-gray-700 hover:border-blue-300'
-                }`}
-              >
-                <div className="font-medium text-sm">{product.label}</div>
-                {product.description && (
-                  <div className={`text-xs mt-1 ${values.water_heater_product === product.id ? 'text-blue-100' : 'text-gray-500'}`}>
-                    {product.description}
+const WaterHeaterProductSelector: React.FC<WaterHeaterProductSelectorProps> = ({
+  waterHeaterType,
+  selectedProduct,
+  onSelectProduct,
+}) => {
+  const selectedType = WATER_HEATER_TYPES.find(t => t.id === waterHeaterType);
+  const products = waterHeaterType === 'ecocute'
+    ? WATER_HEATER_PRODUCTS.ecocute
+    : waterHeaterType === 'ohisama'
+      ? WATER_HEATER_PRODUCTS.ohisama
+      : waterHeaterType === 'niagara'
+        ? WATER_HEATER_PRODUCTS.niagara
+        : waterHeaterType === 'ecojoz'
+          ? WATER_HEATER_PRODUCTS.ecojoz
+          : [];
+
+  // 初期表示時にデフォルト値を設定（エコキュート→370L普通）
+  React.useEffect(() => {
+    if (!waterHeaterType || selectedProduct) return;
+
+    const currentProducts = waterHeaterType === 'ecocute'
+      ? WATER_HEATER_PRODUCTS.ecocute
+      : waterHeaterType === 'ohisama'
+        ? WATER_HEATER_PRODUCTS.ohisama
+        : waterHeaterType === 'niagara'
+          ? WATER_HEATER_PRODUCTS.niagara
+          : waterHeaterType === 'ecojoz'
+            ? WATER_HEATER_PRODUCTS.ecojoz
+            : [];
+
+    if (currentProducts.length > 0) {
+      const defaultProduct = currentProducts.find(p => 'isDefault' in p && p.isDefault) || currentProducts[0];
+      onSelectProduct(defaultProduct.id);
+    }
+  }, [waterHeaterType, selectedProduct, onSelectProduct]);
+
+  if (products.length === 0) return null;
+
+  return (
+    <div className="mt-4 p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
+      <div className="flex items-center gap-2 mb-3">
+        <span className="text-xl">{selectedType?.emoji}</span>
+        <label className="text-sm font-bold text-gray-800">
+          {selectedType?.name} タイプ選択
+        </label>
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+        {products.map((product) => {
+          const isSelected = selectedProduct === product.id;
+          return (
+            <button
+              key={product.id}
+              type="button"
+              onClick={() => onSelectProduct(product.id)}
+              className={`group relative bg-white rounded-lg overflow-hidden transition-all duration-200 text-left w-full ${
+                isSelected
+                  ? 'border-2 border-blue-500 shadow-lg ring-2 ring-blue-100'
+                  : 'border border-gray-200 hover:border-blue-300 hover:shadow-md'
+              }`}
+            >
+              {/* 画像エリア（絵文字で代替） */}
+              <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden flex flex-col items-center justify-center">
+                <span className="text-3xl transition-transform duration-200 group-hover:scale-110">
+                  {selectedType?.emoji}
+                </span>
+                {/* 選択済みマーク */}
+                {isSelected && (
+                  <div className="absolute top-1 right-1 bg-blue-500 rounded-full p-1">
+                    <Check className="w-3 h-3 text-white" strokeWidth={3} />
                   </div>
                 )}
-              </button>
-            ))}
-          </div>
-        </div>
-      );
-    }
+              </div>
+              {/* 情報エリア */}
+              <div className="p-2">
+                <h3 className="font-bold text-xs text-gray-800 line-clamp-1">
+                  {product.label}
+                </h3>
+                {'description' in product && product.description && (
+                  <span className="text-[10px] text-gray-400 line-clamp-1">{product.description}</span>
+                )}
+              </div>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+const AdditionalInputs: React.FC<AdditionalInputProps> = ({ categoryId, values, onChangeExtra, rooms = [] }) => {
+  // 給湯器 - カタログスタイルの商品タイプ選択
+  if (categoryId === 'water_heater' && values.water_heater) {
+    return (
+      <WaterHeaterProductSelector
+        waterHeaterType={values.water_heater}
+        selectedProduct={values.water_heater_product as string | undefined}
+        onSelectProduct={(productId) => onChangeExtra('water_heater_product', productId)}
+      />
+    );
   }
 
   // ポーチ拡張 - 面積入力
@@ -718,10 +840,15 @@ export const BuildingInfoSelector: React.FC<BuildingInfoSelectorProps> = ({
   const isLastSection = currentSectionIndex === sections.length - 1;
 
   const handleCategoryChange = (categoryId: string, optionValue: string | string[]) => {
-    onChange({
+    const newValue = {
       ...value,
       [categoryId]: optionValue,
-    });
+    };
+    // 給湯器タイプ変更時はサブ選択をリセット
+    if (categoryId === 'water_heater') {
+      newValue.water_heater_product = undefined;
+    }
+    onChange(newValue);
   };
 
   // 追加フィールド（面積、自由入力など）の変更処理
