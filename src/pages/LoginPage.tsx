@@ -157,6 +157,13 @@ export function LoginPage() {
     );
   }
 
+  // デバッグ用: ストレージクリアボタン
+  const handleClearStorage = () => {
+    localStorage.clear();
+    sessionStorage.clear();
+    window.location.reload();
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
@@ -235,6 +242,18 @@ export function LoginPage() {
             </button>
           </div>
         </form>
+
+        {/* デバッグ情報 */}
+        <div className="mt-6 pt-4 border-t border-gray-200 text-xs text-gray-400 text-center">
+          <p>Build: {import.meta.env.VITE_GIT_HASH || 'dev'}</p>
+          <button
+            type="button"
+            onClick={handleClearStorage}
+            className="mt-2 text-red-400 hover:text-red-600 underline"
+          >
+            キャッシュクリア
+          </button>
+        </div>
       </div>
     </div>
   );
