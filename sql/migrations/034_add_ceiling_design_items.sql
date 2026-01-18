@@ -7,10 +7,11 @@ DECLARE
   design_category_id uuid;
 BEGIN
   -- 設計カテゴリが存在するか確認、なければ作成
+  -- category_type enumは 'exterior', 'interior', 'equipment', 'other' のみ有効
   SELECT id INTO design_category_id FROM categories WHERE slug = 'design' LIMIT 1;
   IF design_category_id IS NULL THEN
     INSERT INTO categories (name, slug, category_type, display_order, is_active)
-    VALUES ('設計', 'design', 'design', 0, true)
+    VALUES ('設計', 'design', 'other', 0, true)
     RETURNING id INTO design_category_id;
   END IF;
 
