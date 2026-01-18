@@ -254,18 +254,44 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               setUser(userData);
               await updateLastLogin(userData.id);
             } else {
-              // ユーザーデータ取得失敗 - セッションをクリアして再ログインを促す
-              logger.warn('Failed to fetch user data, clearing session');
-              await supabase.auth.signOut();
-              setSession(null);
-              setSupabaseUser(null);
+              // API失敗時はセッション情報から仮ユーザーを作成（セッションは維持）
+              logger.warn('Failed to fetch user data, creating fallback user from session');
+              const fallbackUser: User = {
+                id: session.user.id,
+                auth_id: session.user.id,
+                email: session.user.email || '',
+                full_name: session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'User',
+                full_name_kana: null,
+                role: BOOTSTRAP_ADMIN_EMAILS.includes(session.user.email?.toLowerCase() || '') ? 'admin' : 'coordinator',
+                phone: null,
+                company_name: null,
+                organization_id: null,
+                is_active: true,
+                last_login_at: new Date().toISOString(),
+                created_at: session.user.created_at || new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+              };
+              setUser(fallbackUser);
             }
           } catch (fetchError) {
             logger.error('Error fetching user data:', fetchError);
-            // フェッチエラー時もセッションをクリア
-            await supabase.auth.signOut();
-            setSession(null);
-            setSupabaseUser(null);
+            // フェッチエラー時もセッション情報から仮ユーザーを作成
+            const fallbackUser: User = {
+              id: session.user.id,
+              auth_id: session.user.id,
+              email: session.user.email || '',
+              full_name: session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'User',
+              full_name_kana: null,
+              role: BOOTSTRAP_ADMIN_EMAILS.includes(session.user.email?.toLowerCase() || '') ? 'admin' : 'coordinator',
+              phone: null,
+              company_name: null,
+              organization_id: null,
+              is_active: true,
+              last_login_at: new Date().toISOString(),
+              created_at: session.user.created_at || new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+            };
+            setUser(fallbackUser);
           }
         }
       } catch (error) {
@@ -295,12 +321,47 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (session?.user) {
         try {
           const userData = await fetchUserData(session.user.id);
-          setUser(userData);
           if (userData) {
+            setUser(userData);
             await updateLastLogin(userData.id);
+          } else {
+            // API失敗時はセッション情報から仮ユーザーを作成
+            const fallbackUser: User = {
+              id: session.user.id,
+              auth_id: session.user.id,
+              email: session.user.email || '',
+              full_name: session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'User',
+              full_name_kana: null,
+              role: BOOTSTRAP_ADMIN_EMAILS.includes(session.user.email?.toLowerCase() || '') ? 'admin' : 'coordinator',
+              phone: null,
+              company_name: null,
+              organization_id: null,
+              is_active: true,
+              last_login_at: new Date().toISOString(),
+              created_at: session.user.created_at || new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+            };
+            setUser(fallbackUser);
           }
         } catch (error) {
           logger.error('Error in auth state change:', error);
+          // エラー時も仮ユーザーを作成
+          const fallbackUser: User = {
+            id: session.user.id,
+            auth_id: session.user.id,
+            email: session.user.email || '',
+            full_name: session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'User',
+            full_name_kana: null,
+            role: BOOTSTRAP_ADMIN_EMAILS.includes(session.user.email?.toLowerCase() || '') ? 'admin' : 'coordinator',
+            phone: null,
+            company_name: null,
+            organization_id: null,
+            is_active: true,
+            last_login_at: new Date().toISOString(),
+            created_at: session.user.created_at || new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          };
+          setUser(fallbackUser);
         }
       } else {
         setUser(null);
