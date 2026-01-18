@@ -39,6 +39,8 @@ export function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('[LoginPage] handleSubmit called');
+    alert('ログイン処理開始');
     setError(null);
     setIsLoading(true);
 
@@ -49,7 +51,10 @@ export function LoginPage() {
     }, 15000);
 
     try {
+      console.log('[LoginPage] Calling signIn...');
       const { error } = await signIn(email, password);
+      console.log('[LoginPage] signIn returned, error:', error?.message || 'none');
+      alert('signIn完了: ' + (error ? error.message : '成功'));
       clearTimeout(timeoutId);
       if (error) {
         setError(error.message);
@@ -62,6 +67,7 @@ export function LoginPage() {
     } catch (err) {
       clearTimeout(timeoutId);
       console.error('Login error:', err);
+      alert('signIn例外: ' + (err instanceof Error ? err.message : '不明'));
       setError('ログインに失敗しました: ' + (err instanceof Error ? err.message : '不明なエラー'));
       setIsLoading(false);
     }

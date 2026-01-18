@@ -409,26 +409,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     try {
       logger.info('Attempting sign in for:', email);
+      console.log('[Login] Starting signIn for:', email);
 
-      // Promise.raceで確実にタイムアウト（10秒）
-      const timeoutPromise = new Promise<never>((_, reject) => {
-        setTimeout(() => {
-          reject(new Error('ログインがタイムアウトしました。ネットワーク接続を確認してください。'));
-        }, 10000);
-      });
+      // 直接signInWithPasswordを呼び出し
+      const { error, data } = await supabase.auth.signInWithPassword({ email, password });
 
-      const authPromise = supabase.auth.signInWithPassword({ email, password });
-
-      const { error, data } = await Promise.race([authPromise, timeoutPromise]);
+      console.log('[Login] signInWithPassword completed, error:', error?.message || 'none');
 
       if (error) {
         logger.error('Sign in error:', error.message);
         return { error: new Error(error.message) };
       }
 
+      console.log('[Login] Sign in successful, session:', data.session ? 'obtained' : 'null');
       logger.info('Sign in successful, session:', data.session ? 'obtained' : 'null');
       return { error: null };
     } catch (err) {
+      console.log('[Login] Sign in exception:', err);
       logger.error('Sign in exception:', err);
       return { error: err instanceof Error ? err : new Error('ログインに失敗しました') };
     }
