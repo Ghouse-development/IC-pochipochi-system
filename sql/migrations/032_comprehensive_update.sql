@@ -72,9 +72,9 @@ RETURNS TRIGGER AS $$
 BEGIN
   -- 材料費または工事費が変更されたら売価を再計算
   NEW.selling_price := calculate_selling_price(
-    NEW.material_cost,
-    NEW.installation_cost,
-    NEW.gross_margin_rate
+    COALESCE(NEW.material_cost, 0)::INTEGER,
+    COALESCE(NEW.installation_cost, 0)::INTEGER,
+    COALESCE(NEW.gross_margin_rate, 0.30)
   );
   RETURN NEW;
 END;
@@ -95,8 +95,8 @@ CREATE TRIGGER trg_update_selling_price
 -- =====================================================
 UPDATE item_pricing
 SET selling_price = calculate_selling_price(
-  COALESCE(material_cost, 0),
-  COALESCE(installation_cost, 0),
+  COALESCE(material_cost, 0)::INTEGER,
+  COALESCE(installation_cost, 0)::INTEGER,
   COALESCE(gross_margin_rate, 0.30)
 )
 WHERE selling_price IS NULL OR selling_price = 0;
