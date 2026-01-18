@@ -435,21 +435,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       const data = await response.json();
-      alert('AuthContext: 認証成功、セッション設定中...');
+      alert('AuthContext: 認証成功、トークン保存中...');
 
-      // セッションをSupabase SDKに設定
-      const { error: setError } = await supabase.auth.setSession({
+      // SDKのsetSessionもハングするため、localStorageに直接保存
+      const storageKey = 'sb-qqzqffkiyzeaampotgnn-auth-token';
+      const sessionData = {
         access_token: data.access_token,
         refresh_token: data.refresh_token,
-      });
+        expires_at: data.expires_at,
+        expires_in: data.expires_in,
+        token_type: data.token_type,
+        user: data.user,
+      };
+      localStorage.setItem(storageKey, JSON.stringify(sessionData));
 
-      if (setError) {
-        alert('AuthContext: セッション設定エラー - ' + setError.message);
-        return { error: new Error(setError.message) };
-      }
+      alert('AuthContext: 完了、リロードします');
+      logger.info('Sign in successful via direct fetch, reloading...');
 
-      alert('AuthContext: 完了');
-      logger.info('Sign in successful via direct fetch');
+      // ページをリロードしてセッションを反映
+      window.location.href = '/admin';
       return { error: null };
     } catch (err) {
       console.log('[Login] Sign in exception:', err);
