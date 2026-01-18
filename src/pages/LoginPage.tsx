@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 export function LoginPage() {
-  const { signIn, resetPassword, user, isLoading: authLoading } = useAuth();
+  const { signIn, resetPassword } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -13,23 +13,16 @@ export function LoginPage() {
   const [resetSent, setResetSent] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(false);
 
-  // ログイン成功後、userが設定されたらリダイレクト
+  // ログイン成功後、即座にリダイレクト（ユーザーデータは遷移先で取得）
   useEffect(() => {
-    if (loginSuccess && user && !authLoading) {
-      navigate('/admin', { replace: true });
-    }
-  }, [loginSuccess, user, authLoading, navigate]);
-
-  // ログイン成功後、5秒経ってもuserがセットされない場合は強制リダイレクト
-  useEffect(() => {
-    if (loginSuccess && !user) {
-      const forceRedirectTimeout = setTimeout(() => {
-        console.warn('User data fetch taking too long, forcing redirect');
+    if (loginSuccess) {
+      // 少し待ってからリダイレクト（セッション確立のため）
+      const redirectTimeout = setTimeout(() => {
         navigate('/admin', { replace: true });
-      }, 5000);
-      return () => clearTimeout(forceRedirectTimeout);
+      }, 500);
+      return () => clearTimeout(redirectTimeout);
     }
-  }, [loginSuccess, user, navigate]);
+  }, [loginSuccess, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
