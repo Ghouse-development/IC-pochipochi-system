@@ -58,6 +58,25 @@ export const AWNING_OPTIONS = [
   { id: 'awning-af95', name: 'アルフィン庇 AF95', description: '木目調仕上げ', productId: 'ext-awning-alfin-af95' },
 ] as const;
 
+// 太陽光オプション
+export const SOLAR_OPTIONS = [
+  { id: 'solar-no', name: 'なし', description: '太陽光パネルを設置しない', productId: 'ext-solar-none' },
+  { id: 'solar-yes', name: 'あり', description: '太陽光パネルを設置（金額は資金計画書に記載）', productId: 'ext-solar-yes' },
+] as const;
+
+// 蓄電池オプション
+export const BATTERY_OPTIONS = [
+  { id: 'battery-no', name: 'なし', description: '蓄電池を設置しない', productId: 'ext-battery-none' },
+  { id: 'battery-sumitomo', name: '住友電工', description: '住友電工製蓄電池', productId: 'ext-battery-sumitomo' },
+  { id: 'battery-other', name: 'その他', description: 'その他メーカー蓄電池', productId: 'ext-battery-other' },
+] as const;
+
+// V2Hオプション
+export const V2H_OPTIONS = [
+  { id: 'v2h-no', name: 'なし', description: 'V2Hを設置しない', productId: 'ext-v2h-none' },
+  { id: 'v2h-yes', name: 'あり', description: 'V2H（電気自動車充放電設備）を設置', productId: 'ext-v2h-yes' },
+] as const;
+
 // 複数色選択カテゴリ名（面積指定）
 export const MULTI_COLOR_CATEGORY_NAMES: readonly string[] = [
   '外壁',           // 外装 - 素材タイプ選択後

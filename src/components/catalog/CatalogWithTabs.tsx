@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback, lazy, Suspense } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, lazy, Suspense, useRef } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { Search, ClipboardCheck, Check, Star, ChevronRight, ChevronLeft, Home, X, FileDown, HelpCircle, Eye, Flame } from 'lucide-react';
 import { useToast } from '../common/Toast';
@@ -70,6 +70,9 @@ import {
   PERIPHERAL_PARTS_TYPES,
   GARAGE_SHUTTER_OPTIONS,
   AWNING_OPTIONS,
+  SOLAR_OPTIONS,
+  BATTERY_OPTIONS,
+  V2H_OPTIONS,
   MULTI_COLOR_CATEGORY_NAMES,
   ROOM_BASED_CATEGORY_NAMES,
 } from '../../config/categorySelectorConfig';
@@ -1214,17 +1217,39 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
     navigate(`/item/${item.id}`);
   }, [navigate]);
 
-  // 単一メーカー商品は直接詳細ページ（色選択）へ遷移
-  // 周辺部材（窓台・巾木等）でタイプ選択後、対象商品が1つしかない場合は自動遷移
+  // 単一アイテムカテゴリは直接詳細ページ（色選択）へ自動遷移
+  // - 複数色選択カテゴリ（外壁、軒天、壁材）は除外
+  // - 部屋選択カテゴリ（ベース床、クロス等）は除外
+  // - メーカー選択が必要なカテゴリは選択後に判定
+  const autoNavigatedRef = useRef<string | null>(null);
+
   useEffect(() => {
-    // 周辺部材カテゴリでタイプ選択済みの場合のみ処理
-    if (currentCategoryName !== '周辺部材' || !selectedMaterialType) return;
+    // ローディング中は処理しない
+    if (isLoading) return;
+    // カテゴリ未選択は処理しない
+    if (!currentCategoryName) return;
+    // 複数色選択カテゴリは専用UIを使用するため除外
+    if (MULTI_COLOR_CATEGORY_NAMES.includes(currentCategoryName)) return;
+    // 部屋選択カテゴリは専用UIを使用するため除外
+    if (ROOM_BASED_CATEGORY_NAMES.includes(currentCategoryName)) return;
+    // メーカー選択が必要なカテゴリはメーカー選択後のみ処理
+    if (needsManufacturerSelection && !selectedManufacturer) return;
+    // 素材タイプ選択が必要なカテゴリ（周辺部材など）は選択後のみ処理
+    const needsMaterialTypeFirst = ['周辺部材', '外壁', 'ベース床'].includes(currentCategoryName);
+    if (needsMaterialTypeFirst && !selectedMaterialType) return;
+
     // filteredItemsが1つだけの場合、自動的に詳細ページへ遷移
     if (filteredItems.length === 1) {
       const singleItem = filteredItems[0];
+      // 同じアイテムへの重複遷移を防止
+      if (autoNavigatedRef.current === singleItem.id) return;
+      autoNavigatedRef.current = singleItem.id;
       navigate(`/item/${singleItem.id}`);
+    } else {
+      // 複数アイテムがある場合はrefをリセット
+      autoNavigatedRef.current = null;
     }
-  }, [currentCategoryName, selectedMaterialType, filteredItems, navigate]);
+  }, [currentCategoryName, selectedMaterialType, filteredItems, navigate, isLoading, needsManufacturerSelection, selectedManufacturer]);
 
   const getPrice = (item: ItemWithDetails) => {
     return item.pricing?.find(p => p.product?.code === selectedPlanId)?.price || 0;
@@ -2331,6 +2356,285 @@ export const CatalogWithTabs: React.FC<CatalogWithTabsProps> = ({ onCartClick })
                   {!isDesignReadOnly && (
                     <p className="text-xs text-gray-400 mt-4 text-center">
                       ※この設定は設計担当が管理者画面で設定します
+                    </p>
+                  )}
+                </div>
+              ) : activeTab === 'design' && currentCategoryName === '太陽光' ? (
+                /* 設計タブ: 太陽光選択カード */
+                <div className="max-w-6xl mx-auto px-4">
+                  {isDesignReadOnly && (
+                    <div className="mb-4 px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg">
+                      <p className="text-sm text-amber-700 flex items-center gap-2">
+                        <Eye className="w-4 h-4" />
+                        閲覧専用：設計担当が設定した内容を表示しています
+                      </p>
+                    </div>
+                  )}
+                  <PageHeader
+                    title="太陽光"
+                    subtitle={isDesignReadOnly ? '設計担当が設定した内容です' : '太陽光パネルの設置有無を選択してください'}
+                  />
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+                    {SOLAR_OPTIONS.map((option) => {
+                      const isSelected = cartItems.some(item => item.product.id === option.productId);
+                      const emoji = option.id === 'solar-no' ? '❌' : '☀️';
+                      return (
+                        <button
+                          key={option.id}
+                          disabled={isDesignReadOnly}
+                          onClick={() => {
+                            if (isDesignReadOnly) return;
+                            // 既存の太陽光選択をクリア
+                            const solarItems = cartItems.filter(item =>
+                              item.product.categoryName === '太陽光'
+                            );
+                            solarItems.forEach(item => removeItem(item.product.id));
+                            // 対応する商品をカートに追加
+                            const product = items.find(i => i.id === option.productId);
+                            if (product) {
+                              const catalogProduct = {
+                                id: product.id,
+                                categoryId: product.category_id || '',
+                                categoryName: product.category?.name || '太陽光',
+                                subcategory: product.category_name || '',
+                                name: product.name,
+                                manufacturer: product.manufacturer || '',
+                                modelNumber: product.model_number || '',
+                                unit: product.unit?.symbol || 'セット',
+                                isOption: !product.pricing?.some(p => p.is_standard),
+                                variants: product.variants?.map(v => ({
+                                  id: v.id,
+                                  color: v.color_name || '',
+                                  colorCode: v.color_code || '',
+                                })) || [],
+                                pricing: product.pricing?.map(p => ({
+                                  plan: p.product?.code,
+                                  price: p.price,
+                                })) || [],
+                              };
+                              addItem(catalogProduct as any, 1, catalogProduct.variants[0] as any);
+                            }
+                            // 次のカテゴリへ移動
+                            goToNextCategory();
+                          }}
+                          className={`group bg-white rounded-lg overflow-hidden transition-all duration-200 text-left w-full ${
+                            isSelected
+                              ? 'border-2 border-blue-500 shadow-lg'
+                              : 'border border-gray-200 hover:border-blue-300 hover:shadow-md'
+                          } ${isDesignReadOnly ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                        >
+                          {/* 画像エリア（正方形） */}
+                          <div className="aspect-square bg-gradient-to-br from-yellow-50 to-orange-100 relative overflow-hidden flex flex-col items-center justify-center">
+                            <span className="text-2xl transition-transform duration-200 group-hover:scale-110">
+                              {emoji}
+                            </span>
+                            {/* 選択済みマーク */}
+                            {isSelected && (
+                              <div className="absolute top-1 right-1 bg-blue-500 rounded-full p-1">
+                                <Check className="w-3 h-3 text-white" strokeWidth={3} />
+                              </div>
+                            )}
+                          </div>
+                          {/* 情報エリア */}
+                          <div className="p-2">
+                            <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
+                              {option.name}
+                            </h3>
+                            <span className="text-[10px] text-gray-400 line-clamp-2">{option.description}</span>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {!isDesignReadOnly && (
+                    <p className="text-xs text-gray-400 mt-4 text-center">
+                      ※金額は資金計画書にて別途ご案内します
+                    </p>
+                  )}
+                </div>
+              ) : activeTab === 'design' && currentCategoryName === '蓄電池' ? (
+                /* 設計タブ: 蓄電池選択カード */
+                <div className="max-w-6xl mx-auto px-4">
+                  {isDesignReadOnly && (
+                    <div className="mb-4 px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg">
+                      <p className="text-sm text-amber-700 flex items-center gap-2">
+                        <Eye className="w-4 h-4" />
+                        閲覧専用：設計担当が設定した内容を表示しています
+                      </p>
+                    </div>
+                  )}
+                  <PageHeader
+                    title="蓄電池"
+                    subtitle={isDesignReadOnly ? '設計担当が設定した内容です' : '蓄電池の設置有無を選択してください'}
+                  />
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+                    {BATTERY_OPTIONS.map((option) => {
+                      const isSelected = cartItems.some(item => item.product.id === option.productId);
+                      const emoji = option.id === 'battery-no' ? '❌' : '🔋';
+                      return (
+                        <button
+                          key={option.id}
+                          disabled={isDesignReadOnly}
+                          onClick={() => {
+                            if (isDesignReadOnly) return;
+                            // 既存の蓄電池選択をクリア
+                            const batteryItems = cartItems.filter(item =>
+                              item.product.categoryName === '蓄電池'
+                            );
+                            batteryItems.forEach(item => removeItem(item.product.id));
+                            // 対応する商品をカートに追加
+                            const product = items.find(i => i.id === option.productId);
+                            if (product) {
+                              const catalogProduct = {
+                                id: product.id,
+                                categoryId: product.category_id || '',
+                                categoryName: product.category?.name || '蓄電池',
+                                subcategory: product.category_name || '',
+                                name: product.name,
+                                manufacturer: product.manufacturer || '',
+                                modelNumber: product.model_number || '',
+                                unit: product.unit?.symbol || 'セット',
+                                isOption: !product.pricing?.some(p => p.is_standard),
+                                variants: product.variants?.map(v => ({
+                                  id: v.id,
+                                  color: v.color_name || '',
+                                  colorCode: v.color_code || '',
+                                })) || [],
+                                pricing: product.pricing?.map(p => ({
+                                  plan: p.product?.code,
+                                  price: p.price,
+                                })) || [],
+                              };
+                              addItem(catalogProduct as any, 1, catalogProduct.variants[0] as any);
+                            }
+                            // 次のカテゴリへ移動
+                            goToNextCategory();
+                          }}
+                          className={`group bg-white rounded-lg overflow-hidden transition-all duration-200 text-left w-full ${
+                            isSelected
+                              ? 'border-2 border-blue-500 shadow-lg'
+                              : 'border border-gray-200 hover:border-blue-300 hover:shadow-md'
+                          } ${isDesignReadOnly ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                        >
+                          {/* 画像エリア（正方形） */}
+                          <div className="aspect-square bg-gradient-to-br from-blue-50 to-indigo-100 relative overflow-hidden flex flex-col items-center justify-center">
+                            <span className="text-2xl transition-transform duration-200 group-hover:scale-110">
+                              {emoji}
+                            </span>
+                            {/* 選択済みマーク */}
+                            {isSelected && (
+                              <div className="absolute top-1 right-1 bg-blue-500 rounded-full p-1">
+                                <Check className="w-3 h-3 text-white" strokeWidth={3} />
+                              </div>
+                            )}
+                          </div>
+                          {/* 情報エリア */}
+                          <div className="p-2">
+                            <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
+                              {option.name}
+                            </h3>
+                            <span className="text-[10px] text-gray-400 line-clamp-2">{option.description}</span>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {!isDesignReadOnly && (
+                    <p className="text-xs text-gray-400 mt-4 text-center">
+                      ※金額は資金計画書にて別途ご案内します
+                    </p>
+                  )}
+                </div>
+              ) : activeTab === 'design' && currentCategoryName === 'V2H' ? (
+                /* 設計タブ: V2H選択カード */
+                <div className="max-w-6xl mx-auto px-4">
+                  {isDesignReadOnly && (
+                    <div className="mb-4 px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg">
+                      <p className="text-sm text-amber-700 flex items-center gap-2">
+                        <Eye className="w-4 h-4" />
+                        閲覧専用：設計担当が設定した内容を表示しています
+                      </p>
+                    </div>
+                  )}
+                  <PageHeader
+                    title="V2H"
+                    subtitle={isDesignReadOnly ? '設計担当が設定した内容です' : 'V2H（電気自動車充放電設備）の設置有無を選択してください'}
+                  />
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+                    {V2H_OPTIONS.map((option) => {
+                      const isSelected = cartItems.some(item => item.product.id === option.productId);
+                      const emoji = option.id === 'v2h-no' ? '❌' : '🚗';
+                      return (
+                        <button
+                          key={option.id}
+                          disabled={isDesignReadOnly}
+                          onClick={() => {
+                            if (isDesignReadOnly) return;
+                            // 既存のV2H選択をクリア
+                            const v2hItems = cartItems.filter(item =>
+                              item.product.categoryName === 'V2H'
+                            );
+                            v2hItems.forEach(item => removeItem(item.product.id));
+                            // 対応する商品をカートに追加
+                            const product = items.find(i => i.id === option.productId);
+                            if (product) {
+                              const catalogProduct = {
+                                id: product.id,
+                                categoryId: product.category_id || '',
+                                categoryName: product.category?.name || 'V2H',
+                                subcategory: product.category_name || '',
+                                name: product.name,
+                                manufacturer: product.manufacturer || '',
+                                modelNumber: product.model_number || '',
+                                unit: product.unit?.symbol || 'セット',
+                                isOption: !product.pricing?.some(p => p.is_standard),
+                                variants: product.variants?.map(v => ({
+                                  id: v.id,
+                                  color: v.color_name || '',
+                                  colorCode: v.color_code || '',
+                                })) || [],
+                                pricing: product.pricing?.map(p => ({
+                                  plan: p.product?.code,
+                                  price: p.price,
+                                })) || [],
+                              };
+                              addItem(catalogProduct as any, 1, catalogProduct.variants[0] as any);
+                            }
+                            // 次のカテゴリへ移動
+                            goToNextCategory();
+                          }}
+                          className={`group bg-white rounded-lg overflow-hidden transition-all duration-200 text-left w-full ${
+                            isSelected
+                              ? 'border-2 border-blue-500 shadow-lg'
+                              : 'border border-gray-200 hover:border-blue-300 hover:shadow-md'
+                          } ${isDesignReadOnly ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                        >
+                          {/* 画像エリア（正方形） */}
+                          <div className="aspect-square bg-gradient-to-br from-green-50 to-emerald-100 relative overflow-hidden flex flex-col items-center justify-center">
+                            <span className="text-2xl transition-transform duration-200 group-hover:scale-110">
+                              {emoji}
+                            </span>
+                            {/* 選択済みマーク */}
+                            {isSelected && (
+                              <div className="absolute top-1 right-1 bg-blue-500 rounded-full p-1">
+                                <Check className="w-3 h-3 text-white" strokeWidth={3} />
+                              </div>
+                            )}
+                          </div>
+                          {/* 情報エリア */}
+                          <div className="p-2">
+                            <h3 className="font-bold text-xs text-gray-800 line-clamp-2 min-h-[2rem] leading-tight">
+                              {option.name}
+                            </h3>
+                            <span className="text-[10px] text-gray-400 line-clamp-2">{option.description}</span>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {!isDesignReadOnly && (
+                    <p className="text-xs text-gray-400 mt-4 text-center">
+                      ※金額は資金計画書にて別途ご案内します
                     </p>
                   )}
                 </div>
