@@ -381,6 +381,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
       logger.info('Auth state changed:', event);
+
+      // SDKからsessionがnullの場合、localStorageに保存されたセッションがあればそれを使う
+      if (!session) {
+        const storedData = getStoredSession();
+        if (storedData.session && storedData.user) {
+          logger.info('SDK session is null but we have stored session, keeping it');
+          return; // 既存のセッションを維持
+        }
+      }
+
       setSession(session);
       setSupabaseUser(session?.user ?? null);
 
