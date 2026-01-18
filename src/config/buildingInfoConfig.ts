@@ -357,6 +357,22 @@ const EQUIPMENT_SECTION: BuildingInfoSection = {
   ],
 };
 
+// 給湯器商品タイプ
+export const WATER_HEATER_PRODUCTS = {
+  ecocute: [
+    { id: 'ecocute_370_standard', label: '370L 標準', description: '3〜4人家族向け' },
+    { id: 'ecocute_370_slim', label: '370L 薄型', description: '設置スペースが限られる場合' },
+    { id: 'ecocute_460_standard', label: '460L 標準', description: '4〜5人家族向け' },
+    { id: 'ecocute_460_slim', label: '460L 薄型', description: '大家族・設置スペース限定' },
+    { id: 'ecocute_550_standard', label: '550L 標準', description: '5人以上の大家族向け' },
+  ],
+  ecojoz: [
+    { id: 'ecojoz_24', label: '24号', description: '2〜3人家族向け' },
+    { id: 'ecojoz_20', label: '20号', description: '1〜2人家族向け' },
+    { id: 'ecojoz_16', label: '16号', description: '単身向け' },
+  ],
+};
+
 // 電気・エネルギーセクション
 const ENERGY_SECTION: BuildingInfoSection = {
   id: 'energy',
@@ -521,6 +537,7 @@ export interface BuildingInfo {
   entrance_sink?: string;
   // 電気・エネルギー
   water_heater?: string;
+  water_heater_product?: string; // 給湯器商品タイプ（370L標準など）
   ventilation?: string;
   intercom_count?: string;
   solar?: string; // 無/有
@@ -573,6 +590,7 @@ export const DEFAULT_BUILDING_INFO: BuildingInfo = {
   entrance_sink: 'no',
   // 電気・エネルギー
   water_heater: 'ecocute', // デフォルト: エコキュート
+  water_heater_product: 'ecocute_370_standard', // デフォルト: 370L標準
   ventilation: 'panasonic',
   intercom_count: '1',
   solar: 'yes', // デフォルト: 有

@@ -406,6 +406,7 @@ export const ProjectRegistrationForm: React.FC<ProjectRegistrationFormProps> = (
               onChange={setBuildingInfo}
               onComplete={() => nextStep()}
               sections={BUILDING_INFO_SECTIONS_FLOOR_PLAN}
+              rooms={rooms.map(r => ({ id: r.id, name: r.name, floor: r.floor }))}
             />
           </div>
         )}

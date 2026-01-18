@@ -3,10 +3,11 @@
  * プロジェクト登録時に建築情報をカードで選択
  */
 
-import React from 'react';
-import { Check, ChevronRight, ChevronLeft } from 'lucide-react';
+import React, { useState } from 'react';
+import { Check, ChevronRight, ChevronLeft, Plus, X } from 'lucide-react';
 import {
   BUILDING_INFO_SECTIONS,
+  WATER_HEATER_PRODUCTS,
   type BuildingInfo,
   type BuildingInfoSection,
   type BuildingInfoCategory,
@@ -122,14 +123,172 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({ category, value, on
   );
 };
 
+// 部屋選択コンポーネント
+interface RoomSelectorProps {
+  label: string;
+  selectedRooms: string[];
+  availableRooms: RoomOption[];
+  onChange: (rooms: string[]) => void;
+}
+
+const RoomSelector: React.FC<RoomSelectorProps> = ({ label, selectedRooms, availableRooms, onChange }) => {
+  const toggleRoom = (roomId: string) => {
+    if (selectedRooms.includes(roomId)) {
+      onChange(selectedRooms.filter(r => r !== roomId));
+    } else {
+      onChange([...selectedRooms, roomId]);
+    }
+  };
+
+  if (availableRooms.length === 0) {
+    return (
+      <div className="mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded text-sm text-yellow-700">
+        部屋を先に登録してください
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-2">
+      <label className="block text-xs font-medium text-gray-600 mb-1">{label}</label>
+      <div className="flex flex-wrap gap-1">
+        {availableRooms.map((room) => (
+          <button
+            key={room.id}
+            type="button"
+            onClick={() => toggleRoom(room.id)}
+            className={`px-2 py-1 text-xs rounded transition-all ${
+              selectedRooms.includes(room.id)
+                ? 'bg-blue-500 text-white'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
+          >
+            {room.floor}F-{room.name}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// 個数選択コンポーネント（更に追加機能付き）
+interface CountSelectorProps {
+  currentCount: number;
+  onCountChange: (count: number) => void;
+  maxDefault?: number;
+}
+
+const CountSelector: React.FC<CountSelectorProps> = ({ currentCount, onCountChange, maxDefault = 3 }) => {
+  const [showCustomInput, setShowCustomInput] = useState(false);
+  const [customCount, setCustomCount] = useState('');
+
+  const handleAddMore = () => {
+    if (showCustomInput && customCount) {
+      const newCount = parseInt(customCount, 10);
+      if (newCount > 0) {
+        onCountChange(newCount);
+        setShowCustomInput(false);
+        setCustomCount('');
+      }
+    } else {
+      setShowCustomInput(true);
+    }
+  };
+
+  return (
+    <div className="mt-2 flex items-center gap-2">
+      <span className="text-xs text-gray-500">現在: {currentCount}ヶ所</span>
+      {showCustomInput ? (
+        <>
+          <input
+            type="number"
+            min="1"
+            max="10"
+            value={customCount}
+            onChange={(e) => setCustomCount(e.target.value)}
+            placeholder="個数"
+            className="w-16 px-2 py-1 text-xs border border-gray-300 rounded"
+          />
+          <button
+            type="button"
+            onClick={handleAddMore}
+            className="px-2 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            設定
+          </button>
+          <button
+            type="button"
+            onClick={() => setShowCustomInput(false)}
+            className="p-1 text-gray-400 hover:text-gray-600"
+          >
+            <X className="w-3 h-3" />
+          </button>
+        </>
+      ) : (
+        currentCount >= maxDefault && (
+          <button
+            type="button"
+            onClick={handleAddMore}
+            className="flex items-center gap-1 px-2 py-1 text-xs text-blue-600 hover:bg-blue-50 rounded"
+          >
+            <Plus className="w-3 h-3" />
+            更に追加
+          </button>
+        )
+      )}
+    </div>
+  );
+};
+
 // 追加入力フィールドコンポーネント（ポーチ面積、軒天面積など）
 interface AdditionalInputProps {
   categoryId: string;
   values: BuildingInfo;
   onChangeExtra: (field: string, value: number | string | string[] | number[] | undefined) => void;
+  rooms?: RoomOption[];
 }
 
-const AdditionalInputs: React.FC<AdditionalInputProps> = ({ categoryId, values, onChangeExtra }) => {
+const AdditionalInputs: React.FC<AdditionalInputProps> = ({ categoryId, values, onChangeExtra, rooms = [] }) => {
+  // 給湯器 - 商品タイプ選択
+  if (categoryId === 'water_heater' && values.water_heater) {
+    const products = values.water_heater === 'ecocute'
+      ? WATER_HEATER_PRODUCTS.ecocute
+      : values.water_heater === 'ecojoz'
+        ? WATER_HEATER_PRODUCTS.ecojoz
+        : [];
+
+    if (products.length > 0) {
+      return (
+        <div className="mt-3 p-3 bg-blue-50 rounded-lg">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            {values.water_heater === 'ecocute' ? 'エコキュート' : 'エコジョーズ'}タイプ選択
+          </label>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            {products.map((product) => (
+              <button
+                key={product.id}
+                type="button"
+                onClick={() => onChangeExtra('water_heater_product', product.id)}
+                className={`p-3 rounded-lg text-left transition-all ${
+                  values.water_heater_product === product.id
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-white border border-gray-300 text-gray-700 hover:border-blue-300'
+                }`}
+              >
+                <div className="font-medium text-sm">{product.label}</div>
+                {product.description && (
+                  <div className={`text-xs mt-1 ${values.water_heater_product === product.id ? 'text-blue-100' : 'text-gray-500'}`}>
+                    {product.description}
+                  </div>
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+      );
+    }
+  }
+
   // ポーチ拡張 - 面積入力
   if (categoryId === 'porch_extension' && values.porch_extension === 'yes') {
     return (
@@ -356,6 +515,142 @@ const AdditionalInputs: React.FC<AdditionalInputProps> = ({ categoryId, values, 
             </div>
           ))}
         </div>
+        <CountSelector
+          currentCount={count}
+          onCountChange={(newCount) => onChangeExtra('garage_shutter', String(newCount))}
+        />
+      </div>
+    );
+  }
+
+  // パラペット - 更に追加機能
+  if (categoryId === 'parapet' && values.parapet && values.parapet !== 'no') {
+    const count = parseInt(values.parapet, 10) || 0;
+    return (
+      <div className="mt-2">
+        <CountSelector
+          currentCount={count}
+          onCountChange={(newCount) => onChangeExtra('parapet', String(newCount))}
+        />
+      </div>
+    );
+  }
+
+  // バルコニー - 更に追加機能
+  if (categoryId === 'balcony' && values.balcony && values.balcony !== 'no') {
+    const count = parseInt(values.balcony, 10) || 0;
+    return (
+      <div className="mt-2">
+        <CountSelector
+          currentCount={count}
+          onCountChange={(newCount) => onChangeExtra('balcony', String(newCount))}
+        />
+      </div>
+    );
+  }
+
+  // 室内窓 - 更に追加機能
+  if (categoryId === 'interior_window' && values.interior_window && values.interior_window !== 'no') {
+    const count = parseInt(values.interior_window, 10) || 0;
+    return (
+      <div className="mt-2">
+        <CountSelector
+          currentCount={count}
+          onCountChange={(newCount) => onChangeExtra('interior_window', String(newCount))}
+        />
+      </div>
+    );
+  }
+
+  // 軒天 - 更に追加機能
+  if (categoryId === 'eaves_ceiling' && values.eaves_ceiling && values.eaves_ceiling !== 'no') {
+    // 軒天面積入力は上で処理されているが、更に追加機能も追加
+    // 既に面積入力UIが表示されている場合はスキップ
+  }
+
+  // 庇 - 更に追加機能
+  if (categoryId === 'canopy' && values.canopy && values.canopy !== 'no') {
+    // 庇タイプ選択は上で処理されているが、更に追加機能も追加
+    // 既にタイプ選択UIが表示されている場合はスキップ
+  }
+
+  // 床下点検口 - 個数と部屋選択
+  if (categoryId === 'floor_inspection_hatch' && values.floor_inspection_hatch && values.floor_inspection_hatch !== 'no') {
+    const count = parseInt(values.floor_inspection_hatch, 10) || 0;
+    const selectedRooms = values.floor_inspection_hatch_rooms || [];
+    return (
+      <div className="mt-3 p-3 bg-blue-50 rounded-lg">
+        <CountSelector
+          currentCount={count}
+          onCountChange={(newCount) => onChangeExtra('floor_inspection_hatch', String(newCount))}
+        />
+        <RoomSelector
+          label="床下点検口のある部屋を選択"
+          selectedRooms={selectedRooms}
+          availableRooms={rooms}
+          onChange={(newRooms) => onChangeExtra('floor_inspection_hatch_rooms', newRooms)}
+        />
+      </div>
+    );
+  }
+
+  // 天井点検口 - 個数と部屋選択
+  if (categoryId === 'ceiling_inspection_hatch' && values.ceiling_inspection_hatch && values.ceiling_inspection_hatch !== 'no') {
+    const count = parseInt(values.ceiling_inspection_hatch, 10) || 0;
+    const selectedRooms = values.ceiling_inspection_hatch_rooms || [];
+    return (
+      <div className="mt-3 p-3 bg-blue-50 rounded-lg">
+        <CountSelector
+          currentCount={count}
+          onCountChange={(newCount) => onChangeExtra('ceiling_inspection_hatch', String(newCount))}
+        />
+        <RoomSelector
+          label="天井点検口のある部屋を選択"
+          selectedRooms={selectedRooms}
+          availableRooms={rooms}
+          onChange={(newRooms) => onChangeExtra('ceiling_inspection_hatch_rooms', newRooms)}
+        />
+      </div>
+    );
+  }
+
+  // 換気システム本体 - 個数と部屋選択
+  if (categoryId === 'ventilation_unit' && values.ventilation_unit && values.ventilation_unit !== 'no') {
+    const count = parseInt(values.ventilation_unit, 10) || 0;
+    const selectedRooms = values.ventilation_unit_rooms || [];
+    return (
+      <div className="mt-3 p-3 bg-blue-50 rounded-lg">
+        <CountSelector
+          currentCount={count}
+          onCountChange={(newCount) => onChangeExtra('ventilation_unit', String(newCount))}
+        />
+        <RoomSelector
+          label="換気システム本体のある部屋を選択"
+          selectedRooms={selectedRooms}
+          availableRooms={rooms}
+          onChange={(newRooms) => onChangeExtra('ventilation_unit_rooms', newRooms)}
+        />
+      </div>
+    );
+  }
+
+  // 換気システム給気口 - 個数と部屋選択
+  if (categoryId === 'air_inlet' && values.air_inlet && values.air_inlet !== 'no') {
+    const count = parseInt(values.air_inlet, 10) || 0;
+    const selectedRooms = values.air_inlet_rooms || [];
+    return (
+      <div className="mt-3 p-3 bg-blue-50 rounded-lg">
+        <CountSelector
+          currentCount={count}
+          onCountChange={(newCount) => onChangeExtra('air_inlet', String(newCount))}
+          maxDefault={5}
+        />
+        <RoomSelector
+          label="給気口のある部屋を選択"
+          selectedRooms={selectedRooms}
+          availableRooms={rooms}
+          onChange={(newRooms) => onChangeExtra('air_inlet_rooms', newRooms)}
+        />
       </div>
     );
   }
@@ -369,9 +664,10 @@ interface SectionViewProps {
   values: BuildingInfo;
   onChange: (categoryId: string, value: string | string[]) => void;
   onChangeExtra: (field: string, value: number | string | string[] | number[] | undefined) => void;
+  rooms?: RoomOption[];
 }
 
-const SectionView: React.FC<SectionViewProps> = ({ section, values, onChange, onChangeExtra }) => {
+const SectionView: React.FC<SectionViewProps> = ({ section, values, onChange, onChangeExtra, rooms = [] }) => {
   // 表示条件に基づいてカテゴリをフィルタリング
   const visibleCategories = section.categories.filter(category => {
     // 3階建て以外の場合、2F-3F間のアイアン階段を非表示
@@ -401,6 +697,7 @@ const SectionView: React.FC<SectionViewProps> = ({ section, values, onChange, on
             categoryId={category.id}
             values={values}
             onChangeExtra={onChangeExtra}
+            rooms={rooms}
           />
         </div>
       ))}
@@ -413,6 +710,7 @@ export const BuildingInfoSelector: React.FC<BuildingInfoSelectorProps> = ({
   onChange,
   onComplete,
   sections = BUILDING_INFO_SECTIONS,
+  rooms = [],
 }) => {
   const [currentSectionIndex, setCurrentSectionIndex] = React.useState(0);
   const currentSection = sections[currentSectionIndex];
@@ -496,6 +794,7 @@ export const BuildingInfoSelector: React.FC<BuildingInfoSelectorProps> = ({
         values={value}
         onChange={handleCategoryChange}
         onChangeExtra={handleExtraChange}
+        rooms={rooms}
       />
 
       {/* ナビゲーション */}
